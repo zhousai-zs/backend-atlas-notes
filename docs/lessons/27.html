@@ -1,0 +1,224 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>27. 异常安全与错误模型 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="cur" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 27 课 · 领域 B · 阶段 2</p><p class="dl"><a href="../files/27-b-exception.md" download>⬇ 本课 Markdown</a><a href="../files/practice27.tar.gz" download>⬇ 练习包 practice27.tar.gz</a></p><h1 id="27208">第 27/208 课：异常安全与错误模型</h1>
+<blockquote>
+<p>领域 B · 阶段 2 · 难度：基础 · 前置：RAII（b-raii）、类型系统（b-types）</p>
+</blockquote>
+<h2 id="_1">一、学习目标和为什么要懂</h2>
+<p><strong>一句话</strong>：异常安全说的是<strong>操作失败时，对象和系统还能保住哪些不变量</strong>；而“错误用异常还是错误码传”是<strong>另一个问题</strong>。两件事要分开想。</p>
+<p><strong>为什么后台要懂</strong>：要设计出<strong>不会只改了一半、不会泄漏资源、不会丢掉错误上下文</strong>的库接口。比如公众号后台的配置热加载：新配置解析到一半失败，如果超时已经改成新值、连接数还是旧值，服务就跑在一个谁也没设计过的“混合配置”上。</p>
+<p><strong>学完你应该能</strong>：
+1. 讲清楚基本保证、强保证、不抛保证的区别；
+2. 独立完成：为配置热加载实现“先解析、再替换”，注入失败后旧配置依然完整可用。</p>
+<p><strong>验收标准</strong>：能说出一个操作提供的是哪种保证；失败路径不会留下部分生效的状态。</p>
+<hr />
+<h2 id="_2">二、核心要点：从直觉到原理</h2>
+<h3 id="1">1. 基本、强与不抛保证</h3>
+<p>直觉：把一个操作想成银行转账。失败时你能接受什么样的结果？</p>
+<table>
+<thead>
+<tr>
+<th>保证</th>
+<th>失败后的状态</th>
+<th>转账类比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>不抛（nothrow）</strong></td>
+<td>根本不会失败</td>
+<td>读余额</td>
+</tr>
+<tr>
+<td><strong>强（strong）</strong></td>
+<td>和调用前<strong>完全一样</strong>，像没发生过</td>
+<td>转账失败，两边余额都不动</td>
+</tr>
+<tr>
+<td><strong>基本（basic）</strong></td>
+<td>不泄漏、对象仍<strong>有效、可析构、可再用</strong>，但值可能变了</td>
+<td>账户没坏，但金额不一定是原来的</td>
+</tr>
+<tr>
+<td>无保证</td>
+<td>可能泄漏、不变量破坏</td>
+<td>钱扣了没到账</td>
+</tr>
+</tbody>
+</table>
+<p><strong>原理</strong>：强保证的通用套路是 <strong>“在旁边做完所有可能失败的事 → 用一个不抛的操作提交”</strong>（copy-and-swap）：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">Holder::reload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">text</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Config</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse</span><span class="p">(</span><span class="n">text</span><span class="p">);</span><span class="w">   </span><span class="c1">// 可能抛：此时还没动 *this</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">swap</span><span class="p">(</span><span class="n">cur_</span><span class="p">,</span><span class="w"> </span><span class="n">next</span><span class="p">);</span><span class="w">       </span><span class="c1">// noexcept：提交，不会失败</span>
+<span class="p">}</span><span class="w">                                </span><span class="c1">// 旧值随 next 析构</span>
+</code></pre></div>
+
+<p>关键点：<strong>强保证依赖不抛操作</strong>。<code>swap</code>、移动构造、析构函数应该是 <code>noexcept</code>。这也是上一阶段讲的：<code>vector</code> 扩容时，只有元素的移动构造是 <code>noexcept</code>，才敢用移动，否则退回拷贝来维持强保证。</p>
+<p>后台例子：给用户写“关注列表 + 计数”两份数据，先改列表、再改计数，中间抛异常就只有基本保证（甚至没有）；先把两份新值都算好再一起提交，才接近强保证。</p>
+<h3 id="2-raii">2. 栈展开与 RAII</h3>
+<p>异常抛出后，运行时会<strong>一层层退出栈帧，并析构途中所有已构造好的局部对象</strong>，这叫栈展开（stack unwinding）。所以 RAII 对象在失败路径上会被自动清理：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Guard</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="o">~</span><span class="n">Guard</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"~Guard(%s)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">};</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">inner</span><span class="p">()</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">Guard</span><span class="w"> </span><span class="n">g</span><span class="p">{</span><span class="s">"inner"</span><span class="p">};</span><span class="w">  </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"boom"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">middle</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Guard</span><span class="w"> </span><span class="n">g</span><span class="p">{</span><span class="s">"middle"</span><span class="p">};</span><span class="w"> </span><span class="n">inner</span><span class="p">();</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">puts</span><span class="p">(</span><span class="s">"never printed"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Guard</span><span class="w"> </span><span class="n">g</span><span class="p">{</span><span class="s">"main-try"</span><span class="p">};</span><span class="w"> </span><span class="n">middle</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"caught: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>实测输出（g++ -std=c++23）：</p>
+<div class="codehilite"><pre><span></span><code>~Guard(inner)
+~Guard(middle)
+~Guard(main-try)
+caught: boom
+</code></pre></div>
+
+<p>要记住的推论：
+- <strong>资源全交给 RAII</strong>（锁用 <code>lock_guard</code>，fd/内存用智能指针或封装类），失败路径就不用手写清理，自然拿到基本保证。
+- <strong>析构函数不要抛</strong>：栈展开中析构再抛异常，会直接 <code>std::terminate</code>。析构函数默认就是 <code>noexcept</code>。
+- RAII 只负责“资源不漏”，<strong>不负责“状态回滚”</strong>。值改了一半，RAII 帮不了你——这得靠第 1 点的“先算后提交”。</p>
+<h3 id="3-expected">3. 异常、错误码和 expected</h3>
+<p>这是“错误怎么<strong>传递</strong>”的问题，和第 1 点“失败后状态是否完好”正交：用错误码一样可以写出半更新的 bug。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 异常：自动跨层传播，调用方不处理就往上抛</span>
+<span class="n">Config</span><span class="w"> </span><span class="nf">parse_or_throw</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="c1">// 错误码：显式，但容易被忽略</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">);</span><span class="w">   </span><span class="c1">// 返回 0 成功</span>
+
+<span class="c1">// std::expected（C++23）：值或错误二选一，类型里写明“可能失败”</span>
+<span class="n">std</span><span class="o">::</span><span class="n">expected</span><span class="o">&lt;</span><span class="n">Config</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">parse_config</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse_config</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">error</span><span class="p">());</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="n">use</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">);</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>异常</th>
+<th>错误码 / expected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传播</td>
+<td>自动跨多层</td>
+<td>每层手动传</td>
+</tr>
+<tr>
+<td>可见性</td>
+<td>签名里看不出会失败</td>
+<td>返回类型就写着</td>
+</tr>
+<tr>
+<td>适合</td>
+<td>跨层的、少见的失败</td>
+<td>预期内的失败（用户输入、配置格式错）</td>
+</tr>
+</tbody>
+</table>
+<p>常见的组合方式：<strong>模块内部用异常，在边界（RPC handler、线程入口、C 接口）处统一捕获并转换成错误码 / expected</strong>，不让异常越过边界。</p>
+<hr />
+<h2 id="_3">三、常见误区与设计权衡</h2>
+<p><strong>误区（节点原文）</strong>：<strong>捕获所有异常并忽略，会把失败变成“错误的成功”</strong>。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">holder</span><span class="p">.</span><span class="n">reload</span><span class="p">(</span><span class="n">text</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{}</span><span class="w">   </span><span class="c1">// 错！调用方以为热加载成功了</span>
+</code></pre></div>
+
+<p>配置没生效、监控也看不到，问题会拖到线上才暴露。正确做法：至少记录日志、上报，并把失败返回给调用方。</p>
+<p>其他容易踩的坑：
+- 以为“用了 RAII 就是强保证”——RAII 只保证不泄漏，值仍可能改了一半。
+- 移动构造 / <code>swap</code> 没写 <code>noexcept</code>，导致容器扩容退回拷贝，或者无法实现强保证。
+- 在析构函数里做可能失败的事并抛出。</p>
+<p><strong>设计权衡（节点原文）</strong>：异常适合跨层传播，错误码便于显式控制；<strong>团队需要统一边界约定</strong>。进团队后先看看现有代码怎么约定（比如是否禁用异常、错误码怎么定义），跟着约定写，不要在一个模块里两套混用。</p>
+<p>另外，强保证往往要多一份拷贝（先构造新对象），代价是内存和时间；不是所有操作都值得强保证，<strong>至少基本保证，关键状态变更再上强保证</strong>。</p>
+<hr />
+<h2 id="_4">四、动手实践：配置热加载“解析后替换”</h2>
+<p>目标：为配置热加载实现“解析后替换”，注入失败后确保旧配置完整可用。</p>
+<p><strong>步骤 1：把解析写成纯函数</strong>，只读输入、返回新对象，不碰任何全局状态：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">expected</span><span class="o">&lt;</span><span class="n">Config</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">parse_config</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">text</span><span class="p">);</span>
+<span class="c1">// 缺 '='、缺字段、stoi 抛异常、timeout_ms&lt;=0，都返回 unexpected</span>
+</code></pre></div>
+
+<p>内部 <code>std::stoi</code> 可能抛，在函数内捕获后转成 <code>unexpected</code>，异常不越过这个边界。</p>
+<p><strong>步骤 2：用 <code>shared_ptr&lt;const Config&gt;</code> 持有当前配置</strong>，读者拿快照：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">Config</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">cur_</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 3：reload = 先在旁边做完，再 noexcept 提交</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">expected</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">reload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">text</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">parsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse_config</span><span class="p">(</span><span class="n">text</span><span class="p">);</span><span class="w">                        </span><span class="c1">// 可能失败</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">parsed</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unexpected</span><span class="p">(</span><span class="n">parsed</span><span class="p">.</span><span class="n">error</span><span class="p">());</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">Config</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="o">*</span><span class="n">parsed</span><span class="p">));</span><span class="w"> </span><span class="c1">// 可能抛 bad_alloc，仍未改动</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="w"> </span><span class="nf">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">cur_</span><span class="p">.</span><span class="n">swap</span><span class="p">(</span><span class="n">next</span><span class="p">);</span><span class="w">                                          </span><span class="c1">// noexcept 提交</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 4：注入失败</strong>，每次都检查指针没变、值还是旧的：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">bad</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s">"timeout_ms=500</span><span class="se">\n</span><span class="s">max_conn=abc</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w">            </span><span class="c1">// stoi 抛 invalid_argument</span>
+<span class="w">    </span><span class="s">"timeout_ms=500</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w">                          </span><span class="c1">// 缺字段</span>
+<span class="w">    </span><span class="s">"timeout_ms=500</span><span class="se">\n</span><span class="s">noequal</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w">                 </span><span class="c1">// 格式错</span>
+<span class="w">    </span><span class="s">"timeout_ms=-1</span><span class="se">\n</span><span class="s">max_conn=10</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w">              </span><span class="c1">// 校验失败</span>
+<span class="w">    </span><span class="s">"timeout_ms=500</span><span class="se">\n</span><span class="s">max_conn=99999999999999</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="c1">// out_of_range</span>
+<span class="p">};</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">bad</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">CHECK</span><span class="p">(</span><span class="o">!</span><span class="n">h</span><span class="p">.</span><span class="n">reload</span><span class="p">(</span><span class="n">t</span><span class="p">));</span>
+<span class="w">    </span><span class="n">CHECK</span><span class="p">(</span><span class="n">h</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">before</span><span class="p">);</span>
+<span class="w">    </span><span class="n">CHECK</span><span class="p">(</span><span class="n">h</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">timeout_ms</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">200</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">h</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">max_conn</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 5：写一个反例对照</strong>——边解析边写字段的 <code>bad_reload</code>，喂 <code>timeout_ms=999\nmax_conn=abc</code>，观察到 <code>timeout_ms</code> 已改成 999 而 <code>max_conn</code> 还是旧值，就是“部分生效”。</p>
+<p><strong>步骤 6：编译运行（开 ASan/UBSan）</strong>：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++23<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-fsanitize<span class="o">=</span>address,undefined<span class="w"> </span>-g<span class="w"> </span>config_reload.cpp<span class="w"> </span>-o<span class="w"> </span>config_reload
+./config_reload
+</code></pre></div>
+
+<p>我实际跑出来的结果：</p>
+<div class="codehilite"><pre><span></span><code>reload rejected: bad or missing field: stoi
+reload rejected: bad or missing field: map::at
+reload rejected: line 2: missing '='
+reload rejected: timeout_ms must be &gt; 0
+reload rejected: bad or missing field: stoi
+bad_reload threw: stoi; now timeout_ms=999 max_conn=50 (half-applied)
+ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p>完整代码在附件 <code>practice27/</code>（<code>config_reload.cpp</code>、<code>unwind.cpp</code>、<code>test.sh</code>）。</p>
+<p><strong>自检</strong>：你的 <code>reload</code> 提供哪种保证？答：强保证；<code>get()</code> 和 <code>swap</code> 不抛。另外，成功 reload 之后，之前拿到的旧快照依然有效（shared_ptr 保活），正在处理请求的线程不会被换掉手里的配置。</p>
+<hr />
+<h2 id="_5">五、自测题</h2>
+<p><strong>1. <code>std::vector::push_back</code> 在需要扩容时，如果元素的移动构造没有标 <code>noexcept</code>、拷贝构造可用，vector 会怎么做？为什么？</strong></p>
+<details><summary>答案</summary>
+会用拷贝构造把旧元素搬到新内存。因为 push_back 要提供强保证：如果用可能抛的移动，搬到一半抛了，旧缓冲区里的元素已被移走，无法恢复；而拷贝失败时旧缓冲区完好，直接丢掉新缓冲区即可。标上 noexcept 后才会用移动（第 21 课实测过 copy/move 次数的变化）。
+</details>
+
+<p><strong>2. 下面的函数提供哪种异常保证？怎么改成强保证？</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">set_both</span><span class="p">(</span><span class="n">User</span><span class="o">&amp;</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">nick</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">u</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w">   </span><span class="c1">// string 赋值可能抛 bad_alloc</span>
+<span class="w">    </span><span class="n">u</span><span class="p">.</span><span class="n">nick</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nick</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<details><summary>答案</summary>
+基本保证：不泄漏、u 仍有效，但可能 name 已改、nick 没改。改法：先在旁边构造好新值，再用不抛操作提交：
+`std::string n = name, k = nick; u.name.swap(n); u.nick.swap(k);`
+所有可能抛的拷贝都在 swap 之前完成，swap 是 noexcept。
+</details>
+
+<p><strong>3. 一个 RPC handler 里写了 <code>try { reload(text); } catch (...) {}</code>，并给调用方返回成功。问题在哪？应该怎么处理？</strong></p>
+<details><summary>答案</summary>
+这是节点点名的误区：吞掉所有异常，把失败变成“错误的成功”，调用方和监控都以为配置已生效。应该至少记录日志和上报，并把失败（错误码或 expected 的 error）返回给调用方。在 handler 这个边界统一把异常转换成错误码是可以的，但不能丢掉“失败”这个事实和它的上下文。
+</details>
+
+<hr />
+<h2 id="_6">六、推荐资源</h2>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/language/exceptions.html">cppreference：Exceptions</a>（英文文档，进阶，免费）：重点读异常安全保证（基本、强、不抛）和栈展开部分，用来核对本课实验的语义与边界条件。</li>
+</ul>
+<p><strong>源码学习建议（节点原文）</strong>：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。比如本课用的 <code>std::expected</code> 是 C++23，用 g++ 编译要加 <code>-std=c++23</code>。</p><div class="pn"><span><a href="26.html">← 类型系统、转换与接口设计</a></span><span><a href="28.html">分配器、对齐与内存资源 →</a></span></div></main></div></body></html>

@@ -1,0 +1,553 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>10. 搜索树、堆与有序索引 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="cur" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 10 课 · 领域 A · 阶段 1</p><p class="dl"><a href="../files/10-a-tree.md" download>⬇ 本课 Markdown</a><a href="../files/practice10.tar.gz" download>⬇ 练习包 practice10.tar.gz</a></p><h1 id="10208">第 10/208 课：搜索树、堆与有序索引</h1>
+<blockquote>
+<p>节点：<code>a-tree</code> · 域：A · 子类：数据结构与算法 · 难度：基础 · 前置：<code>a-sequence</code></p>
+<p>一句话：树用层次结构组织搜索路径，堆只维护局部优先关系并不提供全局有序遍历。平衡树、搜索树和堆服务不同访问模式，应依据查询和更新需求选择。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 学习目标</h3>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li><strong>解释二叉搜索树（BST）不变量</strong>：对任意节点，左子树键都小于（或 ≤）它，右子树键都大于（或 ≥）它；中序遍历得到有序序列。</li>
+<li><strong>说明平衡与树高的关系</strong>：高度决定查找/插入/删除的路径长度；退化成链时复杂度从 O(log n) 变成 O(n)。</li>
+<li><strong>区分二叉堆与搜索树</strong>：堆只保证父子之间的局部优先（堆序），<strong>不</strong>提供全局有序遍历，也不支持高效的任意键查找或范围扫描。</li>
+<li><strong>独立完成实践</strong>：用最小堆实现定时任务队列，并验证插入与按到期时间取出（删除堆顶）的顺序。</li>
+<li>在微信公众号后台场景里，能说清「定时推送 / 优先级任务 / 范围查找」各自更适合堆还是搜索树（或有序索引）。</li>
+</ol>
+<h3 id="12">1.2 验收标准</h3>
+<p>节点给出的验收标准有两条，本课会反复回扣：</p>
+<ul>
+<li><strong>能区分堆和搜索树的查询能力。</strong> 搜索树（及平衡搜索树、有序索引）支持按键查找、有序遍历、范围查询（如「CreateTime 在 [t1, t2]」）。堆只擅长「反复取出当前最优先的那一个」（最小到期时间、最高优先级），<strong>不能</strong>把堆数组当成已排序数组去二分或范围扫描。</li>
+<li><strong>能解释树退化为什么影响复杂度。</strong> BST 的查找成本与树高成正比。若插入顺序有序或近似有序，普通 BST 可能退化成一条链，高度变成 n-1，每次操作 O(n)。这就是为什么生产系统里有序索引通常用平衡树（或等价结构），而不是裸 BST。</li>
+</ul>
+<h3 id="13">1.3 为什么微信公众号后台要懂树与堆</h3>
+<p>节点对「为什么」的说明很直接：<strong>支撑定时器、优先级任务和范围查找。</strong> 放到即将入职的腾讯微信公众号后台，这三类需求几乎天天碰到：</p>
+<ul>
+<li><strong>定时推送 / 延迟消息。</strong> 运营配置「明天下午 3 点群发」、模板消息重试「60 秒后再投」、access_token 刷新「提前 5 分钟」。大量任务按<strong>到期时间</strong>排队，反复要的是「下一个该执行的是谁」——这是<strong>最小堆 / 优先队列</strong>的典型用法。</li>
+<li><strong>优先级任务队列。</strong> 粉丝互动回调要低延迟；批量打标签、离线报表可以往后排。用堆按优先级取出，比每次全表扫描「找优先级最高的」便宜得多。</li>
+<li><strong>范围查找。</strong> 「查出某公众号最近 7 天的图文阅读记录」「按 openid 字典序扫一段粉丝做分页」——需要<strong>有序</strong>，哈希表做不到高效范围扫描，搜索树或有序索引（如有序 map、B+ 树叶子链）更合适。</li>
+<li><strong>定时器堆 vs 有序索引。</strong> 若你只关心「下一个到期事件」，堆足够；若还要「取消某个 mid 的定时」「查询某时间窗内有哪些任务」，仅靠堆会很痛苦（堆不支持按任意键高效查找），往往需要「堆 + 哈希」或「有序树」等组合。</li>
+</ul>
+<p>所以本课的目标不是背「树是 O(log n)、堆是 O(log n)」，而是建立可验证的模型：<strong>不变量是什么、高度怎么来的、堆序保证什么、不保证什么、什么时候该选哪一种。</strong></p>
+<h2 id="2">2. 从直觉到原理：三个核心要点</h2>
+<h3 id="21">2.1 二叉搜索树不变量</h3>
+<h4 id="_1">直觉：左边更小，右边更大</h4>
+<p>想象一棵「按数值分叉」的决策树：站在节点 <code>50</code> 上，所有比 50 小的数都在左边子树，所有比 50 大的数都在右边子树。找 <code>23</code> 时，一路往左/右走，路径上每个节点都在帮你缩小范围——这就是<strong>用层次结构组织搜索路径</strong>。</p>
+<h4 id="bst">原理：BST 不变量</h4>
+<p>对树中任意节点 <code>u</code>：</p>
+<ul>
+<li><code>u</code> 的左子树中所有键 &lt; <code>u.key</code>（有的实现用 ≤，但同一棵树必须统一）</li>
+<li><code>u</code> 的右子树中所有键 &gt; <code>u.key</code></li>
+<li>左右子树各自也是 BST</li>
+</ul>
+<p>由此立刻得到：</p>
+<ol>
+<li><strong>查找</strong>：从根比较，小于走左、大于走右，路径长度 ≤ 树高。</li>
+<li><strong>中序遍历</strong>（左 → 根 → 右）得到<strong>升序</strong>序列——搜索树天然带有序性。</li>
+<li><strong>范围查询</strong>：可剪枝。例如查 [20, 40]，若当前节点 &lt; 20，整棵左子树可跳过。</li>
+</ol>
+<h4 id="_2">短代码：手工验证不变量</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Node</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Node</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="o">&lt;</span> <span class="n">root</span><span class="o">.</span><span class="n">key</span><span class="p">:</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">key</span> <span class="o">&gt;</span> <span class="n">root</span><span class="o">.</span><span class="n">key</span><span class="p">:</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+    <span class="c1"># 相等：本示例忽略重复键</span>
+    <span class="k">return</span> <span class="n">root</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">inorder</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">root</span><span class="p">:</span>
+        <span class="n">inorder</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">inorder</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_bst</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># 用 (lo, hi) 开区间检查不变量</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">lo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">lo</span> <span class="o">&lt;</span> <span class="n">root</span><span class="o">.</span><span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">hi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">key</span> <span class="o">&lt;</span> <span class="n">hi</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">is_bst</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">key</span><span class="p">)</span> <span class="ow">and</span> <span class="n">is_bst</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="n">root</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">hi</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">80</span><span class="p">]</span>
+    <span class="n">root</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"中序:"</span><span class="p">,</span> <span class="n">inorder</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>          <span class="c1"># [20, 30, 40, 50, 60, 70, 80]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"是 BST?"</span><span class="p">,</span> <span class="n">is_bst</span><span class="p">(</span><span class="n">root</span><span class="p">))</span>         <span class="c1"># True</span>
+</code></pre></div>
+
+<p>在公众号后台里，可以把「消息 CreateTime」或「粉丝 openid」想成键：BST（或更常见的平衡有序结构）让你既能点查，也能按时间窗扫一段。</p>
+<h4 id="_3">和哈希的对比（点一下，后文权衡再展开）</h4>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>哈希表</th>
+<th>搜索树</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单点查找</td>
+<td>平均 O(1)</td>
+<td>O(h)，平衡时 O(log n)</td>
+</tr>
+<tr>
+<td>有序遍历</td>
+<td>不支持（或要全取出再排）</td>
+<td>中序即有序</td>
+</tr>
+<tr>
+<td>范围查询</td>
+<td>不适合</td>
+<td>适合，可剪枝</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22">2.2 平衡与树高</h3>
+<h4 id="_4">直觉：同样多的节点，瘦高树更难找</h4>
+<p>8 个节点如果长成完美二叉树，高度大约 3，找一个键最多比 3 次。如果每次插入的都是递增键 <code>1,2,3,...,8</code>，普通 BST 会退化成右链，高度 7，最坏每次比 8 次。<strong>节点数相同，树形不同，成本天差地别。</strong></p>
+<h4 id="_5">原理：复杂度跟着高度走</h4>
+<p>设树高为 h（根到最深叶的边数，或层数减一，约定一致即可）：</p>
+<ul>
+<li>查找 / 插入 / 删除的路径长度都是 O(h)</li>
+<li>若树「平衡」，h = Θ(log n)，操作为 O(log n)</li>
+<li>若退化成链，h = Θ(n)，操作为 O(n)</li>
+</ul>
+<p><strong>树退化为什么影响复杂度？</strong> 因为算法并没有魔法：它必须沿着父子指针走，每走一步做一次比较。高度就是最多步数。退化 = 高度线性增长 = 每步操作的最坏成本线性增长。验收标准里的这句话，指的就是这个因果链。</p>
+<h4 id="_6">演示：有序插入导致退化</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">height</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># 空树高度 -1，单节点 0</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="n">height</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">left</span><span class="p">),</span> <span class="n">height</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">right</span><span class="p">))</span>
+
+<span class="c1"># 随机/打散插入：较矮</span>
+<span class="n">root_ok</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">80</span><span class="p">]:</span>
+    <span class="n">root_ok</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">root_ok</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"打散插入 高度:"</span><span class="p">,</span> <span class="n">height</span><span class="p">(</span><span class="n">root_ok</span><span class="p">),</span> <span class="s2">"中序:"</span><span class="p">,</span> <span class="n">inorder</span><span class="p">(</span><span class="n">root_ok</span><span class="p">))</span>
+
+<span class="c1"># 严格递增：退化成链</span>
+<span class="n">root_bad</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="n">root_bad</span> <span class="o">=</span> <span class="n">insert</span><span class="p">(</span><span class="n">root_bad</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"递增插入 高度:"</span><span class="p">,</span> <span class="n">height</span><span class="p">(</span><span class="n">root_bad</span><span class="p">),</span> <span class="s2">"中序:"</span><span class="p">,</span> <span class="n">inorder</span><span class="p">(</span><span class="n">root_bad</span><span class="p">))</span>
+</code></pre></div>
+
+<p>预期：打散插入高度约 2；递增插入高度 6。中序都是有序的——<strong>中序有序只说明不变量还在，不说明树是平衡的。</strong></p>
+<h4 id="_7">平衡树在说什么</h4>
+<p>「平衡」通常指用额外约束把高度压在 O(log n)，例如：</p>
+<ul>
+<li>AVL：左右子树高度差 ≤ 1</li>
+<li>红黑树：着色约束 → 最长路径不超过最短路径的两倍量级</li>
+<li>B 树 / B+ 树：多路、适合磁盘与数据库有序索引</li>
+</ul>
+<p>公众号后台里你不一定手写 AVL，但会用到：</p>
+<ul>
+<li>语言库的有序 map（如 C++ <code>std::map</code>，通常红黑树）</li>
+<li>数据库主键 / 二级索引（常见 B+ 树）</li>
+<li>需要范围扫描的内存索引</li>
+</ul>
+<p><strong>要点：需要稳定的 O(log n) 点查 + 有序/范围能力时，选平衡搜索树或有序索引；不要赌裸 BST 的插入顺序永远很随机。</strong></p>
+<h3 id="23">2.3 二叉堆与优先队列</h3>
+<h4 id="_8">直觉：只关心「现在最要紧的那个」</h4>
+<p>定时器场景里，你不需要把所有任务按时间排成完整名单再展示；你只需要反复问：<strong>下一个到期的是谁？</strong> 堆就是为这种「局部优先」设计的：只保证堆顶是最优先，其余位置只要满足父子关系即可。</p>
+<h4 id="_9">原理：堆序 + 完全二叉树形状</h4>
+<p><strong>二叉堆</strong>通常用数组表示一棵完全二叉树：</p>
+<ul>
+<li>下标从 0 开始时：左孩子 <code>2i+1</code>，右孩子 <code>2i+2</code>，父节点 <code>(i-1)//2</code></li>
+<li><strong>最小堆不变量</strong>：任意节点值 ≤ 其子女（父比子更「优先」）</li>
+<li>插入：放到末尾，向上 sift_up</li>
+<li>删除堆顶：用末尾覆盖堆顶，再向下 sift_down</li>
+<li>时间：插入 / 删堆顶 O(log n)；看堆顶 O(1)</li>
+</ul>
+<p><strong>优先队列</strong>是抽象数据类型：push / pop_min（或 pop_max）/ peek。二叉堆是最常见实现；C++ 的 <code>std::priority_queue</code>、Python 的 <code>heapq</code> 都是堆。</p>
+<h4 id="_10">关键：堆不是搜索树</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>搜索树</th>
+<th>二叉堆</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不变量</td>
+<td>全局左右有序（BST）</td>
+<td>仅父子局部优先</td>
+</tr>
+<tr>
+<td>中序/数组顺序</td>
+<td>中序有序</td>
+<td><strong>数组下标顺序 ≠ 排序顺序</strong></td>
+</tr>
+<tr>
+<td>找任意键</td>
+<td>O(h)</td>
+<td>通常要 O(n) 扫</td>
+</tr>
+<tr>
+<td>范围查询</td>
+<td>擅长</td>
+<td>不擅长</td>
+</tr>
+<tr>
+<td>反复取最小</td>
+<td>可删最小，但常数与实现更重</td>
+<td>本职工作</td>
+</tr>
+</tbody>
+</table>
+<p>节点 summary 说得很准：<strong>堆只维护局部优先关系，并不提供全局有序遍历。</strong></p>
+<h4 id="_11">短代码：最小堆核心</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MinHeap</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sift_up</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sift_down</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">top</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sift_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">break</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">p</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sift_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">best</span><span class="p">]:</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">l</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">best</span><span class="p">]:</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">r</span>
+            <span class="k">if</span> <span class="n">best</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">best</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">best</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">best</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="n">MinHeap</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"堆数组(非全序):"</span><span class="p">,</span> <span class="n">h</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>   <span class="c1"># 例如 [1, 3, 8, 5, 4]，不是 [1,3,4,5,8]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"依次 pop:"</span><span class="p">,</span> <span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)])</span>  <span class="c1"># [1,3,4,5,8]</span>
+</code></pre></div>
+
+<p>注意：<code>h.a</code> 打印出来<strong>不是</strong>排序结果；只有不断 <code>pop</code> 才能得到有序序列（堆排序思想）。<strong>不能把堆数组直接当作已排序数组</strong>——这是本课核心误区。</p>
+<h4 id="_12">公众号后台例子</h4>
+<div class="codehilite"><pre><span></span><code>任务 = (到期时间戳, 任务名)
+push (1730000005, "群发A")
+push (1730000001, "重试回调")
+push (1730000003, "刷新token")
+反复 pop → 先拿到 1730000001 的重试，再 token，再群发
+</code></pre></div>
+
+<p>这就是定时任务队列的骨架。</p>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 误区：把堆数组直接当作已排序数组</h3>
+<p>堆数组满足的是<strong>堆序</strong>，不是<strong>全序</strong>。常见错误：</p>
+<ol>
+<li>对 <code>heap.a</code> 做二分查找，假设单调——<strong>错误</strong>，中间可能忽大忽小。</li>
+<li>以为 <code>heap.a[1]</code> 是第二小——<strong>错误</strong>，第二小只保证在堆顶的子节点之中，不一定是下标 1。</li>
+<li>把堆数组直接返回给前端当「按时间排序的任务列表」——<strong>错误</strong>，应多次取出，或另维护有序结构。</li>
+</ol>
+<p>反例：</p>
+<div class="codehilite"><pre><span></span><code>某次最小堆内部可能是：
+       1
+     /   \
+    4     2
+   / \
+  5   7
+数组: [1, 4, 2, 5, 7]
+若当成已排序: 会以为 4 是第二小，其实第二小是 2。
+</code></pre></div>
+
+<h3 id="32">3.2 其他常见误区</h3>
+<ul>
+<li><strong>「有了堆就不需要搜索树」。</strong> 堆解决优先取出；搜索树解决有序与范围。定时器取消指定 id、按时间窗统计，堆单独不够。</li>
+<li><strong>「BST 中序有序所以一定很快」。</strong> 中序有序只说明不变量成立；退化链上中序仍有序，但每次插入已是 O(n)。</li>
+<li><strong>「平衡树和堆都是树，用法差不多」。</strong> 形状都是树，<strong>服务的访问模式不同</strong>：一个为搜索路径，一个为局部优先。</li>
+</ul>
+<h3 id="33-vs">3.3 设计权衡：有序查询 vs 哈希</h3>
+<p>节点 tradeoffs：<strong>有序查询比哈希更适合范围扫描，但单点查找成本不同。</strong></p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>更合适</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>openid → 会话，纯点查</td>
+<td>哈希</td>
+<td>平均 O(1)，不需要序</td>
+</tr>
+<tr>
+<td>按 CreateTime 扫最近 7 天消息</td>
+<td>有序索引 / 搜索树</td>
+<td>范围扫描、有序推进</td>
+</tr>
+<tr>
+<td>下一个到期定时器</td>
+<td>最小堆</td>
+<td>只要全局最小</td>
+</tr>
+<tr>
+<td>既要按 id 取消、又要按时间触发</td>
+<td>堆 + 哈希，或有序树</td>
+<td>单一结构难兼顾</td>
+</tr>
+</tbody>
+</table>
+<p>单点查找成本：</p>
+<ul>
+<li>哈希：平均 O(1)，最坏退化风险（上一课）</li>
+<li>平衡树：稳定 O(log n)</li>
+<li>堆：找任意键 O(n)</li>
+</ul>
+<p><strong>选择依据是查询与更新模式</strong>（节点 summary），不是「哪种数据结构更高级」。</p>
+<h2 id="4">4. 动手实践</h2>
+<p>节点实践：<strong>实现最小堆定时任务队列并验证插入删除顺序。</strong></p>
+<p>下面把实践拆成可执行步骤。建议目录：<code>/workspace/atlas/practice10</code>。</p>
+<h3 id="1_1">步骤 1：建立实验目录</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/workspace/atlas/practice10
+<span class="nb">cd</span><span class="w"> </span>/workspace/atlas/practice10
+</code></pre></div>
+
+<h3 id="2_1">步骤 2：写入定时任务队列</h3>
+<p>将下列代码保存为 <code>timer_heap.py</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># 最小堆定时任务队列：按到期时间取出。</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="p">:</span>
+    <span class="c1"># 比较时只看 due；name/payload 不参与比较。</span>
+    <span class="n">due</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">payload</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TimerMinHeap</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Task</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">peek</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Task</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="n">Task</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sift_up</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Task</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sift_down</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">top</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">as_array_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+        <span class="c1"># 暴露内部数组，用于证明「不是已排序」。</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">t</span><span class="o">.</span><span class="n">due</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sift_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+        <span class="k">while</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">a</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="k">break</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">p</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">p</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_sift_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">a</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">best</span><span class="p">]:</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">l</span>
+            <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">n</span> <span class="ow">and</span> <span class="n">a</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">best</span><span class="p">]:</span>
+                <span class="n">best</span> <span class="o">=</span> <span class="n">r</span>
+            <span class="k">if</span> <span class="n">best</span> <span class="o">==</span> <span class="n">i</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">best</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">best</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">best</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">demo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># 模拟公众号后台：插入顺序乱序，取出必须按 due 升序</span>
+    <span class="n">jobs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Task</span><span class="p">(</span><span class="n">due</span><span class="o">=</span><span class="mi">1730000005</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"群发图文A"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">"appid"</span><span class="p">:</span> <span class="s2">"wx1"</span><span class="p">}),</span>
+        <span class="n">Task</span><span class="p">(</span><span class="n">due</span><span class="o">=</span><span class="mi">1730000001</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"回调重试"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">"msgid"</span><span class="p">:</span> <span class="s2">"m42"</span><span class="p">}),</span>
+        <span class="n">Task</span><span class="p">(</span><span class="n">due</span><span class="o">=</span><span class="mi">1730000003</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"刷新token"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">"appid"</span><span class="p">:</span> <span class="s2">"wx1"</span><span class="p">}),</span>
+        <span class="n">Task</span><span class="p">(</span><span class="n">due</span><span class="o">=</span><span class="mi">1730000002</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"延迟模板消息"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s2">"openid"</span><span class="p">:</span> <span class="s2">"oABC"</span><span class="p">}),</span>
+        <span class="n">Task</span><span class="p">(</span><span class="n">due</span><span class="o">=</span><span class="mi">1730000004</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"清理过期会话"</span><span class="p">,</span> <span class="n">payload</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="n">heap</span> <span class="o">=</span> <span class="n">TimerMinHeap</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== 插入（乱序）==="</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">:</span>
+        <span class="n">heap</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  push due=</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">due</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"    内部数组: </span><span class="si">{</span><span class="n">heap</span><span class="o">.</span><span class="n">as_array_names</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 验证：内部数组通常不是按 due 全序 ==="</span><span class="p">)</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">heap</span><span class="o">.</span><span class="n">as_array_names</span><span class="p">()</span>
+    <span class="n">dues</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  内部 dues: </span><span class="si">{</span><span class="n">dues</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  是否已排序: </span><span class="si">{</span><span class="n">dues</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">sorted</span><span class="p">(</span><span class="n">dues</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 依次 pop（删除堆顶）==="</span><span class="p">)</span>
+    <span class="n">got</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">heap</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">heap</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">got</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">due</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  pop due=</span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">due</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">expect</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">due</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">jobs</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 校验删除顺序 ==="</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  得到: </span><span class="si">{</span><span class="n">got</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  期望: </span><span class="si">{</span><span class="n">expect</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">got</span> <span class="o">==</span> <span class="n">expect</span><span class="p">,</span> <span class="s2">"pop 顺序必须按 due 升序"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  OK: 插入乱序，删除（取出）按到期时间有序。"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">demo</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="3_1">步骤 3：运行并记录结果</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/practice10
+python3<span class="w"> </span>timer_heap.py
+</code></pre></div>
+
+<p>你应当看到：</p>
+<ol>
+<li>每次 <code>push</code> 后内部数组变化，堆顶始终是当前最小 <code>due</code>。</li>
+<li>「是否已排序」多为 <code>False</code>（除非碰巧）。</li>
+<li>五次 <code>pop</code> 的 <code>due</code> 严格为 <code>1730000001 … 1730000005</code>。</li>
+<li>最后打印 <code>OK: 插入乱序，删除（取出）按到期时间有序。</code></li>
+</ol>
+<h3 id="4-heapq">步骤 4：对照标准库 heapq（可选）</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import heapq; h=[];</span>
+<span class="s1">[(heapq.heappush(h,(d,n))) for d,n in [(5,"A"),(1,"重试"),(3,"token"),(2,"模板"),(4,"清理")]];</span>
+<span class="s1">print("内部", h);</span>
+<span class="s1">print("弹出", [heapq.heappop(h) for _ in range(5)])'</span>
+</code></pre></div>
+
+<p>注意：<code>heapq</code> 文档同样不保证列表 <code>h</code> 全序，只保证 <code>h[0]</code> 最小。</p>
+<h3 id="5">步骤 5：对照有序结构的「范围」能力（加深区分）</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">'events=sorted([(1730000001,"重试"),(1730000002,"模板"),(1730000003,"token"),(1730000004,"清理"),(1730000005,"群发")]); lo,hi=1730000002,1730000004; print([e for e in events if lo&lt;=e[0]&lt;=hi])'</span>
+</code></pre></div>
+
+<p>有序结构能直接回答「窗内有哪些」；堆只能反复取最小。这直接回扣验收：<strong>堆擅长下一次触发；搜索树/有序索引擅长范围。</strong></p>
+<h3 id="6">步骤 6：验收自查</h3>
+<ul>
+<li>[ ] 能说出 BST 不变量，并用中序/区间检查解释</li>
+<li>[ ] 能说明递增插入如何抬高树高、为何变成 O(n)</li>
+<li>[ ] 能说明堆数组为何不是已排序数组</li>
+<li>[ ] <code>timer_heap.py</code> 跑通，pop 顺序等于按 <code>due</code> 排序</li>
+<li>[ ] 能区分：定时器取下一任务用堆；按时间窗列消息用有序结构</li>
+</ul>
+<h2 id="5-3">5. 自测题（3 道，附答案）</h2>
+<h3 id="1_2">题 1：堆和搜索树的查询能力差在哪里？</h3>
+<p><strong>题：</strong> 微信公众号后台有两个需求：① 取出「下一个到期」的群发任务；② 列出 CreateTime 在 [t1, t2] 内的全部消息 id。只给一个二叉堆或一棵平衡搜索树，分别怎么选？为什么？</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li>① 用<strong>最小堆（优先队列）</strong>：只需维护局部堆序，反复 <code>pop</code> 堆顶即可，插入/删除 O(log n)。</li>
+<li>② 用<strong>平衡搜索树 / 有序索引</strong>：需要范围扫描与有序遍历；堆不支持高效范围查询，按键查找也是 O(n)。</li>
+<li>若两者都要，通常组合结构（例如按时间的有序树，或堆 + 任务 id 哈希），而不是「一个堆打天下」。</li>
+</ul>
+<h3 id="2_2">题 2：树退化为什么影响复杂度？</h3>
+<p><strong>题：</strong> 向空 BST 依次插入 <code>1..n</code>（严格递增）。查找键 <code>n</code> 的比较次数大约多少？若改用平衡树呢？请用「高度」解释。</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li>严格递增插入使每个新节点都挂在最右孩子上，树退化成右链，高度 Θ(n)。</li>
+<li>查找 <code>n</code> 要从根走到最深叶，约 n 次比较，O(n)。</li>
+<li>平衡树通过旋转等操作把高度压在 Θ(log n)，查找为 O(log n)。</li>
+<li><strong>本质：</strong> BST 操作成本由路径长度（高度）决定；退化抬高高度，直接抬高复杂度。</li>
+</ul>
+<h3 id="3_2">题 3：为什么不能把堆数组直接当已排序数组？</h3>
+<p><strong>题：</strong> 最小堆内部数组为 <code>[1, 4, 2, 5, 7]</code>。有人说「已经差不多排好了，第二小就是 a[1]=4」。错在哪里？正确拿到升序的方式是什么？</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li>堆只保证父 ≤ 子，不保证同层或下标序。第二小只可能在堆顶的孩子里，这里是 <code>4</code> 与 <code>2</code>，真正第二小是 <code>2</code>，不是 <code>a[1]</code>。</li>
+<li>也不能对堆数组做二分。</li>
+<li>正确方式：反复 <code>pop</code>（或复制后再堆排序），得到 <code>1,2,4,5,7</code>；若需要持久有序视图，应使用搜索树等有序结构。</li>
+</ul>
+<h2 id="6_1">6. 推荐资源</h2>
+<p>只使用节点给出的资源：</p>
+<ol>
+<li><strong>搜索树、堆与有序索引：参考文档 / 原始资料</strong>
+   - URL：https://en.cppreference.com/w/cpp/container/priority_queue.html
+   - 来源：en.cppreference.com · 英文 · 文档 · 基础 · 免费
+   - 阅读建议：对照 <code>priority_queue</code> 的 <code>push</code> / <code>pop</code> / <code>top</code> 语义，理解「只暴露堆顶、不提供全局有序遍历」；并结合本课 BST 不变量、平衡与树高，核对本节点实验（定时任务最小堆）的边界——例如默认比较器、元素可比较性、以及「容器内部顺序不可当作已排序序列依赖」。</li>
+</ol>
+<h2 id="7">7. 小结与前后置关系</h2>
+<h3 id="71">7.1 本课要点回顾</h3>
+<ol>
+<li><strong>BST 不变量</strong>组织搜索路径；中序有序；范围查询可剪枝。</li>
+<li><strong>平衡与树高</strong>决定复杂度；退化成链 → O(n)；生产有序索引需平衡保证。</li>
+<li><strong>二叉堆 / 优先队列</strong>只维护局部优先，胜任定时器与优先级任务；<strong>不是</strong>已排序数组，也不替代搜索树的范围能力。</li>
+<li><strong>权衡</strong>：范围与有序看树/有序索引；纯点查看哈希；「下一个最优先」看堆。</li>
+</ol>
+<h3 id="72">7.2 验收回扣</h3>
+<ul>
+<li><strong>区分堆与搜索树的查询能力：</strong> 堆 = 反复取最优先；搜索树 = 点查 + 有序 + 范围。</li>
+<li><strong>树退化影响复杂度：</strong> 高度变线性 ⇒ 路径变线性 ⇒ 操作变 O(n)。</li>
+</ul>
+<h3 id="73">7.3 前后置</h3>
+<ul>
+<li><strong>前置：</strong> <code>a-sequence</code>（顺序结构与基本复杂度直觉）。</li>
+<li><strong>本节点：</strong> <code>a-tree</code>（搜索树、堆与有序索引）。</li>
+<li><strong>后续：</strong> 在更高阶段会把这里的「有序索引 / 优先队列」接到真实存储、定时器实现与调度系统中；先把不变量与适用边界吃透。</li>
+</ul>
+<h3 id="74">7.4 一句话带走</h3>
+<p><strong>树管搜索路径与范围，堆管下一个最要紧的任务；数组长得像树不等于已经排好序，高度失控复杂度就失控。</strong></p><div class="pn"><span><a href="9.html">← 哈希表与冲突处理</a></span><span><a href="11.html">图、依赖与拓扑排序 →</a></span></div></main></div></body></html>

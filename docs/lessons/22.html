@@ -1,0 +1,171 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>22. 智能指针与共享所有权 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="cur" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 22 课 · 领域 B · 阶段 1</p><p class="dl"><a href="../files/22-b-smart.md" download>⬇ 本课 Markdown</a><a href="../files/practice22.tar.gz" download>⬇ 练习包 practice22.tar.gz</a></p><h1 id="22208">第 22/208 课：智能指针与共享所有权</h1>
+<blockquote>
+<p>领域 B · 阶段 1 · 子类：生命周期与所有权 · 难度：基础 · 前置：b-move（拷贝、移动与值类别）</p>
+</blockquote>
+<p>一句话：<code>unique_ptr</code> 表达唯一拥有，<code>shared_ptr</code> 通过控制块管理共享拥有，<code>weak_ptr</code> 提供不延长寿命的观察。</p>
+<h2 id="_1">一、学习目标与为什么后端要懂</h2>
+<p>学完这一课，你应该能做到：</p>
+<ol>
+<li>讲清控制块里有什么、引用计数怎么变化；</li>
+<li>独立完成节点实践：实现"异步回调持有连接"的例子，并修复循环引用和提前析构；</li>
+<li>分清 "shared_ptr 对象本身线程安全" 和 "被指对象线程安全" 是两回事；</li>
+<li>解释 <code>weak_ptr::lock()</code> 为什么会失败、失败时该怎么处理。</li>
+</ol>
+<p>为什么后端要懂：节点给的理由是"明确异步任务、连接及缓存对象的释放责任"。后台服务里，一个请求往往跨好几个异步阶段：收包、调下游 RPC、等回包、写回客户端。连接对象该在什么时候释放？回调触发时连接是否还活着？缓存里的对象被淘汰时，正在使用它的请求怎么办？这些问题答错的结果是 use-after-free（随机崩溃）或内存泄漏（进程慢慢涨到被 OOM），而智能指针就是用类型把"谁负责释放"写清楚。</p>
+<h2 id="_2">二、从直觉到原理</h2>
+<h3 id="1-unique_ptr-shared_ptr">1. 先选对：unique_ptr 是默认，shared_ptr 是例外</h3>
+<p>直觉：一个对象只有一个主人时，用 <code>unique_ptr</code>；它只能移动不能拷贝（上一课的移动语义在这里直接用上），零额外开销。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_unique</span><span class="o">&lt;</span><span class="n">Request</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">req</span><span class="p">));</span><span class="w">   </span><span class="c1">// 所有权转给队列，req 变成空</span>
+</code></pre></div>
+
+<p>只有当"谁最后用完谁释放"在编译期确定不了时（比如多个异步回调都可能最后一个结束），才用 <code>shared_ptr</code>。</p>
+<h3 id="2">2. 控制块与引用计数</h3>
+<p><code>shared_ptr</code> 内部是两个指针：一个指向对象，一个指向<strong>控制块</strong>。控制块里存：</p>
+<ul>
+<li>强引用计数（有多少个 <code>shared_ptr</code> 拥有它）；</li>
+<li>弱引用计数（有多少个 <code>weak_ptr</code> 在观察它）；</li>
+<li>删除器（和分配器）。</li>
+</ul>
+<p>规则：</p>
+<ul>
+<li>拷贝 <code>shared_ptr</code>，强计数 +1；析构或 reset，强计数 -1；</li>
+<li>强计数归零时，调用删除器销毁<strong>对象</strong>；</li>
+<li>强计数和弱计数都归零时，才释放<strong>控制块</strong>本身。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Conn</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span><span class="w">  </span><span class="c1">// 强计数 1</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">                           </span><span class="c1">// 2</span>
+<span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Conn</span><span class="o">&gt;</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">            </span><span class="c1">// 强计数仍是 2，弱计数 +1</span>
+<span class="n">b</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span><span class="w">                            </span><span class="c1">// 1</span>
+<span class="n">a</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span><span class="w">                            </span><span class="c1">// 0 → Conn 被析构；w.expired() == true</span>
+</code></pre></div>
+
+<p><code>make_shared</code> 把对象和控制块放在一次分配里，少一次 malloc；代价是只要还有 <code>weak_ptr</code> 在，那块内存（包括对象占的空间）就不能归还。直接 <code>std::shared_ptr&lt;T&gt;(new T)</code> 则是两次分配。</p>
+<p>计数的增减是原子操作，所以多线程里各自拷贝、各自析构 <code>shared_ptr</code> 是安全的。但原子操作不是免费的，这就是节点说的"计数开销"。</p>
+<h3 id="3-weak_ptr">3. 循环引用与 weak_ptr</h3>
+<p>后台常见结构：<code>Session</code> 持有 <code>Connection</code>，<code>Connection</code> 又想知道自己属于哪个 <code>Session</code>。如果两边都用 <code>shared_ptr</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Conn</span><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">session</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Session</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Conn</span><span class="o">&gt;</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Session</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">s</span><span class="o">-&gt;</span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Conn</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">s</span><span class="o">-&gt;</span><span class="n">conn</span><span class="o">-&gt;</span><span class="n">session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w">   </span><span class="c1">// s 的强计数变成 2</span>
+<span class="c1">// 离开作用域：s 的计数 2→1，永远到不了 0，两个对象都泄漏</span>
+</code></pre></div>
+
+<p>修复：把"反向"那条边改成 <code>weak_ptr</code>，它只观察、不拥有：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Conn</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">session</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="o">-&gt;</span><span class="n">session</span><span class="p">.</span><span class="n">lock</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w">   </span><span class="c1">// 尝试升级成 shared_ptr</span>
+<span class="w">    </span><span class="n">s</span><span class="o">-&gt;</span><span class="n">onData</span><span class="p">(...);</span><span class="w">                    </span><span class="c1">// 在 s 作用域内对象一定活着</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Session 已经没了：丢弃、记日志、关闭连接</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong><code>lock()</code> 为什么会失败</strong>：它检查强计数，为 0 说明对象已经销毁，就返回空的 <code>shared_ptr</code>。这不是 bug，而是 <code>weak_ptr</code> 的本意：告诉你"对象已经不在了"。注意不要先 <code>expired()</code> 再 <code>lock()</code> 分两步判断，中间对象可能被别的线程释放；直接 <code>lock()</code> 并检查结果是原子的。</p>
+<p>经验：画出对象之间的所有权图，强引用必须是一个<strong>无环</strong>的图（树或 DAG），反向边、父指针、观察者列表、缓存索引一律用 <code>weak_ptr</code> 或裸指针（在能保证寿命时）。</p>
+<h3 id="4-shared_from_this">4. shared_from_this：异步回调里保活自己</h3>
+<p>最典型的提前析构：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">Conn::asyncRead</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loop</span><span class="p">.</span><span class="k">post</span><span class="p">([</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">handle</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w"> </span><span class="p">});</span><span class="w">   </span><span class="c1">// 只捕获裸 this</span>
+<span class="p">}</span>
+<span class="c1">// 回调还没执行，外部最后一个 shared_ptr 已释放 → Conn 析构</span>
+<span class="c1">// 回调执行时访问 this → heap-use-after-free</span>
+</code></pre></div>
+
+<p>修复：让类继承 <code>std::enable_shared_from_this&lt;Conn&gt;</code>，在回调里捕获一份 <code>shared_ptr</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Conn</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">enable_shared_from_this</span><span class="o">&lt;</span><span class="n">Conn</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">asyncRead</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shared_from_this</span><span class="p">();</span>
+<span class="w">        </span><span class="n">loop</span><span class="p">.</span><span class="k">post</span><span class="p">([</span><span class="n">self</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">self</span><span class="o">-&gt;</span><span class="n">handle</span><span class="p">(</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">);</span><span class="w"> </span><span class="p">});</span><span class="w">  </span><span class="c1">// 回调持有所有权</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>不能自己写 <code>std::shared_ptr&lt;Conn&gt;(this)</code>：那会新建第二个控制块，两个控制块各自归零时各删一次，就是 double free。<code>shared_from_this()</code> 的原理是基类里藏了一个 <code>weak_ptr</code>，在对象第一次交给 <code>shared_ptr</code> 管理时被设置，调用时对它 <code>lock()</code>，所以复用的是同一个控制块。</p>
+<p>两个限制：</p>
+<ul>
+<li>对象必须已经被某个 <code>shared_ptr</code> 拥有，在构造函数里调用不行；C++17 起没被拥有时调用会抛 <code>std::bad_weak_ptr</code>。</li>
+<li>保活要有终点：回调要么执行要么被取消，否则 <code>self</code> 永远在队列里，连接永远不释放。</li>
+</ul>
+<h3 id="5-new">5. 删除器：管理不是 new 出来的资源</h3>
+<p>智能指针不只管内存，配合删除器可以管任何"需要释放"的东西，这就是上一课 RAII 的延伸：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">closer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[](</span><span class="kt">FILE</span><span class="o">*</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span><span class="w"> </span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="p">,</span><span class="w"> </span><span class="k">decltype</span><span class="p">(</span><span class="n">closer</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fp</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">fopen</span><span class="p">(</span><span class="s">"/tmp/a.log"</span><span class="p">,</span><span class="w"> </span><span class="s">"w"</span><span class="p">),</span><span class="w"> </span><span class="n">closer</span><span class="p">);</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fd</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="kt">int</span><span class="p">(</span><span class="o">::</span><span class="n">open</span><span class="p">(...)),</span><span class="w"> </span><span class="p">[](</span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">);</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="n">p</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+
+<p>区别：<code>unique_ptr</code> 的删除器是<strong>类型的一部分</strong>（不同删除器是不同类型，但可以零开销）；<code>shared_ptr</code> 的删除器存在控制块里、类型被擦除，所以 <code>shared_ptr&lt;T&gt;</code> 不管用什么删除器都是同一个类型，更方便放进容器和接口里。</p>
+<h2 id="_3">三、常见误区</h2>
+<ol>
+<li><strong>以为 shared_ptr 线程安全就万事大吉</strong>（节点特别强调的坑）："同一控制块线程安全不意味着多个线程可无锁修改同一个 shared_ptr 实例。"
+   - 安全：线程 A、B 各自持有自己的 <code>shared_ptr</code> 拷贝，各自拷贝、析构；
+   - 不安全：两个线程同时对<strong>同一个</strong> <code>shared_ptr</code> 变量赋值或 reset（比如一个全局 <code>std::shared_ptr&lt;Config&gt; g_cfg</code> 被热更新线程写、工作线程读）。这是数据竞争，要用锁、C++20 的 <code>std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>，或旧标准的 <code>std::atomic_load/atomic_store</code> 重载；
+   - 也不安全：多个线程无锁修改<strong>被指对象</strong>本身。shared_ptr 只保证计数安全，不保证 <code>Config</code> 的成员读写安全。
+   这就是验收标准里的"区分 shared_ptr 对象安全与被指对象安全"。</li>
+<li><strong>用裸 this 或引用捕获进异步回调</strong>：回调执行时对象可能已析构。</li>
+<li><strong>用同一个裸指针构造两个 shared_ptr</strong>：两个控制块，double free。始终优先 <code>make_shared</code> / <code>make_unique</code>。</li>
+<li><strong>在构造函数里调 shared_from_this()</strong>：对象还没被 shared_ptr 拥有。</li>
+<li><strong>处处 shared_ptr</strong>：所有权变得模糊，谁都不知道对象什么时候死，排查泄漏非常痛苦。</li>
+<li><strong>weak_ptr 先 expired() 再 lock()</strong>：有竞态，直接 lock 并判空。</li>
+</ol>
+<h2 id="_4">四、设计权衡</h2>
+<p>节点给的权衡是："共享所有权便捷，但计数开销与隐含寿命会增加复杂度。"</p>
+<ul>
+<li><strong>计数开销</strong>：每次拷贝和析构都是原子增减，热路径上按值传 <code>shared_ptr</code> 很浪费。只是使用不需要保存时，传 <code>const T&amp;</code> 或 <code>T*</code>；需要接管所有权时才按值传再 <code>std::move</code>。</li>
+<li><strong>隐含寿命</strong>：对象什么时候释放取决于最后一个持有者，可能是某个排队很久的回调，导致析构发生在意想不到的线程、意想不到的时刻（例如析构里关闭 fd 发生在网络线程里）。</li>
+<li>能用 <code>unique_ptr</code> 明确一个主人时就不要用 <code>shared_ptr</code>；必须共享时，把强引用图画出来，确认无环、有终点。</li>
+</ul>
+<p>后台场景举例：</p>
+<ul>
+<li>异步 RPC 回调持有连接：回调里捕获 <code>shared_from_this()</code>，保证回包到达时连接还在；连接被主动关闭时，用超时或取消机制让回调清掉，避免保活变泄漏。</li>
+<li>本地缓存：缓存表持有 <code>shared_ptr&lt;Item&gt;</code>，正在处理的请求也拿一份拷贝；淘汰时缓存只是删掉自己那份，正在用的请求不受影响，用完自然释放。缓存的观察者或反向索引用 <code>weak_ptr</code>。</li>
+</ul>
+<h2 id="_5">五、动手实践：异步回调持有连接，修复循环引用与提前析构</h2>
+<p>实践代码在附带的 <code>practice22/</code> 目录（<code>conn.cpp</code> 和 <code>test.sh</code>），已在 g++ C++17 + AddressSanitizer 下跑通。建议先自己写，再对照。</p>
+<ol>
+<li><strong>搭一个极简事件循环</strong>：一个 <code>std::queue&lt;std::function&lt;void()&gt;&gt;</code>，<code>post</code> 往里放回调，<code>run_loop()</code> 依次执行，模拟 epoll 回调或 RPC 回包的"稍后执行"。</li>
+<li><strong>写 Connection</strong>：构造和析构里增减一个全局存活计数并打印日志，方便观察寿命。</li>
+<li><strong>重现提前析构</strong>：<code>async_read_bad</code> 捕获裸 <code>this</code>，在作用域内创建连接、投递回调、离开作用域，再 <code>run_loop()</code>。用 <code>-fsanitize=address</code> 编译，应看到 <code>heap-use-after-free</code>。</li>
+<li><strong>修复</strong>：继承 <code>enable_shared_from_this</code>，改成捕获 <code>self = shared_from_this()</code>。检查投递后 <code>use_count() == 2</code>，外部释放后连接仍存活，回调执行完才析构。</li>
+<li><strong>重现循环引用</strong>：<code>SessionCycle</code> 和 <code>ConnCycle</code> 互相持有 <code>shared_ptr</code>，离开作用域后存活计数仍不为 0；开启 LeakSanitizer（<code>ASAN_OPTIONS=detect_leaks=1</code>）应报告 <code>detected memory leaks</code>。</li>
+<li><strong>修复循环引用</strong>：反向边改成 <code>weak_ptr</code>，确认 <code>use_count()</code> 为 1、离开作用域后两个对象都析构。</li>
+<li><strong>验证 lock 失败</strong>：保留一个外部 <code>weak_ptr</code>，对象释放后检查 <code>expired()</code> 为真、<code>lock()</code> 返回空。</li>
+<li><strong>加分项</strong>：用 <code>unique_ptr&lt;FILE, 删除器&gt;</code> 管理文件句柄，确认离开作用域自动 <code>fclose</code>。</li>
+</ol>
+<p>运行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice22
+./test.sh
+<span class="c1"># 期望最后一行：ALL_CHECKS_PASSED</span>
+</code></pre></div>
+
+<p>验收（来自节点）：能区分 shared_ptr 对象安全与被指对象安全；能解释 weak_ptr.lock 失败。</p>
+<h2 id="_6">六、自测题</h2>
+<p><strong>题 1</strong>：下面代码最后 <code>Conn</code> 会被析构吗？为什么？</p>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Conn</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="n">Conn</span><span class="o">&gt;</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">w</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+<span class="n">a</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span>
+</code></pre></div>
+
+<details><summary>答案</summary>
+不会。`lock()` 成功返回了一个新的 shared_ptr `b`，强计数为 2；`a.reset()` 后降到 1，`b` 仍拥有对象。只有 `b` 也释放后对象才析构。weak_ptr `w` 本身不影响对象寿命，只让控制块继续存在。
+</details>
+
+<p><strong>题 2</strong>：一个全局 <code>std::shared_ptr&lt;Config&gt; g_cfg</code>，配置热更新线程执行 <code>g_cfg = std::make_shared&lt;Config&gt;(...)</code>，多个工作线程执行 <code>auto c = g_cfg; c-&gt;get(...)</code>，不加锁。有问题吗？</p>
+<details><summary>答案</summary>
+有。引用计数的原子性只保证"不同的 shared_ptr 实例共享同一个控制块"时安全；这里多个线程同时读写的是**同一个** `g_cfg` 实例，属于数据竞争。要加互斥锁，或用 C++20 的 `std::atomic<std::shared_ptr<Config>>`（旧标准用 `std::atomic_load/atomic_store`）。另外，如果 `Config` 发布后不再修改，工作线程读被指对象是安全的；若会被修改，被指对象也要自己保证线程安全。
+</details>
+
+<p><strong>题 3</strong>：为什么不能在 <code>Conn</code> 的成员函数里写 <code>std::shared_ptr&lt;Conn&gt;(this)</code> 来给回调保活？<code>shared_from_this()</code> 又是怎么避免问题的？</p>
+<details><summary>答案</summary>
+`shared_ptr<Conn>(this)` 会新建一个独立的控制块，和外面已有的控制块各自计数，两边都归零时各删一次对象，造成 double free（或其中一边提前删掉对象造成 use-after-free）。`enable_shared_from_this` 在基类里保存一个 weak_ptr，对象第一次交给 shared_ptr 时被关联到同一个控制块，`shared_from_this()` 就是对它 lock，返回共享同一控制块的 shared_ptr。前提是对象已被 shared_ptr 拥有，否则 C++17 起抛 `std::bad_weak_ptr`。
+</details>
+
+<h2 id="_7">七、推荐资源</h2>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/memory.html">cppreference：Memory management library</a>（英文，文档，基础，免费）：重点阅读控制块与引用计数、循环引用与 weak_ptr，用于核对本节点实验的语义和边界。可从这里进入 <code>unique_ptr</code>、<code>shared_ptr</code>、<code>weak_ptr</code>、<code>enable_shared_from_this</code> 各自的页面。</li>
+</ul>
+<p>源码阅读建议（节点 sourceStudy）：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件，比如 <code>shared_from_this</code> 在 C++17 前后对"未被拥有"情况的不同行为。</p><div class="pn"><span><a href="21.html">← 拷贝、移动与值类别</a></span><span><a href="23.html">STL容器与迭代器 →</a></span></div></main></div></body></html>

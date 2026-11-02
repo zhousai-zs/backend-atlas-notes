@@ -1,0 +1,667 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>18. 指针、引用与借用边界 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="cur" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 18 课 · 领域 B · 阶段 1</p><p class="dl"><a href="../files/18-b-pointer.md" download>⬇ 本课 Markdown</a><a href="../files/practice18.tar.gz" download>⬇ 练习包 practice18.tar.gz</a></p><h1 id="18208">第 18/208 课：指针、引用与借用边界</h1>
+<blockquote>
+<p>节点 id：<code>b-pointer</code> · 域：B · 子类：语法与类型 · 难度：基础 · 前置：<code>b-syntax</code></p>
+<p>一句话：指针表示地址且可以为空，引用绑定到对象；两者通常都不表达所有权，使用时必须同时考虑对象能活多久。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 学习目标</h3>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li><strong>解释空指针与解引用。</strong> 说清指针里存的是什么、<code>nullptr</code> 表示什么、解引用空指针为什么会是未定义行为（UB）；能写出“先检查、再使用”的代码，并能用 AddressSanitizer（ASan）读懂空指针访问或悬垂访问的报告。</li>
+<li><strong>独立完成节点实践。</strong> 为字节缓冲区实现带边界检查的访问接口，构造悬垂引用，并用 <code>g++ -fsanitize=address</code> 编译运行、定位问题。</li>
+<li><strong>分清 <code>const</code> 的位置。</strong> 看到 <code>const std::uint8_t*</code>、<code>std::uint8_t* const</code>、<code>const std::uint8_t* const</code> 时，能准确说出“指针本身能不能改”和“通过指针能不能改对象”。</li>
+<li><strong>建立借用边界的意识。</strong> 知道指针和引用通常只是“借用”，不负责让对象活着；接口一旦把借用交出去，就必须明确“谁拥有、活多久、何时失效”。</li>
+</ol>
+<h3 id="12">1.2 验收标准回扣</h3>
+<p>节点给出的验收标准有两条，本课会反复用到：</p>
+<ul>
+<li><strong>能区分指针本身 <code>const</code> 和指向 <code>const</code>。</strong> 前者限制“指针变量能不能改指向”，后者限制“能不能通过指针修改对象”。这两件事互不相同，可以同时成立。</li>
+<li><strong>不会返回局部对象引用。</strong> 局部对象在函数返回时生命周期结束，返回它的引用（或指针）会立刻变成悬垂引用；正确做法是按值返回、返回调用者拥有的对象，或把结果写入调用者提供的容器。</li>
+</ul>
+<h3 id="13">1.3 为什么微信公众号后台要懂</h3>
+<p>节点对“为什么”写得很直接：<strong>阅读后台代码中的传参、缓冲区与非拥有视图。</strong> 放进腾讯微信公众号后台的日常场景，就是下面这些具体问题：</p>
+<ul>
+<li><strong>消息体是“字节 + 长度”，不是以 <code>\0</code> 结尾的字符串。</strong> 微信回调、客服消息、模板消息里可能包含 JSON/XML、图片、语音等二进制或混合内容；解析时通常拿到的是一段 <code>data</code> 加一个 <code>size</code>。用指针访问就必须自己检查下标，不能指望 <code>strlen</code> 或字符串结尾。</li>
+<li><strong>非拥有视图能减少拷贝。</strong> 一个请求体可能被多个解析函数共享：验签、解 XML、取字段、写日志。如果每层都复制一遍，CPU 和内存都会浪费；用 <code>const std::uint8_t* + size</code> 或 <code>ByteView</code> 借用原缓冲区更高效。但这也意味着：<strong>视图不能比原缓冲区活得更久</strong>，异步任务、线程池、延迟发送尤其容易踩坑。</li>
+<li><strong>回调参数常以 <code>const T&amp;</code> 传入。</strong> <code>void on_message(const std::string&amp; body)</code> 表示“我只读，不拷贝”。如果处理函数把 <code>body</code> 的引用存进成员变量或丢给异步线程，回调返回后这个引用就可能悬垂。后台代码里“看起来能跑、压测偶发乱码”的问题，很多都出在这里。</li>
+<li><strong>网络长度字段不可信。</strong> 包头里的 <code>offset</code>、<code>length</code> 来自外部输入。用 <code>offset + length &lt;= size</code> 做检查时，两个无符号数相加可能溢出；正确写法是先比较 <code>offset &lt;= size</code>，再比较 <code>length &lt;= size - offset</code>。这是缓冲区接口必须守住的边界。</li>
+<li><strong>线上故障定位成本高。</strong> ASan 能在测试阶段直接给出“哪一行读了已释放/已出作用域的地址”，比线上靠 core dump 猜要便宜得多。把 <code>-fsanitize=address</code> 纳入单测和 CI，是后台 C++ 服务很划算的一道防线。</li>
+</ul>
+<p>所以本课的目标不是背语法，而是建立一条工程习惯：<strong>指针/引用只说明“怎么访问”，不说明“对象还活着”；所有权和生命周期要在接口设计里说清楚。</strong></p>
+<h2 id="2">2. 从直觉到原理：三个核心要点</h2>
+<h3 id="21">2.1 空指针与解引用</h3>
+<h4 id="_1">直觉：地址纸条可以为空</h4>
+<p>把指针想成一张写着“门牌号”的纸条：</p>
+<ul>
+<li>纸条上写着有效地址，解引用 <code>*p</code> 就是“按地址去取东西”。</li>
+<li>纸条上写着“没有地址”，就是空指针，用 <code>nullptr</code> 表示。</li>
+<li>拿着一张空纸条去取东西，不是“取到 0”，而是<strong>未定义行为</strong>：可能立刻崩溃，也可能被优化成任意结果。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="nf">find_byte</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span>
+<span class="w">                              </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">payload</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">0x01</span><span class="p">,</span><span class="w"> </span><span class="mh">0x02</span><span class="p">,</span><span class="w"> </span><span class="mh">0x03</span><span class="p">};</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_byte</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mh">0x02</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">found</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"found: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">found</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"not found</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>“查找可能失败”用返回值 <code>nullptr</code> 表达是常见设计；调用方必须在使用前检查。现代 C++ 也可以返回 <code>std::optional&lt;std::uint8_t&gt;</code> 或 <code>std::optional&lt;std::size_t&gt;</code>，把“可能没有”写进类型里，减少忘记检查的机会。</p>
+<h4 id="_2">原理：解引用空指针为什么危险</h4>
+<ul>
+<li><code>nullptr</code> 不指向任何对象，<code>*p</code> 没有合法对象可访问。</li>
+<li>C++ 标准不规定这时发生什么；操作系统可能因为访问 0 页触发段错误，编译器也可能假设“解引用过的指针一定非空”，从而删掉后面的判空逻辑。</li>
+<li>所以<strong>空指针检查必须发生在解引用之前</strong>，而且不能靠“我先解引用一下看看”来探测。</li>
+</ul>
+<p>一个常被忽略的边界：<strong>指针非空，不代表对象还活着。</strong> 指针只保存地址；对象被 <code>delete</code>、离开作用域、被容器扩容搬走后，旧地址仍然可能“非空”，但已经不能访问。这正是节点 pitfalls 强调的：</p>
+<blockquote>
+<p>指针非空不保证仍指向存活对象。</p>
+</blockquote>
+<p>用 ASan 编译一个空指针解引用的小程序：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>address<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span>null_demo.cpp<span class="w"> </span>-o<span class="w"> </span>null_demo
+./null_demo
+</code></pre></div>
+
+<p>典型报告会包含：</p>
+<div class="codehilite"><pre><span></span><code>ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000
+The signal is caused by a READ memory access.
+Hint: address points to the zero page.
+</code></pre></div>
+
+<p>报告里的 <code>0x000000000000</code> 就是空地址。读调用栈可以定位到具体函数；如果是悬垂对象，报告会换成 <code>heap-use-after-free</code> 或 <code>stack-use-after-scope</code>，地址不是 0，但同样无效。</p>
+<h4 id="_3">后台例子：回调里“可选字段”的查找</h4>
+<p>解析微信消息时，某个可选字段可能不存在：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_field</span><span class="p">(</span><span class="n">body</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">body</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">field</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">handle_missing_field</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">field</span><span class="p">;</span>
+</code></pre></div>
+
+<p>不要写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find_field</span><span class="p">(</span><span class="n">body</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">body</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">field</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">field</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">handle_missing_field</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>后者既解引用了空指针，又让编译器有理由认为 <code>field</code> 永远非空。即使“目前没崩”，也是未定义行为。</p>
+<h3 id="22-const">2.2 引用绑定与 <code>const</code></h3>
+<h4 id="_4">直觉：引用是对象的别名</h4>
+<p>引用在定义时必须绑定到一个对象，之后一直是这个对象的别名：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
+<span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">code</span><span class="p">;</span>
+<span class="n">ref</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">code</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+</code></pre></div>
+
+<p>输出是 <code>500</code>，因为 <code>ref</code> 和 <code>code</code> 是同一个对象。引用有几个关键性质：</p>
+<ul>
+<li><strong>必须初始化</strong>，不能先声明再绑定。</li>
+<li><strong>不能重新绑定</strong>，<code>ref = other</code> 是给原对象赋值，不是让 <code>ref</code> 改指向 <code>other</code>。</li>
+<li><strong>没有合法的“空引用”</strong>。通过解引用空指针来“制造引用”是 UB，不是一种可检查的状态。</li>
+<li>引用本身通常不占独立对象空间（实现细节），但语义上它就是一个别名。</li>
+</ul>
+<p>函数参数里的引用表达“借用调用者的对象”：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">set_status</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"status="</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">code</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">log_message</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">body</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>std::string&amp;</code> 是可写的借用，<code>const std::string&amp;</code> 是只读借用。后者还能绑定临时对象，因此适合做只读参数，避免不必要的拷贝。</p>
+<h4 id="const">原理：<code>const</code> 到底修饰谁</h4>
+<p>看指针声明时，从变量名往左读，<code>const</code> 修饰离它最近的那个部分：</p>
+<table>
+<thead>
+<tr>
+<th>声明</th>
+<th>指针本身能否改指向</th>
+<th>能否通过指针改对象</th>
+<th>读法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>std::uint8_t* p</code></td>
+<td>能</td>
+<td>能</td>
+<td>指向可写字节的指针</td>
+</tr>
+<tr>
+<td><code>const std::uint8_t* p</code></td>
+<td>能</td>
+<td>不能</td>
+<td>指向 const 字节的指针（pointer to const）</td>
+</tr>
+<tr>
+<td><code>std::uint8_t* const p</code></td>
+<td>不能</td>
+<td>能</td>
+<td>const 指针，指向可写字节（const pointer）</td>
+</tr>
+<tr>
+<td><code>const std::uint8_t* const p</code></td>
+<td>不能</td>
+<td>不能</td>
+<td>指向 const 字节的 const 指针</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
+<span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="c1">// *p1 = 9;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
+<span class="o">*</span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
+<span class="c1">// p2 = buffer + 1;</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">p3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
+<span class="c1">// *p3 = 9;</span>
+<span class="c1">// p3 = buffer + 1;</span>
+</code></pre></div>
+
+<p>删掉注释后，后三种赋值会分别被编译器拒绝。注意 <code>p1</code> 可以改指向，但改不了 <code>*p1</code>；<code>p2</code> 正好相反。</p>
+<p>引用版本的 <code>const</code> 更简单：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&amp;</span><span class="w"> </span><span class="n">writable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&amp;</span><span class="w"> </span><span class="n">readable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">writable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="c1">// readable = 8;</span>
+</code></pre></div>
+
+<p><code>const std::uint8_t&amp;</code> 是“引用到 const 对象”，不是“const 引用”。C++ 里没有 <code>T&amp; const</code> 这种顶层 const 引用写法（会编译失败）；<code>const</code> 作用在“被引用的对象”上。</p>
+<h4 id="_5">生命周期：借用最怕“原对象先走”</h4>
+<p>引用本身不延长被引用对象的生命周期（除了一个局部 <code>const T&amp;</code> 直接绑定临时对象的特例）。例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">make_greeting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">local</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"hello"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">local</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>函数返回时 <code>local</code> 已销毁，返回的引用立刻悬垂。编译器通常会警告：</p>
+<div class="codehilite"><pre><span></span><code>warning: reference to local variable 'local' returned [-Wreturn-local-addr]
+</code></pre></div>
+
+<p>这个警告不能忽略，更不能靠 <code>-Wno-return-local-addr</code> 关掉。正确写法是按值返回：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">make_greeting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>或者由调用者提供存储：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">make_greeting</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"hello"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>同理，下面这种写法也会留下悬垂引用：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">on_message</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">saved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="w">    </span><span class="n">pending_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">saved</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>body</code> 绑定的是调用者（或上层框架）拥有的对象；回调返回后，<code>pending_</code> 里的引用不保证还有效。跨回调、跨线程保存时，应该拷贝 <code>std::string</code>，或者用 <code>std::shared_ptr</code> 等明确的所有权类型。节点的 tradeoff 正好点在这里：</p>
+<blockquote>
+<p>借用减少拷贝，但把生命周期约束交给调用者。</p>
+</blockquote>
+<h4 id="const_1">后台例子：缓冲区接口的 const 重载</h4>
+<p>一个字节缓冲区通常提供两个 <code>at</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">);</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+</code></pre></div>
+
+<ul>
+<li>非 const 对象调用第一个，返回可写引用。</li>
+<li>const 对象（或 const 引用）只能调用第二个，返回只读引用。</li>
+<li>这样 <code>const ByteBuffer&amp;</code> 的调用者在<strong>编译期</strong>就无法写缓冲区，而不是等到运行期才发现。</li>
+</ul>
+<p>这也是本课实践里 <code>ByteBuffer</code> 的设计基础。</p>
+<h3 id="23">2.3 指针运算和数组边界</h3>
+<h4 id="_6">直觉：指针加法是“跳过多少个元素”</h4>
+<p>数组在内存里连续存放。若 <code>p</code> 指向数组第 0 个元素，<code>p + i</code> 指向第 <code>i</code> 个元素（不是第 <code>i</code> 个字节，而是 <code>i * sizeof(T)</code> 个字节之后）：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">payload</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span><span class="w"> </span><span class="mi">40</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+</code></pre></div>
+
+<p><code>*(p + 2)</code> 和 <code>p[2]</code> 等价。合法的指针运算有一个严格范围：</p>
+<ul>
+<li>可以形成指向数组元素或<strong>尾后一位</strong>（one-past-the-end）的指针，即 <code>payload + 5</code>。</li>
+<li>可以解引用 <code>payload + 0</code> 到 <code>payload + 4</code>。</li>
+<li><strong>不能解引用 <code>payload + 5</code></strong>，尾后指针只能用于比较、作为区间右端点，不能读。</li>
+<li>两个指针相减只在同一数组（或同一数组的尾后）内有定义；跨对象相减没有可移植意义。</li>
+</ul>
+<h4 id="_7">原理：为什么指针本身不携带长度</h4>
+<p>指针只有地址，没有“这个地址后面还有多少字节”的信息。下面这个函数单独看 <code>p</code>，无法知道它指向的数组有多长：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">consume</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 不知道 p 后面有多少字节，不能安全地 p[0]、p[1] ...</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>所以后台接口更应该用“指针 + 长度”或“视图”表达：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">consume</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">use</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>对于不可信的长度字段，检查顺序很重要：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="nf">in_range</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">offset</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>不要写：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">return</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+</code></pre></div>
+
+<p>当 <code>offset</code> 和 <code>length</code> 很大时，<code>offset + length</code> 可能无符号溢出，回绕成一个很小的值，让非法区间通过检查。先减后比可以避免溢出：</p>
+<ul>
+<li><code>offset &lt;= size</code> 保证 <code>size - offset</code> 不会下溢；</li>
+<li><code>length &lt;= size - offset</code> 等价于 <code>offset + length &lt;= size</code>，但没有加法溢出风险。</li>
+</ul>
+<h4 id="_8">边界检查的两种风格</h4>
+<ol>
+<li><strong>抛异常/返回错误</strong>：适合公共接口、解析入口，越界是调用方错误，必须显式处理。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">ByteBuffer::at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">size_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">"index out of range"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">data_</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ol start="2">
+<li><strong>返回指针/布尔值</strong>：适合热路径或“可能失败”的查找，调用方自行决定如何处理。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="nf">ByteBuffer::try_at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">size_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">data_</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">index</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>无论哪种，<strong>边界检查必须依据有效长度，而不是容量或分配大小</strong>。缓冲区“分配了 4KB”不等于“有效数据有 4KB”；<code>std::vector</code> 的 <code>size()</code> 和 <code>capacity()</code> 也必须区分。</p>
+<h4 id="_9">后台例子：解析消息体里的字段</h4>
+<p>假设消息体格式是 <code>[2 字节长度][内容]</code>，需要取出内容：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="nf">read_field</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&amp;</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="n">ByteView</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">offset</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">offset</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">body</span><span class="p">[</span><span class="n">offset</span><span class="p">])</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">body</span><span class="p">[</span><span class="n">offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="w">    </span><span class="n">offset</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">offset</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ByteView</span><span class="p">(</span><span class="n">body</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">offset</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">);</span>
+<span class="w">    </span><span class="n">offset</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">length</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里有三道边界：</p>
+<ul>
+<li><code>offset</code> 是否还在缓冲区内；</li>
+<li>长度字段本身是否读得下（至少 2 字节，且 <code>offset + 2</code> 不溢出）；</li>
+<li>声明的长度是否超过剩余字节。</li>
+</ul>
+<p>少任何一道，外部输入都可能让解析器越界读。用 ASan 跑一组畸形输入，比等线上报警快得多。</p>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 常见误区</h3>
+<ol>
+<li>
+<p><strong>“指针非空，所以对象还活着。”</strong>
+   这是本节点最核心的 pitfall。指针只表示地址；<code>delete</code> 后、对象离开作用域后、<code>vector</code> 扩容后，旧地址可能仍然非空。有效性来自生命周期管理，不来自 <code>p != nullptr</code>。</p>
+</li>
+<li>
+<p><strong>返回局部对象的引用或指针。</strong>
+   <code>return local;</code>（返回 <code>T&amp;</code> 或 <code>T*</code>）在函数返回后立即悬垂。编译器通常给出 <code>-Wreturn-local-addr</code>，要把它当错误处理，而不是关掉警告。</p>
+</li>
+<li>
+<p><strong>把 <code>const T*</code> 和 <code>T* const</code> 混为一谈。</strong>
+   前者是“指向只读对象的指针”，指针本身可以改指向；后者是“const 指针”，不能改指向，但可以通过它改对象。<code>const T* const</code> 才是两者都限制。</p>
+</li>
+<li>
+<p><strong>把 <code>const T&amp;</code> 参数存起来跨调用使用。</strong>
+   <code>void handle(const std::string&amp; body)</code> 里的 <code>body</code> 只在调用期间有效。把它存进成员、队列、lambda 捕获或异步任务，回调结束后就可能悬垂。</p>
+</li>
+<li>
+<p><strong>尾后指针解引用。</strong>
+   <code>data + size</code> 可以形成、可以用于比较和表示区间右端，但 <code>*(data + size)</code> 是越界。循环条件应写 <code>i &lt; size</code>，而不是 <code>i &lt;= size</code>。</p>
+</li>
+<li>
+<p><strong>用 <code>offset + length &lt;= size</code> 检查外部长度。</strong>
+   无符号加法可能溢出。应写 <code>offset &lt;= size &amp;&amp; length &lt;= size - offset</code>。</p>
+</li>
+<li>
+<p><strong>把 <code>sizeof(pointer)</code> 当数组长度。</strong>
+   指针参数退化为指针后，<code>sizeof(p)</code> 是指针大小（常见 8 字节），不是数组字节数。数组长度要用单独参数、<code>std::size</code>（对真正的数组）或容器 <code>size()</code>。</p>
+</li>
+<li>
+<p><strong>未初始化指针。</strong>
+   <code>std::uint8_t* p;</code> 的值不确定，解引用是 UB。定义时就初始化为 <code>nullptr</code>，或直接绑定到有效对象。</p>
+</li>
+<li>
+<p><strong>混淆 <code>size()</code> 与 <code>capacity()</code>。</strong>
+   <code>vector</code> 的容量之外、<code>size()</code> 之内才是有效元素；用容量做边界检查会读到未构造区域。</p>
+</li>
+</ol>
+<h3 id="32">3.2 设计权衡</h3>
+<table>
+<thead>
+<tr>
+<th>选择</th>
+<th>好处</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>借用（指针 / 引用 / 视图）</td>
+<td>避免拷贝，适合大消息体、多层解析</td>
+<td>生命周期约束转移给调用者；跨异步/线程时容易悬垂</td>
+</tr>
+<tr>
+<td>按值返回 / 拷贝</td>
+<td>所有权清晰，生命周期简单</td>
+<td>内存分配与拷贝成本；大对象可能昂贵</td>
+</tr>
+<tr>
+<td><code>std::string_view</code></td>
+<td>只读字符串视图，接口简洁</td>
+<td>不保证以 <code>\0</code> 结尾；不能用于二进制中的任意 NUL；仍有生命周期问题</td>
+</tr>
+<tr>
+<td>指针 + 长度 / 字节视图</td>
+<td>适合二进制、可含 NUL、零拷贝解析</td>
+<td>需要手动做边界检查；接口略啰嗦</td>
+</tr>
+<tr>
+<td><code>at()</code> 抛异常</td>
+<td>错误无法被静默忽略</td>
+<td>异常路径有开销；热路径可能不适合</td>
+</tr>
+<tr>
+<td><code>operator[]</code> / 裸指针</td>
+<td>快，无检查</td>
+<td>越界是 UB；必须靠不变量或外部校验保证</td>
+</tr>
+<tr>
+<td><code>unique_ptr</code> / <code>shared_ptr</code> 表达所有权</td>
+<td>释放责任明确，减少泄漏</td>
+<td>有间接层与原子引用计数成本；不是所有场景都需要</td>
+</tr>
+<tr>
+<td><code>const</code> 正确性</td>
+<td>编译期阻止误写，接口意图清晰</td>
+<td>需要维护 const/非 const 重载；旧代码改造有成本</td>
+</tr>
+</tbody>
+</table>
+<p>一个实用的取舍原则：</p>
+<ul>
+<li><strong>入口处做检查，内部靠不变量。</strong> 解析网络包、读配置、接收外部长度时，用带检查的接口；进入核心逻辑后，如果类型和前置条件已经保证范围，可以用更轻的访问方式。</li>
+<li><strong>所有权用类型表达。</strong> 需要拥有就 <code>std::vector</code>、<code>std::string</code>、<code>std::unique_ptr</code>；只是临时借用就用指针/引用/视图，并在接口文档和命名里写清“有效期”。</li>
+<li><strong>跨边界不借。</strong> 跨线程、跨回调、进队列、进缓存的数据，要么拷贝，要么转移所有权；不要把栈上或回调参数的引用带出去。</li>
+</ul>
+<h2 id="4-asan">4. 动手实践：边界检查缓冲区 + ASan 定位悬垂引用</h2>
+<p>实践目录已经准备好：</p>
+<div class="codehilite"><pre><span></span><code>practice18/
+├── byte_buffer.hpp
+├── bounds_demo.cpp
+├── dangling_ref.cpp
+├── test.sh
+└── README.md
+</code></pre></div>
+
+<h3 id="0">步骤 0：进入目录并确认工具链</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice18
+g++<span class="w"> </span>--version
+</code></pre></div>
+
+<p>需要支持 C++17 和 <code>-fsanitize=address</code> 的 GCC（本课在 GCC 14 上验证）。</p>
+<h3 id="1_1">步骤 1：设计接口</h3>
+<p><code>ByteBuffer</code> 拥有数据，<code>ByteView</code> 只借用数据：</p>
+<ul>
+<li><code>ByteBuffer(std::size_t size)</code>：分配指定字节数，初始为 0。</li>
+<li><code>ByteBuffer(std::initializer_list&lt;std::uint8_t&gt;)</code>：方便测试。</li>
+<li><code>size()</code> / <code>empty()</code>：返回有效长度。</li>
+<li><code>at(std::size_t)</code>：带边界检查，越界抛 <code>std::out_of_range</code>。</li>
+<li><code>at(std::size_t) const</code>：只读重载，返回 <code>const std::uint8_t&amp;</code>。</li>
+<li><code>data()</code> / <code>data() const</code>：返回裸指针，供底层库或视图使用。</li>
+<li><code>ByteView(const std::uint8_t*, std::size_t)</code>：非拥有视图。</li>
+<li><code>ByteView(const ByteBuffer&amp;)</code>：从缓冲区构造视图，但不延长缓冲区寿命。</li>
+</ul>
+<p>关键点：<code>at</code> 的 const 重载让 <code>const ByteBuffer&amp;</code> 只能读；<code>ByteView</code> 的 <code>at</code> 返回 <code>const std::uint8_t&amp;</code>，因为视图不应修改原缓冲区。</p>
+<h3 id="2_1">步骤 2：实现边界检查</h3>
+<p>核心逻辑：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">data_</span><span class="p">.</span><span class="n">size</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">out_of_range</span><span class="p">(</span><span class="s">"ByteBuffer::at index out of range"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">check</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">data_</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">at</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">check</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">data_</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意 <code>index &gt;= size</code> 而不是 <code>index &gt; size</code>：下标从 0 开始，最后一个合法下标是 <code>size - 1</code>。</p>
+<h3 id="3_1">步骤 3：写测试</h3>
+<p><code>bounds_demo.cpp</code> 覆盖：</p>
+<ul>
+<li>正常读写首字节、末字节；</li>
+<li><code>at(size)</code>、<code>at(100)</code> 越界抛异常；</li>
+<li>通过越界引用写入也被拒绝；</li>
+<li>const 缓冲区只能读；</li>
+<li><code>const std::uint8_t*</code> 可以改指向但不能改对象；</li>
+<li><code>std::uint8_t* const</code> 不能改指向但可以改对象；</li>
+<li><code>ByteView</code> 能读、越界会抛异常。</li>
+</ul>
+<p>编译运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Wpedantic<span class="w"> </span>-Werror<span class="w"> </span>-g<span class="w"> </span>-O1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>bounds_demo.cpp<span class="w"> </span>-o<span class="w"> </span>bounds_demo
+./bounds_demo
+</code></pre></div>
+
+<p>预期输出：</p>
+<div class="codehilite"><pre><span></span><code>[PASS] size is 4
+[PASS] at(0) reads first byte
+...
+[PASS] view rejects out-of-range read
+all tests passed
+</code></pre></div>
+
+<h3 id="4">步骤 4：构造悬垂引用</h3>
+<p><code>dangling_ref.cpp</code> 提供三个场景：</p>
+<ol>
+<li><code>heap</code>：引用绑定到 <code>new[]</code> 的字节，<code>delete[]</code> 后继续读。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="p">[</span><span class="mi">4</span><span class="p">]{</span><span class="mh">0x01</span><span class="p">,</span><span class="w"> </span><span class="mh">0x02</span><span class="p">,</span><span class="w"> </span><span class="mh">0x03</span><span class="p">,</span><span class="w"> </span><span class="mh">0x04</span><span class="p">};</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&amp;</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">payload</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="k">delete</span><span class="p">[]</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
+<span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">second</span><span class="p">);</span>
+</code></pre></div>
+
+<ol start="2">
+<li><code>stack</code>：指针指向块作用域数组元素，离开作用域后解引用。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">frame</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">0x0A</span><span class="p">,</span><span class="w"> </span><span class="mh">0x0B</span><span class="p">,</span><span class="w"> </span><span class="mh">0x0C</span><span class="p">,</span><span class="w"> </span><span class="mh">0x0D</span><span class="p">};</span>
+<span class="w">    </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">frame</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">second</span><span class="p">);</span>
+</code></pre></div>
+
+<ol start="3">
+<li><code>return</code>：函数返回局部 <code>std::string</code> 的引用。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">local_greeting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">local</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"hello from a local string"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">local</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="5-asan">步骤 5：用 ASan 编译运行</h3>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-g<span class="w"> </span>-O0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-fsanitize<span class="o">=</span>address<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>dangling_ref.cpp<span class="w"> </span>-o<span class="w"> </span>dangling_ref
+
+./dangling_ref<span class="w"> </span>heap
+./dangling_ref<span class="w"> </span>stack
+./dangling_ref<span class="w"> </span><span class="k">return</span>
+</code></pre></div>
+
+<p>编译时你应看到：</p>
+<div class="codehilite"><pre><span></span><code>warning: reference to local variable 'local' returned [-Wreturn-local-addr]
+</code></pre></div>
+
+<p>这是编译器在免费帮你抓第 3 个场景。运行 <code>heap</code> 时，ASan 典型报告：</p>
+<div class="codehilite"><pre><span></span><code>ERROR: AddressSanitizer: heap-use-after-free on address ...
+READ of size 1 at ...
+    #0 ... heap_reference_case ... dangling_ref.cpp:16
+    #1 ... main ... dangling_ref.cpp:34
+
+freed by thread T0 here:
+    #0 ... operator delete[](void*)
+    #1 ... heap_reference_case ... dangling_ref.cpp:15
+</code></pre></div>
+
+<p>先看错误类型，再看 <code>READ</code> 的调用栈（谁在越界读），最后看 <code>freed by</code>（谁提前释放了对象）。运行 <code>stack</code> 时会得到：</p>
+<div class="codehilite"><pre><span></span><code>ERROR: AddressSanitizer: stack-use-after-scope on address ...
+</code></pre></div>
+
+<p>报告会指出该地址位于哪个栈帧、哪个变量（例如 <code>frame</code>），以及越界读发生在哪一行。</p>
+<p><code>return</code> 场景在 GCC 的 ASan 下不保证被拦截：可能直接段错误，也可能读到垃圾值。原因是 use-after-return 的检测依赖编译器和运行库支持；<strong>不能把“ASan 没报”当成代码正确</strong>。这类问题主要靠编译警告和代码评审拦截。</p>
+<blockquote>
+<p>实践提示：悬垂 demo 使用 <code>-O0</code>，是为了让“释放后读取”的操作保持原样。若开启优化，编译器可能基于 UB 把读取重排或删除，ASan 就未必在同一位置报错。真实项目通常用 <code>-O1 -g -fsanitize=address</code> 平衡速度与可读性，但排查特定问题时可以降到 <code>-O0</code>。</p>
+</blockquote>
+<h3 id="6">步骤 6：修复</h3>
+<ul>
+<li>堆上的引用：不要让引用活过 <code>delete</code>；如果确实需要共享，使用 <code>std::shared_ptr</code> 或明确的所有权容器。</li>
+<li>栈上的指针：扩大对象作用域，或把值拷贝出来；不要返回指向局部数组元素的指针。</li>
+<li>返回局部引用：改为按值返回：</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">local_greeting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"hello from a local string"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ul>
+<li>非拥有视图：保证拥有者活得更久；跨异步边界时复制数据或转移所有权。</li>
+</ul>
+<h3 id="7">步骤 7：一键验证</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice18
+./test.sh
+</code></pre></div>
+
+<p>脚本会：</p>
+<ol>
+<li>用 <code>-Wall -Wextra -Wpedantic -Werror</code> 编译并运行 <code>bounds_demo</code>；</li>
+<li>用 ASan 编译 <code>dangling_ref</code>；</li>
+<li>分别运行 <code>heap</code> 和 <code>stack</code>，确认进程非 0 退出且报告包含 <code>heap-use-after-free</code> / <code>stack-use-after-scope</code>。</li>
+</ol>
+<p>看到 <code>all practice18 checks passed</code> 即完成。</p>
+<h2 id="5">5. 自测题</h2>
+<h3 id="1-const">题 1：区分 <code>const</code> 的位置</h3>
+<p>下面三个声明分别表示什么？哪些可以改变指针指向？哪些可以通过指针修改 <code>std::uint8_t</code> 对象？</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong>答案：</strong></p>
+<ul>
+<li><code>a</code> 是“指向 const 字节的指针”（pointer to const）：可以改指向（<code>a = buffer + 1</code> 合法），不能写 <code>*a</code>。</li>
+<li><code>b</code> 是“const 指针”（const pointer）：不能改指向（<code>b = buffer + 1</code> 非法），可以写 <code>*b</code>。</li>
+<li><code>c</code> 是“指向 const 字节的 const 指针”：既不能改指向，也不能写 <code>*c</code>。</li>
+</ul>
+<p>记忆方法：从变量名往左读，<code>const</code> 修饰离它最近的部分；<code>*</code> 左边的 <code>const</code> 管对象，<code>*</code> 右边的 <code>const</code> 管指针本身。</p>
+<h3 id="2_2">题 2：返回局部引用</h3>
+<p>下面的函数有什么问题？编译器会给出什么警告？应该怎么改？</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">build_response</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"{</span><span class="se">\"</span><span class="s">errcode</span><span class="se">\"</span><span class="s">:0}"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>答案：</strong></p>
+<p><code>body</code> 是局部对象，函数返回时被销毁，返回的引用立即悬垂。调用方使用它属于未定义行为：可能读到垃圾、崩溃，或者在优化后表现“正常”。</p>
+<p>GCC 通常给出：</p>
+<div class="codehilite"><pre><span></span><code>warning: reference to local variable 'body' returned [-Wreturn-local-addr]
+</code></pre></div>
+
+<p>正确做法是按值返回（依赖 RVO/移动）：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">build_response</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"{</span><span class="se">\"</span><span class="s">errcode</span><span class="se">\"</span><span class="s">:0}"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>或者让调用者提供输出参数：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">build_response</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"{</span><span class="se">\"</span><span class="s">errcode</span><span class="se">\"</span><span class="s">:0}"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>不要把警告当成“已知问题”关掉；这类接口在后台代码里一旦跨线程或延迟调用，就很难排查。</p>
+<h3 id="3_2">题 3：安全地检查偏移与长度</h3>
+<p><code>size</code> 是缓冲区有效长度，<code>offset</code> 和 <code>length</code> 来自网络包头。下面这个检查为什么不够安全？应怎么写？</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">offset</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+</code></pre></div>
+
+<p><strong>答案：</strong></p>
+<p><code>offset</code>、<code>length</code>、<code>size</code> 都是无符号类型时，<code>offset + length</code> 可能溢出并回绕。例如 <code>offset = SIZE_MAX</code>、<code>length = 2</code>，相加得到 <code>1</code>，可能错误地通过 <code>1 &lt;= size</code> 的检查，随后 <code>body + offset</code> 就越界了。</p>
+<p>安全写法是先保证 <code>offset</code> 不越界，再用减法比较：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">offset</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">length</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">offset</span><span class="p">);</span>
+</code></pre></div>
+
+<p>这样 <code>size - offset</code> 不会下溢，并且等价于 <code>offset + length &lt;= size</code>。随后再形成 <code>body + offset</code>，并只在 <code>length</code> 范围内访问；注意 <code>body + size</code> 是合法的尾后指针，但不能解引用。</p>
+<h2 id="6_1">6. 推荐资源</h2>
+<ul>
+<li><strong>指针、引用与借用边界：参考文档 / 原始资料</strong></li>
+<li>链接：<a href="https://en.cppreference.com/w/cpp/language/pointer.html">https://en.cppreference.com/w/cpp/language/pointer.html</a></li>
+<li>来源：en.cppreference.com</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：基础</li>
+<li>说明：重点阅读空指针与解引用、引用绑定与 <code>const</code>，用于核对本节点实验的语义和边界。读的时候把示例中的指针声明按“从变量名往左读”的方法拆一遍，再对照本课的 <code>ByteBuffer::at</code> 与 <code>dangling_ref.cpp</code>，确认自己对 const 位置和生命周期边界的理解一致。</li>
+</ul><div class="pn"><span><a href="17.html">← 类型、表达式与控制流</a></span><span><a href="19.html">对象生命周期与存储期 →</a></span></div></main></div></body></html>

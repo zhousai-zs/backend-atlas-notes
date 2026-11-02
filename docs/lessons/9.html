@@ -1,0 +1,798 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>9. 哈希表与冲突处理 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="cur" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 9 课 · 领域 A · 阶段 1</p><p class="dl"><a href="../files/9-a-hash.md" download>⬇ 本课 Markdown</a></p><h1 id="9208">第 9/208 课：哈希表与冲突处理</h1>
+<blockquote>
+<p>节点：<code>a-hash</code> · 域：A · 子类：数据结构与算法 · 难度：基础 · 前置：<code>a-sequence</code></p>
+<p>一句话：哈希表用哈希函数缩小查找范围，通过链地址或开放寻址处理冲突。平均常数时间依赖哈希分布与装载因子，扩容及恶意碰撞可能造成长尾。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 学习目标</h3>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li>解释哈希函数与相等关系各自负责什么，以及为什么查找必须同时依赖两者。</li>
+<li>说清楚“平均 O(1)”背后的假设：哈希分布、装载因子、哈希与比较的成本，以及为什么它不等于最坏情况有界。</li>
+<li>区分链地址与开放寻址的存储布局、冲突处理、删除方式和引用稳定性。</li>
+<li>独立实现一个字符串哈希表，构造碰撞，并用装载因子变化解释探测次数的变化。</li>
+<li>正确描述 rehash 之后旧指针、旧引用、旧迭代器和旧桶索引的边界。</li>
+<li>在微信公众号后台这类读多写多、存在恶意输入的系统中，做出可解释的容量与安全取舍。</li>
+</ol>
+<h3 id="12">1.2 验收标准</h3>
+<p>节点给出的验收标准有两条，本课会反复回扣：</p>
+<ul>
+<li><strong>能解释平均 O(1) 的假设。</strong> 不是“哈希表永远快”，而是在“哈希函数把键较均匀地散布到桶里、装载因子被 rehash 控制在常数上界、键的哈希与比较成本可视为常数”这些前提下，期望查找成本是常数。若哈希退化、装载因子失控或输入由攻击者构造，最坏情况会退化为 O(n)。</li>
+<li><strong>rehash 后旧引用的边界描述正确。</strong> 不同实现差别很大：常见节点式 <code>std::unordered_map</code> 在 rehash 后元素地址不变，指向元素的指针和引用仍然有效，但迭代器失效；开放寻址或把元素连续存放在数组里的实现，rehash 会搬动元素，指针、引用、迭代器通常全部失效。不能笼统地说“rehash 后所有引用都失效”，也不能反过来说“都没事”。</li>
+</ul>
+<h3 id="13">1.3 为什么微信公众号后台要懂哈希表</h3>
+<p>节点对“为什么”的说明很直接：<strong>理解 KV 索引、去重及攻击输入下的退化。</strong> 放到微信公众号后台，哈希表几乎无处不在：</p>
+<ul>
+<li><strong>openid → 用户会话缓存。</strong> 用户进入公众号、点击菜单、打开网页授权，后端都要根据 openid 找到对应的会话、权限、最近一次交互状态。哈希表把“在百万级用户里找一个人”变成“先算一个桶号，再在很短的链里比较 openid”。</li>
+<li><strong>消息去重。</strong> 微信服务器可能重试推送，业务侧也可能重复消费。用消息 id、FromUserName、CreateTime 等字段组成去重键，放进哈希集合，可以快速判断“这条消息是不是已经处理过”。如果只比较哈希值而不比较完整键，两个不同消息可能被误判为重复，造成丢消息。</li>
+<li><strong>access_token 缓存。</strong> access_token 数量不多，但访问频率极高，而且刷新时有并发问题。哈希表适合做 <code>appid → token</code> 的内存索引；如果表很小，启动时预留容量，避免在请求路径上触发扩容。</li>
+<li><strong>粉丝列表索引。</strong> 按 openid 查粉丝资料、标签、分组，本质上是高基数 KV 索引。键的数量大，装载因子和每个元素的内存开销都会直接影响单机容量。</li>
+<li><strong>恶意碰撞攻击。</strong> 如果接口接受用户可控的字符串作为键，而哈希函数固定且分布可预测，攻击者可以构造大量落入同一个桶的键。链地址表会退化成一条长链表，开放寻址表会退化成连续探测，CPU 被打满，正常请求的 p99 延迟急剧上升。</li>
+<li><strong>扩容毛刺。</strong> 活动开始、批量导入粉丝、缓存预热时，短时间插入大量新键，可能触发一次 O(n) 的 rehash。平均吞吐看起来没问题，但单个请求可能正好撞上这次扩容，形成尾延迟。</li>
+</ul>
+<p>所以本课的目标不是背“哈希表增删改查 O(1)”，而是建立一套能验证的模型：<strong>键怎样变成桶号、冲突怎样被解决、装载因子怎样影响成本、扩容后哪些旧引用还能用。</strong></p>
+<h2 id="2">2. 从直觉到原理：三个核心要点</h2>
+<h3 id="21">2.1 哈希函数与相等关系</h3>
+<h4 id="_1">直觉：先分类，再确认</h4>
+<p>想象一个图书馆。你要找《深入理解计算机系统》，不会从第一排第一本开始逐本翻。你先根据分类号走到“计算机”书架，再在那一排里比较书名。哈希函数就是“分类号”，相等关系就是“确认书名是否完全一致”。</p>
+<p>哈希表也是这样：</p>
+<ol>
+<li>用哈希函数 <code>h(key)</code> 把任意键映射到 <code>0..m-1</code> 的桶号。</li>
+<li>到对应的桶里找。</li>
+<li>对桶里的候选键，用相等比较 <code>key == candidate</code> 确认是不是同一个键。</li>
+</ol>
+<p>只有哈希不够，因为不同的键可能得到同一个哈希值，这叫<strong>冲突</strong>。只有相等也不够，因为那就退化成从头到尾的线性扫描。<strong>哈希负责缩小范围，相等负责最终判定。</strong></p>
+<h4 id="_2">原理：查找 = 哈希定位 + 相等比较</h4>
+<p>形式化地，一个哈希表至少需要两个部件：</p>
+<ul>
+<li>哈希函数 <code>h: K → {0, 1, ..., m-1}</code>，<code>m</code> 是桶的数量。</li>
+<li>相等谓词 <code>eq(a, b)</code>，判断两个键是否表示同一个键。</li>
+</ul>
+<p>查找 <code>get(k)</code> 的过程是：</p>
+<div class="codehilite"><pre><span></span><code>i = h(k) % m
+for candidate in bucket[i]:
+    if eq(k, candidate.key):
+        return candidate.value
+return NOT_FOUND
+</code></pre></div>
+
+<p>这里有两个容易忽略的成本：</p>
+<ul>
+<li><code>h(k)</code> 本身可能不是 O(1)。对字符串来说，哈希要遍历字节，成本是 O(键长度)。openid 长度通常固定且很短，可以近似常数；如果把整段消息体当键，哈希成本就会随消息长度增长。</li>
+<li><code>eq(k, candidate)</code> 也可能不是 O(1)。字符串比较在最坏情况下要看完整个字符串。哈希表只是减少了需要比较的次数，并没有让单次比较免费。</li>
+</ul>
+<h4 id="_3">契约：哈希与相等必须一致</h4>
+<p>一个正确的哈希表依赖下面几条契约：</p>
+<ol>
+<li><strong>同一个键，在它作为键期间，哈希值必须稳定。</strong> 如果键对象被修改，导致哈希值变化，之前插入的位置就找不到了。</li>
+<li><strong>若 <code>a == b</code>，则必须有 <code>h(a) == h(b)</code>。</strong> 这是最重要的一条。反过来不成立：<code>h(a) == h(b)</code> 只说明冲突，不说明 <code>a == b</code>。</li>
+<li><strong>相等比较和哈希必须覆盖同一组字段。</strong> 如果相等比较忽略大小写，哈希也必须忽略大小写；如果相等比较忽略某个字段，哈希也不能把该字段算进去。否则会出现“逻辑上相等，但哈希到不同桶”的情况，查找失败。</li>
+<li><strong>哈希函数应尽量均匀、快速，并让相近输入产生不相近的输出。</strong> 这不是正确性的硬性要求，但直接决定平均性能。</li>
+</ol>
+<p>用 C++ 自定义一个 openid 键，需要同时提供哈希和相等：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">OpenId</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">OpenId</span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">OpenIdHash</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="nf">operator</span><span class="p">()(</span><span class="k">const</span><span class="w"> </span><span class="n">OpenId</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">{}(</span><span class="n">key</span><span class="p">.</span><span class="n">value</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">OpenId</span><span class="p">,</span><span class="w"> </span><span class="n">Session</span><span class="p">,</span><span class="w"> </span><span class="n">OpenIdHash</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sessions</span><span class="p">;</span>
+</code></pre></div>
+
+<p><code>std::unordered_map</code> 默认用 <code>std::equal_to&lt;Key&gt;</code> 做相等比较，用 <code>std::hash&lt;Key&gt;</code> 做哈希。自定义类型如果既没有 <code>operator==</code> 也没有可用的 <code>std::hash</code> 特化，就无法直接作为键。这里的 <code>OpenIdHash</code> 复用了标准库对字符串的哈希，保证“相等则同哈希”。</p>
+<p>Python 的 <code>dict</code> 也是同一套契约：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">OpenId</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"value"</span><span class="p">,)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">OpenId</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span>
+</code></pre></div>
+
+<p>Python 有一个保护机制：如果你只定义了 <code>__eq__</code> 而没有定义 <code>__hash__</code>，这个类会变成不可哈希，避免你无意中破坏契约。但如果你定义了 <code>__hash__</code>，又允许对象在插入后修改参与哈希的字段，问题仍然会发生：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">key</span> <span class="o">=</span> <span class="n">OpenId</span><span class="p">(</span><span class="s2">"openid_A"</span><span class="p">)</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="s2">"session-A"</span><span class="p">}</span>
+<span class="n">key</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">"openid_B"</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>   <span class="c1"># 很可能输出 None</span>
+</code></pre></div>
+
+<p>插入时字典记录的是 <code>hash("openid_A")</code> 对应的位置；修改后查找用的是 <code>hash("openid_B")</code>，自然找不到旧条目。更糟的是，这个对象还留在字典里，却很难再被正常访问。<strong>结论：作为键的对象应当视为不可变；需要修改时，先删除旧键，再插入新键。</strong></p>
+<h4 id="_4">字符串哈希函数长什么样</h4>
+<p>一个简单、常见的字符串哈希是 FNV-1a：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fnv1a</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mi">14695981039346656037</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">^=</span> <span class="n">b</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="mi">1099511628211</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFFFFFFFFFF</span>
+    <span class="k">return</span> <span class="n">h</span>
+</code></pre></div>
+
+<p>它逐字节做“异或再乘一个奇数”，让每个字节都影响最终结果。实际使用时再对桶数取模：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">bucket</span> <span class="o">=</span> <span class="n">fnv1a</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">%</span> <span class="n">bucket_count</span>
+</code></pre></div>
+
+<p>对比一个故意写坏的哈希：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">first_char</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">s</span> <span class="k">else</span> <span class="mi">0</span>
+</code></pre></div>
+
+<p>如果所有 openid 都以 <code>u</code> 开头，这个函数会把所有键都送到同一个桶。它不是“偶尔冲突”，而是<strong>确定性地构造了最坏情况</strong>。这正是恶意碰撞攻击的入口：攻击者不需要破解哈希，只需要知道哈希只看首字符，就能批量制造同桶键。</p>
+<p>哈希函数的质量通常看三点：</p>
+<ul>
+<li><strong>均匀性</strong>：输出是否大致均匀落在各个桶里。</li>
+<li><strong>雪崩效应</strong>：输入改一个字节，输出应有大量位变化。</li>
+<li><strong>速度</strong>：哈希在每次查找都要算，不能比比较本身还贵太多。</li>
+</ul>
+<p><code>std::hash</code> 适合一般用途，但标准并不保证它在不同实现、不同版本、不同进程中产生相同结果，也不保证它能抵抗碰撞攻击。<strong>不要把 <code>std::hash</code> 的结果持久化到数据库，也不要用它当全局唯一 ID。</strong> 对不可信输入，应使用带随机种子的键控哈希（例如 SipHash 这一类设计），让攻击者无法离线构造碰撞。</p>
+<h4 id="_5">后端场景：哈希值不能代替相等</h4>
+<p>假设消息去重表只存 64 位哈希：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="n">digest</span> <span class="o">=</span> <span class="n">fnv1a</span><span class="p">(</span><span class="n">msg_id</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFFFFFFFFFF</span>
+<span class="k">if</span> <span class="n">digest</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+    <span class="n">drop_message</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">digest</span><span class="p">)</span>
+    <span class="n">process_message</span><span class="p">()</span>
+</code></pre></div>
+
+<p>两个不同的 <code>msg_id</code> 可能得到同一个 64 位值。随着消息量增加，碰撞概率会上升；一旦碰撞，第二条不同消息会被当成重复消息丢掉。正确做法是：<strong>哈希表内部可以用哈希缩小候选范围，但最终必须比较完整键（或足够强的唯一 ID）。</strong> 如果业务上必须只存摘要，就要接受碰撞概率并做额外校验，而不是把哈希值当成“不会重复的键”。</p>
+<h3 id="22-rehash">2.2 负载因子和 rehash</h3>
+<h4 id="_6">直觉：桶不能无限挤</h4>
+<p>设哈希表里有 <code>n</code> 个元素，桶的数量是 <code>m</code>，定义<strong>装载因子</strong>：</p>
+<div class="codehilite"><pre><span></span><code>α = n / m
+</code></pre></div>
+
+<p><code>α</code> 衡量平均每个桶要装多少个元素。链地址中，如果哈希足够均匀，平均链长就是 <code>α</code>；开放寻址中，<code>α</code> 越接近 1，空槽越少，探测越长。</p>
+<p>例如：</p>
+<ul>
+<li>100 万个会话，200 万个桶，<code>α = 0.5</code>。</li>
+<li>100 万个会话，100 万个桶，<code>α = 1.0</code>。</li>
+<li>100 万个会话，50 万个桶，<code>α = 2.0</code>。</li>
+</ul>
+<p>链地址可以容忍 <code>α &gt; 1</code>，但平均链长会继续增长；开放寻址必须保证至少有一个空槽，通常要把 <code>α</code> 控制在 0.5 到 0.75 之间。</p>
+<h4 id="o1">平均 O(1) 到底假设了什么</h4>
+<p>在“简单均匀哈希”的假设下，链地址的期望查找成本是：</p>
+<div class="codehilite"><pre><span></span><code>成功查找：约 1 + α/2 次比较
+失败查找：约 α 次比较
+</code></pre></div>
+
+<p>开放寻址的线性探测在均匀哈希近似下：</p>
+<div class="codehilite"><pre><span></span><code>成功查找：约 1/2 * (1 + 1/(1-α))
+失败查找：约 1/2 * (1 + 1/(1-α)^2)
+</code></pre></div>
+
+<p>代入数字就能看出为什么不能把装载因子推到 1：</p>
+<table>
+<thead>
+<tr>
+<th>α</th>
+<th>链地址成功/失败</th>
+<th>线性探测成功</th>
+<th>线性探测失败</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.25</td>
+<td>1.125 / 0.25</td>
+<td>1.17</td>
+<td>1.39</td>
+</tr>
+<tr>
+<td>0.50</td>
+<td>1.25 / 0.50</td>
+<td>1.50</td>
+<td>2.50</td>
+</tr>
+<tr>
+<td>0.75</td>
+<td>1.375 / 0.75</td>
+<td>2.50</td>
+<td>8.50</td>
+</tr>
+<tr>
+<td>0.90</td>
+<td>1.45 / 0.90</td>
+<td>5.50</td>
+<td>50.50</td>
+</tr>
+<tr>
+<td>0.99</td>
+<td>1.495 / 0.99</td>
+<td>50.50</td>
+<td>5000.50</td>
+</tr>
+</tbody>
+</table>
+<p>这些公式成立的前提是：</p>
+<ol>
+<li>哈希函数把键均匀、独立地散布到桶里。</li>
+<li><code>α = n/m</code> 被 rehash 控制在一个常数上界内，不随 <code>n</code> 增长。</li>
+<li>哈希计算和相等比较可以看作 O(1)（或键长度有界）。</li>
+<li>输入不是攻击者专门构造的碰撞集合。</li>
+</ol>
+<p>满足这些前提，期望成本才是 O(1)。如果桶数固定而元素无限增长，<code>α</code> 会随 <code>n</code> 增长，平均链长也随之增长，整体就退化为 O(n)。所以“哈希表 O(1)”不是一个无条件的承诺，而是“<strong>均匀哈希 + 有界装载因子</strong>”下的期望结论。</p>
+<p>还要区分三个词：</p>
+<ul>
+<li><strong>期望 O(1)</strong>：对哈希函数的随机性和键分布取平均。</li>
+<li><strong>均摊 O(1)</strong>：把偶尔一次 O(n) 的 rehash 成本摊到很多次插入上。</li>
+<li><strong>最坏 O(n)</strong>：所有键落到同一个桶，或 rehash 正好发生在这一次操作里。</li>
+</ul>
+<p>后端更关心尾延迟，而“平均”和“均摊”都不能自动推出“最坏有界”。这一点在第 3 节会展开。</p>
+<h4 id="rehash">rehash 做了什么</h4>
+<p>当 <code>α</code> 超过阈值，哈希表需要<strong>扩容并重新分布</strong>：</p>
+<ol>
+<li>分配一个更大的桶数组（常见做法是翻倍，或取下一个质数）。</li>
+<li>遍历旧表中的所有元素。</li>
+<li>用新的桶数重新计算每个元素的桶号，插入新表。</li>
+<li>释放旧桶数组。</li>
+</ol>
+<p>重新计算桶号是必要的，因为 <code>h(key) % m</code> 依赖 <code>m</code>。即使哈希值不变，桶号也会变。</p>
+<p>成本分析：</p>
+<ul>
+<li>一次 rehash 要搬运 <code>n</code> 个元素，成本是 O(n + m)。</li>
+<li>如果每次扩容按几何级数增长（例如 2 倍），从空表插入 <code>n</code> 个元素的总搬运成本是 O(n)，所以<strong>均摊</strong>每次插入 O(1)。</li>
+<li>但单次插入仍可能是 O(n)。对有严格延迟目标的服务，这一次 O(n) 就是尾延迟毛刺。</li>
+<li>如果每次只增加一个桶，扩容次数太多，总成本会退化到 Θ(n²)。</li>
+</ul>
+<p>因此，工程上通常选择几何扩容，并在可预期的大批量写入前预留容量。</p>
+<h4 id="c">C++ 标准库里的控制手段</h4>
+<p><code>std::unordered_map</code> 暴露了几个关键接口：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cache</span><span class="p">;</span>
+
+<span class="n">cache</span><span class="p">.</span><span class="n">max_load_factor</span><span class="p">(</span><span class="mf">0.75f</span><span class="p">);</span><span class="w">  </span><span class="c1">// 超过 0.75 时倾向于扩容</span>
+<span class="n">cache</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">1'000'000</span><span class="p">);</span><span class="w">      </span><span class="c1">// 为约 100 万个元素预留桶，尽量避免请求路径上 rehash</span>
+</code></pre></div>
+
+<p>几个接口的含义：</p>
+<ul>
+<li><code>load_factor()</code>：当前 <code>size() / bucket_count()</code>。</li>
+<li><code>bucket_count()</code>：当前桶数。</li>
+<li><code>max_load_factor()</code>：装载因子上限提示，默认通常是 1.0。调低它会增加桶数、减少冲突，但更费内存。</li>
+<li><code>rehash(n)</code>：让桶数至少为 <code>n</code>，可能触发重排。</li>
+<li><code>reserve(n)</code>：按当前 <code>max_load_factor</code> 预留足够容纳 <code>n</code> 个元素的桶数，可能触发重排。</li>
+</ul>
+<p>注意：<code>reserve</code> 和 <code>rehash</code> 都可能分配内存并抛异常；在服务启动阶段预留，比在请求处理中途扩容更可控。<code>max_load_factor</code> 是提示而不是精确保证，具体行为以你使用的标准库实现和版本文档为准。</p>
+<p>Python 的 <code>dict</code> 不暴露桶数和装载因子，扩容阈值属于实现细节。CPython 会在内部装载因子达到阈值时扩容，不同版本的具体阈值可能变化。<strong>不要把某个版本的内部阈值写死到容量规划里</strong>；需要控制内存和延迟时，应通过压测和版本核对来确认。</p>
+<h4 id="rehash_1">rehash 后旧引用到底还能不能用</h4>
+<p>这是本课最重要的边界之一。先看一段 C++：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cache</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cache</span><span class="p">[</span><span class="s">"openid_A"</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cache</span><span class="p">[</span><span class="s">"openid_A"</span><span class="p">];</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">"openid_A"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"before buckets="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="n">bucket_count</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" it_value="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">cache</span><span class="p">.</span><span class="n">rehash</span><span class="p">(</span><span class="mi">1024</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"after buckets="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="n">bucket_count</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" same_address="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cache</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="s">"openid_A"</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"value_via_pointer="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 不要解引用 it：rehash 之后迭代器已经失效。</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>对常见的节点式 <code>std::unordered_map</code> 实现，标准保证：</p>
+<ul>
+<li><strong>rehash 会使迭代器失效。</strong></li>
+<li><strong>rehash 不使指向元素的指针和引用失效。</strong> 因为元素节点本身没有被搬走，只是桶数组中的链接关系变了。</li>
+<li><strong><code>end()</code> 迭代器始终不应长期缓存。</strong></li>
+<li><strong><code>erase</code> 只使被删除元素的迭代器、指针和引用失效。</strong></li>
+<li><strong>桶号会改变</strong>，所以缓存 <code>bucket(key)</code> 的结果或自己算出的 <code>h(key) % m</code> 在 rehash 后不能继续用。</li>
+</ul>
+<p>但这条“指针和引用仍有效”的结论不能推广到所有哈希表：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>rehash 后旧引用/指针</th>
+<th>旧迭代器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>常见节点式 <code>std::unordered_map</code></td>
+<td>指向元素的指针/引用仍有效</td>
+<td>失效</td>
+</tr>
+<tr>
+<td>自定义链地址，元素存在 <code>std::vector</code> 里</td>
+<td>元素被搬移，通常失效</td>
+<td>失效</td>
+</tr>
+<tr>
+<td>开放寻址 / 连续槽数组</td>
+<td>元素被搬移，通常全部失效</td>
+<td>失效</td>
+</tr>
+<tr>
+<td>缓存了桶索引或 <code>h(key) % m</code></td>
+<td>桶号改变，不能再用</td>
+<td>不适用</td>
+</tr>
+<tr>
+<td>已 <code>erase</code> 的元素</td>
+<td>失效</td>
+<td>失效</td>
+</tr>
+<tr>
+<td>Python <code>dict</code> 的键对象</td>
+<td>键对象本身不会被字典搬走</td>
+<td>字典大小变化时，迭代中会报错，不能依赖</td>
+</tr>
+</tbody>
+</table>
+<p>所以正确表述不是“rehash 后引用都失效”，也不是“rehash 后引用都安全”，而是：<strong>要看容器是否把元素节点单独分配、rehash 是否搬动元素、以及你持有的是指针/引用还是迭代器/桶索引。</strong> 对 <code>std::unordered_map</code>，记住“迭代器失效、元素指针和引用通常仍有效”；对开放寻址实现，默认按“全部失效”处理，除非文档明确保证。</p>
+<h4 id="_7">后端场景：把扩容移出请求路径</h4>
+<p>假设公众号后台有一个 <code>openid → Session</code> 的缓存，活动开始瞬间涌入大量新用户。如果表没有预留，插入到某个阈值时会触发 rehash，正好命中的那个请求要等待整个桶数组重建。平均 QPS 可能只下降一点，但 p99 会明显抬头。</p>
+<p>可选做法：</p>
+<ul>
+<li>服务启动时按预估在线用户数 <code>reserve</code>，或分片成多个小表，降低单次 rehash 的规模。</li>
+<li>对批量导入、缓存预热，先扩容再灌数据。</li>
+<li>监控 <code>load_factor</code>、最大链长和 rehash 次数；不要只看平均响应时间。</li>
+<li>对延迟极敏感的场景，考虑增量 rehash：把一次大搬迁拆成多次小步骤。Redis 的字典就采用这种思路，但那是实现层面的设计，不是所有标准库容器都提供。</li>
+</ul>
+<h3 id="23">2.3 开放寻址与链地址</h3>
+<p>冲突不可避免，关键是冲突发生后把元素放在哪里。最常见的两类方案是<strong>链地址</strong>和<strong>开放寻址</strong>。</p>
+<h4 id="_8">链地址：每个桶挂一条链</h4>
+<p>链地址的布局是：桶数组的每个槽保存一个链表（或节点链）的头指针。哈希到同一个桶的元素，都挂在同一条链上。</p>
+<div class="codehilite"><pre><span></span><code>buckets:
+[0] -&gt; ("openid_A", session) -&gt; ("openid_Z", session) -&gt; null
+[1] -&gt; null
+[2] -&gt; ("openid_B", session) -&gt; null
+[3] -&gt; ("openid_C", session) -&gt; null
+</code></pre></div>
+
+<p>查找时：</p>
+<ol>
+<li>算出桶号。</li>
+<li>沿链逐个比较键。</li>
+<li>找到相等键就返回；走到链尾就说明不存在。</li>
+</ol>
+<p>插入时可以在链头插入，也可以在链尾追加；删除时从链上摘掉节点。链地址的删除很直接：<strong>找到节点，修改前驱的指针即可</strong>，不需要墓碑。</p>
+<p>链地址的优缺点：</p>
+<ul>
+<li>优点：删除简单；可以容忍 <code>α &gt; 1</code>；如果节点单独分配，rehash 只改桶指针，元素地址可以保持不变（常见 <code>std::unordered_map</code> 就是这种思路）。</li>
+<li>缺点：每个元素额外带指针，内存开销更大；节点分散在堆上，缓存局部性差；冲突严重时退化成链表，查找 O(n)。</li>
+</ul>
+<p>很多语言的标准库哈希表采用链地址或其变体。Java 的 <code>HashMap</code> 在链过长时还会把链表转成红黑树，把最坏查找从 O(n) 降为 O(log n)，这是工程上对抗退化的一个例子。C++ 标准不规定 <code>unordered_map</code> 必须用链地址，但常见实现采用节点式链地址。</p>
+<h4 id="_9">开放寻址：所有元素都放在槽数组里</h4>
+<p>开放寻址不建链表，所有元素都直接放在一个槽数组里。发生冲突时，按某种<strong>探测序列</strong>寻找下一个空槽：</p>
+<ul>
+<li>线性探测：<code>i, i+1, i+2, ...</code></li>
+<li>二次探测：<code>i, i+1², i+2², ...</code></li>
+<li>双重哈希：用第二个哈希函数决定步长。</li>
+</ul>
+<p>查找时沿着同样的探测序列走：</p>
+<ul>
+<li>遇到空槽：说明键不存在，停止。</li>
+<li>遇到已使用且键相等：找到了。</li>
+<li>遇到已使用但键不等：继续探测。</li>
+<li>遇到墓碑（已删除标记）：不能停，必须继续。</li>
+</ul>
+<p>线性探测的查找骨架：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">EMPTY</span><span class="p">,</span> <span class="n">USED</span><span class="p">,</span> <span class="n">DELETED</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">lookup</span><span class="p">(</span><span class="n">slots</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">slots</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">slots</span><span class="p">)):</span>
+        <span class="n">slot</span> <span class="o">=</span> <span class="n">slots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">slot</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">EMPTY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">slot</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="n">USED</span> <span class="ow">and</span> <span class="n">slot</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">slot</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">slots</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+
+<p>插入时找到第一个 <code>EMPTY</code> 或 <code>DELETED</code> 槽放入；如果表里没有空槽，必须先扩容，否则探测会绕圈。</p>
+<p>开放寻址的优缺点：</p>
+<ul>
+<li>优点：元素连续存放，缓存局部性好；不需要每个元素额外挂指针，内存更紧凑；线性探测的顺序访问对 CPU 缓存和预取友好。</li>
+<li>缺点：装载因子必须严格小于 1，通常要控制在 0.5 到 0.75；线性探测容易产生<strong>一次聚集</strong>，冲突会连成一片；删除复杂；rehash 会搬动元素，引用不稳定。</li>
+</ul>
+<h4 id="_10">删除为什么需要墓碑</h4>
+<p>开放寻址最容易踩的坑是删除。假设线性探测插入顺序如下：</p>
+<div class="codehilite"><pre><span></span><code>槽位:   0     1     2     3
+内容:  K1    K2    K3    EMPTY
+</code></pre></div>
+
+<p>如果 <code>K1</code> 和 <code>K2</code> 冲突，<code>K2</code> 被放到 1；<code>K3</code> 又冲突，被放到 2。现在删除 <code>K2</code>：</p>
+<ul>
+<li>如果直接把槽 1 设为 <code>EMPTY</code>，查找 <code>K3</code> 时，探测从槽 0 开始，走到槽 1 看到 <code>EMPTY</code> 就停止，误判 <code>K3</code> 不存在。</li>
+<li>正确做法是把槽 1 标记为 <code>DELETED</code>（墓碑）。查找 <code>K3</code> 时遇到墓碑会继续探测，最终在槽 2 找到。</li>
+</ul>
+<p>所以：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">slots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">DELETED</span>   <span class="c1"># 不能直接设为 EMPTY</span>
+</code></pre></div>
+
+<p>墓碑会被查找路径经过，但可以被后续插入复用。如果删除很多而插入很少，墓碑会越积越多，表看起来“很空”，实际探测却很长。这时需要 rehash 清理墓碑。另一种实现是删除后把后面的元素回移（backward-shift），避免墓碑，但实现更复杂，也需要仔细处理探测链。</p>
+<h4 id="_11">链地址与开放寻址的对比</h4>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>链地址</th>
+<th>开放寻址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储</td>
+<td>桶数组 + 独立节点/链</td>
+<td>一个连续槽数组</td>
+</tr>
+<tr>
+<td>冲突处理</td>
+<td>挂到同桶的链上</td>
+<td>按探测序列找下一个槽</td>
+</tr>
+<tr>
+<td>装载因子</td>
+<td>可以大于 1，但链会变长</td>
+<td>必须小于 1，通常 ≤ 0.75</td>
+</tr>
+<tr>
+<td>删除</td>
+<td>摘链即可</td>
+<td>墓碑或回移，复杂</td>
+</tr>
+<tr>
+<td>缓存局部性</td>
+<td>指针跳转，通常较差</td>
+<td>连续访问，通常较好</td>
+</tr>
+<tr>
+<td>引用稳定性</td>
+<td>节点式实现 rehash 后元素地址可不变</td>
+<td>rehash 搬动元素，通常全部失效</td>
+</tr>
+<tr>
+<td>最坏情况</td>
+<td>所有键同桶，O(n)</td>
+<td>探测整个表/墓碑堆积，O(n)</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td>删除频繁、需要稳定引用、实现简单</td>
+<td>读多写少、内存紧凑、缓存友好</td>
+</tr>
+</tbody>
+</table>
+<p>选择时不要只看“哪个更快”，而要看负载：</p>
+<ul>
+<li>会话缓存、access_token 缓存这类读多、删除少、键值较小的场景，开放寻址的局部性优势明显。</li>
+<li>消息去重、粉丝索引这类插入删除都频繁、可能需要持有元素引用的场景，链地址的删除和引用稳定性更省心。</li>
+<li>如果输入不可信，两种方案都可能被碰撞攻击打退；必须配合键控哈希、输入限制和监控。</li>
+<li>如果团队自己实现，必须明确墓碑策略、扩容策略、装载因子上限和并发模型；直接用成熟标准库通常更安全。</li>
+</ul>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 平均常数时间不等于最坏有界延迟</h3>
+<p>这是本节点明确列出的陷阱，也是后端最容易吃亏的地方。</p>
+<p>“平均 O(1)”至少隐藏了四层假设：</p>
+<ol>
+<li>键的哈希值均匀分布。</li>
+<li>装载因子被控制在常数上界。</li>
+<li>哈希和相等比较的成本可视为常数。</li>
+<li>输入不是攻击者专门构造的。</li>
+</ol>
+<p>真实系统里，这四条都可能被打破：</p>
+<ul>
+<li><strong>弱哈希。</strong> 例如只看首字符、只看长度、或者对某些字段不敏感，攻击者可以批量制造同桶键。</li>
+<li><strong>固定种子。</strong> 如果哈希函数完全确定且公开，攻击者可以离线计算出大量碰撞键，再通过接口提交。</li>
+<li><strong>突发写入。</strong> 活动、批量导入、缓存预热会让装载因子快速上升，触发 rehash。</li>
+<li><strong>长键。</strong> 如果把长字符串甚至整个请求体作为键，单次哈希就是 O(长度)，不是 O(1)。</li>
+</ul>
+<p>一个典型的退化过程是：接口接受用户可控的 <code>msg_id</code>，后端用弱哈希做去重集合。攻击者提交 20 万个都落在同一个桶的键。链地址表的那个桶变成一条长度 20 万的链表；每次插入或查询都要走完整条链，单次操作从微秒级变成毫秒级甚至更差。正常用户的请求排在后面，p99 延迟飙升，严重时线程池被占满。<strong>平均负载可能并不高，但尾延迟已经被打穿。</strong></p>
+<p>应对思路不是承诺“最坏 O(1)”（哈希表一般做不到），而是降低退化的概率和影响：</p>
+<ul>
+<li>对不可信输入使用带随机种子的键控哈希，让攻击者无法稳定构造碰撞。</li>
+<li>限制单个键的长度和单次请求的键数量，对异常输入限流。</li>
+<li>预分配容量，避免在请求路径上触发大 rehash；或采用增量 rehash。</li>
+<li>监控装载因子、最大链长、探测长度和 rehash 次数，而不是只看平均 QPS。</li>
+<li>对延迟目标严格的接口，用压测覆盖“最坏分布”，测 p99/p999，不只看均值。</li>
+<li>必要时使用树化桶、分片哈希表或其他混合结构，把最坏情况从 O(n) 降下来。</li>
+</ul>
+<p>结论：<strong>哈希表的“常数时间”是期望值，不是延迟上界。</strong> 设计 SLA 时，必须把碰撞、扩容和恶意输入纳入最坏情况预算。</p>
+<h3 id="32">3.2 其他常见误区</h3>
+<ul>
+<li><strong>只比较哈希值。</strong> 哈希相等只说明可能相等，必须再比较完整键。把哈希值当唯一 ID 会造成误判去重或错误命中。</li>
+<li><strong>修改作为键的对象。</strong> 插入后修改参与哈希的字段，会导致旧条目无法查找。键应视为不可变。</li>
+<li><strong>哈希与相等覆盖的字段不一致。</strong> 例如相等比较忽略大小写，哈希却区分大小写，逻辑上相等的键会落到不同桶。</li>
+<li><strong>假设迭代顺序稳定。</strong> <code>unordered_map</code> 的遍历顺序不保证；rehash 后顺序会变。不要依赖它做分页、排序或幂等输出。</li>
+<li><strong>认为 rehash 只影响性能。</strong> 如果你缓存了迭代器、桶号或指向元素的引用，rehash 可能直接造成未定义行为或错误结果。</li>
+<li><strong>在开放寻址中把装载因子推到 1。</strong> 没有空槽时探测可能死循环；删除后的墓碑也会让有效装载因子高于表面值。</li>
+<li><strong>忽略线程安全。</strong> <code>std::unordered_map</code> 和 Python <code>dict</code> 都不是为多线程无锁并发读写设计的。读多写少也要用合适的锁或并发容器；一边扩容一边读是数据竞争。</li>
+<li><strong>只看桶数，不看分布。</strong> 桶很多但哈希很差，仍然会集中冲突；桶数合适但键分布偏斜，也会长尾。</li>
+<li><strong>把 <code>std::hash</code> 当稳定标识。</strong> 标准不保证跨实现、跨版本、跨进程一致；不要持久化哈希值，也不要用它做跨服务 ID。</li>
+</ul>
+<h3 id="33">3.3 设计权衡：开放寻址局部性好，删除及引用稳定性更复杂</h3>
+<p>节点给出的取舍是：<strong>开放寻址局部性好，删除及引用稳定性更复杂。</strong> 这句话可以拆成两半：</p>
+<ul>
+<li><strong>局部性好</strong>：开放寻址把元素放在连续数组里，线性探测通常访问相邻槽位，能吃到缓存行和硬件预取的好处。链地址要沿着堆上的节点指针跳转，每次跳转都可能是一次缓存缺失。对读多、键值小、装载因子可控的缓存，开放寻址往往有更好的常数。</li>
+<li><strong>删除及引用稳定性更复杂</strong>：开放寻址不能简单地把槽清空，否则会截断探测链，所以需要墓碑或回移；墓碑积累会拖慢查找，需要定期 rehash。rehash 会搬动元素，之前持有的指针、引用、迭代器都可能失效。链地址删除只需摘链，节点式实现还能在 rehash 后保持元素地址不变，引用更稳定。</li>
+</ul>
+<p>实际选择可以用下面的问题清单：</p>
+<ol>
+<li><strong>删除频繁吗？</strong> 频繁删除且不想处理墓碑，优先链地址。</li>
+<li><strong>需要长期持有元素引用吗？</strong> 需要的话，确认容器在 rehash 后是否保持元素地址；不要假设所有链地址都稳定。</li>
+<li><strong>读是否远多于写？</strong> 读多写少、键值小，开放寻址的缓存局部性更有价值。</li>
+<li><strong>内存是否紧张？</strong> 开放寻址没有每元素指针开销，通常更紧凑；但为了低装载因子要多留空槽。</li>
+<li><strong>输入是否不可信？</strong> 两种结构都需要键控哈希和限流；开放寻址在碰撞下可能出现聚集，链地址会退化成链表。</li>
+<li><strong>延迟目标是否严格？</strong> 需要预分配、分片、增量 rehash 或监控，不能只依赖均摊 O(1)。</li>
+</ol>
+<p>没有一种结构在所有维度都赢。<strong>结构选择应该由访问模式、删除比例、引用稳定性要求、内存预算和安全模型共同决定。</strong></p>
+<h2 id="4">4. 动手实践</h2>
+<p>本实践的目标是节点要求的：<strong>实现字符串哈希表，构造碰撞并测量负载因子影响。</strong> 下面用 Python 实现一个链地址哈希表，不依赖第三方库；你可以直接在装有 Python 3 的环境里运行。</p>
+<h3 id="1_1">步骤 1：建立实验目录</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/atlas-hash
+<span class="nb">cd</span><span class="w"> </span>/tmp/atlas-hash
+python3<span class="w"> </span>--version
+</code></pre></div>
+
+<h3 id="2_1">步骤 2：写入哈希表与基准脚本</h3>
+<p>把下面的内容保存为 <code>/tmp/atlas-hash/hash_bench.py</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fnv1a</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mi">14695981039346656037</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">):</span>
+        <span class="n">h</span> <span class="o">^=</span> <span class="n">b</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="mi">1099511628211</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFFFFFFFFFFFF</span>
+    <span class="k">return</span> <span class="n">h</span> <span class="o">%</span> <span class="n">mod</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">first_char</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">mod</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">ord</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">s</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="o">%</span> <span class="n">mod</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ChainTable</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buckets</span><span class="p">,</span> <span class="n">hash_fn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buckets</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">buckets</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hash_fn</span> <span class="o">=</span> <span class="n">hash_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="n">chain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buckets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hash_fn</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buckets</span><span class="p">))]</span>
+        <span class="k">for</span> <span class="n">existing</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">existing</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">chain</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">contains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="n">chain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buckets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hash_fn</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buckets</span><span class="p">))]</span>
+        <span class="n">probes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">existing</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
+            <span class="n">probes</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">existing</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">probes</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">probes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lengths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">buckets</span><span class="p">]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buckets</span><span class="p">)</span>
+        <span class="n">nonempty</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">length</span> <span class="ow">in</span> <span class="n">lengths</span> <span class="k">if</span> <span class="n">length</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">sum</span><span class="p">(</span><span class="n">length</span> <span class="o">*</span> <span class="p">(</span><span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">length</span> <span class="ow">in</span> <span class="n">lengths</span><span class="p">)</span> <span class="o">/</span> <span class="n">n</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"alpha"</span><span class="p">:</span> <span class="n">n</span> <span class="o">/</span> <span class="n">m</span><span class="p">,</span>
+            <span class="s2">"max_chain"</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">lengths</span><span class="p">),</span>
+            <span class="s2">"avg_nonempty"</span><span class="p">:</span> <span class="n">n</span> <span class="o">/</span> <span class="n">nonempty</span> <span class="k">if</span> <span class="n">nonempty</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"exp_succ"</span><span class="p">:</span> <span class="n">success</span><span class="p">,</span>
+            <span class="s2">"exp_fail"</span><span class="p">:</span> <span class="n">n</span> <span class="o">/</span> <span class="n">m</span><span class="p">,</span>
+        <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">key</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"user:openid:</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">4096</span>
+    <span class="n">fixed_n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="n">fixed_n</span><span class="p">,)</span> <span class="k">if</span> <span class="n">fixed_n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">else</span> <span class="p">(</span><span class="n">m</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="n">m</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">m</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">//</span> <span class="mi">4</span><span class="p">,</span> <span class="n">m</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">hash_fn</span> <span class="ow">in</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">"FNV-1a"</span><span class="p">,</span> <span class="n">fnv1a</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"FirstCharHash (weak)"</span><span class="p">,</span> <span class="n">first_char</span><span class="p">),</span>
+    <span class="p">]:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"== </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">, buckets=</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> =="</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="n">ChainTable</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">hash_fn</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">table</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">key</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+            <span class="n">s</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>
+            <span class="n">hit</span><span class="p">,</span> <span class="n">hit_probes</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">key</span><span class="p">(</span><span class="n">n</span> <span class="o">//</span> <span class="mi">2</span><span class="p">))</span>
+
+            <span class="n">miss_total</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">):</span>
+                <span class="n">miss</span><span class="p">,</span> <span class="n">probes</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">f</span><span class="s2">"user:openid:absent-</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">assert</span> <span class="ow">not</span> <span class="n">miss</span>
+                <span class="n">miss_total</span> <span class="o">+=</span> <span class="n">probes</span>
+            <span class="n">miss_avg</span> <span class="o">=</span> <span class="n">miss_total</span> <span class="o">/</span> <span class="mi">1000</span>
+
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"n=</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">5d</span><span class="si">}</span><span class="s2"> alpha=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'alpha'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"max_chain=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'max_chain'</span><span class="p">]</span><span class="si">:</span><span class="s2">5d</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"avg_nonempty=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'avg_nonempty'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"exp_succ=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'exp_succ'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"exp_fail=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'exp_fail'</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"hit=</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">hit</span><span class="p">)</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">hit_probes</span><span class="si">}</span><span class="s2"> "</span>
+                <span class="sa">f</span><span class="s2">"miss_avg=</span><span class="si">{</span><span class="n">miss_avg</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+<p>这个脚本做了几件事：</p>
+<ul>
+<li><code>ChainTable</code> 是链地址哈希表，每个桶是一个 Python 列表。</li>
+<li><code>fnv1a</code> 是一个分布较好的字符串哈希。</li>
+<li><code>first_char</code> 是故意写弱的哈希：所有以 <code>u</code> 开头的键都会落到同一个桶，用来构造碰撞。</li>
+<li><code>stats()</code> 计算装载因子、最大链长、非空桶平均长度、成功查找的期望探测次数，以及失败查找的理论值 <code>n/m</code>。</li>
+<li>默认情况下，主程序在 <code>α = 0.25, 0.5, 0.75, 0.9</code> 四档分别建表，并对 1000 个不存在的键测量实际探测次数；第二个命令行参数可以固定元素数量，便于单独改变桶数。</li>
+</ul>
+<h3 id="3_1">步骤 3：运行并记录结果</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/tmp/atlas-hash
+python3<span class="w"> </span>hash_bench.py<span class="w"> </span><span class="m">4096</span>
+</code></pre></div>
+
+<p>一次运行的示例输出如下（具体数值会随 Python 版本和哈希实现略有不同）：</p>
+<div class="codehilite"><pre><span></span><code>== FNV-1a, buckets=4096 ==
+n= 1024 alpha=0.250 max_chain=    3 avg_nonempty=1.120 exp_succ=1.113 exp_fail=0.250 hit=1/1 miss_avg=0.110
+n= 2048 alpha=0.500 max_chain=    5 avg_nonempty=1.244 exp_succ=1.231 exp_fail=0.500 hit=1/2 miss_avg=0.250
+n= 3072 alpha=0.750 max_chain=    5 avg_nonempty=1.480 exp_succ=1.415 exp_fail=0.750 hit=1/1 miss_avg=0.446
+n= 3686 alpha=0.900 max_chain=    6 avg_nonempty=1.570 exp_succ=1.495 exp_fail=0.900 hit=1/2 miss_avg=0.536
+== FirstCharHash (weak), buckets=4096 ==
+n= 1024 alpha=0.250 max_chain= 1024 avg_nonempty=1024.000 exp_succ=512.500 exp_fail=0.250 hit=1/513 miss_avg=1024.000
+n= 2048 alpha=0.500 max_chain= 2048 avg_nonempty=2048.000 exp_succ=1024.500 exp_fail=0.500 hit=1/1025 miss_avg=2048.000
+n= 3072 alpha=0.750 max_chain= 3072 avg_nonempty=3072.000 exp_succ=1536.500 exp_fail=0.750 hit=1/1537 miss_avg=3072.000
+n= 3686 alpha=0.900 max_chain= 3686 avg_nonempty=3686.000 exp_succ=1843.500 exp_fail=0.900 hit=1/1844 miss_avg=3686.000
+</code></pre></div>
+
+<h3 id="4-fnv-1a">步骤 4：解读 FNV-1a 的结果</h3>
+<p>先看正常哈希：</p>
+<ul>
+<li><code>alpha</code> 从 0.25 升到 0.9，<code>max_chain</code> 从 3 升到 6，<code>exp_succ</code> 从约 1.11 升到约 1.50。这与链地址的期望公式 <code>1 + α/2</code> 很接近。</li>
+<li><code>exp_fail = n/m = α</code>，这是“查询哈希均匀分布”时的理论失败成本。</li>
+<li><code>miss_avg</code> 是实际测得的 1000 个不存在键的平均探测次数，量级也随着装载因子上升而增加。它不一定精确等于 <code>α</code>，因为具体键的落点、空桶比例和哈希分布都会影响样本均值。</li>
+<li><code>hit</code> 列是某个存在键的实测探测次数，通常很小，说明在桶内很快能比较到。</li>
+</ul>
+<p>关键结论：<strong>在哈希分布正常时，装载因子上升会让链变长、探测次数增加，但只要 α 有上界，平均成本仍然是常数级。</strong></p>
+<h3 id="5">步骤 5：观察弱哈希下的碰撞</h3>
+<p>再看 <code>FirstCharHash</code>：</p>
+<ul>
+<li>所有键都以 <code>u</code> 开头，所以全部落在同一个桶。</li>
+<li><code>max_chain = n</code>，<code>avg_nonempty = n</code>，<code>exp_succ ≈ n/2</code>，实际查找一个键平均要走半条链，失败查找要走完整条链。</li>
+<li><code>exp_fail</code> 仍然显示 <code>n/m</code>，但这是理论列，它假设查询哈希均匀分布；弱哈希显然违反了这个假设。实际 <code>miss_avg = n</code>，说明<strong>只看装载因子不能预测最坏情况</strong>。</li>
+<li><code>alpha</code> 从 0.25 到 0.9，<code>max_chain</code> 始终等于 <code>n</code>，因为冲突不是由装载因子造成的，而是由哈希函数把键集中在一起造成的。</li>
+</ul>
+<p>这就是恶意碰撞攻击的缩小版：攻击者不需要让 <code>α</code> 变大，只要让所有键落到同一个桶，就能让单次操作退化为 O(n)。</p>
+<h3 id="6">步骤 6：改变桶数，隔离装载因子的影响</h3>
+<p>固定元素数量，改变桶数，观察 <code>α</code> 和探测次数的关系。脚本的第二个参数可以指定固定元素数：</p>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>hash_bench.py<span class="w"> </span><span class="m">1024</span><span class="w"> </span><span class="m">1024</span>
+python3<span class="w"> </span>hash_bench.py<span class="w"> </span><span class="m">4096</span><span class="w"> </span><span class="m">1024</span>
+python3<span class="w"> </span>hash_bench.py<span class="w"> </span><span class="m">8192</span><span class="w"> </span><span class="m">1024</span>
+</code></pre></div>
+
+<p>例如，当 <code>n = 1024</code> 时：</p>
+<ul>
+<li><code>m = 1024</code>，<code>α ≈ 1.0</code>，链更长。</li>
+<li><code>m = 4096</code>，<code>α = 0.25</code>，链更短。</li>
+<li><code>m = 8192</code>，<code>α = 0.125</code>，链更短，但空桶更多、内存占用更大。</li>
+</ul>
+<p>记录每组 <code>(m, n, α, max_chain, exp_succ, miss_avg)</code>，你应该能观察到：</p>
+<ul>
+<li>正常哈希下，<code>α</code> 越低，平均链长和探测次数越小。</li>
+<li>但 <code>α</code> 过低会浪费桶数组内存，形成“空间换时间”的权衡。</li>
+<li>弱哈希下，改变 <code>m</code> 不能解决集中冲突，因为所有键仍然落在同一个桶；这再次说明<strong>哈希质量与装载因子是两个独立因素</strong>。</li>
+</ul>
+<h3 id="7-rehash">步骤 7：验证 rehash 后的引用边界</h3>
+<p>如果你有 C++ 环境，可以编译第 2.2 节的 <code>unordered_map</code> 示例，确认：</p>
+<ul>
+<li><code>rehash</code> 后 <code>bucket_count</code> 改变。</li>
+<li>指向元素的指针地址不变，<code>*p</code> 仍可读。</li>
+<li>旧迭代器不能再用。</li>
+</ul>
+<p>如果没有 C++ 环境，可以用 Python 验证“迭代期间改变字典大小”的边界：</p>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">d = {"a": 1, "b": 2}</span>
+<span class="s">try:</span>
+<span class="s">    for k in d:</span>
+<span class="s">        d["c"] = 3</span>
+<span class="s">except RuntimeError as e:</span>
+<span class="s">    print("RuntimeError:", e)</span>
+<span class="s">PY</span>
+</code></pre></div>
+
+<p>预期会看到类似 <code>dictionary changed size during iteration</code> 的错误。这说明：字典内部结构变化时，正在进行的迭代不能继续依赖。<strong>不要一边遍历哈希表一边插入或删除；需要修改时先收集键，再统一处理，或使用显式的快照。</strong></p>
+<h3 id="8">步骤 8：验收自查</h3>
+<p>完成实验后，确认你能回答：</p>
+<ul>
+<li>在正常哈希下，<code>α</code> 从 0.25 升到 0.9，为什么 <code>exp_succ</code> 只从约 1.1 升到约 1.5？</li>
+<li>为什么弱哈希下 <code>max_chain</code> 等于 <code>n</code>，而 <code>exp_fail</code> 仍然显示 <code>n/m</code>？这两个数字分别代表什么假设？</li>
+<li>如果 <code>n</code> 继续增长而 <code>m</code> 不变，平均链长会怎样变化？这时还能说“平均 O(1)”吗？</li>
+<li>对 <code>std::unordered_map</code>，rehash 后指针、引用、迭代器分别是什么状态？换成开放寻址还一样吗？</li>
+<li>如果线上接口接受不可信字符串作为键，你会增加哪些防护？</li>
+</ul>
+<h2 id="5-3">5. 自测题（3 道，附答案）</h2>
+<h3 id="1-o1">题 1：为什么“平均 O(1)”需要假设？在什么情况下会退化？</h3>
+<p><strong>答案：</strong> 哈希表的平均 O(1) 不是无条件成立的。它假设哈希函数把键较均匀、独立地散布到桶中，装载因子 <code>α = n/m</code> 被 rehash 控制在常数上界，键的哈希和相等比较成本可视为常数，并且输入不是攻击者刻意构造的碰撞集合。满足这些条件时，链地址的期望查找成本约为 <code>1 + α/2</code>（成功）或 <code>α</code>（失败），是常数级。</p>
+<p>退化的情况包括：</p>
+<ul>
+<li>哈希函数很弱或固定可预测，大量键落入同一个桶，链地址退化为长链表，开放寻址退化为长探测，最坏 O(n)。</li>
+<li>桶数固定而元素持续增长，<code>α</code> 随 <code>n</code> 增长，平均链长也随之增长。</li>
+<li>单次 rehash 需要搬运 <code>n</code> 个元素，虽然均摊 O(1)，但这次操作本身是 O(n)，会造成尾延迟。</li>
+<li>键很长，哈希和比较本身是 O(键长度)，不再是 O(1)。</li>
+</ul>
+<p>所以“平均 O(1)”描述的是期望和均摊，不是最坏延迟上界。</p>
+<h3 id="2stdunordered_map-rehash">题 2：<code>std::unordered_map</code> rehash 后，指向元素的指针、引用和迭代器分别怎样？</h3>
+<p><strong>答案：</strong> 对常见的节点式 <code>std::unordered_map</code> 实现，标准保证 rehash 会使迭代器失效，但不使指向元素的指针和引用失效，因为元素节点本身没有被搬走，只是桶数组和链接关系重建了。<code>end()</code> 迭代器不应长期缓存；<code>erase</code> 只使被删除元素的迭代器、指针和引用失效。桶号会改变，所以缓存的 <code>bucket(key)</code> 结果或自己算的 <code>h(key) % m</code> 不能继续使用。</p>
+<p>要注意，这个结论不能推广到所有哈希表。开放寻址或把元素连续存放在数组里的实现，rehash 会搬动元素，指针、引用、迭代器通常全部失效；自定义链地址如果元素存在 <code>std::vector</code> 里，也会因搬移而失效。正确做法是查具体容器的文档，并区分“元素地址是否稳定”和“迭代器是否有效”这两件事。</p>
+<h3 id="3_2">题 3：开放寻址删除为什么需要墓碑？链地址为什么不需要？</h3>
+<p><strong>答案：</strong> 开放寻址的查找依赖探测序列，遇到空槽就认为键不存在。如果删除时直接把槽设为 <code>EMPTY</code>，会截断探测链：某个键可能被放在更后面的槽里，但查找在删除位置就提前停止，误判不存在。墓碑 <code>DELETED</code> 表示“这里曾经有元素，但已删除”，查找遇到墓碑会继续探测，插入则可以复用墓碑。墓碑积累过多会拖慢查找，需要 rehash 清理。</p>
+<p>链地址的每个桶是一条独立的链，删除时只要找到节点并修改前驱指针，把节点从链上摘掉即可。查找其他元素不依赖“空槽”作为终止条件，而是走到链尾，所以不需要墓碑。代价是链地址需要额外的节点和指针，缓存局部性通常不如开放寻址。</p>
+<h2 id="6_1">6. 推荐资源</h2>
+<ul>
+<li><strong>哈希表与冲突处理：参考文档 / 原始资料</strong></li>
+<li>链接：https://en.cppreference.com/w/cpp/container/unordered_map.html</li>
+<li>来源：en.cppreference.com</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：基础</li>
+<li>说明：重点阅读哈希函数与相等关系、<code>max_load_factor</code>、<code>rehash</code>、<code>reserve</code>，以及迭代器/引用失效的说明，用于核对本节点实验的语义和边界。</li>
+</ul>
+<p>阅读时建议带着三个问题：</p>
+<ol>
+<li><code>unordered_map</code> 对键的哈希和相等有什么要求？自定义类型需要提供什么？</li>
+<li><code>max_load_factor</code>、<code>rehash</code>、<code>reserve</code> 分别怎样影响桶数和扩容？</li>
+<li>rehash 后哪些对象失效、哪些仍然有效？文档的保证和具体实现的保证分别是什么？</li>
+</ol>
+<h2 id="7">7. 小结与前后置关系</h2>
+<p>哈希表的核心可以压缩成一句话：<strong>用哈希函数把键缩小到一个桶，用相等关系在桶内确认，用 rehash 把装载因子维持在可控范围，用链地址或开放寻址处理冲突。</strong></p>
+<p>三个要点分别对应三个工程问题：</p>
+<ul>
+<li><strong>哈希函数与相等关系</strong>决定“能不能找对”。哈希负责定位，相等负责判定；两者覆盖的字段必须一致，键在插入后不能随便修改。</li>
+<li><strong>负载因子和 rehash</strong>决定“平均快不快、扩容时抖不抖”。<code>α</code> 有上界时期望成本才是常数；rehash 均摊 O(1)，但单次 O(n)，并且会改变桶号和迭代器有效性。</li>
+<li><strong>开放寻址与链地址</strong>决定“空间、缓存、删除、引用稳定性怎么取舍”。开放寻址局部性好，但删除和引用稳定性更复杂；链地址删除简单，但指针跳转和额外内存有代价。</li>
+</ul>
+<p>与本课的前置节点 <code>a-sequence</code> 的关系也很直接：顺序表/动态数组提供了连续存储和按索引 O(1) 访问，哈希表的桶数组本身就是一个序列；链地址的每个桶也常用序列存放冲突元素；rehash 时的扩容和搬移，与动态数组扩容在“均摊 O(1)、单次 O(n)、旧引用可能失效”这些问题上是相通的。区别在于：序列用整数下标直接定位，哈希表先把任意键映射成桶号，因此还要额外处理哈希分布、冲突和恶意输入。理解顺序表的扩容边界，再来看哈希表的 rehash，会更容易把“均摊成本”和“引用失效”这两件事分清。</p><div class="pn"><span><a href="8.html">← 数组、链表、栈与队列</a></span><span><a href="10.html">搜索树、堆与有序索引 →</a></span></div></main></div></body></html>

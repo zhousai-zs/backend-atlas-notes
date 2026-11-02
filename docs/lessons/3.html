@@ -1,0 +1,911 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>3. 内存层次与局部性 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="cur" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 3 课 · 领域 A · 阶段 1</p><p class="dl"><a href="../files/3-a-memory.md" download>⬇ 本课 Markdown</a></p><h1 id="3208">第 3/208 课：内存层次与局部性</h1>
+<blockquote>
+<p>节点：<code>a-memory</code>（Memory Hierarchy）<br />
+领域：A / 硬件与操作系统<br />
+阶段：1<br />
+前置节点：<code>a-machine</code><br />
+难度：基础<br />
+关键词：内存层次、时间局部性、空间局部性、缓存行、组相联、工作集、访问步长</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 这个节点在说什么</h3>
+<p>节点的核心结论是：</p>
+<blockquote>
+<p>寄存器、CPU 缓存、DRAM 和持久存储的延迟与容量差异很大，局部性决定访问效率。</p>
+</blockquote>
+<p>节点给出的学习理由是：</p>
+<blockquote>
+<p>理解同样复杂度的算法为何表现不同。</p>
+</blockquote>
+<p>这句话对后端工程师尤其重要。两个算法都写成 <code>O(n)</code>，一个顺序扫数组，一个沿链表随机跳；复杂度分析看起来一样，真实耗时可能差几倍到几十倍。差别不一定来自“算法错了”，而可能来自<strong>数据放在哪里、按什么顺序访问、每次搬多少字节</strong>。</p>
+<h3 id="12">1.2 学完本课后你应该能够</h3>
+<ol>
+<li>解释<strong>时间局部性</strong>与<strong>空间局部性</strong>，并能举出后端代码中的例子。</li>
+<li>解释<strong>缓存行</strong>与<strong>组相联</strong>的基本原理，知道为什么“访问一个字节”可能实际搬来一整行。</li>
+<li>解释<strong>工作集、缓存容量、访问步长</strong>之间的关系，能说明工作集超过缓存后为什么会变慢。</li>
+<li>独立完成实践：比较连续数组、链表、不同步长遍历的每元素耗时。</li>
+<li>避免把 <strong>page cache（页缓存）</strong> 当成 <strong>CPU cache（CPU 缓存）</strong>。</li>
+</ol>
+<h3 id="13">1.3 为什么后端要懂内存层次</h3>
+<p>以典型的微信公众号后台请求为例：</p>
+<div class="codehilite"><pre><span></span><code>接入 -&gt; 鉴权 -&gt; 限流 -&gt; 消息解析 -&gt; 业务路由 -&gt; 存储/缓存 -&gt; 组装响应
+</code></pre></div>
+
+<p>这条链路里到处是内存访问：</p>
+<ul>
+<li><strong>鉴权和限流</strong>：用户状态、配额、计数器是热点数据，可能被反复读取和更新。</li>
+<li><strong>消息解析</strong>：JSON/Protobuf 字段通常在一个连续缓冲区里，顺序解析比到处跳指针更友好。</li>
+<li><strong>业务路由</strong>：哈希表、树、链表节点可能形成指针追逐，每次解引用都可能是一次缓存未命中。</li>
+<li><strong>批量任务</strong>：数组、切片、批处理缓冲区如果布局紧凑，CPU 能预取后续数据；大量小对象则会增加随机访问。</li>
+<li><strong>并发写入</strong>：两个线程更新同一缓存行里的不同计数器，可能产生伪共享，让性能远低于预期。</li>
+</ul>
+<p>理解内存层次，能让你在以下问题上有更可靠的判断：</p>
+<ul>
+<li>为什么同样复杂度的代码，换个数据结构就慢了？</li>
+<li>为什么“缓存命中率很高”仍然可能被带宽卡住？</li>
+<li>为什么序列化缓冲区、对象字段顺序、哈希桶布局会影响 p99？</li>
+<li>为什么 <code>free -h</code> 里的 <code>buff/cache</code> 很大，不能直接说明 CPU 缓存很大？</li>
+</ul>
+<p>本课不要求你背某款 CPU 的精确参数。硬件参数会变，<strong>用命令看当前机器、用实验验证假设</strong>才是稳定能力。</p>
+<hr />
+<h2 id="2">2. 从直觉到原理</h2>
+<h3 id="21">2.1 先建立直觉：书桌、书架、仓库</h3>
+<p>把 CPU 取数据想成找工具：</p>
+<ul>
+<li><strong>寄存器</strong>：手里正在用的工具，数量最少，拿起来最快。</li>
+<li><strong>L1/L2 缓存</strong>：桌面和抽屉，放最近常用的东西。</li>
+<li><strong>L3 缓存</strong>：房间里的书架，容量更大，但走过去要时间。</li>
+<li><strong>DRAM</strong>：楼下仓库，容量很大，取一次明显更慢。</li>
+<li><strong>SSD/HDD</strong>：更远的仓库，容量最大，但延迟高几个数量级。</li>
+</ul>
+<p>越靠近 CPU，容量越小、速度越快、成本越高。常见数量级如下，<strong>具体数值必须用当前机器实测</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th style="text-align: right;">典型容量</th>
+<th style="text-align: right;">典型访问延迟</th>
+<th>谁管理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>寄存器</td>
+<td style="text-align: right;">几十到几百个，每个 4/8 字节</td>
+<td style="text-align: right;">小于 1 ns</td>
+<td>编译器/CPU</td>
+</tr>
+<tr>
+<td>L1 缓存</td>
+<td style="text-align: right;">每核几十 KiB</td>
+<td style="text-align: right;">约 1 ns</td>
+<td>CPU 硬件</td>
+</tr>
+<tr>
+<td>L2 缓存</td>
+<td style="text-align: right;">每核几百 KiB 到几 MiB</td>
+<td style="text-align: right;">几 ns 到十几 ns</td>
+<td>CPU 硬件</td>
+</tr>
+<tr>
+<td>L3 缓存</td>
+<td style="text-align: right;">几 MiB 到数百 MiB</td>
+<td style="text-align: right;">十几 ns 到几十 ns</td>
+<td>CPU 硬件</td>
+</tr>
+<tr>
+<td>DRAM</td>
+<td style="text-align: right;">几 GiB 到 TiB</td>
+<td style="text-align: right;">几十 ns 到一百多 ns</td>
+<td>操作系统/硬件</td>
+</tr>
+<tr>
+<td>SSD</td>
+<td style="text-align: right;">几百 GiB 到 TiB</td>
+<td style="text-align: right;">几十 µs 到几百 µs</td>
+<td>操作系统/设备</td>
+</tr>
+<tr>
+<td>HDD</td>
+<td style="text-align: right;">几百 GiB 到 TiB</td>
+<td style="text-align: right;">几 ms 到十几 ms</td>
+<td>操作系统/设备</td>
+</tr>
+</tbody>
+</table>
+<p>这张表最重要的不是记住数字，而是记住<strong>数量级差距</strong>。如果 CPU 访问一次 DRAM 要几十到上百纳秒，而一条简单指令不到一纳秒，那么“多一次内存未命中”就可能相当于浪费很多条指令的时间。</p>
+<p>在 Linux 上先看自己的机器：</p>
+<div class="codehilite"><pre><span></span><code>lscpu
+getconf<span class="w"> </span>-a<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>cache
+getconf<span class="w"> </span>LEVEL1_DCACHE_LINESIZE
+getconf<span class="w"> </span>LEVEL1_DCACHE_SIZE
+getconf<span class="w"> </span>LEVEL2_CACHE_SIZE
+getconf<span class="w"> </span>LEVEL3_CACHE_SIZE
+</code></pre></div>
+
+<p>注意：<code>lscpu</code> 里的缓存可能是<strong>所有实例的汇总</strong>，例如显示 <code>L1d cache: 384 KiB (8 instances)</code>，并不等于每个核都有 384 KiB；<code>getconf</code> 通常给出单个 CPU 的缓存参数。不同发行版、不同架构暴露的字段也可能不同，看到空值并不奇怪。</p>
+<h3 id="22">2.2 时间局部性：刚用过的东西，马上还会用</h3>
+<p><strong>时间局部性</strong>（temporal locality）是指：如果一个地址刚被访问过，那么它在不久后很可能再次被访问。</p>
+<p>最直观的例子是循环里的累加器：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">uint64_t</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">hot_config</span><span class="o">-&gt;</span><span class="n">rate_limit</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>total</code> 和 <code>hot_config-&gt;rate_limit</code> 会被反复使用。编译器很可能把 <code>hot_config-&gt;rate_limit</code> 放进寄存器，之后循环里不再访问内存——这其实就是对时间局部性的极致利用。</p>
+<p>后端场景里，时间局部性对应：</p>
+<ul>
+<li>同一个热点用户的鉴权结果、限流配额；</li>
+<li>同一个配置对象被大量请求读取；</li>
+<li>同一个连接或会话的元数据在短时间内反复使用；</li>
+<li>同一个哈希表桶被连续查找。</li>
+</ul>
+<p><strong>设计启示</strong>：如果一个数据在时间窗口内会被反复访问，就应尽量让它留在离 CPU 近的地方，或者减少重复的随机查找。应用层缓存、连接级缓存、请求级缓存都在利用时间局部性，但它们和 CPU 缓存不是同一层东西，后面会区分。</p>
+<h3 id="23">2.3 空间局部性：用了这个，附近的东西也会被用</h3>
+<p><strong>空间局部性</strong>（spatial locality）是指：如果一个地址被访问，那么它附近的地址很可能很快也被访问。</p>
+<p>连续数组是空间局部性的典型：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">uint64_t</span><span class="w"> </span><span class="nf">sum_array</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>访问 <code>a[0]</code> 时，硬件不是只搬 8 字节，而是把包含 <code>a[0]</code> 的一整条缓存行搬进来。之后访问 <code>a[1]</code>、<code>a[2]</code>……很可能直接命中，不需要再去 DRAM。</p>
+<p>反过来，二维数组的遍历顺序会明显影响空间局部性。C 的二维数组按行优先存储，下面第一段通常比第二段更友好：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">j</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">j</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>第一段沿着内存连续走；第二段每次跨过一整行，访问跨度大，缓存行利用率低。矩阵很大时，差异会非常明显。</p>
+<p>后端场景里，空间局部性对应：</p>
+<ul>
+<li><strong>序列化缓冲区</strong>：Protobuf/JSON 的字段在连续 buffer 中，顺序解析比“每个字段一个小对象、再到处跳指针”更友好。</li>
+<li><strong>数组/切片</strong>：批量用户 ID、消息 ID 放在连续内存里，扫描和批处理更快。</li>
+<li><strong>结构体布局</strong>：经常一起访问的字段放在一起，能减少缓存行数量。</li>
+<li><strong>哈希表桶</strong>：桶内元素紧凑，查找时一次搬入更多候选；节点分散则容易指针追逐。</li>
+</ul>
+<h3 id="24">2.4 缓存行：搬运的最小单位不是字节</h3>
+<p>CPU 缓存和内存之间通常以<strong>缓存行</strong>（cache line，也叫 cache block）为单位搬运。常见 x86-64 和 ARM64 机器上是 <strong>64 字节</strong>，但也有其他大小，必须用命令确认：</p>
+<div class="codehilite"><pre><span></span><code>getconf<span class="w"> </span>LEVEL1_DCACHE_LINESIZE
+</code></pre></div>
+
+<p>假设缓存行是 64 字节，<code>uint64_t</code> 是 8 字节，那么一条缓存行可以放 8 个元素：</p>
+<div class="codehilite"><pre><span></span><code>地址:  0    8    16   24   32   40   48   56   64
+      +----+----+----+----+----+----+----+----+
+      | a0 | a1 | a2 | a3 | a4 | a5 | a6 | a7 | ...
+      +----+----+----+----+----+----+----+----+
+      &lt;------------ 一条 64B 缓存行 ------------&gt;
+</code></pre></div>
+
+<p>这意味着：</p>
+<ul>
+<li>顺序访问 <code>a[0]</code> 到 <code>a[7]</code>，可能只触发一次内存搬运，后面 7 次都命中。</li>
+<li>如果每次只访问一个元素，而且步长很大，那么每次都可能搬入一整行，却只用到其中 8 字节。</li>
+<li>一个包含很多冷字段的大结构体，即使只读一个小字段，也可能把大量无关字节带进缓存。</li>
+</ul>
+<p>一个后端常见的布局问题是“热字段和冷字段混在一起”：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Session</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">user_id</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">expire_at</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">nickname</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">signature</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>如果后台只需要扫描 <code>expire_at</code> 做过期检查，却要遍历大量 <code>Session</code>，那么 <code>nickname</code> 和 <code>signature</code> 会把缓存行占满，真正有用的字段很少。把热字段拆出来，或者采用结构体数组/数组结构体（AoS/SoA）的混合布局，通常能减少无效搬运。但这不是无条件的，后面会讲更新成本和并发冲突的权衡。</p>
+<h3 id="25">2.5 组相联：缓存行放在哪个“格子”里</h3>
+<p>缓存不是一整块随便放的大仓库，而是按<strong>组（set）</strong>和<strong>路（way）</strong>组织。一个 N 路组相联缓存可以简化成：</p>
+<div class="codehilite"><pre><span></span><code>一个地址拆成：| tag | set index | block offset |
+</code></pre></div>
+
+<ul>
+<li><strong>block offset</strong>：定位缓存行内的字节；</li>
+<li><strong>set index</strong>：选择缓存中的哪一个组；</li>
+<li><strong>tag</strong>：确认这个组里的哪一路才是目标行。</li>
+</ul>
+<p>如果缓存容量是 <code>C</code>，缓存行大小是 <code>L</code>，相联度是 <code>W</code>（每组 W 路），那么：</p>
+<div class="codehilite"><pre><span></span><code>组数 S = C / (L × W)
+</code></pre></div>
+
+<p>例如，假设某级 L1 数据缓存是 32 KiB、缓存行 64 字节、8 路组相联：</p>
+<div class="codehilite"><pre><span></span><code>S = 32 KiB / (64 B × 8) = 64 组
+</code></pre></div>
+
+<p>地址的低 6 位是行内偏移（64 = 2^6），接下来 6 位是组索引（64 组 = 2^6），剩余高位是 tag。</p>
+<p><strong>直接映射</strong>可以看成 1 路组相联：每个地址只能去一个固定位置，冲突时只能互相驱逐。<strong>全相联</strong>则是只有一组、所有行都可以放，冲突最少，但查找成本高。组相联是折中：</p>
+<ul>
+<li>相联度越高，越不容易发生“多个热点行映射到同一组”的冲突；</li>
+<li>但查找、替换和功耗也更复杂，硬件不会无限提高相联度。</li>
+</ul>
+<p>一个简化的冲突例子：假设 32 KiB、64B 行、8 路，共 64 组。如果连续访问 9 个地址，它们之间都相隔 4096 字节（4 KiB），那么它们的组索引位相同，都会落到同一组。8 路只能放 8 条，第 9 条会把其中一条挤出去；如果循环反复访问这 9 条，就可能不断互相驱逐，这叫<strong>冲突未命中</strong>。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">512</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里 <code>512 × 8 字节 = 4096 字节</code>。真实 CPU 的索引方式、物理地址转换、预取器和相联度都比这个模型复杂，所以这段代码是帮助理解“组冲突”的思维实验，不是精确的性能预测。实际机器可能是 12 路、16 路，甚至 L1 使用 VIPT 等设计，不能拿一个公式硬套所有 CPU。</p>
+<h3 id="26">2.6 工作集、容量和访问步长</h3>
+<p><strong>工作集</strong>（working set）是指在一段时间窗口内，程序真正访问到的地址集合或字节数。注意它不是“进程虚拟地址空间有多大”，也不是“数组声明了多大”。</p>
+<p>例如：</p>
+<ul>
+<li>一个 1 GiB 的数组，但最近只反复访问其中 1 MiB 的热点区域：工作集可能只有 1 MiB，能放进缓存。</li>
+<li>一个 64 MiB 的数组，按随机顺序访问：工作集接近 64 MiB，超过常见的 32 MiB L3，就会频繁访问 DRAM。</li>
+<li>一个链表有 100 万个节点，但只遍历最近插入的 1000 个：工作集可能很小；如果遍历全部节点，工作集就是所有被触及的缓存行。</li>
+</ul>
+<p>经典上可以把缓存未命中粗略分成三类：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>强制性未命中</td>
+<td>第一次访问，缓存里本来就没有</td>
+<td>冷启动扫描</td>
+</tr>
+<tr>
+<td>容量未命中</td>
+<td>工作集超过缓存容量</td>
+<td>大数组随机访问</td>
+</tr>
+<tr>
+<td>冲突未命中</td>
+<td>多个热点行映射到同一组</td>
+<td>4 KiB 步长的多个流</td>
+</tr>
+</tbody>
+</table>
+<p><strong>访问步长</strong>（stride）是相邻两次访问之间的地址距离。假设 <code>uint64_t</code> 为 8 字节、缓存行 64 字节：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">步长（元素）</th>
+<th style="text-align: right;">相邻访问间隔</th>
+<th style="text-align: right;">每条缓存行大约用到</th>
+<th style="text-align: right;">每行可服务元素数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8 B</td>
+<td style="text-align: right;">64 B</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">16 B</td>
+<td style="text-align: right;">32 B</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">32 B</td>
+<td style="text-align: right;">16 B</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">64 B</td>
+<td style="text-align: right;">8 B</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">128 B</td>
+<td style="text-align: right;">8 B（且跳过部分行）</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+<p>步长越大，空间局部性通常越差：每次访问都可能落在新的缓存行上，缓存行里大部分字节没被利用。但也要注意两个细节：</p>
+<ol>
+<li><strong>预取器</strong>可能识别固定步长并提前取数据，所以“步长大”不一定线性变慢，必须实测。</li>
+<li>如果固定数组大小、只遍历整个数组，那么步长越大，访问的元素数越少，工作集也可能变小，<code>ns/元素</code> 未必单调上升。做实验时要控制变量。</li>
+</ol>
+<p>衡量局部性时，常用<strong>每元素耗时</strong>：</p>
+<div class="codehilite"><pre><span></span><code>每元素耗时 = 总耗时 / 实际访问元素数
+</code></pre></div>
+
+<p>只看总时间会被“访问了多少元素”干扰。例如步长 32 的循环可能总时间更短，因为它只访问了 1/32 的元素；但按每元素计算，可能更慢。</p>
+<h3 id="27">2.7 把三个要点串起来</h3>
+<p>一次连续数组求和大致经历：</p>
+<ol>
+<li>第一次访问 <code>a[0]</code>：缓存未命中，硬件从 DRAM 搬入包含 <code>a[0]</code> 的 64B 行。</li>
+<li>访问 <code>a[1]</code> 到 <code>a[7]</code>：大概率命中同一条缓存行，利用空间局部性。</li>
+<li>访问 <code>a[8]</code>：进入下一条缓存行，可能触发新的搬运；预取器可能已经提前取了一部分。</li>
+<li>如果数组远大于缓存，前面的行会被后来的行挤出，出现容量未命中。</li>
+<li>如果访问模式变成大步长或随机指针，缓存行利用率下降，预取效果变差，每元素耗时上升。</li>
+</ol>
+<p>链表则多了一层问题：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Node</span><span class="p">;</span>
+</code></pre></div>
+
+<p>遍历 <code>p = p-&gt;next</code> 时，下一次访问的地址依赖当前节点里的指针。CPU 很难提前知道下一个节点在哪，预取器也不容易帮忙；如果节点在堆上分散，几乎每次解引用都可能碰到新的缓存行。<strong>指针追逐 + 随机布局 + 依赖链</strong>，是链表扫描常常慢于连续数组的根本原因。</p>
+<h3 id="28-perf">2.8 用 <code>perf</code> 观察缓存未命中</h3>
+<p>先确认机器和缓存参数，再用 <code>perf</code> 看运行时事件：</p>
+<div class="codehilite"><pre><span></span><code>lscpu
+getconf<span class="w"> </span>-a<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>cache
+
+perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>cache-references,cache-misses,cycles,instructions<span class="w"> </span>./locality
+</code></pre></div>
+
+<p>只看缓存未命中也可以：</p>
+<div class="codehilite"><pre><span></span><code>perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>cache-misses<span class="w"> </span>./locality
+</code></pre></div>
+
+<p>不同内核、不同 CPU 支持的事件名不完全一样；<code>LLC-loads</code>、<code>LLC-load-misses</code> 等事件在部分机器上可用，在容器或云主机里也可能被限制。若出现权限错误，先检查：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/proc/sys/kernel/perf_event_paranoid
+</code></pre></div>
+
+<p>不要在没确认影响的情况下随意修改生产机的内核参数。测试环境里也要记录 CPU 型号、编译器版本和编译选项，否则不同次实验的数字没有可比性。</p>
+<hr />
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 误区一：缓存命中率高，就没有带宽瓶颈</h3>
+<p>节点特别提醒：</p>
+<blockquote>
+<p>缓存命中率高不代表没有带宽瓶颈。</p>
+</blockquote>
+<p>“命中率”是一个比例：</p>
+<div class="codehilite"><pre><span></span><code>命中率 = 命中次数 / 总访问次数
+</code></pre></div>
+
+<p>它没有告诉你：</p>
+<ul>
+<li>每次命中要搬多少字节；</li>
+<li>总共有多少次访问；</li>
+<li>缓存层级之间的带宽是否已经饱和；</li>
+<li>未命中的那部分有多贵；</li>
+<li>访问是否被依赖链卡住。</li>
+</ul>
+<p>举例来说，一个服务每秒产生大量缓存访问，即使 99% 都在 L3 命中，剩下 1% 的未命中在巨大请求量下仍可能是每秒数百万次 DRAM 访问；同时，每次命中也要在 L1/L2/L3 之间传输缓存行，L3 带宽可能先成为瓶颈。另一种情况是命中率很高，但每次访问都依赖上一次结果，CPU 只能干等，表现为延迟瓶颈而不是带宽瓶颈。</p>
+<p>所以至少要看一组指标，而不是只看一个比例：</p>
+<ul>
+<li><code>cycles</code>、<code>instructions</code>：每周期指令数、整体执行效率；</li>
+<li><code>cache-misses</code>：缓存未命中次数；</li>
+<li><code>LLC-load-misses</code>（若支持）：最后一级缓存未命中；</li>
+<li>实际吞吐、p99 延迟、每请求内存访问量；</li>
+<li>工作集大小和访问步长。</li>
+</ul>
+<h3 id="32-cpu">3.2 误区二：把页缓存当成 CPU 缓存</h3>
+<p>这是两个不同层次的东西，必须分清：</p>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>CPU 缓存</th>
+<th>页缓存（page cache）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>位置</td>
+<td>CPU 内部或靠近 CPU 的 SRAM</td>
+<td>DRAM 中的文件页</td>
+</tr>
+<tr>
+<td>管理方式</td>
+<td>CPU 硬件自动管理</td>
+<td>操作系统内核管理</td>
+</tr>
+<tr>
+<td>单位</td>
+<td>缓存行，常见 64B</td>
+<td>内存页，常见 4KiB</td>
+</tr>
+<tr>
+<td>主要目的</td>
+<td>降低访问 DRAM 的延迟</td>
+<td>避免每次都读磁盘</td>
+</tr>
+<tr>
+<td>观察方式</td>
+<td><code>lscpu</code>、<code>getconf</code>、<code>perf</code></td>
+<td><code>free -h</code>、<code>/proc/meminfo</code></td>
+</tr>
+<tr>
+<td>命中含义</td>
+<td>数据在 CPU 缓存中</td>
+<td>文件内容已在内存页中</td>
+</tr>
+</tbody>
+</table>
+<p>几个容易混淆的现象：</p>
+<ul>
+<li><code>free -h</code> 里的 <code>buff/cache</code> 很大，说明内核缓存了不少文件页，<strong>不代表 CPU 缓存很大</strong>。</li>
+<li>文件已经在 page cache 中，读取时仍然要经过 CPU 缓存和内存；page cache 命中只是避免磁盘 I/O，不是“CPU 免费拿到数据”。</li>
+<li><code>perf stat -e cache-misses</code> 统计的是 CPU 缓存未命中，不是 page cache 未命中。文件不在 page cache 里通常表现为磁盘读、缺页或 I/O 等待，要用 <code>iostat</code>、<code>vmstat</code>、<code>/proc/vmstat</code> 等工具看。</li>
+</ul>
+<p>可以这样观察：</p>
+<div class="codehilite"><pre><span></span><code>free<span class="w"> </span>-h
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'MemTotal|MemFree|Cached|Buffers'</span><span class="w"> </span>/proc/meminfo
+getconf<span class="w"> </span>PAGE_SIZE
+</code></pre></div>
+
+<p><code>getconf PAGE_SIZE</code> 常见结果是 4096，即 4 KiB。它和 64B 的缓存行不是一个概念：页是虚拟内存和文件缓存的管理单位，缓存行是 CPU 缓存搬运的单位。</p>
+<h3 id="33">3.3 其他常见误区</h3>
+<p><strong>误区：数组一定比链表快。</strong><br />
+对于“从头到尾顺序扫描”，连续数组通常更有优势，因为空间局部性和预取器都站在它这边。但如果是频繁在已知位置插入/删除，链表可能避免大范围搬移；如果数组访问是随机的、链表节点恰好很集中，结论也可能变化。<strong>布局和访问模式要一起看。</strong></p>
+<p><strong>误区：缓存越大越好。</strong><br />
+缓存变大可能降低容量未命中，但也会带来更高的访问延迟、更复杂的相联/替换逻辑和更高的成本。真实系统是层次化折中，不是单一容量数字比赛。</p>
+<p><strong>误区：对齐和填充总是有益。</strong><br />
+把热点计数器按缓存行对齐，能避免伪共享；但填充会增加内存占用，减少有效缓存容量，也可能让更新路径更复杂。是否值得，要用并发量和性能数据判断。</p>
+<h3 id="34">3.4 设计权衡：紧凑布局不是免费午餐</h3>
+<p>节点给出的权衡是：</p>
+<blockquote>
+<p>紧凑布局通常利于缓存，但可与更新成本和并发写冲突。</p>
+</blockquote>
+<p>这句话可以展开成几组常见取舍：</p>
+<ol>
+<li>
+<p><strong>AoS 与 SoA</strong><br />
+   把一条记录的字段放在一起（AoS），读取整条记录时局部性好；但如果只扫描其中一个热字段，冷字段会浪费缓存行。拆成多个数组（SoA），扫描单个字段更紧凑，但更新一条完整记录可能要访问多个数组，代码和内存分配也更复杂。</p>
+</li>
+<li>
+<p><strong>紧凑与伪共享</strong><br />
+   两个线程分别更新同一缓存行里的两个计数器，逻辑上互不相关，硬件却要来回同步这条缓存行，这就是伪共享。把计数器分开到不同缓存行可以缓解，但会增加内存占用。紧凑布局节省容量，却可能制造写冲突。</p>
+</li>
+<li>
+<p><strong>不可变快照与更新成本</strong><br />
+   读多写少的场景可以用不可变快照/写时复制，让读路径看到紧凑、稳定的数据；但每次更新要复制，分配和 GC 压力会上升。读路径的缓存友好，可能是用写路径的成本换来的。</p>
+</li>
+<li>
+<p><strong>连续缓冲区与扩容</strong><br />
+   序列化时把字段连续写入一个 buffer，解析和扫描都更友好；但 buffer 扩容可能触发整块复制。预留容量能减少复制，却会浪费内存。大量小对象则灵活，但容易形成指针追逐和分配器压力。</p>
+</li>
+<li>
+<p><strong>批处理与延迟</strong><br />
+   把随机小访问合并成连续批量访问，通常能提高缓存和带宽利用率；但批处理会增加排队延迟。后台系统要在吞吐和 p99 之间做选择。</p>
+</li>
+</ol>
+<p>一个实用的原则是：<strong>先测量，再改布局。</strong> 不要因为“理论上缓存友好”就把结构改得难以维护；也不要因为“复杂度一样”就忽略数据布局。</p>
+<hr />
+<h2 id="4">4. 动手实践：比较数组、链表与步长</h2>
+<h3 id="41">4.1 实践目标</h3>
+<p>完成一个可运行的 C 程序，记录：</p>
+<ul>
+<li>连续数组顺序遍历的每元素耗时；</li>
+<li>链表遍历的每元素耗时；</li>
+<li>不同步长遍历数组的每元素耗时；</li>
+<li>工作集/访问跨度变化时，每元素耗时如何变化。</li>
+</ul>
+<p>节点给出的实践要求是：</p>
+<blockquote>
+<p>比较连续数组、链表与不同步长遍历，记录每元素耗时。</p>
+</blockquote>
+<h3 id="42">4.2 第一步：查看当前机器</h3>
+<div class="codehilite"><pre><span></span><code>lscpu
+getconf<span class="w"> </span>-a<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>cache
+getconf<span class="w"> </span>LEVEL1_DCACHE_LINESIZE
+getconf<span class="w"> </span>LEVEL1_DCACHE_SIZE
+getconf<span class="w"> </span>LEVEL2_CACHE_SIZE
+getconf<span class="w"> </span>LEVEL3_CACHE_SIZE
+</code></pre></div>
+
+<p>把结果记下来，尤其是：</p>
+<ul>
+<li>CPU 型号；</li>
+<li>L1/L2/L3 容量；</li>
+<li>缓存行大小；</li>
+<li>是否有多个 NUMA 节点。</li>
+</ul>
+<p>后面的实验数字必须和这些参数一起解释。不要拿一台机器的结果去断言另一台机器。</p>
+<h3 id="43">4.3 第二步：保存程序</h3>
+<p>把下面的代码保存为 <code>locality.c</code>。程序默认：</p>
+<ul>
+<li>数组/链表实验使用 8M 个元素；</li>
+<li>步长实验每次访问 1M 个元素，最大步长 32；</li>
+<li>每个测试跑 3 次，取中位数；</li>
+<li>用 <code>volatile</code> 全局变量接收结果，防止编译器把整个循环优化掉。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _POSIX_C_SOURCE 200809L</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stddef.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">Node</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sink</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">now_ns</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">timespec</span><span class="w"> </span><span class="n">ts</span><span class="p">;</span>
+<span class="w">    </span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ts</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">ts</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1e9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">ts</span><span class="p">.</span><span class="n">tv_nsec</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">median3</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">bench_array</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">stride</span><span class="p">,</span>
+<span class="w">                          </span><span class="kt">size_t</span><span class="w"> </span><span class="o">*</span><span class="n">visited_out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">visited</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">stride</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="n">visited</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">    </span><span class="n">sink</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
+<span class="w">    </span><span class="o">*</span><span class="n">visited_out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">visited</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">bench_array_fixed</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">visits</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">stride</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">visits</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">stride</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">    </span><span class="n">sink</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">bench_list</span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">head</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="o">*</span><span class="n">visited_out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">visited</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
+<span class="w">        </span><span class="n">visited</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">    </span><span class="n">sink</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="p">;</span>
+<span class="w">    </span><span class="o">*</span><span class="n">visited_out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">visited</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="nf">build_shuffled_list</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Node</span><span class="w"> </span><span class="o">**</span><span class="n">slots</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">slots</span><span class="p">));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">slots</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">node</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">node</span><span class="p">));</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">node</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">free</span><span class="p">(</span><span class="n">slots</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+<span class="w">            </span><span class="n">free</span><span class="p">(</span><span class="n">slots</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">node</span><span class="o">-&gt;</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">        </span><span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">        </span><span class="n">slots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">node</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x9e3779b97f4a7c15ULL</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">--</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="o">^=</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span>
+<span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="o">^=</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="o">^=</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">17</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)(</span><span class="n">state</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">i</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">tmp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slots</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="w">        </span><span class="n">slots</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slots</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+<span class="w">        </span><span class="n">slots</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">slots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slots</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="w">    </span><span class="n">slots</span><span class="p">[</span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">slots</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">slots</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">free_list</span><span class="p">(</span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">head</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">head</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="w">        </span><span class="n">free</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
+<span class="w">        </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">visited</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">span_mib</span><span class="p">,</span>
+<span class="w">                   </span><span class="kt">double</span><span class="w"> </span><span class="n">ns</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">elements</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">per</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elements</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">elements</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%-24s %10zu %10.1f %12.3f %12.3f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">visited</span><span class="p">,</span><span class="w"> </span><span class="n">span_mib</span><span class="p">,</span><span class="w"> </span><span class="n">ns</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="p">,</span><span class="w"> </span><span class="n">per</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8u</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024u</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024u</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">visits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1u</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024u</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024u</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">max_stride</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strtoull</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">end</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">*</span><span class="n">end</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">'\0'</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"用法: %s [元素数] [步长实验访问次数]</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">v</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">n</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"元素数超出 size_t 范围</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strtoull</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="n">end</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">end</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">*</span><span class="n">end</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="sc">'\0'</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"用法: %s [元素数] [步长实验访问次数]</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">visits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">v</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">visits</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"访问次数超出 size_t 范围</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">SIZE_MAX</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="w"> </span><span class="o">||</span>
+<span class="w">        </span><span class="n">visits</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">SIZE_MAX</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_stride</span><span class="w"> </span><span class="o">||</span>
+<span class="w">        </span><span class="n">visits</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_stride</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">SIZE_MAX</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"规模过大，乘法会溢出</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"malloc array"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">build_shuffled_list</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">head</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"build list"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">free</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"数组/链表: n=%zu, 数组约 %.1f MiB, 单节点 %zu B</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mf">1024.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1024.0</span><span class="p">),</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">));</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%-24s %10s %10s %12s %12s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="s">"workload"</span><span class="p">,</span><span class="w"> </span><span class="s">"visited"</span><span class="p">,</span><span class="w"> </span><span class="s">"span_MiB"</span><span class="p">,</span><span class="w"> </span><span class="s">"total_ms"</span><span class="p">,</span><span class="w"> </span><span class="s">"ns/elem"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">visited</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">t</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bench_array</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">visited</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">report</span><span class="p">(</span><span class="s">"array stride=1"</span><span class="p">,</span><span class="w"> </span><span class="n">visited</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mf">1024.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1024.0</span><span class="p">),</span>
+<span class="w">           </span><span class="n">median3</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span><span class="w"> </span><span class="n">visited</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">t</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bench_list</span><span class="p">(</span><span class="n">head</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">visited</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">report</span><span class="p">(</span><span class="s">"linked list shuffled"</span><span class="p">,</span><span class="w"> </span><span class="n">visited</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">Node</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mf">1024.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1024.0</span><span class="p">),</span>
+<span class="w">           </span><span class="n">median3</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span><span class="w"> </span><span class="n">visited</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">free_list</span><span class="p">(</span><span class="n">head</span><span class="p">);</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">sn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">visits</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">max_stride</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">sn</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"malloc stride array"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">sn</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">s</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">步长实验: 每个步长访问 %zu 个元素, 数组约 %.1f MiB</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="n">visits</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">sn</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mf">1024.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1024.0</span><span class="p">));</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%-24s %10s %10s %12s %12s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="s">"workload"</span><span class="p">,</span><span class="w"> </span><span class="s">"visited"</span><span class="p">,</span><span class="w"> </span><span class="s">"span_MiB"</span><span class="p">,</span><span class="w"> </span><span class="s">"total_ms"</span><span class="p">,</span><span class="w"> </span><span class="s">"ns/elem"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">strides</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">};</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">strides</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">strides</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">stride</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">strides</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">t</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bench_array_fixed</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">visits</span><span class="p">,</span><span class="w"> </span><span class="n">stride</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">name</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">        </span><span class="n">snprintf</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">name</span><span class="p">),</span><span class="w"> </span><span class="s">"array stride=%zu"</span><span class="p">,</span><span class="w"> </span><span class="n">stride</span><span class="p">);</span>
+<span class="w">        </span><span class="n">report</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">visits</span><span class="p">,</span>
+<span class="w">               </span><span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">visits</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">stride</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">))</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mf">1024.0</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1024.0</span><span class="p">),</span>
+<span class="w">               </span><span class="n">median3</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span><span class="w"> </span><span class="n">visits</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="44">4.4 第三步：编译并运行</h3>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O2<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-o<span class="w"> </span>locality<span class="w"> </span>locality.c
+./locality
+</code></pre></div>
+
+<p>如果内存较小，先用小一点的规模验证程序：</p>
+<div class="codehilite"><pre><span></span><code>./locality<span class="w"> </span><span class="m">2000000</span><span class="w"> </span><span class="m">1000000</span>
+</code></pre></div>
+
+<p>程序的两个参数分别是：</p>
+<ol>
+<li>数组/链表实验的元素数，默认 <code>8388608</code>（8M）；</li>
+<li>步长实验每次访问的元素数，默认 <code>1048576</code>（1M）。</li>
+</ol>
+<p>步长实验会分配 <code>访问次数 × 32</code> 个 <code>uint64_t</code>。默认约 256 MiB。如果机器内存紧张，把第二个参数调小，例如：</p>
+<div class="codehilite"><pre><span></span><code>./locality<span class="w"> </span><span class="m">2000000</span><span class="w"> </span><span class="m">250000</span>
+</code></pre></div>
+
+<h3 id="45">4.5 第四步：理解输出</h3>
+<p>在某台机器上运行 <code>./locality 2000000 1000000</code>，可能看到类似输出（数字仅用于说明格式，不是标准答案）：</p>
+<div class="codehilite"><pre><span></span><code>数组/链表: n=2000000, 数组约 15.3 MiB, 单节点 16 B
+workload                    visited   span_MiB     total_ms      ns/elem
+array stride=1              2000000       15.3        2.136        1.068
+linked list shuffled        2000000       30.5      245.817      122.908
+
+步长实验: 每个步长访问 1000000 个元素, 数组约 244.1 MiB
+workload                    visited   span_MiB     total_ms      ns/elem
+array stride=1              1000000        7.6        0.964        0.964
+array stride=2              1000000       15.3        1.294        1.294
+array stride=4              1000000       30.5        2.098        2.098
+array stride=8              1000000       61.0        3.189        3.189
+array stride=16             1000000      122.1        6.227        6.227
+array stride=32             1000000      244.1        7.751        7.751
+</code></pre></div>
+
+<p>读表时注意：</p>
+<ul>
+<li><code>visited</code> 是实际访问的元素数；</li>
+<li><code>span_MiB</code> 是访问跨度或数据大小的近似值，不等于真实占用（链表还有分配器开销）；</li>
+<li><code>total_ms</code> 是 3 次运行的中位数；</li>
+<li><code>ns/elem</code> 才是横向比较时最常用的指标。</li>
+</ul>
+<p>链表通常明显慢于连续数组，原因不只是“链表多了一次指针解引用”，还包括：</p>
+<ul>
+<li>节点来自多次 <code>malloc</code>，地址分散；</li>
+<li>每个节点只有 16 字节，缓存行利用率低；</li>
+<li>下一次访问依赖当前节点的 <code>next</code>，形成依赖链；</li>
+<li>预取器难以预测随机地址。</li>
+</ul>
+<p>步长实验中，每个步长访问的元素数相同，但地址跨度随步长增大。<code>span_MiB</code> 变大时，缓存行利用率和预取效率通常会下降，<code>ns/elem</code> 往往上升。要注意，<code>span_MiB</code> 是地址跨度，不等于实际触及的字节数：步长很大时会跳过一些缓存行，真正搬入的字节可能少于跨度。判断是否超过缓存容量时，应结合 <code>perf</code> 的未命中数据，而不是只看跨度。若你的机器 L3 很大，曲线可能比较平；这时把第二个参数调大，或者把 <code>max_stride</code> 调大，让实际工作集超过最后一级缓存。</p>
+<h3 id="46-perf">4.6 第五步：用 <code>perf</code> 交叉验证</h3>
+<div class="codehilite"><pre><span></span><code>perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>cache-references,cache-misses,cycles,instructions<span class="w"> </span>./locality<span class="w"> </span><span class="m">2000000</span><span class="w"> </span><span class="m">1000000</span>
+</code></pre></div>
+
+<p>也可以只看缓存未命中：</p>
+<div class="codehilite"><pre><span></span><code>perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>cache-misses<span class="w"> </span>./locality<span class="w"> </span><span class="m">2000000</span><span class="w"> </span><span class="m">1000000</span>
+</code></pre></div>
+
+<p>建议把下面这些信息一起记录到实验笔记里：</p>
+<div class="codehilite"><pre><span></span><code>CPU 型号：
+L1d / L2 / L3 容量：
+缓存行大小：
+编译器版本：
+编译选项：
+元素数 / 访问次数：
+三次运行的 ns/elem：
+perf 的 cache-misses、cycles、instructions：
+</code></pre></div>
+
+<p>不要只记录一个“快了/慢了”的结论。节点提醒过，资源里的历史硬件参数要和当前机器实测区分；同样，别人的实验数字也不能直接套到你的机器上。</p>
+<h3 id="47">4.7 第六步：解释工作集超过缓存后的变化</h3>
+<p>用实验结果回答这三个问题：</p>
+<ol>
+<li>
+<p><strong>连续数组为什么通常快？</strong><br />
+   因为顺序访问利用了空间局部性，一条 64B 行可服务多个 8B 元素，预取器也容易工作。</p>
+</li>
+<li>
+<p><strong>链表为什么可能慢很多？</strong><br />
+   因为指针追逐让下一次地址不可预测，节点分散导致每次访问新缓存行的概率高，且存在依赖链。</p>
+</li>
+<li>
+<p><strong>步长变大后为什么每元素耗时上升？</strong><br />
+   因为每次访问利用到的缓存行字节变少，地址跨度变大，工作集更容易超过缓存；但要注意预取器和实际缓存大小会让曲线不完全线性。</p>
+</li>
+</ol>
+<p>如果工作集超过 L3 后，每元素耗时明显上升，通常说明容量未命中开始占主导，但也可能混有 TLB 未命中、冲突未命中或预取失效等因素。若曲线没有变化，可能是：</p>
+<ul>
+<li>工作集仍然小于 L3；</li>
+<li>预取器很好地处理了固定步长；</li>
+<li>编译器做了优化；</li>
+<li>测量被循环开销、频率变化或容器噪声干扰。</li>
+</ul>
+<h3 id="48">4.8 实践验收</h3>
+<p>完成后，你应该能用自己的话解释：</p>
+<ul>
+<li>[ ] 为什么连续数组的每元素耗时通常低于随机链表；</li>
+<li>[ ] 为什么步长增大可能降低缓存行利用率；</li>
+<li>[ ] 为什么工作集超过缓存后，命中率和每元素耗时会变化；</li>
+<li>[ ] 为什么 <code>free -h</code> 里的 <code>buff/cache</code> 不能当作 CPU 缓存大小；</li>
+<li>[ ] 为什么“缓存命中率高”仍然可能是带宽或延迟问题。</li>
+</ul>
+<hr />
+<h2 id="5">5. 自测题与答案</h2>
+<h3 id="1_1">题 1：时间局部性和空间局部性有什么区别？</h3>
+<p>请分别解释，并各举一个微信公众号后台的场景。</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li><strong>时间局部性</strong>：同一个地址在短时间内被反复访问。例如同一个热点用户的鉴权结果、限流配额、配置对象被大量请求重复读取。优化方向是让热点数据留在近处、减少重复随机查找，或使用合适的应用层缓存。</li>
+<li><strong>空间局部性</strong>：一个地址被访问后，附近地址很快也被访问。例如顺序解析 Protobuf/JSON 缓冲区、顺序扫描用户 ID 数组。优化方向是使用连续布局、批量处理、减少指针追逐。</li>
+</ul>
+<p>两者经常同时出现：顺序扫描数组既利用了空间局部性，累加器又利用了时间局部性。</p>
+<h3 id="2-32-kib64b-8-l1-9-4-kib">题 2：一个 32 KiB、64B 缓存行、8 路组相联的 L1 缓存有多少组？为什么 9 个相隔 4 KiB 的热点地址可能发生冲突？</h3>
+<p><strong>答案：</strong></p>
+<p>组数：</p>
+<div class="codehilite"><pre><span></span><code>S = 32 KiB / (64 B × 8) = 64 组
+</code></pre></div>
+
+<p>64 组意味着组索引使用 6 位，64B 行内偏移使用 6 位。相隔 4096 字节（4 KiB）的地址，其低位组索引不变，因此会映射到同一组。8 路只能同时容纳 8 条这样的缓存行；如果循环反复访问 9 条，就会互相驱逐，形成冲突未命中。</p>
+<p>这是简化模型。真实 CPU 的相联度、地址转换、预取器和替换策略更复杂，实际结果要以机器参数和 <code>perf</code> 实测为准。</p>
+<h3 id="3-99-p99">题 3：服务缓存命中率 99%，但 p99 延迟上升。可能是什么原因？应该看哪些指标？</h3>
+<p><strong>答案：</strong></p>
+<p>可能原因包括：</p>
+<ul>
+<li>命中率是比例，不反映总访问量和每次搬运的字节数；高并发下，即使 1% 未命中也可能产生大量 DRAM 访问。</li>
+<li>命中发生在较远的缓存层（例如 L3），延迟仍然不低。</li>
+<li>L3/DRAM 带宽可能已经饱和，缓存命中率高不代表没有带宽瓶颈。</li>
+<li>访问依赖链长，CPU 在等下一次加载，表现为延迟问题。</li>
+<li>工作集、步长或 TLB 行为变化，导致未命中的代价变高。</li>
+<li>把 page cache 命中和 CPU 缓存命中混为一谈，误判了瓶颈位置。</li>
+</ul>
+<p>建议至少看：</p>
+<ul>
+<li><code>perf stat -e cache-references,cache-misses,cycles,instructions</code>；</li>
+<li>若机器支持，看 <code>LLC-loads</code>、<code>LLC-load-misses</code>；</li>
+<li>每请求的内存访问量、实际吞吐和 p99；</li>
+<li>工作集大小、访问步长、NUMA 和 CPU 迁移情况；</li>
+<li>磁盘 I/O 和 page cache 指标（<code>free -h</code>、<code>/proc/meminfo</code>、<code>iostat</code>、<code>vmstat</code>），用于排除“页缓存/磁盘”问题。</li>
+</ul>
+<p>关键不是只追求更高的命中率，而是找到<strong>延迟、带宽、容量、访问模式</strong>中真正的限制因素。</p>
+<hr />
+<h2 id="6">6. 推荐资源</h2>
+<p>节点给出的资源是：</p>
+<ul>
+<li><strong>What Every Programmer Should Know About Memory</strong></li>
+<li>作者：Ulrich Drepper</li>
+<li>类型：技术论文</li>
+<li>语言：英文</li>
+<li>难度：进阶</li>
+<li>是否免费：是</li>
+<li>链接：https://www.akkadia.org/drepper/cpumemory.pdf</li>
+</ul>
+<p>阅读建议：</p>
+<ol>
+<li>先读缓存、局部性和数据布局相关章节，把本课的缓存行、组相联、工作集概念串起来。</li>
+<li>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件，不要只记结论。</li>
+<li>论文里的硬件参数有历史背景，<strong>必须和当前机器的 <code>lscpu</code>、<code>getconf</code>、<code>perf</code> 实测区分</strong>。</li>
+<li>读完一章后，回到本课的 <code>locality.c</code>，改一改数组大小、步长、链表布局，观察结果是否支持论文中的解释。</li>
+</ol>
+<p>本课的最终目标不是记住“缓存有几级”，而是形成一种稳定的分析方法：</p>
+<div class="codehilite"><pre><span></span><code>先看数据布局和访问顺序
+-&gt; 再看工作集是否超过缓存
+-&gt; 用 perf 和实验验证
+-&gt; 最后才决定是否调整结构
+</code></pre></div><div class="pn"><span><a href="2.html">← CPU与指令执行</a></span><span><a href="4.html">操作系统的资源抽象 →</a></span></div></main></div></body></html>

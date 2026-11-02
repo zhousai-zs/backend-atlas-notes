@@ -1,0 +1,774 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>5. 终端、路径与命令组合 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="cur" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 5 课 · 领域 A · 阶段 0</p><p class="dl"><a href="../files/5-a-shell.md" download>⬇ 本课 Markdown</a></p><h1 id="5208">第 5/208 课：终端、路径与命令组合</h1>
+<blockquote>
+<p>节点：<code>a-shell</code> · 域：A · 子类：工具与程序执行 · 难度：入门 · 前置：<code>a-os</code></p>
+<p>一句话：Shell 解释命令并连接程序的输入输出，是操作 Linux 开发环境的基本界面。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li>解释绝对路径与相对路径的区别，并能判断一条命令实际操作的是哪个文件。</li>
+<li>说明标准输入、标准输出、标准错误分别是什么，以及重定向如何改变它们的方向。</li>
+<li>用管道把多个命令组合起来，完成“统计日志中错误次数”这类任务。</li>
+<li>在命令失败后查看退出码，并解释退出码 0 与非 0 的含义。</li>
+<li>正确处理带空格的文件名，避免变量未引用导致的分词与通配符展开。</li>
+<li>理解节点给出的取舍：短命令适合探索，复杂且重复的任务应写成可检查的脚本。</li>
+</ol>
+<p>节点对“为什么”的说明很直接：<strong>能够独立编译、查看文件、查找日志并执行可复现操作。</strong> 对即将进入腾讯微信公众号后台开发的后端工程师来说，这不是“运维才需要”的技能，而是日常工作的基本操作界面：</p>
+<ul>
+<li><strong>查线上日志</strong>：服务把访问日志、错误日志写到某台机器的某个目录。你需要先确认自己在哪、日志的绝对路径是什么，再用 <code>grep</code>、<code>awk</code>、<code>sort</code>、<code>uniq</code> 统计错误码。</li>
+<li><strong>定位故障</strong>：某次发布后错误率上升，你要在日志里按时间、接口、错误码过滤，并确认统计命令本身有没有失败。</li>
+<li><strong>可复现</strong>：排查过程如果只留在终端历史里，别人无法复核。把关键命令整理成脚本，才能让结论可重复。</li>
+<li><strong>避免误操作</strong>：路径写错、重定向写错、变量没加引号，都可能让命令操作到错误的文件，甚至清空日志。理解语义比记住命令更重要。</li>
+</ul>
+<p>本课不要求你成为 Shell 专家，而是建立一套能验证的终端操作模型：<strong>命令从哪里读数据、把结果写到哪里、成功还是失败、文件名如何被解释。</strong></p>
+<h2 id="2">2. 从直觉到原理：四个核心要点</h2>
+<h3 id="21-shell">2.1 Shell 是什么：命令的解释器与连接器</h3>
+<p>终端里你输入一行命令，例如：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>/var/log/wechat/app.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<p>Shell 做的主要事情可以概括为：</p>
+<ol>
+<li><strong>解析</strong>这行文本：识别命令名、参数、管道、重定向和引号。</li>
+<li><strong>启动程序</strong>：为 <code>grep</code> 和 <code>wc</code> 分别创建进程。</li>
+<li><strong>连接输入输出</strong>：把 <code>grep</code> 的标准输出接到 <code>wc</code> 的标准输入。</li>
+<li><strong>等待并报告结果</strong>：等待命令结束，并通过退出码表示成功或失败。</li>
+</ol>
+<p>这里要区分两个概念：</p>
+<ul>
+<li><strong>Shell</strong> 是解释命令的程序，常见的有 Bash、Zsh、sh 等。它本身不负责“搜索日志”，而是负责把 <code>grep</code> 启动起来并接好管道。</li>
+<li><strong>命令</strong> 通常是一个可执行程序，例如 <code>ls</code>、<code>grep</code>、<code>cat</code>、<code>wc</code>。程序只关心自己从标准输入读到什么、向标准输出写什么。</li>
+</ul>
+<p>节点摘要说“Shell 解释命令并连接程序的输入输出”，这句话的落点就在第 2、3 步：<strong>Shell 的核心价值不是替代程序，而是把许多小程序的输入输出拼接起来。</strong></p>
+<h3 id="22">2.2 绝对路径与相对路径</h3>
+<h4 id="_1">直觉</h4>
+<p>路径就是“文件在文件系统中的位置”。有两种写法：</p>
+<ul>
+<li><strong>绝对路径</strong>：从根目录 <code>/</code> 开始写，位置唯一，不依赖你当前所在目录。</li>
+<li><strong>相对路径</strong>：从当前工作目录开始写，位置取决于你现在在哪。</li>
+</ul>
+<p>例如：</p>
+<div class="codehilite"><pre><span></span><code>/var/log/wechat/app.log      # 绝对路径
+logs/app.log                 # 相对路径
+./logs/app.log               # 相对路径，显式表示“当前目录下”
+../logs/app.log              # 相对路径，先回到上一级目录
+</code></pre></div>
+
+<p>常用命令：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">pwd</span><span class="w">                 </span><span class="c1"># 打印当前工作目录</span>
+ls<span class="w">                  </span><span class="c1"># 列出当前目录内容</span>
+ls<span class="w"> </span>/var/log/wechat<span class="w">  </span><span class="c1"># 用绝对路径列出目录</span>
+<span class="nb">cd</span><span class="w"> </span>/var/log/wechat<span class="w">  </span><span class="c1"># 切换到绝对路径</span>
+<span class="nb">cd</span><span class="w"> </span>logs<span class="w">             </span><span class="c1"># 切换到当前目录下的 logs</span>
+<span class="nb">cd</span><span class="w"> </span>..<span class="w">               </span><span class="c1"># 回到上一级目录</span>
+<span class="nb">cd</span><span class="w"> </span>~<span class="w">                </span><span class="c1"># 回到当前用户的家目录</span>
+</code></pre></div>
+
+<h4 id="_2">原理：路径如何被解析</h4>
+<p>相对路径的解析依赖<strong>当前工作目录（current working directory，cwd）</strong>。每个进程都有自己的 cwd。Shell 在执行命令前，会以 Shell 的 cwd 为基准解释相对路径。</p>
+<p>假设当前目录是 <code>/home/backend</code>：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>logs/app.log
+</code></pre></div>
+
+<p>实际访问的是 <code>/home/backend/logs/app.log</code>。如果你先执行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/var/log/wechat
+cat<span class="w"> </span>logs/app.log
+</code></pre></div>
+
+<p>同样的相对路径就变成了 <code>/var/log/wechat/logs/app.log</code>。<strong>命令文本没变，目标可能完全变了。</strong> 这是线上排查时最常见的误操作来源之一。</p>
+<p>路径中的几个特殊成分：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>根目录，也是绝对路径的起点</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>当前目录</td>
+</tr>
+<tr>
+<td><code>..</code></td>
+<td>上一级目录</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>当前用户的家目录（由 Shell 展开）</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>在 <code>cd -</code> 中表示上一次所在目录</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_3">后端场景：先确认“我在哪”</h4>
+<p>查日志前，先确认路径，而不是凭记忆直接 <code>rm</code> 或 <code>&gt;</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">pwd</span>
+ls<span class="w"> </span>-l<span class="w"> </span>/var/log/wechat/
+</code></pre></div>
+
+<p>如果日志路径来自配置，优先使用配置中的绝对路径，或者先 <code>cd</code> 到明确目录再使用相对路径。对删除、覆盖、批量修改这类危险操作，绝对路径通常更安全，因为它不随 cwd 变化。</p>
+<h4 id="_4">带空格的文件名</h4>
+<p>空格在 Shell 中默认是<strong>参数分隔符</strong>，不是文件名的一部分。因此：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>my<span class="w"> </span>log.txt
+</code></pre></div>
+
+<p>会被解释为把 <code>my</code> 和 <code>log.txt</code> 两个参数传给 <code>cat</code>，而不是读取名为 <code>my log.txt</code> 的文件。正确写法是加引号或转义：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span><span class="s2">"my log.txt"</span>
+cat<span class="w"> </span><span class="s1">'my log.txt'</span>
+cat<span class="w"> </span>my<span class="se">\ </span>log.txt
+</code></pre></div>
+
+<p>这三种写法都能让 Shell 把 <code>my log.txt</code> 当作一个参数。第 2.5 节会进一步解释单引号、双引号和反斜杠的区别。</p>
+<h3 id="23">2.3 标准输入、标准输出与重定向</h3>
+<h4 id="_5">直觉：每个程序都有三个默认通道</h4>
+<p>Unix 风格的程序通常默认打开三个标准流：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>文件描述符</th>
+<th>默认连接</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标准输入（stdin）</td>
+<td>0</td>
+<td>终端键盘</td>
+<td>程序从这里读数据</td>
+</tr>
+<tr>
+<td>标准输出（stdout）</td>
+<td>1</td>
+<td>终端屏幕</td>
+<td>程序把正常结果写到这里</td>
+</tr>
+<tr>
+<td>标准错误（stderr）</td>
+<td>2</td>
+<td>终端屏幕</td>
+<td>程序把错误信息写到这里</td>
+</tr>
+</tbody>
+</table>
+<p>“默认连接终端”意味着：你不做任何重定向时，输入来自键盘，正常输出和错误都显示在屏幕上。重定向就是<strong>在启动程序前，改变这些文件描述符指向的位置</strong>。</p>
+<h4 id="_6">输出重定向</h4>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span>&gt;<span class="w"> </span>out.txt<span class="w">       </span><span class="c1"># 覆盖写入 out.txt</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"world"</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>out.txt<span class="w">      </span><span class="c1"># 追加到 out.txt 末尾</span>
+</code></pre></div>
+
+<p>关键区别：</p>
+<ul>
+<li><code>&gt;</code> 会先截断目标文件。如果目标文件是线上日志，执行 <code>&gt; app.log</code> 会立刻清空它。</li>
+<li><code>&gt;&gt;</code> 追加，不截断已有内容。</li>
+</ul>
+<p>把标准错误单独写入文件：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>/var/log/wechat/app.log<span class="w"> </span>&gt;<span class="w"> </span>matches.txt<span class="w"> </span><span class="m">2</span>&gt;<span class="w"> </span>errors.txt
+</code></pre></div>
+
+<p>这里：</p>
+<ul>
+<li><code>&gt; matches.txt</code> 只重定向 stdout（文件描述符 1）。</li>
+<li><code>2&gt; errors.txt</code> 重定向 stderr（文件描述符 2）。</li>
+</ul>
+<p>如果想让 stdout 和 stderr 都进入同一个文件：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">command</span><span class="w"> </span>&gt;<span class="w"> </span>all.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</code></pre></div>
+
+<p><code>2&gt;&amp;1</code> 的含义是“把文件描述符 2 指向文件描述符 1 当前指向的位置”。因此顺序很重要：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">command</span><span class="w"> </span>&gt;<span class="w"> </span>all.log<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w">   </span><span class="c1"># 正确：两者都进 all.log</span>
+<span class="nb">command</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>all.log<span class="w">   </span><span class="c1"># 错误理解：stderr 仍指向终端，stdout 才进文件</span>
+</code></pre></div>
+
+<p>第二种写法中，<code>2&gt;&amp;1</code> 先执行，此时 fd 1 还指向终端，所以 stderr 被复制成“终端”；随后 <code>&gt; all.log</code> 只改变 fd 1。结果就是错误仍打印在屏幕上。<strong>重定向按从左到右生效。</strong></p>
+<p>有些 Shell 支持更简洁的 <code>&amp;&gt;</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">command</span><span class="w"> </span><span class="p">&amp;</span>&gt;<span class="w"> </span>all.log
+</code></pre></div>
+
+<p>但如果你写脚本并希望兼容更多 Shell，<code>&gt; all.log 2&gt;&amp;1</code> 更通用。</p>
+<h4 id="_7">输入重定向</h4>
+<div class="codehilite"><pre><span></span><code>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span>/var/log/wechat/app.log
+</code></pre></div>
+
+<p><code>&lt;</code> 把文件内容接到程序的标准输入。这里 <code>wc -l</code> 从 stdin 读，不把文件名当作参数，因此输出只有行数，没有文件名。对比：</p>
+<div class="codehilite"><pre><span></span><code>wc<span class="w"> </span>-l<span class="w"> </span>/var/log/wechat/app.log
+</code></pre></div>
+
+<p>后者把路径作为参数传给 <code>wc</code>，输出通常包含行数和文件名。</p>
+<p>丢弃不需要的输出：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">command</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</code></pre></div>
+
+<p><code>/dev/null</code> 是一个特殊设备，写入的内容会被丢弃。常用于“只关心退出码，不关心输出”的场景。</p>
+<h4 id="_8">原理：重定向发生在程序启动之前</h4>
+<p>重定向不是程序内部的功能，而是 Shell 在 <code>fork</code>/<code>exec</code> 前后对文件描述符做的安排。程序启动后，它看到的 fd 0、1、2 已经指向新的文件或管道，程序本身不需要知道“输出被重定向了”。</p>
+<p>这也解释了一个常见现象：<strong>程序往 stdout 写的内容和往 stderr 写的内容，可以分别被送到不同地方。</strong> 日志系统常把正常访问日志写 stdout、错误写 stderr，再由进程管理器分别收集。</p>
+<h3 id="24">2.4 管道：把字节流从一个程序送到另一个程序</h3>
+<h4 id="_9">直觉</h4>
+<p>管道符 <code>|</code> 把左边命令的标准输出接到右边命令的标准输入：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>/var/log/wechat/app.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<p>含义是：</p>
+<ol>
+<li><code>grep</code> 从日志中筛出包含 <code>ERROR</code> 的行，写到 stdout。</li>
+<li>Shell 把 <code>grep</code> 的 stdout 接到 <code>wc</code> 的 stdin。</li>
+<li><code>wc -l</code> 从 stdin 读入这些行，统计行数。</li>
+</ol>
+<p>屏幕上最终只看到数字，因为 <code>wc</code> 的 stdout 仍然指向终端。</p>
+<h4 id="_10">原理：管道传递的是字节流</h4>
+<p>这是本节点验收要求之一：<strong>能解释管道传递的是字节流。</strong></p>
+<p>管道不是把“行对象”“JSON 对象”或“错误记录结构”传给下一个程序，而是把左边程序写出的字节原样送过去。右边程序看到的只是连续的字节，至于这些字节如何分行、如何解析，由右边程序自己决定。</p>
+<p>例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">printf</span><span class="w"> </span><span class="s1">'ERROR 500\nINFO 200\nERROR 502\n'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-c
+</code></pre></div>
+
+<p><code>wc -c</code> 统计的是字节数，不是行数，也不是错误条数。管道里没有“错误对象”，只有文本字节。<code>grep</code> 之所以能按行工作，是因为它自己按换行符解析输入。</p>
+<p>这也带来两个实际影响：</p>
+<ul>
+<li><strong>文本协议很常见</strong>：日志、CSV、JSON 行都可以通过管道处理，只要上下游对字节格式达成一致。</li>
+<li><strong>二进制数据要小心</strong>：如果上游输出二进制，下游却按文本处理，可能被截断或破坏。处理文件名列表时，换行符本身可能出现在文件名中，因此有了 <code>find -print0</code> 与 <code>xargs -0</code> 这类以 NUL 分隔的约定。</li>
+</ul>
+<h4 id="_11">常用组合</h4>
+<p>统计日志中不同错误码的次数：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>/var/log/wechat/app.log<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'{print $NF}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-nr
+</code></pre></div>
+
+<p>逐段解释：</p>
+<ul>
+<li><code>grep "ERROR"</code>：筛出错误行。</li>
+<li><code>awk '{print $NF}'</code>：取每行最后一个字段（假设日志把错误码放在末尾）。</li>
+<li><code>sort</code>：排序，让相同错误码相邻。</li>
+<li><code>uniq -c</code>：统计相邻重复项的次数。</li>
+<li><code>sort -nr</code>：按次数从大到小排序。</li>
+</ul>
+<p>统计某个接口的请求数：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"/cgi-bin/message"</span><span class="w"> </span>/var/log/wechat/access.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<p>查看错误码分布：</p>
+<div class="codehilite"><pre><span></span><code>awk<span class="w"> </span><span class="s1">'{print $9}'</span><span class="w"> </span>/var/log/wechat/access.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-nr<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+</code></pre></div>
+
+<p>这些命令都很短，适合在终端里探索。若统计逻辑复杂、需要反复执行，就应写成脚本并加入错误检查，这对应节点的取舍：<strong>短命令适合探索，复杂重复任务应写成可检查脚本。</strong></p>
+<h4 id="_12">管道与退出码的关系</h4>
+<p>默认情况下，管道的退出码是<strong>最后一个命令</strong>的退出码。例如：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>app.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<p>即使 <code>grep</code> 因为文件不存在而失败，只要 <code>wc</code> 成功执行，整个管道的退出码仍可能是 0。这在脚本里很危险：你可能拿到一个“成功”的统计结果，但实际上日志根本没读到。</p>
+<p>Bash 可以用 <code>set -o pipefail</code> 让管道中任意一个命令失败时，整个管道返回非 0：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>pipefail
+grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>app.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+</code></pre></div>
+
+<p>是否开启 <code>pipefail</code> 是设计权衡：开启后更容易发现上游失败，但也会改变依赖“最后一个命令成功即可”的既有脚本行为。写生产脚本时应明确选择，而不是依赖默认值碰运气。</p>
+<h3 id="25">2.5 退出码：命令成功还是失败</h3>
+<h4 id="_13">直觉</h4>
+<p>每个进程结束时都会返回一个退出状态码。Shell 用特殊变量 <code>$?</code> 读取上一条命令的退出码：</p>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>/var/log/wechat/app.log
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+</code></pre></div>
+
+<p>约定是：</p>
+<ul>
+<li><strong>0</strong>：成功。</li>
+<li><strong>非 0</strong>：失败。不同数值可以表示不同失败原因，但具体含义由程序定义。</li>
+</ul>
+<p>注意：<code>$?</code> 只保留<strong>最近一条命令</strong>的退出码。你执行了 <code>echo $?</code> 之后，<code>$?</code> 就变成 <code>echo</code> 自己的退出码（通常是 0）。因此要立刻检查：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>/var/log/wechat/app.log
+<span class="nv">status</span><span class="o">=</span><span class="nv">$?</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"grep exit status: </span><span class="nv">$status</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>先把退出码保存到变量，再打印或判断，避免被后续命令覆盖。</p>
+<h4 id="_14">在条件中使用</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>/var/log/wechat/app.log<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"found errors"</span>
+<span class="k">else</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"no errors or read failure"</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<p><code>grep -q</code> 表示安静模式，只关心是否匹配，不输出匹配行。<code>if</code> 判断的是命令的退出码是否为 0。</p>
+<p>用 <code>||</code> 和 <code>&amp;&amp;</code> 组合：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>app.log<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"grep failed or no match"</span>
+</code></pre></div>
+
+<p>这里要区分两种“非 0”：</p>
+<ul>
+<li><code>grep</code> 没找到匹配时通常返回 1，这不一定是“命令执行故障”，而是“没有匹配”。</li>
+<li>文件不存在、权限不足等错误通常返回 2 或其他非 0 值。</li>
+</ul>
+<p>排查线上问题时，不能只看“有没有输出”，还要看退出码和 stderr。<strong>命令失败后能查看退出码</strong>，是本节点的验收要求之一。</p>
+<h4 id="_15">常见退出码示例</h4>
+<div class="codehilite"><pre><span></span><code>true<span class="p">;</span><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span><span class="w">    </span><span class="c1"># 0</span>
+false<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span><span class="w">    </span><span class="c1"># 1</span>
+ls<span class="w"> </span>/no/such/path<span class="w">  </span><span class="c1"># 报错</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span><span class="w">           </span><span class="c1"># 非 0，具体值由 ls 决定</span>
+</code></pre></div>
+
+<p>在脚本里，如果希望某条命令失败就立即停止，可以谨慎使用：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">set</span><span class="w"> </span>-e
+</code></pre></div>
+
+<p>但 <code>set -e</code> 有许多边界情况（例如命令出现在 <code>if</code> 条件、<code>||</code> 左侧时不会触发退出），不能把它当成万能的错误处理。更可控的方式是显式检查关键命令：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>/var/log/wechat/app.log<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"log check failed"</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+</code></pre></div>
+
+<p>这里把错误信息写到 stderr（<code>&gt;&amp;2</code>），把失败状态传给脚本的调用者，符合“错误走错误通道”的惯例。</p>
+<h3 id="26-shell">2.6 引号：控制 Shell 如何解释文本</h3>
+<h4 id="_16">三种常见写法</h4>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单引号 <code>'...'</code></td>
+<td>内部内容几乎原样保留，不展开变量，不展开通配符</td>
+</tr>
+<tr>
+<td>双引号 <code>"..."</code></td>
+<td>保留为一个参数，但会展开变量、命令替换等</td>
+</tr>
+<tr>
+<td>反斜杠 <code>\</code></td>
+<td>转义下一个字符，使其失去特殊含义</td>
+</tr>
+</tbody>
+</table>
+<p>例子：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">name</span><span class="o">=</span><span class="s2">"wechat backend"</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'$name'</span><span class="w">   </span><span class="c1"># 输出字面量 $name</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span><span class="w">   </span><span class="c1"># 输出 wechat backend</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$name</span><span class="w">     </span><span class="c1"># 输出两个参数：wechat 和 backend</span>
+</code></pre></div>
+
+<p>最后一行最关键：<strong>未引用的变量会发生分词（word splitting）</strong>。<code>$name</code> 展开成 <code>wechat backend</code> 后，Shell 再按空格把它拆成两个参数。如果这个变量是文件名、路径或用户输入，程序收到的参数数量就可能不对。</p>
+<h4 id="_17">未引用变量还会触发通配符展开</h4>
+<p>节点的误区明确指出：</p>
+<blockquote>
+<p>未引用变量会触发分词与通配符展开。</p>
+</blockquote>
+<p>例如当前目录有 <code>app.log</code>、<code>app.log.1</code>、<code>app.log.2</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">pattern</span><span class="o">=</span><span class="s2">"app.log*"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$pattern</span><span class="w">     </span><span class="c1"># Shell 可能把它展开成多个文件名</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$pattern</span><span class="s2">"</span><span class="w">   </span><span class="c1"># 输出字面量 app.log*</span>
+</code></pre></div>
+
+<p>未引用时，变量展开后的 <code>*</code> 会参与路径名展开（globbing）；加双引号后，<code>*</code> 被当作普通字符。很多“脚本在某个目录下行为不对”的问题，根源都是这里。</p>
+<h4 id="_18">正确处理带空格的文件名</h4>
+<p>错误写法：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">file</span><span class="o">=</span><span class="s2">"my log.txt"</span>
+cat<span class="w"> </span><span class="nv">$file</span><span class="w">          </span><span class="c1"># 被拆成 cat my log.txt，可能读错文件</span>
+</code></pre></div>
+
+<p>正确写法：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">file</span><span class="o">=</span><span class="s2">"my log.txt"</span>
+cat<span class="w"> </span><span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span><span class="w">        </span><span class="c1"># 一个参数，完整文件名</span>
+</code></pre></div>
+
+<p>遍历文件名时，不要用 <code>for f in $(ls)</code>，因为 <code>$(ls)</code> 的输出会按空白分词，遇到空格、换行就出错。更稳妥的方式是让 <code>find</code> 用 NUL 分隔输出：</p>
+<div class="codehilite"><pre><span></span><code>find<span class="w"> </span>/var/log/wechat<span class="w"> </span>-name<span class="w"> </span><span class="s1">'*.log'</span><span class="w"> </span>-print0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-0<span class="w"> </span>grep<span class="w"> </span>-l<span class="w"> </span><span class="s2">"ERROR"</span>
+</code></pre></div>
+
+<p><code>-print0</code> 用 NUL 字节分隔文件名，<code>xargs -0</code> 按 NUL 读取。因为 Unix 文件名中不能包含 NUL，这种分隔方式不会把带空格或换行的文件名拆坏。这正是“管道传递字节流”在工程上的一个直接应用：<strong>选择一种不会与数据内容冲突的分隔符。</strong></p>
+<h4 id="_19">引号与命令替换</h4>
+<p>双引号内可以展开命令替换：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">today</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%F<span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"log date: </span><span class="nv">$today</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>如果命令替换的结果可能包含空格，仍然要加双引号：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">dir</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="w"> </span>-d<span class="k">)</span>
+ls<span class="w"> </span><span class="s2">"</span><span class="nv">$dir</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>单引号内不会展开：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s1">'$HOME'</span><span class="w">   </span><span class="c1"># 字面量 $HOME</span>
+</code></pre></div>
+
+<p>选择原则可以简化为：</p>
+<ul>
+<li>需要<strong>字面量</strong>时用单引号。</li>
+<li>需要<strong>变量展开</strong>时用双引号，并且默认给变量加双引号。</li>
+<li>只有在明确知道分词或通配符展开是想要的行为时，才不加引号。</li>
+</ul>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 路径相关误区</h3>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>后果</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>以为相对路径永远指向同一个文件</td>
+<td><code>cd</code> 后命令操作了别的目录</td>
+<td>危险操作前先 <code>pwd</code>，或使用绝对路径</td>
+</tr>
+<tr>
+<td>忘记空格需要引用</td>
+<td><code>cat my log.txt</code> 把文件名拆成两个参数</td>
+<td><code>cat "my log.txt"</code></td>
+</tr>
+<tr>
+<td>把 <code>~</code> 当成普通字符</td>
+<td>单引号内 <code>~</code> 不展开</td>
+<td>需要家目录时不要放在单引号里</td>
+</tr>
+<tr>
+<td>用 <code>cd</code> 改变全局位置后忘记切回</td>
+<td>后续命令都在错误目录执行</td>
+<td>在脚本中使用子 Shell 或绝对路径</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32">3.2 重定向相关误区</h3>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>后果</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用 <code>&gt;</code> 追加日志</td>
+<td>目标文件被截断</td>
+<td>追加用 <code>&gt;&gt;</code></td>
+</tr>
+<tr>
+<td>认为 <code>2&gt;&amp;1</code> 顺序无所谓</td>
+<td>stderr 可能仍留在终端</td>
+<td>写成 <code>&gt; file 2&gt;&amp;1</code></td>
+</tr>
+<tr>
+<td>只看屏幕输出，不看 stderr</td>
+<td>漏掉错误原因</td>
+<td>分别重定向并检查退出码</td>
+</tr>
+<tr>
+<td>把正常结果和错误混在一个文件</td>
+<td>后续统计被错误信息污染</td>
+<td>正常走 stdout，错误走 stderr</td>
+</tr>
+</tbody>
+</table>
+<h3 id="33">3.3 管道相关误区</h3>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>后果</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>以为管道传递结构化对象</td>
+<td>下游按字节解析时得到意外结果</td>
+<td>明确上下游的文本格式与分隔符</td>
+</tr>
+<tr>
+<td>以为管道中任一命令失败都会让整体失败</td>
+<td>上游失败被最后一个命令掩盖</td>
+<td>需要时开启 <code>set -o pipefail</code></td>
+</tr>
+<tr>
+<td>对二进制数据按行处理</td>
+<td>数据被破坏或截断</td>
+<td>使用合适的二进制安全工具与分隔符</td>
+</tr>
+<tr>
+<td>忘记管道会并发启动多个进程</td>
+<td>资源占用、缓冲行为与单命令不同</td>
+<td>复杂场景用脚本分步处理并记录中间结果</td>
+</tr>
+</tbody>
+</table>
+<h3 id="34">3.4 退出码相关误区</h3>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>后果</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用输出是否为空判断成功</td>
+<td>成功但无匹配、失败但无输出都可能混淆</td>
+<td>同时检查退出码和 stderr</td>
+</tr>
+<tr>
+<td>在 <code>echo $?</code> 之后才想读取上一条命令的状态</td>
+<td>读到的是 <code>echo</code> 的退出码</td>
+<td>立即保存到变量</td>
+</tr>
+<tr>
+<td>认为 <code>grep</code> 返回 1 一定是故障</td>
+<td>可能只是没有匹配</td>
+<td>区分“无匹配”和“读取失败”</td>
+</tr>
+<tr>
+<td>盲目依赖 <code>set -e</code></td>
+<td>某些上下文不会按预期退出</td>
+<td>对关键步骤显式判断</td>
+</tr>
+</tbody>
+</table>
+<h3 id="35">3.5 引号相关误区</h3>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>后果</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>变量一律不加引号</td>
+<td>分词、通配符展开导致参数数量错误</td>
+<td>默认写成 <code>"$var"</code></td>
+</tr>
+<tr>
+<td>用 <code>for f in $(ls)</code> 遍历文件</td>
+<td>空格、换行文件名被拆坏</td>
+<td>用 <code>find -print0</code> 配合 <code>xargs -0</code></td>
+</tr>
+<tr>
+<td>在单引号里期待变量展开</td>
+<td>得到字面量</td>
+<td>需要展开时用双引号</td>
+</tr>
+<tr>
+<td>把用户输入直接拼进命令</td>
+<td>可能触发意外的通配符或命令解析</td>
+<td>加引号、校验输入，必要时避免 <code>eval</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="36">3.6 设计权衡：一行命令还是脚本</h3>
+<p>节点给出的权衡是：</p>
+<blockquote>
+<p>短命令适合探索，复杂重复任务应写成可检查脚本。</p>
+</blockquote>
+<p>可以这样理解：</p>
+<ul>
+<li><strong>探索阶段</strong>：你不知道日志格式、字段位置、错误码分布，用短命令逐步试错最快。例如先 <code>head</code> 看几行，再 <code>grep</code> 过滤，再 <code>awk</code> 取字段。</li>
+<li><strong>固化阶段</strong>：当命令需要反复执行、被别人复用、或用于生产判断时，应写成脚本。脚本可以加入参数校验、<code>set -o pipefail</code>、明确的退出码、日志输出和注释，便于审查与复现。</li>
+</ul>
+<p>一行命令的优点是即时、灵活；缺点是难以审查、难以测试、错误容易被管道掩盖。脚本的优点是结构清晰、可版本控制；缺点是需要维护。选择标准不是“哪个更高级”，而是<strong>这次操作是否需要可复现和可审查</strong>。</p>
+<h2 id="4">4. 动手实践：用管道统计错误次数，并处理带空格文件名</h2>
+<p>本实践对应节点要求：<strong>用管道统计日志错误次数，正确处理带空格文件名。</strong> 下面每一步都可以直接执行。</p>
+<h3 id="1_1">步骤 1：建立实验目录</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/shell-lab/logs
+<span class="nb">cd</span><span class="w"> </span>/tmp/shell-lab
+<span class="nb">pwd</span>
+</code></pre></div>
+
+<p>预期：<code>pwd</code> 输出 <code>/tmp/shell-lab</code>。这一步同时验证了绝对路径与 <code>cd</code> 后的当前工作目录。</p>
+<h3 id="2_1">步骤 2：创建一个带空格的文件名</h3>
+<div class="codehilite"><pre><span></span><code><span class="nv">log_file</span><span class="o">=</span><span class="s2">"/tmp/shell-lab/logs/wechat app.log"</span>
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'%s\n'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'2026-10-30 10:00:01 INFO 200 /cgi-bin/message'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'2026-10-30 10:00:02 ERROR 500 /cgi-bin/message'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'2026-10-30 10:00:03 INFO 200 /cgi-bin/user'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'2026-10-30 10:00:04 ERROR 502 /cgi-bin/message'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'2026-10-30 10:00:05 ERROR 500 /cgi-bin/user'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'2026-10-30 10:00:06 WARN 429 /cgi-bin/message'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$log_file</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>注意这里使用了 <code>"$log_file"</code>。如果写成 <code>&gt; $log_file</code>，路径中的空格会导致分词，重定向目标可能变成错误的位置。</p>
+<h3 id="3_1">步骤 3：确认文件存在且能正确读取</h3>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span><span class="s2">"/tmp/shell-lab/logs/wechat app.log"</span>
+wc<span class="w"> </span>-l<span class="w"> </span><span class="s2">"/tmp/shell-lab/logs/wechat app.log"</span>
+</code></pre></div>
+
+<p>预期：文件存在，<code>wc -l</code> 输出 6。对比错误写法：</p>
+<div class="codehilite"><pre><span></span><code>wc<span class="w"> </span>-l<span class="w"> </span><span class="nv">$log_file</span>
+</code></pre></div>
+
+<p>如果 <code>log_file</code> 变量未加引号，Shell 会把它拆成 <code>/tmp/shell-lab/logs/wechat</code> 和 <code>app.log</code> 两个参数，<code>wc</code> 的行为就不再是读取那一个完整文件。这个对比可以帮助你直观看到分词的影响。</p>
+<h3 id="4-error">步骤 4：用管道统计 ERROR 行数</h3>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span><span class="s2">"/tmp/shell-lab/logs/wechat app.log"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<p>预期：输出 3。</p>
+<p>这里管道传递的是 <code>grep</code> 写出的字节流，<code>wc -l</code> 按换行符统计行数。<code>grep</code> 不传递“错误对象”，只传递匹配到的文本行。</p>
+<h3 id="5">步骤 5：按错误码统计次数</h3>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span><span class="s2">"/tmp/shell-lab/logs/wechat app.log"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'{print $3}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-nr
+</code></pre></div>
+
+<p>预期输出类似：</p>
+<div class="codehilite"><pre><span></span><code>      2 500
+      1 502
+</code></pre></div>
+
+<p>逐段含义：</p>
+<ul>
+<li><code>grep "ERROR"</code>：只保留错误行。</li>
+<li><code>awk '{print $3}'</code>：取第 3 个字段，即错误码。</li>
+<li><code>sort</code>：让相同错误码相邻。</li>
+<li><code>uniq -c</code>：统计连续重复项。</li>
+<li><code>sort -nr</code>：按次数降序排列。</li>
+</ul>
+<h3 id="6">步骤 6：检查命令失败后的退出码</h3>
+<p>先执行一个会失败的命令：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span><span class="s2">"/tmp/shell-lab/logs/does-not-exist.log"</span>
+<span class="nv">status</span><span class="o">=</span><span class="nv">$?</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"exit status: </span><span class="nv">$status</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>预期：<code>grep</code> 向 stderr 报错，<code>status</code> 为非 0。注意要先把 <code>$?</code> 保存到 <code>status</code>，否则后面的 <code>echo</code> 会覆盖它。</p>
+<p>再检查成功命令：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span><span class="s2">"/tmp/shell-lab/logs/wechat app.log"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"exit status: </span><span class="nv">$?</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>预期：输出 0。</p>
+<p>再观察“无匹配”的情况：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"FATAL"</span><span class="w"> </span><span class="s2">"/tmp/shell-lab/logs/wechat app.log"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"exit status: </span><span class="nv">$?</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>预期：非 0（<code>grep</code> 通常返回 1）。这说明非 0 不一定代表程序崩溃，也可能只是没有匹配。排查时应结合 stderr 和具体退出码判断。</p>
+<h3 id="7">步骤 7：安全处理多个带空格的文件名</h3>
+<p>再创建一个带空格的文件：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">printf</span><span class="w"> </span><span class="s1">'%s\n'</span><span class="w"> </span><span class="s1">'2026-10-30 11:00:00 ERROR 503 /cgi-bin/pay'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>&gt;<span class="w"> </span><span class="s2">"/tmp/shell-lab/logs/pay service.log"</span>
+</code></pre></div>
+
+<p>用 NUL 分隔遍历并统计：</p>
+<div class="codehilite"><pre><span></span><code>find<span class="w"> </span>/tmp/shell-lab/logs<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s1">'*.log'</span><span class="w"> </span>-print0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-0<span class="w"> </span>grep<span class="w"> </span>-h<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<p>预期：输出 4（原文件 3 条，新文件 1 条）。</p>
+<p>如果写成 <code>find ... | xargs grep</code>，文件名中的空格可能被 <code>xargs</code> 当作分隔符，导致参数拆分错误。<code>-print0</code> 与 <code>-0</code> 的组合保证文件名按 NUL 分隔，不会因空格或换行而损坏。</p>
+<h3 id="8">步骤 8：把探索命令整理成可检查脚本（可选但推荐）</h3>
+<p>创建 <code>/tmp/shell-lab/count_errors.sh</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>pipefail
+
+<span class="nv">log_dir</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">1</span><span class="p">:?usage: count_errors.sh &lt;log-dir&gt;</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-d<span class="w"> </span><span class="s2">"</span><span class="nv">$log_dir</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"not a directory: </span><span class="nv">$log_dir</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">2</span>
+<span class="k">fi</span>
+
+<span class="nv">count</span><span class="o">=</span><span class="k">$(</span>
+<span class="w">  </span>find<span class="w"> </span><span class="s2">"</span><span class="nv">$log_dir</span><span class="s2">"</span><span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-name<span class="w"> </span><span class="s1">'*.log'</span><span class="w"> </span>-print0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-0<span class="w"> </span>grep<span class="w"> </span>-h<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<span class="k">)</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"ERROR count: </span><span class="nv">$count</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>执行：</p>
+<div class="codehilite"><pre><span></span><code>chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/shell-lab/count_errors.sh
+/tmp/shell-lab/count_errors.sh<span class="w"> </span>/tmp/shell-lab/logs
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"script exit status: </span><span class="nv">$?</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>这个脚本体现了本课的多个要点：参数加引号、目录存在性检查、<code>pipefail</code>、错误写 stderr、用退出码表达失败。它比一行命令更适合重复执行和审查。</p>
+<h3 id="_20">验收自查</h3>
+<p>完成实践后，确认你能做到：</p>
+<ul>
+<li>[ ] 解释绝对路径与相对路径的区别，并说明 <code>cd</code> 为什么会改变相对路径的含义。</li>
+<li>[ ] 说明管道传递的是字节流，而不是结构化对象。</li>
+<li>[ ] 在命令失败后，立即保存并查看退出码。</li>
+<li>[ ] 用 <code>"$file"</code> 正确处理带空格的文件名。</li>
+<li>[ ] 用 <code>find -print0 | xargs -0</code> 处理可能包含空格的文件名列表。</li>
+</ul>
+<h2 id="5_1">5. 自测题</h2>
+<h3 id="1_2">题 1：相对路径会指向哪里？</h3>
+<p>当前工作目录是 <code>/home/backend</code>，执行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/var/log/wechat
+cat<span class="w"> </span>logs/app.log
+</code></pre></div>
+
+<p><code>cat</code> 实际尝试读取哪个文件？如果希望无论当前目录在哪都读取 <code>/var/log/wechat/logs/app.log</code>，应该怎么写？</p>
+<p><strong>答案：</strong> <code>cat</code> 读取的是 <code>/var/log/wechat/logs/app.log</code>，因为 <code>cd</code> 后当前工作目录变成了 <code>/var/log/wechat</code>，相对路径 <code>logs/app.log</code> 以它为基准解析。若要不受当前目录影响，应使用绝对路径：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/var/log/wechat/logs/app.log
+</code></pre></div>
+
+<h3 id="2-cat-file">题 2：为什么 <code>cat $file</code> 可能出错？</h3>
+<p>假设：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">file</span><span class="o">=</span><span class="s2">"/var/log/wechat/wechat app.log"</span>
+cat<span class="w"> </span><span class="nv">$file</span>
+</code></pre></div>
+
+<p>这条命令可能有什么问题？给出正确写法，并解释原因。</p>
+<p><strong>答案：</strong> 未加引号的 <code>$file</code> 会发生分词，路径中的空格被 Shell 当作参数分隔符，<code>cat</code> 可能收到 <code>/var/log/wechat/wechat</code> 和 <code>app.log</code> 两个参数，从而读取错误的文件或报错。正确写法是：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span><span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>双引号保证变量展开后仍作为一个参数传递，不会因空格被拆开，也不会让变量内容中的 <code>*</code> 等字符触发通配符展开。</p>
+<h3 id="3_2">题 3：管道失败为什么可能被掩盖？</h3>
+<p>执行：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span><span class="s2">"ERROR"</span><span class="w"> </span>/var/log/wechat/not-exist.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+<span class="nb">echo</span><span class="w"> </span><span class="nv">$?</span>
+</code></pre></div>
+
+<p><code>grep</code> 读取失败，但整个管道的退出码可能是什么？为什么？在 Bash 中如何让上游失败也导致整个管道失败？</p>
+<p><strong>答案：</strong> 默认情况下，管道的退出码是最后一个命令的退出码。这里 <code>wc -l</code> 成功执行（从空输入统计出 0），所以整个管道可能返回 0，尽管 <code>grep</code> 因文件不存在而失败。这会让人误以为统计成功。Bash 中可以开启：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>pipefail
+</code></pre></div>
+
+<p>开启后，管道中任意一个命令返回非 0，整个管道就返回非 0。生产脚本中应明确是否需要这一行为，并结合 stderr 与退出码一起判断。</p>
+<h2 id="6_1">6. 推荐资源</h2>
+<p>以下仅使用节点提供的资源：</p>
+<ol>
+<li>
+<p><strong>MIT Missing Semester · Course Overview + The Shell</strong>
+   - 链接：https://missing.csail.mit.edu/2020/course-shell/
+   - 来源：MIT CSAIL · 英文 · 公开课与实验 · 入门 · 免费
+   - 节点推荐理由：从命令、路径、管道和重定向开始，配合练习建立可复现的终端操作能力。
+   - 建议阅读方式：跟着课程中的示例实际敲一遍，重点观察路径解析、管道连接和重定向后的输出位置。</p>
+</li>
+<li>
+<p><strong>终端、路径与命令组合：参考文档 / 原始资料</strong>
+   - 链接：https://www.gnu.org/software/bash/manual/html_node/Shell-Commands.html
+   - 来源：www.gnu.org · 英文 · 文档 · 入门 · 免费
+   - 节点推荐理由：重点阅读绝对与相对路径与标准输入输出和重定向，用于核对本节点实验的语义和边界。
+   - 建议阅读方式：把文档中的定义与本课实验逐条对照，特别关注重定向顺序、管道退出状态和引号相关的边界条件；阅读时记录适用版本与限制。</p>
+</li>
+</ol><div class="pn"><span><a href="4.html">← 操作系统的资源抽象</a></span><span><a href="6.html">源码到可执行文件 →</a></span></div></main></div></body></html>

@@ -1,0 +1,1144 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2. CPU与指令执行 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="cur" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 2 课 · 领域 A · 阶段 0</p><p class="dl"><a href="../files/2-a-machine.md" download>⬇ 本课 Markdown</a></p><h1 id="2208-cpu">第 2/208 课：CPU与指令执行</h1>
+<blockquote>
+<p>节点：<code>a-machine</code>（CPU Execution）<br />
+领域：A / 硬件与操作系统<br />
+阶段：0<br />
+前置节点：<code>a-binary</code><br />
+本课关键词：寄存器、程序计数器、指令、数据通路、流水线、分支预测、乱序执行、指令集、微架构</p>
+</blockquote>
+<h2 id="0">0. 这个节点在学什么</h2>
+<p>节点的核心结论是：</p>
+<blockquote>
+<p>CPU 按照指令集执行加载、计算、分支和存储；流水线与乱序执行属于具体微架构实现。</p>
+</blockquote>
+<p>这句话可以拆成两层：</p>
+<ol>
+<li><strong>软件看到的契约</strong>：CPU 能执行哪些指令、能用哪些寄存器、如何寻址、函数如何调用。这一层主要由<strong>指令集架构（ISA）</strong>和<strong>ABI</strong>描述。</li>
+<li><strong>硬件内部的实现</strong>：同一条指令在芯片里怎样被拆分、排队、预测、并行执行。这一层是<strong>微架构</strong>，不同型号的 CPU 可以完全不同。</li>
+</ol>
+<p>本课的目标不是让你背会某款 CPU 的框图，而是建立一条稳定的心智链路：</p>
+<div class="codehilite"><pre><span></span><code>C 代码 -&gt; 编译器生成的指令 -&gt; CPU 取指/译码/执行 -&gt; 真实运行时间
+</code></pre></div>
+
+<p>后端工程师平时写的是 C/C++、Go、Java 等高层代码，但性能问题最终会落到这条链路上。尤其是即将进入腾讯微信公众号后台开发的同学，面对消息收发、权限校验、限流、路由、存储访问等高并发路径，理解这条链路能帮助你：</p>
+<ul>
+<li>看懂编译器优化和汇编，知道源码里的一个 <code>if</code> 不一定是机器里的一条分支；</li>
+<li>用 <code>perf stat</code> 解释“为什么同样的代码，换数据分布后变慢了”；</li>
+<li>理解函数调用、栈帧和调用约定，为后续排查栈溢出、崩溃、协程切换打基础；</li>
+<li>知道“主频高”不等于“业务快”，容量评估必须用真实负载测量；</li>
+<li>为后面的缓存、并发、操作系统调度课程建立硬件直觉。</li>
+</ul>
+<hr />
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 本课学习目标</h3>
+<p>学完本课后，你应该能够：</p>
+<ol>
+<li><strong>解释寄存器与程序计数器</strong>：知道它们分别保存什么，程序计数器如何驱动“下一条指令”。</li>
+<li><strong>解释指令与数据通路</strong>：能说清一条加载、加法、比较、分支、存储指令在 CPU 中大致经过哪些部件。</li>
+<li><strong>区分指令集与微架构</strong>：知道 x86-64、ARM64、RISC-V 是 ISA，而流水线深度、分支预测器、乱序执行窗口是微架构。</li>
+<li><strong>解释一次函数调用的基本过程</strong>：<code>call</code>/<code>ret</code>、返回地址、栈帧、参数寄存器、返回值寄存器、调用约定。</li>
+<li><strong>完成动手实践</strong>：把循环编译成汇编；用排序后数据与随机数据对比条件分支的运行时间；用 <code>perf stat</code> 观察分支预测失败。</li>
+<li><strong>建立正确的性能观</strong>：主频不能单独决定程序速度；抽象模型便于理解，但优化决策必须回到真实硬件测量。</li>
+</ol>
+<h3 id="12-cpu">1.2 为什么后端要懂 CPU 执行</h3>
+<p>后端服务不是“把请求交给数据库”这么简单。一个微信公众号后台的典型请求可能包含：</p>
+<div class="codehilite"><pre><span></span><code>接入层 -&gt; 鉴权 -&gt; 限流 -&gt; 消息解析 -&gt; 业务路由 -&gt; 存储/缓存 -&gt; 组装响应
+</code></pre></div>
+
+<p>其中每一段都可能有大量分支、函数调用、内存访问和循环：</p>
+<ul>
+<li>解析 JSON/Protobuf 时，字段是否存在、类型是否匹配，都是条件分支；</li>
+<li>鉴权和限流时，命中缓存还是回源，是典型的热路径分支；</li>
+<li>消息分发时，不同消息类型走不同处理器，可能形成间接跳转；</li>
+<li>批量任务中，数据是否有序、是否集中，会影响分支预测和缓存命中；</li>
+<li>排查 p99 延迟时，<code>cycles</code>、<code>instructions</code>、<code>branch-misses</code> 往往比“CPU 使用率”更有解释力。</li>
+</ul>
+<p>更重要的是，<strong>源码不等于机器指令</strong>。编译器可能：</p>
+<ul>
+<li>把循环展开；</li>
+<li>把条件分支转换成 <code>cmov</code>；</li>
+<li>自动向量化；</li>
+<li>内联函数，消除 <code>call</code>/<code>ret</code>；</li>
+<li>把变量长期放在寄存器里，而不是内存里。</li>
+</ul>
+<p>如果你只看 C 代码，很容易对真实执行情况做出错误判断。理解 CPU 执行，就是学会在“源码”和“硬件”之间来回翻译。</p>
+<hr />
+<h2 id="2">2. 从直觉到原理</h2>
+<h3 id="21-cpu">2.1 先建立直觉：CPU 在重复一个很小的循环</h3>
+<p>把 CPU 想成一个极其勤奋、但只会执行简单动作的工人。它不断重复：</p>
+<ol>
+<li><strong>取指（Fetch）</strong>：根据程序计数器，从内存中取出下一条指令。</li>
+<li><strong>译码（Decode）</strong>：识别这是什么指令，需要哪些寄存器，做什么运算。</li>
+<li><strong>执行（Execute）</strong>：算术逻辑单元做加减、比较、位运算；或计算内存地址。</li>
+<li><strong>访存（Memory）</strong>：需要时读写数据。</li>
+<li><strong>写回（Write Back）</strong>：把结果写回寄存器。</li>
+</ol>
+<p>这叫<strong>指令周期</strong>。真实的现代 CPU 比这复杂得多，会并行、乱序、预测，但这个五步模型是理解一切的起点。</p>
+<p>一个很短的 C 循环：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">long</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">s</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>它做的事情可以抽象成：</p>
+<div class="codehilite"><pre><span></span><code>s = 0
+i = 0
+判断 i &lt; n，不成立就结束
+读取 a[i]
+s = s + a[i]
+i = i + 1
+跳回判断
+</code></pre></div>
+
+<p>这就是“加载、计算、分支、存储”的雏形。CPU 的工作不是理解“求和”，而是执行一条条更小的指令。</p>
+<h3 id="22">2.2 寄存器与程序计数器</h3>
+<h4 id="_1">寄存器是什么</h4>
+<p>寄存器是 CPU 内部数量很少、速度极快的存储单元。它们不像内存那样有地址总线访问延迟，通常可以在一个时钟周期内被读写（具体取决于微架构和指令）。</p>
+<p>常见寄存器可以分为几类：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>作用</th>
+<th>x86-64 例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通用寄存器</td>
+<td>整数、指针、临时值</td>
+<td><code>rax</code>、<code>rbx</code>、<code>rcx</code>、<code>rdx</code>、<code>rsi</code>、<code>rdi</code>、<code>r8</code>–<code>r15</code></td>
+</tr>
+<tr>
+<td>栈指针</td>
+<td>指向当前栈顶</td>
+<td><code>rsp</code></td>
+</tr>
+<tr>
+<td>帧指针</td>
+<td>指向当前栈帧基址</td>
+<td><code>rbp</code></td>
+</tr>
+<tr>
+<td>指令指针/程序计数器</td>
+<td>指向下一条要执行的指令</td>
+<td><code>rip</code></td>
+</tr>
+<tr>
+<td>标志寄存器</td>
+<td>保存比较结果、溢出、零标志等</td>
+<td><code>rflags</code></td>
+</tr>
+<tr>
+<td>向量寄存器</td>
+<td>SIMD/浮点运算</td>
+<td><code>xmm</code>、<code>ymm</code>、<code>zmm</code></td>
+</tr>
+</tbody>
+</table>
+<p>寄存器非常宝贵。编译器会尽量把循环变量、指针、累加器放在寄存器里；寄存器不够时，才会“溢出”到栈上。你在 <code>-O0</code> 汇编里看到大量 <code>-8(%rbp)</code>、<code>-16(%rbp)</code>，通常就是变量被放在栈上。</p>
+<h4 id="_2">程序计数器是什么</h4>
+<p>程序计数器（Program Counter，PC）保存“下一条指令的地址”。在 x86-64 中，它叫 <code>rip</code>（Instruction Pointer）。CPU 每取一条指令，PC 通常增加这条指令的长度；遇到跳转、调用、返回、中断时，PC 被改成目标地址。</p>
+<p>可以把 PC 想成书签：</p>
+<ul>
+<li>顺序执行：书签往后翻一页；</li>
+<li><code>jmp</code>：直接翻到某一页；</li>
+<li><code>call</code>：记住当前页，翻到函数那一页；</li>
+<li><code>ret</code>：回到刚才记住的那一页；</li>
+<li>中断/异常：硬件把现场保存好，跳到处理程序。</li>
+</ul>
+<p>关键点：<strong>PC 是控制流的源头</strong>。CPU 先要知道下一条指令在哪里，才能取指。分支预测之所以重要，就是因为 CPU 不想等 PC 确定后才继续工作。</p>
+<h4 id="gdb">用 <code>gdb</code> 看寄存器</h4>
+<p>编译一个带调试信息的程序后，可以用 <code>gdb</code> 观察：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span>-o<span class="w"> </span>call<span class="w"> </span>call.c
+gdb<span class="w"> </span>-q<span class="w"> </span>./call
+</code></pre></div>
+
+<p>在 <code>gdb</code> 中：</p>
+<div class="codehilite"><pre><span></span><code>(gdb) break add
+(gdb) run
+(gdb) info registers rip rsp rbp rdi rsi rax
+(gdb) x/4gx $rsp
+(gdb) disassemble /r
+</code></pre></div>
+
+<p>你会看到：</p>
+<ul>
+<li><code>rip</code> 指向当前即将执行的指令；</li>
+<li><code>rsp</code> 指向栈顶；</li>
+<li><code>rdi</code>、<code>rsi</code> 往往是前两个整数参数；</li>
+<li><code>rax</code> 往往是返回值或临时结果；</li>
+<li><code>x/4gx $rsp</code> 可以查看栈上的返回地址、保存的 <code>rbp</code> 等内容。</li>
+</ul>
+<p>这比只看源码更能建立“机器正在做什么”的直觉。</p>
+<h3 id="23">2.3 指令与数据通路</h3>
+<h4 id="_3">指令是什么</h4>
+<p>一条机器指令通常包含：</p>
+<ul>
+<li><strong>操作码（opcode）</strong>：要做什么，例如加、加载、跳转；</li>
+<li><strong>操作数</strong>：对谁做，可能是寄存器、立即数、内存地址；</li>
+<li><strong>寻址方式</strong>：如何算出内存地址；</li>
+<li><strong>下一条指令的位置</strong>：顺序下一条，或某个跳转目标。</li>
+</ul>
+<p>以 x86-64 为例，几类常见指令：</p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>movq (%rdi), %rax</code></td>
+<td>从 <code>rdi</code> 指向的内存读取 8 字节到 <code>rax</code></td>
+</tr>
+<tr>
+<td><code>addq %rax, %rbx</code></td>
+<td><code>rbx = rbx + rax</code></td>
+</tr>
+<tr>
+<td><code>cmpq %rdx, %rdi</code></td>
+<td>比较 <code>rdi</code> 与 <code>rdx</code>，设置标志位</td>
+</tr>
+<tr>
+<td><code>jne .L3</code></td>
+<td>若不相等，跳到 <code>.L3</code></td>
+</tr>
+<tr>
+<td><code>call add</code></td>
+<td>调用函数 <code>add</code></td>
+</tr>
+<tr>
+<td><code>ret</code></td>
+<td>从当前函数返回</td>
+</tr>
+</tbody>
+</table>
+<p>注意：不同汇编语法看起来不同。GCC 在 Linux 上默认常用 AT&amp;T 语法，<code>objdump -M intel</code> 可以切换成 Intel 语法。学习时不必死记语法，重点是看懂“数据从哪里来、到哪里去、控制流是否改变”。</p>
+<h4 id="_4">数据通路是什么</h4>
+<p>“数据通路”是数据在 CPU 内部流动的路径，通常包括：</p>
+<div class="codehilite"><pre><span></span><code>程序计数器
+   |
+   v
+取指单元 ---&gt; 指令译码 ---&gt; 寄存器堆
+                              |
+                              v
+                        算术逻辑单元 ALU
+                        地址生成单元 AGU
+                              |
+                              v
+                          数据缓存/内存
+                              |
+                              v
+                          写回寄存器
+</code></pre></div>
+
+<p>控制单元则负责根据指令产生控制信号：什么时候读寄存器、ALU 做什么运算、是否写内存、下一条 PC 取哪里。</p>
+<h4 id="c">把 C 循环翻译成汇编</h4>
+<p>把前面的求和函数保存为 <code>sum.c</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">long</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">s</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>用 GCC 生成汇编：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O2<span class="w"> </span>-S<span class="w"> </span>-o<span class="w"> </span>sum.s<span class="w"> </span>sum.c
+</code></pre></div>
+
+<p>在 x86-64 上，<code>-O2</code> 通常会得到类似下面的结果（不同 GCC 版本和平台可能略有差异）：</p>
+<div class="codehilite"><pre><span></span><code><span class="nl">sum:</span>
+<span class="w">    </span><span class="nf">testq</span><span class="w">   </span><span class="nv">%rsi</span><span class="p">,</span><span class="w"> </span><span class="nv">%rsi</span>
+<span class="w">    </span><span class="nf">jle</span><span class="w">     </span><span class="no">.L4</span>
+<span class="w">    </span><span class="nf">leaq</span><span class="w">    </span><span class="p">(</span><span class="nv">%rdi</span><span class="p">,</span><span class="nv">%rsi</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span><span class="w"> </span><span class="nv">%rdx</span>
+<span class="w">    </span><span class="nf">xorl</span><span class="w">    </span><span class="nv">%eax</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="nl">.L3:</span>
+<span class="w">    </span><span class="nf">addq</span><span class="w">    </span><span class="p">(</span><span class="nv">%rdi</span><span class="p">),</span><span class="w"> </span><span class="nv">%rax</span>
+<span class="w">    </span><span class="nf">addq</span><span class="w">    </span><span class="no">$8</span><span class="p">,</span><span class="w"> </span><span class="nv">%rdi</span>
+<span class="w">    </span><span class="nf">cmpq</span><span class="w">    </span><span class="nv">%rdx</span><span class="p">,</span><span class="w"> </span><span class="nv">%rdi</span>
+<span class="w">    </span><span class="nf">jne</span><span class="w">     </span><span class="no">.L3</span>
+<span class="w">    </span><span class="nf">ret</span>
+<span class="nl">.L4:</span>
+<span class="w">    </span><span class="nf">xorl</span><span class="w">    </span><span class="nv">%eax</span><span class="p">,</span><span class="w"> </span><span class="nv">%eax</span>
+<span class="w">    </span><span class="nf">ret</span>
+</code></pre></div>
+
+<p>逐行理解：</p>
+<table>
+<thead>
+<tr>
+<th>汇编</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>testq %rsi, %rsi</code></td>
+<td>测试 <code>n</code> 是否为 0 或负数</td>
+</tr>
+<tr>
+<td><code>jle .L4</code></td>
+<td>若 <code>n &lt;= 0</code>，跳到返回 0 的分支</td>
+</tr>
+<tr>
+<td><code>leaq (%rdi,%rsi,8), %rdx</code></td>
+<td>计算结束地址：<code>a + n * 8</code></td>
+</tr>
+<tr>
+<td><code>xorl %eax, %eax</code></td>
+<td>把累加器 <code>rax</code> 清零</td>
+</tr>
+<tr>
+<td><code>addq (%rdi), %rax</code></td>
+<td>读取 <code>a[i]</code> 并加到 <code>rax</code></td>
+</tr>
+<tr>
+<td><code>addq $8, %rdi</code></td>
+<td>指针前进 8 字节，指向下一个 <code>long</code></td>
+</tr>
+<tr>
+<td><code>cmpq %rdx, %rdi</code></td>
+<td>比较当前指针和结束地址</td>
+</tr>
+<tr>
+<td><code>jne .L3</code></td>
+<td>不相等就继续循环</td>
+</tr>
+<tr>
+<td><code>ret</code></td>
+<td>返回，返回值在 <code>rax</code></td>
+</tr>
+</tbody>
+</table>
+<p>这段汇编里已经能看到本节点的几个关键词：</p>
+<ul>
+<li><strong>寄存器</strong>：<code>rax</code> 是累加器，<code>rdi</code> 是数组指针，<code>rsi</code> 是长度，<code>rdx</code> 是结束地址；</li>
+<li><strong>程序计数器</strong>：<code>jne</code> 会改变下一条指令的位置；</li>
+<li><strong>指令与数据通路</strong>：<code>addq (%rdi), %rax</code> 同时完成“访存”和“计算”；</li>
+<li><strong>分支</strong>：循环末尾的条件跳转；</li>
+<li><strong>编译器优化</strong>：<code>-O2</code> 把循环变量 <code>i</code> 变成了指针递增，减少了一次乘法和比较。</li>
+</ul>
+<p>如果你用 <code>-O0</code> 编译，会看到更多栈访问和更“笨”的代码：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O0<span class="w"> </span>-S<span class="w"> </span>-o<span class="w"> </span>sum_O0.s<span class="w"> </span>sum.c
+</code></pre></div>
+
+<p>这正好说明：<strong>源码到机器码之间隔着一层编译器</strong>。学习汇编不是要手写汇编，而是为了知道编译器把你的代码变成了什么。</p>
+<h4 id="objdump">用 <code>objdump</code> 看机器码</h4>
+<p><code>gcc -S</code> 看的是汇编文本；<code>objdump</code> 看的是已经编译好的可执行文件中的机器码：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O2<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>sum<span class="w"> </span>sum.c
+objdump<span class="w"> </span>-d<span class="w"> </span>-M<span class="w"> </span>intel<span class="w"> </span>sum<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'/&lt;sum&gt;:/,/^$/p'</span>
+</code></pre></div>
+
+<p>你会看到地址、机器码字节和汇编指令。例如：</p>
+<div class="codehilite"><pre><span></span><code>0000000000001139 &lt;sum&gt;:
+    1139: f3 0f 1e fa          endbr64
+    113d: 48 85 f6             test   rsi,rsi
+    1140: 7e 15                jle    1157 &lt;sum+0x1e&gt;
+    ...
+</code></pre></div>
+
+<p><code>objdump</code> 的价值在于：</p>
+<ul>
+<li>确认编译器到底生成了哪些指令；</li>
+<li>确认某个 <code>if</code> 是否变成了条件跳转，还是 <code>cmov</code>；</li>
+<li>确认函数有没有被内联；</li>
+<li>对照源码和机器码，理解性能差异。</li>
+</ul>
+<h3 id="24-vs">2.4 指令集与微架构：软件契约 vs 硬件实现</h3>
+<p>这是本节点最重要的概念之一。</p>
+<h4 id="isa">指令集架构（ISA）</h4>
+<p>ISA 是软件和 CPU 之间的契约，规定：</p>
+<ul>
+<li>有哪些指令；</li>
+<li>指令如何编码；</li>
+<li>有哪些寄存器；</li>
+<li>有哪些寻址方式；</li>
+<li>特权级、异常、内存模型等。</li>
+</ul>
+<p>常见 ISA：</p>
+<ul>
+<li><strong>x86-64</strong>：Intel/AMD 服务器和 PC 常见；</li>
+<li><strong>ARM64/AArch64</strong>：手机、部分服务器常见；</li>
+<li><strong>RISC-V</strong>：开放指令集，教学和研究常见。</li>
+</ul>
+<p>编译器面向 ISA 生成代码。只要 ISA 兼容，同一个二进制程序通常可以在不同实现上运行。</p>
+<h4 id="_5">微架构</h4>
+<p>微架构是某个具体 CPU 核心如何实现这个 ISA，包括：</p>
+<ul>
+<li>流水线多少级；</li>
+<li>每周期能取多少条、发射多少条指令；</li>
+<li>分支预测器有多复杂；</li>
+<li>乱序执行窗口多大；</li>
+<li>缓存多大、几路组相联；</li>
+<li>有没有 SMT（超线程）；</li>
+<li>主频、功耗、散热策略。</li>
+</ul>
+<p>例如，同样是 x86-64，不同代际的 Intel、AMD 处理器，流水线深度、预测器、缓存层次都可能不同。同一段二进制代码在它们上面都能跑，但性能可能差很多。</p>
+<h4 id="_6">一张表区分</h4>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>指令集 ISA</th>
+<th>微架构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是什么</td>
+<td>软件可见的契约</td>
+<td>硬件内部的实现</td>
+</tr>
+<tr>
+<td>例子</td>
+<td>x86-64、ARM64、RISC-V</td>
+<td>某款 Intel/AMD/ARM 核心</td>
+</tr>
+<tr>
+<td>决定什么</td>
+<td>指令编码、寄存器、寻址、特权级</td>
+<td>流水线、预测器、缓存、乱序窗口、频率</td>
+</tr>
+<tr>
+<td>对后端的意义</td>
+<td>二进制兼容、编译器目标</td>
+<td>性能、功耗、成本、调优空间</td>
+</tr>
+<tr>
+<td>是否会变</td>
+<td>很稳定，演进较慢</td>
+<td>每代产品都可能变化</td>
+</tr>
+</tbody>
+</table>
+<p>还要注意：<strong>ABI 不是 ISA</strong>。函数参数放在哪些寄存器、栈如何对齐、哪些寄存器由调用者保存，这些属于调用约定/ABI。x86-64 在 Linux 上常用 System V ABI，在 Windows 上调用约定不同。后端服务通常部署在 Linux 上，所以本课以 System V AMD64 ABI 为例。</p>
+<p>节点验收要求“能区分指令集和微架构”，你可以用一句话回答：</p>
+<blockquote>
+<p>指令集是“CPU 承诺能听懂哪些指令”，微架构是“CPU 内部如何把这些指令执行得快”；同一指令集可以有不同微架构，性能不能只看指令集或主频。</p>
+</blockquote>
+<h3 id="25">2.5 流水线：让多条指令同时在路上</h3>
+<h4 id="_7">从“做完一条再做下一条”到流水线</h4>
+<p>如果没有流水线，CPU 执行一条指令要经过取指、译码、执行、访存、写回，做完才做下一条。这样吞吐量很低。</p>
+<p>流水线像工厂装配线：把一条指令的处理拆成多个阶段，不同指令处在不同阶段，同时推进。</p>
+<p>经典五级流水线：</p>
+<div class="codehilite"><pre><span></span><code>时间 -&gt;
+指令1:  IF  ID  EX  MEM  WB
+指令2:      IF  ID  EX   MEM  WB
+指令3:          IF  ID   EX   MEM  WB
+指令4:              IF   ID   EX   MEM  WB
+</code></pre></div>
+
+<p>理想情况下，虽然一条指令仍需 5 个周期完成（延迟），但每个周期都能完成一条指令（吞吐量）。这就是“延迟”和“吞吐量”的区别。</p>
+<h4 id="_8">流水线冒险</h4>
+<p>流水线不是免费的，常见冒险有三类：</p>
+<ol>
+<li><strong>数据冒险</strong>：后一条指令需要前一条指令的结果。</li>
+<li><strong>控制冒险</strong>：遇到分支，不知道下一条该取哪里。</li>
+<li><strong>结构冒险</strong>：多条指令争用同一个硬件资源。</li>
+</ol>
+<p>数据冒险的例子：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">addq</span><span class="w"> </span><span class="nv">%rax</span><span class="p">,</span><span class="w"> </span><span class="nv">%rbx</span>
+<span class="nf">addq</span><span class="w"> </span><span class="nv">%rbx</span><span class="p">,</span><span class="w"> </span><span class="nv">%rcx</span>
+</code></pre></div>
+
+<p>第二条指令需要 <code>rbx</code>，而第一条还没写回。现代 CPU 常用<strong>转发/旁路（forwarding/bypass）</strong>，把结果从执行阶段直接送给下一条指令，减少等待。</p>
+<p>加载后立即使用则更麻烦：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">movq</span><span class="w"> </span><span class="p">(</span><span class="nv">%rdi</span><span class="p">),</span><span class="w"> </span><span class="nv">%rax</span>
+<span class="nf">addq</span><span class="w"> </span><span class="nv">%rax</span><span class="p">,</span><span class="w"> </span><span class="nv">%rbx</span>
+</code></pre></div>
+
+<p><code>rax</code> 要等访存阶段结束才可用，可能产生一个“气泡”（bubble），流水线暂停一个周期。这就是为什么“指针追逐”和“链表遍历”常常比数组遍历慢：不是指令多，而是依赖链和访存延迟限制了并行。</p>
+<p>控制冒险就是分支问题：CPU 取到一条条件跳转时，条件可能还没算出来，但它不想停，于是先猜一个方向继续取指。这就是分支预测。</p>
+<h3 id="26-cpu">2.6 分支预测：CPU 的“猜下一步”</h3>
+<h4 id="_9">为什么需要预测</h4>
+<p>考虑循环：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>循环末尾的条件跳转，前 <code>n-1</code> 次都“跳回循环开头”，最后一次“不跳，继续往下”。如果 CPU 每次都等条件算完再取指，流水线会经常空转。</p>
+<p>现代 CPU 会在分支结果出来之前，根据历史信息预测：</p>
+<ul>
+<li>这个分支以前跳过吗？</li>
+<li>最近几次是跳还是不跳？</li>
+<li>这个分支和之前哪些分支有关？</li>
+<li>目标地址在哪里？</li>
+</ul>
+<p>常见机制包括：</p>
+<ul>
+<li><strong>静态预测</strong>：例如“向后跳通常 taken，向前跳通常 not taken”；</li>
+<li><strong>两位饱和计数器</strong>：连续两次猜错才改变强预测；</li>
+<li><strong>BTB（Branch Target Buffer）</strong>：缓存分支目标地址；</li>
+<li><strong>全局历史/局部历史</strong>：利用分支之间的相关性；</li>
+<li><strong>返回地址栈（RAS）</strong>：预测 <code>ret</code> 的返回地址；</li>
+<li><strong>间接分支预测</strong>：用于虚函数调用、switch、函数指针等。</li>
+</ul>
+<h4 id="_10">预测失败的成本</h4>
+<p>如果猜错，CPU 必须：</p>
+<ol>
+<li>丢弃已经取入的错误路径指令；</li>
+<li>恢复寄存器状态；</li>
+<li>从正确地址重新取指；</li>
+<li>重新填满流水线。</li>
+</ol>
+<p>这叫<strong>流水线冲刷（flush）</strong>。代价通常是十几个到几十个周期，流水线越深，代价往往越大。</p>
+<h4 id="_11">排序数据为什么可能更快</h4>
+<p>经典例子：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<ul>
+<li>如果 <code>data</code> 是<strong>随机</strong>的，条件大约一半真一半假，历史预测很难稳定，分支预测失败多。</li>
+<li>如果 <code>data</code> 已经<strong>排序</strong>，前一半几乎全为假，后一半几乎全为真；除了中间一次转变，预测器很容易学会，失败少。</li>
+</ul>
+<p>注意：这里变快的不是“加法变少了”，而是<strong>控制流变得可预测</strong>。排序本身要花时间，所以只有在“同一批数据被反复处理很多次”或“排序对后续逻辑也有价值”时才可能划算。这个权衡会在动手实践里量化。</p>
+<h4 id="_12">一个重要的现实：编译器可能把分支消掉</h4>
+<p>源码里的 <code>if</code> 不一定对应机器里的条件跳转。编译器可能把它变成：</p>
+<ul>
+<li><code>cmov</code>（条件传送）：没有控制流分支，但仍有数据依赖；</li>
+<li>向量化指令：一次处理多个元素；</li>
+<li>查表或无分支计算。</li>
+</ul>
+<p>所以做实验时，必须用 <code>objdump</code> 确认循环里到底有没有条件跳转。如果没有，排序前后没有差异是正常现象，不是实验失败，而是编译器优化在起作用。</p>
+<h3 id="27">2.7 乱序执行：在不改变结果的前提下重叠工作</h3>
+<h4 id="_13">什么是有序、什么是乱序</h4>
+<p>程序在软件层面有一个顺序。CPU 为了填满流水线，可能把后面不依赖前面结果的指令提前执行，这叫<strong>乱序执行（Out-of-Order Execution，OoO）</strong>。</p>
+<p>例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">long</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+</code></pre></div>
+
+<p>两个加载 <code>a[i]</code>、<code>b[i]</code> 互不依赖，CPU 可以让它们并行发出，不必等第一个加载完成再发第二个。等数据都到齐后，再做加法。</p>
+<p>现代乱序 CPU 通常包含：</p>
+<ul>
+<li><strong>重排序缓冲区（ROB）</strong>：记录指令原始顺序，保证按序提交；</li>
+<li><strong>保留站/调度器</strong>：等待操作数就绪，选择可执行的指令；</li>
+<li><strong>寄存器重命名</strong>：消除假依赖，让更多指令并行；</li>
+<li><strong>加载/存储队列</strong>：管理内存访问顺序和冲突。</li>
+</ul>
+<p>关键点：<strong>乱序执行不等于结果乱序</strong>。CPU 可以乱序执行，但通常按程序顺序“退休/提交”（retire/commit），以保证异常和内存语义正确。你在软件层看到的仍然是顺序语义。</p>
+<h4 id="_14">乱序执行的边界</h4>
+<p>乱序执行不是无限的，受限于：</p>
+<ul>
+<li>ROB 大小；</li>
+<li>物理寄存器数量；</li>
+<li>加载/存储队列大小；</li>
+<li>执行单元数量；</li>
+<li>缓存和内存延迟；</li>
+<li>依赖链长度。</li>
+</ul>
+<p>如果循环里有一条很长的依赖链，例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</code></pre></div>
+
+<p>每次加法都依赖上一次的 <code>s</code>，那么即使 CPU 能乱序，也很难让多次迭代的加法同时进行。反过来，如果有多个独立累加器，编译器或程序员可以制造更多指令级并行（ILP）。</p>
+<h4 id="_15">乱序执行与安全</h4>
+<p>乱序和推测执行也带来了侧信道安全问题（例如 Spectre 类问题）。CPU 可能提前执行本不该执行的路径，留下缓存痕迹。现代 CPU 和编译器会加入各种缓解措施，这些措施可能带来性能开销。这里先建立概念，后续安全与操作系统课程会展开。</p>
+<h3 id="28">2.8 一次函数调用的基本过程</h3>
+<p>这是本节点的验收点之一。我们用一个最小例子：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">__attribute__</span><span class="p">((</span><span class="n">noinline</span><span class="p">))</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">long</span><span class="w"> </span><span class="n">caller</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">caller</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>保存为 <code>call.c</code>，用 <code>-O0</code> 和帧指针编译，方便观察：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O0<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>call<span class="w"> </span>call.c
+objdump<span class="w"> </span>-d<span class="w"> </span>-M<span class="w"> </span>intel<span class="w"> </span>call<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'/&lt;caller&gt;:/,/^$/p'</span>
+</code></pre></div>
+
+<p>在 x86-64 System V ABI 下，调用过程大致如下。</p>
+<h4 id="_16">第一步：调用者准备参数</h4>
+<p>前六个整数/指针参数依次放入：</p>
+<div class="codehilite"><pre><span></span><code>rdi, rsi, rdx, rcx, r8, r9
+</code></pre></div>
+
+<p>所以 <code>add(7, 5)</code> 会变成：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">movl</span><span class="w"> </span><span class="no">$7</span><span class="p">,</span><span class="w"> </span><span class="nv">%edi</span>
+<span class="nf">movl</span><span class="w"> </span><span class="no">$5</span><span class="p">,</span><span class="w"> </span><span class="nv">%esi</span>
+</code></pre></div>
+
+<p>超过六个的整数参数，或者较大的结构体，可能通过栈传递。浮点参数使用 <code>xmm0</code>–<code>xmm7</code>。具体规则属于 ABI，不同平台不同。</p>
+<h4 id="call">第二步：调用者执行 <code>call</code></h4>
+<div class="codehilite"><pre><span></span><code><span class="nf">call</span><span class="w"> </span><span class="no">add</span>
+</code></pre></div>
+
+<p><code>call</code> 做两件事：</p>
+<ol>
+<li>把<strong>返回地址</strong>压入栈。返回地址是 <code>call</code> 后面那条指令的地址；</li>
+<li>把程序计数器 <code>rip</code> 设置为 <code>add</code> 的入口地址。</li>
+</ol>
+<p>此时栈顶保存着“函数执行完后回到哪里”。</p>
+<h4 id="_17">第三步：被调用者建立栈帧</h4>
+<p>典型的函数序言（prologue）：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">pushq</span><span class="w"> </span><span class="nv">%rbp</span>
+<span class="nf">movq</span><span class="w"> </span><span class="nv">%rsp</span><span class="p">,</span><span class="w"> </span><span class="nv">%rbp</span>
+<span class="nf">subq</span><span class="w"> </span><span class="no">$N</span><span class="p">,</span><span class="w"> </span><span class="nv">%rsp</span>
+</code></pre></div>
+
+<p>含义：</p>
+<ul>
+<li>保存调用者的 <code>rbp</code>；</li>
+<li>让 <code>rbp</code> 指向当前栈帧基址；</li>
+<li>为局部变量、临时值、保存的寄存器腾出空间。</li>
+</ul>
+<p>如果函数使用了 <code>rbx</code>、<code>r12</code>–<code>r15</code> 等<strong>被调用者保存寄存器</strong>，还要先把它们压栈，返回前恢复。</p>
+<h4 id="_18">第四步：执行函数体</h4>
+<p><code>add</code> 可能被编译成：</p>
+<div class="codehilite"><pre><span></span><code><span class="nl">add:</span>
+<span class="w">    </span><span class="nf">leaq</span><span class="w"> </span><span class="p">(</span><span class="nv">%rdi</span><span class="p">,</span><span class="nv">%rsi</span><span class="p">),</span><span class="w"> </span><span class="nv">%rax</span>
+<span class="w">    </span><span class="nf">ret</span>
+</code></pre></div>
+
+<p><code>rdi</code> 和 <code>rsi</code> 是参数，结果放入 <code>rax</code>。<code>rax</code> 是整数/指针返回值寄存器。</p>
+<h4 id="_19">第五步：函数返回</h4>
+<p>典型尾声（epilogue）：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">leave</span>
+<span class="nf">ret</span>
+</code></pre></div>
+
+<p><code>leave</code> 等价于：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">movq</span><span class="w"> </span><span class="nv">%rbp</span><span class="p">,</span><span class="w"> </span><span class="nv">%rsp</span>
+<span class="nf">popq</span><span class="w"> </span><span class="nv">%rbp</span>
+</code></pre></div>
+
+<p>它恢复栈指针和调用者的帧指针。然后 <code>ret</code> 从栈顶弹出返回地址，写回 <code>rip</code>，控制流回到调用者。</p>
+<h4 id="_20">第六步：调用者继续</h4>
+<p>调用者从 <code>call</code> 的下一条指令继续执行。返回值在 <code>rax</code> 中。调用者需要注意：</p>
+<ul>
+<li><code>rax</code>、<code>rcx</code>、<code>rdx</code>、<code>rsi</code>、<code>rdi</code>、<code>r8</code>–<code>r11</code> 等是<strong>调用者保存寄存器</strong>，被调用者可以随意修改；</li>
+<li><code>rbx</code>、<code>rbp</code>、<code>r12</code>–<code>r15</code> 是<strong>被调用者保存寄存器</strong>，被调用者必须恢复；</li>
+<li>栈在 <code>call</code> 前要满足 ABI 的对齐要求（x86-64 System V 通常要求调用前 <code>rsp</code> 16 字节对齐）。</li>
+</ul>
+<h4 id="_21">栈帧示意</h4>
+<div class="codehilite"><pre><span></span><code>高地址
++----------------------+
+| 调用者的栈帧          |
++----------------------+
+| 第 7 个及以后参数      |  &lt;- 调用者准备
++----------------------+
+| 返回地址              |  &lt;- call 压入
++----------------------+
+| 保存的 %rbp           |  &lt;- 被调用者序言
++----------------------+
+| 局部变量/临时空间      |  &lt;- sub $N, %rsp
++----------------------+
+| 对齐填充/出参空间      |
++----------------------+
+低地址                  &lt;- %rsp
+</code></pre></div>
+
+<p>这就是“一次函数调用”的完整骨架。很多后端问题都能从这里找到线索：</p>
+<ul>
+<li>递归太深导致栈溢出；</li>
+<li>协程切换需要保存/恢复寄存器上下文；</li>
+<li>崩溃栈回溯依赖帧指针或 DWARF 信息；</li>
+<li>回调、虚函数、函数指针会带来间接分支，影响分支预测；</li>
+<li>不同 ABI 的库混用可能导致参数错位或栈损坏。</li>
+</ul>
+<hr />
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 常见误区</h3>
+<h4 id="_22">误区一：主频越高，程序一定越快</h4>
+<p>不对。粗略的性能关系是：</p>
+<div class="codehilite"><pre><span></span><code>运行时间 ≈ 指令数 × 平均每指令周期数（CPI） ÷ 主频
+</code></pre></div>
+
+<p>主频只是分母中的一个因素。程序还可能受限于：</p>
+<ul>
+<li>指令数太多；</li>
+<li>CPI 太高（缓存未命中、分支预测失败、依赖链）；</li>
+<li>内存带宽；</li>
+<li>I/O 和锁竞争；</li>
+<li>多核利用率；</li>
+<li>功耗和散热导致的降频。</li>
+</ul>
+<p>一款 3.0 GHz 的 CPU 可能因为缓存小、分支预测差，跑得比 2.5 GHz 但 IPC 更高的 CPU 慢。服务器选型不能只看主频，必须跑真实业务基准。</p>
+<h4 id="c_1">误区二：一条 C 语句就是一条指令</h4>
+<p>不对。一行 C 可能变成多条指令，也可能被完全优化掉。循环可能被展开、向量化；函数可能被内联；条件分支可能变成 <code>cmov</code>。必须看编译器和汇编。</p>
+<h4 id="_23">误区三：分支预测就是“随机猜”</h4>
+<p>现代预测器会利用历史、目标地址、相关性，准确率可以很高。但面对真正随机、无规律的数据，准确率会下降。排序数据之所以快，是因为分支模式变得高度可预测。</p>
+<h4 id="_24">误区四：乱序执行会让程序结果乱序</h4>
+<p>不对。乱序执行是硬件内部的调度方式，软件可见的结果和异常顺序通常仍按程序顺序提交。不要把“乱序执行”理解成“程序语义可以乱”。</p>
+<h4 id="_25">误区五：排序一定能让程序更快</h4>
+<p>不一定。排序本身有 O(N log N) 的成本；如果只处理一次，排序可能得不偿失。而且编译器可能把分支优化成 <code>cmov</code> 或向量化，排序带来的分支预测收益就消失了。正确做法是测量。</p>
+<h4 id="_26">误区六：汇编指令越少越快</h4>
+<p>不一定。指令少但依赖链长、缓存不友好，可能更慢；指令多但能并行、访问局部性好，可能更快。性能取决于指令数、CPI、访存、并行度和预测等多个因素。</p>
+<h4 id="_27">误区七：指令集就是微架构</h4>
+<p>不对。x86-64 是 ISA；某款具体 CPU 的流水线、缓存、预测器才是微架构。同一份二进制可以在不同微架构上运行，性能不同。</p>
+<h4 id="_28">误区八：函数调用只是跳转</h4>
+<p>不对。函数调用涉及参数传递、返回地址、栈帧、寄存器保存、栈对齐、返回值等一整套 ABI 约定。<code>call</code>/<code>ret</code> 只是其中最显眼的两个指令。</p>
+<h3 id="32">3.2 设计权衡</h3>
+<table>
+<thead>
+<tr>
+<th>权衡</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象 vs 真实</td>
+<td>五级流水线是教学模型，真实 CPU 更复杂；理解模型有助于推理，但优化必须实测</td>
+</tr>
+<tr>
+<td>流水线深度</td>
+<td>深流水线可能提高主频，但分支预测失败和异常恢复的代价更大</td>
+</tr>
+<tr>
+<td>乱序窗口</td>
+<td>窗口越大，越能隐藏延迟，但功耗、面积、复杂度更高</td>
+</tr>
+<tr>
+<td>分支预测</td>
+<td>预测越准，流水线越满；但预测器占用芯片面积和功耗，且推测执行有安全风险</td>
+</tr>
+<tr>
+<td>排序 vs 不排序</td>
+<td>排序可能让分支更可预测，但有 upfront 成本；只在重复处理或后续也受益时考虑</td>
+</tr>
+<tr>
+<td>编译器优化</td>
+<td>向量化、内联、<code>cmov</code> 可能提升吞吐，也可能改变分支行为；需要看汇编和测量</td>
+</tr>
+<tr>
+<td>可移植 vs 极致优化</td>
+<td>针对某款微架构调优可能很快，但换 CPU 或编译器后收益可能消失</td>
+</tr>
+</tbody>
+</table>
+<p>节点特别强调：</p>
+<blockquote>
+<p>抽象模型便于理解，优化决策仍需要真实硬件测量。</p>
+</blockquote>
+<p>这句话应该成为你以后做性能优化的默认原则。不要凭“看起来应该更快”下结论，要用 <code>perf</code>、基准测试和真实负载说话。</p>
+<hr />
+<h2 id="4">4. 动手实践</h2>
+<p>本实践对应节点任务：</p>
+<blockquote>
+<p>编译循环为汇编，对比顺序与随机分支的运行时间。</p>
+</blockquote>
+<p>建议在 Linux x86-64 环境完成。需要：</p>
+<ul>
+<li><code>gcc</code>；</li>
+<li><code>binutils</code>（提供 <code>objdump</code>）；</li>
+<li>可选：<code>perf</code>、<code>gdb</code>、<code>taskset</code>。</li>
+</ul>
+<p>先记录环境，便于解释结果差异：</p>
+<div class="codehilite"><pre><span></span><code>uname<span class="w"> </span>-m
+gcc<span class="w"> </span>--version
+lscpu
+</code></pre></div>
+
+<p>把 CPU 型号、GCC 版本、编译选项记在实验笔记里。不同机器上的绝对时间不可直接比较，但同一台机器上的相对趋势有意义。</p>
+<h3 id="41">4.1 第一步：把循环编译成汇编</h3>
+<p>创建 <code>sum.c</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">long</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">s</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>生成 <code>-O0</code> 和 <code>-O2</code> 汇编：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O0<span class="w"> </span>-S<span class="w"> </span>-o<span class="w"> </span>sum_O0.s<span class="w"> </span>sum.c
+gcc<span class="w"> </span>-O2<span class="w"> </span>-S<span class="w"> </span>-o<span class="w"> </span>sum_O2.s<span class="w"> </span>sum.c
+</code></pre></div>
+
+<p>对比两个文件：</p>
+<div class="codehilite"><pre><span></span><code>diff<span class="w"> </span>-u<span class="w"> </span>sum_O0.s<span class="w"> </span>sum_O2.s
+</code></pre></div>
+
+<p>观察并回答：</p>
+<ol>
+<li><code>-O0</code> 是否把 <code>i</code>、<code>s</code>、<code>n</code>、<code>a</code> 放在栈上？</li>
+<li><code>-O2</code> 是否把循环变量变成了指针递增？</li>
+<li>循环条件对应哪条比较指令和哪条跳转指令？</li>
+<li>哪条指令负责读取数组元素？哪条负责累加？</li>
+<li>返回值放在哪个寄存器？</li>
+</ol>
+<p>再用 <code>objdump</code> 看可执行文件：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O2<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>sum<span class="w"> </span>sum.c
+objdump<span class="w"> </span>-d<span class="w"> </span>-M<span class="w"> </span>intel<span class="w"> </span>sum<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'/&lt;sum&gt;:/,/^$/p'</span>
+</code></pre></div>
+
+<p>你应该能在输出中找到类似 <code>add rax,QWORD PTR [rdi]</code>、<code>add rdi,0x8</code>、<code>cmp rdi,rdx</code>、<code>jne</code> 的指令。不同编译器版本可能不同，但“加载、加法、指针递增、比较、条件跳转”这条链是稳定的。</p>
+<h3 id="42">4.2 第二步：观察一次函数调用</h3>
+<p>创建 <code>call.c</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">__attribute__</span><span class="p">((</span><span class="n">noinline</span><span class="p">))</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">long</span><span class="w"> </span><span class="n">caller</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">caller</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译并反汇编：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O0<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>call<span class="w"> </span>call.c
+objdump<span class="w"> </span>-d<span class="w"> </span>-M<span class="w"> </span>intel<span class="w"> </span>call<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'/&lt;caller&gt;:/,/^$/p'</span>
+objdump<span class="w"> </span>-d<span class="w"> </span>-M<span class="w"> </span>intel<span class="w"> </span>call<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'/&lt;add&gt;:/,/^$/p'</span>
+</code></pre></div>
+
+<p>在 <code>caller</code> 中找：</p>
+<ul>
+<li><code>mov edi,0x7</code>、<code>mov esi,0x5</code>：参数放入寄存器；</li>
+<li><code>call add</code>：调用；</li>
+<li><code>add rax,0x1</code>：使用返回值；</li>
+<li><code>leave</code>、<code>ret</code>：返回。</li>
+</ul>
+<p>在 <code>add</code> 中找：</p>
+<ul>
+<li>函数序言；</li>
+<li>参数如何被使用；</li>
+<li>返回值是否在 <code>rax</code>；</li>
+<li><code>ret</code> 如何返回。</li>
+</ul>
+<p>如果装了 <code>gdb</code>，可以单步执行并在 <code>add</code> 入口查看：</p>
+<div class="codehilite"><pre><span></span><code>(gdb) break add
+(gdb) run
+(gdb) info registers rip rsp rbp rdi rsi
+(gdb) x/4gx $rsp
+(gdb) stepi
+</code></pre></div>
+
+<p>重点确认：<code>rsp</code> 指向的栈顶是不是返回地址，<code>rdi</code>/<code>rsi</code> 是不是 7 和 5。</p>
+<h3 id="43">4.3 第三步：排序数据与随机数据的分支对比</h3>
+<p>下面是一份完整可运行的 C 基准程序，它依次做这几件事：</p>
+<ol>
+<li>生成随机数组；</li>
+<li>复制并排序一份；</li>
+<li>对同一段带条件分支的求和逻辑，分别用随机数据和排序数据重复执行；</li>
+<li>输出耗时和校验和。</li>
+</ol>
+<p>创建 <code>branch_bench.c</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _POSIX_C_SOURCE 200809L</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span>
+
+<span class="cp">#define N 32768</span>
+<span class="cp">#define PASSES 2000</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">cmp_int</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pa</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">pb</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">pa</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">pb</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">__attribute__</span><span class="p">((</span><span class="n">noinline</span><span class="p">))</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sum_branch</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">s</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">now_sec</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">timespec</span><span class="w"> </span><span class="n">ts</span><span class="p">;</span>
+<span class="w">    </span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ts</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">ts</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">ts</span><span class="p">.</span><span class="n">tv_nsec</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">use_sorted</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">strcmp</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="s">"sorted"</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">random_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">random_data</span><span class="p">));</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">sorted_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_data</span><span class="p">));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">random_data</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">sorted_data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"malloc"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">srand</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">random_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">255</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">memcpy</span><span class="p">(</span><span class="n">sorted_data</span><span class="p">,</span><span class="w"> </span><span class="n">random_data</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">random_data</span><span class="p">));</span>
+<span class="w">    </span><span class="n">qsort</span><span class="p">(</span><span class="n">sorted_data</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="o">*</span><span class="n">sorted_data</span><span class="p">),</span><span class="w"> </span><span class="n">cmp_int</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">use_sorted</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">sorted_data</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">random_data</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">acc</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">sum_branch</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_sec</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">PASSES</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">__asm__</span><span class="w"> </span><span class="k">volatile</span><span class="p">(</span><span class="s">""</span><span class="w"> </span><span class="o">:::</span><span class="w"> </span><span class="s">"memory"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">acc</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">sum_branch</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_sec</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">sink</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">acc</span><span class="p">;</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">sink</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%-6s N=%d PASSES=%d time=%.3f s checksum=%llu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="n">use_sorted</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"sorted"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"random"</span><span class="p">,</span>
+<span class="w">           </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">PASSES</span><span class="p">,</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">acc</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">random_data</span><span class="p">);</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">sorted_data</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译。这里使用 GCC 选项尽量阻止编译器把条件分支转换成 <code>cmov</code> 或自动向量化：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-std<span class="o">=</span>c11<span class="w"> </span>-O2<span class="w"> </span>-g<span class="w"> </span>-fno-tree-vectorize<span class="w"> </span>-fno-if-conversion<span class="w"> </span>-fno-if-conversion2<span class="w"> </span>-o<span class="w"> </span>branch_bench<span class="w"> </span>branch_bench.c
+</code></pre></div>
+
+<p>说明：</p>
+<ul>
+<li><code>-O2</code>：常用优化级别；</li>
+<li><code>-fno-tree-vectorize</code>：关闭自动向量化；</li>
+<li><code>-fno-if-conversion</code>、<code>-fno-if-conversion2</code>：尽量阻止把 <code>if</code> 转成无分支的 <code>cmov</code>；</li>
+<li>这些是 GCC 选项。不同编译器或版本可能不支持，若报错可去掉不支持的选项，但必须用 <code>objdump</code> 确认循环中仍有条件跳转。</li>
+</ul>
+<p>运行：</p>
+<div class="codehilite"><pre><span></span><code>./branch_bench<span class="w"> </span>random
+./branch_bench<span class="w"> </span>sorted
+</code></pre></div>
+
+<p>为了减少调度抖动，可以绑定到一个 CPU 核心，并重复几次：</p>
+<div class="codehilite"><pre><span></span><code>taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>./branch_bench<span class="w"> </span>random
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>./branch_bench<span class="w"> </span>sorted
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>./branch_bench<span class="w"> </span>random
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>./branch_bench<span class="w"> </span>sorted
+</code></pre></div>
+
+<p>建议每种模式跑 3–5 次，记录时间，取中位数。不要只跑一次就下结论。</p>
+<h3 id="44">4.4 第四步：确认机器码里真的有分支</h3>
+<p>先确认 <code>sum_branch</code> 中没有被优化成 <code>cmov</code>：</p>
+<div class="codehilite"><pre><span></span><code>objdump<span class="w"> </span>-d<span class="w"> </span>-M<span class="w"> </span>intel<span class="w"> </span>branch_bench<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'/&lt;sum_branch&gt;:/,/^$/p'</span>
+</code></pre></div>
+
+<p>你希望看到类似：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">cmp</span><span class="w">    </span><span class="no">DWORD</span><span class="w"> </span><span class="no">PTR</span><span class="w"> </span><span class="p">[</span><span class="no">rdi</span><span class="err">+</span><span class="no">rax</span><span class="p">*</span><span class="mi">4</span><span class="p">],</span><span class="mi">0x7f</span>
+<span class="nf">jle</span><span class="w">    </span><span class="no">...</span>
+</code></pre></div>
+
+<p>或者：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">cmp</span><span class="w">    </span><span class="no">...</span>
+<span class="nf">jl</span><span class="w">     </span><span class="no">...</span>
+</code></pre></div>
+
+<p>如果看到的是 <code>cmov</code>，说明编译器已经把它变成条件传送，排序前后可能没有明显差异。这时可以：</p>
+<ol>
+<li>检查编译选项是否生效；</li>
+<li>换一个 GCC 版本；</li>
+<li>接受这个结果，并把它作为“源码分支不等于机器分支”的例证。</li>
+</ol>
+<h3 id="45-perf-stat">4.5 第五步：用 <code>perf stat</code> 看分支预测失败</h3>
+<p>如果系统允许使用 <code>perf</code>，运行：</p>
+<div class="codehilite"><pre><span></span><code>perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>cycles,instructions,branches,branch-misses<span class="w"> </span>-r<span class="w"> </span><span class="m">3</span><span class="w"> </span>--<span class="w"> </span>taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>./branch_bench<span class="w"> </span>random
+perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>cycles,instructions,branches,branch-misses<span class="w"> </span>-r<span class="w"> </span><span class="m">3</span><span class="w"> </span>--<span class="w"> </span>taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>./branch_bench<span class="w"> </span>sorted
+</code></pre></div>
+
+<p>重点关注：</p>
+<ul>
+<li><code>branches</code>：执行了多少条分支；</li>
+<li><code>branch-misses</code>：其中有多少次预测失败；</li>
+<li><code>cycles</code>、<code>instructions</code>：周期数和指令数；</li>
+<li><code>branch-misses / branches</code>：分支失败率。</li>
+</ul>
+<p>典型预期是：</p>
+<ul>
+<li><code>random</code> 的 <code>branch-misses</code> 明显更多；</li>
+<li><code>sorted</code> 的 <code>branch-misses</code> 更少；</li>
+<li>如果编译器消除了分支，两者可能接近。</li>
+</ul>
+<p>如果 <code>perf</code> 提示权限不足，可以尝试：</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>sysctl<span class="w"> </span>kernel.perf_event_paranoid
+</code></pre></div>
+
+<p>或者在有权限的开发机上完成实验。不要为了实验随意修改生产机器内核参数。</p>
+<h3 id="46">4.6 第六步：记录结论</h3>
+<p>建议在实验笔记中写清楚：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU 型号</td>
+<td><code>lscpu</code> 输出</td>
+</tr>
+<tr>
+<td>GCC 版本</td>
+<td><code>gcc --version</code></td>
+</tr>
+<tr>
+<td>编译选项</td>
+<td>完整命令</td>
+</tr>
+<tr>
+<td><code>random</code> 中位耗时</td>
+<td>3–5 次结果</td>
+</tr>
+<tr>
+<td><code>sorted</code> 中位耗时</td>
+<td>3–5 次结果</td>
+</tr>
+<tr>
+<td><code>random</code> 分支失败率</td>
+<td><code>perf stat</code> 结果</td>
+</tr>
+<tr>
+<td><code>sorted</code> 分支失败率</td>
+<td><code>perf stat</code> 结果</td>
+</tr>
+<tr>
+<td>汇编中是否有条件跳转</td>
+<td><code>objdump</code> 结果</td>
+</tr>
+<tr>
+<td>结论</td>
+<td>是否支持“可预测分支更快”</td>
+</tr>
+</tbody>
+</table>
+<p>然后回答三个问题：</p>
+<ol>
+<li>排序后变快，是因为指令数变少了吗？</li>
+<li>如果不是，那是 CPU 的哪一部分在起作用？</li>
+<li>如果业务只处理一次数据，排序还值得吗？</li>
+</ol>
+<h3 id="47">4.7 验收清单</h3>
+<p>完成本实践后，检查自己是否能做到：</p>
+<ul>
+<li>[ ] 用 <code>gcc -S</code> 生成汇编，并指出循环中的比较和跳转；</li>
+<li>[ ] 用 <code>objdump</code> 找到 <code>sum_branch</code> 中的条件跳转；</li>
+<li>[ ] 用 <code>perf stat</code> 读出 <code>branch-misses</code>；</li>
+<li>[ ] 解释排序数据为什么可能减少分支预测失败；</li>
+<li>[ ] 解释为什么排序不一定划算；</li>
+<li>[ ] 用自己的话区分 ISA 与微架构；</li>
+<li>[ ] 画出一次函数调用的栈帧，并说明 <code>call</code>/<code>ret</code> 的作用。</li>
+</ul>
+<hr />
+<h2 id="5">5. 自测题</h2>
+<h3 id="1_1">题 1：程序计数器与函数调用</h3>
+<p>请解释：</p>
+<ol>
+<li>程序计数器保存什么？</li>
+<li>执行 <code>call</code> 时，返回地址被放在哪里？</li>
+<li>执行 <code>ret</code> 时，CPU 如何知道回到哪里？</li>
+<li>栈帧里通常包含哪些内容？</li>
+</ol>
+<p><strong>参考答案：</strong></p>
+<ol>
+<li>程序计数器保存下一条要执行指令的地址；在 x86-64 中叫 <code>rip</code>。顺序执行时它指向下一条指令，遇到跳转、调用、返回、中断时被修改。</li>
+<li><code>call</code> 会把 <code>call</code> 后面那条指令的地址（返回地址）压入栈，然后把 <code>rip</code> 设置为被调用函数的入口地址。</li>
+<li><code>ret</code> 从栈顶弹出返回地址，写入 <code>rip</code>，从而回到调用者继续执行。</li>
+<li>典型栈帧包括：返回地址、保存的调用者帧指针 <code>rbp</code>、局部变量、临时空间、保存的被调用者保存寄存器、栈对齐填充，以及可能通过栈传递的参数。具体布局取决于 ABI 和编译器。</li>
+</ol>
+<h3 id="2_1">题 2：主频与性能</h3>
+<p>两款 CPU 都执行同一套 x86-64 指令，A 的主频是 3.0 GHz，B 的主频是 2.5 GHz。为什么 B 可能运行同一个程序更快？请至少说出三个原因。</p>
+<p><strong>参考答案：</strong></p>
+<ul>
+<li>B 的微架构 IPC 更高：每周期能执行更多指令，或流水线/执行单元更宽；</li>
+<li>B 的缓存更大、命中率更高，减少了内存等待；</li>
+<li>B 的分支预测器更准，流水线冲刷更少；</li>
+<li>A 可能存在功耗/散热降频，实际频率达不到标称值；</li>
+<li>A 的乱序执行窗口更小，难以隐藏延迟；</li>
+<li>程序可能受内存带宽、I/O、锁竞争限制，主频不是瓶颈。</li>
+</ul>
+<p>核心公式是：运行时间 ≈ 指令数 × CPI ÷ 主频。主频只是其中一个因素。</p>
+<h3 id="3_1">题 3：排序数据与随机数据</h3>
+<p>在“排序后数据 vs 随机数据”的分支实验中，为什么排序后可能更快？为什么有时候两者又没有明显差异？做这个实验时应该怎样验证？</p>
+<p><strong>参考答案：</strong></p>
+<p>排序后，<code>if (data[i] &gt;= 128)</code> 的条件模式变成“前面几乎全假、后面几乎全真”，分支预测器容易学习，预测失败少；随机数据的条件模式无规律，预测失败多，流水线冲刷成本高，所以更慢。</p>
+<p>两者没有明显差异，可能是因为编译器把条件分支优化成了 <code>cmov</code>、进行了向量化，或者瓶颈不在分支而在内存、循环开销等。验证方法：</p>
+<ol>
+<li>用 <code>objdump -d -M intel</code> 查看 <code>sum_branch</code> 中是否还有条件跳转；</li>
+<li>用 <code>perf stat -e branches,branch-misses</code> 对比两种数据的失败率；</li>
+<li>多种编译选项、多次运行，取中位数；</li>
+<li>注意排序本身的成本，不能只看循环阶段。</li>
+</ol>
+<hr />
+<h2 id="6">6. 推荐资源</h2>
+<p>本课只使用节点提供的资源：</p>
+<ul>
+<li><a href="https://www.nand2tetris.org/course">CPU与指令执行：参考文档 / 原始资料</a><br />
+  来源：<code>www.nand2tetris.org</code><br />
+  语言：英文<br />
+  类型：文档<br />
+  难度：入门<br />
+  免费：是<br />
+  节点建议：重点阅读“寄存器与程序计数器”和“指令与数据通路”，用于核对本节点实验的语义和边界。</li>
+</ul>
+<p>阅读时建议按节点的 <code>sourceStudy</code> 要求做：</p>
+<ul>
+<li>核对定义、示例和错误处理路径；</li>
+<li>记录你使用的课程版本、平台和编译器版本；</li>
+<li>注意不同版本、不同硬件上的边界条件；</li>
+<li>把“教学模型”和“真实微架构”分开记录，不要混为一谈。</li>
+</ul>
+<hr />
+<h2 id="7">7. 一页总结</h2>
+<div class="codehilite"><pre><span></span><code>CPU 执行的核心链路：
+PC 指向指令 -&gt; 取指 -&gt; 译码 -&gt; 读寄存器/算地址 -&gt; 执行/访存 -&gt; 写回
+
+寄存器：
+  数量少、速度快；保存操作数、指针、临时结果、栈指针、返回地址等。
+
+程序计数器：
+  保存下一条指令地址；jmp/call/ret/中断都会改变它。
+
+指令与数据通路：
+  加载、计算、比较、分支、存储；数据在寄存器、ALU、缓存/内存之间流动。
+
+流水线：
+  多条指令重叠执行；有数据冒险、控制冒险、结构冒险；分支预测失败会冲刷。
+
+分支预测：
+  利用历史预测跳转方向；随机分支难预测，排序后分支模式更稳定。
+
+乱序执行：
+  不改变软件可见结果，提前执行就绪指令；受 ROB、寄存器、队列和依赖链限制。
+
+ISA vs 微架构：
+  ISA 是软件契约；微架构是硬件实现。同一 ISA 性能可以差很多。
+
+函数调用：
+  参数入寄存器 -&gt; call 压返回地址 -&gt; 被调用者建栈帧 -&gt; 返回值放 rax
+  -&gt; ret 弹出返回地址 -&gt; 调用者继续。
+
+性能观：
+  时间 ≈ 指令数 × CPI ÷ 主频；主频不是唯一因素，优化必须实测。
+</code></pre></div>
+
+<p>下一课可以继续沿着“二进制 -&gt; CPU 执行 -&gt; 缓存/存储层次 -&gt; 操作系统”的路径推进。学习本课时，最重要的不是记住某个汇编片段，而是养成一个习惯：<strong>看到性能现象时，先问“机器实际在执行什么”，再用工具验证。</strong></p><div class="pn"><span><a href="1.html">← 二进制、整数与数字逻辑</a></span><span><a href="3.html">内存层次与局部性 →</a></span></div></main></div></body></html>

@@ -1,0 +1,698 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>20. RAII与资源所有权 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="cur" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 20 课 · 领域 B · 阶段 1</p><p class="dl"><a href="../files/20-b-raii.md" download>⬇ 本课 Markdown</a><a href="../files/practice20.tar.gz" download>⬇ 练习包 practice20.tar.gz</a></p><h1 id="20208-raii">第 20/208 课：RAII与资源所有权</h1>
+<blockquote>
+<p>节点 id：<code>b-raii</code> · 域：B · 子类：生命周期与所有权 · 难度：基础 · 前置：<code>b-lifetime</code></p>
+<p>一句话：RAII将资源获取和对象初始化关联，用确定的析构路径释放文件、锁和内存等资源。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 学习目标</h3>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li><strong>解释构造建立不变量。</strong> 说清“对象构造成功 = 资源已获取且对象处于可用状态”（或明确的空状态）；构造失败时不应留下半初始化、半打开的资源；成员子对象如何帮助分层获取资源。</li>
+<li><strong>独立完成节点实践。</strong> 实现禁止拷贝、可移动的 <code>UniqueFd</code>，覆盖关闭失败（记录错误、析构不抛异常）与移动后状态（源对象置无效、不重复 <code>close</code>）。</li>
+<li><strong>解释析构释放与 <code>noexcept</code>。</strong> 知道为什么析构函数不宜抛异常，栈展开过程中再抛异常会直接 <code>std::terminate</code>，以及 <code>close</code>/<code>unlock</code> 失败应如何报告。</li>
+<li><strong>掌握唯一所有权与移动转移。</strong> 能说清“谁拥有 fd / 锁 / 临时文件”，并能用移动语义把所有权交给调用方、会话对象或异步任务，而不是靠裸 <code>int fd</code> 和口头约定。</li>
+</ol>
+<h3 id="12">1.2 验收标准回扣</h3>
+<p>节点给出的验收标准有两条，本课与实践会反复验证：</p>
+<ul>
+<li><strong>提前返回和抛异常后 fd 数量不增长。</strong> 用 <code>/proc/self/fd</code> 统计打开的描述符；<code>UniqueFd</code> 作为自动对象，无论正常离开作用域、<code>return</code>，还是异常栈展开，都应在析构路径上关闭资源。进函数前与出函数后计数相等，就是“没有泄漏”的可观测证据。</li>
+<li><strong>移动后源对象不重复关闭。</strong> 移动构造 / 移动赋值后，源对象持有无效值（如 <code>-1</code>），析构时不再对原 fd 调用 <code>close</code>；目标对象是唯一所有者。若源对象仍持有旧 fd，两个析构会双重关闭——第二个常是 <code>EBADF</code>，更糟时 fd 号已被内核复用，关到别人的连接。</li>
+</ul>
+<h3 id="13">1.3 为什么微信公众号后台要懂</h3>
+<p>节点对“为什么”写得很直接：<strong>让异常与提前返回不会泄漏资源。</strong> 放进腾讯微信公众号后台的典型 C++ 服务，就是下面这些具体场景：</p>
+<ul>
+<li><strong>Socket / 连接 fd。</strong> 接入层或与下游（消息存储、用户资料、模板消息投递、回调转发）通信时，<code>socket</code> / <code>accept</code> / <code>connect</code> 得到的是裸 <code>int</code>。若在解析 XML/JSON、验签、解密、写日志的中途 <code>return</code> 或抛异常，忘记 <code>close</code>，短连接高峰下会迅速耗尽 fd 上限（<code>ulimit -n</code>），表现为 <code>EMFILE</code> / <code>ENFILE</code>，整机接入能力被拖垮。线上排查时，<code>lsof -p &lt;pid&gt; | wc -l</code> 或看 <code>/proc/&lt;pid&gt;/fd</code> 会发现描述符只增不减。</li>
+<li><strong>互斥锁与临界区。</strong> 推送队列、access_token 缓存、限流计数、会话表常需要加锁。手写 <code>mutex.lock()</code> / <code>unlock()</code> 一旦中间有 <code>return</code>、<code>continue</code> 或异常，锁永远不释放，后续请求全部卡住——这是比泄漏 fd 更“静默致命”的故障：进程还在，QPS 却掉到接近 0。<code>std::lock_guard</code> / <code>std::unique_lock</code> 就是锁上的 RAII。</li>
+<li><strong>临时文件与上传落盘。</strong> 处理媒体上传、素材转码、导出报表时可能 <code>mkstemp</code> 出临时文件。请求被取消、MD5 校验失败、病毒扫描拒绝而提前返回时，若没有析构路径去 <code>close</code> + <code>unlink</code>，磁盘与 fd 都会慢慢漏，最终打满临时目录 inode 或空间。</li>
+<li><strong>数据库连接、内存缓冲、mmap。</strong> 连接池借出的连接、大包零拷贝映射、共享内存段，本质都是“获取—使用—归还”。RAII 把“归还”绑在作用域结束上，比靠人工记得每个分支的 <code>finally</code> 更稳，也比“注释里写请记得关闭”更可审查。</li>
+<li><strong>与第 19 课生命周期的衔接。</strong> 第 19 课强调“对象何时生、何时死”；本课强调“死的时候必须把资源还回去”。悬垂引用是“用了已死对象”；资源泄漏是“对象死了但资源没死”。后台故障里两者经常结伴出现：泄漏把 fd 耗尽，随后新连接失败；或错误的生命周期让 RAII 对象过早析构，异步回调 use-after-close。</li>
+<li><strong>异步回调不能指望局部 RAII 自动跨线程。</strong> 把 <code>UniqueFd</code> 或 <code>lock_guard</code> 的生命周期想成“过了线程边界还有效”是错的——局部确定性只覆盖当前作用域与当前栈展开。跨线程、跨事件循环仍要明确所有权转移（移动进任务对象、<code>shared_ptr</code> 等），这正是节点 tradeoffs 要强调的。</li>
+</ul>
+<p>所以本课的工程习惯是：<strong>资源的获取写在构造里，释放写在析构里；需要转移时用移动，而不是复制一个会“双重释放”的句柄；跨异步边界时显式设计所有者，而不是默默引用捕获局部 RAII。</strong></p>
+<h2 id="2">2. 从直觉到原理：三个核心要点</h2>
+<h3 id="21">2.1 构造建立不变量</h3>
+<h4 id="_1">直觉：对象一出生就该“能用或明确为空”</h4>
+<p>RAII（Resource Acquisition Is Initialization）字面意思是：<strong>资源获取即初始化</strong>。更贴工程的说法是：</p>
+<ul>
+<li>构造函数负责拿到资源（打开文件、加锁、<code>socket</code>、<code>mmap</code>……）；</li>
+<li>构造成功后，对象满足一组<strong>不变量</strong>（例如：<code>fd_ &gt;= 0</code> 且指向已打开的描述符；或 <code>fd_ == -1</code> 表示空对象）；</li>
+<li>之后成员函数可以假定不变量成立，不必每次都问“资源到底拿到没有”。</li>
+</ul>
+<p>对比裸资源写法：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/tmp/wx-upload.bin"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CREAT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CLOEXEC</span><span class="p">,</span><span class="w"> </span><span class="mo">0600</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// ... 中间有 20 行解析、验签、写日志 ...</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">signature_ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 忘了 close(fd) —— 泄漏</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">quota_ok</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w">  </span><span class="c1">// 这条路径记得了</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</code></pre></div>
+
+<p>问题不在于 <code>open</code>/<code>close</code> 本身难，而在于<strong>每一条提前返回路径都要记得释放</strong>。路径一多，必漏。代码审查时很难用眼睛扫全部分支。</p>
+<p>RAII 写法把不变量收进类型：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">UniqueFd</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">UniqueFd</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">fd_</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">UniqueFd</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">reset</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">UniqueFd</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">UniqueFd</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">UniqueFd</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">UniqueFd</span><span class="p">(</span><span class="n">UniqueFd</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">fd_</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">fd_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">UniqueFd</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">reset</span><span class="p">();</span>
+<span class="w">            </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">fd_</span><span class="p">;</span>
+<span class="w">            </span><span class="n">other</span><span class="p">.</span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">fd_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">valid</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">fd_</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">reset</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">new_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd_</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span>
+<span class="w">            </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">fd_</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">);</span>
+<span class="w">            </span><span class="c1">// 失败只记录，见 2.2</span>
+<span class="w">            </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_fd</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd_</span><span class="p">{</span><span class="mi">-1</span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="n">UniqueFd</span><span class="w"> </span><span class="nf">open_upload</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">O_RDWR</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CREAT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CLOEXEC</span><span class="p">,</span><span class="w"> </span><span class="mo">0600</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"open upload failed"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">UniqueFd</span><span class="p">{</span><span class="n">fd</span><span class="p">};</span><span class="w">  </span><span class="c1">// NRVO / 移动，见 2.3</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里的不变量可以表述为：</p>
+<ol>
+<li>若对象处于“持有”状态，则 <code>fd_ &gt;= 0</code>，且该 fd 的关闭责任属于本对象；</li>
+<li>若对象处于“空 / moved-from”状态，则 <code>fd_ == -1</code>；</li>
+<li>同一时刻，至多一个 <code>UniqueFd</code> 实例对某个 fd 拥有关闭责任。</li>
+</ol>
+<h4 id="_2">原理：构造失败与异常安全</h4>
+<p>C++ 里若构造函数抛出异常，<strong>析构函数不会被调用</strong>（对象没构造成功）。因此：</p>
+<ul>
+<li>构造过程中已经拿到的资源，必须在抛出前就地释放；或</li>
+<li>用成员子对象的 RAII 分层获取——先构造成功的成员会在后续成员/构造体失败时按已构造逆序析构。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">connect_fd</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">host</span><span class="p">);</span><span class="w">  </span><span class="c1">// 失败抛异常或返回 -1（此处假设抛）</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Connection</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="w"> </span><span class="n">sock_</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// 假设 MetricsReporter 也是 RAII，构造时注册，析构时反注册</span>
+<span class="w">    </span><span class="c1">// MetricsReporter metrics_;</span>
+
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Connection</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">host</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">sock_</span><span class="p">(</span><span class="n">connect_fd</span><span class="p">(</span><span class="n">host</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 若构造函数体随后抛异常，sock_ 会先被析构并 close</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">handshake</span><span class="p">(</span><span class="n">sock_</span><span class="p">.</span><span class="n">get</span><span class="p">()))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"handshake failed"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>对后台服务而言，“构造建立不变量”意味着：<strong>业务函数拿到一个活着的对象时，可以相信资源已就绪；失败以异常或错误码在边界处理，而不是满世界检查半开连接。</strong></p>
+<p>工厂函数比“先默认构造再 <code>open</code> 成员函数”更容易维护不变量：要么返回可用对象，要么失败（抛异常 / 返回 <code>std::optional</code> / 返回错误码），不存在“对象在但 fd 无效却被当成已连接”的灰态——除非你<strong>显式</strong>支持空状态（如默认构造的 <code>UniqueFd</code>），并让 <code>valid()</code> 可查。</p>
+<h4 id="_3">后台例子：加锁的临界区</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">g_token_mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_access_token</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">get_token</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">appid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">g_token_mu</span><span class="p">);</span><span class="w">  </span><span class="c1">// 构造 = lock</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_access_token</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">appid</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">g_access_token</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span><span class="w">  </span><span class="c1">// 提前返回也解锁——析构 = unlock</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"empty token"</span><span class="p">);</span><span class="w">  </span><span class="c1">// 异常同样解锁</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// lock 析构，解锁</span>
+</code></pre></div>
+
+<p><code>lock_guard</code> 的不变量是“持有锁”；离开作用域（含异常）一定解锁。这与 <code>UniqueFd</code> 同构，只是资源从 fd 换成了互斥锁。公众号后台刷新 <code>access_token</code>、更新回调配置缓存时，这类写法是默认选项。</p>
+<h4 id="vs-raii">对比：手动释放 vs RAII 的控制流</h4>
+<table>
+<thead>
+<tr>
+<th>控制流</th>
+<th>手动 <code>close</code></th>
+<th><code>UniqueFd</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正常走到末尾</td>
+<td>要写一次 <code>close</code></td>
+<td>析构自动</td>
+</tr>
+<tr>
+<td>中间 <code>return</code></td>
+<td>每个分支都要 <code>close</code></td>
+<td>析构自动</td>
+</tr>
+<tr>
+<td><code>continue</code> / <code>break</code> 出带资源的块</td>
+<td>容易漏</td>
+<td>析构自动</td>
+</tr>
+<tr>
+<td><code>throw</code></td>
+<td>要靠上层 <code>catch</code> 里关，或重复清理</td>
+<td>栈展开自动</td>
+</tr>
+<tr>
+<td>移动给调用方</td>
+<td>靠约定“谁关闭”</td>
+<td>类型强制唯一所有者</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-noexcept">2.2 析构释放和 noexcept</h3>
+<h4 id="_4">直觉：离开作用域 = 语言保证会走的清理点</h4>
+<p>自动存储期对象在离开作用域时析构；异常导致栈展开时，<strong>已经构造成功的自动对象也会析构</strong>。RAII 正是把释放动作放进这个“语言保证会走”的路径——这比依赖程序员记得每一条 <code>return</code> 可靠得多。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">handle_callback</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="w"> </span><span class="n">fd</span><span class="p">{</span><span class="o">::</span><span class="n">open</span><span class="p">(</span><span class="s">"/tmp"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_DIRECTORY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CLOEXEC</span><span class="p">)};</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">parse_ok</span><span class="p">(</span><span class="n">body</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span><span class="w">  </span><span class="c1">// 析构 close</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">need_auth</span><span class="p">(</span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">authorized</span><span class="p">(</span><span class="n">body</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"unauthorized"</span><span class="p">);</span><span class="w">  </span><span class="c1">// 栈展开同样 close</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">write_audit_log</span><span class="p">(</span><span class="n">fd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// 正常路径结束也 close</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>无论三条路中的哪一条，<code>fd</code> 都应被关闭——这就是节点 why 所说：<strong>让异常与提前返回不会泄漏资源。</strong></p>
+<p>结合第 19 课：栈展开按与构造相反的顺序销毁自动对象；成员按声明逆序析构。只要释放写在析构里，顺序就与对象图一致，而不是与你手写的 <code>goto cleanup</code> 标签一致。</p>
+<h4 id="_5">原理：析构为什么不宜抛异常</h4>
+<p>节点 pitfalls 明确：<strong>析构函数不宜抛出异常。</strong> C++ 工程实践与 Core Guidelines 都把它当作硬约束。</p>
+<p>原因：</p>
+<ol>
+<li><strong>栈展开中再抛异常会 <code>std::terminate</code>。</strong> 若因异常正在展开栈，某个析构又抛出新异常，程序无法同时处理两个异常，直接终止。对后台服务来说，这等于一个本可降级的 <code>close</code> 失败把整个进程拉死。</li>
+<li><strong><code>close</code> / <code>fclose</code> / <code>unlock</code> 失败通常不可恢复或不宜以异常表达。</strong> 对 fd 而言，失败多是 <code>EINTR</code>（可重试）或 <code>EBADF</code>（本就无效）。记录日志、打点或写入 <code>last_close_errno</code> 比抛异常更合适。</li>
+<li><strong>标准库假定元素析构不抛。</strong> <code>std::vector</code> 在重新分配、销毁范围时若元素析构抛异常，会破坏异常安全保证，甚至在已经处于异常路径时触发 <code>terminate</code>。</li>
+<li><strong>C++11 起析构函数在多数情况下是 <code>noexcept</code> 的。</strong> 若你在析构里抛出，会直接调用 <code>std::terminate</code>，连“上层还能接住”的机会都没有。</li>
+</ol>
+<p>因此 <code>UniqueFd</code> 的关闭逻辑应写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">UniqueFd::reset</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">new_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd_</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span>
+<span class="w">        </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">fd_</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">last_close_errno_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">errno</span><span class="p">;</span><span class="w">  </span><span class="c1">// 记录，不抛</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">last_close_errno_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_fd</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">~</span><span class="n">UniqueFd</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">reset</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p>实践目录里的用例故意先 <code>close</code> 底层 fd，再让 <code>UniqueFd::reset</code> 遇到 <code>EBADF</code>：断言<strong>不抛异常</strong>且 <code>last_close_errno() == EBADF</code>。这覆盖了节点 practice 要求的“关闭失败”分支。</p>
+<h4 id="_6">坑：异步资源生命周期</h4>
+<p>节点 pitfalls 后半句同样重要：<strong>也不能自动保证异步资源生命周期。</strong></p>
+<p>错误示范：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">bad_async</span><span class="p">(</span><span class="n">ThreadPool</span><span class="o">&amp;</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="w"> </span><span class="n">fd</span><span class="p">{</span><span class="n">accept_client</span><span class="p">()};</span>
+<span class="w">    </span><span class="n">pool</span><span class="p">.</span><span class="n">submit</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 危险：fd 可能在任务运行前就析构关闭了</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">        </span><span class="o">::</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">));</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">}</span><span class="w">  </span><span class="c1">// UniqueFd 在这里析构——任务里变成 use-after-close</span>
+</code></pre></div>
+
+<p>正确做法是<strong>移动所有权进任务</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">good_async</span><span class="p">(</span><span class="n">ThreadPool</span><span class="o">&amp;</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="w"> </span><span class="n">fd</span><span class="p">{</span><span class="n">accept_client</span><span class="p">()};</span>
+<span class="w">    </span><span class="n">pool</span><span class="p">.</span><span class="n">submit</span><span class="p">([</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">fd</span><span class="p">)]()</span><span class="w"> </span><span class="k">mutable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 任务对象持有 UniqueFd，任务结束（lambda 析构）才 close</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">        </span><span class="o">::</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">));</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>局部 RAII 管的是<strong>当前作用域</strong>；跨异步边界必须显式转移所有权。事件循环里注册的 <code>on_readable</code> 回调同理：要么让会话对象活到回调注销，要么把 <code>UniqueFd</code> 放进会话并由会话统一析构。</p>
+<h4 id="_7">小实验：感受“析构必走”</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">LoudClose</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="o">~</span><span class="n">LoudClose</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"close "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">demo</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">boom</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">LoudClose</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"a"</span><span class="p">};</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">boom</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"boom"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">LoudClose</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"b"</span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">demo</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"----</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">demo</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(...)</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出类似：</p>
+<div class="codehilite"><pre><span></span><code>close b
+close a
+----
+close a
+</code></pre></div>
+
+<p><code>boom==true</code> 时 <code>b</code> 尚未构造，只有 <code>a</code> 被析构——这与“只有构造成功的对象才会析构”一致，也解释了为什么构造中途拿到的裸资源必须立刻交给 RAII 成员。</p>
+<h3 id="23">2.3 唯一所有权与移动转移</h3>
+<h4 id="_8">直觉：一把钥匙不能复制，只能转交</h4>
+<p>文件描述符、<code>FILE*</code>、很多 OS 句柄都是<strong>唯一所有权</strong>资源：两个所有者各自 <code>close</code> 一次，就会双重关闭（第二个常是 <code>EBADF</code>，或更糟——fd 号被复用后关错别人的连接，造成随机串话、半包、安全问题）。</p>
+<p>因此 <code>UniqueFd</code> 必须：</p>
+<ul>
+<li><strong>禁止拷贝</strong>（<code>= delete</code> 拷贝构造 / 拷贝赋值）；</li>
+<li><strong>允许移动</strong>：把 fd 数值转给新对象，源对象置为 <code>-1</code>。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">UniqueFd</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="o">::</span><span class="n">open</span><span class="p">(</span><span class="s">"/dev/null"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CLOEXEC</span><span class="p">)};</span>
+<span class="n">UniqueFd</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span><span class="w">   </span><span class="c1">// 源无效</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">valid</span><span class="p">());</span><span class="w">       </span><span class="c1">// 目标是唯一所有者</span>
+<span class="c1">// a 析构：什么也不关</span>
+<span class="c1">// b 析构：close 一次</span>
+</code></pre></div>
+
+<p>这与 <code>std::unique_ptr</code> 同构：<code>unique_ptr</code> 管内存，<code>UniqueFd</code> 管描述符；<code>std::unique_lock</code> 管锁的所有权转移。学会一个，其余的可按同一骨架写。</p>
+<h4 id="_9">原理：移动构造与移动赋值的不变量</h4>
+<p>移动后必须维持：</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>移动后状态</th>
+<th>析构行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>源（moved-from）</td>
+<td><code>fd_ == -1</code>（或文档约定的空状态）</td>
+<td>不调用 <code>close</code></td>
+</tr>
+<tr>
+<td>目标</td>
+<td>持有原来的 fd</td>
+<td>负责 <code>close</code></td>
+</tr>
+</tbody>
+</table>
+<p>移动赋值还要注意自移动与先释放旧资源：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">UniqueFd</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">UniqueFd</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">reset</span><span class="p">();</span><span class="w">           </span><span class="c1">// 先释放自己旧的 fd</span>
+<span class="w">        </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">other</span><span class="p">.</span><span class="n">fd_</span><span class="p">;</span>
+<span class="w">        </span><span class="n">other</span><span class="p">.</span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>release()</code> 是另一类转移：把裸 fd 交还给调用方，对象自身置空且<strong>不</strong> <code>close</code>——用于与只接受 <code>int</code> 的 C API 交互，但责任立刻回到人工约定，应尽量缩短裸 fd 暴露窗口。</p>
+<p>验收标准第二句——<strong>移动后源对象不重复关闭</strong>——在实践里通过“移动后源为 <code>-1</code>，目标 <code>reset</code> 关闭后，再对原 raw fd 手动 <code>close</code> 得到 <code>EBADF</code>（证明只关过一次）”来验证。</p>
+<h4 id="_10">后台例子：把连接所有权交给会话对象</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">ClientSession</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="w"> </span><span class="n">conn_</span><span class="p">;</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">ClientSession</span><span class="p">(</span><span class="n">UniqueFd</span><span class="w"> </span><span class="n">conn</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">conn_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">conn</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="n">ClientSession</span><span class="w"> </span><span class="nf">accept_session</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">listen_fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">accept4</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">,</span><span class="w"> </span><span class="n">SOCK_CLOEXEC</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">raw</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"accept failed"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ClientSession</span><span class="p">{</span><span class="n">UniqueFd</span><span class="p">{</span><span class="n">raw</span><span class="p">}};</span><span class="w">  </span><span class="c1">// 移动进会话；会话析构时关连接</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>再看“借出连接池连接”的 RAII guard（所有权仍在池中，guard 只负责归还）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ConnectionPool</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PooledConn</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">PooledConn</span><span class="p">(</span><span class="n">ConnectionPool</span><span class="o">&amp;</span><span class="w"> </span><span class="n">pool</span><span class="p">,</span><span class="w"> </span><span class="n">UniqueFd</span><span class="o">*</span><span class="w"> </span><span class="n">slot</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">pool_</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">),</span><span class="w"> </span><span class="n">slot_</span><span class="p">(</span><span class="n">slot</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="o">~</span><span class="n">PooledConn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pool_</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">slot_</span><span class="p">)</span><span class="w"> </span><span class="n">pool_</span><span class="o">-&gt;</span><span class="n">release</span><span class="p">(</span><span class="n">slot_</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="n">PooledConn</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">PooledConn</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">PooledConn</span><span class="p">(</span><span class="n">PooledConn</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">o</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">pool_</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">pool_</span><span class="p">),</span><span class="w"> </span><span class="n">slot_</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">slot_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">o</span><span class="p">.</span><span class="n">pool_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">        </span><span class="n">o</span><span class="p">.</span><span class="n">slot_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">slot_</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">ConnectionPool</span><span class="o">*</span><span class="w"> </span><span class="n">pool_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">UniqueFd</span><span class="o">*</span><span class="w"> </span><span class="n">slot_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>公众号后台的长连接、下游 RPC channel、与微信服务器的回调 HTTP 连接，都可以用同一模式：<strong>边界上获得裸 fd → 立刻装进 RAII → 只通过移动转移，不拷贝；池化资源用 guard 归还而不是双重拥有。</strong></p>
+<h4 id="shared_ptr">和 <code>shared_ptr</code> 的边界</h4>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>更合适的工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单一所有者、可转移</td>
+<td><code>UniqueFd</code> / <code>unique_ptr</code></td>
+</tr>
+<tr>
+<td>多处回调共享、最后一人释放</td>
+<td><code>shared_ptr</code>（注意环）</td>
+</tr>
+<tr>
+<td>只读借用、寿命由调用方保证</td>
+<td><code>const UniqueFd&amp;</code> 或裸 <code>int</code> + 文档</td>
+</tr>
+<tr>
+<td>锁</td>
+<td><code>lock_guard</code>（不可移）/ <code>unique_lock</code>（可移）</td>
+</tr>
+</tbody>
+</table>
+<p>不要为了“图省事”把所有 fd 都做成 <code>shared_ptr</code>：共享所有权会让“谁该关、何时关”变模糊，泄漏与周期更难查。默认唯一所有权，共享是例外且要写清释放点。</p>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31-pitfalls">3.1 误区（pitfalls）</h3>
+<p>节点 pitfalls：<strong>析构函数不宜抛出异常，也不能自动保证异步资源生命周期。</strong></p>
+<p>展开成可检查的清单：</p>
+<ol>
+<li><strong>在析构里抛异常“报告 close 失败”。</strong> 会导致栈展开中 <code>terminate</code>，或破坏容器保证。应记录 <code>errno</code> / 指标。</li>
+<li><strong>以为 RAII 能管到别的线程。</strong> 引用捕获局部 <code>UniqueFd</code> 丢进线程池，是典型 use-after-close。</li>
+<li><strong>提供拷贝却浅拷贝 fd。</strong> 两个对象 <code>close</code> 同一 fd，或一个关闭后另一个以为还有效；fd 复用后变成关错连接。</li>
+<li><strong>移动后仍使用源对象的 get()。</strong> moved-from 对象只保证“可析构、可再赋值”，不保证还能读写下层资源。</li>
+<li><strong>构造失败却留下全局副作用。</strong> 例如构造里 <code>open</code> 成功后又 <code>new</code> 失败抛异常，却没关 fd——应用成员 RAII 或 <code>unique_ptr</code> 分层。</li>
+<li><strong>用 <code>int</code> 到处传并约定“调用方关闭”。</strong> 约定靠人，人会忘；类型系统靠编译器。</li>
+<li><strong><code>dup</code> 后两个 fd 都塞进各自 <code>UniqueFd</code> 却误以为是“同一所有权的拷贝”。</strong> <code>dup</code> 出的是新描述符，两个都要关——这是两个资源，不是一个资源的双所有者；与浅拷贝同一 fd 不同。</li>
+<li><strong>在信号处理函数里做复杂 RAII。</strong> 异步信号上下文有严格限制；不要把复杂锁与堆操作放进 handler。</li>
+</ol>
+<h3 id="32-tradeoffs">3.2 权衡（tradeoffs）</h3>
+<p>节点 tradeoffs：<strong>RAII提供局部确定性，跨线程回调仍需设计所有权。</strong></p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优点</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>局部 <code>UniqueFd</code> / <code>lock_guard</code></td>
+<td>异常安全、提前返回不漏、代码短</td>
+<td>只覆盖当前栈与作用域</td>
+</tr>
+<tr>
+<td>移动进异步任务 / 会话对象</td>
+<td>所有权清晰，生命周期跟随任务</td>
+<td>要在类型里显式 <code>std::move</code></td>
+</tr>
+<tr>
+<td><code>shared_ptr</code> 共享所有权</td>
+<td>多处回调都能安全持有</td>
+<td>开销、循环引用、所有权变模糊</td>
+</tr>
+<tr>
+<td>裸 fd + 人工 <code>close</code></td>
+<td>无封装成本</td>
+<td>高泄漏率，难审代码</td>
+</tr>
+<tr>
+<td>连接池 + RAII guard</td>
+<td>归还确定性好</td>
+<td>要区分“池拥有”与“借用方不拥有”</td>
+</tr>
+</tbody>
+</table>
+<p>微信公众号后台常见结论：</p>
+<ul>
+<li><strong>请求内同步路径</strong>：优先局部 RAII（fd、锁、临时缓冲）。</li>
+<li><strong>跨线程 / 跨事件循环</strong>：移动唯一所有权，或明确 <code>shared_ptr</code> 的释放点；不要“引用捕获局部 RAII”。</li>
+<li><strong>连接池</strong>：池子拥有连接；借出时用 RAII guard 保证归还（类似 <code>lock_guard</code> 对锁），而不是把池内连接的唯一所有权随便 <code>move</code> 走后丢失。</li>
+<li><strong>与脚本语言 <code>with</code> / <code>defer</code> 对比</strong>：思想相同——绑定作用域与释放；C++ 用析构与类型系统把释放变成编译期结构，而不是运行时约定。</li>
+</ul>
+<h2 id="4">4. 动手实践</h2>
+<p>实践目录：<code>/workspace/atlas/lessons/practice20/</code></p>
+<h3 id="41">4.1 要实现什么</h3>
+<p>按节点 practice：<strong>实现禁止拷贝、可移动的 UniqueFd，覆盖关闭失败与移动后状态。</strong></p>
+<p>最低要求：</p>
+<ol>
+<li><code>unique_fd.hpp</code>：<code>UniqueFd</code> 禁止拷贝、可移动；<code>reset</code>/<code>析构</code> 中 <code>close</code> 失败只记 <code>errno</code> 不抛；移动后源为 <code>-1</code>。</li>
+<li>用 <code>/proc/self/fd</code>（或等价手段）证明：提前 <code>return</code>、抛异常后打开 fd 数量不增长。</li>
+<li>证明移动后不双重关闭。</li>
+<li><code>test.sh</code> 用 <code>g++ -std=c++17 -Wall</code> 编译运行，最后打印 <code>ALL checks passed</code>。</li>
+</ol>
+<h3 id="42">4.2 文件一览</h3>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>unique_fd.hpp</code></td>
+<td><code>UniqueFd</code> 实现：禁止拷贝、可移动；close 失败记 errno</td>
+</tr>
+<tr>
+<td><code>fd_count.hpp</code></td>
+<td><code>/proc/self/fd</code> 计数</td>
+</tr>
+<tr>
+<td><code>demo_early_return.cpp</code></td>
+<td>提前 return / 抛异常后 fd 数量不增长</td>
+</tr>
+<tr>
+<td><code>demo_move.cpp</code></td>
+<td>移动后源对象为 <code>-1</code>，不重复 close</td>
+</tr>
+<tr>
+<td><code>demo_close_fail.cpp</code></td>
+<td>close 失败（EBADF）只记录不抛</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>一键验证</td>
+</tr>
+<tr>
+<td><code>README.md</code></td>
+<td>步骤说明</td>
+</tr>
+</tbody>
+</table>
+<h3 id="43">4.3 建议步骤</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice20
+<span class="c1"># 阅读 unique_fd.hpp / demo_early_return.cpp / demo_move.cpp / demo_close_fail.cpp</span>
+./test.sh
+</code></pre></div>
+
+<p>自行实现时的顺序建议：</p>
+<ol>
+<li>先写默认构造、<code>explicit UniqueFd(int)</code>、<code>get</code>/<code>valid</code>、析构 <code>close</code>。</li>
+<li><code>= delete</code> 拷贝；实现移动构造与移动赋值（源置 <code>-1</code>）。</li>
+<li><code>reset</code> / <code>release</code>；<code>close</code> 遇 <code>EINTR</code> 重试，其它错误写入 <code>last_close_errno</code>。</li>
+<li>写测试：计数 fd → early return / try-catch → move → 人为先 <code>close</code> 再 <code>reset</code>。</li>
+<li>确认 <code>./test.sh</code> 输出 <code>ALL checks passed</code>。</li>
+</ol>
+<h3 id="44">4.4 关键实现要点（对照验收）</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 提前返回 / 异常：作用域结束必析构</span>
+<span class="n">UniqueFd</span><span class="w"> </span><span class="n">fd</span><span class="p">{</span><span class="n">open_something</span><span class="p">()};</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bad</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w">                  </span><span class="c1">// fd 数应回到进入前</span>
+<span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"x"</span><span class="p">);</span><span class="w">  </span><span class="c1">// 栈展开同样关闭</span>
+
+<span class="c1">// 移动</span>
+<span class="n">UniqueFd</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w">        </span><span class="c1">// a.get()==-1，仅 b close</span>
+
+<span class="c1">// close 失败</span>
+<span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">.</span><span class="n">get</span><span class="p">());</span><span class="w">                </span><span class="c1">// 人为关掉</span>
+<span class="n">fd</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span><span class="w">                       </span><span class="c1">// EBADF 被记录，绝不 throw</span>
+</code></pre></div>
+
+<p>手动编译：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Wpedantic<span class="w"> </span>-Werror<span class="w"> </span>-g<span class="w"> </span>-O0<span class="w"> </span>demo_early_return.cpp<span class="w"> </span>-o<span class="w"> </span>demo_early_return<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./demo_early_return
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Wpedantic<span class="w"> </span>-Werror<span class="w"> </span>-g<span class="w"> </span>-O0<span class="w"> </span>demo_move.cpp<span class="w"> </span>-o<span class="w"> </span>demo_move<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./demo_move
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Wpedantic<span class="w"> </span>-Werror<span class="w"> </span>-g<span class="w"> </span>-O0<span class="w"> </span>demo_close_fail.cpp<span class="w"> </span>-o<span class="w"> </span>demo_close_fail<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./demo_close_fail
+</code></pre></div>
+
+<h2 id="5">5. 自测题（附答案）</h2>
+<h3 id="1_1">题 1：为什么析构里抛异常很危险？</h3>
+<p>下面代码在“正常路径”和“已经在栈展开”时分别可能发生什么？</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">NaughtyFd</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">;</span>
+<span class="w">    </span><span class="o">~</span><span class="n">NaughtyFd</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"close failed"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">NaughtyFd</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="n">open_devnull</span><span class="p">()};</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"biz error"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>答案：</strong></p>
+<ul>
+<li><code>f</code> 抛出 <code>biz error</code> 后开始栈展开，需要调用 <code>a</code> 的析构。</li>
+<li>若此时 <code>close</code> 失败并再次抛出，C++ 无法同时传播两个异常，将调用 <code>std::terminate</code> 结束进程。</li>
+<li>即便在正常路径，析构抛异常也会让调用方很难写 <code>try/catch</code>（对象生命周期结束点不在业务代码里），并破坏标准库容器对“析构不抛”的假定；C++11 后析构多为 <code>noexcept</code>，抛出即 <code>terminate</code>。</li>
+<li>正确做法：析构/<code>reset</code> 内吞掉 <code>close</code> 错误并记录，保持不抛。这对应节点 pitfalls 前半句。</li>
+</ul>
+<h3 id="2_1">题 2：下列哪些写法满足“唯一所有权”？</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">UniqueFd</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="n">open_devnull</span><span class="p">()};</span>
+
+<span class="c1">// A</span>
+<span class="n">UniqueFd</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+
+<span class="c1">// B</span>
+<span class="n">UniqueFd</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+
+<span class="c1">// C</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">take</span><span class="p">(</span><span class="n">UniqueFd</span><span class="w"> </span><span class="n">fd</span><span class="p">);</span>
+<span class="n">take</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">c</span><span class="p">));</span>
+
+<span class="c1">// D</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">borrow</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">UniqueFd</span><span class="o">&amp;</span><span class="w"> </span><span class="n">fd</span><span class="p">);</span>
+<span class="n">borrow</span><span class="p">(</span><span class="n">c</span><span class="p">);</span><span class="w">  </span><span class="c1">// 假设 c 仍有效</span>
+</code></pre></div>
+
+<p><strong>答案：</strong></p>
+<ul>
+<li>A <strong>不满足</strong>，且正确实现中应无法编译（拷贝已删除）。若强行浅拷贝 fd，会双重关闭。</li>
+<li>B <strong>满足</strong>：移动后 <code>a</code> 无效，<code>c</code> 唯一持有。</li>
+<li>C <strong>满足</strong>：按值传参再移入形参，所有权交给 <code>take</code>；函数结束时形参析构关闭。</li>
+<li>D <strong>不转移所有权</strong>：调用期间借用，调用方仍负责生命周期。只要保证 <code>borrow</code> 不把引用或 <code>fd.get()</code> 存到调用之后，就是安全的只读借用；它本身不是“唯一所有权转移”，而是“借用”，需另用文档/类型约束寿命。若 <code>borrow</code> 启动异步任务并捕获引用，则踩中 pitfalls 后半句。</li>
+</ul>
+<h3 id="3-fd">题 3：提前返回与异常后如何证明 fd 不泄漏？移动后如何证明不双重关闭？</h3>
+<p>用文字写出你在实践中的验证步骤，并说明为什么“<code>/proc/self/fd</code> 绝对值减少了几个”不重要。</p>
+<p><strong>答案：</strong></p>
+<ol>
+<li>调用 <code>count_open_fds()</code>（读 <code>/proc/self/fd</code>）得到 <code>before</code>。</li>
+<li>在函数内构造 <code>UniqueFd</code>（内部 <code>open</code>），然后 <code>return</code> 或 <code>throw</code>。</li>
+<li>回到调用方后再测 <code>after</code>，断言 <code>after == before</code>。</li>
+<li><code>/proc/self/fd</code> 的计数包含 <code>.</code>、<code>..</code> 以及 <code>opendir</code> 自身占用的 fd，<strong>绝对值</strong>依赖实现与调用方式；验收关心的是<strong>相对不变</strong>——操作前后打开数量不增长，说明没有泄漏。</li>
+<li>移动验证：记录 raw → <code>b = std::move(a)</code> → 断言 <code>a.get()==-1</code> → <code>b.reset()</code> 正常关闭 → 再 <code>::close(raw)</code> 应得 <code>EBADF</code>，证明没有“没关”也没有“关了两次还以为有效”。人为先 <code>close(raw)</code> 再 <code>UniqueFd::reset</code>，应记录 <code>EBADF</code> 且不抛。</li>
+<li>对照节点 acceptance：提前返回和抛异常后 fd 数量不增长；移动后源对象不重复关闭。</li>
+</ol>
+<h2 id="6">6. 推荐资源</h2>
+<ul>
+<li><strong>RAII与资源所有权：参考文档 / 原始资料</strong></li>
+<li>链接：<a href="https://en.cppreference.com/w/cpp/language/raii.html">https://en.cppreference.com/w/cpp/language/raii.html</a></li>
+<li>来源：en.cppreference.com</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：基础</li>
+<li>
+<p>说明：重点阅读构造建立不变量与析构释放和 noexcept，用于核对本节点实验的语义和边界。对照本课的 <code>UniqueFd</code>：构造是否建立“持有或为空”的不变量、析构是否无条件释放、失败是否不抛；再把例子映射到锁与临时文件。</p>
+</li>
+<li>
+<p><strong>C++ Core Guidelines · R.1 RAII</strong></p>
+</li>
+<li>链接：<a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-raii">https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-raii</a></li>
+<li>来源：ISO C++ Core Guidelines</li>
+<li>语言：英文</li>
+<li>类型：工程指南</li>
+<li>难度：进阶</li>
+<li>说明：对照资源管理规则，检查资源获取、异常退出和所有权转移。用 R.1 审查公众号后台里 socket、锁、临时文件是否都有明确所有者，以及跨线程回调是否仍错误依赖局部 RAII（节点 tradeoffs）。</li>
+</ul>
+<h2 id="7">7. 验收回扣</h2>
+<p>完成本课后，用下面这张清单做最终自检：</p>
+<table>
+<thead>
+<tr>
+<th>验收项</th>
+<th>你应该能给出的证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提前返回和抛异常后 fd 数量不增长</td>
+<td>能运行 <code>demo_early_return</code> / <code>demo_move</code> / <code>demo_close_fail</code>，展示 <code>/proc/self/fd</code> 计数前后相等</td>
+</tr>
+<tr>
+<td>移动后源对象不重复关闭</td>
+<td>能说明移动后源为 <code>-1</code>，且只有目标对象 <code>close</code> 一次</td>
+</tr>
+<tr>
+<td>能解释构造建立不变量</td>
+<td>能说出“构造成功 ⇒ 资源就绪或明确为空”，并举 <code>UniqueFd</code> / <code>lock_guard</code> 例子</td>
+</tr>
+<tr>
+<td>析构释放与 noexcept</td>
+<td>能说明栈展开中再抛会 <code>terminate</code>，并能指出 <code>close</code> 失败应记录不抛</td>
+</tr>
+<tr>
+<td>唯一所有权与移动转移</td>
+<td>能写出禁止拷贝、可移动的类型，并在会话 / 异步任务间 <code>std::move</code></td>
+</tr>
+<tr>
+<td>理解 pitfalls / tradeoffs</td>
+<td>能指出异步回调不能靠局部 RAII，跨线程需设计所有权</td>
+</tr>
+<tr>
+<td>能独立完成节点实践</td>
+<td><code>./test.sh</code> 打印 <code>ALL checks passed</code></td>
+</tr>
+</tbody>
+</table>
+<p>最后再回到节点 summary：</p>
+<blockquote>
+<p>RAII将资源获取和对象初始化关联，用确定的析构路径释放文件、锁和内存等资源。</p>
+</blockquote>
+<p>以及节点 why：</p>
+<blockquote>
+<p>让异常与提前返回不会泄漏资源。</p>
+</blockquote>
+<p>只要你能用本课的 <code>UniqueFd</code> 实验把这两句话讲清楚，并能解释移动后为何不会双重关闭、析构为何不能抛异常、跨线程为何仍要设计所有权，本节点就算真正掌握了。</p><div class="pn"><span><a href="19.html">← 对象生命周期与存储期</a></span><span><a href="21.html">拷贝、移动与值类别 →</a></span></div></main></div></body></html>

@@ -1,0 +1,196 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>23. STL容器与迭代器 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="cur" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 23 课 · 领域 B · 阶段 1</p><p class="dl"><a href="../files/23-b-stl.md" download>⬇ 本课 Markdown</a><a href="../files/practice23.tar.gz" download>⬇ 练习包 practice23.tar.gz</a></p><h1 id="23208-stl">第 23/208 课：STL容器与迭代器</h1>
+<blockquote>
+<p>领域 B（C++）· 阶段 1 · 难度：基础 · 子类：泛型与标准库
+前置：b-move（移动语义）、a-hash（哈希）、a-tree（树）</p>
+</blockquote>
+<p><strong>一句话</strong>：标准容器提供不同的数据布局和复杂度保证，迭代器规则是正确使用容器的重要契约。</p>
+<h2 id="_1">一、学习目标与为什么后端要懂</h2>
+<p>学完你应该能：
+1. 讲清 <code>vector</code> 和 <code>deque</code> 的区别；
+2. 独立实现一个<strong>有上限的 LRU 缓存</strong>，并说清 <code>list + 哈希表</code> 组合的成本；
+3. （验收）指出 <code>vector</code> 扩容后哪些引用失效；为"有序范围查询"和"单点查询"各选对容器。</p>
+<p><strong>为什么后端要懂</strong>：避免扩容、删除及 rehash 后的悬垂访问。后台服务里，容器是最常用的数据结构：连接表、会话表、本地热点缓存、按时间排序的消息队列……一旦在"容器变化后还拿着旧指针/迭代器"，轻则读到脏数据，重则偶发 core，而且往往只在高峰期（扩容最频繁时）出现，极难复现。</p>
+<h2 id="_2">二、从直觉到原理</h2>
+<h3 id="1-vector-deque">1. vector 与 deque</h3>
+<p><strong>直觉</strong>：<code>vector</code> 是一整块连续数组；<code>deque</code> 是"一排固定大小的块 + 一张块指针表"。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>vector</th>
+<th>deque</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内存</td>
+<td>单块连续</td>
+<td>分段连续</td>
+</tr>
+<tr>
+<td>尾部插入</td>
+<td>均摊 O(1)，满了要整体搬家</td>
+<td>O(1)，满了加一块，不搬旧元素</td>
+</tr>
+<tr>
+<td>头部插入</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>随机访问</td>
+<td>O(1)，最快（一次寻址）</td>
+<td>O(1)，但要两次寻址</td>
+</tr>
+<tr>
+<td>缓存局部性</td>
+<td>最好</td>
+<td>稍差</td>
+</tr>
+</tbody>
+</table>
+<p><strong>原理</strong>：<code>vector</code> 容量用完时会申请更大的一块（常见实现约 1.5 或 2 倍）、把元素移动/拷贝过去、释放旧块。所以：
+- <strong>扩容后，所有指向旧元素的指针、引用、迭代器全部失效</strong>；
+- 没扩容的 <code>push_back</code> 只让 <code>end()</code> 失效。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
+<span class="kt">int</span><span class="o">&amp;</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">v</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span><span class="w">        </span><span class="c1">// 若触发扩容，first 已悬垂</span>
+<span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">first</span><span class="p">;</span><span class="w">    </span><span class="c1">// 未定义行为，ASan 会报 heap-use-after-free</span>
+</code></pre></div>
+
+<p>（复习第 21 课：元素的移动构造是 <code>noexcept</code> 时，扩容才会用移动而不是拷贝。）</p>
+<p><code>deque</code> 的头尾插入不会搬动已有元素，<strong>指向元素的引用保持有效</strong>，但迭代器会失效——这是个容易记反的细节。</p>
+<p><strong>后台场景</strong>：存一批请求做批处理，用 <code>vector</code> + 预先 <code>reserve</code>；需要两头进出的滑动窗口（比如最近 N 秒的请求时间戳），用 <code>deque</code>。</p>
+<h3 id="2-map-unordered_map">2. map 与 unordered_map</h3>
+<p><strong>直觉</strong>：<code>map</code> 是排好序的书架（红黑树），<code>unordered_map</code> 是带编号的储物柜（哈希表）。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>map</th>
+<th>unordered_map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>底层</td>
+<td>红黑树（a-tree）</td>
+<td>哈希桶（a-hash）</td>
+</tr>
+<tr>
+<td>查找</td>
+<td>O(log n)</td>
+<td>平均 O(1)，最坏 O(n)</td>
+</tr>
+<tr>
+<td>有序遍历 / 范围查询</td>
+<td>支持 <code>lower_bound/upper_bound</code></td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>插入对迭代器</td>
+<td>都不失效</td>
+<td>rehash 时<strong>迭代器全部失效</strong>（元素引用仍有效）</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>每节点三指针 + 颜色</td>
+<td>桶数组 + 节点</td>
+</tr>
+</tbody>
+</table>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="w"> </span><span class="n">Msg</span><span class="o">&gt;</span><span class="w"> </span><span class="n">by_time</span><span class="p">;</span><span class="w">            </span><span class="c1">// key = 发送时间戳</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">lo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">by_time</span><span class="p">.</span><span class="n">lower_bound</span><span class="p">(</span><span class="n">t1</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">hi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">by_time</span><span class="p">.</span><span class="n">upper_bound</span><span class="p">(</span><span class="n">t2</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lo</span><span class="p">;</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">hi</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">it</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* [t1, t2] 内的消息 */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="p">,</span><span class="w"> </span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sessions</span><span class="p">;</span><span class="w">  </span><span class="c1">// 按 uid 单点查</span>
+<span class="n">sessions</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">100000</span><span class="p">);</span><span class="w">                         </span><span class="c1">// 预留桶，减少 rehash</span>
+</code></pre></div>
+
+<p><strong>选型规则</strong>（对应验收第 2 条）：要"某时间段内的数据""排行榜前 N"等<strong>有序范围</strong>用 <code>map</code>；只按 key 查一条（如按 openid 找会话）用 <code>unordered_map</code>。</p>
+<h3 id="3-reserve">3. 迭代器失效和 reserve</h3>
+<p>迭代器本质是"指向容器内部位置的东西"，容器结构一变，它可能就指向了错的地方。必背规则：</p>
+<ul>
+<li><strong>vector</strong>：扩容 → 全部失效；<code>insert/erase</code> → 该位置及之后失效。</li>
+<li><strong>unordered_map</strong>：rehash → 迭代器全部失效；<code>erase</code> → 只有被删那个失效。</li>
+<li><strong>map / list</strong>：<code>erase</code> → 只有被删那个失效，其余都不受影响。</li>
+</ul>
+<p>边遍历边删除的正确写法（<code>erase</code> 返回下一个有效迭代器）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">end</span><span class="p">();</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">expired</span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">))</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="o">++</span><span class="n">it</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>reserve(n)</code> 只预分配<strong>容量</strong>，保证在容量内 <code>push_back</code> 不扩容、指针稳定：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="n">r</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="c1">// r.size() == 0！r[0] = 1; 是越界写，未定义行为</span>
+<span class="n">r</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w">  </span><span class="c1">// 正确</span>
+</code></pre></div>
+
+<h3 id="4-lru-list">4. 综合：LRU 缓存为什么是 list + 哈希表</h3>
+<ul>
+<li><code>unordered_map&lt;key, list::iterator&gt;</code> 负责 O(1) 找到节点；</li>
+<li><code>std::list</code> 负责 O(1) 把节点挪到表头（<code>splice</code>）、O(1) 从表尾淘汰；</li>
+<li>关键：<strong><code>list</code> 的迭代器在 splice/其他元素增删时都不失效</strong>，所以哈希表里存它的迭代器才安全。换成 <code>vector</code> 存就不行。</li>
+</ul>
+<p><strong>成本</strong>：每个元素两份开销——链表节点（前后两个指针 + 数据，一次单独的堆分配）+ 哈希节点（key 拷贝 + 迭代器 + 桶）。节点分散在堆上，缓存局部性差。条目很多、value 很小时，元数据可能比数据还大；对性能要求高时可考虑预分配节点池或侵入式链表。</p>
+<h2 id="_3">三、常见误区</h2>
+<ol>
+<li><strong>reserve 只改变容量，不构造元素</strong>：<code>reserve</code> 后直接 <code>v[i] = x</code> 是越界。想要有元素请用 <code>resize</code>。</li>
+<li>在 <code>push_back</code> 之后继续用之前取的 <code>&amp;v[0]</code>、<code>v.begin()</code>。</li>
+<li>遍历 <code>unordered_map</code> 时插入元素，触发 rehash 后继续 <code>++it</code>。</li>
+<li>以为 <code>unordered_map</code> 一定比 <code>map</code> 快：小数据量、需要有序时 <code>map</code> 更合适；哈希冲突严重时退化到 O(n)。</li>
+<li>用 <code>map[key]</code> 做"查找"：key 不存在时会插入一个默认值，用 <code>find</code> 或 <code>count</code>。</li>
+</ol>
+<h2 id="_4">四、设计权衡</h2>
+<p>复杂度、局部性、稳定性与内存开销需要一起比较。大 O 相同时，连续内存的 <code>vector</code> 往往因 CPU 缓存友好而实际更快；需要"元素地址稳定"（被别处长期引用）时，要选 <code>list</code>/<code>map</code>，或者存 <code>unique_ptr</code>；内存紧张时要算上每节点的指针开销。</p>
+<h2 id="lru">五、动手实践：有上限的 LRU 缓存</h2>
+<p>代码在附件 <code>practice23/</code>（<code>lru.cpp</code> + <code>test.sh</code>），已在 g++ C++17 + ASan/UBSan 下验证通过。</p>
+<ol>
+<li>新建目录，写 <code>LruCache&lt;K,V&gt;</code>：成员 <code>std::list&lt;std::pair&lt;K,V&gt;&gt; items_</code>（头部 = 最近使用）和 <code>std::unordered_map&lt;K, list::iterator&gt; idx_</code>。</li>
+<li><code>get(k)</code>：哈希表找不到返回空；找到就 <code>items_.splice(items_.begin(), items_, it)</code> 移到表头再返回。</li>
+<li><code>put(k, v)</code>：已存在就更新并移到表头；不存在时若已满，先 <code>idx_.erase(items_.back().first)</code> 再 <code>pop_back()</code>，然后 <code>emplace_front</code> 并记录迭代器。</li>
+<li>测试：容量 2，put a、b，get a，put c ⇒ b 被淘汰，a、c 仍在。</li>
+<li>加一段观察 <code>vector</code> 扩容：记录 <code>data()</code>，<code>push_back</code> 到容量变化，比较地址。</li>
+<li>加一段 <code>reserve(100)</code>：确认 <code>size()==0</code>，再 push 100 个元素，<code>data()</code> 不变。</li>
+<li>运行：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice23<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./test.sh
+</code></pre></div>
+
+<p>期望输出：</p>
+<div class="codehilite"><pre><span></span><code>LRU OK: b evicted, size=2
+vector realloc: capacity 1 -&gt; 2, data moved=yes
+after reserve(100): size=0 capacity&gt;=100=yes
+100 push_back within reserved capacity: data stable=yes
+map range [200,400]: 2 items
+ALL_TESTS_PASSED
+</code></pre></div>
+
+<ol start="8">
+<li>用自己的话写下 <code>list + unordered_map</code> 每个条目的内存成本，以及为什么不能用 <code>vector</code> 替代 <code>list</code>。</li>
+</ol>
+<p><strong>进阶</strong>：故意在 <code>get</code> 前先取 <code>auto&amp; ref = vec[0]</code>，然后 push 到扩容再读 <code>ref</code>，看 ASan 报 heap-use-after-free。</p>
+<h2 id="_5">六、自测题</h2>
+<p><strong>1. <code>std::vector&lt;int&gt; v(4); v.reserve(4); int* p = &amp;v[1]; v.push_back(5);</code> 之后 p 还能用吗？</strong></p>
+<details><summary>答案</summary>
+不能保证。容量为 4、size 为 4，push_back 第 5 个元素会触发扩容，所有指针、引用、迭代器全部失效，p 悬垂。若之前 `reserve(8)`，则不扩容，p 仍有效（只有 end() 失效）。
+</details>
+
+<p><strong>2. 要支持"查某用户 uid 的会话"和"查 10:00–10:05 之间创建的所有会话"，分别用什么容器？</strong></p>
+<details><summary>答案</summary>
+单点按 uid 查用 `unordered_map<uid, Session>`，平均 O(1)；时间范围查询用 `map<创建时间, ...>`（或 multimap，时间可能重复），借助 `lower_bound/upper_bound` 做 O(log n + k) 的范围遍历。实际可两者并存，一个做主索引一个做二级索引。
+</details>
+
+<p><strong>3. LRU 实现里，哈希表存 <code>list::iterator</code> 为什么安全？换成存 <code>vector</code> 下标或迭代器会怎样？</strong></p>
+<details><summary>答案</summary>
+`std::list` 的迭代器只有在指向的那个元素被删除时才失效，`splice` 移动节点和其他元素的增删都不影响它，所以可以长期存。`vector` 中间删除会让后面元素前移（下标和迭代器都错位），扩容还会让全部迭代器失效，而且把元素移到头部是 O(n)。
+</details>
+
+<h2 id="_6">七、推荐资源</h2>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/container.html">cppreference：Containers library</a>（英文文档，基础，免费）：重点阅读 vector 与 deque、map 与 unordered_map，用于核对本节点实验的语义和边界；每个容器页都有 "Iterator invalidation" 小节，建议对照本课规则过一遍。</li>
+</ul><div class="pn"><span><a href="22.html">← 智能指针与共享所有权</a></span><span><a href="24.html">算法、Lambda与函数对象 →</a></span></div></main></div></body></html>

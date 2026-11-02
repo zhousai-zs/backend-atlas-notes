@@ -1,0 +1,1323 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>19. 对象生命周期与存储期 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="cur" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 19 课 · 领域 B · 阶段 1</p><p class="dl"><a href="../files/19-b-lifetime.md" download>⬇ 本课 Markdown</a><a href="../files/practice19.tar.gz" download>⬇ 练习包 practice19.tar.gz</a></p><h1 id="19208">第 19/208 课：对象生命周期与存储期</h1>
+<blockquote>
+<p>节点 id：<code>b-lifetime</code> · 域：B · 子类：生命周期与所有权 · 难度：基础 · 前置：<code>b-pointer</code></p>
+<p>一句话：对象生命周期从满足初始化条件开始，到析构或存储被释放或复用时结束；存储存在不代表对象可用。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 学习目标</h3>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li><strong>解释自动、静态和线程存储期。</strong> 说清一个对象“住在哪里、活多久、什么时候构造、什么时候析构”，并区分“存储期”和“对象生命周期”这两个容易混为一谈的概念。</li>
+<li><strong>独立完成节点实践。</strong> 用日志记录嵌套对象与临时对象的构造析构，验证 <code>std::string_view</code> 绑定临时 <code>std::string</code> 后的悬垂问题，并能用 AddressSanitizer（ASan）读懂报告。</li>
+<li><strong>解释引用延长的适用范围。</strong> 知道局部 <code>const T&amp;</code> 或 <code>T&amp;&amp;</code> 直接绑定临时对象时，临时对象会活到引用的作用域结束；也知道这种延长<strong>不会穿过函数返回、函数参数、引用成员或 <code>std::string_view</code></strong>。</li>
+<li><strong>画出成员与宿主对象的生命周期。</strong> 能说清基类、成员、构造函数体、析构函数体、成员逆序析构之间的先后关系，并能据此审查后台连接对象、回调对象和异步任务的释放时机。</li>
+</ol>
+<h3 id="12">1.2 验收标准回扣</h3>
+<p>节点给出的验收标准有两条，本课会反复用到：</p>
+<ul>
+<li><strong>能解释引用延长的适用范围。</strong> 重点不是背“<code>const T&amp;</code> 会延长寿命”这一句话，而是知道它只在<strong>局部引用变量直接绑定临时对象</strong>时成立。绑定到函数返回的引用、函数参数、引用成员、<code>std::string_view</code> 或裸指针，都不会把临时对象延长到该引用/视图/指针的寿命；函数参数只在调用表达式期间有效。</li>
+<li><strong>能画出成员与宿主对象的生命周期。</strong> 宿主对象构造时，基类先于成员，成员按<strong>声明顺序</strong>构造，构造函数体最后执行；析构时顺序基本相反：析构函数体先执行，成员按声明逆序析构，基类最后析构。成员子对象有自己的生命周期，不能简单地把“宿主对象还活着”等同于“每个成员都可以随意使用”。</li>
+</ul>
+<h3 id="13">1.3 为什么微信公众号后台要懂</h3>
+<p>节点对“为什么”写得很直接：<strong>定位悬垂引用、临时对象和析构顺序导致的问题。</strong> 放进腾讯微信公众号后台的典型 C++ 服务，就是下面这些具体场景：</p>
+<ul>
+<li><strong>回调参数只在回调期间有效。</strong> 微信服务器把消息推到后台，框架通常会以 <code>void on_message(const std::string&amp; body)</code> 或 <code>void on_message(std::string_view body)</code> 的形式把请求体交给业务代码。这个 <code>body</code> 的所有者往往是框架或上层缓冲区。如果业务代码把 <code>body</code> 的引用、<code>std::string_view</code> 字段或指向它的指针存进队列，交给异步线程处理，回调返回后这些“借用”就可能悬垂。线上表现常常是偶发乱码、JSON 解析失败，甚至进程崩溃。</li>
+<li><strong>临时对象在签名、日志和拼接中大量出现。</strong> 例如验签时拼接 <code>appid + timestamp + nonce</code>，日志里拼接 <code>request_id + " " + openid</code>。这些临时 <code>std::string</code> 默认只活到当前完整表达式结束。把它们直接交给一个返回 <code>std::string_view</code> 的函数，或者把 <code>c_str()</code> 存起来，都会留下悬垂视图。</li>
+<li><strong>成员析构顺序决定关闭阶段是否安全。</strong> 一个连接对象可能持有 <code>logger_</code>、<code>socket_</code>、<code>timer_</code>、<code>on_timeout_</code> 等成员。如果 <code>timer_</code> 的析构函数还会触发回调，而回调捕获了 <code>this</code>，或者 <code>logger_</code> 已经被先销毁，关闭连接时就可能出现 use-after-free。后台服务的“优雅关闭”问题，很多都出在这里。</li>
+<li><strong>静态存储期和线程存储期容易制造“看起来是全局、其实是每线程”的误解。</strong> 访问令牌缓存、配置、日志器常做成静态对象；请求上下文常做成 <code>thread_local</code>。静态对象的初始化顺序跨翻译单元没有保证，线程局部变量也不能拿来在线程之间共享。线程池复用线程、协程可能切换线程时，这类问题尤其隐蔽。</li>
+<li><strong>零拷贝解析很诱人，但所有权必须说清楚。</strong> 公众号后台的请求体可能很大，解析 XML/JSON 时用 <code>std::string_view</code> 指向原缓冲区能减少拷贝。但视图不拥有数据，必须保证原缓冲区在所有视图使用完之前一直活着；一旦跨异步边界，通常就要复制数据或转移所有权。</li>
+<li><strong>ASan 能在测试阶段把“悬垂”变成可定位的报告。</strong> 线上靠 core dump 猜成本很高；用 <code>-fsanitize=address</code> 跑单测，可以直接看到 <code>heap-use-after-free</code>、<code>stack-use-after-scope</code>，以及“谁释放了这块内存”的调用栈。</li>
+</ul>
+<p>所以本课的目标不是背标准条款，而是建立一条工程习惯：<strong>看到引用、指针、视图、临时对象和成员对象时，先问“谁拥有它、它活多久、谁可能让它提前结束”。</strong></p>
+<h2 id="2">2. 从直觉到原理：三个核心要点</h2>
+<h3 id="21">2.1 自动、静态和线程存储期</h3>
+<h4 id="_1">直觉：对象住在哪里、住多久</h4>
+<p>“存储期”描述的是<strong>存储</strong>能持续多久；“生命周期”描述的是<strong>对象</strong>从什么时候开始可用、到什么时候不能再当作该类型对象使用。两者经常同时发生，但并不总是同一件事。</p>
+<p>C++ 里常见的存储期可以先用一张表建立直觉：</p>
+<table>
+<thead>
+<tr>
+<th>存储期</th>
+<th>典型声明</th>
+<th>何时开始</th>
+<th>何时结束</th>
+<th>关键点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自动存储期</td>
+<td>块作用域变量、函数参数</td>
+<td>进入作用域并完成初始化</td>
+<td>离开作用域，包括异常栈展开</td>
+<td>每次进入作用域都是新对象</td>
+</tr>
+<tr>
+<td>静态存储期</td>
+<td>命名空间变量、<code>static</code> 局部变量、静态数据成员</td>
+<td>程序启动前，或首次执行声明时</td>
+<td>程序退出</td>
+<td>局部静态变量 C++11 起初始化线程安全</td>
+</tr>
+<tr>
+<td>线程存储期</td>
+<td><code>thread_local</code> 变量</td>
+<td>该线程首次使用前</td>
+<td>该线程退出</td>
+<td>每个线程一份，不是共享变量</td>
+</tr>
+<tr>
+<td>动态存储期</td>
+<td><code>new</code> / <code>malloc</code> 得到的存储</td>
+<td><code>new</code> 分配并构造后；<code>malloc</code> 只分配存储，需 placement new 才开始对象生命周期</td>
+<td><code>delete</code> / 显式析构后</td>
+<td>本节点不展开，但悬垂问题常来自这里</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_2">自动存储期：离开作用域就结束</h4>
+<p>自动对象最常见：函数里的局部变量、函数参数、块作用域里的对象。它们在执行到声明时构造，在离开作用域时析构；如果中途抛异常，栈展开也会调用已经构造完成的自动对象析构函数。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Loud</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Loud</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"+ "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Loud</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"- "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Loud</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"a"</span><span class="p">};</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Loud</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"b"</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Loud</span><span class="w"> </span><span class="n">c</span><span class="p">{</span><span class="s">"c"</span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">handle</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出顺序是：</p>
+<div class="codehilite"><pre><span></span><code>+ a
++ b
+- b
++ c
+- c
+- a
+</code></pre></div>
+
+<p><code>b</code> 在内部块结束时先析构，<code>c</code> 在函数结束时析构，<code>a</code> 最后析构。自动对象的生命周期与作用域强绑定，这是最容易推理的一类对象。</p>
+<h4 id="_3">静态存储期：活得比函数长</h4>
+<p>静态存储期包括命名空间作用域变量、静态数据成员和 <code>static</code> 局部变量。它们从程序启动附近开始存在，到程序退出时销毁。<code>static</code> 局部变量有一个重要特点：<strong>第一次执行到声明时才初始化</strong>，而不是每次调用都初始化。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Loud</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Loud</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"+ "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Loud</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"- "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">Loud</span><span class="w"> </span><span class="n">global</span><span class="p">{</span><span class="s">"global"</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">who</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Loud</span><span class="w"> </span><span class="n">automatic</span><span class="p">{</span><span class="n">who</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"-auto"</span><span class="p">};</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">Loud</span><span class="w"> </span><span class="n">process_wide</span><span class="p">{</span><span class="s">"static-local"</span><span class="p">};</span>
+<span class="w">    </span><span class="k">thread_local</span><span class="w"> </span><span class="n">Loud</span><span class="w"> </span><span class="n">per_thread</span><span class="p">{</span><span class="n">who</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">"-thread-local"</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  handling "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">who</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">process_wide</span><span class="p">;</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">per_thread</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"main starts</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">handle</span><span class="p">(</span><span class="s">"main"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">worker</span><span class="p">([]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">handle</span><span class="p">(</span><span class="s">"worker"</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="n">worker</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"main ends</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>一次典型输出是：</p>
+<div class="codehilite"><pre><span></span><code>+ global
+main starts
++ main-auto
++ static-local
++ main-thread-local
+  handling main
+- main-auto
++ worker-auto
++ worker-thread-local
+  handling worker
+- worker-auto
+- worker-thread-local
+main ends
+- main-thread-local
+- static-local
+- global
+</code></pre></div>
+
+<p>从输出可以读出三件事：</p>
+<ul>
+<li><code>global</code> 在 <code>main</code> 之前构造，在 <code>main</code> 之后析构。</li>
+<li><code>static-local</code> 只在第一次调用 <code>handle</code> 时构造，第二次调用不会重复构造；它在程序退出阶段才析构。</li>
+<li><code>main-thread-local</code> 和 <code>worker-thread-local</code> 各自属于对应线程：主线程的在线程退出阶段析构，工作线程的在工作线程退出时析构。</li>
+</ul>
+<p>静态存储期有两个经典坑：</p>
+<ol>
+<li><strong>跨翻译单元的初始化顺序没有保证。</strong> 一个 <code>.cpp</code> 里的全局对象构造函数如果使用另一个 <code>.cpp</code> 里的全局对象，后者可能还没构造。常用解法是把全局对象改成函数内静态对象（Meyers singleton），把初始化推迟到首次调用。</li>
+<li><strong>程序退出阶段的析构顺序也要小心。</strong> 同一翻译单元内通常按构造逆序销毁，但跨翻译单元的顺序未指定。不要在静态对象的析构函数里依赖另一个可能已经销毁的静态对象，尤其是日志器、配置和连接池。</li>
+</ol>
+<h4 id="_4">线程存储期：每个线程一份</h4>
+<p><code>thread_local</code> 变量在每个线程中有独立实例。它适合保存“当前线程的请求上下文”“线程私有的缓冲区”等内容，但不适合做跨线程共享。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="k">thread_local</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">tls_request_id</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">handle_request</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tls_request_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"thread "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" handles "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">tls_request_id</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">a</span><span class="p">([]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">handle_request</span><span class="p">(</span><span class="s">"req-a"</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">b</span><span class="p">([]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">handle_request</span><span class="p">(</span><span class="s">"req-b"</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="n">a</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">b</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>两个线程各自看到自己的 <code>tls_request_id</code>，互不干扰。需要注意：</p>
+<ul>
+<li><code>thread_local</code> 的构造发生在该线程首次使用之前，析构发生在线程退出时；主线程的线程局部对象也在程序退出阶段销毁。</li>
+<li>它绑定的是<strong>线程</strong>，不是逻辑请求。线程池复用线程时，如果不清空上下文，下一个请求可能读到上一个请求的残留值。</li>
+<li>协程如果可能在不同线程上恢复执行，<code>thread_local</code> 不会自动跟着协程走，容易导致上下文错乱。此时应把上下文作为显式参数或协程状态传递。</li>
+<li>不要把某个线程的 <code>thread_local</code> 对象引用传给另一个线程；通过引用访问的是原线程的对象，可能造成数据竞争或悬垂；只有通过变量名访问，才会得到当前线程自己的实例。</li>
+</ul>
+<h4 id="_5">后台例子：静态令牌缓存与线程局部请求上下文</h4>
+<p>访问令牌缓存通常希望全进程共享，可以用函数内静态对象：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">AccessToken</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">expires_at</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">AccessToken</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">token_cache</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">AccessToken</span><span class="w"> </span><span class="n">cache</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">cache</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>函数内静态对象在 C++11 起初始化线程安全，并且能把初始化推迟到首次调用，避开跨翻译单元的静态初始化顺序问题。</p>
+<p>请求上下文则更适合 <code>thread_local</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">RequestContext</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">request_id</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">openid</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">thread_local</span><span class="w"> </span><span class="n">RequestContext</span><span class="w"> </span><span class="n">tls_context</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">on_message</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tls_context</span><span class="p">.</span><span class="n">request_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_request_id</span><span class="p">();</span>
+<span class="w">    </span><span class="n">tls_context</span><span class="p">.</span><span class="n">openid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">extract_openid</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>但要注意：如果异步任务在线程池的另一个线程执行，它看不到原线程的 <code>tls_context</code>。正确做法是把需要的字段复制到任务对象里，或者显式传递一个 <code>RequestContext</code>，不要依赖 <code>thread_local</code> 自动跨线程传递。</p>
+<h4 id="_6">存储期不等于生命周期</h4>
+<p>节点 summary 强调：<strong>存储存在不代表对象可用。</strong> 这句话至少有三层含义：</p>
+<ol>
+<li><strong>原始存储没有对象。</strong> <code>operator new(sizeof(T))</code> 或 <code>std::byte buffer[sizeof(T)]</code> 只得到一块字节，<code>T</code> 的对象还没有开始生命周期。必须用 placement new 构造，之后才能通过 <code>T*</code> 使用；直接 <code>reinterpret_cast&lt;T*&gt;(buffer)-&gt;foo()</code> 是未定义行为（UB）。</li>
+<li><strong>容器容量里可能有未构造区域。</strong> <code>std::vector&lt;T&gt;</code> 的 <code>size()</code> 表示已经构造的元素个数，<code>capacity()</code> 表示已分配存储能容纳多少个元素。访问 <code>size()</code> 到 <code>capacity()</code> 之间的区域不是“读到旧值”，而是访问不存在的对象。</li>
+<li><strong>联合体只有活跃成员活着。</strong> <code>union</code> 的存储足够大，但同一时间只有当前活跃成员的对象生命周期在进行；读取非活跃成员通常是 UB（标准布局类型的公共初始序列等少数情况除外）。</li>
+</ol>
+<p>对象生命周期的粗略规则是：</p>
+<ul>
+<li>标量类型：存储就位并完成初始化后，对象生命周期开始；存储被释放或复用时结束。</li>
+<li>类类型：初始化完成、对象可以正常使用时，完整对象可用；完整对象的生命周期在析构函数开始执行时结束。析构函数体和成员析构仍在进行，但这段时间只能做有限操作，不能把对象当成“还完整活着”随意使用。</li>
+<li>成员子对象有自己的生命周期：它们在宿主构造过程中按顺序开始，在宿主析构函数体执行完后按逆序结束。</li>
+</ul>
+<p>这也是为什么“对象还占着内存”不等于“对象还能用”。悬垂引用、悬垂指针、悬垂视图，本质上都是<strong>存储可能还在，但对象生命周期已经结束</strong>。</p>
+<h3 id="22">2.2 临时对象与引用延长</h3>
+<h4 id="_7">直觉：临时对象默认只活到分号</h4>
+<p>表达式里经常会产生没有名字的临时对象，例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"hello "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"wechat"</span><span class="p">);</span>
+</code></pre></div>
+
+<p><code>std::string("wechat")</code> 和加法结果都是临时对象。它们通常活到<strong>当前完整表达式</strong>结束，也就是大致到分号为止。下面这种写法是安全的，因为临时对象在 <code>s</code> 的初始化完成前一直活着：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"hello "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"wechat"</span><span class="p">);</span>
+</code></pre></div>
+
+<p>但把临时对象的“地址”或“视图”留下来，就要小心：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"hello"</span><span class="p">).</span><span class="n">c_str</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span>
+</code></pre></div>
+
+<p>这两行结束后，临时 <code>std::string</code> 已经销毁，<code>p</code> 和 <code>v</code> 都悬垂。指针和 <code>std::string_view</code> 都不是引用，不会触发引用延长。</p>
+<h4 id="_8">原理：引用延长的规则</h4>
+<p>C++ 有一个特例：<strong>局部 <code>const T&amp;</code> 或 <code>T&amp;&amp;</code> 直接绑定到临时对象时，临时对象的生命周期延长到该引用的生命周期结束。</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"wechat"</span><span class="p">);</span>
+</code></pre></div>
+
+<p><code>a</code> 和 <code>b</code> 都是局部引用，临时 <code>std::string</code> 会活到 <code>a</code> / <code>b</code> 离开作用域。这个规则很实用，例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">greeting</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_greeting</span><span class="p">();</span>
+</code></pre></div>
+
+<p>如果 <code>make_greeting()</code> 按值返回 <code>std::string</code>，返回的临时对象会直接绑定到 <code>greeting</code>，寿命被延长。但如果 <code>make_greeting()</code> 返回的是 <code>const std::string&amp;</code>，情况就不同了：如果它返回的是临时对象的引用，临时对象是在函数内部的 <code>return</code> 表达式里创建并销毁的，<code>greeting</code> 只是复制了一个已经悬垂的引用；如果它返回的是静态/全局对象的引用，引用本身有效，但那是对象本身的寿命，不是“引用延长”。</p>
+<p>把常见写法列成表：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>是否延长</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>const T&amp; r = T{};</code></td>
+<td>是</td>
+<td>局部 const 左值引用直接绑定临时对象</td>
+</tr>
+<tr>
+<td><code>T&amp;&amp; r = T{};</code></td>
+<td>是</td>
+<td>局部右值引用直接绑定临时对象</td>
+</tr>
+<tr>
+<td><code>const T&amp; r = make();</code>，<code>make</code> 返回 <code>T</code></td>
+<td>是</td>
+<td>返回的临时对象直接绑定到 <code>r</code></td>
+</tr>
+<tr>
+<td><code>const T&amp; r = make_ref();</code>，<code>make_ref</code> 返回 <code>const T&amp;</code></td>
+<td>否</td>
+<td>若该引用指向临时/局部对象，临时对象在 <code>make_ref</code> 的 <code>return</code> 全表达式结束时就销毁；<code>r</code> 只是复制了悬垂引用。若返回静态/全局对象的引用，则安全，但这不是“延长”</td>
+</tr>
+<tr>
+<td><code>void f(const T&amp;); f(T{});</code></td>
+<td>不需要</td>
+<td>临时对象活到包含调用的完整表达式结束，函数调用期间安全</td>
+</tr>
+<tr>
+<td><code>struct S { const T&amp; r; S() : r(T{}) {} };</code></td>
+<td>否</td>
+<td>引用成员绑定临时对象，构造调用所在完整表达式结束后就可能悬垂</td>
+</tr>
+<tr>
+<td><code>const T&amp; r = f().member;</code>，<code>f</code> 返回值，<code>member</code> 是值成员</td>
+<td>是</td>
+<td>延长的是 <code>f</code> 返回的完整临时对象；若 <code>member</code> 本身是引用成员，则不适用</td>
+</tr>
+<tr>
+<td><code>std::string_view v = make();</code></td>
+<td>否</td>
+<td><code>string_view</code> 不是引用，不触发延长</td>
+</tr>
+<tr>
+<td><code>const char* p = std::string("x").c_str();</code></td>
+<td>否</td>
+<td>指针不是引用，临时销毁后悬垂</td>
+</tr>
+<tr>
+<td><code>const T&amp; r = std::move(obj);</code></td>
+<td>不需要</td>
+<td><code>r</code> 绑定到 <code>obj</code> 本身，寿命由 <code>obj</code> 决定</td>
+</tr>
+</tbody>
+</table>
+<p>一个关键结论：<strong>引用延长不是“传染”的。</strong> 它只在引用变量直接绑定临时对象时发生，不会穿过函数返回、函数参数、引用成员、指针或视图。</p>
+<h4 id="tracer">用 Tracer 看见延长与不延长</h4>
+<p>先准备一个会打日志的 <code>Tracer</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Tracer</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Tracer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">name_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">depth_</span><span class="o">++</span><span class="p">,</span><span class="w"> </span><span class="sc">' '</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"+ "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name_</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Tracer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="o">--</span><span class="n">depth_</span><span class="p">,</span><span class="w"> </span><span class="sc">' '</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"- "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name_</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Tracer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="p">(</span><span class="n">Tracer</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Tracer</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name_</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">inline</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">thread_local</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">depth_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>下面这个函数按值返回 <code>Tracer</code>，绑定到局部 <code>const Tracer&amp;</code> 后，临时对象会活到引用离开作用域：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Tracer</span><span class="w"> </span><span class="nf">make_tracer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Tracer</span><span class="p">(</span><span class="s">"returned temporary"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"--- const ref extension ---</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_tracer</span><span class="p">();</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"t is alive</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"--- after scope ---</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出是：</p>
+<div class="codehilite"><pre><span></span><code>--- const ref extension ---
++ returned temporary
+t is alive
+- returned temporary
+--- after scope ---
+</code></pre></div>
+
+<p>析构日志出现在 <code>t</code> 离开作用域时，而不是在 <code>make_tracer()</code> 返回时，说明延长生效了。</p>
+<p>再看一个反例：函数返回的是引用，而不是值：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">make_dangling</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Tracer</span><span class="p">(</span><span class="s">"temporary returned by reference"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_dangling</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"after make_dangling</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出是：</p>
+<div class="codehilite"><pre><span></span><code>+ temporary returned by reference
+- temporary returned by reference
+after make_dangling
+</code></pre></div>
+
+<p>临时对象在 <code>make_dangling()</code> 的 <code>return</code> 表达式结束时就被销毁了，<code>main</code> 里的 <code>t</code> 只是拿到了一个悬垂引用。GCC 通常会给出：</p>
+<div class="codehilite"><pre><span></span><code>warning: returning reference to temporary [-Wreturn-local-addr]
+</code></pre></div>
+
+<p>这个警告必须当错误处理。更隐蔽的是，如果先写 <code>const T&amp; r = T{};</code> 再 <code>return r;</code>，有些编译器不一定会警告，但临时对象只延长到 <code>r</code> 这个局部引用，函数返回后同样悬垂。</p>
+<h4 id="_9">后台例子：解析结果不要保存指向请求体的视图</h4>
+<p>假设解析函数返回一组 <code>std::string_view</code> 字段：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">ParsedMessage</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">content</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">ParsedMessage</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+</code></pre></div>
+
+<p>如果这样使用：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">on_message</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">body</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ParsedMessage</span><span class="w"> </span><span class="n">parsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+<span class="w">    </span><span class="n">enqueue</span><span class="p">([</span><span class="n">parsed</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">use</span><span class="p">(</span><span class="n">parsed</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>parsed.type</code> 和 <code>parsed.content</code> 指向 <code>body</code> 的缓冲区。回调返回后，<code>body</code> 可能被框架释放，异步任务再使用 <code>parsed</code> 就是 use-after-free。</p>
+<p>安全的做法有两种：</p>
+<ol>
+<li><strong>让解析结果拥有数据</strong>：字段改成 <code>std::string</code>，解析时复制。</li>
+<li><strong>让任务持有原缓冲区的所有权</strong>：把请求体复制到 <code>std::shared_ptr&lt;std::string&gt;</code>，任务捕获这个 <code>shared_ptr</code>，视图只在 <code>shared_ptr</code> 存活期间使用。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">owned_body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+<span class="n">enqueue</span><span class="p">([</span><span class="n">owned_body</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ParsedMessage</span><span class="w"> </span><span class="n">parsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse</span><span class="p">(</span><span class="o">*</span><span class="n">owned_body</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">parsed</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>第二种做法减少了复制，但把释放时机交给了 <code>shared_ptr</code> 的引用计数。节点 tradeoff 提醒的正是这一点：<strong>更短所有权链易推理，过度共享会隐藏释放时机。</strong></p>
+<h4 id="string_view">签名场景：临时字符串与 <code>string_view</code></h4>
+<p>验签代码经常拼接临时字符串：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">sign</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">appid</span><span class="p">,</span>
+<span class="w">                 </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">timestamp</span><span class="p">,</span>
+<span class="w">                 </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">nonce</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">verify_request</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">appid</span><span class="p">,</span>
+<span class="w">                    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">timestamp</span><span class="p">,</span>
+<span class="w">                    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">nonce</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">verify</span><span class="p">(</span><span class="n">sign</span><span class="p">(</span><span class="n">appid</span><span class="p">,</span><span class="w"> </span><span class="n">timestamp</span><span class="p">,</span><span class="w"> </span><span class="n">nonce</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里 <code>sign(...)</code> 返回的临时 <code>std::string</code> 活到 <code>verify</code> 调用结束，是安全的。但如果写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="nf">bad_signature</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">sign</span><span class="p">(</span><span class="s">"appid"</span><span class="p">,</span><span class="w"> </span><span class="s">"timestamp"</span><span class="p">,</span><span class="w"> </span><span class="s">"nonce"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>sign</code> 返回的临时字符串在 <code>return</code> 表达式结束时销毁，返回的 <code>string_view</code> 立刻悬垂。验签失败、偶发乱码，可能就是这样来的。</p>
+<h4 id="stdstring_view"><code>std::string_view</code> 为什么特别危险</h4>
+<p><code>std::string_view</code> 只是一个“指针 + 长度”的非拥有视图。它不管理内存，也不延长任何对象的寿命。常见危险来源有：</p>
+<ul>
+<li><strong>绑定临时 <code>std::string</code></strong>：临时对象在完整表达式结束时销毁，视图悬垂。</li>
+<li><strong>绑定局部 <code>std::string</code></strong>：局部对象离开作用域后，视图悬垂。</li>
+<li><strong>原字符串被修改或扩容</strong>：<code>std::string</code> 的 <code>append</code>、<code>push_back</code> 等操作可能重新分配缓冲区，旧视图指向已释放内存；即使没有重新分配，内容变化也会让视图看到新内容，长度却可能不匹配。</li>
+<li><strong>原字符串被移动</strong>：移动后原对象仍然存在，但缓冲区所有权可能转移；视图是否有效取决于具体实现和移动后的状态，不能依赖。</li>
+<li><strong>跨异步边界保存视图</strong>：请求体、局部缓冲区、临时字符串都可能在异步任务执行前消失。</li>
+</ul>
+<p>安全的用法是：<strong>视图只在拥有者确定存活的作用域内使用。</strong> 如果函数参数是 <code>std::string_view</code>，调用期间临时字符串是安全的；但函数不能把视图存起来跨调用使用。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">log_message</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">message</span><span class="p">);</span>
+
+<span class="n">log_message</span><span class="p">(</span><span class="n">make_body</span><span class="p">());</span>
+</code></pre></div>
+
+<p>只要 <code>log_message</code> 内部不保存 <code>message</code>，这次调用是安全的，因为 <code>make_body()</code> 返回的临时字符串活到整个调用表达式结束。</p>
+<h3 id="23">2.3 成员构造析构顺序</h3>
+<h4 id="_10">直觉：先地基，后楼层；拆楼顺序相反</h4>
+<p>一个类对象通常由基类子对象和成员子对象组成。构造时：</p>
+<ol>
+<li>虚基类（如果有多继承和虚继承）；</li>
+<li>直接非虚基类，按声明顺序；</li>
+<li>非静态数据成员，按<strong>声明顺序</strong>；</li>
+<li>构造函数体。</li>
+</ol>
+<p>析构时大致相反：</p>
+<ol>
+<li>析构函数体；</li>
+<li>非静态数据成员，按声明<strong>逆序</strong>；</li>
+<li>直接非虚基类，按声明逆序；</li>
+<li>虚基类。</li>
+</ol>
+<p>数组元素按下标递增构造，按下标递减析构。</p>
+<h4 id="_11">原理：初始化顺序看声明，不看初始化列表</h4>
+<p>很多初学者以为构造函数初始化列表里写的顺序就是实际初始化顺序。不是。<strong>实际顺序由成员在类中的声明顺序决定。</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"tracer.hpp"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Base</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">t</span><span class="p">{</span><span class="s">"Base"</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Base</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  Base body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Base</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  ~Base body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Inner</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">t</span><span class="p">{</span><span class="s">"Inner"</span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Derived</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"Derived::a"</span><span class="p">};</span>
+<span class="w">    </span><span class="n">Inner</span><span class="w"> </span><span class="n">inner</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"Derived::b"</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Derived</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"Derived::a"</span><span class="p">},</span><span class="w"> </span><span class="n">inner</span><span class="p">{},</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"Derived::b"</span><span class="p">}</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  Derived body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Derived</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  ~Derived body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"before Derived</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Derived</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"inside scope</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"after Derived</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出是：</p>
+<div class="codehilite"><pre><span></span><code>before Derived
++ Base
+  Base body
+ + Derived::a
+  + Inner
+   + Derived::b
+  Derived body
+inside scope
+  ~Derived body
+   - Derived::b
+  - Inner
+ - Derived::a
+  ~Base body
+- Base
+after Derived
+</code></pre></div>
+
+<p>顺序可以这样读：</p>
+<ul>
+<li><code>Base</code> 先于 <code>Derived</code> 的成员构造，所以 <code>Base</code> 的 <code>Tracer</code> 和 <code>Base</code> 构造函数体先出现。</li>
+<li><code>Derived</code> 的成员按声明顺序 <code>a</code>、<code>inner</code>、<code>b</code> 构造，最后执行 <code>Derived</code> 构造函数体。</li>
+<li>析构时先执行 <code>~Derived</code> 函数体，然后按逆序销毁 <code>b</code>、<code>inner</code>、<code>a</code>，再执行 <code>~Base</code> 函数体，最后销毁 <code>Base</code> 的成员。</li>
+</ul>
+<p>如果初始化列表写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Derived</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"Derived::b"</span><span class="p">},</span><span class="w"> </span><span class="n">inner</span><span class="p">{},</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"Derived::a"</span><span class="p">}</span><span class="w"> </span><span class="p">{</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>实际顺序仍然是 <code>a</code>、<code>inner</code>、<code>b</code>。GCC 的 <code>-Wreorder</code>（Clang 对应 <code>-Wreorder-ctor</code>）会提醒你“初始化列表顺序和声明顺序不一致”：</p>
+<div class="codehilite"><pre><span></span><code>warning: 'Derived::b' will be initialized after [-Wreorder]
+warning:   'Tracer Derived::a' [-Wreorder]
+warning:   when initialized here [-Wreorder]
+</code></pre></div>
+
+<p>更危险的是在初始化表达式里使用还没构造的成员：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">BadInit</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">BadInit</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>声明顺序是 <code>a</code> 先于 <code>b</code>，所以 <code>a</code> 先用 <code>b + 1</code> 初始化，而此时 <code>b</code> 还没有初始化。读取未初始化的 <code>b</code> 是 UB。<code>-Wreorder</code> 会警告，但不要依赖警告；写初始化列表时保持与声明顺序一致。</p>
+<h4 id="_12">构造失败时会发生什么</h4>
+<p>如果构造函数体抛出异常，完整对象不会构造成功，但<strong>已经构造完成的基类和成员会按逆序析构</strong>。例如 <code>Derived</code> 的构造函数体抛异常，已经构造好的 <code>Base</code>、<code>a</code>、<code>inner</code>、<code>b</code> 会被销毁。理解这一点有助于排查“构造到一半失败，资源有没有泄漏”的问题。RAII 之所以重要，就是因为成员和基类的析构会在异常路径上自动执行。</p>
+<h4 id="_13">后台例子：连接对象的成员顺序</h4>
+<p>假设一个连接对象持有日志器、套接字、超时回调和定时器：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="o">~</span><span class="n">Connection</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">timer_</span><span class="p">.</span><span class="n">stop</span><span class="p">();</span>
+<span class="w">        </span><span class="n">on_timeout_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Logger</span><span class="w"> </span><span class="n">logger_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Socket</span><span class="w"> </span><span class="n">socket_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">on_timeout_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Timer</span><span class="w"> </span><span class="n">timer_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>成员声明顺序是 <code>logger_</code>、<code>socket_</code>、<code>on_timeout_</code>、<code>timer_</code>。构造顺序是 <code>logger_</code>、<code>socket_</code>、<code>on_timeout_</code>、<code>timer_</code>；析构顺序是 <code>timer_</code>、<code>on_timeout_</code>、<code>socket_</code>、<code>logger_</code>。</p>
+<p>这个顺序有几个好处：</p>
+<ul>
+<li><code>timer_</code> 最先析构，它析构时还可以安全使用 <code>on_timeout_</code>、<code>socket_</code>、<code>logger_</code>。</li>
+<li><code>logger_</code> 最后析构，<code>socket_</code> 等成员的析构函数如果打日志，日志器还活着。</li>
+<li>在 <code>~Connection</code> 函数体里先 <code>timer_.stop()</code> 并清空回调，避免定时器在对象销毁后继续触发回调。</li>
+</ul>
+<p>但还要注意：如果 <code>on_timeout_</code> 捕获了 <code>this</code>，而某个异步操作在 <code>~Connection</code> 返回后仍然持有这个回调，那么即使成员顺序正确，也会发生 use-after-free。正确做法是：</p>
+<ul>
+<li>在析构函数体里停止所有异步操作，并等待或取消它们；</li>
+<li>异步回调不要长期捕获裸 <code>this</code>，可以使用 <code>std::weak_ptr</code> 观察对象是否还活着；</li>
+<li>如果回调必须延长对象寿命，就明确使用 <code>std::shared_ptr</code>，并接受“对象可能晚于预期释放”的代价。</li>
+</ul>
+<h4 id="_14">画生命周期图</h4>
+<p>以 <code>Derived</code> 为例，可以画出这样的时间轴：</p>
+<div class="codehilite"><pre><span></span><code>时间轴 →
+
+Derived 完整对象:
+  构造开始 ────────────────────────────── 析构开始
+  │ Base 构造 │ Derived 成员构造 │ body │ ~body │ 成员逆序析构 │ Base 析构 │
+
+Base 子对象:
+  [Base::t 构造][Base body][Base 使用期][~Base body][~Base::t]
+
+Derived 成员:
+  a:      [构造][使用期][析构]
+  inner:     [构造][使用期][析构]
+  b:            [构造][使用期][析构]
+</code></pre></div>
+
+<p>关键不是把图画得多漂亮，而是能回答：</p>
+<ul>
+<li>哪个成员先构造？按声明顺序。</li>
+<li>哪个成员先析构？按声明逆序。</li>
+<li>构造函数体执行时，哪些成员已经构造好了？所有成员。</li>
+<li>析构函数体执行时，哪些成员还活着？所有成员都还活着；成员析构发生在函数体之后。</li>
+<li>基类和成员谁先谁后？基类先构造、后析构；成员后构造、先析构。</li>
+</ul>
+<p>这张图能直接用于审查后台对象：如果 <code>timer_</code> 的回调依赖 <code>socket_</code>，就要保证 <code>timer_</code> 先于 <code>socket_</code> 析构；如果某个成员的析构函数要打日志，就要保证日志器比它活得久。</p>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 常见误区</h3>
+<ol>
+<li>
+<p><strong>“存储还在，所以对象还能用。”</strong>
+   这是本节点最核心的误区。<code>vector</code> 的容量、<code>operator new</code> 的原始内存、<code>union</code> 的非活跃成员、<code>delete</code> 之后的堆块，都可能“内存还在”，但对象生命周期已经结束。有效性来自生命周期管理，不来自“地址看起来还有效”。</p>
+</li>
+<li>
+<p><strong>“绑定到函数返回的引用会自动延长临时对象寿命。”</strong>
+   节点 pitfalls 明确点出：<strong>绑定到函数返回引用不会自动延长原临时对象寿命。</strong> <code>const T&amp; r = f();</code> 只有在 <code>f</code> 按值返回 <code>T</code> 时，返回的临时对象才直接绑定到 <code>r</code> 并被延长；如果 <code>f</code> 返回 <code>const T&amp;</code>，<code>r</code> 只是复制了 <code>f</code> 内部已经悬垂的引用。</p>
+</li>
+<li>
+<p><strong>“<code>std::string_view</code> 是引用，所以会延长寿命。”</strong>
+   <code>std::string_view</code> 不是引用，它只是一个指针加长度。绑定临时 <code>std::string</code>、局部 <code>std::string</code> 或被修改过的 <code>std::string</code>，都可能悬垂。</p>
+</li>
+<li>
+<p><strong>“引用成员绑定临时对象没问题。”</strong>
+   <code>struct S { const std::string&amp; r; S() : r(std::string("x")) {} };</code> 中，临时字符串不会延长到 <code>S</code> 对象的寿命。构造结束后 <code>s.r</code> 就可能悬垂。需要拥有数据时，用 <code>std::string</code> 值成员；需要共享时，用 <code>std::shared_ptr</code> 等明确的所有权类型。</p>
+</li>
+<li>
+<p><strong>“初始化列表里写的顺序就是构造顺序。”</strong>
+   实际顺序由声明顺序决定。初始化列表顺序不一致时，<code>-Wreorder</code> 会警告；在初始化表达式里使用尚未构造的成员是 UB。</p>
+</li>
+<li>
+<p><strong>“静态对象一定已经初始化好了。”</strong>
+   跨翻译单元的动态初始化顺序没有保证。一个全局对象的构造函数使用另一个翻译单元的全局对象，可能读到未初始化状态。函数内静态对象（Meyers singleton）通常更安全。</p>
+</li>
+<li>
+<p><strong>“程序退出时静态对象可以随便用。”</strong>
+   静态对象析构顺序跨翻译单元未指定。静态对象的析构函数里如果调用另一个可能已经销毁的静态日志器、配置或连接池，仍然是 UB。</p>
+</li>
+<li>
+<p><strong>“<code>thread_local</code> 可以当全局变量共享。”</strong>
+   <code>thread_local</code> 每个线程一份，不是共享变量。把某个线程的 <code>thread_local</code> 引用传给另一个线程，或者在线程池复用线程时不清理上下文，都会导致数据错乱。协程切换线程时也要特别小心。</p>
+</li>
+<li>
+<p><strong>“返回局部引用/指针，编译器一定会警告。”</strong>
+   直接 <code>return local;</code> 通常会触发 <code>-Wreturn-local-addr</code>，但通过引用变量中转、通过 <code>std::string_view</code> 中转时，编译器不一定警告。不要用“没警告”证明代码正确。</p>
+</li>
+<li>
+<p><strong>“容器扩容不会影响已有引用。”</strong>
+    <code>std::vector</code> 扩容会重新分配存储，旧元素被移动或复制后销毁，指向旧元素的引用、指针、迭代器和视图全部失效。需要稳定地址时，考虑 <code>std::deque</code>、<code>std::list</code>、<code>std::vector&lt;std::unique_ptr&lt;T&gt;&gt;</code>，或者提前 <code>reserve</code>。</p>
+</li>
+<li>
+<p><strong>“<code>std::move</code> 会结束对象生命周期。”</strong>
+    被移动的对象仍然活着，只是处于“有效但未指定”的状态；它的析构函数仍会执行。移动不等于销毁，也不等于可以跳过生命周期管理。</p>
+</li>
+<li>
+<p><strong>“通过基类指针 <code>delete</code> 派生对象总是安全的。”</strong>
+    如果基类析构函数不是 <code>virtual</code>，通过基类指针 <code>delete</code> 派生对象是 UB，派生类的析构函数可能不会执行。生命周期没有正确结束，资源可能泄漏。</p>
+</li>
+<li>
+<p><strong>“过度共享所有权没有代价。”</strong>
+    <code>std::shared_ptr</code> 能延长对象寿命，但也会隐藏释放时机。回调、缓存、会话对象互相持有 <code>shared_ptr</code> 时，容易出现对象迟迟不释放、引用环、关闭后仍被异步任务保活等问题。节点 tradeoff 说得很准确：<strong>更短所有权链易推理，过度共享会隐藏释放时机。</strong></p>
+</li>
+</ol>
+<h3 id="32">3.2 设计权衡</h3>
+<table>
+<thead>
+<tr>
+<th>选择</th>
+<th>好处</th>
+<th>代价 / 风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>值语义、按值返回</td>
+<td>所有权清晰，生命周期容易推理</td>
+<td>大对象有拷贝/移动成本</td>
+</tr>
+<tr>
+<td>引用 / 指针 / 视图</td>
+<td>避免拷贝，适合大请求体、多层解析</td>
+<td>生命周期约束转移给调用者；跨异步/线程容易悬垂</td>
+</tr>
+<tr>
+<td>局部 <code>const T&amp;</code> 延长临时对象</td>
+<td>写法简洁，适合短期只读使用</td>
+<td>只对直接绑定的局部引用生效，容易误以为“到处都能延长”</td>
+</tr>
+<tr>
+<td><code>std::string_view</code></td>
+<td>零拷贝、接口简洁、可含 NUL</td>
+<td>不拥有数据、不保证 <code>\0</code> 结尾、不延长寿命</td>
+</tr>
+<tr>
+<td><code>std::unique_ptr</code></td>
+<td>单一所有权，释放责任明确</td>
+<td>不能共享；转移所有权需要移动语义</td>
+</tr>
+<tr>
+<td><code>std::shared_ptr</code></td>
+<td>共享所有权，适合异步回调和缓存</td>
+<td>原子引用计数成本；引用环；释放时机不直观</td>
+</tr>
+<tr>
+<td><code>std::weak_ptr</code></td>
+<td>观察共享对象，不延长寿命</td>
+<td>使用前必须 <code>lock()</code>，可能已经失效</td>
+</tr>
+<tr>
+<td>静态对象</td>
+<td>全局访问、惰性初始化方便</td>
+<td>初始化/析构顺序、线程安全、测试隔离问题</td>
+</tr>
+<tr>
+<td><code>thread_local</code></td>
+<td>每线程上下文，无锁访问</td>
+<td>不是共享变量；线程池复用、协程迁移、析构顺序问题</td>
+</tr>
+<tr>
+<td>显式上下文对象 / 依赖注入</td>
+<td>生命周期和依赖关系清楚，易测试</td>
+<td>需要更多参数和接口设计</td>
+</tr>
+<tr>
+<td>RAII 守卫</td>
+<td>异常安全，释放时机确定</td>
+<td>需要遵守析构函数约束，不能随意抛异常</td>
+</tr>
+</tbody>
+</table>
+<p>一个实用的取舍原则：</p>
+<ul>
+<li><strong>优先缩短所有权链。</strong> 能用值就用值，能 <code>unique_ptr</code> 就不要 <code>shared_ptr</code>；共享只在确实需要多个所有者时使用。</li>
+<li><strong>跨边界不借。</strong> 回调返回、进入队列、跨线程、进缓存的数据，要么复制，要么转移所有权；不要把栈上或回调参数的引用/视图带出去。</li>
+<li><strong>在接口上写清寿命。</strong> <code>std::string_view</code> 参数表示“只在本次调用期间有效”；<code>const T&amp;</code> 参数也是借用；<code>shared_ptr</code> 表示共享所有权。命名和注释要让人一眼看出谁负责让对象活着。</li>
+<li><strong>用工具兜底，但不依赖工具。</strong> <code>-Wall -Wextra</code>、<code>-Wreturn-local-addr</code>、ASan 都很有用，但优化后的 UB 可能绕过检测；代码审查和类型设计仍然是第一道防线。</li>
+</ul>
+<h2 id="4-tracer-string_view">4. 动手实践：Tracer + 引用延长 + <code>string_view</code> 悬垂</h2>
+<p>本实践对应节点 practice：<strong>用日志记录嵌套对象与临时对象的构造析构，验证 <code>string_view</code> 悬垂。</strong> 建议在 <code>/workspace/atlas/lessons/practice19</code> 下完成。</p>
+<h3 id="0">步骤 0：准备目录与工具链</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/workspace/atlas/lessons/practice19
+<span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice19
+g++<span class="w"> </span>--version
+</code></pre></div>
+
+<p>需要支持 C++17 和 <code>-fsanitize=address</code> 的 GCC 或 Clang。本课示例命令按 GCC 14 编写。</p>
+<h3 id="1-tracerhpp">步骤 1：写 <code>tracer.hpp</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Tracer</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Tracer</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">name_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">depth_</span><span class="o">++</span><span class="p">,</span><span class="w"> </span><span class="sc">' '</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"+ "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name_</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Tracer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="o">--</span><span class="n">depth_</span><span class="p">,</span><span class="w"> </span><span class="sc">' '</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"- "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name_</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Tracer</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="p">(</span><span class="n">Tracer</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Tracer</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name_</span><span class="p">;</span>
+<span class="w">    </span><span class="kr">inline</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">thread_local</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">depth_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p><code>Tracer</code> 在构造时打印 <code>+</code>，析构时打印 <code>-</code>，并用 <code>depth_</code> 做缩进。<code>depth_</code> 是 <code>thread_local</code>，避免多个线程同时打日志时缩进互相干扰。它只避免 <code>depth_</code> 的数据竞争，不保证多线程下整行输出不交错；生产日志应使用日志库或加锁。注意：这个缩进假设对象严格按栈式嵌套构造/析构；静态对象和线程局部对象的析构会晚于作用域，缩进不再代表调用栈，这是正常的。demo 也假设同一个 <code>Tracer</code> 的构造和析构发生在同一线程；跨线程传递对象需要更严谨的日志方案。</p>
+<h3 id="2_1">步骤 2：观察嵌套对象和成员顺序</h3>
+<p>新建 <code>nested_order.cpp</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"tracer.hpp"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Base</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">t</span><span class="p">{</span><span class="s">"Base"</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Base</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  Base body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Base</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  ~Base body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Inner</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">t</span><span class="p">{</span><span class="s">"Inner"</span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Derived</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"Derived::a"</span><span class="p">};</span>
+<span class="w">    </span><span class="n">Inner</span><span class="w"> </span><span class="n">inner</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"Derived::b"</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Derived</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"Derived::a"</span><span class="p">},</span><span class="w"> </span><span class="n">inner</span><span class="p">{},</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"Derived::b"</span><span class="p">}</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  Derived body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Derived</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"  ~Derived body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"before Derived</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Derived</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"inside scope</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"after Derived</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Wpedantic<span class="w"> </span>-Werror<span class="w"> </span>-g<span class="w"> </span>-O0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>nested_order.cpp<span class="w"> </span>-o<span class="w"> </span>nested_order
+./nested_order
+</code></pre></div>
+
+<p>预期输出：</p>
+<div class="codehilite"><pre><span></span><code>before Derived
++ Base
+  Base body
+ + Derived::a
+  + Inner
+   + Derived::b
+  Derived body
+inside scope
+  ~Derived body
+   - Derived::b
+  - Inner
+ - Derived::a
+  ~Base body
+- Base
+after Derived
+</code></pre></div>
+
+<p>检查点：</p>
+<ul>
+<li><code>Base</code> 是否先于 <code>Derived</code> 的成员构造？</li>
+<li><code>a</code>、<code>inner</code>、<code>b</code> 是否按声明顺序构造？</li>
+<li>析构是否按 <code>b</code>、<code>inner</code>、<code>a</code> 逆序？</li>
+<li><code>~Derived</code> 函数体是否在成员析构之前执行？</li>
+<li><code>~Base</code> 函数体是否在 <code>Derived</code> 成员析构之后执行？</li>
+</ul>
+<p>再故意把初始化列表顺序写反，观察 <code>-Wreorder</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Derived</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"Derived::b"</span><span class="p">},</span><span class="w"> </span><span class="n">inner</span><span class="p">{},</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"Derived::a"</span><span class="p">}</span><span class="w"> </span><span class="p">{</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>即使这样写，实际构造顺序仍然是 <code>a</code>、<code>inner</code>、<code>b</code>，但编译器会警告。编译时先去掉 <code>-Werror</code>，否则警告会直接变成错误。不要用初始化列表顺序去“控制”构造顺序。</p>
+<h3 id="3_1">步骤 3：验证引用延长与函数返回引用</h3>
+<p>新建 <code>lifetime_ext.cpp</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"tracer.hpp"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="n">Tracer</span><span class="w"> </span><span class="nf">make_tracer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Tracer</span><span class="p">(</span><span class="s">"returned temporary"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"--- const ref extension ---</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_tracer</span><span class="p">();</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"t is alive</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"--- after scope ---</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Wpedantic<span class="w"> </span>-Werror<span class="w"> </span>-g<span class="w"> </span>-O0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>lifetime_ext.cpp<span class="w"> </span>-o<span class="w"> </span>lifetime_ext
+./lifetime_ext
+</code></pre></div>
+
+<p>预期输出：</p>
+<div class="codehilite"><pre><span></span><code>--- const ref extension ---
++ returned temporary
+t is alive
+- returned temporary
+--- after scope ---
+</code></pre></div>
+
+<p>析构日志在作用域结束时才出现，说明 <code>const Tracer&amp; t = make_tracer();</code> 延长了返回临时对象的寿命。</p>
+<p>新建 <code>return_ref.cpp</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"tracer.hpp"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">make_dangling</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Tracer</span><span class="p">(</span><span class="s">"temporary returned by reference"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">Tracer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_dangling</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"after make_dangling</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">t</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译时<strong>不要</strong>加 <code>-Werror</code>，因为这里故意触发警告：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-g<span class="w"> </span>-O0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-fsanitize<span class="o">=</span>address<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>return_ref.cpp<span class="w"> </span>-o<span class="w"> </span>return_ref
+./return_ref
+</code></pre></div>
+
+<p>你应看到类似警告：</p>
+<div class="codehilite"><pre><span></span><code>warning: returning reference to temporary [-Wreturn-local-addr]
+</code></pre></div>
+
+<p>运行输出：</p>
+<div class="codehilite"><pre><span></span><code>+ temporary returned by reference
+- temporary returned by reference
+after make_dangling
+</code></pre></div>
+
+<p>临时对象在 <code>make_dangling()</code> 返回时就析构了，<code>main</code> 里的 <code>t</code> 已经悬垂。这个例子故意不读取 <code>t</code>，所以 ASan 不一定会报错；日志已经足以证明生命周期没有延长。</p>
+<h3 id="4-string_view">步骤 4：验证 <code>string_view</code> 悬垂</h3>
+<p>新建 <code>view_dangling.cpp</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string_view&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">make_body</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"{</span><span class="se">\"</span><span class="s">msg</span><span class="se">\"</span><span class="s">:</span><span class="se">\"</span><span class="s">a long body that does not fit in small-string optimization</span><span class="se">\"</span><span class="s">}"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"scope"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"safe"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_body</span><span class="p">();</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">view</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"temporary"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_body</span><span class="p">();</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">view</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">view</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_body</span><span class="p">();</span>
+<span class="w">        </span><span class="n">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">view</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里的字符串故意写得较长，超过常见 <code>std::string</code> 的小字符串优化（SSO）阈值，让数据落在堆上，便于 ASan 稳定报告 <code>heap-use-after-free</code>。</p>
+<p>编译：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-fsanitize<span class="o">=</span>address<span class="w"> </span>-Wextra<span class="w"> </span>-g<span class="w"> </span>-O0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-fno-omit-frame-pointer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>view_dangling.cpp<span class="w"> </span>-o<span class="w"> </span>view_dangling
+</code></pre></div>
+
+<p>先运行安全版本：</p>
+<div class="codehilite"><pre><span></span><code>./view_dangling<span class="w"> </span>safe
+</code></pre></div>
+
+<p>应正常输出 JSON 内容。再运行两个悬垂版本：</p>
+<div class="codehilite"><pre><span></span><code>./view_dangling<span class="w"> </span>scope
+./view_dangling<span class="w"> </span>temporary
+</code></pre></div>
+
+<p>两者都应以非 0 退出，并出现类似报告：</p>
+<div class="codehilite"><pre><span></span><code>ERROR: AddressSanitizer: heap-use-after-free on address ...
+READ of size ... at ...
+    #0 ... std::basic_ostream...
+    #1 ... main ... view_dangling.cpp:&lt;行号&gt;
+
+freed by thread T0 here:
+    #0 ... operator delete(void*)
+    #1 ... std::string::~basic_string...
+</code></pre></div>
+
+<p>报告里先看错误类型，再看 <code>READ</code> 的调用栈（谁在越界读），最后看 <code>freed by</code>（谁提前释放了字符串）。<code>scope</code> 场景中 <code>body</code> 离开作用域时释放；<code>temporary</code> 场景中 <code>make_body()</code> 返回的临时字符串在完整表达式结束时释放。</p>
+<p>如果字符串很短，可能落在栈上，ASan 报告会变成 <code>stack-use-after-scope</code>；也可能因为优化或实现细节没有被捕获。<strong>ASan 没报不代表代码正确</strong>，但一旦报出来，就是明确的 UB 证据。</p>
+<h3 id="5">步骤 5：修复悬垂问题</h3>
+<p>针对上面的实验，修复思路如下：</p>
+<ol>
+<li><strong>返回引用改为按值返回。</strong></li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="n">Tracer</span><span class="w"> </span><span class="nf">make_tracer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Tracer</span><span class="p">(</span><span class="s">"returned temporary"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>如果调用方需要长期持有，就让返回值拥有数据，而不是返回内部临时对象的引用。</p>
+<ol start="2">
+<li><strong>让视图的拥有者活得更久。</strong></li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_body</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="n">use</span><span class="p">(</span><span class="n">view</span><span class="p">);</span>
+</code></pre></div>
+
+<p>只要 <code>body</code> 在 <code>view</code> 使用期间一直活着，并且不被修改到重新分配，视图就是安全的。</p>
+<ol start="3">
+<li><strong>跨异步边界时复制或转移所有权。</strong></li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">owned_body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">body</span><span class="p">);</span>
+<span class="n">enqueue</span><span class="p">([</span><span class="n">owned_body</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ParsedMessage</span><span class="w"> </span><span class="n">parsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse</span><span class="p">(</span><span class="o">*</span><span class="n">owned_body</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">parsed</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>或者直接解析成拥有数据的结构：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">ParsedMessage</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">content</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<ol start="4">
+<li><strong>引用成员改为值成员或明确的所有权类型。</strong></li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Session</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">token</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>如果确实要共享，使用 <code>std::shared_ptr</code>，并保证被引用对象比 <code>Session</code> 活得久；如果只是观察，使用 <code>std::weak_ptr</code> 并在使用前 <code>lock()</code>。</p>
+<ol start="5">
+<li><strong>成员顺序按依赖关系排列。</strong></li>
+</ol>
+<p>依赖者先声明还是后声明，取决于构造和析构的方向：</p>
+<ul>
+<li>构造按声明顺序，析构按声明逆序。</li>
+<li>如果 <code>A</code> 的析构函数要使用 <code>B</code>，那么 <code>B</code> 必须比 <code>A</code> 晚析构，也就是 <code>B</code> 要声明在 <code>A</code> 前面。</li>
+<li>如果 <code>A</code> 的构造函数要使用 <code>B</code>，那么 <code>B</code> 必须比 <code>A</code> 早构造，也就是 <code>B</code> 要声明在 <code>A</code> 前面。</li>
+</ul>
+<p>这两个条件通常可以同时满足：<strong>把被依赖的对象声明在前面，把依赖者声明在后面。</strong></p>
+<h3 id="6-clang-ast-dump">步骤 6：用 Clang AST dump 看隐式临时对象</h3>
+<p>节点 sourceStudy 建议：对照 cppreference 的临时对象规则，使用 Clang AST dump 查看隐式临时对象与析构位置。装好 Clang 后可以运行：</p>
+<div class="codehilite"><pre><span></span><code>clang++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Xclang<span class="w"> </span>-ast-dump<span class="w"> </span>-fsyntax-only<span class="w"> </span>lifetime_ext.cpp<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'MaterializeTemporaryExpr|CXXBindTemporaryExpr|CXXTemporaryObjectExpr'</span>
+</code></pre></div>
+
+<p>可以重点观察：</p>
+<ul>
+<li><code>CXXTemporaryObjectExpr</code>：显式创建的临时对象，例如 <code>Tracer("returned temporary")</code>。</li>
+<li><code>MaterializeTemporaryExpr</code>：prvalue 被物化为临时对象的位置。</li>
+<li><code>CXXBindTemporaryExpr</code>：临时对象绑定到析构清理的位置。</li>
+</ul>
+<p>AST dump 的输出通常很大，建议先用 <code>grep</code> 过滤，再对照源码行号看“临时对象在哪里创建、在哪里注册析构”。这比只背规则更能建立直觉。</p>
+<h3 id="7">步骤 7：一键验证</h3>
+<p>可以把下面的脚本保存为 <code>test.sh</code>，然后执行 <code>chmod +x test.sh &amp;&amp; ./test.sh</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">CXX</span><span class="o">=</span><span class="si">${</span><span class="nv">CXX</span><span class="k">:-</span><span class="nv">g</span><span class="p">++</span><span class="si">}</span>
+<span class="nv">BASE</span><span class="o">=(</span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-g<span class="w"> </span>-O0<span class="o">)</span>
+<span class="nv">ASAN</span><span class="o">=(</span>-fsanitize<span class="o">=</span>address<span class="w"> </span>-fno-omit-frame-pointer<span class="o">)</span>
+
+<span class="nv">$CXX</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">BASE</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>-Wpedantic<span class="w"> </span>-Werror<span class="w"> </span>nested_order.cpp<span class="w"> </span>-o<span class="w"> </span>nested_order
+./nested_order<span class="w"> </span>&gt;<span class="w"> </span>nested_order.out
+grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"+ Base"</span><span class="w"> </span>nested_order.out
+grep<span class="w"> </span>-q<span class="w"> </span>--<span class="w"> </span><span class="s2">"- Base"</span><span class="w"> </span>nested_order.out
+
+<span class="nv">$CXX</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">BASE</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>-Wpedantic<span class="w"> </span>-Werror<span class="w"> </span>lifetime_ext.cpp<span class="w"> </span>-o<span class="w"> </span>lifetime_ext
+./lifetime_ext<span class="w"> </span>&gt;<span class="w"> </span>lifetime_ext.out
+grep<span class="w"> </span>-q<span class="w"> </span>--<span class="w"> </span><span class="s2">"- returned temporary"</span><span class="w"> </span>lifetime_ext.out
+
+<span class="nv">$CXX</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">BASE</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">ASAN</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>return_ref.cpp<span class="w"> </span>-o<span class="w"> </span>return_ref<span class="w"> </span><span class="m">2</span>&gt;<span class="w"> </span>return_ref.log
+cat<span class="w"> </span>return_ref.log
+./return_ref<span class="w"> </span>&gt;<span class="w"> </span>return_ref.out
+
+<span class="nv">$CXX</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">BASE</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">ASAN</span><span class="p">[@]</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>view_dangling.cpp<span class="w"> </span>-o<span class="w"> </span>view_dangling
+./view_dangling<span class="w"> </span>safe<span class="w"> </span>&gt;<span class="w"> </span>view_safe.out
+
+<span class="nb">set</span><span class="w"> </span>+e
+./view_dangling<span class="w"> </span>scope<span class="w"> </span>&gt;<span class="w"> </span>view_scope.out<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="nv">scope_status</span><span class="o">=</span><span class="nv">$?</span>
+./view_dangling<span class="w"> </span>temporary<span class="w"> </span>&gt;<span class="w"> </span>view_temp.out<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="nv">temp_status</span><span class="o">=</span><span class="nv">$?</span>
+<span class="nb">set</span><span class="w"> </span>-e
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$scope_status</span><span class="s2">"</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$temp_status</span><span class="s2">"</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"expected ASan failures for dangling string_view"</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+
+grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"AddressSanitizer"</span><span class="w"> </span>view_scope.out
+grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"AddressSanitizer"</span><span class="w"> </span>view_temp.out
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"all practice19 checks passed"</span>
+</code></pre></div>
+
+<p>看到 <code>all practice19 checks passed</code> 即完成基本实践。注意：<code>return_ref.cpp</code> 是故意保留 UB 的演示，真实项目里不能保留这样的代码；它只用于观察编译警告和析构日志。</p>
+<h2 id="5_1">5. 自测题</h2>
+<h3 id="1_1">题 1：存储期与生命周期</h3>
+<p>下面四个对象分别是什么存储期？它们大致在什么时候构造、什么时候析构？</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Loud</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Loud</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">name</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="o">~</span><span class="n">Loud</span><span class="p">()</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">};</span>
+
+<span class="n">Loud</span><span class="w"> </span><span class="n">g</span><span class="p">{</span><span class="s">"global"</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">f</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Loud</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"automatic"</span><span class="p">};</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="n">Loud</span><span class="w"> </span><span class="n">s</span><span class="p">{</span><span class="s">"static local"</span><span class="p">};</span>
+<span class="w">    </span><span class="k">thread_local</span><span class="w"> </span><span class="n">Loud</span><span class="w"> </span><span class="n">t</span><span class="p">{</span><span class="s">"thread local"</span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>答案：</strong></p>
+<ul>
+<li><code>g</code> 是静态存储期。它在 <code>main</code> 之前（或程序启动阶段的动态初始化中）构造，在程序退出阶段析构。</li>
+<li><code>a</code> 是自动存储期。每次调用 <code>f</code> 时构造，离开 <code>f</code> 的作用域时析构；如果 <code>f</code> 抛异常，栈展开也会析构它。</li>
+<li><code>s</code> 是静态存储期。第一次执行到声明时构造，之后调用 <code>f</code> 不会重复构造；在程序退出阶段析构。C++11 起局部静态变量的初始化是线程安全的。</li>
+<li><code>t</code> 是线程存储期。每个线程首次使用前构造自己的实例，线程退出时析构；主线程的实例在程序退出阶段析构。它不是跨线程共享变量。</li>
+</ul>
+<p>补充：静态对象的析构顺序在同一翻译单元内通常与构造相反，跨翻译单元的顺序未指定。不要依赖不同 <code>.cpp</code> 中静态对象的相对析构顺序。</p>
+<h3 id="2_2">题 2：哪些引用延长是安全的？</h3>
+<p>下面几种写法，哪些是安全的？哪些会悬垂？说明理由。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">make</span><span class="p">();</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">make_ref</span><span class="p">();</span>
+
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make</span><span class="p">();</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_ref</span><span class="p">();</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make</span><span class="p">();</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">take</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="p">);</span>
+<span class="n">take</span><span class="p">(</span><span class="n">make</span><span class="p">());</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">S</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">    </span><span class="n">S</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">r</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"x"</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">};</span>
+<span class="n">S</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+</code></pre></div>
+
+<p><strong>答案：</strong></p>
+<ul>
+<li><code>const std::string&amp; a = make();</code> <strong>安全</strong>。<code>make</code> 按值返回 <code>std::string</code>，返回的临时对象直接绑定到局部引用 <code>a</code>，生命周期延长到 <code>a</code> 离开作用域。</li>
+<li><code>const std::string&amp; b = make_ref();</code> <strong>不一定安全</strong>。<code>make_ref</code> 返回的是引用，不是值。它内部如果返回的是临时对象或局部对象的引用，那个对象在 <code>make_ref</code> 的 <code>return</code> 表达式结束时就已经销毁；<code>b</code> 只是复制了一个悬垂引用。引用延长不会穿过函数返回。如果 <code>make_ref</code> 返回的是静态对象或全局对象的引用，则 <code>b</code> 在那些对象存活期间是安全的，但这是对象本身的寿命，不是“引用延长”。</li>
+<li><code>std::string_view c = make();</code> <strong>不安全</strong>。<code>std::string_view</code> 不是引用，不触发引用延长。<code>make()</code> 返回的临时字符串在完整表达式结束时销毁，<code>c</code> 悬垂。</li>
+<li><code>take(make());</code> <strong>安全</strong>。临时字符串活到包含这次函数调用的完整表达式结束，整个 <code>take</code> 调用期间都有效。前提是 <code>take</code> 不把引用或视图保存到调用之后。</li>
+<li><code>S s;</code> <strong>不安全</strong>。引用成员 <code>r</code> 在构造函数初始化列表中绑定到临时 <code>std::string("x")</code>，临时对象不会延长到 <code>S</code> 对象的寿命。构造调用所在完整表达式结束后 <code>s.r</code> 就可能悬垂。应把成员改成 <code>std::string</code> 值类型，或用明确的所有权类型。</li>
+</ul>
+<p>记忆方法：<strong>延长只发生在“局部引用变量直接绑定临时对象”这一种形态；函数返回、函数参数、引用成员、指针、视图都不在延长范围内。</strong></p>
+<h3 id="3_2">题 3：成员构造析构顺序</h3>
+<p>下面代码的输出顺序是什么？<code>Derived</code> 的初始化列表写成 <code>b</code> 在前、<code>a</code> 在后，会改变实际顺序吗？如果 <code>a</code> 的析构函数要使用 <code>b</code>，当前声明顺序安全吗？</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Base</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">t</span><span class="p">{</span><span class="s">"Base"</span><span class="p">};</span>
+<span class="w">    </span><span class="n">Base</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Base body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="o">~</span><span class="n">Base</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"~Base body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Derived</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"a"</span><span class="p">};</span>
+<span class="w">    </span><span class="n">Tracer</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"b"</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Derived</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"b-init"</span><span class="p">},</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"a-init"</span><span class="p">}</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Derived body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="o">~</span><span class="n">Derived</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"~Derived body</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p><strong>答案：</strong></p>
+<p>实际构造顺序是：</p>
+<ol>
+<li><code>Base::t</code></li>
+<li><code>Base</code> 构造函数体</li>
+<li><code>Derived::a</code></li>
+<li><code>Derived::b</code></li>
+<li><code>Derived</code> 构造函数体</li>
+</ol>
+<p>析构顺序是：</p>
+<ol>
+<li><code>~Derived</code> 函数体</li>
+<li><code>Derived::b</code></li>
+<li><code>Derived::a</code></li>
+<li><code>~Base</code> 函数体</li>
+<li><code>Base::t</code></li>
+</ol>
+<p>初始化列表写成 <code>b{"b-init"}, a{"a-init"}</code> <strong>不会改变实际顺序</strong>。成员初始化顺序始终由声明顺序决定：<code>a</code> 在 <code>b</code> 前声明，所以 <code>a</code> 先构造。GCC 的 <code>-Wreorder</code>（Clang 对应 <code>-Wreorder-ctor</code>）会警告初始化列表顺序与声明顺序不一致。</p>
+<p>如果 <code>a</code> 的析构函数要使用 <code>b</code>，当前声明顺序<strong>不安全</strong>。析构按声明逆序进行：<code>b</code> 先析构，<code>a</code> 后析构。<code>a</code> 析构时 <code>b</code> 已经销毁，访问它就是 use-after-free。应把被依赖的 <code>b</code> 声明在 <code>a</code> 前面，这样 <code>b</code> 先构造、后析构，<code>a</code> 析构时 <code>b</code> 还活着。换句话说：<strong>被依赖者声明在前，依赖者声明在后。</strong></p>
+<h2 id="6">6. 推荐资源</h2>
+<ul>
+<li><strong>对象生命周期与存储期：参考文档 / 原始资料</strong></li>
+<li>链接：<a href="https://en.cppreference.com/w/cpp/language/lifetime.html">https://en.cppreference.com/w/cpp/language/lifetime.html</a></li>
+<li>来源：en.cppreference.com</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：基础</li>
+<li>说明：重点阅读自动、静态和线程存储期与临时对象与引用延长，用于核对本节点实验的语义和边界。读的时候把示例中的临时对象按“完整表达式结束”“局部引用延长”“函数返回不延长”三类拆开，再对照本课的 <code>lifetime_ext.cpp</code>、<code>return_ref.cpp</code> 和 <code>view_dangling.cpp</code>，确认自己对生命周期边界的理解一致。</li>
+<li><strong>C++ Core Guidelines · Lifetime safety</strong></li>
+<li>链接：<a href="https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-lifetime">https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-lifetime</a></li>
+<li>来源：ISO C++ Core Guidelines</li>
+<li>语言：英文</li>
+<li>类型：工程指南</li>
+<li>难度：进阶</li>
+<li>说明：对照悬空指针与视图的规则，审查后台回调的生命周期。重点看“不要返回局部对象的引用/指针”“不要让视图比拥有者活得更久”“明确所有权”等建议，并尝试用这些规则检查本课的 <code>on_message</code>、<code>parse</code> 和连接对象示例。</li>
+</ul>
+<h2 id="7_1">7. 验收回扣</h2>
+<p>完成本课后，用下面这张清单做最终自检：</p>
+<table>
+<thead>
+<tr>
+<th>验收项</th>
+<th>你应该能给出的证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能解释引用延长的适用范围</td>
+<td>能说出“局部 <code>const T&amp;</code> / <code>T&amp;&amp;</code> 直接绑定临时对象才延长”，并能举出函数返回引用、引用成员、<code>std::string_view</code> 三个反例</td>
+</tr>
+<tr>
+<td>能画出成员与宿主对象的生命周期</td>
+<td>能画出基类先于成员构造、成员按声明顺序构造、析构函数体先于成员析构、成员按声明逆序析构、基类最后析构的时间轴</td>
+</tr>
+<tr>
+<td>能解释自动、静态和线程存储期</td>
+<td>能说明 <code>Loud</code> 实验中 <code>global</code>、<code>static-local</code>、<code>thread-local</code>、<code>automatic</code> 的构造/析构时机</td>
+</tr>
+<tr>
+<td>能独立完成节点实践</td>
+<td>能运行 <code>nested_order</code>、<code>lifetime_ext</code>、<code>return_ref</code>、<code>view_dangling</code>，并解释输出和 ASan 报告</td>
+</tr>
+<tr>
+<td>能定位 <code>string_view</code> 悬垂</td>
+<td>能说明视图不拥有数据、不延长寿命，并能给出“复制数据”或“让拥有者活得更久”的修复方案</td>
+</tr>
+<tr>
+<td>能审查后台生命周期问题</td>
+<td>能指出回调参数、异步任务、线程池上下文、连接对象成员析构顺序中的风险，并给出所有权/生命周期上的修改建议</td>
+</tr>
+</tbody>
+</table>
+<p>最后再回到节点 summary：</p>
+<blockquote>
+<p>对象生命周期从满足初始化条件开始，到析构或存储被释放或复用时结束；存储存在不代表对象可用。</p>
+</blockquote>
+<p>以及节点 pitfalls：</p>
+<blockquote>
+<p>绑定到函数返回引用不会自动延长原临时对象寿命。</p>
+</blockquote>
+<p>只要你能用本课的 Tracer 实验、<code>string_view</code> 悬垂实验和成员顺序图把这两句话讲清楚，本节点就算真正掌握了。</p><div class="pn"><span><a href="18.html">← 指针、引用与借用边界</a></span><span><a href="20.html">RAII与资源所有权 →</a></span></div></main></div></body></html>

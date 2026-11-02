@@ -1,0 +1,778 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>1. 二进制、整数与数字逻辑 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="cur" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 1 课 · 领域 A · 阶段 0</p><p class="dl"><a href="../files/1-a-binary.md" download>⬇ 本课 Markdown</a></p><h1 id="1208">第 1/208 课：二进制、整数与数字逻辑</h1>
+<blockquote>
+<p>节点：A / 硬件与操作系统 / 入门<br />
+一句话：计算机用位保存信息；整数怎么解释、能表示多大、运算后是什么，由位宽、符号规则和语言语义共同决定。<br />
+先修：无。会一点 C/C++ 或 Python 即可。</p>
+</blockquote>
+<p>本课不把“整数”当成理所当然的数学对象，而是把它拆成三层：</p>
+<ol>
+<li><strong>位模式</strong>：内存里到底有哪些 0 和 1。</li>
+<li><strong>解释</strong>：同样的位，按无符号、补码、协议字段分别是什么意思。</li>
+<li><strong>运算规则</strong>：语言允许什么、禁止什么，哪些结果可以依赖。</li>
+</ol>
+<p>这也是后端处理协议、日志、序列化和边界值时最常用的思考顺序。</p>
+<h2 id="_1">学习目标</h2>
+<p>完成本课，你应能：</p>
+<ul>
+<li>不借助计算器，在二进制、十六进制和十进制之间转换，并说明“位宽”为什么不能省。</li>
+<li>解释补码，手算 8 位有符号/无符号边界，例如 <code>0x7F</code>、<code>0x80</code>、<code>0xFF</code>。</li>
+<li>用 AND、OR、XOR、移位和掩码读写协议字段，并说明整数提升、负数右移和溢出的风险。</li>
+<li>独立实现一个十六进制转储工具，对同一个字节同时显示十六进制、位模式、无符号值和 <code>int8</code> 解释。</li>
+<li>说明为什么有符号溢出不能依赖，以及什么时候应该使用无符号数或显式的边界检查。</li>
+</ul>
+<h2 id="_2">为什么公众号后台工程师要懂</h2>
+<p>公众号后台服务表面上处理的是 HTTP、JSON/XML、RPC 和业务对象，但底层仍会不断遇到整数：</p>
+<ul>
+<li>网络包、序列化格式和二进制协议里的长度、类型、版本、序号、时间戳。</li>
+<li>权限、状态、开关等常被压缩进一个字节的多个标志位。</li>
+<li>日志排查时，需要用十六进制转储确认“发出去的字节”和“收到的字节”。</li>
+<li>多语言服务之间交换数据时，C++ 的 <code>int</code>、Python 的任意精度整数、固定宽度字段的语义并不相同。</li>
+</ul>
+<p>一个字段宽度看错，可能把长度读成负数；一个符号位解释错，可能让分页游标或超时计算回绕；一个掩码写反，可能把权限位读成相反含义。这里的核心不是“会算二进制”，而是<strong>不把数学整数直接等同于机器整数</strong>。</p>
+<h2 id="1">1. 直觉：字节先有位模式，后有数值</h2>
+<p>一个字节有 8 个位。把它想成 8 个开关：</p>
+<div class="codehilite"><pre><span></span><code>bit:    7   6   5   4   3   2   1   0
+        ↓   ↓   ↓   ↓   ↓   ↓   ↓   ↓
+        1   0   1   0   1   1   1   1
+</code></pre></div>
+
+<p>这 8 个开关本身只表示“通/断”。同一组位可以有不同解释：</p>
+<div class="codehilite"><pre><span></span><code>位模式：      1010 1111
+十六进制：    0xAF
+无符号 8 位： 175
+有符号 8 位： -81
+</code></pre></div>
+
+<p>所以“<code>0xAF</code> 是负数吗？”这个问题不完整。正确问法是：<strong>它在多宽的字段里，按有符号还是无符号解释？</strong></p>
+<p>在协议里，这个字节还可能根本不是“一个数”：</p>
+<div class="codehilite"><pre><span></span><code>bit 7..4：消息类型
+bit 3..0：四个布尔标志
+</code></pre></div>
+
+<p>此时把它整体读成 175 或 -81 都没有业务意义，必须按字段拆开。这就是后续掩码要解决的问题。</p>
+<h2 id="2-4">2. 二进制与十六进制：按 4 位一组</h2>
+<h3 id="21">2.1 二进制是带权重的位</h3>
+<p>一个 8 位无符号数的值是：</p>
+<div class="codehilite"><pre><span></span><code>b7×2^7 + b6×2^6 + ... + b1×2^1 + b0×2^0
+</code></pre></div>
+
+<p>例如：</p>
+<div class="codehilite"><pre><span></span><code>1010 1111
+= 1×128 + 0×64 + 1×32 + 0×16 + 1×8 + 1×4 + 1×2 + 1×1
+= 175
+</code></pre></div>
+
+<p>十六进制之所以适合人类阅读，是因为<strong>一个十六进制位刚好对应 4 个二进制位</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>Hex</th>
+<th>二进制</th>
+<th>十进制</th>
+<th>Hex</th>
+<th>二进制</th>
+<th>十进制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0000</td>
+<td>0</td>
+<td>8</td>
+<td>1000</td>
+<td>8</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0001</td>
+<td>1</td>
+<td>9</td>
+<td>1001</td>
+<td>9</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0010</td>
+<td>2</td>
+<td>A</td>
+<td>1010</td>
+<td>10</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0011</td>
+<td>3</td>
+<td>B</td>
+<td>1011</td>
+<td>11</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0100</td>
+<td>4</td>
+<td>C</td>
+<td>1100</td>
+<td>12</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0101</td>
+<td>5</td>
+<td>D</td>
+<td>1101</td>
+<td>13</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0110</td>
+<td>6</td>
+<td>E</td>
+<td>1110</td>
+<td>14</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0111</td>
+<td>7</td>
+<td>F</td>
+<td>1111</td>
+<td>15</td>
+</tr>
+</tbody>
+</table>
+<p>因此：</p>
+<div class="codehilite"><pre><span></span><code>0xAF
+= 1010 1111
+= 10×16 + 15
+= 175
+</code></pre></div>
+
+<p>反向转换时，从右往左每 4 位分组，左边不足 4 位就补 0：</p>
+<div class="codehilite"><pre><span></span><code>101101
+→ 0010 1101
+→ 0x2D
+→ 45
+</code></pre></div>
+
+<h3 id="22">2.2 位宽不能省</h3>
+<p><code>0xF</code> 和 <code>0x0F</code> 的数值相同，但在协议和位操作里，写出前导零能提醒读者“这是一个字节”。同样，<code>0x00FF</code> 和 <code>0xFF</code> 的数值也可能相同，但它们暗示的字段宽度不同。</p>
+<p>在十六进制转储中，通常每字节固定写两位：</p>
+<div class="codehilite"><pre><span></span><code>00 01 7f 80 ff 41 7e 0a
+</code></pre></div>
+
+<p>这比 <code>0 1 7f 80 ff 41 7e a</code> 更容易按字节对齐，也更适合和协议文档逐字段对照。</p>
+<h3 id="23">2.3 用命令验证转换</h3>
+<p>Linux 下可以直接验证：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">printf</span><span class="w"> </span><span class="s1">'%d\n'</span><span class="w"> </span>0xAF
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'0x%X\n'</span><span class="w"> </span><span class="m">175</span>
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">'print(int("AF", 16), hex(175), bin(175))'</span>
+</code></pre></div>
+
+<p>输出分别体现十进制、十六进制和二进制表示。排查二进制文件时还可以用：</p>
+<div class="codehilite"><pre><span></span><code>xxd<span class="w"> </span>-g1<span class="w"> </span>sample.bin
+od<span class="w"> </span>-An<span class="w"> </span>-tx1<span class="w"> </span>-v<span class="w"> </span>sample.bin
+</code></pre></div>
+
+<p><code>xxd</code> 不一定预装，<code>od</code> 通常是更基础的替代品。它们输出的是字节的十六进制，不负责替你解释有符号值。</p>
+<h2 id="3">3. 补码、有无符号范围：同一个字节的两种读法</h2>
+<h3 id="31">3.1 无符号数与有符号数</h3>
+<p>对于 N 位无符号数，所有位都参与表示非负值：</p>
+<div class="codehilite"><pre><span></span><code>范围：0 .. 2^N - 1
+</code></pre></div>
+
+<p>对于 N 位补码有符号数，最高位是符号位，但它的权重不是简单的“负号”，而是 <code>-2^(N-1)</code>：</p>
+<div class="codehilite"><pre><span></span><code>b(N-1)×(-2^(N-1)) + b(N-2)×2^(N-2) + ... + b0×2^0
+</code></pre></div>
+
+<p>所以 8 位补码的范围是：</p>
+<div class="codehilite"><pre><span></span><code>-128 .. 127
+</code></pre></div>
+
+<p>常见位宽如下：</p>
+<table>
+<thead>
+<tr>
+<th>位宽</th>
+<th>无符号范围</th>
+<th>补码有符号范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>0 .. 255</td>
+<td>-128 .. 127</td>
+</tr>
+<tr>
+<td>16</td>
+<td>0 .. 65535</td>
+<td>-32768 .. 32767</td>
+</tr>
+<tr>
+<td>32</td>
+<td>0 .. 4294967295</td>
+<td>-2147483648 .. 2147483647</td>
+</tr>
+<tr>
+<td>64</td>
+<td>0 .. 2^64-1</td>
+<td>-2^63 .. 2^63-1</td>
+</tr>
+</tbody>
+</table>
+<p>边界字节必须形成条件反射：</p>
+<div class="codehilite"><pre><span></span><code>0x00 = 0
+0x7F = 127
+0x80 = 128（无符号）/ -128（有符号）
+0xFF = 255（无符号）/ -1（有符号）
+</code></pre></div>
+
+<h3 id="32">3.2 补码的转换方法</h3>
+<p>把一个负数写成 N 位补码，可以这样做：</p>
+<div class="codehilite"><pre><span></span><code>取绝对值 → 写成 N 位二进制 → 全部取反 → 加 1
+</code></pre></div>
+
+<p>例如 8 位的 <code>-5</code>：</p>
+<div class="codehilite"><pre><span></span><code>5      = 0000 0101
+取反   = 1111 1010
+加 1   = 1111 1011
+       = 0xFB
+</code></pre></div>
+
+<p>反过来，把 8 位位模式按有符号解释：</p>
+<div class="codehilite"><pre><span></span><code>若最高位为 0：值 = 无符号值
+若最高位为 1：值 = 无符号值 - 256
+</code></pre></div>
+
+<p>于是：</p>
+<div class="codehilite"><pre><span></span><code>0xFB = 251 - 256 = -5
+0x80 = 128 - 256 = -128
+0xFF = 255 - 256 = -1
+</code></pre></div>
+
+<p>补码的好处是加法和减法可以共用同一套电路。例如 8 位的 <code>1 + (-1)</code>：</p>
+<div class="codehilite"><pre><span></span><code>  0000 0001
++ 1111 1111
+-----------
+1 0000 0000
+</code></pre></div>
+
+<p>最高位多出来的 1 被丢弃，留下 <code>0000 0000</code>。这也是为什么补码里只有一个 0，而“符号-数值”表示会同时存在 <code>+0</code> 和 <code>-0</code>。</p>
+<h3 id="33">3.3 扩宽时要区分符号扩展和零扩展</h3>
+<p>把一个 8 位值扩成 32 位时，扩展方式取决于原值的类型：</p>
+<div class="codehilite"><pre><span></span><code>uint8_t 0xFF  → uint32_t 0x000000FF
+int8_t  0xFF  → int32_t  0xFFFFFFFF
+</code></pre></div>
+
+<p>前者补 0，后者补符号位。网络协议里推荐的顺序通常是：</p>
+<ol>
+<li>先把字节按无符号读出来。</li>
+<li>根据协议字段定义，决定是否再解释为有符号数。</li>
+<li>不要先把一个字节做符号扩展，再当成无符号长度使用。</li>
+</ol>
+<h3 id="34-cc">3.4 C/C++ 中的短例子</h3>
+<p>下面的代码不依赖“把 128 强转成有符号”的实现细节，而是显式做补码解释：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xAF</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">signed_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mh">0x80</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">b</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mh">0x100</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"0x%02X %u %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">signed_value</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出：</p>
+<div class="codehilite"><pre><span></span><code>0xAF 175 -81
+</code></pre></div>
+
+<p>C/C++ 的 <code>int</code> 宽度并不一定等于 32 位。协议字段应优先使用固定宽度类型，例如 <code>uint8_t</code>、<code>uint32_t</code>，并用 <code>static_assert</code> 或 <code>sizeof</code> 核对假设。C++20 对补码表示和部分转换规则有更明确的规定，但阅读旧代码或跨编译器时仍要确认语言标准与 ABI。</p>
+<p>Python 的整数没有固定位宽，所以“8 位补码解释”必须由代码显式完成：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">b</span> <span class="o">=</span> <span class="mh">0xAF</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span> <span class="o">-</span> <span class="mh">0x100</span> <span class="k">if</span> <span class="n">b</span> <span class="o">&amp;</span> <span class="mh">0x80</span> <span class="k">else</span> <span class="n">b</span><span class="p">)</span>
+</code></pre></div>
+
+<p>输出：</p>
+<div class="codehilite"><pre><span></span><code>175 -81
+</code></pre></div>
+
+<h2 id="4">4. 从逻辑门到位运算：把协议字段拆开</h2>
+<h3 id="41">4.1 四个基本逻辑操作</h3>
+<p>逐位操作可以看成很多个逻辑门并行工作：</p>
+<table>
+<thead>
+<tr>
+<th>a</th>
+<th>b</th>
+<th>a AND b</th>
+<th>a OR b</th>
+<th>a XOR b</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>AND：两个都是 1 才为 1，适合“保留某些位”。</li>
+<li>OR：有一个是 1 就为 1，适合“置位”。</li>
+<li>XOR：不同为 1，适合“翻转”或做奇偶校验。</li>
+<li>NOT：逐位取反。</li>
+</ul>
+<p>加法也是由逻辑门组成的。对一位加法：</p>
+<div class="codehilite"><pre><span></span><code>sum   = a XOR b XOR carry_in
+carry = (a AND b) OR (carry_in AND (a XOR b))
+</code></pre></div>
+
+<p>这解释了为什么“数字逻辑”和“位运算”不是两门无关的知识：整数加法最终就是这些门电路的组合。</p>
+<h3 id="42">4.2 掩码的常用动作</h3>
+<p>设 <code>k</code> 是位下标，<code>MASK</code> 是一个或多个位组成的掩码：</p>
+<table>
+<thead>
+<tr>
+<th>目的</th>
+<th>写法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>取第 k 位</td>
+<td><code>(v &gt;&gt; k) &amp; 1u</code></td>
+<td>先移到最低位，再取 1 位</td>
+</tr>
+<tr>
+<td>置第 k 位</td>
+<td><code>v \|= (1u &lt;&lt; k)</code></td>
+<td>只把目标位置 1</td>
+</tr>
+<tr>
+<td>清第 k 位</td>
+<td><code>v &amp;= ~(1u &lt;&lt; k)</code></td>
+<td>只把目标位清 0</td>
+</tr>
+<tr>
+<td>翻转第 k 位</td>
+<td><code>v ^= (1u &lt;&lt; k)</code></td>
+<td>目标位取反</td>
+</tr>
+<tr>
+<td>取字段</td>
+<td><code>(v &gt;&gt; offset) &amp; ((1u &lt;&lt; width) - 1)</code></td>
+<td>先移位，再按字段宽度取低位</td>
+</tr>
+</tbody>
+</table>
+<p>判断单个位时写：</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1u</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">k</span><span class="p">))</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span>
+</code></pre></div>
+
+<p>不要写 <code>(v &amp; (1u &lt;&lt; k)) == 1</code>：当 <code>k &gt; 0</code> 时，结果要么是 0，要么是 <code>1u &lt;&lt; k</code>，并不等于 1。判断“是否非零”才正确。判断多个位是否全部为 1 时，应写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">MASK</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MASK</span>
+</code></pre></div>
+
+<h3 id="43">4.3 一个字节拆成两个字段</h3>
+<p>假设协议定义：</p>
+<div class="codehilite"><pre><span></span><code>bit 7..4：消息类型
+bit 3..0：四个标志位
+</code></pre></div>
+
+<p>收到 <code>0xA5 = 1010 0101</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xA5</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)((</span><span class="n">status</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x0Fu</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)(</span><span class="n">status</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x0Fu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)(</span><span class="n">flags</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="mi">1u</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+<span class="w">    </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)(</span><span class="n">flags</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">~</span><span class="p">(</span><span class="mi">1u</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">));</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_bit2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">flags</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1u</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"type=%u flags=0x%02X has_bit2=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">flags</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">has_bit2</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出：</p>
+<div class="codehilite"><pre><span></span><code>type=10 flags=0x06 has_bit2=1
+</code></pre></div>
+
+<p>解释：</p>
+<div class="codehilite"><pre><span></span><code>status = 0xA5 = 1010 0101
+type   = 1010 = 10
+flags  = 0101 = 0x05
+置 bit1 后 flags = 0x07
+清 bit0 后 flags = 0x06
+bit2 仍为 1
+</code></pre></div>
+
+<p>在真实协议里，还应把 <code>4</code>、<code>0x0F</code>、各个位号写成有名字的常量，并在协议文档中固定位图。位操作节省空间，但位图本身就是接口，不能随手改动。</p>
+<h2 id="5">5. 溢出、提升与移位：机器整数不是数学整数</h2>
+<h3 id="51">5.1 无符号回绕和有符号溢出不是一回事</h3>
+<p>在“8 位无符号”的模型里，<code>255 + 1</code> 回绕成 <code>0</code>。在 C/C++ 的 <code>unsigned</code> 运算中，这种回绕是定义好的：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">uint8_t</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">255</span><span class="p">;</span>
+<span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)(</span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+</code></pre></div>
+
+<p>这里 <code>a + 1</code> 会先发生整数提升，变成 <code>int</code> 的 <code>256</code>；赋回 <code>uint8_t</code> 时按无符号转换规则截断为 <code>0</code>。</p>
+<p>但有符号溢出不能这样依赖。对 <code>int</code> 来说，<code>INT_MAX + 1</code> 是<strong>未定义行为</strong>。未定义行为不是“得到一个负数”，而是标准不保证任何结果：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">INT_MAX</span><span class="p">;</span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</code></pre></div>
+
+<p>更危险的是，编译器可以假定有符号溢出不会发生，从而优化掉你的检查。例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">overflowed</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>在发生溢出时这个表达式本来应该为真，但因为有符号溢出是未定义行为，优化器可以按“不会溢出”来推理，最终把函数优化成始终返回 0。因此<strong>不能靠有符号回绕做边界检测</strong>。</p>
+<p>安全思路是：</p>
+<ul>
+<li>协议字段、哈希、位模式、需要明确模 2^N 的计数，用无符号类型。</li>
+<li>业务计数、金额、序号等需要检测越界的值，使用更宽的类型或运算前检查。</li>
+<li>使用语言/编译器提供的溢出检查函数，而不是先算完再看结果是否“变小”。</li>
+<li>在 Python 中整数不会溢出，但写回固定宽度协议时仍要显式 <code>&amp; 0xFF</code>、<code>&amp; 0xFFFFFFFF</code> 或做范围检查。</li>
+</ul>
+<h3 id="52-int">5.2 整数提升：字节参与运算时可能变成 int</h3>
+<p>在常见的 32/64 位平台上，<code>uint8_t</code> 能放进 <code>int</code>，所以它参与算术或位运算时会先提升为 <code>int</code>。这会导致两个容易误判的结果：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)(</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%d %u</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">y</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出：</p>
+<div class="codehilite"><pre><span></span><code>256 0
+</code></pre></div>
+
+<p><code>x + 1</code> 是 <code>int</code> 的 <code>256</code>，不是 <code>uint8_t</code> 的 <code>0</code>；只有赋回 <code>uint8_t</code> 时才截断。</p>
+<p>取反也有同样的问题：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">uint8_t</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x0F</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">~</span><span class="n">b</span><span class="p">;</span>
+</code></pre></div>
+
+<p><code>~b</code> 先把 <code>b</code> 提升为 <code>int</code>，再对 32 位取反，结果通常是一个高位全 1 的负数，而不是 <code>0xF0</code>。若目标确实是“只翻转低 8 位”，应显式收窄：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">uint8_t</span><span class="w"> </span><span class="n">flipped</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)(</span><span class="o">~</span><span class="n">b</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0xFFu</span><span class="p">);</span>
+</code></pre></div>
+
+<p>掩码代码中建议统一使用无符号表达式，并显式写出宽度，避免让读者猜测提升后的类型。</p>
+<h3 id="53">5.3 移位的边界</h3>
+<p>移位规则有几个必须记住的点：</p>
+<ul>
+<li>移位位数必须满足 <code>0 &lt;= k &lt; 位宽</code>。移动位数达到或超过该类型位宽是未定义行为。</li>
+<li>对 32 位有符号 <code>int</code>，<code>1 &lt;&lt; 31</code> 可能溢出；写 <code>1u &lt;&lt; 31</code>。</li>
+<li>左移有符号数直到结果不可表示时，可能产生未定义行为；位模式操作优先用无符号类型。</li>
+<li>负数右移最需要按语言和版本区分。</li>
+</ul>
+<p>例如 <code>-7</code> 的右移与除法：</p>
+<div class="codehilite"><pre><span></span><code>C++ 中 -7 / 2 通常得到 -3（向 0 截断）
+-7 &gt;&gt; 1 在算术右移下得到 -4（向负无穷取整）
+Python 中 -7 // 2 和 -7 &gt;&gt; 1 都得到 -4
+</code></pre></div>
+
+<p>C/C++ 旧标准中负数右移的结果是实现定义的，C++20 起对算术右移有更明确的规则；C 代码、旧编译器、不同标准模式下仍不能想当然。最稳妥的工程习惯是：<strong>做位模式解析时先把值当成无符号数；需要数学除法时明确使用除法并处理负数舍入。</strong></p>
+<h3 id="54">5.4 版本和平台要写进结论</h3>
+<p>同一个表达式在不同环境中可能有不同语义。至少记录：</p>
+<ul>
+<li>语言标准，例如 C++17 还是 C++20。</li>
+<li>编译器和优化级别。</li>
+<li>目标平台的字长和 ABI。</li>
+<li>字段是有符号还是无符号、宽度是多少。</li>
+</ul>
+<p>这正是参考文档需要配合版本阅读的原因：不要把一个标准版本的规则，直接套到另一个版本或另一门语言上。</p>
+<h2 id="6">6. 常见误区和设计权衡</h2>
+<h3 id="61">6.1 常见误区</h3>
+<ol>
+<li>
+<p><strong>“<code>0x80</code> 就是 -128。”</strong><br />
+   它只是一个 8 位位模式。按无符号解释是 128，按有符号解释才是 -128；16 位下又是 128。</p>
+</li>
+<li>
+<p><strong>“有符号溢出会像无符号一样回绕。”</strong><br />
+   C/C++ 有符号溢出是未定义行为。想要定义好的模运算，使用无符号类型。</p>
+</li>
+<li>
+<p><strong>“对 <code>uint8_t</code> 取反还是 8 位。”</strong><br />
+   整数提升会先把它变成 <code>int</code>。需要 8 位结果时显式 <code>&amp; 0xFF</code>。</p>
+</li>
+<li>
+<p><strong>“负数右移就是除以 2。”</strong><br />
+   负数舍入方向、语言版本和实现都可能不同；做协议解析时不要依赖负数右移。</p>
+</li>
+<li>
+<p><strong>“<code>&amp;</code> 和 <code>&amp;&amp;</code> 差不多。”</strong><br />
+<code>&amp;</code> 是逐位运算，不短路；<code>&amp;&amp;</code> 是逻辑运算，会短路。<code>|</code> 和 <code>||</code> 同理。</p>
+</li>
+<li>
+<p><strong>“用位域结构体直接映射网络包最方便。”</strong><br />
+   位域的布局、填充和字节序依赖实现，不适合作为跨平台线格式。线格式应逐字节按协议解码。</p>
+</li>
+<li>
+<p><strong>“<code>1 &lt;&lt; 31</code> 没问题。”</strong><br />
+   在 32 位有符号 <code>int</code> 上可能触发未定义行为；使用 <code>1u &lt;&lt; 31</code>。</p>
+</li>
+<li>
+<p><strong>“无符号数一定更安全。”</strong><br />
+   无符号减法下溢会回绕。安全来自明确的不变量和边界检查，不是来自某一个类型。</p>
+</li>
+</ol>
+<h3 id="62">6.2 设计权衡</h3>
+<ul>
+<li><strong>空间 vs 可读性</strong>：把 8 个开关压进一个字节能省空间，但会让日志、调试和代码审查变难。用命名常量、字段提取函数和位图文档补偿。</li>
+<li><strong>位压缩 vs 协议兼容</strong>：线上的位分配是契约。新增标志应使用保留位，不能随意重定义旧位；发布前要写清楚版本和保留策略。</li>
+<li><strong>无符号位模式 vs 有符号业务值</strong>：解析字节时先用无符号，得到位模式；进入业务计算后再按需转成有符号，并处理边界。</li>
+<li><strong>手写解码 vs 结构体映射</strong>：手写解码更啰嗦，但可移植、可测试；直接强转结构体或使用位域可能快，却容易受对齐、填充和字节序影响。</li>
+<li><strong>性能 vs 正确性</strong>：位操作本身很快，但边界测试更便宜。8 位字段可以穷举 256 种输入，不要只测几个“好看”的值。</li>
+</ul>
+<p>一个实用的默认规则是：</p>
+<div class="codehilite"><pre><span></span><code>协议字节 → uint8_t/uint32_t
+提取字段 → 先右移，再与掩码
+移位常量 → 加 u 后缀
+有符号解释 → 显式转换并写测试
+所有边界 → 用 0、最大值、最小值、符号位翻转验证
+</code></pre></div>
+
+<h2 id="7">7. 动手实践：十六进制转储工具</h2>
+<p>目标：实现 <code>hexdump.py</code>，读取文件或标准输入，先按经典十六进制转储显示字节，再逐个字节显示十六进制、8 位模式、无符号值和 <code>int8</code> 解释。</p>
+<p>建议用时：45～60 分钟。</p>
+<h3 id="1_1">步骤 1：准备实验目录和样本</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/binary-lab
+<span class="nb">cd</span><span class="w"> </span>~/binary-lab
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'\x00\x01\x7f\x80\xff\x41\x7e\x0a'</span><span class="w"> </span>&gt;<span class="w"> </span>sample.bin
+xxd<span class="w"> </span>-g1<span class="w"> </span>sample.bin
+</code></pre></div>
+
+<p>如果没有 <code>xxd</code>，使用：</p>
+<div class="codehilite"><pre><span></span><code>od<span class="w"> </span>-An<span class="w"> </span>-tx1<span class="w"> </span>-v<span class="w"> </span>sample.bin
+</code></pre></div>
+
+<p>观察样本中包含的边界值：<code>0x00</code>、<code>0x7F</code>、<code>0x80</code>、<code>0xFF</code>，以及可打印字符 <code>A</code>、<code>~</code> 和换行符。它们能同时覆盖“零、最大正数、最小负数、-1、不可打印字符”。</p>
+<h3 id="2">步骤 2：实现工具</h3>
+<p>新建 <code>hexdump.py</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dump</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"(empty)"</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="mi">16</span><span class="p">):</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">base</span><span class="p">:</span><span class="n">base</span> <span class="o">+</span> <span class="mi">16</span><span class="p">]</span>
+        <span class="n">hex_part</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">02x</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">chunk</span><span class="p">)</span>
+        <span class="n">ascii_part</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">chr</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="k">if</span> <span class="mi">32</span> <span class="o">&lt;=</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">127</span> <span class="k">else</span> <span class="s2">"."</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">chunk</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">base</span><span class="si">:</span><span class="s2">08x</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">hex_part</span><span class="si">:</span><span class="s2">&lt;47</span><span class="si">}</span><span class="s2">  |</span><span class="si">{</span><span class="n">ascii_part</span><span class="si">}</span><span class="s2">|"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"byte interpretation:"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"offset  hex  binary    unsigned  int8"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="n">signed</span> <span class="o">=</span> <span class="n">b</span> <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mh">0x80</span> <span class="k">else</span> <span class="n">b</span> <span class="o">-</span> <span class="mh">0x100</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">08x</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">02x</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">08b</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">b</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">  </span><span class="si">{</span><span class="n">signed</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"usage: hexdump.py [file]"</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">2</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">buffer</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+
+<p>实现要点：</p>
+<ul>
+<li>每 16 字节一行，偏移量显示为 8 位十六进制。</li>
+<li>经典区用 <code>.</code> 代替不可打印字节，避免终端控制字符影响输出。</li>
+<li>详细区对同一个字节同时给出 <code>0x..</code>、<code>bbbbbbbb</code>、无符号值和 <code>int8</code> 值。</li>
+<li>有符号解释用 <code>b - 0x100</code> 显式计算，不依赖“把某个 Python 值强制转成 int8”的隐含行为。</li>
+</ul>
+<h3 id="3_1">步骤 3：运行并核对关键行</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>hexdump.py<span class="w"> </span>sample.bin
+python3<span class="w"> </span>hexdump.py<span class="w"> </span>&lt;<span class="w"> </span>sample.bin
+</code></pre></div>
+
+<p>输出中应能看懂以下内容（为便于阅读，省略了十六进制列右侧的对齐空格）：</p>
+<div class="codehilite"><pre><span></span><code>00000000  00 01 7f 80 ff 41 7e 0a  |.....A~.|
+
+byte interpretation:
+offset  hex  binary    unsigned  int8
+00000000  00  00000000    0     0
+00000001  01  00000001    1     1
+00000002  7f  01111111  127   127
+00000003  80  10000000  128  -128
+00000004  ff  11111111  255    -1
+00000005  41  01000001   65    65
+00000006  7e  01111110  126   126
+00000007  0a  00001010   10    10
+</code></pre></div>
+
+<p>重点确认：同一行 <code>80</code> 的无符号值是 128，<code>int8</code> 值是 -128；<code>ff</code> 对应 255 和 -1。</p>
+<h3 id="4-8">步骤 4：穷举 8 位边界</h3>
+<p>生成包含 0 到 255 全部字节的文件：</p>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import sys; sys.stdout.buffer.write(bytes(range(256)))'</span><span class="w"> </span>&gt;<span class="w"> </span>allbytes.bin
+python3<span class="w"> </span>hexdump.py<span class="w"> </span>allbytes.bin<span class="w"> </span>&gt;<span class="w"> </span>allbytes.dump
+</code></pre></div>
+
+<p>在 <code>allbytes.dump</code> 中找到这三个偏移：</p>
+<div class="codehilite"><pre><span></span><code>0000007f  7f  01111111  127   127
+00000080  80  10000000  128  -128
+000000ff  ff  11111111  255    -1
+</code></pre></div>
+
+<p>再把工具输出与独立工具对照：</p>
+<div class="codehilite"><pre><span></span><code>xxd<span class="w"> </span>-g1<span class="w"> </span>sample.bin
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">'from pathlib import Path; print(list(Path("sample.bin").read_bytes()))'</span>
+</code></pre></div>
+
+<p>对照时只比较“字节值”，不要被 ASCII 区或列宽差异干扰。这个步骤是在训练：工具输出必须能由独立来源复核，而不是“看起来像”。</p>
+<h3 id="5_1">步骤 5：测试输入边界和错误路径</h3>
+<p>空输入：</p>
+<div class="codehilite"><pre><span></span><code>:<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>hexdump.py
+</code></pre></div>
+
+<p>应输出 <code>(empty)</code>，而不是崩溃或打印空白表头。</p>
+<p>不足一行和跨行输入：</p>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import sys; sys.stdout.buffer.write(b"0123456789abcdefX")'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>hexdump.py
+</code></pre></div>
+
+<p>应出现偏移 <code>00000000</code> 和 <code>00000010</code> 两行，第二行只有 1 个字节，ASCII 区显示 <code>X</code>。</p>
+<p>参数错误：</p>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>hexdump.py<span class="w"> </span>a.bin<span class="w"> </span>b.bin
+</code></pre></div>
+
+<p>应打印 usage 并以非零状态退出。文件不存在时，应明确报错；不要让程序静默返回成功。</p>
+<h3 id="6_1">步骤 6：完成验收</h3>
+<p>用下面的清单检查自己是否真的掌握，而不是只把脚本跑通：</p>
+<ul>
+<li>[ ] 能手算 <code>0x7F</code>、<code>0x80</code>、<code>0xFF</code> 的无符号值和 <code>int8</code> 值。</li>
+<li>[ ] 能手算 <code>-5</code> 的 8 位补码是 <code>0xFB</code>。</li>
+<li>[ ] 能解释 <code>0x80</code> 的负数解释为什么是 <code>-128</code>，以及为什么没有 <code>+128</code>。</li>
+<li>[ ] 能说明有符号溢出为什么不能依赖，并说出至少一种安全做法。</li>
+<li>[ ] 工具能正确处理文件输入、标准输入、空输入、16 字节边界和不足 16 字节的尾行。</li>
+<li>[ ] 工具对 0..255 全部字节的无符号值和 <code>int8</code> 值都正确。</li>
+<li>[ ] 在实验记录中写下 Python 版本、操作系统/架构，以及若使用 C/C++ 对照时的语言标准和编译器版本。</li>
+<li>[ ] 能说清本工具只是“按字节做 int8 解释”，不代表任何真实协议字段一定是有符号数。</li>
+</ul>
+<h2 id="8">8. 自测题</h2>
+<h3 id="1_2">题目 1</h3>
+<p>在 8 位下：</p>
+<ol>
+<li><code>0xC7</code> 的无符号值和有符号值分别是多少？</li>
+<li><code>-25</code> 的补码用十六进制表示是多少？</li>
+</ol>
+<h3 id="2_1">题目 2</h3>
+<p>在常见的 32 位 <code>int</code> 平台上，下面的程序输出什么？为什么不是 <code>0 0</code>？</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFF</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint8_t</span><span class="p">)(</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%d %u</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="p">)</span><span class="n">y</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="3_2">题目 3</h3>
+<p>下面的函数为什么不能可靠地检测 <code>int</code> 加法溢出？请说明原因，并给出一种安全思路。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">overflowed</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="1_3">答案 1</h3>
+<p><code>0xC7 = 1100 0111</code>。</p>
+<ul>
+<li>无符号值：<code>12×16 + 7 = 199</code>。</li>
+<li>有符号值：最高位为 1，所以 <code>199 - 256 = -57</code>。</li>
+</ul>
+<p><code>-25</code>：</p>
+<div class="codehilite"><pre><span></span><code>25     = 0001 1001
+取反   = 1110 0110
+加 1   = 1110 0111
+       = 0xE7
+</code></pre></div>
+
+<p>所以 <code>-25</code> 的 8 位补码是 <code>0xE7</code>，按无符号读是 231，按有符号读是 <code>231 - 256 = -25</code>。</p>
+<h3 id="2_2">答案 2</h3>
+<p>输出：</p>
+<div class="codehilite"><pre><span></span><code>256 0
+</code></pre></div>
+
+<p>原因是整数提升。<code>x</code> 是 <code>uint8_t</code>，参与 <code>x + 1</code> 时通常先提升为 <code>int</code>，所以表达式结果是 <code>int</code> 的 <code>256</code>。但赋值给 <code>uint8_t y</code> 时，结果被截断成 8 位，变成 <code>0</code>。</p>
+<p>这也说明：<strong>表达式中的值</strong>和<strong>存回字段后的值</strong>不是同一个概念。写协议代码时，要明确每一步的类型和宽度，不能只看最终变量。</p>
+<h3 id="3_3">答案 3</h3>
+<p>因为有符号整数溢出在 C/C++ 中是未定义行为。编译器可以假定 <code>x + 1</code> 不会溢出，于是把 <code>x + 1 &lt; x</code> 优化成恒为假；即使某个平台上实际发生了回绕，也不能保证这段检查有效。优化级别、编译器和语言版本都可能改变结果。</p>
+<p>安全思路：</p>
+<ul>
+<li>需要定义好的模 2^N 行为时，使用无符号类型。</li>
+<li>需要检测越界时，在运算前用边界条件检查，例如 <code>x &gt; INT_MAX - 1</code>。</li>
+<li>使用编译器或标准库提供的溢出检查能力。</li>
+<li>使用更宽的类型保存中间结果，再判断是否能放回目标类型。</li>
+</ul>
+<h2 id="9">9. 推荐资源</h2>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/language/types.html">二进制、整数与数字逻辑：参考文档 / 原始资料</a></li>
+<li>来源：en.cppreference.com</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：入门</li>
+<li>费用：免费</li>
+</ul>
+<p>阅读建议：</p>
+<ol>
+<li>先定位整数类型表，核对 <code>int</code>、固定宽度类型和各自的范围，特别留意“宽度不是想当然”的类型。</li>
+<li>再核对有符号表示、转换与整数提升相关段落，用本课的 <code>0xAF</code>、<code>0x80</code>、<code>0xFF</code> 和整数提升例子逐条对照。</li>
+<li>阅读时记录页面适用的是哪一版 C++ 标准；旧代码可能按 C++17 或更早规则编写。不要把 C++ 规则直接套到 C 或 Python 上。</li>
+<li>最后把结论写进实践记录：本机 <code>int</code> 多宽、使用什么编译器/标准、哪些结论依赖补码、哪些行为仍需显式检查。</li>
+</ol>
+<p>本节点只提供了这一条参考资源，本课没有补造额外链接。真正的掌握标准不是“看过”，而是能用自己的话解释边界，并让十六进制转储工具在 0..255 的输入上给出可复核的结果。</p><div class="pn"><span></span><span><a href="2.html">CPU与指令执行 →</a></span></div></main></div></body></html>

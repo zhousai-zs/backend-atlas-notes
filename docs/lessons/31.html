@@ -1,0 +1,651 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>31. C++20无栈协程机制 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="cur" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 31 课 · 领域 B · 阶段 3</p><p class="dl"><a href="../files/31-b-coroutine.md" download>⬇ 本课 Markdown</a><a href="../files/practice31.tar.gz" download>⬇ 练习包 practice31.tar.gz</a></p><h1 id="31208-c20">第 31/208 课：C++20无栈协程机制</h1>
+<blockquote>
+<p>节点：<code>b-coroutine</code>｜领域：B｜阶段：3｜难度：进阶<br />
+前置：<code>b-move</code>、<code>b-lifetime</code>｜标签：C++20 Coroutines、B、C++</p>
+</blockquote>
+<h2 id="_1">学习目标</h2>
+<p>学完本课，你应当能够：</p>
+<ol>
+<li>解释协程帧里有什么、帧由谁拥有、什么时候销毁，以及为什么必须保证“每个协程帧恰好销毁一次”。</li>
+<li>看懂 <code>promise_type</code> 与 awaitable 的协议，知道 <code>co_await</code> 何时真正暂停、何时直接继续。</li>
+<li>解释 <code>initial_suspend</code>、<code>final_suspend</code> 与异常传播的关系，并能实现一个仅用于教学的 <code>Task</code> 和手动恢复器。</li>
+<li>识别“协程不等于线程/调度器”的边界，避免临时 Lambda 捕获、重复销毁、恢复已结束协程等工程问题。</li>
+</ol>
+<h2 id="_2">为什么后端要懂</h2>
+<p>腾讯微信公众号后台的请求处理经常是：解析请求，等待 Redis/MySQL/RPC，再组装响应。C++20 协程让这些异步流程可以写成接近同步代码的形式：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Task</span><span class="w"> </span><span class="nf">handle_request</span><span class="p">(</span><span class="n">Request</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">co_await</span><span class="w"> </span><span class="n">load_user</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">user_id</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">messages</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">co_await</span><span class="w"> </span><span class="n">load_messages</span><span class="p">(</span><span class="n">user</span><span class="p">.</span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="n">send_response</span><span class="p">(</span><span class="n">build_response</span><span class="p">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">messages</span><span class="p">));</span>
+<span class="w">    </span><span class="k">co_return</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>但语言层只提供“暂停/恢复”和 <code>promise</code> 协议。事件循环、I/O 注册、线程池、超时、取消、所有权，都是库或业务框架负责的。把语言协程误当成“自动并发运行时”，就会出现严重误判：</p>
+<ul>
+<li>以为 <code>co_await</code> 一定切换线程，结果在事件循环线程里执行了阻塞操作。</li>
+<li>协程已经销毁，I/O 回调还持有它的句柄，恢复时访问已释放的帧。</li>
+<li>请求对象或 Lambda 捕获先于协程结束而销毁，协程恢复后读到悬空引用。</li>
+<li>同一个帧被析构两次，或者对已经结束的协程再次 <code>resume()</code>。</li>
+</ul>
+<p>节点 <code>b-coroutine</code> 的定位正是：<strong>读懂异步库，并避免把语言协程误当成自动并发运行时</strong>。</p>
+<hr />
+<h2 id="1">1. 协程帧与生命周期</h2>
+<h3 id="_3">直觉：函数多了一个“书签”</h3>
+<p>普通函数调用时，参数、局部变量和返回地址放在线程栈上；函数返回，栈帧消失。协程允许函数在中间暂停，并在之后从暂停点继续，所以它必须把“暂停后还需要的状态”保存到另一个地方。这个保存状态的对象就是<strong>协程帧</strong>（coroutine frame）。</p>
+<p>可以把协程帧想成一本书：协程体是书的内容，暂停点是一枚书签。线程栈不是这本书；协程暂停后，线程可以去做别的事，书仍然放在那里。</p>
+<h3 id="_4">原理：编译器把函数改造成状态机</h3>
+<p>一个包含 <code>co_await</code>、<code>co_yield</code> 或 <code>co_return</code> 的函数会被编译器改造成协程。编译器的核心动作是：</p>
+<ol>
+<li>在调用时创建协程帧。</li>
+<li>在帧里保存 <code>promise</code> 对象、参数副本、跨暂停点仍需使用的局部变量/临时值，以及恢复和销毁所需的控制信息。</li>
+<li>把函数体改造成带暂停/恢复入口的状态机。</li>
+<li>通过 <code>promise_type</code> 决定首次是否暂停、结束是否暂停、如何返回结果、异常如何处理。</li>
+</ol>
+<p>“无栈”指协程不拥有独立的线程栈，也不需要像栈式协程那样切换整个栈；它只保存必要的状态。代价是：<strong>不能在普通函数内部随便暂停</strong>，暂停点必须在协程函数体内，并且异步调用链通常需要把协程一路传下去。</p>
+<p>协程帧通常分配在堆上，编译器在能证明安全时可以做分配消除；标准不规定具体的存储位置，但帧必须独立于当前线程栈存活。这也是“暂停后线程可以离开”的前提。</p>
+<h3 id="_5">帧由谁拥有</h3>
+<p><code>std::coroutine_handle</code> 只是指向协程帧的<strong>非拥有句柄</strong>，类似裸指针。复制 handle 不会复制帧，也不会自动销毁帧。常见做法是让一个 RAII 类型持有唯一句柄，比如教学用的 <code>Task</code>：</p>
+<ul>
+<li><code>Task</code> 可移动、不可复制；</li>
+<li>移动时转移句柄；</li>
+<li>析构时如果句柄有效，调用一次 <code>destroy()</code>；</li>
+<li><code>destroy()</code> 之后把句柄置空，避免重复销毁。</li>
+</ul>
+<p>如果 <code>final_suspend</code> 返回 <code>std::suspend_never{}</code>，协程结束时运行时会自动销毁帧，此时再手动 <code>destroy()</code> 就是错误的。教学 <code>Task</code> 使用 <code>final_suspend</code> 返回 <code>suspend_always</code>，让“谁拥有、谁销毁”变得明确。</p>
+<h3 id="_6">短代码：观察帧的创建、暂停和销毁</h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;coroutine&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">MiniTask</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">promise_type</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">promise_type</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[promise ctor]</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="o">~</span><span class="n">promise_type</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[promise dtor]</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">MiniTask</span><span class="w"> </span><span class="n">get_return_object</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">MiniTask</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;::</span><span class="n">from_promise</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)};</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="w"> </span><span class="n">initial_suspend</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="w"> </span><span class="n">final_suspend</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">return_void</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">unhandled_exception</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">terminate</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">MiniTask</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">handle</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">h</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">MiniTask</span><span class="p">(</span><span class="n">MiniTask</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">h</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exchange</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">MiniTask</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">MiniTask</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="n">h</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span>
+<span class="w">            </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exchange</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">h</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">MiniTask</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MiniTask</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">MiniTask</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">MiniTask</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="o">~</span><span class="n">MiniTask</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="n">h</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">h</span><span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Probe</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">~</span><span class="n">Probe</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[local dtor]</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">MiniTask</span><span class="w"> </span><span class="nf">demo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Probe</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[body] A</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">co_await</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[body] B</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">demo</span><span class="p">();</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">h</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[caller]</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">h</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译并运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-pedantic<span class="w"> </span>mini_task.cpp<span class="w"> </span>-o<span class="w"> </span>mini_task
+./mini_task
+</code></pre></div>
+
+<p>你会看到 <code>promise</code> 构造在协程体执行之前；第一次 <code>resume()</code> 执行到 <code>co_await</code> 后暂停；第二次 <code>resume()</code> 执行完函数体，局部对象 <code>Probe</code> 析构，随后停在 <code>final_suspend</code>；直到 <code>Task</code> 析构，帧里的 <code>promise</code> 才析构。</p>
+<p>关键结论：</p>
+<ul>
+<li><strong>帧的生命周期可能长于函数体的执行时间。</strong> 函数体结束后，帧仍可因 <code>final_suspend</code> 而保留，等待拥有者读取结果或销毁。</li>
+<li><strong>局部对象和帧不是同一件事。</strong> 协程体内的局部对象在离开作用域时析构；<code>promise</code>、帧中参数等随帧销毁而清理。</li>
+<li><strong><code>resume()</code> 只是让状态机继续运行，不代表新线程。</strong> 谁调用 <code>resume()</code>，协程就在谁所在的线程继续。</li>
+</ul>
+<hr />
+<h2 id="2-promise_type-awaitable">2. <code>promise_type</code> 和 awaitable</h2>
+<h3 id="promise">直觉：promise 是协程的控制面板</h3>
+<p>协程体每到一个关键时刻，编译器都会去问 <code>promise</code>：</p>
+<ul>
+<li>刚开始时要暂停吗？——<code>initial_suspend()</code></li>
+<li>结束时要暂停吗？——<code>final_suspend()</code></li>
+<li>返回什么给调用者？——<code>get_return_object()</code></li>
+<li><code>co_return;</code> 怎么处理？——<code>return_void()</code></li>
+<li>抛异常怎么办？——<code>unhandled_exception()</code></li>
+</ul>
+<p><code>co_await</code> 则是在问另一个对象：<strong>awaiter</strong>。表达式 <code>co_await expr</code> 会先得到一个 awaiter，然后依次调用：</p>
+<ol>
+<li><code>await_ready()</code>：如果返回 <code>true</code>，不暂停，直接继续。</li>
+<li><code>await_suspend(handle)</code>：如果返回 <code>true</code> 或 <code>void</code>，暂停；如果返回 <code>false</code>，不暂停；如果返回另一个协程句柄，可以做对称转移。</li>
+<li><code>await_resume()</code>：协程被恢复后调用，它的返回值就是 <code>co_await</code> 表达式的结果。</li>
+</ol>
+<p>因此，<code>co_await</code> 不等于“切线程”。它只表示“这里可能暂停”。是否暂停由 <code>await_ready()</code> 决定，暂停后什么时候、在哪个线程恢复，由 <code>await_suspend()</code> 和持有句柄的调度器决定。</p>
+<h3 id="promise_1">promise 的最小协议</h3>
+<p>一个教学 <code>Task</code> 的 <code>promise_type</code> 至少需要这些成员：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">promise_type</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="nf">get_return_object</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="w"> </span><span class="nf">initial_suspend</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="w"> </span><span class="nf">final_suspend</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">return_void</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">unhandled_exception</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p><code>co_return value;</code> 则需要 <code>return_value(value)</code> 而不是 <code>return_void()</code>。<code>co_yield value;</code> 等价于 <code>co_await promise.yield_value(value);</code>，常用于生成器；后台任务更常见的是 <code>Task</code> 这种一次性协程。</p>
+<h3 id="task">完整的教学 <code>Task</code></h3>
+<p>下面的 <code>Task</code> 故意保持很小：单所有权、手动恢复、<code>initial_suspend</code> 暂停、<code>final_suspend</code> 暂停、异常暂存后重抛。它不追求生产可用，只用于把协议和生命周期看清楚。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;coroutine&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">promise_type</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Task</span><span class="w"> </span><span class="nf">get_return_object</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Task</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;::</span><span class="n">from_promise</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)};</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="w"> </span><span class="nf">initial_suspend</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="w"> </span><span class="nf">final_suspend</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">return_void</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="nf">unhandled_exception</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">current_exception</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">exception_ptr</span><span class="w"> </span><span class="n">error</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Task</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">h_</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">Task</span><span class="p">(</span><span class="n">Task</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">h_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exchange</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">h_</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Task</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">reset</span><span class="p">();</span>
+<span class="w">            </span><span class="n">h_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exchange</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">h_</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Task</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="o">~</span><span class="n">Task</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">reset</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">done</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">h_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">h_</span><span class="p">.</span><span class="n">done</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">resume</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">h_</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">"empty Task"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">done</span><span class="p">())</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">"finished Task"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">h_</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">done</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">h_</span><span class="p">.</span><span class="n">promise</span><span class="p">().</span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">rethrow_exception</span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">promise</span><span class="p">().</span><span class="n">error</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">reset</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">h_</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span>
+<span class="w">            </span><span class="n">h_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">h_</span><span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">InspectAwaiter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">ready</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">await_ready</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ready</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">await_suspend</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;&gt;</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"suspend on "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">await_resume</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"resume on "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">Task</span><span class="w"> </span><span class="nf">inspect</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">ready</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">co_await</span><span class="w"> </span><span class="n">InspectAwaiter</span><span class="p">{</span><span class="n">ready</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"value="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inspect</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"caller on "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">get_id</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译并运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-pedantic<span class="w"> </span>task_await.cpp<span class="w"> </span>-o<span class="w"> </span>task_await
+./task_await
+</code></pre></div>
+
+<p>输出中 <code>suspend</code>、<code>caller</code>、<code>resume</code> 的线程 ID 相同，因为它们都在主线程执行。这个例子刻意说明：<strong><code>co_await</code> 可以暂停，但并没有自动创建线程，也没有自动切换线程。</strong> 真正把恢复投递到其他线程的是异步库的 awaiter/executor。</p>
+<p><code>await_suspend</code> 的返回类型值得记住：</p>
+<ul>
+<li><code>void</code>：暂停。</li>
+<li><code>bool</code>：<code>true</code> 暂停，<code>false</code> 不暂停，继续执行。</li>
+<li><code>std::coroutine_handle&lt;&gt;</code>：对称转移到另一个协程，当前协程保持暂停。</li>
+</ul>
+<p>生产库常用第三种返回类型把“恢复下一个协程”变成尾调用，减少调用栈增长；但这要求你非常清楚帧的存活关系。</p>
+<hr />
+<h2 id="3-initial_suspendfinal_suspend">3. <code>initial_suspend</code>、<code>final_suspend</code> 与异常传播</h2>
+<h3 id="initial_suspend"><code>initial_suspend</code>：懒启动还是立即启动</h3>
+<p><code>initial_suspend()</code> 决定协程体是否在调用时立即开始：</p>
+<ul>
+<li>返回 <code>std::suspend_always</code>：<strong>懒启动</strong>。调用协程函数只创建帧和返回对象，函数体要等第一次 <code>resume()</code> 才执行。</li>
+<li>返回 <code>std::suspend_never</code>：<strong>立即启动</strong>。协程体在调用点就开始运行，直到遇到第一个暂停点或直接结束。</li>
+</ul>
+<p>对后台框架来说，懒启动通常更容易控制生命周期：调用者先拿到 <code>Task</code>，可以绑定请求上下文、注册取消、决定在哪个执行器上启动，然后再恢复。立即启动则可能在调用者还没拿到返回对象时就开始访问请求状态，设计时必须额外小心。</p>
+<p>但要注意：<code>get_return_object()</code> 在 <code>initial_suspend()</code> 之前调用。即使是立即启动，返回对象也是先构造好的；不过调用者拿到它之前，协程体可能已经执行了一部分。</p>
+<h3 id="final_suspend"><code>final_suspend</code>：结束后帧还在不在</h3>
+<p><code>final_suspend()</code> 本身必须声明为 <code>noexcept</code>，并返回一个 awaitable。它决定协程正常结束或异常处理后，帧是否保留：</p>
+<ul>
+<li>返回 <code>std::suspend_always</code>：协程停在 final suspend，<code>done()</code> 为 <code>true</code>，帧仍然有效。拥有者可以读取结果/异常，然后调用 <code>destroy()</code>；此时不要再次 <code>resume()</code>。教学 <code>Task</code> 用这一种。</li>
+<li>返回 <code>std::suspend_never</code>：运行时会自动销毁帧；恢复返回后句柄已经失效，拥有者不能再 <code>destroy()</code>，也不应再通过它查询状态。</li>
+</ul>
+<p>如果使用对称转移把 final suspend 接到下一个协程，也要保证当前帧在转移前不会被错误销毁，并明确谁负责最后销毁。这是异步库设计中最容易出问题的边界之一。</p>
+<h3 id="_7">异常传播：语言层负责捕获，库负责重抛</h3>
+<p>协程体抛出的异常不会像普通函数那样直接穿过 <code>resume()</code> 自动抛给调用者。运行时会捕获它并调用：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">unhandled_exception</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">current_exception</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>随后协程走到 <code>final_suspend</code>。因为教学 <code>Task</code> 的 final suspend 是 <code>suspend_always</code>，帧会保留，异常暂存在 <code>promise</code> 里。调用者在恢复后检查并重抛：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">resume</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">h_</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">"empty Task"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">done</span><span class="p">())</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">"finished Task"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">h_</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">done</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">h_</span><span class="p">.</span><span class="n">promise</span><span class="p">().</span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">rethrow_exception</span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">promise</span><span class="p">().</span><span class="n">error</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>一个会失败的协程可以这样写：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Task</span><span class="w"> </span><span class="nf">failing</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">co_await</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"rpc timeout"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">failing</span><span class="p">();</span>
+<span class="w">    </span><span class="n">t</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">t</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"caught: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">boolalpha</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"done="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">done</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>把这段代码放在第 2 节 <code>Task</code> 的基础上编译：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-pedantic<span class="w"> </span>task_exception.cpp<span class="w"> </span>-o<span class="w"> </span>task_exception
+./task_exception
+</code></pre></div>
+
+<p>执行过程是：</p>
+<ol>
+<li>第一次 <code>resume()</code> 进入协程，执行到 <code>co_await</code> 后暂停，尚未抛异常。</li>
+<li>第二次 <code>resume()</code> 从暂停点继续，抛出 <code>runtime_error</code>。</li>
+<li>运行时捕获异常，调用 <code>unhandled_exception()</code> 把异常存进 <code>promise</code>。</li>
+<li>协程进入 final suspend，<code>resume()</code> 返回。</li>
+<li><code>Task::resume()</code> 发现 <code>done()</code> 且 <code>error</code> 非空，调用 <code>rethrow_exception()</code> 把异常交给调用者。</li>
+<li><code>Task</code> 析构时销毁帧，异常对象也随之释放。</li>
+</ol>
+<p>如果 final suspend 使用 <code>suspend_never</code>，帧会自动销毁，调用者之后就不能再读 <code>promise().error</code>。如果 <code>unhandled_exception()</code> 自己抛出异常，异常会向恢复者传播，规则更细；教学实现选择“暂存 + 显式重抛”，便于把异常路径和帧销毁分开观察。</p>
+<p>另外，<code>await_resume()</code> 抛出异常时，异常发生在协程恢复后的表达式求值中，同样会进入 <code>unhandled_exception()</code> 这条路径。不要把 <code>await_resume()</code> 当成“不会失败的结果读取”。</p>
+<h3 id="_8">三个必须记住的结论</h3>
+<ol>
+<li><strong><code>co_await</code> 不保证暂停。</strong> <code>await_ready()</code> 为 <code>true</code> 时直接继续；<code>await_suspend()</code> 返回 <code>false</code> 时也不暂停。</li>
+<li><strong>暂停不保证换线程。</strong> 手动恢复器就在同一线程 <code>resume()</code>；异步库可能在同一事件循环线程恢复，也可能投递到其他线程。</li>
+<li><strong>final suspend 后帧可能还活着。</strong> 异常和返回值都可能放在 <code>promise</code> 里，拥有者必须按约定读取并销毁。</li>
+</ol>
+<hr />
+<h2 id="lambda">常见误区：临时 Lambda 的捕获可能比协程帧先死</h2>
+<p>这是 C++20 协程里非常典型的悬空问题。看下面的反例：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Task</span><span class="w"> </span><span class="nf">dangerous</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Task</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">co_await</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>问题有两层：</p>
+<ul>
+<li><code>dangerous()</code> 返回时，局部变量 <code>user_id</code> 已经销毁。</li>
+<li>Lambda 闭包是临时对象，在 <code>return</code> 的完整表达式结束后也销毁；但协程帧可能在之后才被恢复。</li>
+</ul>
+<p>对协程 Lambda 来说，捕获保存在闭包对象里，协程帧并不会自动把闭包“安全复制”成独立生命周期。闭包先死，协程恢复时通过失效的闭包访问捕获，就是未定义行为。</p>
+<p>更安全的写法是把需要的数据作为协程参数按值传入：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Task</span><span class="w"> </span><span class="nf">safe</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">co_await</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">user_id</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>按值参数会进入协程帧，生命周期跟随帧，而不是跟随调用者的局部变量。注意：如果参数是 <code>const Request&amp;</code> 或指针，帧里保存的仍然只是引用/指针，不会延长被引用对象的寿命。后台场景里，请求对象、连接对象、会话对象的所有权必须在设计时就写清楚。</p>
+<p>如果非要用 Lambda：</p>
+<ul>
+<li>不要让协程任务活得比闭包对象更久；</li>
+<li>不要让捕获引用指向已经离开作用域的局部变量；</li>
+<li>优先把关键数据按值作为参数传入，而不是依赖捕获；</li>
+<li>对跨线程恢复的协程，还要额外考虑数据竞争和同步。</li>
+</ul>
+<h2 id="_9">设计权衡</h2>
+<h3 id="_10">无栈协程换来了什么</h3>
+<ul>
+<li><strong>减少阻塞线程的需求</strong>：等待 I/O 时协程暂停，线程可以去处理其他任务，不必一个请求占一个线程。</li>
+<li><strong>代码形态更直接</strong>：异步流程可以写成顺序代码，减少回调嵌套。</li>
+<li><strong>暂停成本通常低于栈切换</strong>：不需要切换整个线程栈，只保存协程帧中的状态。</li>
+</ul>
+<p>同时要记住：协程是协作式的，它只在暂停点让出执行权；一段长时间不让出的 CPU 循环仍然会卡住事件循环。</p>
+<h3 id="_11">代价在哪里</h3>
+<ul>
+<li><strong>它不是自动并发运行时</strong>：没有调度器、线程池、超时和取消。框架必须提供这些能力。</li>
+<li><strong>取消和所有权更复杂</strong>：协程暂停时，外部 I/O 操作可能仍持有回调。销毁帧前必须确保不会再有恢复；否则就是 use-after-free。取消通常是协作式的，需要在暂停点/恢复点检查取消令牌。</li>
+<li><strong>同步/阻塞式思维会出错</strong>：普通函数里的阻塞调用不能被 <code>co_await</code> 自动变成异步；调用链上的异步函数也必须是协程，或者由库封装成 awaiter。</li>
+<li><strong>调试更分散</strong>：一个逻辑请求可能跨多次恢复，调用栈不再连续，需要请求 ID、trace 和协程生命周期日志。</li>
+<li><strong>帧分配和异常对象有成本</strong>：编译器可以优化掉部分帧分配，但库不能假设一定零成本；异常路径通常也比错误码更重。</li>
+</ul>
+<p>对腾讯微信公众号后台来说，最实际的设计问题是：<strong>请求被取消/连接断开时，谁负责停止协程、注销 I/O、保证帧只销毁一次？</strong> 这个问题不能靠语言协程自动解决，必须在库的 <code>Task</code>、取消令牌和 I/O 注册层一起设计。</p>
+<hr />
+<h2 id="task_1">动手实践：实现教学 <code>Task</code> 和手动恢复器</h2>
+<p>这个练习只用于理解机制，不用于生产。目标是把三件事看清楚：</p>
+<ol>
+<li>帧什么时候创建、什么时候暂停、什么时候销毁。</li>
+<li>一个帧只销毁一次。</li>
+<li>异常如何被暂存，并在恢复时传播给调用者。</li>
+</ol>
+<h3 id="1-manual_taskcpp">步骤 1：创建 <code>manual_task.cpp</code></h3>
+<p>将下面的完整代码写入文件。代码中的 <code>ManualRunner</code> 就是手动恢复器：每次 <code>step()</code> 显式推进一次协程，不做任何线程调度。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;coroutine&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">promise_type</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">promise_type</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[promise ctor]</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="o">~</span><span class="n">promise_type</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[promise dtor]</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">Task</span><span class="w"> </span><span class="n">get_return_object</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">Task</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;::</span><span class="n">from_promise</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)};</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="w"> </span><span class="n">initial_suspend</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="w"> </span><span class="n">final_suspend</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="p">{};</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">return_void</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">        </span><span class="kt">void</span><span class="w"> </span><span class="n">unhandled_exception</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">current_exception</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">exception_ptr</span><span class="w"> </span><span class="n">error</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Task</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Task</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">h_</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">Task</span><span class="p">(</span><span class="n">Task</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">h_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exchange</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">h_</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">Task</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">reset</span><span class="p">();</span>
+<span class="w">            </span><span class="n">h_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exchange</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">h_</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">Task</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="o">~</span><span class="n">Task</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">reset</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">done</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">h_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">h_</span><span class="p">.</span><span class="n">done</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">resume</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">h_</span><span class="p">)</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">"empty Task"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">done</span><span class="p">())</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">logic_error</span><span class="p">(</span><span class="s">"finished Task"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">h_</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">done</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">h_</span><span class="p">.</span><span class="n">promise</span><span class="p">().</span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">rethrow_exception</span><span class="p">(</span><span class="n">h_</span><span class="p">.</span><span class="n">promise</span><span class="p">().</span><span class="n">error</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">reset</span><span class="p">()</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">h_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">h_</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span>
+<span class="w">            </span><span class="n">h_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">coroutine_handle</span><span class="o">&lt;</span><span class="n">promise_type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">h_</span><span class="p">{};</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ManualRunner</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">ManualRunner</span><span class="p">(</span><span class="n">Task</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">task</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">task_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">task</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">step</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">task_</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">task_</span><span class="p">.</span><span class="n">done</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">done</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">task_</span><span class="p">.</span><span class="n">done</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">task_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">LocalState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">LocalState</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">name_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">name</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[local ctor] "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name_</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">~</span><span class="n">LocalState</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[local dtor] "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">name_</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">Task</span><span class="w"> </span><span class="nf">lifecycle_demo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">LocalState</span><span class="w"> </span><span class="n">state</span><span class="p">{</span><span class="s">"request-state"</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[body] before suspend "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">state</span><span class="p">.</span><span class="n">name_</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">    </span><span class="k">co_await</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[body] after resume</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">Task</span><span class="w"> </span><span class="nf">failing_demo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">co_await</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">suspend_always</span><span class="p">{};</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"rpc timeout"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ManualRunner</span><span class="w"> </span><span class="n">runner</span><span class="p">{</span><span class="n">lifecycle_demo</span><span class="p">()};</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[caller] step 1</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">runner</span><span class="p">.</span><span class="n">step</span><span class="p">();</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[caller] step 2</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">runner</span><span class="p">.</span><span class="n">step</span><span class="p">();</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">runner</span><span class="p">.</span><span class="n">done</span><span class="p">());</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[caller] scope end</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"--- exception path ---</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ManualRunner</span><span class="w"> </span><span class="n">runner</span><span class="p">{</span><span class="n">failing_demo</span><span class="p">()};</span>
+<span class="w">        </span><span class="n">runner</span><span class="p">.</span><span class="n">step</span><span class="p">();</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">runner</span><span class="p">.</span><span class="n">step</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[caller] caught "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">runner</span><span class="p">.</span><span class="n">done</span><span class="p">());</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"[caller] scope end</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="2">步骤 2：编译并运行</h3>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-pedantic<span class="w"> </span>manual_task.cpp<span class="w"> </span>-o<span class="w"> </span>manual_task
+./manual_task
+</code></pre></div>
+
+<p>预期输出：</p>
+<div class="codehilite"><pre><span></span><code>[promise ctor]
+[caller] step 1
+[local ctor] request-state
+[body] before suspend request-state
+[caller] step 2
+[body] after resume
+[local dtor] request-state
+[caller] scope end
+[promise dtor]
+--- exception path ---
+[promise ctor]
+[caller] caught rpc timeout
+[caller] scope end
+[promise dtor]
+</code></pre></div>
+
+<h3 id="3">步骤 3：读数输出，确认帧的生命周期</h3>
+<p>重点观察三组输出：</p>
+<ul>
+<li><strong><code>[promise ctor]</code> 在第一次 <code>step()</code> 之前出现。</strong> 说明协程帧和 <code>promise</code> 在函数调用时就建好了，即使协程体还没开始。</li>
+<li><strong><code>[local dtor]</code> 出现在第二次 <code>step()</code> 中，而 <code>[promise dtor]</code> 出现在作用域结束。</strong> 说明协程体局部对象和协程帧的销毁时机不同。</li>
+<li><strong><code>[promise dtor]</code> 只出现一次。</strong> <code>ManualRunner</code> 析构时带着 <code>Task</code> 析构，<code>Task</code> 的唯一句柄执行一次 <code>destroy()</code>。</li>
+</ul>
+<h3 id="4">步骤 4：验证移动语义没有制造双重销毁</h3>
+<p>把生命周期演示段临时改成手动转移所有权：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Task</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lifecycle_demo</span><span class="p">();</span>
+<span class="n">Task</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="n">b</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+<span class="n">b</span><span class="p">.</span><span class="n">resume</span><span class="p">();</span>
+</code></pre></div>
+
+<p>编译运行后仍应只看到一次 <code>[promise dtor]</code>。原因是移动构造函数用 <code>std::exchange</code> 把源句柄置空；源对象析构时不会再次 <code>destroy()</code>。</p>
+<p>不要为了“观察两次销毁”而故意调用两次 <code>destroy()</code>。第二次调用是未定义行为，可能崩溃、可能静默破坏堆，这不能作为测试手段。</p>
+<h3 id="5">步骤 5：检查异常路径</h3>
+<p>在异常段中确认：</p>
+<ul>
+<li>第一次 <code>step()</code> 只走到 <code>co_await</code>，不会抛异常。</li>
+<li>第二次 <code>step()</code> 中异常被 <code>unhandled_exception()</code> 暂存，协程进入 final suspend，随后 <code>Task::resume()</code> 重抛。</li>
+<li><code>catch</code> 之后 <code>runner.done()</code> 为 <code>true</code>。</li>
+<li>作用域结束时 <code>promise</code> 仍然恰好析构一次。</li>
+</ul>
+<p>可以临时把 <code>unhandled_exception()</code> 改成 <code>std::terminate()</code>，观察异常不再被重抛而是直接终止程序；然后改回“暂存 + 重抛”。这能直观看出：<strong>异常如何传播是 <code>promise_type</code> 的实现选择，不是 <code>co_await</code> 自动完成的魔法。</strong></p>
+<h3 id="6">步骤 6：阅读编译器降低后的代码</h3>
+<p>节点建议阅读编译器协程降低后的代码。可以在本地生成汇编：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O0<span class="w"> </span>-S<span class="w"> </span>manual_task.cpp<span class="w"> </span>-o<span class="w"> </span>manual_task.s
+</code></pre></div>
+
+<p>在生成的汇编或 Compiler Explorer 中标记：</p>
+<ul>
+<li>帧分配和 <code>promise</code> 构造的位置；</li>
+<li>参数、局部状态在帧中的保存位置；</li>
+<li><code>co_await</code> 对应的暂停点和恢复入口；</li>
+<li><code>final_suspend</code> 后的销毁路径；</li>
+<li>异常路径中 <code>unhandled_exception</code> 的调用点。</li>
+</ul>
+<p>不要求读懂每条指令，重点是确认：<strong>编译器确实把协程函数改写成了状态机，暂停点附近会保存/恢复帧状态，而 <code>destroy()</code> 会走帧销毁路径。</strong></p>
+<h3 id="_12">验收清单</h3>
+<ul>
+<li>[ ] 能说明 <code>co_await</code> 不一定切换线程：是否暂停由 <code>await_ready()</code> 决定，恢复线程由调度器决定。</li>
+<li>[ ] 能说明每个协程帧恰好销毁一次：句柄非拥有，<code>Task</code> 用移动语义保证唯一所有权，析构只 <code>destroy()</code> 一次。</li>
+<li>[ ] 能指出教学 <code>Task</code> 中 <code>initial_suspend</code>、<code>final_suspend</code> 分别返回什么，以及为什么。</li>
+<li>[ ] 能解释异常从协程体到 <code>promise</code> 再到调用者的路径。</li>
+<li>[ ] 能说清临时 Lambda 捕获为什么可能悬空，并给出按值传参的替代方案。</li>
+</ul>
+<hr />
+<h2 id="_13">自测题</h2>
+<h3 id="1co_await">题 1：<code>co_await</code> 一定会切换线程吗？</h3>
+<p><strong>答案：不一定，通常也不会仅因为 <code>co_await</code> 就切换线程。</strong></p>
+<p><code>co_await</code> 只是可能暂停。若 <code>await_ready()</code> 返回 <code>true</code>，协程直接继续；若 <code>await_suspend()</code> 返回 <code>false</code>，也不暂停。即使暂停，恢复线程也由持有句柄的调度器决定。教学 <code>ManualRunner</code> 在主线程 <code>resume()</code>，所以暂停和恢复都在同一线程。异步库可以把恢复投递到 I/O 线程或线程池，但那是库的行为，不是语言的保证。</p>
+<h3 id="2final_suspend-suspend_always">题 2：协程抛出异常，<code>final_suspend</code> 返回 <code>suspend_always</code>，谁负责销毁帧？</h3>
+<p><strong>答案：拥有协程句柄的返回对象负责，通常是 <code>Task</code> 的析构函数；必须恰好销毁一次。</strong></p>
+<p>异常发生时，运行时调用 <code>unhandled_exception()</code>，教学实现把异常存进 <code>promise</code>，然后协程停在 final suspend。此时帧仍然有效，局部对象可能已在栈展开中析构，但 <code>promise</code>、参数和帧本身仍在。调用者恢复并收到重抛的异常后，帧不会自动消失；<code>Task</code> 析构时调用 <code>destroy()</code>，清理帧。若忘记销毁会泄漏；若句柄被复制后两个对象都销毁，就是重复销毁，属于未定义行为。</p>
+<h3 id="3-lambda">题 3：为什么临时协程 Lambda 的捕获可能比帧先失效？</h3>
+<p><strong>答案：捕获存在闭包对象里，而临时闭包会在完整表达式结束时销毁；协程帧可能之后才恢复。</strong></p>
+<p>例如 <code>return [&amp;]() -&gt; Task { co_await ...; use(x); }();</code>，闭包是临时对象，<code>return</code> 表达式结束就析构；被捕获的局部变量也可能已经离开作用域。协程恢复时再通过失效的闭包/引用访问捕获，就是悬空访问。修复方式是把数据按值作为协程参数传入，让参数副本进入帧；或者确保闭包和所有捕获的生命周期严格长于 <code>Task</code>。引用和指针参数不会自动延长被引用对象的寿命，这一点在请求对象和连接对象上尤其危险。</p>
+<hr />
+<h2 id="_14">推荐资源</h2>
+<p>以下资源来自本课节点：</p>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>来源</th>
+<th>语言</th>
+<th>类型</th>
+<th>难度</th>
+<th>费用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/language/coroutines.html">C++20无栈协程机制：参考文档 / 原始资料</a></td>
+<td>en.cppreference.com</td>
+<td>英文</td>
+<td>文档</td>
+<td>进阶</td>
+<td>免费</td>
+<td>重点阅读协程帧与生命周期、<code>promise_type</code> 和 awaitable，用于核对本节点实验的语义和边界。</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/cpp/language/coroutines">C++20 Coroutines 语言机制</a></td>
+<td>cppreference</td>
+<td>英文</td>
+<td>文档</td>
+<td>进阶</td>
+<td>免费</td>
+<td>区分编译器提供的暂停恢复协议与库负责的调度器、执行器。</td>
+</tr>
+</tbody>
+</table>
+<p>阅读时建议带着三个问题：帧何时创建和销毁？<code>co_await</code> 的暂停条件是什么？哪些职责属于语言、哪些属于库？把答案对照本课的 <code>Task</code> 和 <code>ManualRunner</code>，你会更容易看懂真实异步框架的 <code>Task&lt;T&gt;</code>、<code>Executor</code>、取消令牌和 I/O awaiter。</p>
+<hr />
+<h2 id="g-14-asanubsan">附：一键验收脚本（已在 g++ 14 + ASan/UBSan 下跑通）</h2>
+<p><code>practice31/</code> 下备有两个文件，可直接对照验收标准：</p>
+<ul>
+<li><code>task.cpp</code>：教学 <code>Task</code>（<code>return_value</code> 版）+ 手动恢复器。通过重载 <code>promise_type::operator new/delete</code> 统计帧的创建与销毁次数，覆盖 4 条路径：正常跑完、异常暂存后 <code>get()</code> 重抛、<strong>没跑完就析构</strong>（挂起中的帧也要 destroy）、移动后只销毁一次。并记录 <code>co_await</code> 前后的线程 id。</li>
+<li><code>lambda_bug.cpp</code>：临时协程 Lambda 按值捕获 <code>std::string</code>，lambda 析构后再 <code>resume()</code>，ASan 报错；改成按值协程参数后正常。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice31<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./test.sh
+</code></pre></div>
+
+<p>实测输出要点：</p>
+<div class="codehilite"><pre><span></span><code>resumes_until_done=3 value=5
+same_thread_after_co_await=yes
+rethrown=db timeout
+frames_created=4 frames_alive=0
+ALL_CHECKS_PASSED
+user=64
+good_version_ok
+stack-use-after-return
+lambda_capture_bug_detected
+</code></pre></div>
+
+<p>注意 <code>lambda_bug.cpp</code> 里捕获是<strong>按值</strong>的，照样出事：按值捕获的副本存在闭包对象里，而协程帧只保存指向闭包的 <code>this</code>，所以“按值捕获”救不了，只有“按值参数”才会被拷进帧。</p><div class="pn"><span><a href="30.html">← C++17/20/23工程选型</a></span><span>下一课 待更新</span></div></main></div></body></html>

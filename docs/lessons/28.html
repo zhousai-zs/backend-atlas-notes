@@ -1,0 +1,193 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>28. 分配器、对齐与内存资源 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="cur" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 28 课 · 领域 B · 阶段 3</p><p class="dl"><a href="../files/28-b-memory.md" download>⬇ 本课 Markdown</a><a href="../files/practice28.tar.gz" download>⬇ 练习包 practice28.tar.gz</a></p><h1 id="28208">第 28/208 课：分配器、对齐与内存资源</h1>
+<blockquote>
+<p>领域 B · 阶段 3 · 难度：进阶 · 前置：b-lifetime（对象生命周期）、b-template（模板）</p>
+</blockquote>
+<p><strong>一句话</strong>：动态分配管理的是“原始存储”，对齐约束和对象构造是两件要分别满足的事，而内存资源（memory resource）让你可以定制分配的生命周期。</p>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<p>学完这一课你应该能：</p>
+<ul>
+<li>解释 <code>new</code> 和 <code>malloc</code> 的区别；</li>
+<li>独立完成：对比普通分配和 <code>monotonic_buffer_resource</code> 处理批次请求时的分配次数；</li>
+<li>（验收）说清“释放存储”和“析构”不是一回事；</li>
+<li>（验收）保证内存池在异常路径上不留下悬垂对象。</li>
+</ul>
+<p><strong>为什么后端要懂</strong>：节点给的理由是“分析频繁分配、碎片和对象池带来的性能及安全影响”。放到公众号后台的场景里想一下：一个接入服务每秒处理大量请求，每个请求要解析出几十个字段，每个字段一个 <code>std::string</code>、一个 <code>vector</code>。每次 <code>new</code> 都要进分配器，可能抢锁，还会造成碎片。高峰时延迟毛刺很可能就来自这里。对象池和内存资源是常见的解法，但用错了就会出现悬垂指针和内存只涨不降。</p>
+<h2 id="2">2. 核心要点：从直觉到原理</h2>
+<h3 id="21-new-malloc">2.1 new 与 malloc 的区别</h3>
+<p><strong>直觉</strong>：<code>malloc</code> 只给你一块“生地”，<code>new</code> 是“拿地并盖好房子”。</p>
+<p><strong>原理</strong>：一个 <code>new T(args)</code> 表达式做两步：</p>
+<ol>
+<li>调 <code>operator new(sizeof(T))</code> 拿原始存储（默认实现通常也是向底层分配器要内存）；</li>
+<li>在这块存储上调 <code>T</code> 的构造函数。</li>
+</ol>
+<p><code>delete p</code> 反过来：先调析构函数，再调 <code>operator delete</code> 释放存储。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>malloc</code> / <code>free</code></th>
+<th><code>new</code> / <code>delete</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>做什么</td>
+<td>只分配、只释放字节</td>
+<td>分配 + 构造 / 析构 + 释放</td>
+</tr>
+<tr>
+<td>失败时</td>
+<td>返回 <code>nullptr</code></td>
+<td>抛 <code>std::bad_alloc</code>（<code>nothrow</code> 版本返回空）</td>
+</tr>
+<tr>
+<td>类型</td>
+<td>返回 <code>void*</code></td>
+<td>返回 <code>T*</code></td>
+</tr>
+<tr>
+<td>能否定制</td>
+<td>换 malloc 实现（如 jemalloc/tcmalloc）</td>
+<td>可重载 <code>operator new</code>，可按类重载</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键结论：释放存储和析构是两回事。</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;new&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">alignas</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">)</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">raw</span><span class="p">[</span><span class="k">sizeof</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">)];</span>
+<span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="p">(</span><span class="n">raw</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span><span class="w">  </span><span class="c1">// placement new：只构造，不分配</span>
+<span class="n">s</span><span class="o">-&gt;~</span><span class="n">basic_string</span><span class="p">();</span><span class="w">                        </span><span class="c1">// 只析构；存储是栈上的 raw，不需要也不能释放</span>
+<span class="c1">// delete s;   // 错！这块内存不是 operator new 给的</span>
+</code></pre></div>
+
+<p><strong>配对规则不能混用</strong>：<code>malloc</code> 配 <code>free</code>，<code>new</code> 配 <code>delete</code>，<code>new[]</code> 配 <code>delete[]</code>，placement new 只配手动析构。混用就是未定义行为。</p>
+<h3 id="22-alignof">2.2 alignof 与过对齐</h3>
+<p><strong>直觉</strong>：CPU 读数据时喜欢地址是某个数的倍数。<code>int</code> 通常要求 4 字节对齐，<code>double</code> 要求 8 字节。</p>
+<p><strong>原理</strong>：</p>
+<ul>
+<li><code>alignof(T)</code> 返回类型的对齐要求；</li>
+<li><code>alignas(N)</code> 可以把对齐要求调大；</li>
+<li>对齐要求超过 <code>alignof(std::max_align_t)</code>（x86-64 上通常是 16）的类型叫<strong>过对齐类型</strong>；</li>
+<li><code>malloc</code> 只保证 <code>max_align_t</code> 级别的对齐。C++17 起，<code>new</code> 一个过对齐类型会自动调用 <code>operator new(size, std::align_val_t)</code>，C 里则用 <code>aligned_alloc</code>。</li>
+</ul>
+<p>后台常见用法是让每个线程的计数器独占一条缓存行，避免伪共享：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">alignas</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="n">Counter</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w"> </span><span class="p">};</span><span class="w">   </span><span class="c1">// alignof=64，sizeof 也被填充到 64</span>
+
+<span class="n">Counter</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Counter</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w">              </span><span class="c1">// C++17：地址自动按 64 对齐</span>
+<span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">aligned_alloc</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">);</span><span class="w">    </span><span class="c1">// 大小必须是对齐的整数倍</span>
+</code></pre></div>
+
+<p>在本机实测（g++ 14、x86-64）的输出：</p>
+<div class="codehilite"><pre><span></span><code>alignof(int)=4 alignof(max_align_t)=16 alignof(Counter)=64 sizeof(Counter)=64
+new Counter[] addr%64=0
+aligned_alloc addr%64=0
+</code></pre></div>
+
+<p><strong>对齐要和构造分开满足</strong>：自己手写内存池、用 placement new 时，给出的地址必须满足 <code>alignof(T)</code>，否则在某些平台上会崩溃，在 x86 上可能只是变慢，但同样是未定义行为。写缓冲区时用 <code>alignas(T) unsigned char buf[...]</code> 或 <code>std::align</code> 来对齐。</p>
+<h3 id="23-allocator-pmr">2.3 allocator 与 pmr 资源</h3>
+<p><strong>传统 allocator</strong>：<code>std::vector&lt;T, Alloc&gt;</code> 里的分配器是<strong>模板参数</strong>。换一个分配器就是换一个类型，<code>vector&lt;int, A&gt;</code> 和 <code>vector&lt;int, B&gt;</code> 不能互相赋值，接口很难统一。</p>
+<p><strong>C++17 的 pmr（polymorphic memory resource）</strong>：分配策略变成一个运行时对象 <code>std::pmr::memory_resource*</code>。容器统一是 <code>std::pmr::vector&lt;T&gt;</code>，构造时传入资源指针就行。</p>
+<p>常用的三种资源：</p>
+<ul>
+<li><code>new_delete_resource()</code>：默认资源，走 <code>::operator new</code> / <code>delete</code>；</li>
+<li><code>monotonic_buffer_resource</code>：只往前切内存，单个 <code>deallocate</code> 什么也不做，资源析构（或 <code>release()</code>）时才整块归还。缓冲用完后向<strong>上游资源</strong>要新块；</li>
+<li><code>unsynchronized_pool_resource</code> / <code>synchronized_pool_resource</code>：按大小分档的池，能复用已释放的块（前者不带锁，后者线程安全）。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory_resource&gt;</span>
+
+<span class="k">alignas</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">max_align_t</span><span class="p">)</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">monotonic_buffer_resource</span><span class="w"> </span><span class="nf">pool</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span>
+<span class="w">                                             </span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">null_memory_resource</span><span class="p">());</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">req</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">);</span><span class="w">   </span><span class="c1">// vector 和里面的 string 都从 pool 里切</span>
+<span class="w">    </span><span class="n">req</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="s">"openid_oXyz1234567890abcdef"</span><span class="p">);</span>
+<span class="p">}</span><span class="w">   </span><span class="c1">// req 先析构（各个 string 的析构执行，但“释放”是空操作），然后 pool 析构</span>
+</code></pre></div>
+
+<p>这里 <code>null_memory_resource()</code> 当上游的意思是：缓冲不够就直接抛 <code>bad_alloc</code>，绝不偷偷去堆上分配，测试时很有用。</p>
+<p><strong>声明顺序很重要</strong>：资源必须比使用它的容器活得更久。所以资源先声明、容器后声明，这样容器先析构、资源后析构。</p>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<p><strong>误区（节点原文）</strong>：<em>placement new 不获取额外存储，释放规则不能混用。</em></p>
+<ul>
+<li>对 placement new 出来的指针调 <code>delete</code>：错，它的存储不是 <code>operator new</code> 给的；</li>
+<li>以为 <code>monotonic_buffer_resource</code> 的 deallocate 会归还内存：不会，只有资源析构或 <code>release()</code> 时才归还；</li>
+<li>以为“内存释放了，对象就析构了”：对 monotonic 资源直接 <code>release()</code>，不会帮你调对象的析构函数。如果对象自己持有其他资源（文件句柄、来自别处的内存），就会泄漏。应该先让容器析构，再释放资源；</li>
+<li>容器比资源活得更久：资源一析构，容器里的指针就悬垂了。</li>
+</ul>
+<p><strong>权衡（节点原文）</strong>：<em>池化减少分配成本，也可能保留高峰内存并掩盖越界。</em></p>
+<ul>
+<li><strong>保留高峰内存</strong>：一个长期存活的 monotonic 资源只涨不降。如果整个进程共用一个，内存会停在历史峰值。所以 monotonic 适合“一个请求一个资源、请求结束整体丢弃”这种生命周期很明确的场景；</li>
+<li><strong>掩盖越界</strong>：池里的对象挨得很近，越界写会悄悄改坏邻居，而不是落在 ASan 能抓到的保护区上。调试时可以临时切回默认资源再跑 ASan；</li>
+<li>线程：<code>unsynchronized_*</code> 和 <code>monotonic_buffer_resource</code> 都不是线程安全的，跨线程共享时要换 <code>synchronized_pool_resource</code> 或每线程一个资源。</li>
+</ul>
+<h2 id="4-monotonic_buffer_resource">4. 动手实践：对比普通分配与 monotonic_buffer_resource 的分配次数</h2>
+<p>代码已经放在 <code>/workspace/atlas/practice28/</code>（<code>batch.cpp</code>、<code>align.cpp</code>、<code>test.sh</code>），我在本机跑通了。</p>
+<p><strong>步骤 1：统计全局分配次数。</strong> 重载全局 <code>operator new</code>，每调一次计数加一。注意也要重载带 <code>std::align_val_t</code> 的版本，因为 libstdc++ 的 <code>new_delete_resource</code> 走的是这个版本，漏了就会少算。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">g_new_calls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="k">operator</span><span class="w"> </span><span class="k">new</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">++</span><span class="n">g_new_calls</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">malloc</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">bad_alloc</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="k">operator</span><span class="w"> </span><span class="k">delete</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">free</span><span class="p">(</span><span class="n">p</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="c1">// 另外还有 operator new(size_t, align_val_t) 及对应的 delete，见 batch.cpp</span>
+</code></pre></div>
+
+<p><strong>步骤 2：模拟一批请求。</strong> 每个请求解析出 4 个长字段（超过短字符串优化 SSO 的长度，所以一定会堆分配），放进 <code>vector&lt;string&gt;</code>。跑 1000 个请求：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">batch</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">req</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">kFields</span><span class="p">)</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 3：换成每个请求一个 monotonic 资源</strong>，用栈上（静态）缓冲，上游设成 <code>null_memory_resource()</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">batch</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">monotonic_buffer_resource</span><span class="w"> </span><span class="nf">pool</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">null_memory_resource</span><span class="p">());</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pmr</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">req</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pool</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">kFields</span><span class="p">)</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 4：对照组，缓冲不够时回退上游。</strong> 只给 64 字节缓冲、上游用默认的 <code>new_delete_resource</code>，整个批次共用一个 pool。</p>
+<p><strong>步骤 5：异常路径。</strong> 在 pool 上构造一组 <code>Tracked</code> 对象，第 3 个构造时抛异常，检查存活对象数回到 0。</p>
+<p><strong>步骤 6：运行</strong> <code>bash /workspace/atlas/practice28/test.sh</code>，实测输出：</p>
+<div class="codehilite"><pre><span></span><code>batch=1000  std::allocator new calls=7000
+batch=1000  monotonic(stack buf, null upstream) new calls=0
+batch=1000  monotonic(64B buf, new_delete upstream) new calls=19
+caught: parse fail, alive=0
+ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p><strong>怎么解读</strong>：</p>
+<ul>
+<li>普通分配每个请求 7 次：4 个字符串，加上 vector 从 1→2→4 的 3 次扩容；</li>
+<li>monotonic 加栈上缓冲是 0 次，请求结束时整块丢弃；</li>
+<li>64 字节缓冲的对照组只有 19 次上游分配。这是因为 monotonic 每次向上游要的块会按几何级数变大。代价是这 1000 个请求用过的内存在 pool 析构前一直不归还，这正是“保留高峰内存”；</li>
+<li>异常路径上，<code>vector</code> 自己保证已构造的元素被析构，pool 再整体释放，没有悬垂对象。</li>
+</ul>
+<p><strong>进阶（节点的 sourceStudy）</strong>：阅读 libstdc++ 的 <code>memory_resource</code> 实现，追踪分配、上游回退和批次释放这三条路径。</p>
+<h2 id="5">5. 自测题</h2>
+<p><strong>题 1</strong>：<code>auto* p = new (buf) Foo;</code> 之后，用 <code>delete p;</code> 释放对吗？应该怎么做？</p>
+<details><summary>答案</summary>
+
+不对。placement new 不分配存储，`buf` 不是 `operator new` 给的，`delete` 会把它当堆内存释放，是未定义行为。正确做法是 `p->~Foo();` 只析构，`buf` 的存储按它本来的方式管理（栈上就随作用域结束，堆上就用对应的释放函数）。
+</details>
+
+<p><strong>题 2</strong>：在 x86-64 上，<code>malloc(sizeof(T))</code> 拿到的内存，能直接 placement new 一个 <code>struct alignas(64) T</code> 吗？</p>
+<details><summary>答案</summary>
+
+不能保证。`malloc` 只保证 `alignof(std::max_align_t)`（通常是 16）的对齐，64 字节对齐不一定满足。应该用 `std::aligned_alloc(64, size)`（size 是 64 的倍数），或者直接 `new T`（C++17 会自动走对齐版本的 `operator new`）。
+</details>
+
+<p><strong>题 3</strong>：有人在进程启动时创建一个全局 <code>monotonic_buffer_resource</code>，所有请求都从它分配，上线后内存一直涨。为什么？怎么改？</p>
+<details><summary>答案</summary>
+
+`monotonic_buffer_resource` 的 `deallocate` 是空操作，内存只在资源析构或 `release()` 时归还，全局资源永远不析构，所以只涨不降。改法：每个请求（或每个批次）一个 monotonic 资源，请求结束整体丢弃；如果确实需要长期复用、释放后能回收，改用 `unsynchronized_pool_resource`（单线程）或 `synchronized_pool_resource`（多线程）。
+</details>
+
+<h2 id="6">6. 推荐资源</h2>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/memory/memory_resource.html">cppreference：std::pmr::memory_resource</a>（英文文档，进阶）：节点建议重点读 new 与 malloc 的区别、alignof 与过对齐，用来核对本节实验的语义和边界。</li>
+</ul><div class="pn"><span><a href="27.html">← 异常安全与错误模型</a></span><span><a href="29.html">非拥有视图与边界安全 →</a></span></div></main></div></body></html>

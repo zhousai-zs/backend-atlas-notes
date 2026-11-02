@@ -1,0 +1,402 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>26. 类型系统、转换与接口设计 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="cur" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 26 课 · 领域 B · 阶段 2</p><p class="dl"><a href="../files/26-b-types.md" download>⬇ 本课 Markdown</a><a href="../files/practice26.tar.gz" download>⬇ 练习包 practice26.tar.gz</a></p><h1 id="26208">第 26/208 课：类型系统、转换与接口设计</h1>
+<blockquote>
+<p>领域 B · 阶段 2 · 难度：基础 ｜ 子类：语法与类型 ｜ 前置：b-template</p>
+</blockquote>
+<p><strong>一句话</strong>：类型系统限制哪些操作合法；强类型接口把单位、状态和所有权写进签名，让错误组合尽量在编译期失败；但运行时输入和生命周期契约仍要显式检查。</p>
+<h2 id="_1">一、学习目标 &amp; 为什么后端要懂</h2>
+<p>学完你应该能：
+1. 解释显式转换与 <code>explicit</code>；
+2. 独立完成：为超时、字节数和请求 ID 设计不可混用的类型接口。</p>
+<p>验收标准（节点原文）：
+- 非法单位组合不能编译；
+- 能解释 <code>reinterpret_cast</code> 为何不构造目标对象。</p>
+<p><strong>为什么后端要懂</strong>：公众号后台的请求上下文里经常同时出现 <code>timeout</code>、<code>body_size</code>、<code>request_id</code>、<code>msg_id</code>，它们在配置、日志和协议里往往只是裸整数或字符串。<code>timeout=3</code> 是秒还是毫秒？<code>size=4096</code> 是字节还是 KB？两个都叫 <code>id</code> 的字符串，谁会拿到用户 ID、谁会拿到请求 ID？如果函数签名只写 <code>int64_t</code> / <code>std::string</code>，编译器帮不了你，错误可能到线上才以“超时早了三倍”“查错用户”“把订单 ID 当用户 ID”的形式出现。类型系统的作用，就是把这些语义放到接口上，让错误组合在编译期暴露。</p>
+<h2 id="_2">二、从直觉到原理</h2>
+<p>类型系统是编译器对“哪些值能参与哪些操作”的检查。它知道 <code>int</code> 和 <code>std::string</code> 不同，却不知道两个 <code>int64_t</code> 一个是毫秒、一个是字节；强类型的任务就是补上后者。接口还能表达所有权：<code>std::unique_ptr&lt;T&gt;</code> 按值传递表示转移，<code>const T&amp;</code> 表示只读借用。下面聚焦节点要求的三个核心点。</p>
+<p>以下短代码为突出类型关系，省略重复的 <code>#include</code>；动手实践部分会给出完整文件。</p>
+<h3 id="1-explicit">1. 显式转换与 <code>explicit</code></h3>
+<p><strong>直觉</strong>：<code>int</code> 到 <code>double</code> 这类标准转换是语言内建的，通常不会丢语义；但用户自定义类型之间的转换如果也能隐式发生，就可能把“毫秒”悄悄变成“秒”，或者把裸数字直接塞进一个有业务含义的参数。</p>
+<p>先看没有类型保护的接口：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">send_request</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">);</span>
+
+<span class="n">send_request</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</code></pre></div>
+
+<p>调用点只写了 <code>5</code>，编译器不知道它代表 5 毫秒、5 秒还是 5 次重试。把单位做成类型后，接口就有了约束：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Milliseconds</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">Milliseconds</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">value_</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">send_request</span><span class="p">(</span><span class="n">Milliseconds</span><span class="w"> </span><span class="n">timeout</span><span class="p">);</span>
+
+<span class="n">send_request</span><span class="p">(</span><span class="n">Milliseconds</span><span class="p">{</span><span class="mi">5</span><span class="p">});</span>
+</code></pre></div>
+
+<p>此时 <code>send_request(5)</code> 不再能通过编译：<code>Milliseconds</code> 的构造函数是 <code>explicit</code> 的，裸 <code>int</code> 不能隐式转换成 <code>Milliseconds</code>。调用点必须明确写出单位，代码审查时也更容易发现“这里传的到底是毫秒还是秒”。</p>
+<p><code>explicit</code> 的准确边界是：</p>
+<ul>
+<li>它禁止<strong>隐式转换</strong>和<strong>复制初始化</strong>，例如 <code>Milliseconds t = 5;</code> 失败，<code>send_request(5)</code> 失败；</li>
+<li>它不禁止<strong>直接初始化</strong>和<strong>显式转换</strong>，例如 <code>Milliseconds t{5};</code>、<code>send_request(Milliseconds{5})</code>、<code>static_cast&lt;Milliseconds&gt;(5)</code> 都可以；</li>
+<li>它只控制“转换能不能悄悄发生”，<strong>不校验值是否合理</strong>。<code>Milliseconds{-1}</code> 仍然可以构造，除非你在构造函数或边界解析里检查范围。</li>
+</ul>
+<p><code>explicit</code> 也可以用在转换运算符上，避免对象被悄悄转成 <code>bool</code> 或其他类型：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Ready</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="k">operator</span><span class="w"> </span><span class="kt">bool</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Ready</span><span class="p">{})</span><span class="w"> </span><span class="p">{</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ready</span><span class="p">{};</span>
+</code></pre></div>
+
+<p><code>if</code> 是语境转换，允许调用 <code>explicit operator bool</code>；<code>bool b = Ready{}</code> 是复制初始化，不允许，因此第二行会编译失败。</p>
+<p><strong><code>static_cast</code> 与 <code>reinterpret_cast</code> 的关键区别</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">raw_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3000</span><span class="p">;</span>
+<span class="n">Milliseconds</span><span class="w"> </span><span class="n">timeout</span><span class="p">{</span><span class="n">raw_ms</span><span class="p">};</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">timeout</span><span class="p">.</span><span class="n">count</span><span class="p">());</span>
+</code></pre></div>
+
+<p>上面的 <code>Milliseconds{raw_ms}</code> 和 <code>static_cast</code> 走的是<strong>值转换/构造</strong>：目标类型的对象会被构造出来，构造函数的规则和校验都会执行。</p>
+<p>而 <code>reinterpret_cast</code> 只是重新解释指针、引用或整数的位模式，它<strong>不调用构造函数，也不开始目标类型的对象生命周期</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3000</span><span class="p">;</span>
+<span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">Milliseconds</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">raw</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">count</span><span class="p">();</span>
+</code></pre></div>
+
+<p><code>&amp;raw</code> 指向的存储里只有一个 <code>std::uint64_t</code>，并没有 <code>Milliseconds</code> 对象。<code>reinterpret_cast</code> 只是把这个地址按 <code>Milliseconds*</code> 来解释；随后解引用并调用成员函数是未定义行为。即使两个类型大小相同、布局看起来一样，也不能把它当成“把字节构造成对象”的手段。需要按值转换时用构造或 <code>static_cast</code>；确实要按位重解释时，必须先确认对象表示、对齐、生命周期和别名规则，不能拿 <code>reinterpret_cast</code> 当序列化或构造工具。</p>
+<h3 id="2-enum-class">2. <code>enum class</code> 与强类型包装</h3>
+<p><strong>直觉</strong>：状态是有限集合，适合用枚举表达；数量和 ID 的底层表示可能都是整数或字符串，但它们有不同的语义，适合用强类型包装。两者解决的问题不同。</p>
+<p>旧式 <code>enum</code> 的枚举名会泄漏到外层作用域，而且会隐式转成整数：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">enum</span><span class="w"> </span><span class="nc">DeliveryState</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Pending</span><span class="p">,</span><span class="w"> </span><span class="n">Sent</span><span class="p">,</span><span class="w"> </span><span class="n">Failed</span><span class="w"> </span><span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Pending</span><span class="p">;</span>
+</code></pre></div>
+
+<p>这会让“状态”退化成魔法数字，也容易把两个不同枚举的值混在一起比较。<code>enum class</code> 把名字收进作用域，并取消隐式转整数：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">DeliveryState</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Pending</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Sent</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Failed</span>
+<span class="p">};</span>
+
+<span class="n">DeliveryState</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DeliveryState</span><span class="o">::</span><span class="n">Pending</span><span class="p">;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
+</code></pre></div>
+
+<p><code>enum class</code> 的好处是：</p>
+<ul>
+<li>必须写 <code>DeliveryState::Pending</code>，不会和别的 <code>Pending</code> 冲突；</li>
+<li>不能隐式转成 <code>int</code>，<code>int n = state;</code> 会编译失败；</li>
+<li>不同 <code>enum class</code> 之间不能直接比较或赋值；</li>
+<li>可以指定底层类型，便于和协议字段的宽度对应。</li>
+</ul>
+<p>但 <code>enum class</code> 只适合表达<strong>有限状态</strong>。超时和字节数都是数量，不能靠枚举穷举；请求 ID 和用户 ID 都是字符串，也不能靠枚举区分。这时需要强类型包装：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Bytes</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">Bytes</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">value_</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">configure</span><span class="p">(</span><span class="n">Milliseconds</span><span class="w"> </span><span class="n">timeout</span><span class="p">,</span><span class="w"> </span><span class="n">Bytes</span><span class="w"> </span><span class="n">max_body</span><span class="p">);</span>
+
+<span class="n">configure</span><span class="p">(</span><span class="n">Bytes</span><span class="p">{</span><span class="mi">4096</span><span class="p">},</span><span class="w"> </span><span class="n">Milliseconds</span><span class="p">{</span><span class="mi">3000</span><span class="p">});</span>
+</code></pre></div>
+
+<p>最后一行故意把参数顺序写反了，编译器会报“不能把 <code>Bytes</code> 转成 <code>Milliseconds</code>”，因为两个包装类型之间没有转换路径。<code>configure(3000, 4096)</code> 也会失败，因为两个构造函数都是 <code>explicit</code>。这就是“非法单位组合不能编译”的核心机制。</p>
+<p>请求 ID 也能用同样方式包起来：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RequestId</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">RequestId</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">value_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">"request id must not be empty"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">str</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>请求 ID 和用户 ID 都可能用 <code>std::string</code> 表示，但包装成不同类型后，把请求 ID 传给只接受用户 ID 的接口会直接编译失败。包装还能把“非空”这类不变量放进构造函数；不过构造函数目前只检查非空，格式校验仍要按实际协议补充。</p>
+<p>设计时可以记住这个分工：</p>
+<ul>
+<li><strong>有限状态</strong>用 <code>enum class</code>，例如 <code>Pending</code>、<code>Sent</code>、<code>Failed</code>；</li>
+<li><strong>数量、单位、ID</strong>用强类型包装，例如 <code>Milliseconds</code>、<code>Bytes</code>、<code>RequestId</code>；</li>
+<li>类型多时可以抽成带 Tag 参数的模板，但关键不是模板，而是<strong>默认不提供跨类型构造和转换</strong>。</li>
+</ul>
+<h3 id="3-const">3. <code>const</code> 正确性与重载</h3>
+<p><strong>直觉</strong>：<code>const</code> 在接口上表达“只读借用”：这个函数不会通过这个引用修改对象。它让调用者更放心，也让编译器能检查出误写。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Frame</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">char</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">data_</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">[](</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">data_</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">data_</span><span class="p">{</span><span class="sc">'x'</span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="n">Frame</span><span class="w"> </span><span class="n">frame</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">Frame</span><span class="o">&amp;</span><span class="w"> </span><span class="n">view</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frame</span><span class="p">;</span>
+
+<span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'A'</span><span class="p">;</span>
+<span class="kt">char</span><span class="w"> </span><span class="n">ch</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</code></pre></div>
+
+<p><code>frame</code> 是非 <code>const</code> 对象，调用非 <code>const</code> 版本的 <code>operator[]</code>，返回可写的 <code>char&amp;</code>；<code>view</code> 是 <code>const</code> 引用，只能调用 <code>const</code> 版本，返回 <code>const char&amp;</code>。如果 <code>const</code> 版本返回了非 <code>const</code> 引用，类型系统就会被绕过，调用者可以修改一个本应只读的对象，所以不要这么做。</p>
+<p>对后端接口来说，常见写法是：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">audit</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RequestId</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Bytes</span><span class="o">&amp;</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+</code></pre></div>
+
+<p><code>const RequestId&amp;</code> 和 <code>const Bytes&amp;</code> 表示只读借用，避免拷贝，也禁止函数内部改调用者的数据。注意，这种借用只在调用期间有效；如果函数把引用或 <code>std::string_view</code> 存起来，调用方仍需保证被引用对象的生命周期。</p>
+<p><strong>重载</strong>可以按 <code>const</code> 限定区分，也可以按强类型参数区分：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">enqueue</span><span class="p">(</span><span class="n">Milliseconds</span><span class="w"> </span><span class="n">delay</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">enqueue</span><span class="p">(</span><span class="n">Bytes</span><span class="w"> </span><span class="n">payload</span><span class="p">);</span>
+</code></pre></div>
+
+<p>因为 <code>Milliseconds</code> 和 <code>Bytes</code> 的构造都是 <code>explicit</code>，<code>enqueue(3000)</code> 不能悄悄选中某一个重载，调用点必须写清单位。重载不是越多越好：参数类型太接近、隐式转换太多，都会让重载决议变得难懂，甚至产生歧义。</p>
+<p><strong>必须强调：<code>const</code> 不是并发同步机制。</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Counter</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">bump</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">++</span><span class="n">value_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">value_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p><code>read()</code> 是 <code>const</code> 成员函数，只说明“通过这个接口不修改成员”。如果一个线程调用 <code>read()</code>，另一个线程同时调用 <code>bump()</code>，仍然会发生数据竞争（data race）。<code>const</code> 不会插入锁、原子操作或内存屏障；<code>mutable</code> 允许 <code>const</code> 成员函数修改缓存，也不会自动带来线程安全。要并发访问，就使用互斥量、原子变量，或者让数据在发布后保持不可变。</p>
+<h2 id="_3">三、常见误区与设计权衡</h2>
+<h3 id="_4">常见误区</h3>
+<ol>
+<li><strong>把 <code>const</code> 当同步机制。</strong> <code>const</code> 是编译期的访问约束，不是运行时同步。一个 <code>const</code> 成员函数和另一个写操作并发执行，仍然可能读到撕裂的数据或触发未定义行为。</li>
+<li><strong>以为 <code>explicit</code> 会校验值。</strong> <code>explicit</code> 只阻止隐式转换；<code>Milliseconds{-1}</code>、<code>Bytes{0}</code> 是否合法，取决于构造函数或边界解析有没有做范围检查。</li>
+<li><strong>用 <code>reinterpret_cast</code> 当构造或序列化工具。</strong> 它不会构造目标对象，也不会开始生命周期；把网络字节直接 <code>reinterpret_cast</code> 成结构体再访问，常见结果是未定义行为、对齐问题和跨版本不兼容。</li>
+<li><strong>随意 <code>static_cast</code> 枚举值。</strong> <code>static_cast&lt;DeliveryState&gt;(99)</code> 可能得到一个没有对应枚举量的值。协议字段进入系统时，应显式映射并拒绝未知值，而不是假设所有整数都合法。</li>
+<li><strong>强类型只包一层，边界却直接 <code>memcpy</code>。</strong> 类型安全只在 C++ 接口内部有效；跨 JSON、Protobuf 或二进制协议时，必须逐字段序列化、反序列化并校验。</li>
+<li><strong>从 <code>const</code> 方法返回内部可变引用。</strong> 这会破坏只读承诺；应返回 <code>const&amp;</code>、值，或者提供明确的非 <code>const</code> 重载。</li>
+</ol>
+<h3 id="_5">设计权衡</h3>
+<p><strong>节点原文：强类型提高安全性，边界序列化仍需显式校验。</strong></p>
+<ul>
+<li><strong>安全性 vs 使用成本</strong>：每个超时都写 <code>Milliseconds{3000}</code> 比裸 <code>3000</code> 啰嗦，但换来的是参数顺序、单位错误在编译期暴露。通常只在跨模块、跨进程的接口边界使用强类型，内部短小的局部变量不必全部包装。</li>
+<li><strong>编译期 vs 运行时</strong>：类型系统能阻止 <code>Bytes</code> 和 <code>Milliseconds</code> 互换，却不能判断一个 <code>RequestId</code> 是否真的来自可信请求，也不能判断 <code>3000</code> 是否超过业务上限。<strong>编译期约束可以提前阻止错误组合，但仍需明确运行时输入与生命周期契约。</strong></li>
+<li><strong>接口清晰 vs 重载/模板膨胀</strong>：强类型参数让重载更清楚，但过多的包装类型和重载会增加样板代码、编译时间和调试成本。优先给真正容易混淆的语义建类型，而不是给每个 <code>int</code> 都套壳。</li>
+<li><strong>序列化与 ABI</strong>：不要依赖包装类型的内存布局做网络协议或持久化。显式写出 <code>.count()</code>、<code>.str()</code>，读入时逐字段校验并重新构造；这样也不会把填充字节、字节序和版本差异带进协议。</li>
+<li><strong><code>const</code> 正确性 vs 同步成本</strong>：<code>const</code> 让接口更容易推理，但不替代并发设计。共享可变状态要有明确的同步策略；能做成不可变快照时，优先不可变。</li>
+</ul>
+<h2 id="id">四、动手实践：为超时、字节数和请求 ID 设计不可混用的类型接口</h2>
+<p>目标（节点原文）：为超时、字节数和请求 ID 设计不可混用的类型接口。</p>
+<h3 id="1">步骤 1：建目录</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/practice26
+<span class="nb">cd</span><span class="w"> </span>~/practice26
+</code></pre></div>
+
+<h3 id="2-typesh">步骤 2：写类型边界 <code>types.h</code></h3>
+<p>三个类型都只提供 <code>explicit</code> 构造和 <code>const</code> 访问器，不提供到裸类型的隐式转换。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Milliseconds</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">Milliseconds</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">value_</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Bytes</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="n">Bytes</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">value_</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RequestId</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">RequestId</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">value_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">"request id must not be empty"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">str</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">RequestBudget</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">RequestId</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Milliseconds</span><span class="w"> </span><span class="n">timeout</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Bytes</span><span class="w"> </span><span class="n">max_body</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<h3 id="3-apih-apicpp">步骤 3：写接口 <code>api.h</code> 和 <code>api.cpp</code></h3>
+<p>接口把三个语义不同的参数分开，请求 ID 只读借用，数量和字节数按值传递。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"types.h"</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">handle_request</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RequestId</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Milliseconds</span><span class="w"> </span><span class="n">timeout</span><span class="p">,</span><span class="w"> </span><span class="n">Bytes</span><span class="w"> </span><span class="n">max_body</span><span class="p">);</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"api.h"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">handle_request</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">RequestId</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Milliseconds</span><span class="w"> </span><span class="n">timeout</span><span class="p">,</span><span class="w"> </span><span class="n">Bytes</span><span class="w"> </span><span class="n">max_body</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"request_id="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">id</span><span class="p">.</span><span class="n">str</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" timeout_ms="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">timeout</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" max_body_bytes="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">max_body</span><span class="p">.</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="4-parseh-parsecpp">步骤 4：写边界解析 <code>parse.h</code> 和 <code>parse.cpp</code></h3>
+<p>外部输入仍然是裸整数，因此在进入类型系统之前必须显式校验；校验通过后再构造强类型。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#pragma once</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"types.h"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="n">RequestBudget</span><span class="w"> </span><span class="nf">parse_budget</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">                           </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">,</span>
+<span class="w">                           </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">max_body_bytes</span><span class="p">);</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"parse.h"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+
+<span class="n">RequestBudget</span><span class="w"> </span><span class="nf">parse_budget</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">                           </span><span class="n">std</span><span class="o">::</span><span class="kt">int64_t</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">,</span>
+<span class="w">                           </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">max_body_bytes</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">timeout_ms</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">timeout_ms</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">60'000</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">"timeout out of range"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">max_body_bytes</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">max_body_bytes</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">"body size out of range"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">RequestBudget</span><span class="p">{</span>
+<span class="w">        </span><span class="n">RequestId</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">id</span><span class="p">)},</span>
+<span class="w">        </span><span class="n">Milliseconds</span><span class="p">{</span><span class="n">timeout_ms</span><span class="p">},</span>
+<span class="w">        </span><span class="n">Bytes</span><span class="p">{</span><span class="n">max_body_bytes</span><span class="p">}</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里的上限只是示例，实际值应按业务配置调整；重点是<strong>先校验裸值，再构造类型</strong>。</p>
+<h3 id="5-maincpp">步骤 5：写正向用例 <code>main.cpp</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"api.h"</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"parse.h"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;exception&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">RequestBudget</span><span class="w"> </span><span class="n">budget</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse_budget</span><span class="p">(</span><span class="s">"req-20261102-001"</span><span class="p">,</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">);</span>
+<span class="w">        </span><span class="n">handle_request</span><span class="p">(</span><span class="n">budget</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">budget</span><span class="p">.</span><span class="n">timeout</span><span class="p">,</span><span class="w"> </span><span class="n">budget</span><span class="p">.</span><span class="n">max_body</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"bad request: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="sc">'\n'</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="6">步骤 6：写两个反向用例</h3>
+<p><code>bad_swap.cpp</code> 交换超时和字节数的位置：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"api.h"</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">RequestId</span><span class="w"> </span><span class="n">id</span><span class="p">{</span><span class="s">"req-bad-001"</span><span class="p">};</span>
+<span class="w">    </span><span class="n">handle_request</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Bytes</span><span class="p">{</span><span class="mi">4096</span><span class="p">},</span><span class="w"> </span><span class="n">Milliseconds</span><span class="p">{</span><span class="mi">3000</span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>bad_raw.cpp</code> 直接传裸整数：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"api.h"</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">RequestId</span><span class="w"> </span><span class="n">id</span><span class="p">{</span><span class="s">"req-bad-002"</span><span class="p">};</span>
+<span class="w">    </span><span class="n">handle_request</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>分别编译这两个文件，预期都失败：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Werror<span class="w"> </span>-c<span class="w"> </span>bad_swap.cpp<span class="w"> </span>-o<span class="w"> </span>/dev/null
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Werror<span class="w"> </span>-c<span class="w"> </span>bad_raw.cpp<span class="w"> </span>-o<span class="w"> </span>/dev/null
+</code></pre></div>
+
+<p>第一步应看到 <code>Bytes</code> 不能转换成 <code>Milliseconds</code> 一类的错误；第二步应看到整数不能隐式转换成 <code>Milliseconds</code> 或 <code>Bytes</code>。编译失败在这里是<strong>预期结果</strong>，说明类型边界生效了。</p>
+<h3 id="7">步骤 7：编译并运行正向用例</h3>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-Werror<span class="w"> </span>main.cpp<span class="w"> </span>api.cpp<span class="w"> </span>parse.cpp<span class="w"> </span>-o<span class="w"> </span>demo
+./demo
+</code></pre></div>
+
+<p>预期输出：</p>
+<div class="codehilite"><pre><span></span><code>request_id=req-20261102-001 timeout_ms=3000 max_body_bytes=4096
+</code></pre></div>
+
+<h3 id="8">步骤 8：验证运行时校验仍然必要</h3>
+<p>把 <code>main.cpp</code> 里的 <code>3000</code> 改成 <code>0</code>，重新运行。编译仍然通过，但 <code>parse_budget</code> 会抛出 <code>timeout out of range</code>，程序输出 <code>bad request</code> 并返回非零状态。这个实验说明：强类型解决了“单位混用”，但<strong>数值是否在业务范围内</strong>仍要靠运行时校验。</p>
+<p>再做一次序列化检查：不要把整个 <code>RequestBudget</code> 用 <code>memcpy</code> 或 <code>reinterpret_cast</code> 直接发到网络。逐字段写出 <code>budget.id.str()</code>、<code>budget.timeout.count()</code>、<code>budget.max_body.count()</code>；读入时逐字段解析、校验，再重新构造三个类型。这样既不依赖对象布局，也能明确处理字节序、协议版本和非法值。</p>
+<h3 id="_6">验收检查</h3>
+<ul>
+<li><code>bad_swap.cpp</code> 和 <code>bad_raw.cpp</code> 都编译失败；</li>
+<li><code>main.cpp</code> 能正确输出请求预算；</li>
+<li>能把 <code>3000</code> 改成 <code>0</code> 后观察运行时异常；</li>
+<li>能用自己的话解释：<code>reinterpret_cast</code> 只解释地址/位模式，不构造目标类型对象。</li>
+</ul>
+<h2 id="_7">五、自测题</h2>
+<p><strong>1. <code>Milliseconds</code> 的构造函数是 <code>explicit</code>，为什么 <code>handle_request(id, 3000, 4096)</code> 不能编译，但 <code>Milliseconds{-1}</code> 仍可能通过编译？这说明 <code>explicit</code> 保证了什么、没保证什么？</strong></p>
+<details><summary>答案</summary>
+`explicit` 阻止裸整数隐式转换成 `Milliseconds`，所以函数调用和复制初始化失败；但直接初始化 `Milliseconds{-1}` 是显式构造，`explicit` 不会拦它。`explicit` 保证的是“转换必须写明”，不保证数值合法。负数超时、零字节、超范围值仍要在构造函数或边界解析中校验。
+</details>
+
+<p><strong>2. <code>const Session&amp; find(const RequestId&amp;) const</code> 是否意味着多个线程可以安全地同时调用它和 <code>update()</code>？</strong></p>
+<details><summary>答案</summary>
+不是。`const` 成员函数只是承诺通过该接口不修改对象，它不提供锁、原子性或内存屏障。如果另一个线程同时执行 `update()` 并写入共享数据，仍然会发生数据竞争。需要互斥量、原子变量或不可变快照等同步手段；另外，返回内部引用时还要注意解锁后的生命周期问题。
+</details>
+
+<p><strong>3. 执行 <code>auto* p = reinterpret_cast&lt;Milliseconds*&gt;(&amp;raw); p-&gt;count();</code>，为什么这不是把 <code>raw</code> 构造成 <code>Milliseconds</code>？正确的转换方式是什么？</strong></p>
+<details><summary>答案</summary>
+`reinterpret_cast` 只把 `&raw` 这个地址按 `Milliseconds*` 解释，不调用构造函数，也不开始 `Milliseconds` 的对象生命周期。地址上本来没有 `Milliseconds` 对象，解引用并访问成员是未定义行为。正确做法是先按值转换或校验，再显式构造，例如检查范围后写 `Milliseconds{static_cast<std::int64_t>(raw)}`（`raw` 是 `uint64_t`，直接 `Milliseconds{raw}` 会因花括号禁止窄化而编译失败）；跨协议字节流应逐字段解析，而不是按位强转结构体。
+</details>
+
+<h2 id="_8">六、推荐资源</h2>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/language/implicit_conversion.html">类型系统、转换与接口设计：参考文档 / 原始资料</a>（en.cppreference.com，英文文档，进阶，免费）：重点阅读显式转换与 <code>explicit</code>、<code>enum class</code> 与强类型包装，用于核对本节点实验的语义和边界。按节点的 sourceStudy 建议，沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</li>
+</ul><div class="pn"><span><a href="25.html">← 模板与编译期泛型</a></span><span><a href="27.html">异常安全与错误模型 →</a></span></div></main></div></body></html>

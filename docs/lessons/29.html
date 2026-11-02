@@ -1,0 +1,457 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>29. 非拥有视图与边界安全 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="cur" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 29 课 · 领域 B · 阶段 2</p><p class="dl"><a href="../files/29-b-views.md" download>⬇ 本课 Markdown</a><a href="../files/practice29.tar.gz" download>⬇ 练习包 practice29.tar.gz</a></p><h1 id="29208">第 29/208 课：非拥有视图与边界安全</h1>
+<h2 id="_1">课程定位</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点</td>
+<td><code>b-views</code> / Views and Spans</td>
+</tr>
+<tr>
+<td>所属领域</td>
+<td>B</td>
+</tr>
+<tr>
+<td>阶段</td>
+<td>2</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>生命周期与所有权</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>基础</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>b-lifetime</code>、<code>b-stl</code></td>
+</tr>
+</tbody>
+</table>
+<p>节点摘要：<code>string_view</code> 和 <code>span</code> 表达一段非拥有数据；它们保留长度但不拥有底层存储。</p>
+<p>节点动机：减少协议解析拷贝，同时避免传统裸指针长度分离。</p>
+<hr />
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<p>学完本课，你应当能够：</p>
+<ol>
+<li>解释 <code>std::string_view</code> 与零结尾之间的关系，不把“视图存在”误认为“字符串一定以 <code>'\0'</code> 结尾”。</li>
+<li>解释 <code>std::span</code> 为什么只能表示连续范围，以及动态长度和静态长度视图的区别。</li>
+<li>说清楚“借用寿命”和“底层存储失效”是两件事。</li>
+<li>独立完成：用 <code>std::span</code> 解析定长协议头，返回独立的值类型，并拒绝截断输入。</li>
+<li>识别临时 <code>std::string</code> 产生的悬垂 <code>string_view</code>，并知道什么时候应该复制成拥有所有权的类型。</li>
+</ol>
+<p>为什么后端工程师要懂这些？因为协议解析、HTTP 请求处理、消息回调、日志切分这些高频路径，往往面对的是已经存在的一块缓冲区。如果每次都复制，会增加分配和内存带宽开销；如果只用裸指针加长度，又很容易出现长度传错、越界读、指针和长度不同步的问题。<code>string_view</code> 和 <code>span</code> 把“指针 + 长度”封装成一个类型，减少拷贝，同时让边界检查更自然。</p>
+<p>但零拷贝不是免费午餐。视图不拥有数据，它只“借用”一段内存。视图对象还活着，不代表它指向的内存还活着。对即将进入腾讯微信公众号后台开发的工程师来说，这一点尤其重要：请求体 buffer 可能被框架复用，异步任务可能晚于请求处理函数执行，回调消息可能来自临时拼接的字符串。把 <code>string_view</code> 或 <code>span</code> 存进异步任务、缓存或成员变量之前，必须先确认底层数据的生命周期。</p>
+<hr />
+<h2 id="2">2. 从直觉到原理</h2>
+<h3 id="21-string_view">2.1 <code>string_view</code> 与零结尾</h3>
+<p><strong>直觉。</strong> <code>std::string</code> 像一栋自己拥有的房子，里面存着字符；<code>std::string_view</code> 像一张写着“从哪个地址开始、看多少个字符”的纸条。纸条本身不建房子，也不保证房子还在。</p>
+<p><strong>原理。</strong> <code>std::string_view</code> 是一段字符序列的非拥有视图，通常由“指向首字符的指针 + 长度”组成。它不分配内存，不拥有字符，也不负责释放。它的长度是权威信息，视图内部可以包含 <code>'\0'</code>，<code>size()</code> 仍然准确。</p>
+<p>关键点是：<code>string_view</code> 不保证零结尾。</p>
+<ul>
+<li>从字符串字面量构造时，字面量本身有结尾 <code>'\0'</code>，但视图的长度不包含这个结尾。</li>
+<li>从 <code>const char*</code> 构造时，构造函数需要先找到结尾，因此输入必须是零结尾的 C 字符串。</li>
+<li>从 <code>std::string</code>、指针加长度、<code>substr()</code> 等构造时，得到的视图不保证 <code>data()[size()] == '\0'</code>。</li>
+<li>不能因为 <code>data()</code> 返回 <code>const char*</code>，就把它直接当成 C 字符串传给 <code>printf("%s")</code>、<code>strlen()</code> 或其他要求零结尾的 API。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string_view&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="nf">dangling</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"wechat"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">owning</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"wechat"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>dangling()</code> 返回后，局部 <code>s</code> 已经销毁，返回的视图指向失效内存。<code>owning()</code> 返回的是拥有所有权的 <code>std::string</code>，值被移动或复制出来，生命周期由调用方管理。</p>
+<p>如果确实需要把视图交给 C API，应该显式创建拥有所有权的字符串，并保证这个字符串在使用期间存活：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string_view&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">log_message</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">text</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">write_log</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">sv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">tmp</span><span class="p">(</span><span class="n">sv</span><span class="p">);</span>
+<span class="w">    </span><span class="n">log_message</span><span class="p">(</span><span class="n">tmp</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>在微信公众号后台场景里，解析 HTTP 头、URL 路径、JSON 字段名时，同步处理阶段可以直接使用 <code>string_view</code> 避免拷贝；一旦要把字段交给异步任务，就应该复制成 <code>std::string</code>。不要假设请求 buffer 会一直存在，也不要假设字段后面一定有 <code>'\0'</code>。</p>
+<h3 id="22-span">2.2 <code>span</code> 与连续范围</h3>
+<p><strong>直觉。</strong> <code>std::span</code> 像一张“从某个地址开始，连续看 N 个元素”的窗口。它适合数组、<code>std::vector</code>、<code>std::array</code> 这类连续存储，不适合链表这种元素分散的结构。</p>
+<p><strong>原理。</strong> <code>std::span&lt;T&gt;</code> 是 C++20 引入的非拥有连续范围视图，通常也是“指针 + 长度”。<code>std::span&lt;const T&gt;</code> 表示只读视图。它有两种长度形式：</p>
+<ul>
+<li><code>std::span&lt;T&gt;</code>：动态长度，运行时确定。</li>
+<li><code>std::span&lt;T, N&gt;</code>：静态长度，长度是类型的一部分。</li>
+</ul>
+<p><code>span</code> 的前提是连续范围。<code>std::vector</code>、<code>std::array</code>、C 数组、<code>std::string</code> 的字符存储都是连续的；<code>std::list</code> 不是连续范围，不能直接构造 <code>span</code>；<code>std::deque</code> 的存储也不是单块连续内存，不能当作 <code>span</code>。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;array&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">consume</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">bytes</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">demo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fixed</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span>
+<span class="w">    </span><span class="n">consume</span><span class="p">(</span><span class="n">fixed</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dynamic</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">view</span><span class="p">(</span><span class="n">dynamic</span><span class="p">);</span>
+<span class="w">    </span><span class="n">consume</span><span class="p">(</span><span class="n">view</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>span</code> 保留了长度，所以不再需要把“指针”和“长度”两个参数分开传。对于协议解析，这一点很重要：长度跟着视图走，接口更难出现“指针传了 A，长度传了 B”的错误。</p>
+<p>但 <code>span</code> 不拥有数据，也不自动检查底层存储是否有效。它只负责表达“这里有一段连续内存”。边界检查仍然要由使用方完成，尤其是 <code>first()</code>、<code>subspan()</code>、下标访问这些操作都有前置条件。</p>
+<p>对于定长协议头，可以在确认输入足够长之后，再收窄成静态长度视图：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;optional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">kHeaderSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="p">,</span><span class="w"> </span><span class="n">kHeaderSize</span><span class="o">&gt;&gt;</span>
+<span class="n">take_header</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">input</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kHeaderSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">first</span><span class="o">&lt;</span><span class="n">kHeaderSize</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意顺序：先检查动态视图的长度，再调用 <code>first&lt;kHeaderSize&gt;()</code>。如果输入可能来自网络，不要直接用不可信长度构造静态长度视图。</p>
+<h3 id="23">2.3 借用寿命和失效</h3>
+<p><strong>直觉。</strong> 视图是借来的钥匙。钥匙还在你手里，不代表房子还在，也不代表房子里的家具没有被搬走。</p>
+<p><strong>原理。</strong> 需要区分三个生命周期：</p>
+<ol>
+<li>视图对象本身的寿命：<code>string_view</code> 或 <code>span</code> 这个“指针 + 长度”结构什么时候销毁。</li>
+<li>底层存储的寿命：原来的 <code>std::string</code>、<code>std::vector</code>、数组或网络 buffer 什么时候销毁。</li>
+<li>底层存储的有效性：存储是否被重新分配、清空、覆盖或复用。</li>
+</ol>
+<p>视图有效，必须同时满足：底层存储还活着，并且没有被会使视图失效的操作破坏。常见失效来源包括：</p>
+<ul>
+<li>局部 <code>std::string</code> 或 <code>std::vector</code> 在函数返回后销毁。</li>
+<li><code>std::vector</code> 扩容导致元素搬家，原来的 <code>span</code> 悬垂。</li>
+<li><code>std::string</code> 的某些修改操作导致缓冲区重新分配。</li>
+<li>容器执行 <code>clear()</code>、<code>erase()</code>、重新赋值等操作。</li>
+<li>网络框架复用了请求 buffer，旧的视图仍然指向同一块地址，但内容已经变成下一个请求的数据。</li>
+<li>异步任务捕获了视图，但原 buffer 在任务执行前已经被释放或复用。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">view_of</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">buf</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">demo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buf</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">view_of</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>buf.push_back(4)</code> 可能触发扩容。扩容后元素搬到新地址，原来的 <code>s</code> 仍然保存旧地址和旧长度，继续使用就是悬垂访问。</p>
+<p>因此，视图最适合“短生命周期、同步使用”的场景：函数参数、一次解析过程、立即消费的只读窗口。跨线程、跨协程、跨请求缓存、长期保存时，优先使用拥有所有权的类型。</p>
+<p>可以用三个问题做快速检查：</p>
+<ol>
+<li>长度够不够？访问前是否检查了 <code>size()</code>？</li>
+<li>底层存储还活着吗？视图会不会逃出原来的作用域？</li>
+<li>底层存储会不会被修改或复用？异步任务执行时，原 buffer 是否仍然有效？</li>
+</ol>
+<hr />
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 常见误区</h3>
+<p><strong>误区一：<code>string_view</code> 一定以零结尾。</strong><br />
+不对。<code>string_view</code> 只保证长度，不保证 <code>data()[size()]</code> 是 <code>'\0'</code>。需要 C 字符串时，显式构造 <code>std::string</code>。</p>
+<p><strong>误区二：视图对象活着，底层内存就有效。</strong><br />
+不对。视图只是指针和长度。底层字符串、容器或 buffer 销毁后，视图仍然可能“看起来正常”，但访问它是未定义行为。</p>
+<p><strong>误区三：临时 <code>std::string</code> 可以安全地转成 <code>string_view</code>。</strong><br />
+不对。临时对象在完整表达式结束后销毁，视图随即悬垂。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string_view&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">use</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">sv</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">bad</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">sv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"wechat"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">sv</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>std::string("wechat")</code> 产生的临时对象在语句结束后销毁，<code>sv</code> 指向失效内存。</p>
+<p><strong>误区四：<code>span</code> 可以指向任意容器。</strong><br />
+不对。<code>span</code> 要求连续范围。链表、哈希表、<code>std::deque</code> 等不能直接当作连续字节块使用。</p>
+<p><strong>误区五：<code>span</code> 会自动做边界检查。</strong><br />
+不对。<code>span</code> 让长度和指针绑定在一起，但 <code>first()</code>、<code>subspan()</code>、下标访问仍然有前置条件。网络输入必须先检查长度。</p>
+<p><strong>误区六：解析完协议头后，把 payload 的 <code>span</code> 直接丢进异步队列。</strong><br />
+这很危险。异步任务执行时，原始网络 buffer 可能已经被复用或释放。要么复制 payload，要么确保 buffer 的所有权被转移到任务中。</p>
+<h3 id="32">3.2 设计权衡</h3>
+<p>零拷贝借用要求更严格的寿命管理，复制可能更简单可靠。实际设计中可以这样取舍：</p>
+<ul>
+<li><strong>函数参数优先用视图。</strong> 例如 <code>void handle(std::string_view name)</code>、<code>void parse(std::span&lt;const std::uint8_t&gt; packet)</code>，调用方可以传 <code>std::string</code>、字面量、数组或 vector，不强制复制。</li>
+<li><strong>返回值优先用拥有所有权的类型。</strong> 如果函数内部创建了数据，返回 <code>std::string</code> 或 <code>std::vector</code>，不要返回指向局部对象的视图。</li>
+<li><strong>API 边界写清楚寿命契约。</strong> 如果确实要返回视图，必须在接口名、注释或文档中说明它借用的是哪个对象、能活多久。</li>
+<li><strong>同步热路径用视图，异步路径用拷贝。</strong> 公众号后台处理回调时，同步解析可以直接借用请求 buffer；投递到线程池、协程或消息队列时，把需要的数据复制成独立对象。</li>
+<li><strong>小数据复制往往更划算。</strong> 几十字节的字段复制成本很低，能换来更简单的生命周期和更少的悬垂风险。</li>
+<li><strong>定长头可以用静态长度，但入口仍接收动态长度。</strong> 外部输入先检查 <code>size()</code>，确认足够后再收窄为 <code>std::span&lt;const std::uint8_t, N&gt;</code>。</li>
+</ul>
+<hr />
+<h2 id="4-span">4. 动手实践：用 <code>span</code> 解析定长协议头</h2>
+<h3 id="41">4.1 实践目标与验收标准</h3>
+<p>目标：用 <code>std::span</code> 解析一个 12 字节的定长协议头，返回独立的 <code>Header</code> 值，并对截断输入返回失败。</p>
+<p>验收标准：</p>
+<ul>
+<li>输入长度小于 12 字节时，解析函数返回 <code>std::nullopt</code>，不读取越界内存。</li>
+<li>解析结果 <code>Header</code> 是独立值，不包含指向输入 buffer 的 <code>span</code> 或 <code>string_view</code>。</li>
+<li>不假设输入以零结尾。</li>
+<li>能说明原始 buffer 被修改、扩容或释放后，为什么不能继续使用旧视图。</li>
+<li>能识别临时 <code>std::string</code> 产生的悬垂 <code>string_view</code>。</li>
+</ul>
+<h3 id="42">4.2 协议头布局</h3>
+<p>本实践使用一个大端序的 12 字节协议头：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">偏移</th>
+<th style="text-align: right;">长度</th>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+<td><code>magic</code></td>
+<td>固定值 <code>0x5758</code>，即字符 <code>WX</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td><code>version</code></td>
+<td>协议版本</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td><code>type</code></td>
+<td>消息类型</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td><code>body_len</code></td>
+<td>消息体长度，大端序</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">4</td>
+<td><code>seq</code></td>
+<td>序列号，大端序</td>
+</tr>
+</tbody>
+</table>
+<p>总长度：<code>2 + 1 + 1 + 4 + 4 = 12</code> 字节。</p>
+<h3 id="43">4.3 可执行步骤</h3>
+<p><strong>步骤 1：定义常量与结果类型。</strong><br />
+定义 <code>kHeaderSize = 12</code>、<code>kMagic = 0x5758</code>，以及只包含普通整数成员的 <code>Header</code> 结构体。不要让 <code>Header</code> 持有 <code>std::span</code> 或 <code>std::string_view</code>。</p>
+<p><strong>步骤 2：写大端序读取函数。</strong><br />
+按字节移位读取 16 位和 32 位整数。不要直接用 <code>reinterpret_cast</code> 把字节指针转成整数指针，避免对齐和严格别名问题。</p>
+<p><strong>步骤 3：实现解析函数。</strong><br />
+函数签名接收 <code>std::span&lt;const std::uint8_t&gt;</code>，返回 <code>std::optional&lt;Header&gt;</code>。先判断 <code>input.size() &lt; kHeaderSize</code>，不足则返回 <code>std::nullopt</code>。确认长度足够后，再用 <code>input.first&lt;kHeaderSize&gt;()</code> 收窄为静态长度视图。</p>
+<p><strong>步骤 4：解析字段并校验。</strong><br />
+依次读取 <code>magic</code>、<code>version</code>、<code>type</code>、<code>body_len</code>、<code>seq</code>。校验 <code>magic</code> 是否符合协议；不符合时返回 <code>std::nullopt</code>。所有字段写入独立的 <code>Header</code> 值。</p>
+<p><strong>步骤 5：校验消息体长度。</strong><br />
+如果调用方还要处理消息体，检查 <code>body_len &lt;= input.size() - kHeaderSize</code>。注意先确认 <code>input.size() &gt;= kHeaderSize</code>，再做减法，避免无符号下溢。</p>
+<p><strong>步骤 6：处理返回结果。</strong><br />
+调用方检查 <code>optional</code> 是否有值。需要消息体时，用 <code>input.subspan(kHeaderSize)</code> 取得剩余范围，并且只在当前同步处理过程中使用；如果要异步处理，复制成 <code>std::vector&lt;std::uint8_t&gt;</code> 或 <code>std::string</code>。</p>
+<p><strong>步骤 7：补充测试。</strong><br />
+至少覆盖：完整 12 字节头、0 到 11 字节的截断输入、错误 <code>magic</code>、<code>body_len</code> 超过实际剩余长度。截断输入必须全部被拒绝。</p>
+<h3 id="44">4.4 参考实现</h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;array&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;optional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">kHeaderSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">kMagic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x5758</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Header</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">magic</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">version</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">body_len</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">seq</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="w"> </span><span class="nf">read_u16_be</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">        </span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">|</span>
+<span class="w">        </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint16_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]));</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="w"> </span><span class="nf">read_u32_be</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">24</span><span class="p">)</span><span class="w"> </span><span class="o">|</span>
+<span class="w">           </span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">|</span>
+<span class="w">           </span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="o">|</span>
+<span class="w">           </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Header</span><span class="o">&gt;</span><span class="w"> </span><span class="n">parse_header</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">input</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kHeaderSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">first</span><span class="o">&lt;</span><span class="n">kHeaderSize</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">Header</span><span class="w"> </span><span class="n">header</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">header</span><span class="p">.</span><span class="n">magic</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_u16_be</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+<span class="w">    </span><span class="n">header</span><span class="p">.</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="w">    </span><span class="n">header</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+<span class="w">    </span><span class="n">header</span><span class="p">.</span><span class="n">body_len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_u32_be</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">data</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+<span class="w">    </span><span class="n">header</span><span class="p">.</span><span class="n">seq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_u32_be</span><span class="p">(</span><span class="n">raw</span><span class="p">.</span><span class="n">data</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">8</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">magic</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">kMagic</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">header</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段实现有几个关键点：</p>
+<ul>
+<li>输入是动态长度 <code>std::span</code>，边界检查在入口完成。</li>
+<li><code>first&lt;kHeaderSize&gt;()</code> 只在长度检查之后调用，满足前置条件。</li>
+<li>返回的是 <code>Header</code> 值，不把外部 buffer 的视图带出函数。</li>
+<li>所有多字节字段按大端序读取，不依赖主机字节序。</li>
+<li>不假设输入以零结尾，因为解析只依赖长度和偏移。</li>
+</ul>
+<h3 id="45">4.5 测试与验收代码</h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;array&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">test_parse_header</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="o">&gt;</span><span class="w"> </span><span class="n">full</span><span class="p">{</span>
+<span class="w">        </span><span class="mh">0x57</span><span class="p">,</span><span class="w"> </span><span class="mh">0x58</span><span class="p">,</span><span class="w"> </span><span class="mh">0x01</span><span class="p">,</span><span class="w"> </span><span class="mh">0x02</span><span class="p">,</span>
+<span class="w">        </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x10</span><span class="p">,</span>
+<span class="w">        </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">,</span><span class="w"> </span><span class="mh">0x2A</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parse_header</span><span class="p">(</span><span class="n">full</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">header</span><span class="p">.</span><span class="n">has_value</span><span class="p">());</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">header</span><span class="o">-&gt;</span><span class="n">magic</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mh">0x5758</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">header</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">header</span><span class="o">-&gt;</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">header</span><span class="o">-&gt;</span><span class="n">body_len</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">16</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">header</span><span class="o">-&gt;</span><span class="n">seq</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">truncated</span><span class="p">(</span><span class="n">full</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">parse_header</span><span class="p">(</span><span class="n">truncated</span><span class="p">).</span><span class="n">has_value</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="o">&gt;</span><span class="w"> </span><span class="n">wrong_magic</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">parse_header</span><span class="p">(</span><span class="n">wrong_magic</span><span class="p">).</span><span class="n">has_value</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段测试覆盖了完整头、全部截断长度和错误 <code>magic</code>。其中“全部截断长度”正是边界安全的核心：0 字节、1 字节、……、11 字节都不能被当成合法头读取。</p>
+<p>如果还要处理消息体，可以增加一个长度校验函数：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="nf">body_len_is_valid</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Header</span><span class="o">&amp;</span><span class="w"> </span><span class="n">header</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">input</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kHeaderSize</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">header</span><span class="p">.</span><span class="n">body_len</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">input</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">kHeaderSize</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>先检查头长度，再做无符号减法，避免 <code>input.size() - kHeaderSize</code> 下溢。</p>
+<h3 id="46">4.6 后台场景加练</h3>
+<p>把上面的解析逻辑放到一个模拟请求处理函数中：</p>
+<ol>
+<li>从 <code>std::vector&lt;std::uint8_t&gt;</code> 读取完整请求包。</li>
+<li>用 <code>std::span&lt;const std::uint8_t&gt;</code> 调用 <code>parse_header</code>。</li>
+<li>如果解析失败，记录“协议头截断或 magic 错误”，直接返回错误。</li>
+<li>如果 <code>body_len</code> 大于剩余字节数，返回“消息体不完整”，不要继续解析。</li>
+<li>如果消息体需要交给异步任务，复制成拥有所有权的 <code>std::vector&lt;std::uint8_t&gt;</code>，不要只传 <code>span</code>。</li>
+</ol>
+<p>这个练习的重点不是协议本身，而是建立习惯：入口用视图减少拷贝，出口用拥有所有权的值保证安全。</p>
+<h3 id="47-asan">4.7 用 ASan 亲眼看到悬垂视图</h3>
+<p>课里的两个失效场景可以直接跑出来（g++ 13，<code>-std=c++20 -fsanitize=address,undefined</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># dangling.cpp: std::string_view v = make_name();  // 临时 string 本行结束即销毁</span>
+<span class="c1"># invalidate.cpp: std::span&lt;int&gt; s(ids); ids.push_back(4); s[0];</span>
+g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>address,undefined<span class="w"> </span>dangling.cpp<span class="w"> </span>-o<span class="w"> </span>dangling<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./dangling
+g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>address,undefined<span class="w"> </span>invalidate.cpp<span class="w"> </span>-o<span class="w"> </span>invalidate<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./invalidate
+</code></pre></div>
+
+<p>两者都会报 <code>heap-use-after-free</code>。不加 ASan 时程序往往“正常”输出，这正是视图悬垂最危险的地方。</p>
+<p>另一个小实验能看到 <code>string_view</code> 不以零结尾：对 <code>"GET /api/user?id=42 HTTP/1.1"</code> 取 <code>substr(4, 15)</code> 得到 <code>/api/user?id=42</code>，用 <code>printf("%.*s", (int)v.size(), v.data())</code> 打印正确，而 <code>printf("%s", v.data())</code> 会一路打印到原字符串末尾，输出 <code>/api/user?id=42 HTTP/1.1</code>。</p>
+<hr />
+<h2 id="5">5. 自测题</h2>
+<h3 id="1_1">题目 1</h3>
+<p>下面代码有什么问题？应该如何修改？</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string_view&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">use</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">sv</span><span class="p">);</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">bad</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">sv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"wechat"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">sv</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="2_1">题目 2</h3>
+<p>已知 <code>std::string_view sv = "abc";</code>，能否直接把 <code>sv.data()</code> 传给要求零结尾字符串的 C API？为什么？</p>
+<h3 id="3_1">题目 3</h3>
+<p>下面代码中，<code>s</code> 在 <code>push_back</code> 之后还可以继续使用吗？为什么？</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">demo</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buf</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">s</span><span class="p">(</span><span class="n">buf</span><span class="p">);</span>
+<span class="w">    </span><span class="n">buf</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="_2">答案</h3>
+<p><strong>答案 1。</strong><br />
+有问题。<code>std::string("wechat")</code> 是临时对象，在完整表达式结束后销毁，<code>sv</code> 随即悬垂。修改方式是让拥有所有权的字符串活到使用结束，或者直接使用 <code>std::string</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">good</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">owner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"wechat"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">use</span><span class="p">(</span><span class="n">owner</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>答案 2。</strong><br />
+不能仅凭 <code>string_view</code> 保证。字符串字面量本身有结尾 <code>'\0'</code>，但 <code>string_view</code> 的契约不保证 <code>data()[size()]</code> 是 <code>'\0'</code>，尤其是 <code>substr()</code>、指针加长度构造、来自非零结尾 buffer 的视图。应显式构造 <code>std::string</code>，或确认源数据确实零结尾。</p>
+<p><strong>答案 3。</strong><br />
+不能假设可以继续使用。<code>push_back</code> 可能触发 <code>std::vector</code> 扩容，元素搬到新地址，原来的 <code>span</code> 指向旧内存，继续访问是未定义行为。应在修改容器后重新获取 <code>span</code>，或者提前预留足够容量，并且不要跨异步边界保存这个视图。</p>
+<hr />
+<h2 id="6">6. 推荐资源</h2>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/container/span.html">非拥有视图与边界安全：参考文档 / 原始资料</a><br />
+  来源：<code>en.cppreference.com</code>；语言：英文；类型：文档；难度：进阶；免费。<br />
+  阅读重点：<code>string_view</code> 与零结尾、<code>span</code> 与连续范围，用于核对本节点实验的语义和边界。</li>
+</ul>
+<p>核对资料时，建议沿“定义、示例、错误处理路径”三部分阅读，并记录适用版本与边界条件。特别是区分 C++17 的 <code>string_view</code> 与 C++20 的 <code>span</code>，以及 <code>first()</code>、<code>subspan()</code> 等操作的前置条件。</p><div class="pn"><span><a href="28.html">← 分配器、对齐与内存资源</a></span><span><a href="30.html">C++17/20/23工程选型 →</a></span></div></main></div></body></html>

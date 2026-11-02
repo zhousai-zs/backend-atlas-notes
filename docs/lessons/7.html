@@ -1,0 +1,194 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>7. 复杂度与实验分析 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="cur" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 7 课 · 领域 A · 阶段 1</p><p class="dl"><a href="../files/7-a-complexity.md" download>⬇ 本课 Markdown</a><a href="../files/practice7.tar.gz" download>⬇ 练习包 practice7.tar.gz</a></p><h1 id="7208">第 7/208 课：复杂度与实验分析</h1>
+<blockquote>
+<p>领域 A · 阶段 1 · 数据结构与算法 · 基础 · 前置：第 6 课「编译与链接」</p>
+</blockquote>
+<p><strong>一句话</strong>：渐近复杂度描述的是输入规模增长时资源消耗的<strong>趋势</strong>，不是延迟的预测。分析时要讲清输入分布、最坏情况和常数成本，再用实验验证。</p>
+<h2 id="_1">一、学习目标和为什么后端要懂</h2>
+<p>学完这一课你应该能：
+1. 解释时间复杂度和空间复杂度；
+2. 独立完成实验：测量线性扫描、二分查找随输入规模增长的耗时曲线；
+3. 推导嵌套循环的复杂度，并解释为什么小数据下的快慢会和大 O 不一致。</p>
+<p><strong>为什么后端要懂</strong>：在加机器之前，先识别出算法级的瓶颈。比如公众号后台要判断一个用户是否在某个号的粉丝集合里：粉丝从 1 万涨到 1000 万，O(n) 扫描的耗时会涨 1000 倍，加 10 台机器也追不上；换成 O(log n) 或 O(1) 的结构，问题直接消失。</p>
+<h2 id="_2">二、核心要点：从直觉到原理</h2>
+<h3 id="1">1. 时间和空间复杂度</h3>
+<p><strong>直觉</strong>：别问"跑多少毫秒"，问"数据翻 10 倍，工作量翻几倍"。</p>
+<table>
+<thead>
+<tr>
+<th>复杂度</th>
+<th>n 翻 10 倍时工作量</th>
+<th>后台例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>O(1)</td>
+<td>不变</td>
+<td>哈希表按 openid 查用户</td>
+</tr>
+<tr>
+<td>O(log n)</td>
+<td>只多几步</td>
+<td>有序数组二分、B+ 树索引</td>
+</tr>
+<tr>
+<td>O(n)</td>
+<td>×10</td>
+<td>遍历整个粉丝列表</td>
+</tr>
+<tr>
+<td>O(n log n)</td>
+<td>约 ×13</td>
+<td>对消息按时间排序</td>
+</tr>
+<tr>
+<td>O(n²)</td>
+<td>×100</td>
+<td>两两比较做消息去重</td>
+</tr>
+</tbody>
+</table>
+<p><strong>原理</strong>：大 O 只保留增长最快的项，丢掉常数和低阶项：<code>3n² + 100n + 7</code> 记为 O(n²)。</p>
+<p><strong>推导嵌套循环</strong>（验收要求）：数清最内层语句执行了多少次。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>          <span class="c1"># n 次</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>   <span class="c1"># n-i 次</span>
+        <span class="n">work</span><span class="p">()</span>              <span class="c1"># 合计 n + (n-1) + ... + 1 = n(n+1)/2，所以是 O(n²)</span>
+
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>                <span class="c1"># i 每次翻倍，循环 log₂n 次</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>      <span class="c1"># 每次 n 次</span>
+        <span class="n">work</span><span class="p">()</span>              <span class="c1"># 合计 n·log n，所以是 O(n log n)</span>
+</code></pre></div>
+
+<p><strong>空间复杂度</strong>同理，算的是<strong>额外</strong>用掉的内存。消息去重用 <code>set</code> 记已见的 msg_id：时间 O(n)，空间 O(n)；先排序再比较相邻项：空间可以做到 O(1)（原地排序），但时间变成 O(n log n)。</p>
+<h3 id="2">2. 最坏、平均与摊还</h3>
+<p>同一个算法，换个输入，代价可能完全不同，所以说复杂度时必须说是哪一种。</p>
+<ul>
+<li><strong>最坏</strong>：线性查找目标在最后或者根本不存在，要比较 n 次。对延迟敏感的接口（看 P99）要关心最坏。</li>
+<li><strong>平均</strong>：目标均匀随机分布时，平均比较约 n/2 次。前提是你<strong>说清楚了输入分布</strong>；真实流量往往不均匀，比如热门大号的请求远多于普通号。</li>
+<li><strong>摊还</strong>：一串操作的总代价分摊到每次。Python <code>list.append</code> 偶尔扩容要拷贝全部元素（O(n)），但容量按比例增长，所以 n 次 append 总共 O(n)，摊还每次 O(1)。注意，摊还 O(1) 不等于每次都快：扩容的那一次就是一个延迟尖刺。</li>
+</ul>
+<h3 id="3">3. 常数、数据分布和规模</h3>
+<p>大 O 把常数丢了，但真实机器上常数很重要：
+- <strong>常数</strong>：每一步的成本不同，比如 CPU 缓存命中与否（回顾第 3 课的内存层次）、解释执行还是 C 实现、有没有函数调用。
+- <strong>数据分布</strong>：二分查找要求数据有序；如果每次都得先排序，就要付 O(n log n)。哈希表在冲突严重时会退化。
+- <strong>规模</strong>：n 小时常数主导，n 大时增长趋势主导。</p>
+<p>我在 box 上实测的纯 Python 版本，单次查找平均纳秒数如下：</p>
+<table>
+<thead>
+<tr>
+<th>n</th>
+<th>线性扫描</th>
+<th>纯 Python 二分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4</td>
+<td>129</td>
+<td>208</td>
+</tr>
+<tr>
+<td>8</td>
+<td>161</td>
+<td>244</td>
+</tr>
+<tr>
+<td>16</td>
+<td>235</td>
+<td>296</td>
+</tr>
+<tr>
+<td>64</td>
+<td>697</td>
+<td>424</td>
+</tr>
+</tbody>
+</table>
+<p>n ≤ 16 时 O(n) 反而更快，到 64 才反超。这就是"小数据下快慢与大 O 不一致"：二分每步要算中点、多做分支，常数更大。所以很多标准库的排序在小区间里会改用插入排序。</p>
+<h2 id="_3">三、常见误区和设计权衡</h2>
+<p><strong>误区</strong>
+- ❌ 从一次小规模测试推断渐近行为。n=1000 跑一次、两者都是"零点几毫秒"，看不出任何趋势；必须扫多个数量级，并且重复测量。
+- ❌ 把大 O 当延迟预测。O(log n) 只说明增长慢，不说明一定是多少毫秒。
+- ❌ 只看平均。接口超时看的是最坏情况和尾延迟。
+- ❌ 测量方法有错，比如计时只包住了一部分代码，或者把构造数据的时间也算进去。</p>
+<p><strong>权衡</strong>：降低复杂度可能增加内存和实现复杂度。
+- 用哈希集合去重，查询 O(1)，但每个元素有额外的内存开销；
+- 维护有序数组可以二分，但插入是 O(n)，因为要挪元素；
+- 换成跳表或平衡树，查询和插入都是 O(log n)，但代码更复杂、常数更大。</p>
+<p>在后台系统里，先估算 n 的量级和读写比例，再选结构，别为了 n=50 的场景上复杂结构。</p>
+<h2 id="_4">四、动手实践：线性扫描与二分查找的耗时曲线</h2>
+<ol>
+<li>在 box 上建目录：<code>mkdir -p ~/lab7 &amp;&amp; cd ~/lab7</code></li>
+<li>保存下面的脚本为 <code>bench.py</code>：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">bisect</span><span class="o">,</span><span class="w"> </span><span class="nn">random</span><span class="o">,</span><span class="w"> </span><span class="nn">timeit</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">linear_search</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">binary_search</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">bisect</span><span class="o">.</span><span class="n">bisect_left</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">i</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="ow">and</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">target</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">bench</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">targets</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="c1"># 每轮查一批随机目标，取多轮中最快的一次，减少噪声</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">timeit</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="n">fn</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">],</span>
+                             <span class="n">number</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="n">repeat</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">best</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e6</span>  <span class="c1"># 微秒/次</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'n'</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'linear(us)'</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'binary(us)'</span><span class="si">:</span><span class="s2">&gt;12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'ratio'</span><span class="si">:</span><span class="s2">&gt;8</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1_000</span><span class="p">,</span> <span class="mi">10_000</span><span class="p">,</span> <span class="mi">100_000</span><span class="p">,</span> <span class="mi">1_000_000</span><span class="p">]:</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>                      <span class="c1"># 已有序，两种方法都能用</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">200</span><span class="p">)]</span>
+    <span class="n">lin</span> <span class="o">=</span> <span class="n">bench</span><span class="p">(</span><span class="n">linear_search</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">targets</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">100_000</span> <span class="k">else</span> <span class="n">targets</span><span class="p">)</span>
+    <span class="n">bi</span> <span class="o">=</span> <span class="n">bench</span><span class="p">(</span><span class="n">binary_search</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">targets</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">&gt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">lin</span><span class="si">:</span><span class="s2">&gt;12.2f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">bi</span><span class="si">:</span><span class="s2">&gt;12.3f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">lin</span><span class="o">/</span><span class="n">bi</span><span class="si">:</span><span class="s2">&gt;8.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+
+<ol start="3">
+<li>运行：<code>python3 bench.py</code>。我在 box 上的真实输出如下（你的机器数值会不同，趋势应该一致）：</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>         n   linear(us)   binary(us)    ratio
+        10         0.17        0.099      1.7
+       100         1.02        0.112      9.1
+      1000         9.92        0.156     63.6
+     10000       110.27        0.217    507.9
+    100000      1110.45        0.312   3555.2
+   1000000     10665.24        0.359  29740.1
+</code></pre></div>
+
+<ol start="4">
+<li>读曲线：n 每 ×10，线性扫描的耗时约 ×10，这是 O(n)；二分只从 0.1 涨到 0.36 微秒，这是 O(log n)。</li>
+<li>加分项：把 <code>binary_search</code> 换成手写的纯 Python 二分，在 n=4、8、16、64 上再测一次，找出交叉点（对照上面第二节的表）。</li>
+<li>加分项：用 <code>matplotlib</code> 把两条曲线画在双对数坐标（log-log）上。斜率约 1 的直线就是 O(n)。</li>
+</ol>
+<h2 id="_5">五、验收标准</h2>
+<ul>
+<li>[ ] 能推导嵌套循环的复杂度（包括内层依赖外层变量、循环变量翻倍这两类）；</li>
+<li>[ ] 能解释为什么小数据下的快慢和大 O 不一致（常数、实现方式、缓存）；</li>
+<li>[ ] 跑出了自己机器上至少跨 5 个数量级的耗时曲线。</li>
+</ul>
+<h2 id="_6">六、自测题</h2>
+<p><strong>1.</strong> 下面代码的时间复杂度是多少？</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">:</span>
+        <span class="n">j</span> <span class="o">*=</span> <span class="mi">2</span>
+</code></pre></div>
+
+<details><summary>答案</summary>外层 n 次，内层 j 翻倍约 log₂n 次，所以是 O(n log n)。</details>
+
+<p><strong>2.</strong> 同事在 n=500 时测得 O(n²) 的去重比 O(n) 的 set 去重还快，于是说"大 O 没用"。你怎么回应？</p>
+<details><summary>答案</summary>小规模下常数主导：set 要算哈希、分配内存，常数更大。大 O 描述的是增长趋势，不预测某个规模下谁快。应该把 n 扫到 1e4、1e5、1e6 再比，O(n²) 很快就会被反超；同时也要看生产环境真实的 n 有多大。</details>
+
+<p><strong>3.</strong> <code>list.append</code> 说是 O(1)，但线上偶尔看到单次 append 耗时尖刺，为什么？这属于哪种复杂度分析？</p>
+<details><summary>答案</summary>这是摊还分析。容量满了要扩容并拷贝全部元素，那一次是 O(n)；因为容量按比例增长，n 次操作总共 O(n)，摊还到每次是 O(1)。摊还 O(1) 不保证每一次都快，对延迟敏感的场景可以预分配容量。</details>
+
+<h2 id="_7">七、推荐资源</h2>
+<ul>
+<li><a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/lecture-notes/">MIT 6.006 Introduction to Algorithms（Fall 2011）讲义</a>：英文、免费、基础难度。重点读时间和空间复杂度、最坏、平均与摊还，用来核对本课实验的语义和边界。</li>
+</ul><div class="pn"><span><a href="6.html">← 源码到可执行文件</a></span><span><a href="8.html">数组、链表、栈与队列 →</a></span></div></main></div></body></html>

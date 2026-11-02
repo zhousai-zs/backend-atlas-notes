@@ -1,0 +1,208 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>6. 源码到可执行文件 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="cur" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 6 课 · 领域 A · 阶段 0</p><p class="dl"><a href="../files/6-a-compile.md" download>⬇ 本课 Markdown</a></p><h1 id="6208">第 6/208 课：源码到可执行文件</h1>
+<blockquote>
+<p>节点：<code>a-compile</code>（Compilation Pipeline）· 域：A · 子类：工具与程序执行 · 难度：入门 · 前置：<code>a-shell</code></p>
+<p>一句话：C++ 源码经过<strong>预处理、编译、汇编与链接</strong>，形成包含机器代码及元数据的程序。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<p>学完本课你应该能：</p>
+<ol>
+<li>解释<strong>翻译单元</strong>与<strong>头文件</strong>是什么、各自起什么作用。</li>
+<li>独立完成：分别生成预处理文件、汇编和目标文件，并用 <code>nm</code> 定位未定义符号。</li>
+<li>说明头文件与库的作用（验收标准）。</li>
+<li>亲手修复一次<strong>重复定义</strong>和一次<strong>未定义引用</strong>（验收标准）。</li>
+</ol>
+<p><strong>为什么后端要懂</strong>：节点给出的理由是——区分<strong>编译错误、链接错误和运行时错误</strong>。微信后台大量服务是 C++ 写的，你提交代码后 CI 报错，第一件事就是判断错误出在哪一层：</p>
+<table>
+<thead>
+<tr>
+<th>错误类型</th>
+<th>典型报错</th>
+<th>发生在哪</th>
+<th>第一反应</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>编译错误</td>
+<td><code>error: 'foo' was not declared in this scope</code></td>
+<td>编译单个 .cpp</td>
+<td>看语法、头文件有没有 include</td>
+</tr>
+<tr>
+<td>链接错误</td>
+<td><code>undefined reference to 'foo()'</code> / <code>multiple definition of 'foo()'</code></td>
+<td>把多个 .o 和库拼起来</td>
+<td>看哪个 .o / 库提供了符号，链接参数对不对</td>
+</tr>
+<tr>
+<td>运行时错误</td>
+<td><code>Segmentation fault</code>、<code>error while loading shared libraries</code></td>
+<td>程序跑起来后</td>
+<td>gdb、core 文件、<code>ldd</code></td>
+</tr>
+</tbody>
+</table>
+<p>能一眼分清这三类，排查时间能省一大半。</p>
+<h2 id="2">2. 从直觉到原理</h2>
+<h3 id="21">2.1 整体流水线（直觉）</h3>
+<p>把 <code>g++ main.cpp -o app</code> 这一条命令拆开，其实是四步：</p>
+<div class="codehilite"><pre><span></span><code>main.cpp ──预处理(-E)──▶ main.i ──编译(-S)──▶ main.s ──汇编(-c)──▶ main.o ──链接──▶ app
+                                                                 util.o ─┘   ▲
+                                                                     libxxx.so/.a
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-E<span class="w"> </span>main.cpp<span class="w"> </span>-o<span class="w"> </span>main.i<span class="w">   </span><span class="c1"># 只预处理：展开 #include、宏</span>
+g++<span class="w"> </span>-S<span class="w"> </span>main.cpp<span class="w"> </span>-o<span class="w"> </span>main.s<span class="w">   </span><span class="c1"># 到汇编为止</span>
+g++<span class="w"> </span>-c<span class="w"> </span>main.cpp<span class="w"> </span>-o<span class="w"> </span>main.o<span class="w">   </span><span class="c1"># 到目标文件为止（不链接）</span>
+g++<span class="w"> </span>main.o<span class="w"> </span>util.o<span class="w"> </span>-o<span class="w"> </span>app<span class="w">    </span><span class="c1"># 链接</span>
+g++<span class="w"> </span>-save-temps<span class="w"> </span>main.cpp<span class="w"> </span>-o<span class="w"> </span>app<span class="w">   </span><span class="c1"># 一次保留全部中间文件</span>
+</code></pre></div>
+
+<h3 id="22">2.2 核心要点一：翻译单元与头文件</h3>
+<p><strong>直觉</strong>：编译器一次只看<strong>一个</strong> .cpp 文件——它根本不知道别的 .cpp 里写了什么。</p>
+<p><strong>原理</strong>：一个 .cpp 经过预处理（把所有 <code>#include</code> 的内容原样粘贴进来、展开宏）之后的结果，就叫<strong>翻译单元</strong>（translation unit）。编译器只对这个单元负责。</p>
+<p>所以头文件的作用就是：<strong>把"声明"复制到每个需要它的翻译单元里</strong>，告诉编译器"这个函数存在，签名是这样，具体在哪你别管"。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// msg.h —— 只放声明</span>
+<span class="cp">#pragma once</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">FormatMsg</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">uin</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">text</span><span class="p">);</span>
+
+<span class="c1">// msg.cpp —— 放定义</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"msg.h"</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">FormatMsg</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">uin</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">text</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">uin</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">": "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// main.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"msg.h"</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">FormatMsg</span><span class="p">(</span><span class="mi">10001</span><span class="p">,</span><span class="w"> </span><span class="s">"hello"</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p>看看预处理有多"暴力"：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-E<span class="w"> </span>main.cpp<span class="w"> </span>-o<span class="w"> </span>main.i
+wc<span class="w"> </span>-l<span class="w"> </span>main.cpp<span class="w"> </span>main.i<span class="w">        </span><span class="c1"># 几行源码可能变成几万行</span>
+grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">"FormatMsg"</span><span class="w"> </span>main.i<span class="w">   </span><span class="c1"># msg.h 里的声明被原样贴了进来</span>
+</code></pre></div>
+
+<p><code>#pragma once</code>（或 <code>#ifndef</code> 守卫）防止同一个头文件在<strong>一个</strong>翻译单元里被贴两次；但它管不到<strong>多个</strong>翻译单元——这正是后面 ODR 问题的根源。</p>
+<p><strong>头文件 vs 库</strong>：头文件给编译器"声明"（我能这么调用），库（<code>.a</code> 静态库 / <code>.so</code> 动态库）给链接器"实现"（真正的机器码）。缺头文件 → 编译错误；缺库 → 链接错误。</p>
+<h3 id="23">2.3 核心要点二：目标文件、符号与链接</h3>
+<p><strong>直觉</strong>：每个 .o 是一块"拼图"，上面有凸起（我提供的函数）和凹槽（我需要别人提供的函数）。链接器负责把凹凸对上。</p>
+<p><strong>原理</strong>：目标文件（Linux 上是 ELF 格式）里有机器码，还有一张<strong>符号表</strong>：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-c<span class="w"> </span>msg.cpp<span class="w"> </span>main.cpp
+nm<span class="w"> </span>-C<span class="w"> </span>main.o<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>FormatMsg
+<span class="c1">#                  U FormatMsg[abi:cxx11](int, ...)   ← U = Undefined，我需要</span>
+nm<span class="w"> </span>-C<span class="w"> </span>msg.o<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>FormatMsg
+<span class="c1"># 0000000000000000 T FormatMsg[abi:cxx11](int, ...)   ← T = 在代码段定义，我提供</span>
+</code></pre></div>
+
+<ul>
+<li><code>U</code>：本文件用到但没定义，等链接器去别处找。</li>
+<li><code>T</code>：本文件在 text（代码）段里定义了。</li>
+<li>链接器扫描所有 .o 和库：每个 <code>U</code> 必须恰好找到一个 <code>T</code> 来匹配。</li>
+<li>一个都找不到 → <code>undefined reference</code></li>
+<li>找到多个强定义 → <code>multiple definition</code></li>
+</ul>
+<p>不加 <code>-C</code> 你会看到 <code>_Z9FormatMsgiRKNSt7__...</code> 这样的名字，这是 C++ 的<strong>名字修饰</strong>（name mangling），把参数类型编码进符号名，以支持重载。用 <code>c++filt</code> 还原：</p>
+<div class="codehilite"><pre><span></span><code>nm<span class="w"> </span>msg.o<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>FormatMsg
+<span class="nb">echo</span><span class="w"> </span>_Z9FormatMsgi<span class="w"> </span><span class="p">|</span><span class="w"> </span>c++filt
+</code></pre></div>
+
+<p>后台场景：你引入一个组内 SDK，头文件 include 好了，编译通过，链接报 <code>undefined reference to 'xxx::Client::Send(...)'</code>——说明<strong>声明有了，实现没进链接</strong>，去查构建配置（如 Makefile / Bazel / CMake）里是否依赖了对应的库，或者库的版本里根本没有这个签名（<code>nm -C libxxx.a | grep Send</code> 对比一下参数）。</p>
+<p>运行时还能看动态库依赖：</p>
+<div class="codehilite"><pre><span></span><code>ldd<span class="w"> </span>./app<span class="w">                 </span><span class="c1"># 列出依赖哪些 .so，"not found" 就是运行时找不到库</span>
+objdump<span class="w"> </span>-d<span class="w"> </span>main.o<span class="w"> </span><span class="p">|</span><span class="w"> </span>less<span class="w">  </span><span class="c1"># 反汇编看机器码</span>
+</code></pre></div>
+
+<h3 id="24-abi">2.4 核心要点三：优化、调试信息和 ABI</h3>
+<p><strong>优化（<code>-O0/-O1/-O2/-O3</code>）</strong>：编译器会内联函数、消除变量、重排指令。代码更快，但生成的机器码和源码不再一一对应。</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-O0<span class="w"> </span>-S<span class="w"> </span>msg.cpp<span class="w"> </span>-o<span class="w"> </span>msg_O0.s
+g++<span class="w"> </span>-O2<span class="w"> </span>-S<span class="w"> </span>msg.cpp<span class="w"> </span>-o<span class="w"> </span>msg_O2.s
+wc<span class="w"> </span>-l<span class="w"> </span>msg_O0.s<span class="w"> </span>msg_O2.s<span class="w">   </span><span class="c1"># 对比汇编行数和结构</span>
+</code></pre></div>
+
+<p><strong>调试信息（<code>-g</code>）</strong>：把"哪条机器指令对应哪行源码、变量叫什么"写进可执行文件（DWARF 段）。没有它，线上 core 文件里只能看到一堆地址。</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-O2<span class="w"> </span>-g<span class="w"> </span>main.cpp<span class="w"> </span>msg.cpp<span class="w"> </span>-o<span class="w"> </span>app
+objdump<span class="w"> </span>-h<span class="w"> </span>app<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>debug<span class="w">   </span><span class="c1"># 能看到 .debug_info 等段</span>
+</code></pre></div>
+
+<p><strong>ABI（应用二进制接口）</strong>：规定函数怎么传参、类在内存里怎么排布、名字怎么修饰。只有 ABI 一致，不同编译产生的 .o / .so 才能链在一起。上面 <code>nm</code> 里出现的 <code>[abi:cxx11]</code> 就是 GCC 对 <code>std::string</code> 新旧 ABI 的区分——用新 ABI 编译的代码去链老 ABI 编的库，就会出现"明明有这个函数却 undefined reference"的怪事。</p>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<p><strong>误区（节点原文）</strong>：把函数定义放进多处包含的头文件，可能违反 <strong>ODR（一次定义规则）</strong>。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// util.h</span>
+<span class="cp">#pragma once</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">Add</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1">// 定义写在了头文件里！</span>
+</code></pre></div>
+
+<p><code>a.cpp</code> 和 <code>b.cpp</code> 都 include 它 → 两个翻译单元各有一个 <code>T Add</code> → 链接时 <code>multiple definition of 'Add(int, int)'</code>。<code>#pragma once</code> 救不了你，因为它只管单个翻译单元。</p>
+<p>修法三选一：
+1. 头文件只留声明，定义挪到 <code>util.cpp</code>；
+2. 加 <code>inline</code>：<code>inline int Add(...)</code>，允许多个翻译单元各有一份相同定义；
+3. 类内定义的成员函数、模板默认就是这种 inline 语义。</p>
+<p><strong>权衡（节点原文）</strong>：优化可能改变调试体验，应保留<strong>可定位</strong>的构建。</p>
+<ul>
+<li><code>-O0 -g</code>：好调试，但性能和线上不一样，有些 bug 复现不出来。</li>
+<li><code>-O2</code>（无 <code>-g</code>）：快，但线上 core 了几乎没法定位。</li>
+<li>常见折中：线上用 <code>-O2 -g</code> 构建，再把调试信息剥离单独保存（<code>objcopy --only-keep-debug</code>），出问题时配合 core 文件还原调用栈。用 gdb 时遇到 <code>&lt;optimized out&gt;</code> 的变量，是优化的正常代价，不是 bug。</li>
+</ul>
+<h2 id="4-nm">4. 动手实践（节点实践：分别生成预处理文件、汇编和目标文件，用 nm 定位未定义符号）</h2>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/lab/compile<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/lab/compile
+</code></pre></div>
+
+<p><strong>步骤 1：准备代码</strong>——把 2.2 里的 <code>msg.h</code>、<code>msg.cpp</code>、<code>main.cpp</code> 写进去。</p>
+<p><strong>步骤 2：逐阶段生成中间产物</strong></p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-E<span class="w"> </span>main.cpp<span class="w"> </span>-o<span class="w"> </span>main.i<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w"> </span>main.i
+g++<span class="w"> </span>-S<span class="w"> </span>main.cpp<span class="w"> </span>-o<span class="w"> </span>main.s<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>grep<span class="w"> </span>-n<span class="w"> </span>FormatMsg<span class="w"> </span>main.s
+g++<span class="w"> </span>-c<span class="w"> </span>main.cpp<span class="w"> </span>-o<span class="w"> </span>main.o<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>file<span class="w"> </span>main.o
+</code></pre></div>
+
+<p><strong>步骤 3：制造并定位未定义引用</strong></p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>main.o<span class="w"> </span>-o<span class="w"> </span>app<span class="w">          </span><span class="c1"># 故意不带 msg.o</span>
+<span class="c1"># → undefined reference to `FormatMsg[abi:cxx11](int, ...)'</span>
+nm<span class="w"> </span>-C<span class="w"> </span>main.o<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">' U '</span><span class="w">  </span><span class="c1"># 找到 U 的 FormatMsg</span>
+</code></pre></div>
+
+<p>修复：<code>g++ -c msg.cpp &amp;&amp; g++ main.o msg.o -o app &amp;&amp; ./app</code>，输出 <code>10001: hello</code>。</p>
+<p><strong>步骤 4：制造并修复重复定义</strong></p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>util.h<span class="w"> </span><span class="s">&lt;&lt;'X'</span>
+<span class="s">#pragma once</span>
+<span class="s">int Add(int a, int b) { return a + b; }</span>
+<span class="s">X</span>
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'#include "util.h"\nint F(){return Add(1,2);}\n'</span><span class="w"> </span>&gt;<span class="w"> </span>a.cpp
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'#include "util.h"\nint F();\nint main(){return F()+Add(3,4)==10?0:1;}\n'</span><span class="w"> </span>&gt;<span class="w"> </span>b.cpp
+g++<span class="w"> </span>a.cpp<span class="w"> </span>b.cpp<span class="w"> </span>-o<span class="w"> </span>dup<span class="w">     </span><span class="c1"># → multiple definition of `Add(int, int)'</span>
+g++<span class="w"> </span>-c<span class="w"> </span>a.cpp<span class="w"> </span>b.cpp<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>nm<span class="w"> </span>-C<span class="w"> </span>a.o<span class="w"> </span>b.o<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>Add<span class="w">   </span><span class="c1"># 两个 T</span>
+</code></pre></div>
+
+<p>修复：把 <code>int Add</code> 改成 <code>inline int Add</code>，重新 <code>g++ a.cpp b.cpp -o dup &amp;&amp; ./dup; echo $?</code>，输出 <code>0</code>。</p>
+<p><strong>步骤 5：对比优化与调试信息</strong></p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>main.cpp<span class="w"> </span>msg.cpp<span class="w"> </span>-o<span class="w"> </span>app_dbg
+g++<span class="w"> </span>-O2<span class="w">    </span>main.cpp<span class="w"> </span>msg.cpp<span class="w"> </span>-o<span class="w"> </span>app_rel
+ls<span class="w"> </span>-l<span class="w"> </span>app_dbg<span class="w"> </span>app_rel<span class="p">;</span><span class="w"> </span>objdump<span class="w"> </span>-h<span class="w"> </span>app_dbg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-c<span class="w"> </span>debug<span class="p">;</span><span class="w"> </span>objdump<span class="w"> </span>-h<span class="w"> </span>app_rel<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-c<span class="w"> </span>debug
+ldd<span class="w"> </span>app_rel
+</code></pre></div>
+
+<p><strong>对照验收</strong>：
+- [ ] 能用自己的话说明头文件与库的作用（声明 vs 实现，编译期 vs 链接期）
+- [ ] 完成步骤 3、4，各修复一次未定义引用和重复定义</p>
+<h2 id="5">5. 自测题</h2>
+<p><strong>Q1</strong>：<code>#include</code> 了第三方头文件，编译通过，链接报 <code>undefined reference to 'Foo::Bar()'</code>。最可能缺什么？怎么确认？</p>
+<blockquote>
+<p><strong>答</strong>：缺的是实现（库或对应的 .o 没参与链接，或库里签名不一致）。用 <code>nm -C 你的.o | grep Bar</code> 看到 <code>U</code>，再用 <code>nm -C libfoo.a | grep Bar</code> 看库里有没有 <code>T</code> 且签名一致；有的话检查链接参数（<code>-L</code> / <code>-l</code> 和顺序）。</p>
+</blockquote>
+<p><strong>Q2</strong>：头文件已经加了 <code>#pragma once</code>，为什么还会出现 <code>multiple definition</code>？</p>
+<blockquote>
+<p><strong>答</strong>：<code>#pragma once</code> 只保证同一个翻译单元里不重复包含。多个 .cpp 各自包含该头文件，每个翻译单元都会生成一份非 inline 的定义，链接时出现多个强符号，违反 ODR。应把定义移到 .cpp 或标记 <code>inline</code>。</p>
+</blockquote>
+<p><strong>Q3</strong>：线上服务 core 了，gdb 里调用栈全是 <code>??</code>，变量显示 <code>&lt;optimized out&gt;</code>。分别是什么原因，构建上该怎么改？</p>
+<blockquote>
+<p><strong>答</strong>：<code>??</code> 通常是没有调试信息（没加 <code>-g</code> 或被剥离且没保留符号文件）；<code>&lt;optimized out&gt;</code> 是 <code>-O2</code> 等优化把变量消掉了，属于正常代价。构建上用 <code>-O2 -g</code>，并单独保留调试信息文件，保证线上版本可定位。</p>
+</blockquote>
+<h2 id="6">6. 推荐资源</h2>
+<ul>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html">GCC 文档：Overall Options</a>（gcc.gnu.org，英文，入门，免费）——重点读翻译单元与头文件、目标文件/符号与链接相关部分，用来核对本节实验里 <code>-E</code>/<code>-S</code>/<code>-c</code> 等选项的语义和边界。</li>
+</ul>
+<blockquote>
+<p>源码研读建议（节点原文）：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote><div class="pn"><span><a href="5.html">← 终端、路径与命令组合</a></span><span><a href="7.html">复杂度与实验分析 →</a></span></div></main></div></body></html>

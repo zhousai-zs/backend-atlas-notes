@@ -1,0 +1,352 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>12. 网络分层、地址与路由 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="cur" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 12 课 · 领域 A · 阶段 0</p><p class="dl"><a href="../files/12-a-network.md" download>⬇ 本课 Markdown</a><a href="../files/practice12.tar.gz" download>⬇ 练习包 practice12.tar.gz</a></p><h1 id="12208">第 12/208 课：网络分层、地址与路由</h1>
+<blockquote>
+<p>节点：<code>a-network</code> · 域：A · 子类：基础工程认知 · 难度：入门 · 前置：<code>a-os</code></p>
+<p>一句话：网络协议分层把应用消息逐层封装，IP负责寻址转发，传输层提供端到端通信语义。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 学习目标</h3>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li><strong>解释链路、IP 与传输层</strong>：说清「帧 / 包 / 段」大致落在哪一层，各自解决什么问题。</li>
+<li><strong>说清 IPv4/IPv6 与子网</strong>：地址长什么样、前缀（CIDR）如何划网段、主机位与网络位怎么分。</li>
+<li><strong>理解路由、MTU 与分片</strong>：包怎么被转发到下一跳；为什么应用消息大小可以远大于链路 MTU。</li>
+<li><strong>独立完成实践</strong>：追踪一次 HTTP 请求，记录 DNS 结果、本机路由提示，以及 TCP 端口与连接两端。</li>
+<li>在微信公众号后台场景里，能把「域名 / IP / 端口 / 应用协议」拆开排障，而不是只会说「网络不行」。</li>
+</ol>
+<h3 id="12">1.2 验收标准</h3>
+<p>节点给出的验收标准有两条，本课会反复回扣：</p>
+<ul>
+<li><strong>能解释 MAC 地址与 IP 的作用范围。</strong> MAC 是链路层、同广播域/同链路上的硬件（或虚拟）地址；跨过路由器后，下一跳的 MAC 会变，端到端通信不靠「目的主机的 MAC 一路不变」。IP 是网络层标识，用于跨网寻址与路由转发（有 NAT 时语义会变复杂，但排障仍先问：这是域名问题、IP 可达问题，还是端口/应用协议问题）。</li>
+<li><strong>能说明 MTU 与应用消息大小不同。</strong> MTU 约束的是「这一跳链路上，一个 IP 包大概能装多大」；你的 JSON、素材文件、模板消息体可以是几十 KB 甚至更大——靠 TCP 分段（或偶发的 IP 分片）切开传输。把「接口 MTU=1500」理解成「HTTP body 不能超过 1500」是错的。</li>
+</ul>
+<h3 id="13">1.3 为什么微信公众号后台要懂网络分层</h3>
+<p>节点对「为什么」写得很干脆：<strong>能够区分域名、IP、端口和应用协议的故障。</strong> 放到即将入职的腾讯微信公众号后台，几乎每天都会碰到这类拆分：</p>
+<ul>
+<li><strong>回调 URL。</strong> 用户消息推到你的公网域名 → DNS 解析到负载均衡 / 机器 IP → 落到 443（或内网端口）→ 应用层是微信约定的 HTTP(S) 验签与 XML/JSON。挂了要先问：域名解析错了？IP 不通？端口没开？还是 HTTP 状态码/验签失败？</li>
+<li><strong>access_token 拉取。</strong> 你的服务访问微信开放平台域名：又是 DNS → 出网路由 / 代理 → TCP 443 → HTTPS + 业务 JSON。超时可能是 DNS、路由 ACL、TLS，或对端限流——分层才能缩小范围。</li>
+<li><strong>素材 CDN。</strong> 图片/音频上传后，粉丝侧往往走 CDN 域名。你要分清「源站 IP」「CDN 边缘节点」「客户端到边缘的路径」；MAC 只在每一跳本地有意义。</li>
+<li><strong>模板消息下发。</strong> 你的后台连微信网关：端口、TLS、HTTP 路径、业务 errcode 是不同层的故障信号。不会分层，就会在日志里把「连接被 RST」和「errcode=40001」混成一句话。</li>
+</ul>
+<p>所以本课要建立的排障肌肉是：<strong>先定层，再定对象（域名 / IP / 端口 / 应用协议），最后才猜业务。</strong></p>
+<h2 id="2">2. 从直觉到原理：三个核心要点</h2>
+<h3 id="21-ip">2.1 链路、IP 与传输层</h3>
+<h4 id="_1">直觉：寄快递的三张标签</h4>
+<p>把一次「公众号服务器把模板消息发到微信网关」想成寄快递：</p>
+<ol>
+<li><strong>应用层</strong>：信纸上写的是 JSON——业务内容（touser、template_id、data）。</li>
+<li><strong>传输层（常见 TCP）</strong>：保证「这封信」在两端进程之间按序、可靠地送达；两端用 <strong>端口</strong> 区分「哪一个进程/服务」在收（例如 443）。</li>
+<li><strong>网络层（IP）</strong>：信封上的「城市门牌」——跨很多路由器也能找到目的主机（或 NAT 后的下一跳目标）。</li>
+<li><strong>链路层</strong>：每一段公路上的「当前这辆车要开进哪个车道/对接哪台交换机」——用 <strong>MAC</strong> 在本链路内投递；到下一个路由器，会换一辆车、换一张本地标签。</li>
+</ol>
+<p>分层的核心收益：<strong>上面的层不用关心下面怎么换「本地标签」；下面的层不用解析业务 JSON。</strong></p>
+<h4 id="_2">原理：封装与解封装</h4>
+<p>发送端大致是「自上而下封装」：</p>
+<div class="codehilite"><pre><span></span><code>应用数据 (HTTP body / 业务 JSON)
+  → 加上传输头（TCP：源端口、目的端口、序号…）      → 段 (segment)
+  → 加上 IP 头（源 IP、目的 IP、协议号…）            → 包 (packet)
+  → 加上链路头（源 MAC、目的 MAC…）                  → 帧 (frame)
+</code></pre></div>
+
+<p>接收端反过来逐层剥头。你在 <code>curl -v</code> 里看到的是应用层对话；<code>ss -ti</code> / Wireshark 才能同时看到传输与 IP；同网段抓包才能直接看到以太网头里的 MAC。</p>
+<p><strong>端口在哪一层？</strong> 端口是传输层的概念：同一台机器上的 IP 只能说明「哪台主机」，端口才说明「哪个套接字/服务」。微信回调打到 <code>https://api.example.com/wx/callback</code>，对系统而言首先是：解析域名得到 IP，再对 <code>IP:443</code> 建 TCP，再在 TLS 之上发 HTTP。</p>
+<h4 id="_3">短命令：看见端口与连接</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 本机谁在听 443 / 80（需按实际环境调整）</span>
+ss<span class="w"> </span>-lntp<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+<span class="c1"># 或</span>
+ss<span class="w"> </span>-ltn
+
+<span class="c1"># 看本机到某主机的 TCP 连接（示例）</span>
+ss<span class="w"> </span>-tn<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># 一次带细节的 HTTPS 请求（会打印 DNS、连接、TLS、HTTP 头）</span>
+curl<span class="w"> </span>-v<span class="w"> </span>--max-time<span class="w"> </span><span class="m">10</span><span class="w"> </span>https://httpbin.org/get<span class="w"> </span>-o<span class="w"> </span>/dev/null
+</code></pre></div>
+
+<p>在 <code>curl -v</code> 输出里，试着标出：<strong>解析到的 IP</strong>、<strong>connect 到的端口</strong>、<strong>HTTP 状态行</strong>——这三项分别贴近「IP / 传输 / 应用」。</p>
+<h4 id="_4">微信公众号例子</h4>
+<p>粉丝发消息 → 微信服务器 POST 你的回调：</p>
+<table>
+<thead>
+<tr>
+<th>你看到的现象</th>
+<th>更可能卡在哪一层</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>域名都 ping/解析不到</td>
+<td>DNS 或根本无网（偏「名字→IP」与连通）</td>
+</tr>
+<tr>
+<td>解析到了 IP，TCP 超时</td>
+<td>路由、防火墙、安全组、端口未监听</td>
+</tr>
+<tr>
+<td>TCP 通了，TLS 握手失败</td>
+<td>证书、SNI、中间盒（仍偏传输之上、应用之下）</td>
+</tr>
+<tr>
+<td>HTTP 200 但业务验签失败</td>
+<td>应用协议 / 业务逻辑</td>
+</tr>
+</tbody>
+</table>
+<p><strong>验收回扣（MAC vs IP）：</strong> 回调路径上每一跳交换机/路由器改写的是「本段的 MAC」；你的公网 IP（或 LB IP）才是跨网转发要盯的标识。不要指望「抓到微信源站 MAC」来做公网排障——你通常根本不在同一链路。</p>
+<hr />
+<h3 id="22-ipv4ipv6">2.2 IPv4/IPv6 和子网</h3>
+<h4 id="_5">直觉：门牌号与小区围墙</h4>
+<ul>
+<li><strong>IPv4</strong>：大约 <code>A.B.C.D</code>，32 位，常写成点分十进制。公网地址紧缺，所以到处是 NAT。</li>
+<li><strong>IPv6</strong>：128 位，写成冒号十六进制；地址空间大，设计上减少「全家共用一个公网 IP」的压力（现实部署仍因环境而异）。</li>
+<li><strong>子网 / 前缀</strong>：用 CIDR 如 <code>192.168.1.0/24</code> 表示「前 24 位是网络号，后 8 位是主机号」——相当于小区围墙：墙内二层广播/邻居发现更近，出墙必须走网关（路由）。</li>
+</ul>
+<h4 id="_6">原理：前缀长度决定「谁算邻居」</h4>
+<p>对 IPv4：</p>
+<ul>
+<li><code>/32</code>：只有一个地址（常常是「主机路由」）。</li>
+<li><code>/24</code>：256 个地址（可用主机数要去掉网络号/广播等细节，入门先建立「前缀越长，子网越小」的直觉）。</li>
+<li><code>/16</code>：更大网段。</li>
+</ul>
+<p>判断「两个 IP 是否同子网」：看在给定前缀长度下，网络前缀是否相同。同子网 → 往往直接链路投递（ARP/ND 解析 MAC）；不同子网 → 交给默认网关或更具体的路由条目。</p>
+<p>IPv6 常见前缀如 <code>/64</code> 作为局域网默认划分（细节留给后续课，本课抓住「前缀 = 子网边界」）。</p>
+<h4 id="_7">短命令与短代码</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 看本机地址与前缀（Linux）</span>
+ip<span class="w"> </span>-br<span class="w"> </span>addr
+ip<span class="w"> </span>route
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">ipaddress</span>
+
+<span class="n">net</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s2">"10.0.0.0/24"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">network_address</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">broadcast_address</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">num_addresses</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s2">"10.0.0.50"</span><span class="p">)</span> <span class="ow">in</span> <span class="n">net</span><span class="p">)</span>   <span class="c1"># True</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s2">"10.0.1.50"</span><span class="p">)</span> <span class="ow">in</span> <span class="n">net</span><span class="p">)</span>   <span class="c1"># False</span>
+</code></pre></div>
+
+<h4 id="_8">微信公众号例子</h4>
+<ul>
+<li>开发机在公司 <code>10.x</code> 网段，微信回调却要求公网可达：你要分清 <strong>内网 IP</strong> 与 <strong>公网入口 IP（LB/NAT）</strong>，别把内网地址配进公众号后台的 URL。</li>
+<li>容器/云主机安全组放行的是「某网段到某端口」——本质是基于 IP 前缀 + 端口的策略；不会写 MAC 白名单做公网回调。</li>
+</ul>
+<hr />
+<h3 id="23-mtu">2.3 路由、MTU 与分片</h3>
+<h4 id="_9">直觉：下一跳，而不是「一步飞到终点」</h4>
+<p>路由不是魔法：每台路由器只决定 <strong>下一跳是谁</strong>。你的包可能经过：本机 → 网关 → 运营商 → … → 对端机房。<code>traceroute</code> / <code>mtr</code> 看的是路径上的线索（ICMP 相关，可能被过滤，结果要会读也要会怀疑）。</p>
+<p><strong>MTU（Maximum Transmission Unit）</strong>：这一跳链路愿意承载的最大帧/包相关上限。以太网常见 IP MTU 1500 字节量级。你的素材文件 2MB，不可能也不需要「一个 IP 包打完」——通常由 <strong>TCP 把字节流切成多个段</strong>，每个段再装进合适大小的 IP 包。</p>
+<p><strong>分片：</strong> 若某跳 MTU 更小且包不可分片（IPv4 DF 位、或 IPv6 本就强调端到端避免中间分片），可能触发 <strong>Path MTU Discovery</strong>；配置不当会出现「小包通、大包挂」的经典故障。</p>
+<h4 id="mtu">原理：应用消息大小 ≠ MTU</h4>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>大致含义</th>
+<th>典型数量级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用消息</td>
+<td>一次业务含义完整的数据（一份 JSON、一张图）</td>
+<td>KB～MB+</td>
+</tr>
+<tr>
+<td>TCP 段</td>
+<td>传输层一次提交给 IP 的一块</td>
+<td>受拥塞窗口、MSS 等约束</td>
+</tr>
+<tr>
+<td>IP 包</td>
+<td>网络层转发单位</td>
+<td>常受路径 MTU 约束（如 ~1500）</td>
+</tr>
+<tr>
+<td>链路帧</td>
+<td>本跳介质上的封装</td>
+<td>MTU 直接相关</td>
+</tr>
+</tbody>
+</table>
+<p><strong>验收回扣（MTU vs 应用消息）：</strong> 接口 <code>mtu 1500</code> 不阻止你 POST 20KB 的模板消息；它只约束「每个 IP 包在这条链路上别太大」。应用层可以很大，下面自动切。</p>
+<h4 id="_10">短命令</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 本机路由表</span>
+ip<span class="w"> </span>route
+
+<span class="c1"># 问内核：去某个 IP 准备怎么走（示例 IP 换成你 DNS 得到的）</span>
+ip<span class="w"> </span>route<span class="w"> </span>get<span class="w"> </span><span class="m">1</span>.1.1.1
+
+<span class="c1"># 路径线索（可能被中间设备限速/过滤）</span>
+traceroute<span class="w"> </span>-n<span class="w"> </span>-w<span class="w"> </span><span class="m">2</span><span class="w"> </span>-q<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">1</span>.1.1.1<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+<span class="c1"># 或</span>
+mtr<span class="w"> </span>-rwzbc<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">1</span>.1.1.1
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># 看网卡 MTU</span>
+ip<span class="w"> </span>link<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'1,20p'</span>
+</code></pre></div>
+
+<h4 id="_11">微信公众号例子</h4>
+<ul>
+<li>上传大素材失败、但 ping 通：可能是代理缓冲、超时、或 Path MTU 问题，而不是「公网 IP 写错」这一种原因。</li>
+<li>内网机器经 HTTP 代理出网：路由表仍指向网关，但 <strong>应用层</strong> 被指到代理；排障时别只看 <code>ip route</code>，也要看环境变量与客户端代理配置——这正是节点 <strong>tradeoffs</strong> 说的：分层便于组合，但排障要沿完整路径定位。</li>
+</ul>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31-tcpip-osi">3.1 误区：TCP/IP 分层模型不必机械对应 OSI 每一层</h3>
+<p>节点 pitfalls：<strong>TCP/IP 分层模型不必机械对应 OSI 每一层。</strong></p>
+<p>考试题喜欢把「会话层、表示层」背得很细；工程排障里更常用的是 <strong>大致四层心智模型</strong>（链路 / 网络 / 传输 / 应用），并把 TLS、HTTP、DNS、RPC 框架放回「偏应用或应用辅助」的位置。不要因为对不上 OSI 第七层的某个名字，就不敢判断「这是端口问题还是 JSON 问题」。</p>
+<p>实践建议：</p>
+<ul>
+<li>能画：<strong>DNS → IP → TCP/UDP 端口 → TLS? → HTTP/RPC</strong>。</li>
+<li>不必强行：每个库调用对应 OSI 某一层编号。</li>
+</ul>
+<h3 id="32">3.2 权衡：分层便于组合，但排障需沿完整路径定位</h3>
+<p>节点 tradeoffs：<strong>分层便于组合，但排障需沿完整路径定位。</strong></p>
+<p>分层的好处：换网卡驱动不用改业务 JSON；换域名不用改 TCP 状态机。坏处是：故障会在层与层之间「折射」。</p>
+<p>完整路径清单（公众号回调一例）：</p>
+<ol>
+<li>公众号后台配置的 URL 字符串是否正确（应用配置）</li>
+<li>DNS 是否解析到你期望的入口</li>
+<li>公网到 LB/机器的路由与安全组</li>
+<li>端口是否在听、TLS 证书是否匹配</li>
+<li>HTTP 路径、验签、业务逻辑</li>
+</ol>
+<p>只盯着一层，会误判。分层是设计工具，也是排障地图——地图要整张用。</p>
+<h2 id="4-http">4. 动手实践：追踪一次 HTTP 请求</h2>
+<p>实践目标（节点原文）：<strong>追踪一次 HTTP 请求，记录 DNS 结果、路由及端口。</strong></p>
+<p>本课在仓库里准备了脚本：<code>/workspace/atlas/practice12/trace_http.py</code>。它会：</p>
+<ol>
+<li>打印目标 URL / 域名 / 约定端口  </li>
+<li>用 DNS（<code>getaddrinfo</code>）列出 IP  </li>
+<li>调用 <code>ip route get &lt;ip&gt;</code> 给出本机转发提示  </li>
+<li>对 <code>IP:443</code>（或 80）做一次 TCP connect，打印本地端口与对端  </li>
+<li>发起 HTTP(S) GET，打印状态码与少量响应头  </li>
+<li>打印验收口述提示（MAC vs IP、MTU vs 应用消息）</li>
+</ol>
+<h3 id="1_1">步骤 1：进入目录并查看脚本</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/practice12
+sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">'1,40p'</span><span class="w"> </span>trace_http.py
+</code></pre></div>
+
+<h3 id="2_1">步骤 2：跑通默认追踪</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>trace_http.py<span class="w"> </span>httpbin.org<span class="w"> </span>/get<span class="w"> </span>--scheme<span class="w"> </span>https
+</code></pre></div>
+
+<p>期望：</p>
+<ul>
+<li>DNS 至少打出一条 IPv4 或 IPv6  </li>
+<li>路由提示含 <code>via</code> / <code>dev</code> / <code>src</code> 之一（环境缺 <code>ip</code> 命令时会打印跳过原因，仍算可解释）  </li>
+<li>TCP connect 为 <code>OK</code>，并看到 <strong>本地端口</strong>（临时端口）与 <strong>对端 443</strong>  </li>
+<li>HTTP status 为 <code>200</code>（依赖外网；若环境无网，把失败点记录在「哪一步」——正是分层练习）</li>
+</ul>
+<h3 id="3-curl-v">步骤 3：亲手对照 <code>curl -v</code></h3>
+<p>另开命令：</p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-v<span class="w"> </span>--max-time<span class="w"> </span><span class="m">10</span><span class="w"> </span>https://httpbin.org/get<span class="w"> </span>-o<span class="w"> </span>/dev/null
+</code></pre></div>
+
+<p>在输出里用笔（或笔记）标出：</p>
+<ol>
+<li>DNS resolve 到的地址  </li>
+<li><code>Trying ...:443</code> / <code>Connected</code>  </li>
+<li>HTTP 状态行  </li>
+</ol>
+<p>与脚本第 2、4、5 步对照，确认你能独立口述同一条路径。</p>
+<h3 id="4">步骤 4：记录一张「分层表」（写进笔记）</h3>
+<p>复制并填空（示例已用脚本结构）：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>本例观察到的对象</th>
+<th>你的记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用</td>
+<td>URL、HTTP 状态码</td>
+<td></td>
+</tr>
+<tr>
+<td>传输</td>
+<td>目的端口 443、本机临时端口</td>
+<td></td>
+</tr>
+<tr>
+<td>网络</td>
+<td>目的 IP、<code>ip route get</code> 下一跳</td>
+<td></td>
+</tr>
+<tr>
+<td>链路</td>
+<td>（本机网卡 MAC；对端 MAC 通常不可见）</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5">步骤 5：验收自查</h3>
+<ul>
+<li>[ ] 能说明：<strong>MAC 作用范围在链路/邻接，IP 用于跨网寻址与路由</strong>  </li>
+<li>[ ] 能说明：<strong>MTU 限制单包大小，不限制应用消息可以很大</strong>  </li>
+<li>[ ] 能独立跑通追踪，并指出 DNS、路由、端口各在哪一步  </li>
+<li>[ ] 能举一个微信回调故障，并按「域名 / IP / 端口 / 应用」分类  </li>
+</ul>
+<h3 id="6">步骤 6：（可选）换一个你熟悉的域名</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>trace_http.py<span class="w"> </span>example.com<span class="w"> </span>/<span class="w"> </span>--scheme<span class="w"> </span>https
+</code></pre></div>
+
+<p>对比两次 DNS 与路由是否变化；端口是否仍是 443。</p>
+<h2 id="5-3">5. 自测题（3 道，附答案）</h2>
+<h3 id="1mac-ip">题 1：MAC 与 IP 的作用范围</h3>
+<p><strong>题：</strong> 粉丝消息经微信服务器 POST 到你的公网回调 <code>https://wx.example.com/cb</code>。有人说：「把微信服务器的 MAC 地址加白名单就能防伪。」这对吗？请用作用范围反驳或限定。</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li>不对（至少对公网场景基本不可行/无意义）。<strong>MAC 只在同一链路/广播域有意义</strong>；跨过路由器后，帧的源/目的 MAC 变成「本跳」的地址，你在机房网卡上看到的源 MAC 是上一跳设备，不是「微信源站主机的 MAC 一路漂过来」。  </li>
+<li>防伪应靠 <strong>TLS、验签 Token/签名、IP 允许列表（若微信公布出口网段）</strong> 等网络层/应用层手段。  </li>
+<li>回扣验收：<strong>能解释 MAC 地址与 IP 的作用范围</strong>。</li>
+</ul>
+<h3 id="2mtu">题 2：MTU 与应用消息大小</h3>
+<p><strong>题：</strong> 网卡 <code>mtu 1500</code>。产品经理要发 80KB 的图文 JSON 给内部渲染服务。有人说必须先把 JSON 拆成 ≤1500 字节的多次 HTTP 请求。是否必须？正确理解是什么？</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li><strong>不是必须。</strong> MTU 约束的是链路/IP 包大小；HTTP 请求体可以是 80KB，由 <strong>TCP 分段</strong>（以及路径上的包大小选择）完成。  </li>
+<li>你要担心的是超时、网关 body limit、内存，而不是「MTU=1500 ⇒ HTTP body≤1500」。  </li>
+<li>回扣验收：<strong>能说明 MTU 与应用消息大小不同</strong>。</li>
+</ul>
+<h3 id="3_1">题 3：分层排障</h3>
+<p><strong>题：</strong> 模板消息发送客户端日志依次为：DNS 正常；<code>connect</code> 到 <code>IP:443</code> 超时；从未出现 HTTP 状态码。故障更可能卡在哪一层？下一步查什么？若换成「TCP 通但 HTTP 返回 401/业务 errcode」，判断如何变？</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li>前者卡在 <strong>传输连通或更下层路径</strong>（路由、安全组、端口未听、中间防火墙），还没到应用协议语义。下一步：<code>ip route get</code>、安全组、对端 <code>ss -lntp</code>、换路径/代理对比。  </li>
+<li>后者说明 <strong>传输已通</strong>，问题在 <strong>应用层鉴权/业务</strong>（token、权限、参数）。  </li>
+<li>这正是 why：<strong>区分域名、IP、端口和应用协议的故障</strong>；也回扣 tradeoffs——要沿完整路径定位。</li>
+</ul>
+<h2 id="6_1">6. 推荐资源</h2>
+<p>只使用节点给出的资源：</p>
+<ol>
+<li><strong>网络分层、地址与路由：参考文档 / 原始资料</strong>
+   - URL：https://beej.us/guide/bgnet/html/index-wide.html#what-is-a-socket
+   - 来源：beej.us · 英文 · 文档 · 入门 · 免费
+   - 阅读建议：从「What is a socket」切入，对照本课的链路 / IP / 传输层直觉；并结合章节中关于地址与协议族的部分，核对 IPv4/IPv6 与「端口属于传输层」的语义，用来检验你在实践里记录的 DNS、IP、端口是否分层正确。</li>
+</ol>
+<h2 id="7">7. 小结与前后置关系</h2>
+<h3 id="71">7.1 本课要点回顾</h3>
+<ol>
+<li><strong>分层封装</strong>：应用消息被传输层、IP、链路层逐层加上头部；排障先定层。  </li>
+<li><strong>IP 与子网</strong>：地址 + 前缀决定「邻居还是走网关」；IPv4/IPv6 是同一思想的不同宽度。  </li>
+<li><strong>路由 / MTU / 分片</strong>：转发看下一跳；MTU 管单包，不管「业务消息能不能大于 1500」。  </li>
+<li><strong>误区与权衡</strong>：不必机械抠 OSI；分层好组合，排障要走完整路径。  </li>
+<li><strong>实践</strong>：对一次 HTTP 请求记下 DNS、路由提示、端口与 HTTP 结果。</li>
+</ol>
+<h3 id="72">7.2 验收回扣</h3>
+<ul>
+<li><strong>MAC vs IP：</strong> 自测题 1 + 实践步骤 4/5。  </li>
+<li><strong>MTU vs 应用消息：</strong> 自测题 2 + 实践口述提示。</li>
+</ul>
+<h3 id="73">7.3 前后置</h3>
+<ul>
+<li><strong>前置：</strong> <code>a-os</code>（进程、系统调用、本机环境——否则端口监听与网卡命令会很飘）。  </li>
+<li><strong>本节点：</strong> <code>a-network</code>（网络分层、地址与路由）。  </li>
+<li><strong>后续：</strong> 套接字编程、HTTP/RPC、负载均衡、服务发现都会默认你具备本课的分层地图。</li>
+</ul>
+<h3 id="74">7.4 一句话带走</h3>
+<p><strong>域名、IP、端口、应用协议是四件不同的事；MAC 管本跳，MTU 管单包，别用它们去限制你对业务消息的想象。</strong></p><div class="pn"><span><a href="11.html">← 图、依赖与拓扑排序</a></span><span><a href="13.html">关系模型与SQL入门 →</a></span></div></main></div></body></html>

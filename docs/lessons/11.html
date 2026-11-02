@@ -1,0 +1,418 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>11. 图、依赖与拓扑排序 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（31/208）</summary><p><a href="../index.html">🏠 首页</a></p><details open><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="cur" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（15/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li class="todo">32. ABI、ODR与二进制兼容 <em>待更新</em></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 11 课 · 领域 A · 阶段 1</p><p class="dl"><a href="../files/11-a-graph.md" download>⬇ 本课 Markdown</a><a href="../files/practice11.tar.gz" download>⬇ 练习包 practice11.tar.gz</a></p><h1 id="11208">第 11/208 课：图、依赖与拓扑排序</h1>
+<blockquote>
+<p>节点：<code>a-graph</code> · 域：A · 子类：数据结构与算法 · 难度：基础 · 前置：<code>a-sequence</code></p>
+<p>一句话：图描述实体之间的关系，有向无环图可以通过拓扑序安排满足前置条件的执行顺序。</p>
+</blockquote>
+<h2 id="1">1. 学习目标与为什么后端要懂</h2>
+<h3 id="11">1.1 学习目标</h3>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li><strong>解释邻接表与邻接矩阵</strong>：两种把「点 + 边」落到内存里的方式；说清空间与查边成本的差异。</li>
+<li><strong>用 BFS / DFS + 访问标记遍历图</strong>：知道队列与栈（或递归）各自在扫图时的角色，以及「未访问 / 访问中 / 已完成」标记为什么重要。</li>
+<li><strong>用入度做拓扑排序，并检出环</strong>：在有向图上输出至少一个合法学习/执行顺序；若存在自环或多节点环，能指出环上节点。</li>
+<li><strong>独立完成实践</strong>：实现课程依赖检查——输入若干「A 依赖 B」关系，输出环中的节点（若有）以及合法学习顺序（若无环）。</li>
+<li>在微信公众号后台场景里，能把「构建依赖、任务调度、学习路径校验」映射成 DAG 上的拓扑序问题。</li>
+</ol>
+<h3 id="12">1.2 验收标准</h3>
+<p>节点给出的验收标准有两条，本课会反复回扣：</p>
+<ul>
+<li><strong>能检测自环和多节点环。</strong> 自环：<code>u → u</code>，入度算法里通常表现为「永远无法把该点的入度减到可调度」。多节点环：<code>A → B → C → A</code>，Kahn 算法结束后仍有入度 &gt; 0 的点；DFS 三色法会在「访问中」再次碰到灰点。验收时两种环都要报得出来。</li>
+<li><strong>能解释多个合法拓扑序。</strong> DAG 的拓扑序往往不唯一：没有相互依赖的节点可以交换顺序。例如「编译 protobuf」和「拉配置中心」互不依赖时，谁先谁后都合法。能说明「为什么两个序都对」比背一个固定序列更重要。</li>
+</ul>
+<h3 id="13">1.3 为什么微信公众号后台要懂图与拓扑</h3>
+<p>节点对「为什么」写得很干脆：<strong>实现构建依赖、任务调度和本网站的学习依赖校验。</strong> 放到即将入职的腾讯微信公众号后台，几乎处处是「有向依赖」：</p>
+<ul>
+<li><strong>素材 / 模板消息依赖。</strong> 群发图文要先上传封面、再组稿、再审核、再投递；模板消息要先有模板 id、再填字段、再调发送接口。边的方向是「必须先完成谁」。</li>
+<li><strong>定时推送流水线。</strong> 选粉丝包 → 渲染文案 → 风控校验 → 投递队列 → 回执汇总。某一步失败不能假装后面已经成功；调度器要按依赖唤醒下游。</li>
+<li><strong>服务启动顺序。</strong> 配置中心、DB 连接池、access_token 刷新协程、回调 HTTP 服务——谁依赖谁，启动脚本或编排系统就是在跑拓扑序；若配成环，进程会卡死或循环重试。</li>
+<li><strong>本 Atlas 学习路径。</strong> 站点本身用节点的 <code>prerequisites</code> 做依赖校验：你不能在没学 <code>a-sequence</code> 的情况下「合法地」宣称已掌握本课的前置。这正是「课程依赖检查」实验的现实版。</li>
+</ul>
+<p>所以本课要建立的模型是：<strong>点 = 任务/模块/课程，有向边 = 前置约束；无环才能排期，有环必须先拆掉。</strong></p>
+<h2 id="2">2. 从直觉到原理：三个核心要点</h2>
+<h3 id="21">2.1 邻接表与邻接矩阵</h3>
+<h4 id="_1">直觉：通讯录两种写法</h4>
+<p>把「公众号后台里谁依赖谁」记在本子上，可以有两种记法：</p>
+<ol>
+<li><strong>邻接表</strong>：给每个模块开一页，只列出它直接依赖的下游（或上游）。大多数模块只依赖少数几个——本子很薄。</li>
+<li><strong>邻接矩阵</strong>：画一张 N×N 表格，行列都是模块，格子里 0/1 表示有没有边。查「A 是否直接依赖 B」一眼看到，但空格子很多。</li>
+</ol>
+<h4 id="_2">原理</h4>
+<p>设有向图 G = (V, E)，|V| = n，|E| = m。</p>
+<table>
+<thead>
+<tr>
+<th>表示</th>
+<th>空间</th>
+<th>枚举 u 的出边</th>
+<th>判断边 u→v 是否存在</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>邻接表 <code>dict[u] → list of v</code></td>
+<td>O(n + m)</td>
+<td>O(出度(u))</td>
+<td>O(出度(u))（若出边再建成 set 可 O(1)）</td>
+</tr>
+<tr>
+<td>邻接矩阵 <code>mat[u][v]</code></td>
+<td>O(n²)</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>稀疏图</strong>（m ≪ n²）——微服务依赖、课程前置、构建 DAG——几乎总是邻接表。<strong>稠密图</strong>（边接近 n²）矩阵才可能划算，后端业务图很少这么稠。</p>
+<h4 id="_3">短代码：两种表示互转</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">edges_to_adj_list</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""edges: list of (u, v) 表示 u → v（u 完成后才能做 v，或 u 依赖 v，约定要统一）"""</span>
+    <span class="n">adj</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">adj</span><span class="p">[</span><span class="n">u</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">adj</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">adj_list_to_matrix</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">adj</span><span class="p">):</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nodes</span><span class="p">)}</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="n">mat</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">vs</span> <span class="ow">in</span> <span class="n">adj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span><span class="p">:</span>
+            <span class="n">mat</span><span class="p">[</span><span class="n">idx</span><span class="p">[</span><span class="n">u</span><span class="p">]][</span><span class="n">idx</span><span class="p">[</span><span class="n">v</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">mat</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"配置"</span><span class="p">,</span> <span class="s2">"DB"</span><span class="p">,</span> <span class="s2">"Token"</span><span class="p">,</span> <span class="s2">"HTTP"</span><span class="p">]</span>
+    <span class="c1"># 边：前置 → 后继（做完左边才能做右边）</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"配置"</span><span class="p">,</span> <span class="s2">"DB"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"配置"</span><span class="p">,</span> <span class="s2">"Token"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"DB"</span><span class="p">,</span> <span class="s2">"HTTP"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"Token"</span><span class="p">,</span> <span class="s2">"HTTP"</span><span class="p">)]</span>
+    <span class="n">adj</span> <span class="o">=</span> <span class="n">edges_to_adj_list</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">adj_list_to_matrix</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">adj</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"邻接表:"</span><span class="p">,</span> <span class="n">adj</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"矩阵行=源, 列=目标:"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">mat</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</code></pre></div>
+
+<p>约定很重要：本课统一 <strong>边 <code>u → v</code> 表示「u 是 v 的前置，必须先做 u 再做 v」</strong>（构建系统常见写法）。有的系统写成「v 依赖 u」的反向边——读代码时先对一下方向，否则拓扑序会反。</p>
+<h3 id="22-bfsdfs">2.2 BFS、DFS 与访问标记</h3>
+<h4 id="_4">直觉：扫楼两种走法</h4>
+<ul>
+<li><strong>BFS（广度优先）</strong>：像按层通知依赖你的服务——先处理「距离起点 1 跳」的，再 2 跳。队列实现。</li>
+<li><strong>DFS（深度优先）</strong>：沿着一条依赖链钻到底，再回溯。栈或递归实现。</li>
+</ul>
+<p>无论哪种，都需要<strong>访问标记</strong>，否则有向图里的分叉、汇合、环会让你重复处理甚至死循环。</p>
+<h4 id="_5">原理：三色标记（对环检测尤其有用）</h4>
+<ol>
+<li><strong>白 / 0</strong>：未访问  </li>
+<li><strong>灰 / 1</strong>：正在栈上（递归路径上）  </li>
+<li><strong>黑 / 2</strong>：已完全处理完  </li>
+</ol>
+<p>DFS 时：若走到<strong>灰点</strong>，说明当前路径构成有向环。这是有向图环检测的经典手法；后面拓扑的 DFS 版会用到。</p>
+<p>BFS 更常配合「入度」做 Kahn 拓扑（下一节），本身不直接用三色，但同样要标记「已入队」，避免重复入队。</p>
+<h4 id="dfs">短代码：DFS 三色检有向环</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">has_directed_cycle</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">adj</span><span class="p">):</span>
+    <span class="n">WHITE</span><span class="p">,</span> <span class="n">GRAY</span><span class="p">,</span> <span class="n">BLACK</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="n">WHITE</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">dfs</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+        <span class="n">color</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">GRAY</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">adj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="k">if</span> <span class="n">color</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="n">GRAY</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># 回到路径上的点 → 有向环</span>
+            <span class="k">if</span> <span class="n">color</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="n">WHITE</span> <span class="ow">and</span> <span class="n">dfs</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">color</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">BLACK</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">color</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">==</span> <span class="n">WHITE</span> <span class="ow">and</span> <span class="n">dfs</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">]</span>
+    <span class="n">ok</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"A"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"B"</span><span class="p">],</span> <span class="s2">"B"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"C"</span><span class="p">],</span> <span class="s2">"C"</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="n">bad</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"A"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"B"</span><span class="p">],</span> <span class="s2">"B"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"C"</span><span class="p">],</span> <span class="s2">"C"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">]}</span>
+    <span class="n">self_loop</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"A"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"A"</span><span class="p">],</span> <span class="s2">"B"</span><span class="p">:</span> <span class="p">[]}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"无环?"</span><span class="p">,</span> <span class="ow">not</span> <span class="n">has_directed_cycle</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">ok</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"三角环?"</span><span class="p">,</span> <span class="n">has_directed_cycle</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">bad</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"自环?"</span><span class="p">,</span> <span class="n">has_directed_cycle</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">],</span> <span class="n">self_loop</span><span class="p">))</span>
+</code></pre></div>
+
+<p><strong>误区预告（第 3 节展开）：</strong> 无向图里「回到父节点」不是环，环检测规则不同；不要把无向图的 visited 写法直接套到有向依赖图上。</p>
+<h3 id="23">2.3 入度、拓扑序与环检测</h3>
+<h4 id="_6">直觉：谁已经没有未完成的前置了？</h4>
+<p>想象流水线看板：每个任务卡片上写着「还差几个前置没做完」（入度）。入度为 0 的可以开工；做完后，通知所有后继「你们的前置又少了一个」。一直如此，直到全部做完——这就是 <strong>Kahn 算法</strong>，输出的顺序就是<strong>拓扑序</strong>。</p>
+<p>若最后还剩卡片入度 &gt; 0，说明它们互相卡死——<strong>图里有环</strong>（含自环：自己入度减不掉）。</p>
+<h4 id="_7">原理</h4>
+<ol>
+<li>计算每个点入度 <code>indeg[v] = 有多少条边指向 v</code>。  </li>
+<li>把所有 <code>indeg == 0</code> 的点放入队列。  </li>
+<li>取出 u，追加到序里；对每条 <code>u → v</code>，<code>indeg[v] -= 1</code>，若变为 0 则入队。  </li>
+<li>若最终序的长度 &lt; n，则存在环；环上节点 ⊆ 那些最终 <code>indeg &gt; 0</code> 的点（精确还原环边需要再 DFS，实践里先报出这些点通常足够排查）。</li>
+</ol>
+<p><strong>多个合法拓扑序：</strong> 队列里同时有多个入度为 0 的点时，取出顺序任意——每一个都对应一种合法排期。验收要求你能解释这一点，而不是死记某一次 BFS 的偶然顺序。</p>
+<h4 id="kahn">短代码：Kahn 拓扑 + 环上残留点</h4>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">topo_sort</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""edges: (pre, nxt) 表示 pre → nxt"""</span>
+    <span class="n">adj</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+    <span class="n">indeg</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="n">adj</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">indeg</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pre</span><span class="p">,</span> <span class="n">nxt</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+        <span class="n">adj</span><span class="p">[</span><span class="n">pre</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nxt</span><span class="p">)</span>
+        <span class="n">indeg</span><span class="p">[</span><span class="n">nxt</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">indeg</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="n">order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">adj</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span>
+            <span class="n">indeg</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">indeg</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">nodes</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">order</span><span class="p">,</span> <span class="p">[]</span>  <span class="c1"># 合法序，无环</span>
+    <span class="n">stuck</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">indeg</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stuck</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"序列"</span><span class="p">,</span> <span class="s2">"哈希"</span><span class="p">,</span> <span class="s2">"树"</span><span class="p">,</span> <span class="s2">"图"</span><span class="p">]</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"序列"</span><span class="p">,</span> <span class="s2">"哈希"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"序列"</span><span class="p">,</span> <span class="s2">"树"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"序列"</span><span class="p">,</span> <span class="s2">"图"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"哈希"</span><span class="p">,</span> <span class="s2">"图"</span><span class="p">)]</span>
+    <span class="n">order</span><span class="p">,</span> <span class="n">stuck</span> <span class="o">=</span> <span class="n">topo_sort</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">edges</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"合法序示例:"</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>  <span class="c1"># 例如 序列,哈希,树,图 或 序列,树,哈希,图</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"环残留:"</span><span class="p">,</span> <span class="n">stuck</span><span class="p">)</span>
+
+    <span class="c1"># 自环</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"自环:"</span><span class="p">,</span> <span class="n">topo_sort</span><span class="p">([</span><span class="s2">"X"</span><span class="p">],</span> <span class="p">[(</span><span class="s2">"X"</span><span class="p">,</span> <span class="s2">"X"</span><span class="p">)]))</span>
+    <span class="c1"># 多节点环</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"三角环:"</span><span class="p">,</span> <span class="n">topo_sort</span><span class="p">([</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">],</span> <span class="p">[(</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"C"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">)]))</span>
+</code></pre></div>
+
+<p>跑第一组时多跑几次、或把队列改成栈、或打乱初始入度为 0 的入队顺序，你会看到<strong>不同但都合法</strong>的拓扑序——回扣验收第二条。</p>
+<h2 id="3">3. 常见误区与设计权衡</h2>
+<h3 id="31">3.1 误区：有向图与无向图的环检测方式不同</h3>
+<p>节点明确指出：<strong>有向图与无向图的环检测方式不同。</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>有向图</th>
+<th>无向图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>环的含义</td>
+<td>沿箭头走一圈回到起点</td>
+<td>不考虑方向的闭合路径</td>
+</tr>
+<tr>
+<td>常见检法</td>
+<td>DFS 三色（遇灰点）；或 Kahn 后仍有入度 &gt; 0</td>
+<td>DFS/BFS 时「访问到已访问且非父节点」</td>
+</tr>
+<tr>
+<td>自环</td>
+<td><code>u → u</code> 直接是环</td>
+<td>通常也视为环（实现时单独判断）</td>
+</tr>
+<tr>
+<td>双向边</td>
+<td><code>A→B</code> 与 <code>B→A</code> 构成两点有向环</td>
+<td>无向里 <code>A—B</code> 只是一条边，不是环</td>
+</tr>
+</tbody>
+</table>
+<p>公众号后台的依赖、构建、启动顺序几乎都是<strong>有向</strong>的。用无向图教材里的「排除父节点」逻辑去检有向环，会漏掉「A→B、B→A」或误判。</p>
+<h3 id="32">3.2 权衡：稀疏图用邻接表，稠密图才考虑矩阵</h3>
+<p>节点权衡原文：<strong>稀疏图用邻接表节省空间，稠密图可能适合矩阵。</strong></p>
+<p>落到工程：</p>
+<ul>
+<li><strong>课程依赖 / 服务依赖 / Make 构建图</strong>：n 可到几百上千，但每个点出度往往个位数 → <strong>邻接表 + Kahn/DFS</strong> 是默认选择。  </li>
+<li><strong>邻接矩阵</strong>适合需要极高频「任意两点是否有边」、且 n 不大（例如几十）的场景；n = 5000 时矩阵就是 2500 万格，内存与缓存都不友好。  </li>
+<li>若既要枚举出边又要 O(1) 判边：邻接表的出边用 <code>set</code>，或「表 + 哈希边集」混合，通常仍优于整张矩阵。</li>
+</ul>
+<h2 id="4">4. 动手实践：课程依赖检查</h2>
+<p>目标（节点 practice）：<strong>实现课程依赖检查，输出环中的节点和合法学习顺序。</strong></p>
+<h3 id="1_1">步骤 1：准备目录</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/workspace/atlas/practice11
+<span class="nb">cd</span><span class="w"> </span>/workspace/atlas/practice11
+</code></pre></div>
+
+<h3 id="2_1">步骤 2：写入完整脚本</h3>
+<p>将下面保存为 <code>course_deps.py</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">"""课程依赖检查：Kahn 拓扑序 + 自环/多节点环残留点。"""</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_course_deps</span><span class="p">(</span>
+    <span class="n">courses</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">prereq_edges</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    prereq_edges: (pre, course) 表示必须先学 pre，再学 course（边 pre → course）。</span>
+<span class="sd">    返回 (合法拓扑序或 None, 环相关节点列表)。</span>
+<span class="sd">    """</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="n">courses</span><span class="p">))</span>  <span class="c1"># 保序去重</span>
+    <span class="n">adj</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+    <span class="n">indeg</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">pre</span><span class="p">,</span> <span class="n">course</span> <span class="ow">in</span> <span class="n">prereq_edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pre</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">adj</span><span class="p">:</span>
+            <span class="n">adj</span><span class="p">[</span><span class="n">pre</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">indeg</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">pre</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pre</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">course</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">adj</span><span class="p">:</span>
+            <span class="n">adj</span><span class="p">[</span><span class="n">course</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">indeg</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">course</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">course</span><span class="p">)</span>
+        <span class="n">adj</span><span class="p">[</span><span class="n">pre</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">course</span><span class="p">)</span>
+        <span class="n">indeg</span><span class="p">[</span><span class="n">course</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># 自环：边 pre → pre</span>
+    <span class="n">self_loops</span> <span class="o">=</span> <span class="p">[</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">vs</span> <span class="ow">in</span> <span class="n">adj</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">vs</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">u</span><span class="p">]</span>
+
+    <span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">(</span><span class="nb">sorted</span><span class="p">([</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">indeg</span> <span class="k">if</span> <span class="n">indeg</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]))</span>  <span class="c1"># sorted 让演示序稳定</span>
+    <span class="n">order</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="n">q</span><span class="p">:</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">q</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="n">order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">adj</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">u</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># 自环无法通过减入度消除</span>
+            <span class="n">indeg</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">indeg</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">self_loops</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">indeg</span><span class="p">):</span>
+        <span class="n">stuck</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">self_loops</span><span class="p">)</span> <span class="o">|</span> <span class="p">{</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">indeg</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">})</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">stuck</span>
+    <span class="k">return</span> <span class="n">order</span><span class="p">,</span> <span class="p">[]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">demo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">courses</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a-sequence"</span><span class="p">,</span> <span class="s2">"a-hash"</span><span class="p">,</span> <span class="s2">"a-tree"</span><span class="p">,</span> <span class="s2">"a-graph"</span><span class="p">,</span> <span class="s2">"a-shell"</span><span class="p">]</span>
+    <span class="c1"># 合法 DAG：多个合法序（hash 与 tree 可互换）</span>
+    <span class="n">ok_edges</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">"a-sequence"</span><span class="p">,</span> <span class="s2">"a-hash"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"a-sequence"</span><span class="p">,</span> <span class="s2">"a-tree"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"a-sequence"</span><span class="p">,</span> <span class="s2">"a-graph"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"a-hash"</span><span class="p">,</span> <span class="s2">"a-graph"</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">"a-shell"</span><span class="p">,</span> <span class="s2">"a-sequence"</span><span class="p">),</span>
+    <span class="p">]</span>
+    <span class="n">order</span><span class="p">,</span> <span class="n">stuck</span> <span class="o">=</span> <span class="n">check_course_deps</span><span class="p">(</span><span class="n">courses</span><span class="p">,</span> <span class="n">ok_edges</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"=== 用例1：无环 ==="</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  合法学习顺序:"</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  环节点:"</span><span class="p">,</span> <span class="n">stuck</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">stuck</span> <span class="o">==</span> <span class="p">[]</span> <span class="ow">and</span> <span class="n">order</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="n">order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"a-shell"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"a-sequence"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"a-sequence"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"a-graph"</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"a-hash"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">"a-graph"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  OK: 依赖约束均满足；hash/tree 相对顺序可因实现而变（皆合法）。"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 用例2：自环 ==="</span><span class="p">)</span>
+    <span class="n">order2</span><span class="p">,</span> <span class="n">stuck2</span> <span class="o">=</span> <span class="n">check_course_deps</span><span class="p">([</span><span class="s2">"X"</span><span class="p">,</span> <span class="s2">"Y"</span><span class="p">],</span> <span class="p">[(</span><span class="s2">"X"</span><span class="p">,</span> <span class="s2">"X"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"Y"</span><span class="p">,</span> <span class="s2">"X"</span><span class="p">)])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  序:"</span><span class="p">,</span> <span class="n">order2</span><span class="p">,</span> <span class="s2">"环节点:"</span><span class="p">,</span> <span class="n">stuck2</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">order2</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">"X"</span> <span class="ow">in</span> <span class="n">stuck2</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  OK: 检出自环 X。"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">=== 用例3：多节点环 A→B→C→A ==="</span><span class="p">)</span>
+    <span class="n">order3</span><span class="p">,</span> <span class="n">stuck3</span> <span class="o">=</span> <span class="n">check_course_deps</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">,</span> <span class="s2">"D"</span><span class="p">],</span>
+        <span class="p">[(</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"C"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">),</span> <span class="p">(</span><span class="s2">"D"</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">)],</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  序:"</span><span class="p">,</span> <span class="n">order3</span><span class="p">,</span> <span class="s2">"环节点:"</span><span class="p">,</span> <span class="n">stuck3</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">order3</span> <span class="ow">is</span> <span class="kc">None</span>
+    <span class="k">assert</span> <span class="nb">set</span><span class="p">(</span><span class="n">stuck3</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="p">{</span><span class="s2">"A"</span><span class="p">,</span> <span class="s2">"B"</span><span class="p">,</span> <span class="s2">"C"</span><span class="p">}</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"  OK: 检出多节点环；D 指向环，通常也会留在残留集或仅环上三点（本实现含入度未清零者）。"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">全部用例通过。"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">demo</span><span class="p">()</span>
+</code></pre></div>
+
+<h3 id="3_1">步骤 3：运行</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/practice11
+python3<span class="w"> </span>course_deps.py
+</code></pre></div>
+
+<p>期望要点：</p>
+<ol>
+<li>用例1 打印一条完整学习顺序，<code>a-shell</code> 在 <code>a-sequence</code> 前，<code>a-sequence</code>/<code>a-hash</code> 在 <code>a-graph</code> 前；环节点为空。  </li>
+<li>用例2 序为 <code>None</code>，环节点含 <code>X</code>。  </li>
+<li>用例3 序为 <code>None</code>，环节点至少含 <code>A,B,C</code>。  </li>
+<li>最后一行 <code>全部用例通过。</code></li>
+</ol>
+<h3 id="4_1">步骤 4：亲手解释「多个合法拓扑序」</h3>
+<p>在用例1 上，把 <code>q = deque(sorted(...))</code> 改成 <code>deque(reversed(sorted(...)))</code> 再跑一次，对比两次 <code>order</code> 中 <code>a-hash</code> 与 <code>a-tree</code> 的先后——两者都合法，因为它们之间没有边。<strong>这就是验收要求的「能解释多个合法拓扑序」。</strong></p>
+<h3 id="5">步骤 5：验收自查</h3>
+<ul>
+<li>[ ] 能画出邻接表，并说明相对矩阵省在哪里  </li>
+<li>[ ] 能说明有向环用三色或 Kahn 残留检测，且与无向图不同  </li>
+<li>[ ] 自环、三角环都能报出节点  </li>
+<li>[ ] 能举出至少两个都合法的拓扑序并说明为何都合法  </li>
+<li>[ ] <code>course_deps.py</code> 三个用例全绿  </li>
+</ul>
+<h2 id="5-3">5. 自测题（3 道，附答案）</h2>
+<h3 id="1-kahn">题 1：自环和多节点环怎么被 Kahn「抓到」？</h3>
+<p><strong>题：</strong> 依赖边为 <code>Token → Token</code>（配置写错），以及另一处 <code>审核 → 投递 → 回执 → 审核</code>。用入度算法时，队列和最终残留分别会怎样？</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li>自环：<code>Token</code> 的入度至少为 1，且减入度时若跳过/无法消除指向自己的边，它永远不会变成可调度的 0（或显式列入自环集）。最终不在完整拓扑序里，出现在残留/环节点中。  </li>
+<li>三角（多节点）环：算法开始时若环外没有入边为 0 的突破口，环上三点入度都 ≥ 1；相互减度也减不完。结束后 <code>order</code> 长度 &lt; n，残留含环上节点。  </li>
+<li>两种都导致「无法输出覆盖全部点的拓扑序」——回扣验收：<strong>能检测自环和多节点环</strong>。</li>
+</ul>
+<h3 id="2_2">题 2：为什么会有多个合法拓扑序？</h3>
+<p><strong>题：</strong> 课程边只有 <code>序列 → 哈希</code>、<code>序列 → 树</code>、<code>序列 → 图</code>、<code>哈希 → 图</code>。写出两个不同的合法学习顺序，并说明为什么都对。</p>
+<p><strong>答案（示例）：</strong></p>
+<ul>
+<li>序1：<code>序列 → 哈希 → 树 → 图</code>  </li>
+<li>序2：<code>序列 → 树 → 哈希 → 图</code>  </li>
+<li><code>哈希</code> 与 <code>树</code> 之间没有依赖边，入度同时可为 0（在 <code>序列</code> 学完后），谁先学都可以；只要保证有向边的前置在后继之前即可。  </li>
+<li>回扣验收：<strong>能解释多个合法拓扑序</strong>。</li>
+</ul>
+<h3 id="3_2">题 3：邻接表还是矩阵？再加一道有向/无向陷阱</h3>
+<p><strong>题：</strong> 微信公众号后台有 200 个微服务，平均每个只依赖 3 个其它服务。应选邻接表还是矩阵？若有人用「无向图排除父节点」的方法检环，会漏掉哪种致命配置？</p>
+<p><strong>答案：</strong></p>
+<ul>
+<li>选<strong>邻接表</strong>：m ≈ 600，n = 200，远稀疏于 n²；矩阵浪费空间，枚举出边还要扫整行。  </li>
+<li>无向检环法会漏掉或误处理<strong>有向两点互依赖</strong>（<code>A→B</code> 且 <code>B→A</code>，例如错误的循环 RPC 依赖）以及依赖方向语义；后台依赖必须按<strong>有向</strong>规则（三色或 Kahn）检测。</li>
+</ul>
+<h2 id="6">6. 推荐资源</h2>
+<p>只使用节点给出的资源：</p>
+<ol>
+<li><strong>图、依赖与拓扑排序：参考文档 / 原始资料</strong>
+   - URL：https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/pages/lecture-notes/
+   - 来源：ocw.mit.edu · 英文 · 文档 · 基础 · 免费
+   - 阅读建议：重点对照邻接表与邻接矩阵的空间/时间，以及 BFS、DFS 与访问标记；用讲义里的定义核对本课实验（课程依赖检查）的边方向、环与拓扑序边界。</li>
+</ol>
+<h2 id="7">7. 小结与前后置关系</h2>
+<h3 id="71">7.1 本课要点回顾</h3>
+<ol>
+<li><strong>图</strong>刻画实体关系；后端里最常见的是<strong>有向依赖图</strong>。  </li>
+<li><strong>邻接表</strong>适合稀疏依赖；<strong>矩阵</strong>偏稠密或重「判边」。  </li>
+<li><strong>BFS/DFS + 标记</strong>是遍历与检环的基础；有向环用三色或 Kahn 残留。  </li>
+<li><strong>入度 + 拓扑序</strong>给出满足前置的执行/学习顺序；有环则无法排完。  </li>
+<li><strong>误区与权衡</strong>记住两句：有向/无向检环不同；稀疏用表、稠密才考虑矩阵。</li>
+</ol>
+<h3 id="72">7.2 验收回扣</h3>
+<ul>
+<li><strong>自环与多节点环：</strong> 实践用例 2、3 与自测题 1。  </li>
+<li><strong>多个合法拓扑序：</strong> 无边约束的节点可交换；实践步骤 4 与自测题 2。</li>
+</ul>
+<h3 id="73">7.3 前后置</h3>
+<ul>
+<li><strong>前置：</strong> <code>a-sequence</code>（顺序与基本结构直觉）。  </li>
+<li><strong>本节点：</strong> <code>a-graph</code>（图、依赖与拓扑排序）。  </li>
+<li><strong>后续：</strong> 调度系统、构建图、服务编排都会反复用到 DAG 与拓扑；先把表示法、遍历标记和环检测练熟。</li>
+</ul>
+<h3 id="74">7.4 一句话带走</h3>
+<p><strong>依赖是有向边，排期是拓扑序；图里有环就别假装能排期，稀疏依赖请优先邻接表。</strong></p><div class="pn"><span><a href="10.html">← 搜索树、堆与有序索引</a></span><span><a href="12.html">网络分层、地址与路由 →</a></span></div></main></div></body></html>
