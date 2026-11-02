@@ -1,0 +1,316 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>32. ABI、ODR与二进制兼容 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（32/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details open><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="cur" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（0/16）</summary><div>阶段 1</div><ul><li class="todo">33. 进程、fork与exec <em>待更新</em></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">34. Linux线程与线程资源 <em>待更新</em></li><li class="todo">35. 系统调用、errno与部分成功 <em>待更新</em></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 32 课 · 领域 B · 阶段 4</p><p class="dl"><a href="../files/32-b-abi.md" download>⬇ 本课 Markdown</a><a href="../files/practice32.tar.gz" download>⬇ 练习包 practice32.tar.gz</a></p><h1 id="32208-abiodr">第 32/208 课：ABI、ODR与二进制兼容</h1>
+<blockquote>
+<p>领域 B（C++）· 阶段 4 · 难度：深入 · 子类：底层机制与工程边界
+前置：b-template（模板与 Concepts）、a-compile（编译与链接）</p>
+</blockquote>
+<p><strong>一句话</strong>：ABI 约定二进制层面的调用方式、对象布局和符号形式；ODR（One Definition Rule，单一定义规则）约束跨翻译单元的定义必须一致。</p>
+<h2 id="_1">一、学习目标与为什么要懂</h2>
+<p>学完本课你应该能：</p>
+<ol>
+<li>解释<strong>符号修饰（name mangling）与调用约定</strong>；</li>
+<li>独立完成：<strong>构造两个编译选项不一致的共享库，用 nm/readelf 和符号版本定位差异</strong>。</li>
+</ol>
+<p>验收标准：</p>
+<ul>
+<li>能区分<strong>源代码兼容</strong>与 <strong>ABI 兼容</strong>；</li>
+<li>能制定<strong>不跨边界传 STL 对象的 C 接口方案</strong>。</li>
+</ul>
+<p>为什么后台要懂：节点给的理由是「排查升级动态库后的崩溃和链接异常」。后台服务大量依赖 <code>.so</code>：公司公共组件、RPC 框架、存储 SDK、第三方加密库。典型现场是「源码一行没改，只是换了个库版本/换了编译机，服务一启动就 core」或者「链接时报 undefined reference，可函数明明在那」。这类问题看源码看不出来，只能到二进制层面去看。</p>
+<h2 id="_2">二、从直觉到原理</h2>
+<h3 id="21-abi">2.1 源码兼容 ≠ ABI 兼容</h3>
+<ul>
+<li><strong>源码兼容（API 兼容）</strong>：老代码拿新头文件<strong>重新编译</strong>还能过、语义不变。</li>
+<li><strong>ABI 兼容</strong>：老的<strong>已编译好的</strong>二进制，不重编，直接和新库一起跑也正确。</li>
+</ul>
+<p>例：给结构体中间加一个字段。源码上调用方完全不用改，能编过——源码兼容；但老调用方按老的 <code>sizeof</code> 和偏移去访问，新库按新布局读——ABI 不兼容，结果是读错字段或踩内存。</p>
+<p>ABI 主要管三件事：<strong>符号叫什么、函数怎么调用、对象在内存里长什么样</strong>。Linux x86-64 上 C 的部分由 System V AMD64 ABI 规定，C++ 部分由 GCC/Clang 共同遵循的 Itanium C++ ABI 规定。</p>
+<h3 id="22">2.2 要点一：符号修饰与调用约定</h3>
+<p>C++ 允许重载和命名空间，链接器却只认一个字符串名字，所以编译器把「命名空间 + 函数名 + 参数类型」编码进符号名：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// f.cpp</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">add_c</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="k">namespace</span><span class="w"> </span><span class="nn">wx</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">Msg</span><span class="p">;</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Msg</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">wx</span><span class="o">::</span><span class="n">send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Msg</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-c<span class="w"> </span>f.cpp
+nm<span class="w"> </span>f.o<span class="w">            </span><span class="c1"># 原始修饰名</span>
+nm<span class="w"> </span>f.o<span class="w"> </span><span class="p">|</span><span class="w"> </span>c++filt<span class="w">  </span><span class="c1"># 还原可读名（nm -C 也可以）</span>
+</code></pre></div>
+
+<p>实测输出：</p>
+<div class="codehilite"><pre><span></span><code>T _Z3addii                    -&gt; add(int, int)
+T _ZN2wx4sendEPKNS_3MsgEl     -&gt; wx::send(wx::Msg const*, long)
+T add_c                       -&gt; add_c（extern "C" 不修饰）
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li><strong>返回类型一般不进符号名</strong>（普通函数），所以只改返回类型可能链接得上但运行错。</li>
+<li><strong>参数类型进符号名</strong>，所以 <code>std::string</code> 的 ABI 一变，所有带 <code>std::string</code> 参数的函数符号都变（见实践）。</li>
+<li><code>extern "C"</code> 关掉修饰，符号就是函数名——这是做跨语言、跨编译器边界接口的基础，但它只解决「名字」，不解决「布局」。</li>
+</ul>
+<p><strong>调用约定</strong>规定参数放哪些寄存器、谁清理栈、返回值怎么回来、哪些寄存器调用者要保存。x86-64 Linux 上前 6 个整数参数走 <code>rdi, rsi, rdx, rcx, r8, r9</code>，返回值走 <code>rax</code>；成员函数的 <code>this</code> 作为隐藏的第一个参数。可以自己看：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-O1<span class="w"> </span>-S<span class="w"> </span>f.cpp<span class="w"> </span>-o<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A3<span class="w"> </span><span class="s1">'_Z3addii:'</span>
+<span class="c1"># 能看到 leal (%rdi,%rsi), %eax：a 在 edi，b 在 esi，结果放进 eax</span>
+</code></pre></div>
+
+<p>还有一个容易忽略的点：有非平凡析构/拷贝的类对象按值传参时不走寄存器，而是通过隐藏指针传递。所以给一个原本平凡的类型加上自定义析构函数，函数签名没变，ABI 却变了。</p>
+<h3 id="23">2.3 要点二：对象布局与虚表</h3>
+<p>对象布局 = 成员顺序 + 对齐填充 + 隐藏成员（虚表指针）+ 基类子对象位置。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">Base</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span><span class="w"> </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">handle</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">Derived</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">handle</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">seq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+</code></pre></div>
+
+<p>实测（g++ x86-64）：<code>sizeof(Base)=16</code>（8 字节 vptr + 4 字节 id + 4 字节填充），<code>sizeof(Derived)=24</code>，<code>id</code> 偏移是 8——因为偏移 0 被 vptr 占了。</p>
+<p>虚函数调用在二进制里是「取 vptr → 按<strong>槽位下标</strong>取函数地址 → 调用」。调用方编译时就把槽位下标写死了。所以下面这些改动源码兼容、ABI 不兼容：</p>
+<ul>
+<li>在已有虚函数<strong>中间</strong>插入新虚函数 → 后续虚函数槽位整体后移，老调用方调到错误函数；</li>
+<li>给类加成员、改成员顺序、改成员类型 → <code>sizeof</code> 和偏移变化；</li>
+<li>给原本没有虚函数的类加第一个虚函数 → 多出 vptr，所有成员偏移 +8；</li>
+<li>改继承关系。</li>
+</ul>
+<p>查看虚表和 typeinfo 符号：</p>
+<div class="codehilite"><pre><span></span><code>nm<span class="w"> </span>-C<span class="w"> </span>libxxx.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'vtable|typeinfo'</span>
+<span class="c1"># _ZTV = vtable，_ZTI = typeinfo，_ZTS = typeinfo name</span>
+g++<span class="w"> </span>-fdump-lang-class<span class="w"> </span>-c<span class="w"> </span>layout.cpp<span class="w">   </span><span class="c1"># GCC 输出类布局和 vtable 详情到 *.class 文件</span>
+</code></pre></div>
+
+<h3 id="24-odr-abi">2.4 要点三：ODR、内联与标准库 ABI</h3>
+<p><strong>ODR</strong>：同一个实体在整个程序里只能有一个定义；<code>inline</code> 函数、类、模板可以在多个翻译单元各有一份定义，但<strong>每一份必须逐 token 相同、含义相同</strong>。违反了通常是未定义行为，编译器和链接器<strong>不保证报错</strong>。</p>
+<p>演示：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// a.cpp</span>
+<span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">limit</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">from_a</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">limit</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="c1">// b.cpp</span>
+<span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">limit</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1">// 违反 ODR</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">from_b</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">limit</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p>实测：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-O0<span class="w"> </span>a.cpp<span class="w"> </span>b.cpp<span class="w"> </span>m.cpp<span class="w"> </span>-o<span class="w"> </span>odr<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./odr<span class="w">      </span><span class="c1"># a=100 b=100</span>
+g++<span class="w"> </span>-O0<span class="w"> </span>b.cpp<span class="w"> </span>a.cpp<span class="w"> </span>m.cpp<span class="w"> </span>-o<span class="w"> </span>odr2<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./odr2<span class="w">    </span><span class="c1"># a=200 b=200   只换了链接顺序</span>
+g++<span class="w"> </span>-O2<span class="w"> </span>-flto<span class="w"> </span>a.cpp<span class="w"> </span>b.cpp<span class="w"> </span>m.cpp<span class="w"> </span>-o<span class="w"> </span>odr3<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./odr3<span class="w">  </span><span class="c1"># a=100 b=200  被内联后又不同了</span>
+</code></pre></div>
+
+<p>没有任何报错，结果却随链接顺序和优化级别变化。原因是 inline 函数生成弱符号，链接器随便留一份；被内联的调用点则用的是自己那一份。后台真实场景：两个组件各自 vendoring 了不同版本的同名 header-only 库，或者同一个头文件在不同 <code>.so</code> 里用不同的宏（例如 <code>-DNDEBUG</code>、<code>-DUSE_FAST_PATH</code>）编译，让结构体或内联函数在不同地方长得不一样。</p>
+<p><strong>标准库 ABI</strong>：<code>std::string</code>、<code>std::list</code> 等的内部布局本身就是 ABI 的一部分。GCC 5 起为了满足 C++11 要求，换了 <code>std::string</code> 实现，用宏 <code>_GLIBCXX_USE_CXX11_ABI</code> 切换新旧两套，新版的符号带 <code>std::__cxx11::</code>。一个库用 <code>=0</code> 编、另一个用 <code>=1</code> 编，带 <code>std::string</code> 参数的接口就对不上（实践第 1 步会亲眼看到）。此外，<code>_GLIBCXX_DEBUG</code> 会改变容器布局，不同 <code>-std=</code> 或不同版本的 libstdc++ 也可能影响模板实例。结论是：<strong>STL 对象不要跨你控制不了编译选项的二进制边界传递</strong>。</p>
+<h3 id="25-soname">2.5 符号版本与 SONAME</h3>
+<p>动态库用两种机制管理兼容性：</p>
+<ul>
+<li><strong>SONAME</strong>（如 <code>libfoo.so.1</code>）：主版本号，ABI 不兼容时升主版本，老程序继续链接 <code>.so.1</code>；</li>
+<li><strong>符号版本</strong>（version script）：每个符号带版本标签，如 <code>cfg_timeout@@CFG_1.0</code>。glibc、libstdc++ 都用这个机制（<code>GLIBC_2.2.5</code>、<code>GLIBCXX_3.4.21</code>），程序运行时会检查需要的版本是否存在——这就是线上常见的 <code>version 'GLIBCXX_3.4.29' not found</code> 报错来源。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>readelf<span class="w"> </span>-d<span class="w"> </span>libx.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'SONAME|NEEDED'</span><span class="w">   </span><span class="c1"># 看 SONAME 和依赖</span>
+readelf<span class="w"> </span>--dyn-syms<span class="w"> </span>-W<span class="w"> </span>libx.so<span class="w">                  </span><span class="c1"># 看导出符号及版本</span>
+readelf<span class="w"> </span>-V<span class="w"> </span>app<span class="w">                                  </span><span class="c1"># 看需要哪些版本</span>
+objdump<span class="w"> </span>-T<span class="w"> </span>libx.so<span class="w">                              </span><span class="c1"># 另一种看动态符号的方式</span>
+</code></pre></div>
+
+<h2 id="_3">三、常见误区与设计权衡</h2>
+<p><strong>误区（节点原文）：<code>extern "C"</code> 不自动保证任意结构布局跨平台相同。</strong>
+<code>extern "C"</code> 只是让符号名不修饰、按 C 调用约定调用。结构体布局仍取决于对齐规则、打包选项（<code>-fpack-struct</code>、<code>#pragma pack</code>）、<code>long</code> 的宽度（Linux 64 位是 8 字节，Windows 64 位是 4 字节）、<code>bool</code>/<code>enum</code> 的大小。实践第 2 步就会演示：符号完全一样、链接一切正常，但库用 <code>-fpack-struct=1</code> 编译，<code>sizeof</code> 从 16 变成 9，读出来的 <code>timeout_ms</code> 是垃圾值。</p>
+<p>其他常见误区：</p>
+<ul>
+<li>「能链接成功就是 ABI 兼容」——布局问题链接器根本检查不到；</li>
+<li>「我只是加了个字段/加了个虚函数，没删东西」——加也会破坏 ABI；</li>
+<li>「ODR 违反编译器会报错」——大多数情况下静默。</li>
+</ul>
+<p><strong>权衡（节点原文）：Pimpl 或 C 接口降低 ABI 暴露，可能增加间接访问和封装成本。</strong></p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>做法</th>
+<th>好处</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C 接口</td>
+<td><code>extern "C"</code> 函数 + 不透明句柄 + 只用定宽整数/指针+长度</td>
+<td>跨编译器、跨语言最稳</td>
+<td>失去 RAII/异常/重载，要写包装层</td>
+</tr>
+<tr>
+<td>Pimpl</td>
+<td>公开类只有一个指向实现的指针，成员都在 <code>.cpp</code> 里</td>
+<td>加字段不改公开布局</td>
+<td>多一次堆分配和指针间接访问</td>
+</tr>
+<tr>
+<td>一起编译</td>
+<td>monorepo 统一工具链和编译选项、从源码构建</td>
+<td>可以随意用 STL/模板</td>
+<td>要求所有依赖同步构建，升级成本高</td>
+</tr>
+</tbody>
+</table>
+<p>一个不跨边界传 STL 的 C 接口方案示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// cfg_api.h —— 对外只暴露这些</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stddef.h&gt;</span>
+<span class="cp">#ifdef __cplusplus</span>
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="p">{</span>
+<span class="cp">#endif</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">cfg_handle</span><span class="w"> </span><span class="n">cfg_handle</span><span class="p">;</span><span class="w">            </span><span class="cm">/* 不透明句柄，布局不暴露 */</span>
+<span class="n">cfg_handle</span><span class="o">*</span><span class="w"> </span><span class="nf">cfg_open</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">path_len</span><span class="p">);</span>
+<span class="kt">int64_t</span><span class="w">     </span><span class="nf">cfg_get_i64</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">cfg_handle</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">key_len</span><span class="p">,</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">dflt</span><span class="p">);</span>
+<span class="cm">/* 输出字符串：调用方提供缓冲区，返回需要的长度 */</span>
+<span class="kt">size_t</span><span class="w">      </span><span class="nf">cfg_get_str</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">cfg_handle</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">key_len</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">cap</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">        </span><span class="nf">cfg_close</span><span class="p">(</span><span class="n">cfg_handle</span><span class="o">*</span><span class="p">);</span>
+<span class="cp">#ifdef __cplusplus</span>
+<span class="p">}</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+
+<p>要点：字符串用「指针 + 长度」，不用 <code>std::string</code>；内存谁分配谁释放（<code>cfg_open</code>/<code>cfg_close</code> 成对）；异常不能穿过 C 边界，在实现里 catch 后转错误码；使用方可以再包一层只在自己编译单元内生效的 C++ RAII 包装。</p>
+<h2 id="_4">四、动手实践：两个编译选项不一致的共享库</h2>
+<p>目标（节点原文）：构造两个编译选项不一致的共享库，使用 nm/readelf 和符号版本定位差异。</p>
+<p><strong>步骤 1：标准库 ABI 不一致。</strong>
+同一份 <code>greet(const std::string&amp;)</code>，分别用 <code>-D_GLIBCXX_USE_CXX11_ABI=1</code> 和 <code>=0</code> 编成两个 <code>.so</code>：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-fPIC<span class="w"> </span>-shared<span class="w"> </span>-D_GLIBCXX_USE_CXX11_ABI<span class="o">=</span><span class="m">1</span><span class="w"> </span>greet.cpp<span class="w"> </span>-o<span class="w"> </span>libgreet_new.so
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-fPIC<span class="w"> </span>-shared<span class="w"> </span>-D_GLIBCXX_USE_CXX11_ABI<span class="o">=</span><span class="m">0</span><span class="w"> </span>greet.cpp<span class="w"> </span>-o<span class="w"> </span>libgreet_old.so
+nm<span class="w"> </span>-D<span class="w"> </span>--defined-only<span class="w"> </span>libgreet_new.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>greet<span class="w"> </span><span class="p">|</span><span class="w"> </span>c++filt
+nm<span class="w"> </span>-D<span class="w"> </span>--defined-only<span class="w"> </span>libgreet_old.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>greet<span class="w"> </span><span class="p">|</span><span class="w"> </span>c++filt
+</code></pre></div>
+
+<p>实测：新版符号是 <code>_Z5greetRKNSt7__cxx1112basic_string...</code>（<code>std::__cxx11::basic_string</code>），旧版是 <code>_Z5greetRKSs</code>。用新 ABI 编的调用方去链接旧库，报 <code>undefined reference to greet(std::__cxx11::basic_string&lt;...&gt; const&amp;)</code>。<strong>排查口诀：报错里看到 <code>__cxx11</code>，先查两边的 <code>_GLIBCXX_USE_CXX11_ABI</code>。</strong></p>
+<p><strong>步骤 2：布局不一致（<code>extern "C"</code> 也救不了）。</strong>
+<code>struct Cfg { char flag; int64_t timeout_ms; };</code> 配 <code>extern "C"</code> 函数，一个库正常编，一个库加 <code>-fpack-struct=1</code>。</p>
+<p>实测：</p>
+<div class="codehilite"><pre><span></span><code>正常库：caller sizeof=16 lib sizeof=16 timeout=3000
+打包库：caller sizeof=16 lib sizeof=9  timeout=-5188146770730811392
+</code></pre></div>
+
+<p>再 <code>diff</code> 两个库的 <code>nm -D</code> 输出：符号<strong>完全相同</strong>。结论是 nm 只能查名字层面的差异，布局差异要靠导出 <code>sizeof</code>/版本号的自检函数、<code>-fdump-lang-class</code>、或者调试信息（<code>pahole</code>、<code>abidiff</code> 这类工具）。</p>
+<p><strong>步骤 3：符号版本与 SONAME。</strong></p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>v1.map<span class="w"> </span><span class="s">&lt;&lt;'M'</span>
+<span class="s">CFG_1.0 { global: cfg_timeout; cfg_size; local: *; };</span>
+<span class="s">M</span>
+g++<span class="w"> </span>-fPIC<span class="w"> </span>-shared<span class="w"> </span>cfg.cpp<span class="w"> </span>-Wl,--version-script<span class="o">=</span>v1.map<span class="w"> </span>-Wl,-soname,libcfgv.so.1<span class="w"> </span>-o<span class="w"> </span>libcfgv.so.1
+readelf<span class="w"> </span>-d<span class="w"> </span>libcfgv.so.1<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>SONAME<span class="w">            </span><span class="c1"># Library soname: [libcfgv.so.1]</span>
+readelf<span class="w"> </span>--dyn-syms<span class="w"> </span>-W<span class="w"> </span>libcfgv.so.1<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>cfg_<span class="w">   </span><span class="c1"># cfg_timeout@@CFG_1.0</span>
+readelf<span class="w"> </span>-V<span class="w"> </span>libgreet_new.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-oE<span class="w"> </span><span class="s1">'(GLIBCXX|CXXABI|GLIBC)_[0-9.]+'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-u
+</code></pre></div>
+
+<p>实测能看到 <code>cfg_timeout@@CFG_1.0</code>，以及 C++ 库依赖 <code>GLIBCXX_3.4.21</code>、<code>CXXABI_1.3</code>。<code>local: *</code> 还顺带把不想导出的符号隐藏掉了，缩小了 ABI 面。</p>
+<p><strong>步骤 4：记录 ABI 边界</strong>（对应节点的 sourceStudy）。
+找一个你会用到的共享库，用 <code>nm -DC --defined-only</code> 列出导出符号，统计有多少带 <code>std::</code>，用 <code>nm -C | grep vtable</code> 看导出了哪些虚表，写下：哪些接口传了 STL 对象、哪些类的布局暴露给了调用方——这些都是升级时的风险点。</p>
+<p>完整脚本（一键跑完上面三步并自动断言，最后打印 <code>ALL_CHECKS_PASSED</code>，已在 g++ 14 上实测通过）见文末附录。</p>
+<h2 id="_5">五、自测题</h2>
+<p><strong>1. 某公共库 v2 只在 <code>class Session</code> 的中间加了一个 <code>std::string trace_id</code> 成员，头文件其他地方不变。业务方不重编、直接替换 <code>.so</code> 上线后 core 了。这算源码兼容还是 ABI 兼容问题？为什么链接/加载时没报错？</strong></p>
+<details><summary>答案</summary>
+源码兼容（重编能过），但 ABI 不兼容。老业务代码编译时按旧的 sizeof 分配 Session、按旧偏移访问成员，新库按新布局读写，导致错位和越界。符号名只包含函数名和参数类型，不包含类的布局，所以动态链接器找得到所有符号，检查不出问题。修复：重编所有使用方，或者升 SONAME 主版本；长期改用 Pimpl/不透明句柄。
+</details>
+
+<p><strong>2. 链接报错 <code>undefined reference to foo(std::__cxx11::basic_string&lt;char...&gt; const&amp;)</code>，<code>nm -DC libfoo.so | grep foo</code> 能看到 <code>foo(std::basic_string&lt;char...&gt; const&amp;)</code>。原因是什么、怎么定位？</strong></p>
+<details><summary>答案</summary>
+双方的 `_GLIBCXX_USE_CXX11_ABI` 不一致：调用方用新 ABI（=1，符号带 __cxx11），库用旧 ABI（=0）编译。用 `nm -D` 对比修饰名就能确认。解决办法是统一宏值重编其中一方；根本办法是对外接口不传 std::string，改成 `const char* + size_t`。
+</details>
+
+<p><strong>3. 同事说：「我们的插件接口全是 <code>extern "C"</code>，所以绝对 ABI 安全。」接口里有 <code>struct Req { bool urgent; long deadline; };</code> 按值传递，宿主和插件分别由不同团队编译。指出至少两个风险。</strong></p>
+<details><summary>答案</summary>
+（1）extern "C" 只保证符号不修饰和 C 调用约定，不保证布局：任一方用了 `-fpack-struct` 或 `#pragma pack`，偏移就变了（本课实践里 sizeof 16 和 9 的情况）；（2）`long` 宽度依平台而定（Linux 64 位是 8，Windows 64 位是 4），跨平台要用 `int64_t`；`bool` 的大小也由实现决定。还有一个风险：结构体以后加字段，按值传递的老调用方直接错。更稳的做法是用定宽类型、显式填充或在结构体首字段放 `size`/版本号，或者改为不透明句柄加访问函数。
+</details>
+
+<h2 id="_6">六、推荐资源</h2>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/language/definition.html">ABI、ODR与二进制兼容：参考文档 / 原始资料（cppreference: Definitions and ODR）</a>，英文文档，难度深入，免费。节点建议重点读与符号修饰、调用约定、对象布局和虚表相关的部分，用来核对本节实验的语义和边界。</li>
+</ul>
+<hr />
+<h2 id="practice32testsh">附录：practice32/test.sh</h2>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># 第32课实践：两个编译选项不一致的共享库，用 nm/readelf/c++filt 定位 ABI 差异</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+<span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>build<span class="p">;</span><span class="w"> </span>mkdir<span class="w"> </span>build<span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+
+<span class="c1"># ---- 1. 同一份源码，两种 _GLIBCXX_USE_CXX11_ABI 编出两个共享库 ----</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>greet.h<span class="w"> </span><span class="s">&lt;&lt;'H'</span>
+<span class="s">#pragma once</span>
+<span class="s">#include &lt;string&gt;</span>
+<span class="s">std::string greet(const std::string&amp; name);</span>
+<span class="s">H</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>greet.cpp<span class="w"> </span><span class="s">&lt;&lt;'C'</span>
+<span class="s">#include "greet.h"</span>
+<span class="s">std::string greet(const std::string&amp; name) { return "hello, " + name; }</span>
+<span class="s">C</span>
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-fPIC<span class="w"> </span>-shared<span class="w"> </span>-D_GLIBCXX_USE_CXX11_ABI<span class="o">=</span><span class="m">1</span><span class="w"> </span>greet.cpp<span class="w"> </span>-o<span class="w"> </span>libgreet_new.so
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-fPIC<span class="w"> </span>-shared<span class="w"> </span>-D_GLIBCXX_USE_CXX11_ABI<span class="o">=</span><span class="m">0</span><span class="w"> </span>greet.cpp<span class="w"> </span>-o<span class="w"> </span>libgreet_old.so
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"== 导出符号（修饰名）=="</span>
+nm<span class="w"> </span>-D<span class="w"> </span>--defined-only<span class="w"> </span>libgreet_new.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>greet
+nm<span class="w"> </span>-D<span class="w"> </span>--defined-only<span class="w"> </span>libgreet_old.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>greet
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"== c++filt 还原 =="</span>
+nm<span class="w"> </span>-D<span class="w"> </span>--defined-only<span class="w"> </span>libgreet_new.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>greet<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'{print $3}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>c++filt
+nm<span class="w"> </span>-D<span class="w"> </span>--defined-only<span class="w"> </span>libgreet_old.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>greet<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'{print $3}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>c++filt
+
+<span class="c1"># 用新 ABI 编调用方，链接旧 ABI 库 -&gt; 链接期找不到符号</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>main.cpp<span class="w"> </span><span class="s">&lt;&lt;'C'</span>
+<span class="s">#include "greet.h"</span>
+<span class="s">#include &lt;iostream&gt;</span>
+<span class="s">int main() { std::cout &lt;&lt; greet("wechat") &lt;&lt; "\n"; }</span>
+<span class="s">C</span>
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-D_GLIBCXX_USE_CXX11_ABI<span class="o">=</span><span class="m">1</span><span class="w"> </span>main.cpp<span class="w"> </span>-L.<span class="w"> </span>-lgreet_new<span class="w"> </span>-Wl,-rpath,<span class="s1">'$ORIGIN'</span><span class="w"> </span>-o<span class="w"> </span>app_ok
+./app_ok<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>out_ok.txt
+grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"hello, wechat"</span><span class="w"> </span>out_ok.txt
+<span class="k">if</span><span class="w"> </span>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-D_GLIBCXX_USE_CXX11_ABI<span class="o">=</span><span class="m">1</span><span class="w"> </span>main.cpp<span class="w"> </span>-L.<span class="w"> </span>-lgreet_old<span class="w"> </span>-o<span class="w"> </span>app_bad<span class="w"> </span><span class="m">2</span>&gt;<span class="w"> </span>link_err.txt<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"FAIL: 预期链接失败"</span><span class="p">;</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"== 新 ABI 调用方链接旧 ABI 库：链接失败（符合预期）=="</span>
+grep<span class="w"> </span>-m1<span class="w"> </span><span class="s2">"undefined reference"</span><span class="w"> </span>link_err.txt
+
+<span class="c1"># ---- 2. 结构布局被编译选项改变：extern "C" 也救不了 ----</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>cfg.h<span class="w"> </span><span class="s">&lt;&lt;'H'</span>
+<span class="s">#pragma once</span>
+<span class="s">#include &lt;stdint.h&gt;</span>
+<span class="s">#ifdef __cplusplus</span>
+<span class="s">extern "C" {</span>
+<span class="s">#endif</span>
+<span class="s">struct Cfg { char flag; int64_t timeout_ms; };</span>
+<span class="s">int64_t cfg_timeout(const struct Cfg* c);</span>
+<span class="s">unsigned cfg_size(void);</span>
+<span class="s">#ifdef __cplusplus</span>
+<span class="s">}</span>
+<span class="s">#endif</span>
+<span class="s">H</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>cfg.cpp<span class="w"> </span><span class="s">&lt;&lt;'C'</span>
+<span class="s">#include "cfg.h"</span>
+<span class="s">extern "C</span><span class="s2">" int64_t cfg_timeout(const Cfg* c) { return c-&gt;timeout_ms; }</span>
+<span class="s2">extern "</span>C<span class="s2">" unsigned cfg_size(void) { return sizeof(Cfg); }</span>
+<span class="s2">C</span>
+<span class="s2">g++ -fPIC -shared cfg.cpp -o libcfg_normal.so</span>
+<span class="s2">g++ -fPIC -shared -fpack-struct=1 cfg.cpp -o libcfg_packed.so</span>
+<span class="s2">cat &gt; use_cfg.cpp &lt;&lt;'C'</span>
+<span class="s2">#include "</span>cfg.h<span class="s2">"</span>
+<span class="s2">#include &lt;cstdio&gt;</span>
+<span class="s2">int main() {</span>
+<span class="s2">  Cfg c{}; c.flag = 1; c.timeout_ms = 3000;</span>
+<span class="s2">  std::printf("</span><span class="nb">caller</span><span class="w"> </span><span class="nv">sizeof</span><span class="o">=</span>%zu<span class="w"> </span>lib<span class="w"> </span><span class="nv">sizeof</span><span class="o">=</span>%u<span class="w"> </span><span class="nv">timeout</span><span class="o">=</span>%lld<span class="se">\n</span><span class="s2">",</span>
+<span class="s2">              sizeof(Cfg), cfg_size(), (long long)cfg_timeout(&amp;c));</span>
+<span class="s2">}</span>
+<span class="s2">C</span>
+<span class="s2">g++ use_cfg.cpp -L. -lcfg_normal -Wl,-rpath,'</span><span class="nv">$ORIGIN</span><span class="s2">' -o cfg_ok</span>
+<span class="s2">g++ use_cfg.cpp -L. -lcfg_packed -Wl,-rpath,'</span><span class="nv">$ORIGIN</span><span class="s2">' -o cfg_bad 2&gt;/dev/null</span>
+<span class="s2">echo "</span><span class="o">==</span><span class="w"> </span><span class="nv">布局一致</span><span class="w"> </span><span class="o">==</span><span class="s2">"; ./cfg_ok | tee cfg_ok.txt</span>
+<span class="s2">echo "</span><span class="o">==</span><span class="w"> </span>库用<span class="w"> </span>-fpack-struct<span class="o">=</span><span class="m">1</span>：链接成功但读错字段<span class="w"> </span><span class="o">==</span><span class="s2">"; ./cfg_bad | tee cfg_bad.txt</span>
+<span class="s2">grep -q "</span><span class="nb">caller</span><span class="w"> </span><span class="nv">sizeof</span><span class="o">=</span><span class="m">16</span><span class="w"> </span>lib<span class="w"> </span><span class="nv">sizeof</span><span class="o">=</span><span class="m">16</span><span class="w"> </span><span class="nv">timeout</span><span class="o">=</span><span class="m">3000</span><span class="s2">" cfg_ok.txt</span>
+<span class="s2">grep -q "</span>lib<span class="w"> </span><span class="nv">sizeof</span><span class="o">=</span><span class="m">9</span><span class="s2">" cfg_bad.txt</span>
+<span class="s2">! grep -q "</span><span class="nv">timeout</span><span class="o">=</span><span class="m">3000</span><span class="s2">" cfg_bad.txt</span>
+<span class="s2">echo "</span><span class="o">==</span><span class="w"> </span>nm<span class="w"> </span>两边符号完全一样，看不出差异<span class="w"> </span><span class="o">==</span><span class="s2">"</span>
+<span class="s2">diff &lt;(nm -D --defined-only libcfg_normal.so | awk '{print </span><span class="nv">$3</span><span class="s2">}' | grep cfg_) \</span>
+<span class="s2">     &lt;(nm -D --defined-only libcfg_packed.so | awk '{print </span><span class="nv">$3</span><span class="s2">}' | grep cfg_) &amp;&amp; echo "</span>符号相同<span class="s2">"</span>
+
+<span class="s2"># ---- 3. 符号版本：给 C 接口打版本号 ----</span>
+<span class="s2">cat &gt; v1.map &lt;&lt;'M'</span>
+<span class="s2">CFG_1.0 { global: cfg_timeout; cfg_size; local: *; };</span>
+<span class="s2">M</span>
+<span class="s2">g++ -fPIC -shared cfg.cpp -Wl,--version-script=v1.map -Wl,-soname,libcfgv.so.1 -o libcfgv.so.1</span>
+<span class="s2">echo "</span><span class="o">==</span><span class="w"> </span>readelf<span class="w"> </span>查看<span class="w"> </span>SONAME<span class="w"> </span><span class="nv">与符号版本</span><span class="w"> </span><span class="o">==</span><span class="s2">"</span>
+<span class="s2">readelf -d libcfgv.so.1 | grep SONAME</span>
+<span class="s2">readelf --dyn-syms -W libcfgv.so.1 | grep cfg_</span>
+<span class="s2">readelf --dyn-syms -W libcfgv.so.1 | grep -q "</span>cfg_timeout@@CFG_1.0<span class="s2">"</span>
+<span class="s2">echo "</span><span class="o">==</span><span class="w"> </span>依赖的<span class="w"> </span>glibc/libstdc++<span class="w"> </span>版本（新<span class="w"> </span>ABI<span class="w"> </span>库）<span class="o">==</span><span class="s2">"</span>
+<span class="s2">readelf -V libgreet_new.so | grep -oE "</span><span class="o">(</span>GLIBCXX<span class="p">|</span>CXXABI<span class="p">|</span>GLIBC<span class="o">)</span>_<span class="o">[</span><span class="m">0</span>-9.<span class="o">]</span>+<span class="s2">" | sort -u | tail -5</span>
+<span class="s2">echo ALL_CHECKS_PASSED</span>
+</code></pre></div><div class="pn"><span><a href="31.html">← C++20无栈协程机制</a></span><span>下一课 待更新</span></div></main></div></body></html>
