@@ -1,0 +1,332 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>35. 系统调用、errno与部分成功 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（35/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（3/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li class="todo">36. 文件描述符与打开文件描述 <em>待更新</em></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="cur" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 35 课 · 领域 C · 阶段 2</p><p class="dl"><a href="../files/35-c-syscall.md" download>⬇ 本课 Markdown</a><a href="../files/practice35.tar.gz" download>⬇ 练习包 practice35.tar.gz</a></p><h1 id="35208-errno">第 35/208 课：系统调用、errno与部分成功</h1>
+<blockquote>
+<p>领域：C · 阶段 2 · 子类：进程、线程与调度 · 难度：基础
+前置：c-process（进程）、b-pointer（指针）</p>
+</blockquote>
+<h2 id="_1">一、学习目标与为什么后端要懂</h2>
+<p><strong>节点摘要</strong>：系统调用是用户态访问内核服务的接口，返回值和 errno 共同表达结果，部分成功通常需要应用继续处理。</p>
+<p><strong>为什么要懂</strong>：正确处理 EINTR、短读写和错误边界。</p>
+<p>学完本课你应该能：</p>
+<ol>
+<li>解释<strong>返回值与 errno 的有效期</strong>：什么时候该看 errno，什么时候看了也没意义。</li>
+<li>独立完成：<strong>实现 <code>read_full</code> / <code>write_full</code> 辅助函数，并用管道触发短读写</strong>。</li>
+</ol>
+<p>验收标准：</p>
+<ul>
+<li>能说明<strong>成功后 errno 不代表错误</strong>；</li>
+<li>能区分 <code>read</code>/<code>write</code> 返回 <strong>0、正数和 -1</strong> 的语义。</li>
+</ul>
+<p>后台场景：公众号后台的服务进程每秒在 socket、管道、日志文件上做大量 <code>read</code>/<code>write</code>。一次 <code>write(fd, buf, 64KB)</code> 返回 16KB 却被当成“写完了”，下游就会收到被截断的包；把 <code>EINTR</code> 当成致命错误，进程收到一个监控信号就会断连；把 <code>EAGAIN</code> 当成“再试一次”放进死循环，CPU 会被打满。这些都是线上真实会出现的问题形态。</p>
+<hr />
+<h2 id="_2">二、从直觉到原理</h2>
+<h3 id="21">2.1 直觉：系统调用就是“请内核帮忙”</h3>
+<p>用户态程序不能直接操作磁盘、网卡、进程表，要通过系统调用（<code>read</code>、<code>write</code>、<code>open</code>、<code>fork</code>……）进入内核。你平时调用的 <code>read()</code> 其实是 glibc 里的一个<strong>封装函数</strong>：它把参数放进寄存器、执行 <code>syscall</code> 指令陷入内核，内核返回后再把结果翻译成 C 语言约定。</p>
+<div class="codehilite"><pre><span></span><code>man<span class="w"> </span><span class="m">2</span><span class="w"> </span>syscalls<span class="w">      </span><span class="c1"># 列出 Linux 全部系统调用（本课推荐资源）</span>
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="nb">read</span><span class="w">          </span><span class="c1"># 第 2 节是系统调用，第 3 节是库函数（如 man 3 fread）</span>
+</code></pre></div>
+
+<p>可以用 <code>strace</code> 看到程序实际发出的系统调用（box 上若没装：<code>apt install strace</code>）：</p>
+<div class="codehilite"><pre><span></span><code>strace<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>openat,read,write<span class="w"> </span>cat<span class="w"> </span>/etc/hostname
+</code></pre></div>
+
+<h3 id="22-errno">2.2 要点一：返回值与 errno 有效期</h3>
+<p><strong>约定</strong>（绝大多数系统调用封装都遵守）：</p>
+<ul>
+<li>失败时返回 <strong>-1</strong>（或 <code>NULL</code>、<code>MAP_FAILED</code> 等特定值），并把错误码写入线程局部变量 <code>errno</code>；</li>
+<li>成功时返回非负值，<strong>不保证会清零 errno</strong>，errno 里可能还是之前某次失败留下的旧值。</li>
+</ul>
+<p>所以正确姿势是：<strong>先看返回值，只有返回值表示失败时才读 errno</strong>。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">open</span><span class="p">(</span><span class="s">"/nonexistent/x"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span><span class="w">         </span><span class="c1">// 失败，errno = ENOENT</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/dev/null"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span><span class="w">     </span><span class="c1">// 成功</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">"fd=%d errno=%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+<span class="c1">// 输出 fd=3 errno=No such file or directory —— errno 是旧值，不代表这次出错</span>
+</code></pre></div>
+
+<p>另外两条关于“有效期”的实践：</p>
+<ul>
+<li>失败后要<strong>立刻保存</strong> errno（<code>int saved = errno;</code>），因为接下来调用 <code>printf</code>、<code>close</code>、<code>malloc</code> 等都可能改写它；</li>
+<li>errno 是<strong>每线程一份</strong>（TLS，上一课讲过），多线程互不覆盖，但同一线程内后续调用会覆盖。</li>
+</ul>
+<p><strong>read/write 返回值的三种语义</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>返回值</th>
+<th>read 含义</th>
+<th>write 含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正数 n</td>
+<td>读到 n 字节，<strong>可能少于请求</strong>（短读）</td>
+<td>写入 n 字节，<strong>可能少于请求</strong>（短写）</td>
+</tr>
+<tr>
+<td>0</td>
+<td><strong>EOF</strong>：对端关闭/文件读完，不是错误</td>
+<td>请求写 0 字节时返回 0（一般不会遇到）</td>
+</tr>
+<tr>
+<td>-1</td>
+<td>失败，看 errno（EINTR、EAGAIN、EBADF…）</td>
+<td>同左（EPIPE、EAGAIN、ENOSPC…）</td>
+</tr>
+</tbody>
+</table>
+<p>“部分成功”指的就是正数但小于请求：内核做了一部分，剩下的需要应用<strong>继续处理</strong>。管道、socket、终端上很常见；普通文件被信号打断或磁盘写满时也可能发生。</p>
+<h3 id="23-eintr">2.3 要点二：EINTR 和重试条件</h3>
+<p>进程阻塞在慢速系统调用（读管道、读 socket、<code>wait</code> 等）时如果收到信号且执行了信号处理函数，调用可能被打断：</p>
+<ul>
+<li>还<strong>没传输任何数据</strong> → 返回 -1，<code>errno == EINTR</code>；</li>
+<li><strong>已经传输了一部分</strong> → 返回已传输字节数（短读/短写）。</li>
+</ul>
+<p>如果用 <code>sigaction</code> 安装处理函数时带了 <code>SA_RESTART</code>，很多调用会被内核自动重启；但不是所有调用都会（具体见 <code>man 7 signal</code> 的 “Interruption of system calls” 一节），所以健壮的代码仍然要处理 EINTR。</p>
+<p><strong>哪些该重试、哪些不该</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>情况</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EINTR</code></td>
+<td>被信号打断、什么都没做 → 可以原样重试</td>
+</tr>
+<tr>
+<td>短读/短写（正数但不够）</td>
+<td>从已完成位置<strong>继续</strong>，不是“重做整次”</td>
+</tr>
+<tr>
+<td><code>EAGAIN</code>/<code>EWOULDBLOCK</code>（非阻塞 fd）</td>
+<td>现在没数据/缓冲区满 → <strong>不要立刻循环重试</strong>，应交给 epoll 等待可读/可写</td>
+</tr>
+<tr>
+<td><code>EBADF</code>、<code>EFAULT</code>、<code>EINVAL</code>、<code>ENOSPC</code>、<code>EPIPE</code> 等</td>
+<td>重试没用，返回给调用者</td>
+</tr>
+</tbody>
+</table>
+<h3 id="24">2.4 要点三：库函数封装与内核接口</h3>
+<ul>
+<li><strong>内核接口</strong>：原始系统调用返回值在寄存器里，出错时是 <code>-错误码</code>（例如 -4 表示 EINTR）。</li>
+<li><strong>glibc 封装</strong>：把负数翻译成“返回 -1 + 设置 errno”，这就是你在 C 里看到的约定。</li>
+<li><strong>更高层库</strong>（stdio 的 <code>fread</code>/<code>fwrite</code>）：自己带缓冲和循环，<code>fread</code> 返回的是“元素个数”，要用 <code>feof</code>/<code>ferror</code> 区分结束和出错；</li>
+<li><strong>不按 errno 约定的接口</strong>：例如 pthread 系列函数<strong>直接返回错误码</strong>，不设置 errno（<code>int rc = pthread_create(...); if (rc) strerror(rc)</code>）。</li>
+</ul>
+<p>所以每用一个接口都要看 man page 的 RETURN VALUE 和 ERRORS 两节，不要想当然。自己写封装时，也应该<strong>保留原始错误与上下文</strong>（见设计权衡）。</p>
+<hr />
+<h2 id="_3">三、常见误区与设计权衡</h2>
+<p><strong>常见误区（节点原文）</strong>：盲目重试所有失败可能重复操作或形成忙循环。</p>
+<p>具体表现：</p>
+<ol>
+<li><code>while (write(...) &lt; 0);</code> —— 遇到 EBADF/EPIPE 会永远循环；遇到非阻塞 fd 的 EAGAIN 会空转打满 CPU。</li>
+<li>短写后把<strong>整块 buffer 重发</strong>，导致对端收到重复数据。正确做法是 <code>buf + done, n - done</code>。</li>
+<li>对非幂等操作（比如已经部分写出的请求、已经发出去的 RPC）在外层“失败就重来”，可能产生重复的业务副作用。</li>
+<li>成功后看 errno 判断“有没有出错”。</li>
+<li>把 <code>read</code> 返回 0 当成错误或“再读一次”，结果对端关闭后陷入死循环。</li>
+</ol>
+<p><strong>设计权衡（节点原文）</strong>：封装应保留原始错误与上下文，避免隐藏语义。</p>
+<ul>
+<li><code>read_full</code> 帮你吞掉 EINTR 和短读很方便，但应该把“读到 EOF 时只读了多少”和“真正的错误 errno”原样交还调用者，而不是统一返回 <code>false</code>；</li>
+<li>记录日志时带上 fd/对端地址/已完成字节数，例如 <code>write to 10.0.0.3:8080 failed after 16384/65536 bytes: EPIPE</code>，排障时一眼看出是部分成功；</li>
+<li>非阻塞场景里，<code>write_full</code> 这种“一直写到完”的封装不合适，它会和事件循环的语义冲突，应该改成“写多少算多少，剩余挂到发送缓冲里等 EPOLLOUT”。</li>
+</ul>
+<hr />
+<h2 id="read_full-write_full">四、动手实践：read_full / write_full + 管道触发短读写</h2>
+<p>节点实践：实现 read_full/write_full 辅助函数并用管道触发短读写。</p>
+<h3 id="1">步骤 1：写辅助函数</h3>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 返回已读字节数（&lt; n 表示提前 EOF）；出错返回 -1，errno 保留原值 */</span>
+<span class="kt">ssize_t</span><span class="w"> </span><span class="nf">read_full</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">got</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">got</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">got</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">r</span><span class="p">;</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="c1">// 部分成功：继续</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w">                           </span><span class="c1">// EOF：不是错误</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w">                </span><span class="c1">// 被信号打断：重试</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w">                                   </span><span class="c1">// 其他错误：交给调用者</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">ssize_t</span><span class="p">)</span><span class="n">got</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">ssize_t</span><span class="w"> </span><span class="nf">write_full</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">put</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">put</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">put</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">put</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">w</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">put</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">w</span><span class="p">;</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w">                                   </span><span class="c1">// EPIPE/EAGAIN 等不盲目重试</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">ssize_t</span><span class="p">)</span><span class="n">put</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="2">步骤 2：触发短读</h3>
+<p>子进程分 4 次、每次间隔 50ms 往管道写 1000 字节；父进程一次 <code>read(fd, buf, 4000)</code>。管道里当时只有 1000 字节，<code>read</code> 就返回 1000，不会等凑满 4000。再用 <code>read_full</code> 读剩下的 3000，它会循环多次直到读满；子进程退出后再 <code>read</code> 返回 0（EOF）。</p>
+<h3 id="3">步骤 3：触发短写</h3>
+<p>用 <code>pipe2(q, O_NONBLOCK)</code> 建非阻塞管道，一次写 1MB：管道容量默认 64KB，<code>write</code> 返回 65536（部分成功）；再写就返回 -1、<code>errno=EAGAIN</code>。这正是“不能盲目循环重试”的场景。</p>
+<h3 id="4-eintr">步骤 4：触发 EINTR</h3>
+<p>用 <code>sigaction</code> 安装 SIGALRM 处理函数且<strong>不带 SA_RESTART</strong>，<code>ualarm(200000,0)</code> 后阻塞 <code>read</code> 一个 1 秒后才有数据的管道：原始 <code>read</code> 返回 -1、<code>EINTR</code>；换成 <code>read_full</code> 后，它吞掉 EINTR 继续等，最终读到 <code>hello</code>。</p>
+<h3 id="5-errno">步骤 5：验证成功后 errno 是旧值</h3>
+<p>先让 <code>open</code> 失败，再成功 <code>open("/dev/null")</code>，打印 errno 仍是 ENOENT。</p>
+<h3 id="6">步骤 6：编译运行</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/practice35
+gcc<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-Wall<span class="w"> </span>-fsanitize<span class="o">=</span>address,undefined<span class="w"> </span>rw.c<span class="w"> </span>-o<span class="w"> </span>rw<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./rw
+</code></pre></div>
+
+<p>我在 box 上实际运行的输出：</p>
+<div class="codehilite"><pre><span></span><code>single_read=1000 (asked 4000)
+read_full_rest=3000 calls=3
+after_eof_read=0
+nonblock_short_write=65536 of 1048576
+full_pipe_write=-1 errno=Resource temporarily unavailable
+raw_read_interrupted=-1 errno=Interrupted system call
+read_full_after_eintr=5 eintr=1 data=hello
+success_fd=3 stale_errno=No such file or directory
+</code></pre></div>
+
+<p><code>./test.sh</code> 会编译并逐项断言，最后打印 <code>ALL_CHECKS_PASSED</code>。完整代码见文末附录。</p>
+<h3 id="_4">自查（对应验收标准）</h3>
+<ul>
+<li>[ ] 能解释最后一行：fd=3 成功，errno 却是 ENOENT，所以成功后 errno 不代表错误。</li>
+<li>[ ] 能指出输出里 1000（正数、短读）、0（EOF）、-1（EAGAIN/EINTR）各自的含义和处理方式。</li>
+</ul>
+<hr />
+<h2 id="_5">五、自测题</h2>
+<p><strong>题 1</strong>：下面代码有什么问题？</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<details><summary>答案</summary>
+判断顺序错了。应当先看返回值 `fd == -1`，失败时才读 errno。open 成功时 errno 可能保留之前的旧值，这段代码会把成功误判成失败；反过来，如果之前有人把 errno 清零，也不能靠它判断。正确写法：`if (fd == -1) { perror("open"); return -1; }`。
+</details>
+
+<p><strong>题 2</strong>：从 TCP socket 读一个 4 字节长度头，<code>read(fd, &amp;len, 4)</code> 返回 2，应该怎么处理？返回 0 呢？</p>
+<details><summary>答案</summary>
+返回 2 是部分成功（短读），要从 `(char*)&len + 2` 继续读剩下的 2 字节，可以直接用 read_full。返回 0 表示对端关闭（EOF），不是错误也不该重试：如果一个字节都还没读到，就是连接正常关闭；如果已经读了一部分，就是协议被截断，应该关闭连接并记录日志。
+</details>
+
+<p><strong>题 3</strong>：某服务把 socket 设成非阻塞后，发送函数写成 <code>while (write_full(fd, buf, n) &lt; 0) {}</code>，上线后 CPU 100%。为什么？怎么改？</p>
+<details><summary>答案</summary>
+非阻塞 fd 的发送缓冲区满时，write 返回 -1、errno=EAGAIN。外层循环立刻重试，形成忙循环；如果错误是 EPIPE/ECONNRESET 这类永久错误，循环永远不会结束。应该区分错误码：EINTR 原地重试；EAGAIN 把未发完的部分留在应用层发送缓冲里，注册 EPOLLOUT 等可写时再发；其他错误保存 errno、带上下文记录日志后关闭连接。封装还应返回已写字节数，避免重复发送已经发出的部分。
+</details>
+
+<hr />
+<h2 id="_6">六、推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/syscalls.2.html">系统调用、errno与部分成功：Linux man-pages</a>（man7.org · 英文 · 文档 · 进阶 · 免费）：重点阅读返回值与 errno 有效期、EINTR 和重试条件，用来核对本节点实验的语义和边界。</li>
+</ul>
+<p>学习方法（节点 sourceStudy）：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+<hr />
+<h2 id="practice35">附：已验证的参考练习（practice35）</h2>
+<h3 id="rwc">rw.c</h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;signal.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/wait.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="cm">/* 返回已读字节数（可能 &lt; n 表示 EOF）；出错返回 -1，errno 保留原值 */</span>
+<span class="kt">ssize_t</span><span class="w"> </span><span class="nf">read_full</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">eintr_cnt</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">calls</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">got</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">got</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">got</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">calls</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">calls</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">r</span><span class="p">;</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w">                       </span><span class="cm">/* EOF：不是错误 */</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">eintr_cnt</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">eintr_cnt</span><span class="p">)</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w">                               </span><span class="cm">/* 其他错误：不重试，交给调用者 */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">ssize_t</span><span class="p">)</span><span class="n">got</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kt">ssize_t</span><span class="w"> </span><span class="nf">write_full</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">calls</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">put</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">put</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">buf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">put</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">put</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">calls</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">calls</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">w</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">put</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">w</span><span class="p">;</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">ssize_t</span><span class="p">)</span><span class="n">put</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">on_alrm</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">s</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* 1. 短读：子进程分 4 次每次写 1000 字节，父进程一次 read(4000) 只拿到一部分 */</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pipe</span><span class="p">(</span><span class="n">p</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">close</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span><span class="w"> </span><span class="n">memset</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="sc">'x'</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">b</span><span class="p">);</span><span class="w"> </span><span class="n">usleep</span><span class="p">(</span><span class="mi">50000</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">8192</span><span class="p">];</span>
+<span class="w">    </span><span class="n">usleep</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">once</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">4000</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"single_read=%zd (asked 4000)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">once</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">calls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">rest</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_full</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">calls</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"read_full_rest=%zd calls=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">rest</span><span class="p">,</span><span class="w"> </span><span class="n">calls</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">eof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"after_eof_read=%zd</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">eof</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="n">waitpid</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/* 2. 非阻塞管道写满 -&gt; 短写/EAGAIN */</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">q</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pipe2</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="n">O_NONBLOCK</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">static</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">big</span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">20</span><span class="p">];</span><span class="w"> </span><span class="n">memset</span><span class="p">(</span><span class="n">big</span><span class="p">,</span><span class="w"> </span><span class="sc">'y'</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">big</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">w</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">big</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">big</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"nonblock_short_write=%zd of %zu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">w</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">big</span><span class="p">);</span>
+<span class="w">    </span><span class="n">errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">w2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">big</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"full_pipe_write=%zd errno=%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">w2</span><span class="p">,</span><span class="w"> </span><span class="n">w2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"none"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="n">close</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+<span class="w">    </span><span class="cm">/* 3. EINTR：无 SA_RESTART 的 SIGALRM 打断阻塞 read */</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">sigaction</span><span class="w"> </span><span class="n">sa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w"> </span><span class="n">sa</span><span class="p">.</span><span class="n">sa_handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">on_alrm</span><span class="p">;</span><span class="w"> </span><span class="n">sa</span><span class="p">.</span><span class="n">sa_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGALRM</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sa</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">r2</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="n">pipe</span><span class="p">(</span><span class="n">r2</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">close</span><span class="p">(</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">r2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="s">"hello"</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span><span class="w"> </span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">r2</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">alarm</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="n">ualarm</span><span class="p">(</span><span class="mi">200000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">saved</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">errno</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"raw_read_interrupted=%zd errno=%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="p">,</span><span class="w"> </span><span class="n">raw</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">strerror</span><span class="p">(</span><span class="n">saved</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"none"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ualarm</span><span class="p">(</span><span class="mi">200000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">eintr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">calls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_full</span><span class="p">(</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">eintr</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">calls</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"read_full_after_eintr=%zd eintr=%d data=%.5s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">ok</span><span class="p">,</span><span class="w"> </span><span class="n">eintr</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w"> </span><span class="n">waitpid</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/* 4. 成功调用后 errno 可能是旧值 */</span>
+<span class="w">    </span><span class="n">errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/nonexistent/x"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/dev/null"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"success_fd=%d stale_errno=%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="testsh">test.sh</h3>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="nb">set</span><span class="w"> </span>-e
+<span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
+gcc<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-Wall<span class="w"> </span>-fsanitize<span class="o">=</span>address,undefined<span class="w"> </span>rw.c<span class="w"> </span>-o<span class="w"> </span>rw
+./rw<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>out.txt
+grep<span class="w"> </span>-Eq<span class="w"> </span><span class="s1">'^single_read=(1000|2000|3000) '</span><span class="w"> </span>out.txt
+grep<span class="w"> </span>-Eq<span class="w"> </span><span class="s1">'^read_full_rest=3000 calls=[2-9]'</span><span class="w"> </span>out.txt
+grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'^after_eof_read=0$'</span><span class="w"> </span>out.txt
+grep<span class="w"> </span>-Eq<span class="w"> </span><span class="s1">'^nonblock_short_write=[0-9]+ of 1048576'</span><span class="w"> </span>out.txt
+!<span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'nonblock_short_write=1048576'</span><span class="w"> </span>out.txt
+grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'full_pipe_write=-1 errno=Resource temporarily unavailable'</span><span class="w"> </span>out.txt
+grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'raw_read_interrupted=-1 errno=Interrupted system call'</span><span class="w"> </span>out.txt
+grep<span class="w"> </span>-Eq<span class="w"> </span><span class="s1">'read_full_after_eintr=5 eintr=[1-9] data=hello'</span><span class="w"> </span>out.txt
+grep<span class="w"> </span>-q<span class="w"> </span><span class="s1">'stale_errno=No such file or directory'</span><span class="w"> </span>out.txt
+<span class="nb">echo</span><span class="w"> </span>ALL_CHECKS_PASSED
+</code></pre></div><div class="pn"><span><a href="34.html">← Linux线程与线程资源</a></span><span>下一课 待更新</span></div></main></div></body></html>
