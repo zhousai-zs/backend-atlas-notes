@@ -1,0 +1,517 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>38. 虚拟内存、缺页与mmap - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（38/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（6/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="cur" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 38 课 · 领域 C · 阶段 2</p><p class="dl"><a href="../files/38-c-vm.md" download>⬇ 本课 Markdown</a><a href="../files/practice38.tar.gz" download>⬇ 练习包 practice38.tar.gz</a></p><h1 id="38208-mmap">第 38/208 课：虚拟内存、缺页与mmap</h1>
+<blockquote>
+<p>节点：<code>c-vm</code>｜领域：C｜阶段：2｜难度：基础</p>
+<p>一句话总结：虚拟地址通过页表映射到物理页，缺页可能分配、加载或触发访问错误；mmap 建立映射而非直接复制文件。</p>
+</blockquote>
+<h2 id="_1">一、学习目标与为什么后端要懂</h2>
+<p>学完本节，你应当能够：</p>
+<ol>
+<li>解释页表与 TLB 的作用，说清一次内存访问如何从虚拟地址走到物理页。</li>
+<li>区分匿名映射与文件映射，理解 <code>MAP_SHARED</code> / <code>MAP_PRIVATE</code> 的语义差异。</li>
+<li>解释缺页的几种结果：分配零页、从 page cache 或磁盘加载、COW 复制、触发 <code>SIGSEGV</code> 或 <code>SIGBUS</code>。</li>
+<li>独立完成实验：映射一个文件并顺序/随机读取，记录 major/minor faults 与 RSS 变化。</li>
+<li>区分 VIRT 与 RSS，解释文件被截断后继续访问映射的风险。</li>
+</ol>
+<p>为什么后端工程师要懂这些？因为你每天打交道的进程指标、内存占用和文件访问方式，背后都是这套机制：</p>
+<ul>
+<li>线上 <code>top</code> 里某个服务 VIRT 几个 GB，并不代表它真的占了几个 GB 物理内存；看不懂就会误判内存泄漏。</li>
+<li>用 <code>mmap</code> 加载只读词表、倒排索引、配置快照，看起来很优雅，但首次访问会触发缺页，延迟抖动、page cache 压力和错误处理都要提前设计。</li>
+<li>容器里 RSS 过高会触发 OOM，而 RSS 里既可能有匿名页，也可能有共享的文件页，统计口径直接影响容量规划。</li>
+<li>文件被截断、磁盘故障、网络文件系统抖动，都可能让一次普通的内存读取变成 <code>SIGBUS</code>，后端服务必须有兜底。</li>
+</ul>
+<p>本节以腾讯微信公众号后台这类长驻服务为背景：只读词表/索引文件用 <code>mmap</code> 加载、进程 VIRT 很大、需要控制 RSS 和尾延迟。下面从直觉到原理逐层展开。</p>
+<hr />
+<h2 id="_2">二、从直觉到原理</h2>
+<h3 id="21">2.1 先建立直觉：虚拟地址不是物理地址</h3>
+<p>进程看到的每个地址都是虚拟地址。CPU 访存时，先用页表把虚拟页号（VPN）翻译成物理页号（PFN），再加上页内偏移，才真正访问物理内存。</p>
+<ul>
+<li>虚拟地址空间可以很大，甚至大于物理内存；只有真正被访问的页才需要物理页。</li>
+<li>每个进程有独立页表，所以同样的虚拟地址在不同进程里可以指向不同物理页。</li>
+<li>映射关系不是“整块连续”，而是以页为单位（常见 4 KiB，也有 2 MiB/1 GiB 大页）。</li>
+</ul>
+<p>这解释了一个常见现象：进程 <code>malloc</code> 了 1 GiB，VIRT 立刻涨了 1 GiB，但 RSS 可能只有几 MiB。因为地址空间只是“预留了编号”，物理页要等首次访问触发缺页才分配。</p>
+<h3 id="22-tlb">2.2 页表与 TLB</h3>
+<h4 id="_3">页表</h4>
+<p>以常见的 4 KiB 页、48 位虚拟地址为例，一个虚拟地址可拆成：</p>
+<div class="codehilite"><pre><span></span><code>| 页表各级索引（9+9+9+9 位） | 页内偏移（12 位） |
+</code></pre></div>
+
+<p>多级页表的好处是稀疏：没有用到的地址区间不需要建表。每个页表项（PTE）里除了物理页号，还有：</p>
+<ul>
+<li>present 位：该页当前是否在内存中；</li>
+<li>读写/执行权限位；</li>
+<li>user/supervisor 位；</li>
+<li>accessed / dirty 位；</li>
+<li>与 COW、swap、文件映射相关的标志。</li>
+</ul>
+<p>一次地址翻译理论上要逐级查表，最坏多次内存访问。为了不让每次访存都变慢，CPU 引入了 TLB。</p>
+<h4 id="tlb">TLB</h4>
+<p>TLB（Translation Lookaside Buffer）是页表项的硬件缓存，缓存“虚拟页号 → 物理页号”的翻译结果。</p>
+<ul>
+<li>TLB 命中：直接得到物理地址，几乎无额外开销。</li>
+<li>TLB 未命中：硬件（或内核）走页表，必要时触发缺页异常。</li>
+<li>进程切换、<code>munmap</code>、权限变化、页表项修改会破坏 TLB 有效性；现代 CPU 用 PCID/ASID 减少切换时的全量刷新。</li>
+</ul>
+<p>对后端的启示：</p>
+<ul>
+<li>大量随机访问分散在大地址空间，会降低 TLB 命中率；顺序访问和局部性好得多。</li>
+<li>大页（Huge Page）能显著减少 TLB 项数量和页表层级，但会带来内部碎片和分配/回收复杂度。</li>
+<li><code>madvise(MADV_HUGEPAGE)</code>、透明大页（THP）等调优，本质上都在改善 TLB 与缺页行为。</li>
+</ul>
+<h3 id="23">2.3 匿名映射与文件映射</h3>
+<p>Linux 的 <code>mmap</code> 建立的是“虚拟内存区域（VMA）到后备对象”的映射。按后备对象分两类。</p>
+<h4 id="_4">匿名映射</h4>
+<p>没有文件作为后备，常用 <code>MAP_ANONYMOUS</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span><span class="w"> </span><span class="n">PROT_READ</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PROT_WRITE</span><span class="p">,</span>
+<span class="w">               </span><span class="n">MAP_PRIVATE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">MAP_ANONYMOUS</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+
+<p>特点：</p>
+<ul>
+<li>首次读通常映射到内核的共享零页，只读；首次写触发缺页，分配真正的匿名页（按需零填充）。</li>
+<li>匿名页没有文件可回写，内存紧张时只能换出到 swap（如果启用）。</li>
+<li><code>malloc</code> 的大块分配、线程栈、<code>brk</code>/<code>mmap</code> 扩展的堆，很多都落在匿名映射上。</li>
+</ul>
+<h4 id="_5">文件映射</h4>
+<p>用打开的文件描述符作为后备：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"index.bin"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">PROT_READ</span><span class="p">,</span><span class="w"> </span><span class="n">MAP_PRIVATE</span><span class="p">,</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+
+<p>按共享语义又分：</p>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>写操作的结果</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MAP_SHARED</code></td>
+<td>修改写回文件，对其他映射者可见</td>
+<td>共享内存、数据库文件、日志</td>
+</tr>
+<tr>
+<td><code>MAP_PRIVATE</code></td>
+<td>写时复制（COW），修改不落盘</td>
+<td>只读加载、进程私有快照</td>
+</tr>
+</tbody>
+</table>
+<p>文件映射的关键点是：<code>mmap</code> 本身通常只建立 VMA，不读取文件内容。真正的数据要等访问对应页时，通过缺页从 page cache 取得；page cache 没有再发起磁盘 IO。</p>
+<h4 id="vmtestc">一个最小示例：映射并读取（保存为 <code>vmtest.c</code>）</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/mman.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/resource.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/stat.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">show_faults</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">tag</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">rusage</span><span class="w"> </span><span class="n">ru</span><span class="p">;</span>
+<span class="w">    </span><span class="n">getrusage</span><span class="p">(</span><span class="n">RUSAGE_SELF</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ru</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%-12s min_flt=%ld maj_flt=%ld maxrss=%ldKB</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">ru</span><span class="p">.</span><span class="n">ru_minflt</span><span class="p">,</span><span class="w"> </span><span class="n">ru</span><span class="p">.</span><span class="n">ru_majflt</span><span class="p">,</span><span class="w"> </span><span class="n">ru</span><span class="p">.</span><span class="n">ru_maxrss</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"usage: %s &lt;file&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">stat</span><span class="w"> </span><span class="n">st</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fstat</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">st</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"fstat"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">st</span><span class="p">.</span><span class="n">st_size</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">PROT_READ</span><span class="p">,</span><span class="w"> </span><span class="n">MAP_PRIVATE</span><span class="p">,</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MAP_FAILED</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"mmap"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">show_faults</span><span class="p">(</span><span class="s">"after mmap"</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 通常还没有读文件数据 */</span>
+
+<span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">len</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="p">)</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="n">show_faults</span><span class="p">(</span><span class="s">"sequential"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">srand</span><span class="p">(</span><span class="mi">12345</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="p">)</span><span class="n">p</span><span class="p">[(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">rand</span><span class="p">()</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">len</span><span class="p">];</span>
+<span class="w">    </span><span class="n">show_faults</span><span class="p">(</span><span class="s">"random"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"sum=%lu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+<span class="w">    </span><span class="n">munmap</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>观察重点：</p>
+<ul>
+<li><code>after mmap</code> 时 major/minor faults 往往没有明显增长，因为映射还没触碰数据页。</li>
+<li>顺序读取会触发一批 minor 或 major faults；如果文件刚被写过、还在 page cache 中，多为 minor。注意缺页次数通常<strong>远少于页数</strong>：Linux 文件映射有 fault-around（一次缺页顺手映射周围已在 page cache 的若干页，常见 16 页即 64 KiB），再加上预读。我在内核 6.12 上实测 16 MiB（4096 页）热缓存文件顺序读，只多了约 262 次 minor fault、0 次 major fault。</li>
+<li>随机读取不一定新增 major faults，因为前面顺序读已经把页读进来了；要观察随机访问的代价，应先 <code>echo 3 &gt; /proc/sys/vm/drop_caches</code>（需 root）或换一个未读过的文件。</li>
+</ul>
+<h3 id="24-cow-sigbus">2.4 缺页、COW 与 SIGBUS</h3>
+<h4 id="_6">缺页不是“错误”，而是一个处理流程</h4>
+<p>CPU 访问的页 PTE 不满足条件时触发缺页异常，内核根据 VMA 和 PTE 状态决定怎么处理：</p>
+<ol>
+<li><strong>匿名页首次写</strong>：分配物理页并清零。</li>
+<li><strong>文件页首次访问</strong>：page cache 命中则建立映射（minor fault）；未命中则发起磁盘 IO（major fault）。</li>
+<li><strong>COW 页首次写</strong>：复制一份物理页，修改当前进程的 PTE 指向新页，原页引用计数减一。</li>
+<li><strong>页被换出</strong>：从 swap 读回（major fault）。</li>
+<li><strong>非法访问</strong>：地址不在任何 VMA、权限不符，发送 <code>SIGSEGV</code>；文件映射超出有效范围或底层 IO 错误，可能发送 <code>SIGBUS</code>。</li>
+</ol>
+<p>minor fault 不涉及磁盘 IO，major fault 需要 IO（或 swap）。这也是为什么“首次访问”通常比“热数据访问”慢得多。</p>
+<h4 id="cow">COW：写时复制</h4>
+<p><code>fork()</code> 之后，父子进程的页表最初指向同一批物理页，并标记为只读。任何一方写入时触发缺页，内核才复制该页：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span><span class="w"> </span><span class="n">PROT_READ</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PROT_WRITE</span><span class="p">,</span>
+<span class="w">               </span><span class="n">MAP_PRIVATE</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">MAP_ANONYMOUS</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'A'</span><span class="p">;</span>
+
+<span class="kt">pid_t</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'B'</span><span class="p">;</span><span class="w">   </span><span class="cm">/* 触发 COW：给子进程复制一页 */</span>
+<span class="w">    </span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li>COW 让 <code>fork</code> 很快，但“写”会把成本推迟；大量写会导致大量复制，RSS 也会上涨。</li>
+<li><code>MAP_PRIVATE</code> 的文件映射同样是 COW：读的是 page cache，写会复制出私有匿名页，不修改文件。</li>
+<li>后端服务里，<code>fork</code> 后立刻 <code>exec</code> 通常没事；<code>fork</code> 后长期在子进程里改内存，就要警惕 COW 放大。</li>
+</ul>
+<h4 id="sigbus">SIGBUS：文件映射的“隐形炸弹”</h4>
+<p><code>SIGBUS</code> 常见于文件映射的以下场景：</p>
+<ul>
+<li>映射后文件被截断，访问落在“文件末尾之后、但仍在映射长度之内”的页；</li>
+<li>映射的最后一页不足一页，访问超出文件实际长度的部分；</li>
+<li>底层存储 IO 错误、网络文件系统断连等。</li>
+</ul>
+<p>示例（保存为 <code>trunc.c</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/mman.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"data.bin"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDWR</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CREAT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_TRUNC</span><span class="p">,</span><span class="w"> </span><span class="mo">0644</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ftruncate</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"ftruncate"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span><span class="w"> </span><span class="n">PROT_READ</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">PROT_WRITE</span><span class="p">,</span><span class="w"> </span><span class="n">MAP_SHARED</span><span class="p">,</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MAP_FAILED</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"mmap"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="sc">'A'</span><span class="p">;</span><span class="w">                 </span><span class="cm">/* 正常 */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ftruncate</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"ftruncate"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"%c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span><span class="w">       </span><span class="cm">/* 文件已截断，访问可能触发 SIGBUS */</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>为什么不是 <code>SIGSEGV</code>？因为地址本身是合法映射，问题出在“映射的后备文件不再提供这一页”，所以内核用 <code>SIGBUS</code> 表示总线/存储层面的错误。后端设计上必须注意：</p>
+<ul>
+<li>文件映射期间，其他进程或本进程不要随意截断文件；</li>
+<li>更新索引时用“写新文件 + 原子 rename”替换，而不是原地截断；</li>
+<li>对可能 <code>SIGBUS</code> 的访问路径做好信号处理或改用带返回值检查的 <code>pread</code>。</li>
+</ul>
+<h3 id="25-virt-rss">2.5 VIRT 与 RSS：最容易混淆的两个指标</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>含义</th>
+<th>是否占物理内存</th>
+<th>典型观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VIRT / VSZ / VmSize</td>
+<td>虚拟地址空间大小</td>
+<td>否</td>
+<td>线程栈、<code>malloc</code> 预留、映射文件都会让它变大</td>
+</tr>
+<tr>
+<td>RSS / VmRSS</td>
+<td>常驻物理内存（resident set size）</td>
+<td>是（含共享页）</td>
+<td>真正被访问并留在内存中的页</td>
+</tr>
+<tr>
+<td>VmData</td>
+<td>数据段相关虚拟内存</td>
+<td>否</td>
+<td>堆、匿名映射等</td>
+</tr>
+<tr>
+<td>VmSwap</td>
+<td>被换出的匿名页</td>
+<td>否（在 swap）</td>
+<td>内存压力大时上涨</td>
+</tr>
+</tbody>
+</table>
+<p>注意：</p>
+<ul>
+<li>RSS 统计的是“物理页被这个进程映射且驻留”，同一个 page cache 页可能被多个进程计入各自的 RSS，因此多进程 RSS 相加会高估真实占用。需要更精确口径时看 PSS（<code>/proc/&lt;pid&gt;/smaps_rollup</code>）。</li>
+<li>VIRT 很大不等于内存泄漏。Go、JVM、glibc 多 arena、线程栈、文件映射都会让 VIRT 看起来夸张。</li>
+<li><code>mmap</code> 一个 10 GiB 文件，VIRT 可能增加约 10 GiB，但只要不访问，RSS 不会同步增加。</li>
+</ul>
+<p>常用命令：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 查看进程的地址空间布局：每行是一个 VMA</span>
+cat<span class="w"> </span>/proc/&lt;pid&gt;/maps
+
+<span class="c1"># 只看关键内存计数</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'VmSize|VmRSS|VmData|VmSwap|VmPTE'</span><span class="w"> </span>/proc/&lt;pid&gt;/status
+
+<span class="c1"># 统计子进程的 minor/major faults 与峰值 RSS</span>
+/usr/bin/time<span class="w"> </span>-v<span class="w"> </span>./vmtest<span class="w"> </span>index.bin
+
+<span class="c1"># 持续观察指定进程</span>
+ps<span class="w"> </span>-o<span class="w"> </span>pid,min_flt,maj_flt,rss,vsz,cmd<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+
+<span class="c1"># 在程序内部读取自身 fault 计数</span>
+<span class="c1"># getrusage(RUSAGE_SELF, &amp;ru) -&gt; ru_minflt / ru_majflt / ru_maxrss</span>
+</code></pre></div>
+
+<p>字段解释：</p>
+<ul>
+<li><code>min_flt</code>：minor page faults，无需磁盘 IO 的缺页次数；</li>
+<li><code>maj_flt</code>：major page faults，需要 IO 的缺页次数；</li>
+<li><code>rss</code>：常驻内存，单位通常是 KiB；</li>
+<li><code>vsz</code>：虚拟地址空间大小，单位通常是 KiB；</li>
+<li><code>ru_maxrss</code>：进程峰值 RSS，Linux 上单位是 KiB。</li>
+</ul>
+<p><code>/proc/&lt;pid&gt;/maps</code> 中常见的行：</p>
+<div class="codehilite"><pre><span></span><code>55f0... r-xp 00000000 fd:01 123456 /usr/bin/vmtest
+7f2a... r--p 00000000 fd:01 789012 /data/index.bin
+7f2b... rw-p 00000000 00:00 0          [anon]
+7ffd... rw-p 00000000 00:00 0          [stack]
+</code></pre></div>
+
+<p>权限位 <code>r-xp</code>、<code>rw-p</code>、偏移、设备号、inode 和路径，能帮你判断某段地址是代码、文件映射、匿名堆还是栈。<code>[heap]</code>、<code>[stack]</code>、<code>[anon]</code>、<code>[vdso]</code> 等标签也很常见。</p>
+<hr />
+<h2 id="_7">三、常见误区与设计权衡</h2>
+<h3 id="31-mmap-io">3.1 误区：mmap 意味着没有 IO、没有拷贝成本</h3>
+<p>这是本节最需要记住的坑。</p>
+<p><code>mmap</code> 建立映射，不等于把文件读进内存，更不等于“零成本”：</p>
+<ol>
+<li><strong>仍然有 IO</strong>：首次访问对应页时，page cache 未命中就会发起磁盘读，表现为 major fault。文件很大时，逐页缺页甚至可能比一次大块 <code>read</code> 更慢。</li>
+<li><strong>仍然有拷贝/复制成本</strong>：文件页本身可以做到用户态直接访问 page cache，减少一次 <code>read</code> 的内核到用户拷贝；但 <code>MAP_PRIVATE</code> 的写会触发 COW 复制，<code>MAP_SHARED</code> 的脏页需要回写，匿名映射首次写要清零分配。</li>
+<li><strong>仍有缺页和页表开销</strong>：每个新页都要建立 PTE、可能触发 TLB 未命中；大量小页会带来可观的软缺页开销。</li>
+<li><strong>仍受 page cache 与回收影响</strong>：内存压力下页可能被回收，再次访问又缺页；<code>mlock</code> 能锁定但会占用不可换出内存。</li>
+<li><strong>随机小读未必划算</strong>：<code>read</code> 有内核预读，顺序读大文件时往往更高效；<code>mmap</code> 的优势更多在于随机访问和多次复用。</li>
+</ol>
+<p>所以选型时要问：访问模式是顺序还是随机？文件多大？是否需要多进程共享？能否接受首次访问的缺页抖动？错误如何恢复？</p>
+<h3 id="32">3.2 权衡：映射方便随机访问，但错误恢复和驻留控制更难</h3>
+<p><code>mmap</code> 的优点：</p>
+<ul>
+<li>随机访问自然：像访问数组一样访问文件，不需要自己维护缓冲区和偏移。</li>
+<li>多进程共享 page cache，减少重复内存。</li>
+<li>避免显式 <code>read</code> 的系统调用和用户缓冲区管理。</li>
+</ul>
+<p>代价：</p>
+<ul>
+<li><strong>错误恢复难</strong>：普通 <code>read</code> 返回 <code>-1</code> 和 <code>errno</code>，调用方可以重试；<code>mmap</code> 访问出错可能直接是 <code>SIGBUS</code>/<code>SIGSEGV</code>，需要信号处理或额外校验，恢复路径复杂。</li>
+<li><strong>驻留控制难</strong>：你很难精确控制哪些页常驻；<code>madvise(MADV_SEQUENTIAL/WILLNEED/DONTNEED)</code>、<code>mlock</code> 只是建议或限制，最终受内核回收策略影响。</li>
+<li><strong>生命周期耦合</strong>：文件被截断、替换、卸载，映射可能失效；必须约定好更新协议。</li>
+<li><strong>可观测性更绕</strong>：RSS 里混入共享文件页，排障时要结合 <code>smaps</code>、<code>maps</code> 判断。</li>
+</ul>
+<p>一个实用的后台经验：只读、大、随机访问、更新不频繁的索引/词表适合 <code>mmap</code>；需要精细错误处理、流式顺序读、或文件会被频繁改写的场景，优先考虑 <code>read</code>/<code>pread</code> 加显式缓冲。</p>
+<hr />
+<h2 id="_8">四、动手实践：映射文件并顺序/随机读取</h2>
+<p>目标：亲手观察 <code>mmap</code> 后 VIRT、RSS、minor/major faults 的变化，并复现文件截断后的风险。</p>
+<h3 id="1">步骤 1：准备一个足够大的测试文件</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/vm-lab<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/vm-lab
+
+<span class="c1"># 生成 256 MiB 文件；用 urandom 避免全是零页导致观察偏差</span>
+dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/urandom<span class="w"> </span><span class="nv">of</span><span class="o">=</span>index.bin<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">256</span><span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress
+ls<span class="w"> </span>-lh<span class="w"> </span>index.bin
+</code></pre></div>
+
+<p>说明：如果文件全是零，某些路径可能走共享零页，缺页表现不典型。用随机数据更接近真实索引文件。</p>
+<h3 id="2">步骤 2：编写并编译实验程序</h3>
+<p>把 2.3 节的最小示例保存到 <code>/tmp/vm-lab/vmtest.c</code>，然后：</p>
+<div class="codehilite"><pre><span></span><code>cc<span class="w"> </span>-O2<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-o<span class="w"> </span>vmtest<span class="w"> </span>vmtest.c
+</code></pre></div>
+
+<h3 id="3">步骤 3：冷缓存下观察顺序读取</h3>
+<div class="codehilite"><pre><span></span><code>sync
+<span class="nb">echo</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/proc/sys/vm/drop_caches<span class="w">   </span><span class="c1"># 需要 root；生产环境不要随便执行</span>
+
+/usr/bin/time<span class="w"> </span>-v<span class="w"> </span>./vmtest<span class="w"> </span>index.bin
+</code></pre></div>
+
+<p>记录：</p>
+<ul>
+<li><code>Minor (reclaiming a frame) page faults</code></li>
+<li><code>Major (requiring I/O) page faults</code></li>
+<li><code>Maximum resident set size</code></li>
+<li>程序自身打印的 <code>after mmap</code> / <code>sequential</code> / <code>random</code> 三组 <code>getrusage</code> 数据</li>
+</ul>
+<p>预期：<code>after mmap</code> 时 RSS 和 faults 增长不明显；顺序读取后 RSS 明显上升，冷缓存下 major faults 增多；再次运行时由于 page cache 已热，major faults 明显减少。</p>
+<h3 id="4">步骤 4：热缓存下重复</h3>
+<div class="codehilite"><pre><span></span><code>/usr/bin/time<span class="w"> </span>-v<span class="w"> </span>./vmtest<span class="w"> </span>index.bin
+</code></pre></div>
+
+<p>对比两次结果：同样的代码，major faults 可能从很多降到接近 0，说明“缺页成本”高度依赖 page cache 状态。</p>
+<h3 id="5-proc">步骤 5：运行中观察 <code>/proc</code></h3>
+<p>另开一个终端，让程序处理更大文件或加 <code>sleep</code>，然后：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">pid</span><span class="o">=</span><span class="k">$(</span>pgrep<span class="w"> </span>-n<span class="w"> </span>vmtest<span class="k">)</span>
+cat<span class="w"> </span>/proc/<span class="nv">$pid</span>/maps<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'index.bin|anon|stack'</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'VmSize|VmRSS|VmData|VmSwap'</span><span class="w"> </span>/proc/<span class="nv">$pid</span>/status
+ps<span class="w"> </span>-o<span class="w"> </span>pid,min_flt,maj_flt,rss,vsz,cmd<span class="w"> </span>-p<span class="w"> </span><span class="nv">$pid</span>
+</code></pre></div>
+
+<p>重点确认：</p>
+<ul>
+<li><code>index.bin</code> 出现在 <code>maps</code> 中，权限通常是 <code>r--p</code> 或 <code>r--s</code>；</li>
+<li><code>VmSize</code> 明显大于 <code>VmRSS</code>；</li>
+<li><code>VmRSS</code> 随访问页数增加而增加，但不是一次性等于文件大小。</li>
+</ul>
+<h3 id="6-sigbus">步骤 6：复现文件截断后的 SIGBUS</h3>
+<p>把 2.4 节的截断示例保存为 <code>trunc.c</code>，编译运行：</p>
+<div class="codehilite"><pre><span></span><code>cc<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-Wall<span class="w"> </span>-o<span class="w"> </span>trunc<span class="w"> </span>trunc.c
+./trunc<span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"exit=</span><span class="nv">$?</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>预期：进程可能因 <code>SIGBUS</code> 终止（shell 显示 <code>Bus error</code>，退出码通常为 135）。用 <code>dmesg</code> 或 <code>strace</code> 可进一步确认信号来源。</p>
+<p>进一步实验：先映射并读一遍，再在另一个进程里 <code>truncate -s 0 data.bin</code>，然后继续访问，观察行为。理解“映射长度没变，但后备文件内容没了”这一风险。</p>
+<h3 id="7">步骤 7：记录实验结论</h3>
+<p>建议按下面模板记录，形成自己的排障笔记：</p>
+<div class="codehilite"><pre><span></span><code>文件大小：
+是否冷缓存：
+after mmap:   min_flt=      maj_flt=      rss=
+sequential:   min_flt=      maj_flt=      rss=
+random:       min_flt=      maj_flt=      rss=
+VmSize:       VmRSS:
+截断实验现象：
+结论：
+</code></pre></div>
+
+<h3 id="box">附：一键验证脚本（我在 box 上实测通过）</h3>
+<p>如果没有 root、做不了 <code>drop_caches</code>，可以用 <code>fsync + posix_fadvise(POSIX_FADV_DONTNEED)</code> 把刚写的文件尽量踢出 page cache，再映射读取。课程附带的 <code>practice38/vm.c</code> + <code>test.sh</code> 做了这件事：写 64 MiB 文件 → 踢缓存 → mmap → 顺序读前一半 → <code>MADV_RANDOM</code> 后随机读后一半 2000 页 → 再顺序读一遍 → <code>ftruncate</code> 到 1 页后访问末尾 → 最后再测匿名映射。在 Linux 6.12 上的实测输出：</p>
+<div class="codehilite"><pre><span></span><code>after_mmap VSZ+65536KB RSS+216KB          # VIRT 涨满 64MB，RSS 几乎不动
+seq_half minflt=512 majflt=1 RSS+32988KB pages=8192   # 8192 页只缺页 512 次：fault-around + 预读
+rand_2000 minflt=2 majflt=1764 RSS+40172KB            # 关掉预读后随机读，几乎每页一次 major fault
+seq_again minflt=0 majflt=0                           # 已驻留且已建立 PTE，不再缺页
+truncate_access SIGBUS                                # 截断后访问 EOF 之后的映射页
+first_page_ok=x                                       # 仍在文件范围内的第一页照常可读
+anon_256MB_untouched RSS+0KB                          # 匿名映射不碰就不占物理内存
+anon_touch_32MB RSS+32768KB                           # 碰多少页就涨多少
+</code></pre></div>
+
+<p><code>test.sh</code> 自动检查 6 项（VSZ 与 RSS 分离、顺序读缺页数远少于页数、随机读出现大量 major fault、重复访问不缺页、截断后 SIGBUS、匿名映射按需占用），全部通过时打印 <code>ALL_CHECKS_PASSED</code>。具体数字会随内核版本、文件系统和内存压力变化，看趋势即可。</p>
+<p>运行：<code>cd practice38 &amp;&amp; ./test.sh</code></p>
+<h3 id="_9">验收标准</h3>
+<ul>
+<li>能用自己的话区分 VIRT 与 RSS，并说明为什么 VIRT 很大不一定代表物理内存占用高。</li>
+<li>能解释文件截断后继续访问映射的风险：地址仍合法，但后备页失效，可能触发 <code>SIGBUS</code>；更新文件应采用“写新文件 + 原子 rename”。</li>
+<li>能根据 <code>/proc/&lt;pid&gt;/maps</code>、<code>/proc/&lt;pid&gt;/status</code>、<code>ps</code>、<code>/usr/bin/time -v</code> 和 <code>getrusage</code> 的数据，判断一次访问是 minor fault 还是 major fault。</li>
+</ul>
+<hr />
+<h2 id="_10">五、自测题（附答案）</h2>
+<h3 id="1-virt-8-gibrss-300-mib">题 1：进程 VIRT 显示 8 GiB，RSS 只有 300 MiB，是否说明存在内存泄漏？</h3>
+<p><strong>答案</strong>：不能。VIRT 是虚拟地址空间大小，包含尚未访问的匿名映射、文件映射、线程栈、分配器预留等；RSS 才是当前驻留的物理页。8 GiB VIRT 可能只是映射了一个大索引文件或预留了地址空间。判断泄漏应看 RSS/PSS 随时间的变化趋势、<code>/proc/&lt;pid&gt;/smaps</code> 的具体区间，以及业务负载是否同步变化。</p>
+<h3 id="2mmap-munmap-major-faults-0">题 2：<code>mmap</code> 一个文件后立刻 <code>munmap</code>，为什么 major faults 可能几乎为 0？</h3>
+<p><strong>答案</strong>：<code>mmap</code> 通常只建立 VMA，不读取文件数据；没有访问就没有缺页。即使访问了，如果文件内容已在 page cache 中，缺页是 minor fault，不需要磁盘 IO。只有 page cache 未命中、需要从磁盘或远端存储加载时，才会产生 major fault。因此“映射了”不等于“读过了”，更不等于“发生了 IO”。</p>
+<h3 id="3-sigbus">题 3：映射文件后，另一个进程把文件截断，继续读取映射为什么会触发 <code>SIGBUS</code> 而不是普通的读错误？</h3>
+<p><strong>答案</strong>：映射的虚拟地址范围仍然存在，PTE 也可能仍指向原来的 page cache 页；但文件被截断后，超出新文件长度的部分不再有有效后备数据。内核在访问该页时发现后备对象无法提供这一页（或底层 IO 出错），于是发送 <code>SIGBUS</code>。它不是地址非法（那通常是 <code>SIGSEGV</code>），而是“映射的后备存储不可用”。后台系统应避免原地截断正在被映射的文件，改用写新文件再原子 <code>rename</code> 的发布方式。</p>
+<hr />
+<h2 id="_11">六、推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/mmap.2.html">虚拟内存、缺页与mmap：Linux man-pages</a>（man7.org，英文，文档，进阶，免费）</li>
+</ul>
+<p>重点阅读页表与 TLB、匿名和文件映射相关章节，并核对 <code>mmap</code> 的 flags、返回值、<code>MAP_SHARED</code>/<code>MAP_PRIVATE</code> 语义、<code>SIGBUS</code> 条件与错误处理路径。建议结合本节点实验，记录你使用的内核版本、文件系统类型和边界条件，因为不同版本、不同文件系统（如本地 ext4、网络文件系统）的行为可能不同。</p>
+<hr />
+<h2 id="_12">七、小结</h2>
+<ul>
+<li>虚拟内存把“地址”与“物理页”解耦；页表负责翻译，TLB 负责加速。</li>
+<li><code>mmap</code> 建立 VMA 与后备对象的映射，不直接复制文件；匿名映射与文件映射、共享与私有决定缺页和写回行为。</li>
+<li>缺页可能分配、加载、COW 或报错；minor fault 不涉及 IO，major fault 需要 IO。</li>
+<li>VIRT 是地址空间，RSS 是驻留物理页；排障要结合 <code>maps</code>、<code>status</code>、<code>ps</code>、<code>time -v</code> 和 <code>getrusage</code>。</li>
+<li><code>mmap</code> 不是免费的：仍有 IO、缺页、页表、COW 和回收成本；它擅长随机访问和共享，但错误恢复与驻留控制更难。</li>
+</ul>
+<hr />
+<h2 id="practice38vmc-testsh">附录：practice38/vm.c 与 test.sh</h2>
+<p><code>vm.c</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;signal.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;setjmp.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/mman.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/resource.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/stat.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">rss_kb</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span><span class="kt">FILE</span><span class="o">*</span><span class="n">f</span><span class="o">=</span><span class="n">fopen</span><span class="p">(</span><span class="s">"/proc/self/status"</span><span class="p">,</span><span class="s">"r"</span><span class="p">);</span><span class="kt">char</span><span class="w"> </span><span class="n">l</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span><span class="kt">long</span><span class="w"> </span><span class="n">v</span><span class="o">=</span><span class="mi">-1</span><span class="p">;</span>
+<span class="w"> </span><span class="k">while</span><span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="k">sizeof</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="n">f</span><span class="p">))</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">strncmp</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="s">"VmRSS:"</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span><span class="w"> </span><span class="n">sscanf</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">6</span><span class="p">,</span><span class="s">"%ld"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span><span class="w"> </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span><span class="k">return</span><span class="w"> </span><span class="n">v</span><span class="p">;}</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">vsz_kb</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span><span class="kt">FILE</span><span class="o">*</span><span class="n">f</span><span class="o">=</span><span class="n">fopen</span><span class="p">(</span><span class="s">"/proc/self/status"</span><span class="p">,</span><span class="s">"r"</span><span class="p">);</span><span class="kt">char</span><span class="w"> </span><span class="n">l</span><span class="p">[</span><span class="mi">256</span><span class="p">];</span><span class="kt">long</span><span class="w"> </span><span class="n">v</span><span class="o">=</span><span class="mi">-1</span><span class="p">;</span>
+<span class="w"> </span><span class="k">while</span><span class="p">(</span><span class="n">fgets</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="k">sizeof</span><span class="w"> </span><span class="n">l</span><span class="p">,</span><span class="n">f</span><span class="p">))</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">strncmp</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="s">"VmSize:"</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span><span class="w"> </span><span class="n">sscanf</span><span class="p">(</span><span class="n">l</span><span class="o">+</span><span class="mi">7</span><span class="p">,</span><span class="s">"%ld"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">v</span><span class="p">);</span><span class="w"> </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span><span class="k">return</span><span class="w"> </span><span class="n">v</span><span class="p">;}</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">flt</span><span class="p">(</span><span class="kt">long</span><span class="o">*</span><span class="n">mn</span><span class="p">,</span><span class="kt">long</span><span class="o">*</span><span class="n">mj</span><span class="p">){</span><span class="k">struct</span><span class="w"> </span><span class="nc">rusage</span><span class="w"> </span><span class="n">r</span><span class="p">;</span><span class="n">getrusage</span><span class="p">(</span><span class="n">RUSAGE_SELF</span><span class="p">,</span><span class="o">&amp;</span><span class="n">r</span><span class="p">);</span><span class="o">*</span><span class="n">mn</span><span class="o">=</span><span class="n">r</span><span class="p">.</span><span class="n">ru_minflt</span><span class="p">;</span><span class="o">*</span><span class="n">mj</span><span class="o">=</span><span class="n">r</span><span class="p">.</span><span class="n">ru_majflt</span><span class="p">;}</span>
+<span class="k">static</span><span class="w"> </span><span class="n">sigjmp_buf</span><span class="w"> </span><span class="n">jb</span><span class="p">;</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onbus</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">){(</span><span class="kt">void</span><span class="p">)</span><span class="n">s</span><span class="p">;</span><span class="n">siglongjmp</span><span class="p">(</span><span class="n">jb</span><span class="p">,</span><span class="mi">1</span><span class="p">);}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="kt">char</span><span class="o">**</span><span class="n">argv</span><span class="p">){</span>
+<span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="n">path</span><span class="o">=</span><span class="n">argc</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">?</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">:</span><span class="s">"data.bin"</span><span class="p">;</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">sz</span><span class="o">=</span><span class="mi">64UL</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">;</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">pg</span><span class="o">=</span><span class="n">sysconf</span><span class="p">(</span><span class="n">_SC_PAGESIZE</span><span class="p">);</span>
+<span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="o">=</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="n">O_RDWR</span><span class="o">|</span><span class="n">O_CREAT</span><span class="o">|</span><span class="n">O_TRUNC</span><span class="p">,</span><span class="mo">0644</span><span class="p">);</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="n">buf</span><span class="o">=</span><span class="n">malloc</span><span class="p">(</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">);</span><span class="w"> </span><span class="n">memset</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="sc">'x'</span><span class="p">,</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">);</span>
+<span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">64</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">write</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">buf</span><span class="p">,</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">)</span><span class="o">!=</span><span class="mi">1</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">){</span><span class="n">perror</span><span class="p">(</span><span class="s">"write"</span><span class="p">);</span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;}</span>
+<span class="w"> </span><span class="n">fsync</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w"> </span><span class="n">posix_fadvise</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">POSIX_FADV_DONTNEED</span><span class="p">);</span><span class="w">  </span><span class="cm">/* 尽量把页缓存踢掉 */</span>
+<span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">mn0</span><span class="p">,</span><span class="n">mj0</span><span class="p">,</span><span class="n">mn1</span><span class="p">,</span><span class="n">mj1</span><span class="p">;</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">r0</span><span class="o">=</span><span class="n">rss_kb</span><span class="p">(),</span><span class="n">v0</span><span class="o">=</span><span class="n">vsz_kb</span><span class="p">();</span>
+<span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="n">p</span><span class="o">=</span><span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="n">sz</span><span class="p">,</span><span class="n">PROT_READ</span><span class="p">,</span><span class="n">MAP_SHARED</span><span class="p">,</span><span class="n">fd</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">p</span><span class="o">==</span><span class="n">MAP_FAILED</span><span class="p">){</span><span class="n">perror</span><span class="p">(</span><span class="s">"mmap"</span><span class="p">);</span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;}</span>
+<span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"after_mmap VSZ+%ldKB RSS+%ldKB</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">vsz_kb</span><span class="p">()</span><span class="o">-</span><span class="n">v0</span><span class="p">,</span><span class="n">rss_kb</span><span class="p">()</span><span class="o">-</span><span class="n">r0</span><span class="p">);</span>
+<span class="w"> </span><span class="n">flt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mn0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">mj0</span><span class="p">);</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">sum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">off</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">off</span><span class="o">&lt;</span><span class="n">sz</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span><span class="n">off</span><span class="o">+=</span><span class="n">pg</span><span class="p">)</span><span class="w"> </span><span class="n">sum</span><span class="o">+=</span><span class="n">p</span><span class="p">[</span><span class="n">off</span><span class="p">];</span><span class="w">          </span><span class="cm">/* 顺序读前一半 */</span>
+<span class="w"> </span><span class="n">flt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mn1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">mj1</span><span class="p">);</span>
+<span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"seq_half minflt=%ld majflt=%ld RSS+%ldKB pages=%zu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">mn1</span><span class="o">-</span><span class="n">mn0</span><span class="p">,</span><span class="n">mj1</span><span class="o">-</span><span class="n">mj0</span><span class="p">,</span><span class="n">rss_kb</span><span class="p">()</span><span class="o">-</span><span class="n">r0</span><span class="p">,</span><span class="n">sz</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">pg</span><span class="p">);</span>
+<span class="w"> </span><span class="n">madvise</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">sz</span><span class="p">,</span><span class="n">MADV_RANDOM</span><span class="p">);</span><span class="w"> </span><span class="n">srand</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="n">flt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mn0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">mj0</span><span class="p">);</span>
+<span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">2000</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="kt">size_t</span><span class="w"> </span><span class="n">off</span><span class="o">=</span><span class="p">(</span><span class="kt">size_t</span><span class="p">)(</span><span class="n">sz</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">rand</span><span class="p">()</span><span class="o">%</span><span class="p">(</span><span class="n">sz</span><span class="o">/</span><span class="mi">2</span><span class="o">/</span><span class="n">pg</span><span class="p">))</span><span class="o">*</span><span class="n">pg</span><span class="p">);</span><span class="w"> </span><span class="n">sum</span><span class="o">+=</span><span class="n">p</span><span class="p">[</span><span class="n">off</span><span class="p">];}</span><span class="w"> </span><span class="cm">/* 随机读后一半 */</span>
+<span class="w"> </span><span class="n">flt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mn1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">mj1</span><span class="p">);</span>
+<span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"rand_2000 minflt=%ld majflt=%ld RSS+%ldKB</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">mn1</span><span class="o">-</span><span class="n">mn0</span><span class="p">,</span><span class="n">mj1</span><span class="o">-</span><span class="n">mj0</span><span class="p">,</span><span class="n">rss_kb</span><span class="p">()</span><span class="o">-</span><span class="n">r0</span><span class="p">);</span>
+<span class="w"> </span><span class="n">flt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mn0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">mj0</span><span class="p">);</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">off</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">off</span><span class="o">&lt;</span><span class="n">sz</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span><span class="n">off</span><span class="o">+=</span><span class="n">pg</span><span class="p">)</span><span class="w"> </span><span class="n">sum</span><span class="o">+=</span><span class="n">p</span><span class="p">[</span><span class="n">off</span><span class="p">];</span><span class="w"> </span><span class="n">flt</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mn1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">mj1</span><span class="p">);</span>
+<span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"seq_again minflt=%ld majflt=%ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">mn1</span><span class="o">-</span><span class="n">mn0</span><span class="p">,</span><span class="n">mj1</span><span class="o">-</span><span class="n">mj0</span><span class="p">);</span>
+<span class="w"> </span><span class="cm">/* 截断后访问映射 -&gt; SIGBUS */</span>
+<span class="w"> </span><span class="n">ftruncate</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">pg</span><span class="p">);</span><span class="w"> </span><span class="n">signal</span><span class="p">(</span><span class="n">SIGBUS</span><span class="p">,</span><span class="n">onbus</span><span class="p">);</span>
+<span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">sigsetjmp</span><span class="p">(</span><span class="n">jb</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span><span class="w"> </span><span class="n">sum</span><span class="o">+=</span><span class="n">p</span><span class="p">[</span><span class="n">sz</span><span class="mi">-1</span><span class="p">];</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"truncate_access no_signal</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"truncate_access SIGBUS</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"first_page_ok=%c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w"> </span><span class="cm">/* 匿名映射：只有触碰才占 RSS */</span>
+<span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">ra</span><span class="o">=</span><span class="n">rss_kb</span><span class="p">();</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="n">a</span><span class="o">=</span><span class="n">mmap</span><span class="p">(</span><span class="nb">NULL</span><span class="p">,</span><span class="mi">256UL</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">,</span><span class="n">PROT_READ</span><span class="o">|</span><span class="n">PROT_WRITE</span><span class="p">,</span><span class="n">MAP_PRIVATE</span><span class="o">|</span><span class="n">MAP_ANONYMOUS</span><span class="p">,</span><span class="mi">-1</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"anon_256MB_untouched RSS+%ldKB</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">rss_kb</span><span class="p">()</span><span class="o">-</span><span class="n">ra</span><span class="p">);</span>
+<span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">o</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">o</span><span class="o">&lt;</span><span class="p">(</span><span class="mi">32UL</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">);</span><span class="n">o</span><span class="o">+=</span><span class="n">pg</span><span class="p">)</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="n">o</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+<span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"anon_touch_32MB RSS+%ldKB</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">rss_kb</span><span class="p">()</span><span class="o">-</span><span class="n">ra</span><span class="p">);</span>
+<span class="w"> </span><span class="n">munmap</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">256UL</span><span class="o">&lt;&lt;</span><span class="mi">20</span><span class="p">);</span><span class="w"> </span><span class="n">munmap</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">sz</span><span class="p">);</span><span class="w"> </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w"> </span><span class="n">unlink</span><span class="p">(</span><span class="n">path</span><span class="p">);</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">sum</span><span class="p">;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;}</span>
+</code></pre></div>
+
+<p><code>test.sh</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="c1"># 第38课实践：mmap 文件顺序/随机读，记录 minor/major faults、VSZ/RSS，截断后 SIGBUS</span>
+<span class="nb">set</span><span class="w"> </span>-u<span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
+gcc<span class="w"> </span>-O1<span class="w"> </span>-w<span class="w"> </span>-o<span class="w"> </span>vm<span class="w"> </span>vm.c<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="nv">out</span><span class="o">=</span><span class="k">$(</span>./vm<span class="w"> </span>./data.bin<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="nv">fail</span><span class="o">=</span><span class="m">0</span>
+chk<span class="o">(){</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="s2">"</span><span class="nv">$2</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"PASS </span><span class="nv">$1</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"FAIL </span><span class="nv">$1</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="nv">fail</span><span class="o">=</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span><span class="p">;</span><span class="w"> </span><span class="o">}</span>
+g<span class="o">(){</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">"^</span><span class="nv">$1</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s2">"</span><span class="nv">$2</span><span class="s2">=[0-9]*"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="o">=</span><span class="w"> </span>-f2<span class="p">;</span><span class="w"> </span><span class="o">}</span>
+<span class="nv">vsz</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span><span class="p">|</span>grep<span class="w"> </span>after_mmap<span class="p">|</span>sed<span class="w"> </span><span class="s1">'s/.*VSZ+\([0-9]*\)KB RSS+\([0-9]*\)KB/\1/'</span><span class="k">)</span>
+<span class="nv">rss</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span><span class="p">|</span>grep<span class="w"> </span>after_mmap<span class="p">|</span>sed<span class="w"> </span><span class="s1">'s/.*RSS+\([0-9]*\)KB/\1/'</span><span class="k">)</span>
+chk<span class="w"> </span><span class="s2">"mmap 后 VSZ 涨 64MB 而 RSS 几乎不涨"</span><span class="w"> </span><span class="s1">'[ "$vsz" -ge 65536 ] &amp;&amp; [ "$rss" -lt 4096 ]'</span>
+chk<span class="w"> </span><span class="s2">"顺序读缺页数远少于页数(fault-around/预读)"</span><span class="w"> </span><span class="s1">'[ "$(g seq_half minflt)" -lt 8192 ]'</span>
+chk<span class="w"> </span><span class="s2">"MADV_RANDOM 随机读出现大量 major fault"</span><span class="w"> </span><span class="s1">'[ "$(g rand_2000 majflt)" -gt 100 ]'</span>
+chk<span class="w"> </span><span class="s2">"再次顺序读已驻留页不再缺页"</span><span class="w"> </span><span class="s1">'[ "$(g seq_again minflt)" -eq 0 ] &amp;&amp; [ "$(g seq_again majflt)" -eq 0 ]'</span>
+chk<span class="w"> </span><span class="s2">"截断后访问越界映射收到 SIGBUS"</span><span class="w"> </span><span class="s1">'echo "$out" | grep -q "truncate_access SIGBUS"'</span>
+<span class="nv">a0</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span><span class="p">|</span>grep<span class="w"> </span>anon_256MB<span class="p">|</span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">'+[0-9]*'</span><span class="p">|</span>tr<span class="w"> </span>-d<span class="w"> </span>+<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nv">a1</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$out</span><span class="s2">"</span><span class="p">|</span>grep<span class="w"> </span>anon_touch<span class="p">|</span>grep<span class="w"> </span>-o<span class="w"> </span><span class="s1">'+[0-9]*'</span><span class="p">|</span>tr<span class="w"> </span>-d<span class="w"> </span>+<span class="k">)</span>
+chk<span class="w"> </span><span class="s2">"匿名 256MB 未触碰不占 RSS，触碰 32MB 才涨约 32MB"</span><span class="w"> </span><span class="s1">'[ "$a0" -lt 1024 ] &amp;&amp; [ "$a1" -ge 32000 ]'</span>
+<span class="o">[</span><span class="w"> </span><span class="nv">$fail</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>ALL_CHECKS_PASSED
+</code></pre></div><div class="pn"><span><a href="37.html">← 文件读写、页缓存与持久性</a></span><span>下一课 待更新</span></div></main></div></body></html>
