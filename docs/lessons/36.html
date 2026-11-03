@@ -1,0 +1,471 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>36. 文件描述符与打开文件描述 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（36/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（4/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="cur" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li class="todo">37. 文件读写、页缓存与持久性 <em>待更新</em></li><li class="todo">38. 虚拟内存、缺页与mmap <em>待更新</em></li><li class="todo">39. 管道、共享内存与IPC <em>待更新</em></li><li class="todo">40. 信号与安全停机 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 36 课 · 领域 C · 阶段 1</p><p class="dl"><a href="../files/36-c-fd.md" download>⬇ 本课 Markdown</a><a href="../files/practice36.tar.gz" download>⬇ 练习包 practice36.tar.gz</a></p><h1 id="36208">第 36/208 课：文件描述符与打开文件描述</h1>
+<blockquote>
+<p>节点：<code>c-fd</code> ｜ 领域：C ｜ 阶段：1 ｜ 难度：基础 ｜ 子类：文件与内存</p>
+<p>一句话：文件描述符是进程中的整数引用，多个 fd 可能指向同一个打开文件描述并共享偏移及部分标志。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 学习目标</h2>
+<p>学完这一课，你应该能做到：</p>
+<ul>
+<li>能解释 <strong>fd 表（file descriptor table）</strong> 与 <strong>打开文件描述（open file description）</strong> 的区别与对应关系。</li>
+<li>能解释 <code>dup</code>、<code>fork</code> 之后为什么偏移会「串味」（共享偏移），以及 <code>O_APPEND</code>、<code>O_CLOEXEC</code>、<code>FD_CLOEXEC</code> 各自管的是什么。</li>
+<li>能独立完成实验：用 <code>dup</code> 与 <code>fork</code> 演示共享偏移，并验证 <code>FD_CLOEXEC</code> 避免子进程泄漏。</li>
+<li>满足两条验收标准：
+  1. 能解释 <strong>fd 复用导致的误关闭</strong>（close 后整数很快可能分配给新连接）。
+  2. 能说明 <strong>所有权包装（RAII）不重复 close</strong>。</li>
+</ul>
+<h3 id="_1">为什么后端要懂</h3>
+<p>你是要入职腾讯微信公众号后台开发的后端工程师。后台服务的日常大概长这样：</p>
+<ul>
+<li>每个微信用户请求进来，网关/接入层用 <code>accept</code> 拿到一个连接 fd；长连接维持、心跳、断线重连都要围绕 fd 生命周期管理。</li>
+<li>处理消息时要读配置、读模板、写日志、访问缓存/数据库，背后都是 socket fd 或普通文件 fd。</li>
+<li>服务经常要 <code>fork</code> + <code>exec</code> 拉起子进程（比如异步任务、回调消费者、外部脚本），如果 fd 没打好 <code>CLOEXEC</code>，子进程会把父进程的连接、监听端口「顺走」，造成泄漏甚至安全问题。</li>
+<li>高并发下 fd 数量是硬资源（<code>ulimit -n</code>）。泄漏 = 迟早 <code>EMFILE: Too many open files</code>，然后整个进程的 <code>accept</code> 全部失败。</li>
+<li>排障时你要能看懂 <code>lsof</code>、<code>/proc/PID/fd</code>、<code>strace</code> 的输出，快速定位「这个 fd 到底指向哪个 socket、偏移在哪、谁还引用着它」。</li>
+</ul>
+<p>这些都不是玄学，全部落在「fd 表 + 打开文件描述」这一层。理解这一层，你才能解释 <code>dup</code>、<code>fork</code>、连接关闭的工程边界。</p>
+<hr />
+<h2 id="2">2. 从直觉到原理</h2>
+<h3 id="21-fd">2.1 第一层直觉：fd 只是一个整数</h3>
+<p>当你写下：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"config.json"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+</code></pre></div>
+
+<p>内核返回的 <code>3</code>、<code>4</code>、<code>5</code>…… 并不是「文件」，也不是「文件内容」，它只是<strong>当前进程 fd 表里的一个下标</strong>。</p>
+<ul>
+<li><code>0</code> = stdin，<code>1</code> = stdout，<code>2</code> = stderr（约定俗成，进程启动时就被占用）。</li>
+<li>之后 <code>open</code>/<code>socket</code>/<code>accept</code>/<code>pipe</code> 返回的，通常是当前最小的空闲下标。</li>
+<li>fd 是<strong>进程私有</strong>的：同样的整数 <code>3</code>，在进程 A 和进程 B 里完全可能指向两个毫不相干的东西。</li>
+</ul>
+<p>这解释了为什么 fd 能「复用」：一旦某个下标被 <code>close</code> 释放回空闲集合，下一次分配很可能立刻把它拿去给一条新连接。</p>
+<h3 id="22-fd">2.2 第二层：fd 表 → 打开文件描述</h3>
+<p>内核里的结构大致是三层的（简化版）：</p>
+<div class="codehilite"><pre><span></span><code>进程 A                          系统级
+┌──────────────┐
+│ fd 0  ───────┼──► 打开文件描述 X ──► inode / socket 对象
+│ fd 1  ───────┼──► 打开文件描述 Y
+│ fd 3  ───────┼──► 打开文件描述 X   ← 和 fd 0 指向同一个！
+└──────────────┘
+</code></pre></div>
+
+<ul>
+<li><strong>fd 表</strong>：每个进程一张，表项是「下标 → 指向某个打开文件描述的指针」，外加每个 fd 自己的 <strong>fd 标志</strong>（目前主要是 <code>FD_CLOEXEC</code>）。</li>
+<li><strong>打开文件描述（open file description, OFD）</strong>：由 <code>open</code>/<code>socket</code>/<code>accept</code>/<code>pipe</code> 创建，是<strong>系统级</strong>的对象，可能被多个进程的多个 fd 共同引用。它保存：</li>
+<li><strong>文件偏移（offset）</strong></li>
+<li><strong>打开标志</strong>（<code>O_RDONLY</code>/<code>O_WRONLY</code>/<code>O_RDWR</code>、<code>O_APPEND</code>、<code>O_NONBLOCK</code> 等）</li>
+<li>引用计数、文件状态等</li>
+</ul>
+<p>关键结论：<strong>偏移和大部分打开标志属于「打开文件描述」，不属于单个 fd。</strong> 所以两个 fd 只要指向同一个 OFD，就会共享偏移。这就是后面 <code>dup</code>/<code>fork</code> 现象的总根源。</p>
+<blockquote>
+<p>注意区分：<code>FD_CLOEXEC</code> 是存在<strong>fd 表项</strong>上的（每个 fd 独立）；而 <code>O_CLOEXEC</code> 是 <code>open</code> 时的一个<strong>打开标志</strong>，它的效果是「创建后顺手把该 fd 的 <code>FD_CLOEXEC</code> 置上」。别把两者混为一谈。</p>
+</blockquote>
+<h3 id="23-dup-fd-ofd">2.3 第三层：dup —— 复制 fd，共享同一个 OFD</h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"demo.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">dupfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dup</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w">           </span><span class="cm">/* 新 fd，指向同一个打开文件描述 */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dupfd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"dup"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">      </span><span class="cm">/* 偏移 0 → 1 */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">dupfd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="cm">/* 从 1 开始读，不是 0！ */</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"a=%c b=%c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">dupfd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>如果文件内容以 <code>AB</code> 开头，输出会是 <code>a=A b=B</code>，而不是两次读到 <code>A</code>。因为 <code>fd</code> 和 <code>dupfd</code> 共享同一个 offset。</p>
+<p><code>dup2(oldfd, newfd)</code> 则是指定目标下标的版本：若 <code>newfd</code> 已打开会先被关闭，然后成为 <code>oldfd</code> 的副本。它常用于把管道/文件重定向到 0/1/2。</p>
+<h3 id="24-fork-fd-ofd">2.4 第四层：fork —— 子进程继承 fd，仍然共享 OFD</h3>
+<p><code>fork</code> 之后，子进程得到父进程 fd 表的一份<strong>拷贝</strong>。拷贝的是「指针」，不是「打开文件描述本身」。所以：</p>
+<ul>
+<li>父子进程中编号相同的 fd 指向<strong>同一个 OFD</strong>。</li>
+<li>它们<strong>共享偏移</strong>，也共享打开标志。</li>
+<li>但 <code>close(fd)</code> 是<strong>各关各的</strong>：子进程 <code>close</code> 只减少引用计数，父进程的同号 fd 依然有效；反之亦然。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/wait.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"demo.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">                        </span><span class="cm">/* 子进程 */</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"child read: %c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"parent read: %c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span><span class="w">  </span><span class="cm">/* 接着子进程的位置 */</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>子进程读走第一个字节后，父进程读到的是第二个字节。这正是「共享偏移」的直观证据。</p>
+<blockquote>
+<p>顺带一个易错点：<code>O_APPEND</code> 也属于打开文件描述。多个进程以 <code>O_APPEND</code> 写同一个文件时，每次 <code>write</code> 都会原子地「移到末尾再写」，不会互相覆盖半行日志。这在高并发写日志时很重要。</p>
+</blockquote>
+<h3 id="25-cloexec">2.5 第五层：CLOEXEC 与关闭责任</h3>
+<p><code>exec</code> 系列会替换进程映像，但<strong>默认会保留所有没有 <code>FD_CLOEXEC</code> 的 fd</strong>。这意味着：</p>
+<ul>
+<li>父进程监听 80 端口的 <code>listen_fd</code>、正在处理的连接 fd，如果不设 <code>CLOEXEC</code>，<code>fork</code> + <code>exec</code> 出来的子程序（可能是 <code>ffmpeg</code>、某个脚本、某个 SDK 拉起的 helper 进程）会继承它们。</li>
+<li>子程序本身并不知道这些 fd 的存在，也不会关闭它们；只要子程序活着，这些连接/端口就一直被引用。</li>
+<li>父进程 <code>close</code> 掉自己的 fd 后，资源并没有真正释放（引用计数没到 0），于是出现「明明关了，端口还占着」「连接泄漏」的怪异现象。</li>
+</ul>
+<p>正确做法：</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 方式一：open 时直接带 O_CLOEXEC（推荐，原子，无竞态） */</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"data.bin"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CLOEXEC</span><span class="p">);</span>
+
+<span class="cm">/* 方式二：先创建再设置 fd 标志（多线程下存在竞态窗口） */</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">F_GETFD</span><span class="p">);</span>
+<span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">F_SETFD</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">FD_CLOEXEC</span><span class="p">);</span>
+</code></pre></div>
+
+<p><code>accept4</code>、<code>socket</code>（带 <code>SOCK_CLOEXEC</code>）、<code>pipe2</code>、<code>dup3</code> 等都提供了原子版本，多线程服务里应优先使用。</p>
+<p><strong>关闭责任的划分</strong>：</p>
+<ul>
+<li>谁创建/拥有 fd，谁负责 <code>close</code>；<code>dup</code> 出来的每个 fd 都是独立的「关闭义务」，都要各关一次。</li>
+<li><code>fork</code> 后的子进程若 <code>exec</code>，靠 <code>FD_CLOEXEC</code> 自动清理；若不 <code>exec</code>，则子进程要自己 <code>close</code> 不需要的 fd（或干脆在 <code>fork</code> 前就规划好）。</li>
+<li>引用计数归零，OFD 才释放，底层 inode/socket 才真正关闭。</li>
+</ul>
+<h3 id="26-linux">2.6 用 Linux 工具把这一切「看见」</h3>
+<p><strong>看 fd 表：</strong></p>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>/proc/PID/fd
+<span class="c1"># lrwx------ 1 user user 64 ... 0 -&gt; /dev/pts/0</span>
+<span class="c1"># lrwx------ 1 user user 64 ... 1 -&gt; /dev/pts/0</span>
+<span class="c1"># lrwx------ 1 user user 64 ... 3 -&gt; socket:[123456]</span>
+<span class="c1"># lrwx------ 1 user user 64 ... 4 -&gt; /var/log/app.log</span>
+</code></pre></div>
+
+<p><code>/proc/PID/fd</code> 里的每个符号链接就是 fd 表项，箭头指向它引用的对象。两个不同编号指向同一个 <code>socket:[inode]</code>，说明它们共享同一个 socket 的打开文件描述。</p>
+<p><strong>看 fd 标志与偏移：</strong></p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/proc/PID/fdinfo/3
+<span class="c1"># pos:    1024                ← 共享的偏移</span>
+<span class="c1"># flags:  02100000            ← 八进制：O_RDONLY + O_LARGEFILE(0100000) + O_CLOEXEC(02000000)</span>
+<span class="c1"># mnt_id: 25</span>
+<span class="c1"># ino:    123456</span>
+</code></pre></div>
+
+<p><code>pos</code> 是偏移，两个 fd 若指向同一 OFD，<code>pos</code> 会一致变化；<code>flags</code> 是八进制的打开标志，内核会在这里把该 fd 的 <code>FD_CLOEXEC</code> 显示为 <code>O_CLOEXEC</code> 位（<code>02000000</code>）。所以同一个 OFD 的两个 fd，<code>pos</code> 一样，<code>02000000</code> 这一位却可能不同（例如 <code>dup</code> 出来的新 fd 默认不带 CLOEXEC）。</p>
+<p><strong>看谁打开了什么：</strong></p>
+<div class="codehilite"><pre><span></span><code>lsof<span class="w"> </span>-p<span class="w"> </span>PID
+lsof<span class="w"> </span>-i<span class="w"> </span>:8080
+lsof<span class="w"> </span>/var/log/app.log
+</code></pre></div>
+
+<p><code>lsof</code> 会列出进程的 fd、类型、设备、大小/偏移、名称，适合快速排查「谁占着端口/文件」。</p>
+<p><strong>看系统调用轨迹：</strong></p>
+<div class="codehilite"><pre><span></span><code>strace<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>openat,close,dup,dup2,dup3,fcntl,accept4<span class="w"> </span>-p<span class="w"> </span>PID
+<span class="c1"># 或从启动开始：</span>
+strace<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>file,desc<span class="w"> </span>./server
+</code></pre></div>
+
+<p><code>strace -f</code> 会跟踪子进程，能直接看到 <code>fork</code>/<code>exec</code> 前后哪些 fd 被打开、被设置 <code>FD_CLOEXEC</code>、有没有被泄漏。</p>
+<p><strong>一个具体的对照实验（不执行也可看懂）：</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 终端 1：启动一个会长期运行并打开文件的进程</span>
+./server<span class="w"> </span><span class="p">&amp;</span>
+<span class="nv">PID</span><span class="o">=</span><span class="nv">$!</span>
+
+<span class="c1"># 终端 2：</span>
+ls<span class="w"> </span>-l<span class="w"> </span>/proc/<span class="nv">$PID</span>/fd
+cat<span class="w"> </span>/proc/<span class="nv">$PID</span>/fdinfo/3
+lsof<span class="w"> </span>-p<span class="w"> </span><span class="nv">$PID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+strace<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>desc<span class="w"> </span>-p<span class="w"> </span><span class="nv">$PID</span>
+</code></pre></div>
+
+<hr />
+<h2 id="3">3. 常见误区</h2>
+<h3 id="1close">误区 1：close 之后那个整数就「安全了」</h3>
+<p><strong>不是。</strong> <code>close(fd)</code> 只是把下标还回空闲池。紧接着 <code>accept</code>/<code>open</code>/<code>socket</code> <strong>很可能拿到同一个整数</strong>。如果代码里还留着一份旧的 <code>fd</code> 副本（比如某个回调、定时器、事件循环里的缓存），之后再对这个整数 <code>close</code> 一次，就会把<strong>新连接</strong>误关掉。</p>
+<p>这就是验收标准里说的「<strong>fd 复用导致的误关闭</strong>」，典型场景：</p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* 反面教材 */</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">on_timeout</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w">            </span><span class="cm">/* 第一处关闭 */</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">on_error</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w">            </span><span class="cm">/* 若此时 fd 已被复用为新连接，误杀！ */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>或者更隐蔽的：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accept</span><span class="p">(...);</span>
+<span class="n">register_callback</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w">    </span><span class="cm">/* 回调里还会用它 */</span>
+<span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w">                </span><span class="cm">/* 提前关了 */</span>
+<span class="cm">/* ... 新连接 accept 拿到同一个整数 ... */</span>
+<span class="cm">/* 回调触发，读写/关闭的是别人的连接 */</span>
+</code></pre></div>
+
+<p><strong>防御手段：</strong></p>
+<ul>
+<li>用「连接对象」而不是裸整数作为身份，对象里带 <code>fd</code> 和 <code>closed</code> 状态；关闭后立即把状态置为 closed，所有路径先检查状态。</li>
+<li>关闭后把变量置为 <code>-1</code>（<code>fd = -1</code>），让二次 <code>close(-1)</code> 变成一个无害的 <code>EBADF</code>，而不是误关别人。</li>
+<li>事件循环里用 <code>epoll</code> 的 <code>data.ptr</code> 指向对象而非 fd，避免 fd 复用后事件投递到错误对象。</li>
+<li>明确「唯一所有者」，其余位置只持有弱引用/句柄，不各自 <code>close</code>。</li>
+</ul>
+<h3 id="2fork-fd">误区 2：fork 之后父子共用 fd，所以关一次就行</h3>
+<p><strong>错。</strong> <code>fork</code> 后父子各有一份 fd 表，<code>close</code> 是各关各的。要释放底层 OFD，必须让<strong>所有</strong>引用都关掉（引用计数归零）。父进程关了、子进程没关，资源仍然泄漏。</p>
+<h3 id="3dup-fd">误区 3：dup 出来的 fd 是「别名」，关一个就都关了</h3>
+<p><strong>错。</strong> <code>dup</code> 返回的是<strong>新的 fd 表项</strong>，有独立的关闭义务。关掉 <code>dupfd</code> 不影响 <code>fd</code> 的可用性（只要还有引用，OFD 就活着）。只是它们共享偏移。</p>
+<h3 id="4o_cloexec-fd_cloexec">误区 4：<code>O_CLOEXEC</code> 和 <code>FD_CLOEXEC</code> 是同一个东西</h3>
+<p><code>O_CLOEXEC</code> 是 <code>open</code> 的入参标志；<code>FD_CLOEXEC</code> 是 fd 表项上的标志。前者是「创建时顺手设置后者」的便捷方式。用 <code>fcntl(F_SETFD)</code> 改的是后者。多线程环境下「先 open 再 fcntl」中间有竞态窗口，可能被别的线程 <code>fork</code>+<code>exec</code> 时泄漏，所以优先 <code>O_CLOEXEC</code>/<code>SOCK_CLOEXEC</code>/<code>accept4</code>。</p>
+<h3 id="5close">误区 5：<code>close</code> 返回值不重要</h3>
+<p>在 Linux 上，<code>close</code> 可能因为延迟写入错误（如 NFS）返回 <code>-1</code>，但<strong>fd 已经被释放</strong>。所以「close 失败就重试」是危险的——重试可能关掉被复用的新 fd。正确处理是记录错误，但不要盲目重试同一个整数。</p>
+<hr />
+<h2 id="4">4. 设计权衡</h2>
+<h3 id="41-fd">4.1 集中管理 fd 减少泄漏</h3>
+<p><strong>收益</strong>：把所有 fd 的创建/关闭收敛到一个「连接池 / fd 管理器 / RAII 包装」里，能显著降低泄漏与双重关闭的概率。常见做法：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">FileDesc</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">FileDesc</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">fd_</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="o">~</span><span class="n">FileDesc</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">reset</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">FileDesc</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">FileDesc</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+<span class="w">    </span><span class="n">FileDesc</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">FileDesc</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">FileDesc</span><span class="p">(</span><span class="n">FileDesc</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">o</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">fd_</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">release</span><span class="p">())</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">FileDesc</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">FileDesc</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">o</span><span class="p">)</span><span class="w"> </span><span class="k">noexcept</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">this</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">o</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">reset</span><span class="p">();</span><span class="w"> </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">release</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="k">this</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">fd_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">release</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fd_</span><span class="p">;</span><span class="w"> </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">   </span><span class="cm">/* 放弃所有权，不 close */</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">reset</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">fd_</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w">                 </span><span class="cm">/* 只 close 一次 */</span>
+<span class="w">        </span><span class="n">fd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fd</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="k">operator</span><span class="w"> </span><span class="kt">bool</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">fd_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li><strong>所有权唯一</strong>：同一时刻只有一个包装对象拥有该 fd，析构时 <code>close</code> 一次。</li>
+<li><strong>移动而非拷贝</strong>：转移所有权用 <code>release()</code> 把源置 <code>-1</code>，避免两份都去 <code>close</code>。</li>
+<li><strong><code>close</code> 后置 <code>-1</code></strong>：让重复析构/重复关闭变成无害操作。</li>
+<li><strong>对外只暴露 <code>get()</code></strong>：其他模块要用 fd 就读，不拥有、不关闭。</li>
+</ul>
+<p>这就对应验收标准「<strong>所有权包装不重复 close</strong>」。</p>
+<h3 id="42">4.2 但异步关闭需要协调事件回调</h3>
+<p>RAII 把「何时 close」绑定到了对象生命周期，这在同步代码里很香，但在<strong>异步事件驱动</strong>的服务里会打架：</p>
+<ul>
+<li>事件循环（<code>epoll</code>/libevent/libuv）里可能还挂着这个 fd 的读/写事件回调。</li>
+<li>如果对象析构（<code>close</code> 掉 fd）时没有先从事件循环注销，可能出现：回调仍被触发 → 访问已释放对象（use-after-free）；或者 fd 被复用后，旧事件投递到新连接（误关/误读写）。</li>
+<li>所以「关闭」通常要拆成两步：先 <code>epoll_ctl(DEL)</code> / 注销回调，等确认没有在途回调，再真正 <code>close</code>。有时还要用「延迟关闭」或「引用计数对象 + 最后持有者关闭」来保证安全。</li>
+</ul>
+<p><strong>权衡结论</strong>：</p>
+<ul>
+<li>同步、短生命周期：优先 RAII/所有权包装，简单可靠。</li>
+<li>异步、回调密集：需要「所有权包装 + 生命周期引用计数 + 事件注销协议」三者配合；只在所有回调都不再引用时才真正 <code>close</code>。</li>
+<li>无论哪种，都要遵守「唯一关闭者」和「close 后置 <code>-1</code>」这两条底线。</li>
+</ul>
+<p>在公众号后台这类高并发长连接场景，连接对象通常被事件循环、业务回调、超时定时器多方引用，因此更常见的是「引用计数连接对象 + 最后释放时注销并 close」的模型，而不是裸 fd 直接 RAII。</p>
+<hr />
+<h2 id="5">5. 动手实践（可执行步骤）</h2>
+<blockquote>
+<p>目标：用 <code>dup</code> 与 <code>fork</code> 演示共享偏移，并验证 <code>FD_CLOEXEC</code> 避免子进程泄漏。
+以下步骤在 Linux 上执行即可。实验 C 之后附了一份我实际跑通的一键验证脚本。</p>
+</blockquote>
+<h3 id="adup">实验 A：dup 演示共享偏移</h3>
+<p><strong>步骤 1：准备文件</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">printf</span><span class="w"> </span><span class="s1">'ABCDEFGHIJ'</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/ofd_demo.txt
+od<span class="w"> </span>-c<span class="w"> </span>/tmp/ofd_demo.txt
+</code></pre></div>
+
+<p><strong>步骤 2：写程序 <code>dup_demo.c</code></strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/tmp/ofd_demo.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CLOEXEC</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dup</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd2</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"dup"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w">  </span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="cm">/* 期望 A */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd2</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="cm">/* 期望 B（共享偏移） */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w">  </span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">   </span><span class="cm">/* 期望 C */</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"fd=%d fd2=%d reads: %c %c %c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">fd2</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd2</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 3：编译运行</strong></p>
+<div class="codehilite"><pre><span></span><code>cc<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>/tmp/dup_demo<span class="w"> </span>/tmp/dup_demo.c
+/tmp/dup_demo
+<span class="c1"># 期望输出：fd=3 fd2=4 reads: A B C</span>
+</code></pre></div>
+
+<p><strong>验收点</strong>：两次读没有都拿到 <code>A</code>，而是连续推进，证明共享偏移。</p>
+<p><strong>步骤 4：观察 fdinfo（可选）</strong></p>
+<p>把程序改成读一个字节后 <code>sleep(30)</code>，运行后另开终端：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">PID</span><span class="o">=</span><span class="k">$(</span>pgrep<span class="w"> </span>-f<span class="w"> </span>dup_demo<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
+ls<span class="w"> </span>-l<span class="w"> </span>/proc/<span class="nv">$PID</span>/fd
+cat<span class="w"> </span>/proc/<span class="nv">$PID</span>/fdinfo/3
+cat<span class="w"> </span>/proc/<span class="nv">$PID</span>/fdinfo/4
+</code></pre></div>
+
+<p>对比两个 <code>pos:</code>，读数后它们应保持一致；<code>flags:</code> 中可见 <code>O_CLOEXEC</code> 位。</p>
+<h3 id="bfork">实验 B：fork 演示共享偏移</h3>
+<p><strong>步骤 1：写 <code>fork_demo.c</code></strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/wait.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/tmp/ofd_demo.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CLOEXEC</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"fork"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"child  read: %c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"parent read: %c</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 2：编译运行</strong></p>
+<div class="codehilite"><pre><span></span><code>cc<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>/tmp/fork_demo<span class="w"> </span>/tmp/fork_demo.c
+/tmp/fork_demo
+<span class="c1"># 期望：child read: A</span>
+<span class="c1">#       parent read: B   ← 父进程没有从 A 重新开始</span>
+</code></pre></div>
+
+<p><strong>验收点</strong>：父子共享同一 OFD 的偏移；若父进程「重新读到 A」，则说明你其实做了 <code>lseek(fd, 0, SEEK_SET)</code> 或另开了文件。</p>
+<h3 id="c-fd_cloexec">实验 C：验证 FD_CLOEXEC 避免子进程泄漏</h3>
+<p><strong>步骤 1：写 <code>cloexec_demo.c</code></strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/wait.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd_cloexec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/tmp/ofd_demo.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_CLOEXEC</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd_plain</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/tmp/ofd_demo.txt"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 故意不设 */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd_cloexec</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">fd_plain</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"parent fds: cloexec=%d plain=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">fd_cloexec</span><span class="p">,</span><span class="w"> </span><span class="n">fd_plain</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"fork"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">        </span><span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="s">"ls -l /proc/%d/fd"</span><span class="p">,</span><span class="w"> </span><span class="n">getpid</span><span class="p">());</span>
+<span class="w">        </span><span class="n">execl</span><span class="p">(</span><span class="s">"/bin/sh"</span><span class="p">,</span><span class="w"> </span><span class="s">"sh"</span><span class="p">,</span><span class="w"> </span><span class="s">"-c"</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nb">NULL</span><span class="p">);</span><span class="w">  </span><span class="cm">/* exec 后看子进程 fd */</span>
+<span class="w">        </span><span class="n">_exit</span><span class="p">(</span><span class="mi">127</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd_cloexec</span><span class="p">);</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd_plain</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 2：编译运行</strong></p>
+<div class="codehilite"><pre><span></span><code>cc<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>/tmp/cloexec_demo<span class="w"> </span>/tmp/cloexec_demo.c
+/tmp/cloexec_demo
+</code></pre></div>
+
+<p><strong>期望结果</strong>：子进程（<code>sh</code>）的 <strong>步骤 3：加验证（把「看到」变成「断言」）</strong></p>
+<p>注意：判断必须发生在 <strong>exec 之后</strong>。如果在 <code>fork</code> 后、<code>exec</code> 前用 <code>fcntl</code> 检查，两个 fd 都还开着，因为 <code>FD_CLOEXEC</code> 只在 <code>execve</code> 那一刻生效。所以让 exec 出来的 <code>sh</code> 自己检查 <code>/proc/self/fd</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">cmd</span><span class="p">[</span><span class="mi">160</span><span class="p">];</span>
+<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">cmd</span><span class="p">,</span>
+<span class="w">        </span><span class="s">"for f in %d %d; do [ -e /proc/self/fd/$f ] &amp;&amp; echo child_has_fd=$f || echo child_no_fd=$f; done"</span><span class="p">,</span>
+<span class="w">        </span><span class="n">fd_plain</span><span class="p">,</span><span class="w"> </span><span class="n">fd_cloexec</span><span class="p">);</span>
+<span class="w">    </span><span class="n">execl</span><span class="p">(</span><span class="s">"/bin/sh"</span><span class="p">,</span><span class="w"> </span><span class="s">"sh"</span><span class="p">,</span><span class="w"> </span><span class="s">"-c"</span><span class="p">,</span><span class="w"> </span><span class="n">cmd</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="n">_exit</span><span class="p">(</span><span class="mi">127</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>验收点</strong>：<code>fd_plain</code> 输出 <code>child_has_fd</code>（泄漏到了 exec 后的新程序），<code>fd_cloexec</code> 输出 <code>child_no_fd</code>。这就验证了 <code>FD_CLOEXEC</code> 确实避免子进程泄漏。</p>
+<p><strong>验收点</strong>：<code>cloexec</code> 那个显示 <code>closed (good)</code>，<code>plain</code> 那个显示 <code>still open (leaked)</code>。这就验证了 <code>FD_CLOEXEC</code> 确实避免子进程泄漏。</p>
+<p><strong>步骤 4：用 strace 复核</strong></p>
+<div class="codehilite"><pre><span></span><code>strace<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>openat,close,fcntl,execve<span class="w"> </span>/tmp/cloexec_demo<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'openat|execve|fcntl'</span>
+</code></pre></div>
+
+<p>你能看到 <code>openat(..., O_CLOEXEC)</code>，以及 <code>execve</code> 后子进程没有再引用 <code>fd_cloexec</code> 的迹象。</p>
+<h3 id="gccg-asanubsan">一键验证脚本（已在 gcc/g++ + ASan/UBSan 下实测通过）</h3>
+<p><code>practice36/</code> 里有三个文件：<code>fdlab.c</code>（dup 共享偏移、两次 open 不共享、fork 共享、CLOEXEC 对比、fd 复用误关闭）、<code>owned_fd.cpp</code>（只能移动的 RAII 包装，统计 close 次数）、<code>test.sh</code>（编译、运行并逐条断言）。实测输出：</p>
+<div class="codehilite"><pre><span></span><code>dup: a=3 b=4 read via a -&gt; pos(a)=3 pos(b)=3
+open twice: pos(c)=0 (独立)
+fork: child read 3 -&gt; parent pos(a)=6
+leak=6 safe=7
+child_has_fd=6
+child_no_fd=7
+reuse: old=8 new=8 same_number=yes
+reuse: newconn closed by mistake (EBADF)
+a=-1 b=-1 c&gt;=0:1
+closes=2 (期望 2，每个 fd 恰好一次)
+ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p><code>reuse</code> 两行就是验收标准一：旧整数 8 被 close 后，下一次 open 立刻又拿到 8，再对旧变量 close 一次，新连接就被误关了。<code>closes=2</code> 是验收标准二：两次 move 之后，两个 fd 各被 close 恰好一次。</p>
+<p>fdlab.c 中 fd 复用部分的核心：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">stale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span><span class="w">               </span><span class="c1">// 某个回调里保存的旧整数</span>
+<span class="n">close</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">newconn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/dev/null"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span><span class="w">   </span><span class="c1">// 拿到同一个数字</span>
+<span class="n">close</span><span class="p">(</span><span class="n">stale</span><span class="p">);</span><span class="w">                   </span><span class="c1">// 二次 close 误关了新连接</span>
+<span class="c1">// fcntl(newconn, F_GETFD) == -1, errno == EBADF</span>
+</code></pre></div>
+
+<h3 id="d-fd">实验 D（选做）：观察 fd 复用导致的误关闭</h3>
+<p>思路：父进程 <code>accept</code> 一个连接拿到 <code>fd=5</code>，业务代码误 <code>close(5)</code>；随后再 <code>accept</code> 新连接，内核很可能又给 <code>5</code>；此时旧的回调再 <code>close(5)</code>，新连接被误关。可用一个最小 TCP 服务 + 两个客户端 + <code>strace -e trace=accept,close</code> 复现。观察日志里「同一个整数被 close 两次，中间夹着一次 accept」。</p>
+<hr />
+<h2 id="6">6. 自测题</h2>
+<h3 id="1-fd">题 1：两个 fd 都读同一个文件，为什么后读的没有从文件开头开始？</h3>
+<p><strong>参考答案</strong>：因为 <code>dup</code>（以及 <code>fork</code> 继承）产生的新 fd 指向<strong>同一个打开文件描述</strong>，而文件偏移保存在打开文件描述里，是被这些 fd <strong>共享</strong>的。<code>read</code> 会推进共享偏移，所以第二个 fd 从第一个 fd 读到的位置继续往下读。若想各自独立，需要重新 <code>open</code>（得到新的 OFD），或显式 <code>lseek</code> 调整。</p>
+<h3 id="2closefd-fd-1-fd">题 2：<code>close(fd)</code> 之后马上把 <code>fd</code> 置为 <code>-1</code> 有什么意义？这和「fd 复用导致的误关闭」有什么关系？</h3>
+<p><strong>参考答案</strong>：<code>close</code> 只是释放下标，操作系统随时可能把同一个整数分配给新的 <code>accept</code>/<code>open</code>/<code>socket</code>。如果代码还保留旧整数并再次 <code>close</code>，就会误关新连接。把变量置 <code>-1</code> 后，二次 <code>close(-1)</code> 只会返回 <code>EBADF</code>，不会伤及他人；同时在对象层面记录 <code>closed</code> 状态、用唯一所有者模型、事件回调使用对象而非裸 fd，都能进一步避免误关闭。</p>
+<h3 id="3-fork-exec-fd">题 3：父进程 <code>fork</code> 后 <code>exec</code> 一个外部程序，为什么监听端口的 fd 可能被子进程「带走」？怎么避免？</h3>
+<p><strong>参考答案</strong>：<code>exec</code> 默认保留所有未设置 <code>FD_CLOEXEC</code> 的 fd；子进程继承父进程 fd 表的拷贝，<code>exec</code> 后这些 fd 仍在，且子程序并不知道、也不会关闭它们，于是监听 socket 的引用计数不归零，端口持续被占用，形成泄漏。避免方法：创建 fd 时用 <code>O_CLOEXEC</code>（或 <code>SOCK_CLOEXEC</code>、<code>accept4(..., SOCK_CLOEXEC)</code>、<code>pipe2(..., O_CLOEXEC)</code> 等原子方式），或对已存在的 fd 用 <code>fcntl(fd, F_SETFD, FD_CLOEXEC)</code>；多线程下优先使用原子创建方式以避免竞态窗口。</p>
+<hr />
+<h2 id="7">7. 推荐资源</h2>
+<ul>
+<li><strong>文件描述符与打开文件描述：Linux man-pages</strong>
+  <a href="https://man7.org/linux/man-pages/man2/open.2.html">https://man7.org/linux/man-pages/man2/open.2.html</a></li>
+<li>来源：man7.org ｜ 语言：英文 ｜ 类型：文档 ｜ 难度：基础 ｜ 免费</li>
+<li>推荐理由：重点阅读 fd 表与 open file description、<code>dup</code> 与共享偏移相关说明，用于核对本节点实验的语义和边界（注意不同内核版本的 <code>O_CLOEXEC</code> / <code>FD_CLOEXEC</code> 行为细节可能略有差异，实践中以目标系统 man-pages 为准）。</li>
+</ul>
+<blockquote>
+<p>学习建议（对应节点 <code>sourceStudy</code>）：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。比如把 <code>open(2)</code> 里关于 <code>O_CLOEXEC</code>、<code>O_APPEND</code>、文件偏移共享的描述逐条对到本课实验现象上，记录你所用内核版本的输出差异。</p>
+</blockquote><div class="pn"><span><a href="35.html">← 系统调用、errno与部分成功</a></span><span>下一课 待更新</span></div></main></div></body></html>
