@@ -490,7 +490,9 @@ cc -Wall -Wextra -O0 -g -o /tmp/cloexec_demo /tmp/cloexec_demo.c
 /tmp/cloexec_demo
 ```
 
-**期望结果**：子进程（`sh`）的 **步骤 3：加验证（把「看到」变成「断言」）**
+**期望结果**：子进程（`sh`）列出的 fd 里能看到 `plain` 那个，看不到 `cloexec` 那个。
+
+**步骤 3：加验证（把「看到」变成「断言」）**
 
 注意：判断必须发生在 **exec 之后**。如果在 `fork` 后、`exec` 前用 `fcntl` 检查，两个 fd 都还开着，因为 `FD_CLOEXEC` 只在 `execve` 那一刻生效。所以让 exec 出来的 `sh` 自己检查 `/proc/self/fd`：
 
@@ -506,10 +508,6 @@ if (pid == 0) {
 ```
 
 **验收点**：`fd_plain` 输出 `child_has_fd`（泄漏到了 exec 后的新程序），`fd_cloexec` 输出 `child_no_fd`。这就验证了 `FD_CLOEXEC` 确实避免子进程泄漏。
-
-
-
-**验收点**：`cloexec` 那个显示 `closed (good)`，`plain` 那个显示 `still open (leaked)`。这就验证了 `FD_CLOEXEC` 确实避免子进程泄漏。
 
 **步骤 4：用 strace 复核**
 
