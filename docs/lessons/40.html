@@ -1,0 +1,1023 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>40. 信号与安全停机 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（40/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（8/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="cur" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li class="todo">41. 调度、亲和性与上下文切换 <em>待更新</em></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 40 课 · 领域 C · 阶段 2</p><p class="dl"><a href="../files/40-c-signal.md" download>⬇ 本课 Markdown</a><a href="../files/practice40.tar.gz" download>⬇ 练习包 practice40.tar.gz</a></p><h1 id="40208">第 40/208 课：信号与安全停机</h1>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点</td>
+<td><code>c-signal</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Signals</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>C / 2</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>通信与运行时</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>基础</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>c-process</code>、<code>c-syscall</code></td>
+</tr>
+<tr>
+<td>核心摘要</td>
+<td>信号异步通知进程事件，处理器可能中断普通执行，因此只能使用符合信号安全约束的操作。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>本课要建立的不是“信号编号记忆”，而是一条可靠的停机链路：内核把 <code>SIGTERM</code> 送到进程，进程安全地感知它，停止接入新请求，排空在途请求，并在截止时间前退出。对即将参与腾讯微信公众号后台开发的后端工程师来说，这条链路直接决定滚动发布时用户会不会看到连接被重置、请求半途失败。</p>
+</blockquote>
+<h2 id="_1">学习目标</h2>
+<p>学完本课，你应该能够：</p>
+<ol>
+<li>解释信号的<strong>处置</strong>与<strong>屏蔽</strong>：默认、忽略、捕获分别意味着什么，<code>sigprocmask</code> / <code>pthread_sigmask</code> 如何让信号进入待决状态。</li>
+<li>说明多线程程序中信号会被投递给“任意一个未屏蔽它的线程”，并解释为什么必须在创建线程之前配置屏蔽字。</li>
+<li>解释 <code>async-signal-safe</code> 的约束，能够判断 <code>write</code>、<code>printf</code>、<code>malloc</code>、<code>syslog</code> 在信号处理器中是否可用。</li>
+<li>能独立完成本节点实践：用 <code>signalfd</code> 把 <code>SIGTERM</code> 纳入事件循环，停止接入并排空在途请求，且在截止时间到达时强制退出。</li>
+<li>能在代码评审中识别“线程安全函数被误用于信号处理器”“只屏蔽主线程”“退出没有截止时间”等常见问题。</li>
+</ol>
+<h2 id="_2">为什么后端要懂信号与安全停机</h2>
+<p>节点给出的理由是：<strong>让服务可靠处理退出与子进程通知。</strong> 这句话在后端生产环境里非常具体。</p>
+<p>以微信公众号后台的滚动发布为例：</p>
+<ul>
+<li>发布系统（Kubernetes、systemd 或自研调度器）要下线一个旧实例时，通常会先发送 <code>SIGTERM</code>，给进程一段宽限期；宽限期结束后再发送 <code>SIGKILL</code>。</li>
+<li>如果进程没有处理 <code>SIGTERM</code>，默认动作是立即终止。此时正在处理的 HTTP 请求、数据库事务、缓存更新、消息确认可能被硬生生打断，客户端看到 <code>502</code>、<code>connection reset</code> 或超时。</li>
+<li>如果进程能优雅处理，就可以先关闭监听 socket，让新连接不再进来；再把已经接收的请求处理完；最后在截止时间前主动退出。负载均衡和发布系统看到的是平滑下线，而不是一批失败请求。</li>
+<li>后台服务还经常创建子进程（worker、脚本、外部命令）。子进程退出时会产生 <code>SIGCHLD</code>。如果不回收，就会积累僵尸进程，最终耗尽进程表资源。</li>
+<li>线上排障时，<code>kill -TERM</code>、<code>/proc/&lt;pid&gt;/status</code> 里的信号掩码、<code>strace -e trace=signal</code> 都是定位“为什么进程不退出”“为什么信号没收到”的基础工具。</li>
+</ul>
+<p>所以，信号不是“写个小程序才用得到”的知识。它处在<strong>进程生命周期、线程模型、事件循环和发布系统</strong>的交汇处。</p>
+<h2 id="0">0. 先建立直觉：信号到底是什么</h2>
+<p>把进程想象成一间正在工作的办公室，信号就是内核按门铃：</p>
+<ul>
+<li>门铃可以在任何时刻响，不问你当前是不是正在开会、正在拿锁、正在写文件。</li>
+<li>你可以选择门铃响起后做什么：不理它、按固定流程处理、或者干脆把门铃拆掉（但有些门铃拆不掉）。</li>
+<li>门铃响的时候，你原本的工作会被暂时打断；处理完门铃后，通常还要回到原来的工作。</li>
+<li>如果同时响很多次同一种门铃，普通信号可能只会被记住一次，不会排队成很多次。</li>
+</ul>
+<p>对应到 Linux：</p>
+<ul>
+<li>信号是内核向进程或线程发送的<strong>异步事件通知</strong>。</li>
+<li>信号有编号和名字，例如 <code>SIGTERM</code> 是 15，<code>SIGINT</code> 是 2，<code>SIGKILL</code> 是 9。</li>
+<li>进程可以设置信号的<strong>处置方式</strong>，也可以<strong>屏蔽</strong>信号。</li>
+<li>信号处理器运行在被打断的线程上下文中，可能打断任意普通代码，包括持有锁的代码。</li>
+<li>因此，处理器能做的事情受到严格限制，这就是 <code>async-signal-safe</code>。</li>
+</ul>
+<p>本课的三个核心要点是：</p>
+<ol>
+<li>信号处置和屏蔽；</li>
+<li><code>async-signal-safe</code>；</li>
+<li><code>signalfd</code> 与优雅退出。</li>
+</ol>
+<p>下面按“直觉 → 原理 → 代码 / 命令 → 后端场景”逐层展开。</p>
+<hr />
+<h2 id="1">1. 核心要点一：信号处置和屏蔽</h2>
+<h3 id="11">1.1 直觉：处置是“发生时怎么办”，屏蔽是“先别送来”</h3>
+<p>这两个概念很容易混淆：</p>
+<ul>
+<li><strong>处置（disposition）</strong>：信号真正被递送时，进程要做什么。默认终止？忽略？还是执行一个处理器函数？</li>
+<li><strong>屏蔽（block）</strong>：暂时不让这个信号被递送。信号不会消失，而是变成<strong>待决（pending）</strong>，等解除屏蔽后再递送。</li>
+</ul>
+<p>可以这样记：</p>
+<blockquote>
+<p>忽略是“收到了但扔掉”；屏蔽是“先别送，等我准备好”。</p>
+</blockquote>
+<h3 id="12">1.2 处置：默认、忽略、捕获</h3>
+<p>Linux 用 <code>sigaction</code> 设置信号处置。三种基本处置如下：</p>
+<table>
+<thead>
+<tr>
+<th>处置</th>
+<th>设置方式</th>
+<th>行为</th>
+<th>典型例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>默认</td>
+<td><code>SIG_DFL</code></td>
+<td>按该信号的默认动作执行</td>
+<td><code>SIGTERM</code> 默认终止进程；<code>SIGSEGV</code> 默认终止并可能产生 core dump；<code>SIGCHLD</code> 默认忽略</td>
+</tr>
+<tr>
+<td>忽略</td>
+<td><code>SIG_IGN</code></td>
+<td>收到后丢弃，不执行处理器</td>
+<td>明确不想响应某个信号时使用</td>
+</tr>
+<tr>
+<td>捕获</td>
+<td>函数指针</td>
+<td>信号递送时执行处理器</td>
+<td>收到 <code>SIGTERM</code> 后设置退出标志</td>
+</tr>
+</tbody>
+</table>
+<p><code>SIGKILL</code> 和 <code>SIGSTOP</code> 是例外：</p>
+<ul>
+<li><code>SIGKILL</code> 不能被捕获、忽略或屏蔽，只能由内核强制终止进程。</li>
+<li><code>SIGSTOP</code> 不能被捕获、忽略或屏蔽，只能由内核暂停进程。</li>
+<li>因此，<strong>不要指望捕获 <code>SIGKILL</code> 来做优雅退出</strong>。发布系统先用 <code>SIGTERM</code> 给你机会，超时才用 <code>SIGKILL</code>。</li>
+</ul>
+<p>一个最小的 <code>sigaction</code> 示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;signal.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">sig_atomic_t</span><span class="w"> </span><span class="n">g_stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">on_term</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">signo</span><span class="p">;</span>
+<span class="w">    </span><span class="n">g_stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">install_handler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">sigaction</span><span class="w"> </span><span class="n">sa</span><span class="p">;</span>
+<span class="w">    </span><span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sa</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">sa</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sa</span><span class="p">.</span><span class="n">sa_handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">on_term</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sa</span><span class="p">.</span><span class="n">sa_mask</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sa</span><span class="p">.</span><span class="n">sa_flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">sigaction</span><span class="p">(</span><span class="n">SIGTERM</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sa</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段代码有几个关键点：</p>
+<ul>
+<li>处理器只写了一个 <code>volatile sig_atomic_t</code> 标志，没有调用 <code>printf</code>、<code>malloc</code>、<code>syslog</code>。</li>
+<li><code>sa_mask</code> 是处理器执行期间额外屏蔽的信号集合；当前信号默认也会在处理期间被屏蔽，除非设置 <code>SA_NODEFER</code>。</li>
+<li><code>sa_flags = 0</code> 表示不设置 <code>SA_RESTART</code>。这样被信号打断的阻塞系统调用可能以 <code>EINTR</code> 返回，事件循环需要处理 <code>EINTR</code>。</li>
+<li>实际工程中优先使用 <code>sigaction</code>，不要依赖老式 <code>signal()</code> 的实现差异。</li>
+</ul>
+<h3 id="13">1.3 屏蔽与待决信号</h3>
+<p>屏蔽一个信号使用 <code>sigprocmask</code>（单线程）或 <code>pthread_sigmask</code>（多线程）。<strong>多线程程序应使用 <code>pthread_sigmask</code></strong>，因为 <code>sigprocmask</code> 在多线程程序中的行为未指定。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">sigset_t</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span>
+<span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">);</span>
+<span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SIGTERM</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pthread_sigmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>屏蔽后，如果 <code>SIGTERM</code> 到达，它不会立即递送，而是进入进程的待决集合。等解除屏蔽时，它才会被递送：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">pthread_sigmask</span><span class="p">(</span><span class="n">SIG_UNBLOCK</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+</code></pre></div>
+
+<p>查看待决信号可以使用 <code>sigpending</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">sigset_t</span><span class="w"> </span><span class="n">pending</span><span class="p">;</span>
+<span class="n">sigpending</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pending</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">is_pending</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sigismember</span><span class="p">(</span><span class="o">&amp;</span><span class="n">pending</span><span class="p">,</span><span class="w"> </span><span class="n">SIGTERM</span><span class="p">);</span>
+</code></pre></div>
+
+<p>但线上更常用 <code>/proc</code>：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'Sig(Blk|Ign|Cgt|Pnd)'</span><span class="w"> </span>/proc/&lt;pid&gt;/status
+</code></pre></div>
+
+<p>各字段含义：</p>
+<ul>
+<li><code>SigBlk</code>：被屏蔽的信号集合（blocked）。</li>
+<li><code>SigIgn</code>：被忽略的信号集合（ignored）。</li>
+<li><code>SigCgt</code>：被捕获的信号集合（caught）。</li>
+<li><code>SigPnd</code>：线程级待决信号。</li>
+<li><code>ShdPnd</code>：进程级共享待决信号。</li>
+</ul>
+<p>这些字段是十六进制位掩码。信号编号 <code>n</code> 对应第 <code>n-1</code> 位（从 0 开始）。例如只屏蔽 <code>SIGTERM</code>（15）时，对应位是第 14 位，即 <code>0x4000</code>。可以用 <code>kill -l</code> 查看编号和名字的对应关系：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">kill</span><span class="w"> </span>-l
+</code></pre></div>
+
+<p>发送信号：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">kill</span><span class="w"> </span>-TERM<span class="w"> </span>&lt;pid&gt;
+</code></pre></div>
+
+<p>查看信号相关的系统调用：</p>
+<div class="codehilite"><pre><span></span><code>strace<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>signal<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+</code></pre></div>
+
+<p>你通常会看到 <code>rt_sigaction</code>、<code>rt_sigprocmask</code>、<code>signalfd4</code>，以及类似 <code>--- SIGTERM {si_signo=SIGTERM, ...} ---</code> 的输出。这比只盯着业务日志更能说明“信号到底有没有到进程”。</p>
+<h3 id="14">1.4 多线程下的关键规则</h3>
+<p>这是本课最重要的规则之一：</p>
+<blockquote>
+<p>进程定向信号会被投递给<strong>任意一个没有屏蔽它的线程</strong>。</p>
+</blockquote>
+<p>也就是说，如果你只在主线程调用了 <code>pthread_sigmask(SIG_BLOCK, &amp;mask, NULL)</code>，然后创建了工作线程，工作线程会继承主线程的信号掩码；但如果某个线程后来解除屏蔽，或者你在创建线程之后才设置屏蔽，内核就可能把 <code>SIGTERM</code> 投递给那个线程。</p>
+<p>后果可能是：</p>
+<ul>
+<li>默认处置直接终止整个进程，优雅退出逻辑根本没机会执行。</li>
+<li>处理器在某个工作线程中运行，而你以为是主线程在处理。</li>
+<li>使用 <code>signalfd</code> 时，如果信号没有在所有线程中被屏蔽，信号可能被其他线程拿走，<code>signalfd</code> 读不到。</li>
+</ul>
+<p>正确做法：</p>
+<ol>
+<li>在创建任何线程之前，由主线程调用 <code>pthread_sigmask</code> 屏蔽需要同步处理的信号。</li>
+<li>之后创建的所有线程都继承这个屏蔽字。</li>
+<li>工作线程不要再解除这些信号的屏蔽。</li>
+<li>如果线程已经存在，必须逐个线程配置屏蔽字，或者重新设计为“先屏蔽、后建线程”。</li>
+</ol>
+<p>这也解释了为什么节点特别强调：多线程下要在创建线程前屏蔽。</p>
+<hr />
+<h2 id="2-async-signal-safe">2. 核心要点二：<code>async-signal-safe</code></h2>
+<h3 id="21">2.1 直觉：处理器可能打断“正在拿锁的人”</h3>
+<p>普通函数调用是可预期的：你调用 <code>malloc</code>，它执行完返回，你再继续。信号处理器不是这样。</p>
+<p>假设一个线程正在 <code>malloc</code> 内部持有分配器的锁，这时 <code>SIGTERM</code> 到达，处理器开始执行。如果处理器里又调用 <code>malloc</code>：</p>
+<ul>
+<li>同一个线程试图再次获取它已经持有的锁；</li>
+<li>或者锁的状态被信号打断，无法保证一致；</li>
+<li>结果可能是死锁、崩溃，甚至内存状态损坏。</li>
+</ul>
+<p>再比如 <code>printf</code> / <code>syslog</code>：</p>
+<ul>
+<li>它们内部可能使用 stdio 锁、缓冲区、动态内存分配；</li>
+<li>信号可能正好打断这些内部状态；</li>
+<li>在处理器中调用它们，可能死锁，或者把日志缓冲区弄坏。</li>
+</ul>
+<p>所以，<strong>信号处理器不是普通函数</strong>。它运行在一个“随时可能打断别人”的上下文里，只能调用 POSIX 明确列为 <strong>async-signal-safe</strong> 的函数。</p>
+<h3 id="22">2.2 原理：安全函数是白名单，不是“看起来简单就行”</h3>
+<p>POSIX 维护了一份异步信号安全函数列表。常见的安全函数包括：</p>
+<ul>
+<li><code>write</code>、<code>read</code>、<code>open</code>、<code>close</code></li>
+<li><code>_exit</code></li>
+<li><code>kill</code></li>
+<li>部分 <code>sigaction</code>、<code>sigprocmask</code> 相关函数</li>
+<li><code>waitpid</code> 等（具体以目标系统和 man-pages 为准）</li>
+</ul>
+<p>不安全的常见函数包括：</p>
+<ul>
+<li><code>printf</code>、<code>fprintf</code>、<code>snprintf</code>（标准未保证异步信号安全）</li>
+<li><code>malloc</code>、<code>free</code>、<code>calloc</code>、<code>realloc</code></li>
+<li><code>syslog</code></li>
+<li><code>exit</code>（会执行 <code>atexit</code>、刷新 stdio，可能死锁；应使用 <code>_exit</code>）</li>
+<li><code>strerror</code></li>
+<li><code>pthread_mutex_lock</code> / <code>pthread_mutex_unlock</code></li>
+<li>大多数 C++ 标准库设施，例如 <code>std::string</code>、<code>std::cout</code>、<code>std::mutex</code></li>
+</ul>
+<p>节点要求特别记住：</p>
+<blockquote>
+<p><code>write</code> 可以；<code>printf</code> / <code>malloc</code> / <code>syslog</code> 不行，可能死锁。</p>
+</blockquote>
+<p>此外，处理器还应保存和恢复 <code>errno</code>，因为它可能打断正在依赖 <code>errno</code> 的普通代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">on_term</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">saved_errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">errno</span><span class="p">;</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">signo</span><span class="p">;</span>
+<span class="w">    </span><span class="n">g_stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">saved_errno</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="23-self-pipe">2.3 两种安全模式：标志位与 self-pipe</h3>
+<p>如果不想使用 <code>signalfd</code>，有两种常见的安全做法。</p>
+<h4 id="volatile-sig_atomic_t">模式一：只设置 <code>volatile sig_atomic_t</code> 标志</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="k">volatile</span><span class="w"> </span><span class="kt">sig_atomic_t</span><span class="w"> </span><span class="n">g_stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">on_term</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">saved_errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">errno</span><span class="p">;</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">signo</span><span class="p">;</span>
+<span class="w">    </span><span class="n">g_stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">saved_errno</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>主循环周期性检查：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">g_stop</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">do_one_event</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这种模式最简单，但有局限：</p>
+<ul>
+<li>只能传递非常简单的状态，通常就是一个“该停了”的标志。</li>
+<li>如果主循环阻塞在 <code>epoll_wait</code>、<code>accept</code>、<code>read</code> 上，需要处理 <code>EINTR</code>，或者设置超时定期醒来。</li>
+<li>不适合传递复杂数据，也不适合做日志、内存分配等操作。</li>
+</ul>
+<h4 id="self-pipe">模式二：self-pipe</h4>
+<p>处理器只向管道写入一个字节，事件循环从管道读端感知：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">g_wakeup</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">};</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">on_term</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">signo</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">saved_errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">errno</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="kt">byte</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">g_wakeup</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">n</span><span class="p">;</span>
+<span class="w">    </span><span class="n">errno</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">saved_errno</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>事件循环把 <code>g_wakeup[0]</code> 加入 <code>epoll</code>，读到字节后执行真正的退出流程。<code>write</code> 是异步信号安全的。管道写端通常设为非阻塞；如果写满返回 <code>EAGAIN</code>，说明通知已经存在，可以忽略。注意保存和恢复 <code>errno</code>。</p>
+<p>self-pipe 的优点是<strong>可移植</strong>，不依赖 Linux 专有的 <code>signalfd</code>；缺点是多了文件描述符和读写处理。</p>
+<h3 id="24">2.4 常见误区：线程安全不等于异步信号安全</h3>
+<p>这是节点明确点出的坑：</p>
+<blockquote>
+<p>线程安全函数不必然异步信号安全。</p>
+</blockquote>
+<p><code>malloc</code> 是线程安全的：多个线程同时调用时，它用锁保护内部数据结构。但它是<strong>不可重入</strong>的：如果信号处理器在同一个线程持有 <code>malloc</code> 锁时再次调用 <code>malloc</code>，就可能自死锁。</p>
+<p>同样，<code>printf</code> 可能对 stdio 加锁，<code>syslog</code> 可能内部加锁或分配内存。它们“多线程调用没问题”，不代表“信号处理器里调用没问题”。</p>
+<p>判断标准不是“这个函数看起来简单吗”，而是：</p>
+<blockquote>
+<p>它是否在 POSIX 的 async-signal-safe 列表中？</p>
+</blockquote>
+<p>工程上最稳妥的做法是：<strong>处理器只做最小动作</strong>——设置 <code>volatile sig_atomic_t</code> 标志，或 <code>write</code> 到 self-pipe，或完全交给 <code>signalfd</code>，把业务逻辑放到正常的事件循环上下文里执行。</p>
+<hr />
+<h2 id="3-signalfd">3. 核心要点三：<code>signalfd</code> 与优雅退出</h2>
+<h3 id="31">3.1 直觉：把信号变成“可读的文件描述符”</h3>
+<p>传统处理器模式是“信号来了，打断你，执行处理器”。<code>signalfd</code> 换了一个思路：</p>
+<blockquote>
+<p>先把信号屏蔽住，让它们保持待决；然后创建一个文件描述符，信号到达时这个 fd 变成可读；事件循环像处理 socket 一样处理它。</p>
+</blockquote>
+<p>这样就不需要在信号处理器里写任何业务逻辑。信号消费发生在正常上下文，可以安全地调用 <code>printf</code>、<code>malloc</code>、业务函数和日志库。</p>
+<p>节点要求的实践正是：</p>
+<blockquote>
+<p>用 <code>signalfd</code> 将 <code>SIGTERM</code> 纳入事件循环，停止接入并排空请求。</p>
+</blockquote>
+<h3 id="32-signalfd">3.2 <code>signalfd</code> 的基本用法</h3>
+<p>关键顺序不能错：</p>
+<ol>
+<li>先构造信号集合；</li>
+<li><strong>先屏蔽这些信号</strong>（多线程程序用 <code>pthread_sigmask</code>）；</li>
+<li>再调用 <code>signalfd</code> 创建 fd；</li>
+<li>把 fd 加入 <code>epoll</code>；</li>
+<li>事件循环中 <code>read</code> 出 <code>struct signalfd_siginfo</code>。</li>
+</ol>
+<p>示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;signal.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/signalfd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">setup_signal_fd</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">sigset_t</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SIGTERM</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SIGINT</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pthread_sigmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">signalfd</span><span class="p">(</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SFD_NONBLOCK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SFD_CLOEXEC</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>几个细节：</p>
+<ul>
+<li><code>SFD_NONBLOCK</code> 让 <code>read</code> 在没有信号时返回 <code>EAGAIN</code>，便于事件循环处理。</li>
+<li><code>SFD_CLOEXEC</code> 避免 fd 泄漏到 <code>exec</code> 后的子进程。</li>
+<li>必须在所有线程中屏蔽相应信号，否则信号可能被其他线程直接消费，<code>signalfd</code> 读不到。</li>
+<li><code>signalfd</code> 是 Linux 专有接口。需要可移植时使用 self-pipe。</li>
+</ul>
+<p>读取信号：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">signalfd_siginfo</span><span class="w"> </span><span class="n">si</span><span class="p">;</span>
+<span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">si</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">si</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">(</span><span class="kt">ssize_t</span><span class="p">)</span><span class="k">sizeof</span><span class="w"> </span><span class="n">si</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">si</span><span class="p">.</span><span class="n">ssi_signo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIGTERM</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">begin_shutdown</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>signalfd_siginfo</code> 还带有发送者 pid、uid、信号编号等信息，排障时很有用。</p>
+<h3 id="33-sigchld-waitpid">3.3 <code>SIGCHLD</code> 与 <code>waitpid</code> 回收</h3>
+<p>子进程退出时，父进程会收到 <code>SIGCHLD</code>。如果父进程不回收，子进程会变成僵尸进程（zombie）。</p>
+<p>常见做法：</p>
+<ul>
+<li>把 <code>SIGCHLD</code> 也加入屏蔽集合和 <code>signalfd</code>；</li>
+<li>事件循环收到 <code>SIGCHLD</code> 后，循环调用 <code>waitpid(-1, &amp;status, WNOHANG)</code>，直到没有可回收的子进程；</li>
+<li>不要在处理器里做复杂逻辑，更不要依赖“一个 <code>SIGCHLD</code> 对应一个子进程”——普通信号会合并。</li>
+</ul>
+<p>回收示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">waitpid</span><span class="p">(</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">WNOHANG</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">handle_child_exit</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">    </span><span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>补充说明：</p>
+<ul>
+<li><code>SIGCHLD</code> 的默认处置是忽略，但“默认忽略”并不等于自动回收，仍然需要 <code>waitpid</code>，除非显式设置 <code>SIG_IGN</code> 或 <code>SA_NOCLDWAIT</code> 让内核自动回收。</li>
+<li>如果业务不关心子进程退出状态，可以显式设置 <code>SIG_IGN</code> 或 <code>SA_NOCLDWAIT</code>；但多数服务需要知道退出码，所以更常见的是 <code>waitpid</code>。</li>
+</ul>
+<h3 id="34">3.4 优雅退出流程</h3>
+<p>节点要求的目标流程是：</p>
+<blockquote>
+<p>收到 <code>SIGTERM</code> 后关闭监听 socket 停止接入、排空在途请求、截止时间到了强制退出。</p>
+</blockquote>
+<p>把它拆成状态机：</p>
+<ol>
+<li><strong>正常运行</strong>：监听 socket 在 <code>epoll</code> 中，接受新连接，处理请求。</li>
+<li><strong>收到 <code>SIGTERM</code></strong>：进入 draining 状态。</li>
+<li><strong>停止接入</strong>：把监听 fd 从 <code>epoll</code> 删除并 <code>close</code>，不再 <code>accept</code> 新连接。</li>
+<li><strong>拒绝新任务</strong>：对已经建立的 keep-alive 连接，不再派发新请求；可以返回 <code>503</code> 并带 <code>Connection: close</code>，或者处理完当前请求后关闭连接。</li>
+<li><strong>排空在途请求</strong>：等待 <code>active_requests</code> 计数归零。</li>
+<li><strong>截止时间</strong>：从收到信号开始计算一个 deadline，通常小于发布系统的宽限期（例如宽限期 30 秒，deadline 设为 25 秒，留出清理时间）。</li>
+<li><strong>正常退出</strong>：在途请求清空后，刷新必要的日志/指标，关闭下游连接，退出。</li>
+<li><strong>强制退出</strong>：如果 deadline 到了还有请求没完成，记录一条固定信息后调用 <code>_exit</code>，不要继续等待，否则会被 <code>SIGKILL</code> 硬杀。</li>
+</ol>
+<p>伪代码：</p>
+<div class="codehilite"><pre><span></span><code>on SIGTERM:
+    if already draining: return
+    draining = true
+    deadline = monotonic_now() + 25s
+    epoll_ctl(DEL, listen_fd)
+    close(listen_fd)
+
+event loop:
+    if draining and active_requests == 0: break
+    if draining and monotonic_now() &gt;= deadline: force_exit()
+    wait for events with timeout = remaining time
+    on new connection: only possible before draining; accept and active_requests++
+    on request complete: active_requests--
+    during draining: do not start new requests
+</code></pre></div>
+
+<p>两个验收关键点：</p>
+<ul>
+<li><strong>处理器不调用非安全日志函数</strong>：如果使用 <code>signalfd</code>，处理器根本不存在；如果使用传统处理器，只允许 <code>write</code>、<code>_exit</code> 或写 <code>volatile sig_atomic_t</code>。</li>
+<li><strong>退出有截止时间且无新任务进入</strong>：关闭监听 fd 后不再接受新连接；draining 状态下不再启动新请求；deadline 到达必须强制退出。</li>
+</ul>
+<h3 id="35-c">3.5 一个可用的 C 骨架</h3>
+<p>下面是一个简化的事件循环骨架，省略了 socket 创建、请求解析和业务处理细节。重点是信号如何进入 <code>epoll</code>、如何停止接入、如何计算 deadline。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;signal.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/epoll.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/signalfd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">g_signal_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">g_listen_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">g_epoll_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">g_active</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">g_draining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">g_deadline_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">now_ms</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">timespec</span><span class="w"> </span><span class="n">ts</span><span class="p">;</span>
+<span class="w">    </span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ts</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">ts</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1000L</span><span class="n">L</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ts</span><span class="p">.</span><span class="n">tv_nsec</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1000000L</span><span class="n">L</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">setup_signal_fd</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">sigset_t</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SIGTERM</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SIGINT</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pthread_sigmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">g_signal_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signalfd</span><span class="p">(</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SFD_NONBLOCK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SFD_CLOEXEC</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">g_signal_fd</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">begin_shutdown</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_draining</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">g_draining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">g_deadline_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ms</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">25000</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_listen_fd</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">g_epoll_fd</span><span class="p">,</span><span class="w"> </span><span class="n">EPOLL_CTL_DEL</span><span class="p">,</span><span class="w"> </span><span class="n">g_listen_fd</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">        </span><span class="n">close</span><span class="p">(</span><span class="n">g_listen_fd</span><span class="p">);</span>
+<span class="w">        </span><span class="n">g_listen_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">drain_signals</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">signalfd_siginfo</span><span class="w"> </span><span class="n">si</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">g_signal_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">si</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">si</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EAGAIN</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="p">(</span><span class="kt">ssize_t</span><span class="p">)</span><span class="k">sizeof</span><span class="w"> </span><span class="n">si</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">si</span><span class="p">.</span><span class="n">ssi_signo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIGTERM</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">si</span><span class="p">.</span><span class="n">ssi_signo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIGINT</span><span class="p">)</span>
+<span class="w">            </span><span class="n">begin_shutdown</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">setup_signal_fd</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">g_epoll_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">epoll_create1</span><span class="p">(</span><span class="n">EPOLL_CLOEXEC</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_epoll_fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">epoll_event</span><span class="w"> </span><span class="n">ev</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ev</span><span class="p">.</span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EPOLLIN</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_signal_fd</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">g_epoll_fd</span><span class="p">,</span><span class="w"> </span><span class="n">EPOLL_CTL_ADD</span><span class="p">,</span><span class="w"> </span><span class="n">g_signal_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ev</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">g_listen_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_listen_socket</span><span class="p">(</span><span class="mi">8080</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_listen_fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">ev</span><span class="p">.</span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EPOLLIN</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_listen_fd</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">g_epoll_fd</span><span class="p">,</span><span class="w"> </span><span class="n">EPOLL_CTL_ADD</span><span class="p">,</span><span class="w"> </span><span class="n">g_listen_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ev</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">epoll_event</span><span class="w"> </span><span class="n">events</span><span class="p">[</span><span class="mi">128</span><span class="p">];</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_draining</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_active</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">            </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_deadline_ms</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">now_ms</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">left</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">            </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">left</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">epoll_wait</span><span class="p">(</span><span class="n">g_epoll_fd</span><span class="p">,</span><span class="w"> </span><span class="n">events</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span>
+<span class="w">                </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">g_signal_fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">drain_signals</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">                    </span><span class="k">goto</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">g_listen_fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">accept_connections</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">handle_connection</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="nl">out</span><span class="p">:</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_draining</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">g_active</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="n">_exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>说明：</p>
+<ul>
+<li><code>create_listen_socket</code>、<code>accept_connections</code>、<code>handle_connection</code> 需要按业务实现。</li>
+<li><code>accept_connections</code> 中每接受一个连接，<code>g_active</code> 增加；请求处理完成或连接关闭时减少。</li>
+<li>draining 期间不能再 <code>accept</code>，因为监听 fd 已从 <code>epoll</code> 删除并关闭。</li>
+<li>对 keep-alive 连接，<code>handle_connection</code> 必须检查 <code>g_draining</code>，不要在当前请求结束后继续派发新请求。</li>
+<li>如果请求由工作线程处理，<code>g_active</code> 和 <code>g_draining</code> 的修改需要同步；可以只在事件循环线程修改计数，工作线程通过事件通知完成，或者使用互斥锁/原子变量。</li>
+<li><code>CLOCK_MONOTONIC</code> 不受系统时间跳变影响，适合计算超时。</li>
+</ul>
+<h3 id="36-systemd-kubernetes">3.6 结合 systemd 与 Kubernetes</h3>
+<p>发布系统通常遵循同一套节奏：</p>
+<ul>
+<li><strong>systemd</strong>：默认停止信号是 <code>SIGTERM</code>，在 <code>TimeoutStopSec</code> 之后仍未退出时发送 <code>SIGKILL</code>。可通过 <code>KillSignal</code>、<code>TimeoutStopSec</code>、<code>KillMode</code> 等配置调整。</li>
+<li><strong>Kubernetes</strong>：Pod 终止时先发送 <code>SIGTERM</code>，等待 <code>terminationGracePeriodSeconds</code>（常见默认 30 秒，以集群配置为准），超时后发送 <code>SIGKILL</code>。</li>
+</ul>
+<p>因此：</p>
+<ul>
+<li>优雅退出的 deadline 必须小于平台宽限期，给日志刷新、连接关闭留出余量。</li>
+<li>不要捕获 <code>SIGKILL</code> 做收尾，它不可捕获。</li>
+<li>在 Kubernetes 中，还要考虑 Endpoint/负载均衡摘除流量的延迟。常见做法是配合 readiness probe、preStop hook 或短暂的摘流等待，让新流量先停止，再处理 <code>SIGTERM</code>。</li>
+<li>如果容器里的业务进程不是 PID 1，而是被 shell 脚本包了一层，要确保 shell 会把 <code>SIGTERM</code> 转发给业务进程，或者直接用 <code>exec</code> 启动业务进程。否则发布系统杀的是 shell，业务进程可能收不到信号。</li>
+</ul>
+<hr />
+<h2 id="4">4. 常见误区与设计权衡</h2>
+<h3 id="41">4.1 常见误区</h3>
+<ol>
+<li>
+<p><strong>“线程安全函数就能在信号处理器里用”</strong>
+   这是本节点明确指出的坑。<code>malloc</code> 是线程安全的，但不是异步信号安全的；信号处理器可能打断持有锁的代码，再次调用会导致死锁。</p>
+</li>
+<li>
+<p><strong>在处理器里打日志</strong>
+   <code>printf</code>、<code>fprintf</code>、<code>syslog</code> 都不是异步信号安全的，可能死锁或破坏缓冲区。应使用 <code>write</code>、标志位、self-pipe 或 <code>signalfd</code>。</p>
+</li>
+<li>
+<p><strong>只屏蔽主线程</strong>
+   进程定向信号可能被投递给任意未屏蔽线程。若工作线程没有屏蔽，<code>SIGTERM</code> 可能在 worker 中触发默认终止，<code>signalfd</code> 也收不到。必须在创建线程前屏蔽。</p>
+</li>
+<li>
+<p><strong>以为 <code>SIGKILL</code> 可以捕获</strong>
+   <code>SIGKILL</code> 和 <code>SIGSTOP</code> 不可捕获、不可忽略、不可屏蔽。优雅退出的时间窗来自 <code>SIGTERM</code> 到 <code>SIGKILL</code> 之间的宽限期。</p>
+</li>
+<li>
+<p><strong>关闭监听 fd 后还继续处理 keep-alive 上的新请求</strong>
+   停止接入不仅是“不再 <code>accept</code>”，还包括 draining 状态下不再启动新任务。否则旧连接会不断带来新请求，永远排不空。</p>
+</li>
+<li>
+<p><strong>没有截止时间</strong>
+   如果某个请求卡住，进程会一直等，最后被 <code>SIGKILL</code> 硬杀。必须设置 deadline，并在超时后 <code>_exit</code>。</p>
+</li>
+<li>
+<p><strong>忘记回收子进程</strong>
+   <code>SIGCHLD</code> 默认忽略不等于自动回收。需要 <code>waitpid</code> 循环，或显式使用 <code>SIG_IGN</code> / <code>SA_NOCLDWAIT</code>。</p>
+</li>
+<li>
+<p><strong>处理器里调用 <code>exit</code></strong>
+   <code>exit</code> 会刷新 stdio、执行 <code>atexit</code> 回调，不是异步信号安全的。处理器中需要立即退出时使用 <code>_exit</code>。</p>
+</li>
+<li>
+<p><strong>忽略 <code>EINTR</code></strong>
+   信号可能打断 <code>epoll_wait</code>、<code>accept</code>、<code>read</code> 等阻塞调用。事件循环应检查 <code>errno == EINTR</code> 并继续，而不是当成致命错误。</p>
+</li>
+<li>
+<p><strong>忘记保存和恢复 <code>errno</code></strong>
+    处理器可能打断依赖 <code>errno</code> 的普通代码。进入处理器时保存，返回前恢复。</p>
+</li>
+</ol>
+<h3 id="42">4.2 设计权衡</h3>
+<p>节点给出的权衡是：</p>
+<blockquote>
+<p>同步消费信号易维护，但需正确配置所有线程的屏蔽字。</p>
+</blockquote>
+<p>展开来说：</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优点</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传统处理器 + <code>volatile sig_atomic_t</code> 标志</td>
+<td>实现小、可移植、延迟低</td>
+<td>处理器能力极弱；主循环需要轮询或处理 <code>EINTR</code>；无法安全传递复杂信息</td>
+</tr>
+<tr>
+<td>传统处理器 + self-pipe</td>
+<td>可移植；能把信号接入事件循环</td>
+<td>多一个 fd；需要处理非阻塞写和 <code>EAGAIN</code>；仍要小心处理器约束</td>
+</tr>
+<tr>
+<td><code>signalfd</code></td>
+<td>无处理器；在正常上下文消费；可直接纳入 <code>epoll</code>；能拿到信号附加信息</td>
+<td>Linux 专有；必须在所有线程正确屏蔽；要理解 fd 生命周期</td>
+</tr>
+<tr>
+<td>单独信号线程 + <code>sigwait</code> / <code>sigwaitinfo</code></td>
+<td>同步消费、逻辑集中</td>
+<td>多一个线程；同样需要所有线程屏蔽；线程间通信需要设计</td>
+</tr>
+</tbody>
+</table>
+<p>对大多数 Linux 后端服务，<code>signalfd</code> 很适合“事件循环 + 优雅退出”的场景：信号处理和业务处理在同一个线程上下文，日志、内存分配都可以正常使用，维护成本低。代价是必须把屏蔽字配置正确，尤其是多线程服务。</p>
+<p>如果追求可移植性，self-pipe 是经典替代方案；如果只是一个小工具，标志位最简单。</p>
+<hr />
+<h2 id="5-signalfd-sigterm">5. 动手实践：用 <code>signalfd</code> 让 <code>SIGTERM</code> 进入事件循环</h2>
+<p>目标：实现一个最小可验证的优雅下线流程。不要只写“捕获信号后退出”，而要真正完成“停止接入 + 排空请求 + 截止时间强制退出”。</p>
+<h3 id="1_1">步骤 1：搭一个最小事件循环服务器</h3>
+<p>准备以下结构：</p>
+<ul>
+<li>一个监听 socket，设为非阻塞，加入 <code>epoll</code>。</li>
+<li>一个 <code>active_requests</code> 计数，表示当前在途请求数。</li>
+<li>一个缓慢请求，例如 sleep 2 秒或模拟数据库操作，用来观察排空过程。</li>
+<li>一个 <code>draining</code> 状态，表示是否已经收到 <code>SIGTERM</code>。</li>
+</ul>
+<p>验收观察点：正常运行时，新连接可以建立，请求可以完成，<code>active_requests</code> 能正确增减。</p>
+<h3 id="2-sigterm">步骤 2：在创建线程之前屏蔽 <code>SIGTERM</code></h3>
+<p>在主函数最开始、创建任何线程之前执行：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">sigset_t</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span>
+<span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">);</span>
+<span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SIGTERM</span><span class="p">);</span>
+<span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SIGINT</span><span class="p">);</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pthread_sigmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>如果后续要创建 worker 线程，不要在工作线程里解除这些信号的屏蔽。这样所有线程都继承屏蔽字，信号会保持待决，交给 <code>signalfd</code> 消费。</p>
+<h3 id="3-signalfd-epoll">步骤 3：创建 <code>signalfd</code> 并加入 <code>epoll</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">sfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">signalfd</span><span class="p">(</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mask</span><span class="p">,</span><span class="w"> </span><span class="n">SFD_NONBLOCK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SFD_CLOEXEC</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sfd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">epoll_event</span><span class="w"> </span><span class="n">ev</span><span class="p">;</span>
+<span class="n">ev</span><span class="p">.</span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EPOLLIN</span><span class="p">;</span>
+<span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sfd</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">epfd</span><span class="p">,</span><span class="w"> </span><span class="n">EPOLL_CTL_ADD</span><span class="p">,</span><span class="w"> </span><span class="n">sfd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ev</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>同时把监听 fd 也加入 <code>epoll</code>。</p>
+<h3 id="4_1">步骤 4：事件循环中读取信号</h3>
+<p>当 <code>epoll_wait</code> 返回 <code>sfd</code> 可读时：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">signalfd_siginfo</span><span class="w"> </span><span class="n">si</span><span class="p">;</span>
+<span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">si</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">si</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">(</span><span class="kt">ssize_t</span><span class="p">)</span><span class="k">sizeof</span><span class="w"> </span><span class="n">si</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">si</span><span class="p">.</span><span class="n">ssi_signo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIGTERM</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">si</span><span class="p">.</span><span class="n">ssi_signo</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIGINT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">begin_shutdown</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意要循环读到 <code>EAGAIN</code>，一次事件可能对应多个待决信号，普通信号也可能合并。</p>
+<h3 id="5-sigterm">步骤 5：收到 <code>SIGTERM</code> 后停止接入</h3>
+<p><code>begin_shutdown</code> 至少做三件事：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">begin_shutdown</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_draining</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">g_draining</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">g_deadline_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ms</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">25000</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_listen_fd</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">g_epoll_fd</span><span class="p">,</span><span class="w"> </span><span class="n">EPOLL_CTL_DEL</span><span class="p">,</span><span class="w"> </span><span class="n">g_listen_fd</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">        </span><span class="n">close</span><span class="p">(</span><span class="n">g_listen_fd</span><span class="p">);</span>
+<span class="w">        </span><span class="n">g_listen_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>动作顺序：</p>
+<ol>
+<li>设置 <code>draining</code>，让后续请求处理逻辑知道不能再启动新任务。</li>
+<li>计算 deadline，建议小于 Kubernetes 的宽限期。</li>
+<li>从 <code>epoll</code> 删除监听 fd。</li>
+<li>关闭监听 fd，内核不再接受新连接。</li>
+</ol>
+<h3 id="6">步骤 6：排空在途请求，并拒绝新任务</h3>
+<p>在连接处理函数中：</p>
+<ul>
+<li>每开始处理一个请求，<code>active_requests++</code>。</li>
+<li>每完成一个请求，<code>active_requests--</code>。</li>
+<li>如果 <code>draining</code> 为真，不再从 keep-alive 连接上读取并派发新请求；可以返回 <code>503</code> 和 <code>Connection: close</code>，或者完成当前请求后直接关闭连接。</li>
+<li>不要在处理完当前请求后再启动后台任务、定时任务或新的下游请求，除非这些任务也被纳入排空和截止时间管理。</li>
+</ul>
+<p>事件循环的等待时间要根据 deadline 计算：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_draining</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_active</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_deadline_ms</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">now_ms</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">left</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">left</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">epoll_wait</span><span class="p">(</span><span class="n">g_epoll_fd</span><span class="p">,</span><span class="w"> </span><span class="n">events</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="p">);</span>
+</code></pre></div>
+
+<h3 id="7">步骤 7：截止时间到达时强制退出</h3>
+<p>如果 deadline 到了还有在途请求：</p>
+<ul>
+<li>用正常上下文（不是信号处理器）记录一条固定信息，例如“graceful shutdown timeout, forcing exit”；</li>
+<li>调用 <code>_exit(1)</code> 立即退出，避免继续被平台 <code>SIGKILL</code>；</li>
+<li>不要在超时路径依赖 stdio 缓冲，必要时使用 <code>write</code> 写入 STDERR。</li>
+</ul>
+<p>验收时重点确认：</p>
+<ul>
+<li>新连接在 <code>SIGTERM</code> 后无法建立；</li>
+<li>已在处理的慢请求可以完成；</li>
+<li>如果人为制造一个永不完成的请求，进程会在 deadline 到达后退出，而不是无限等待。</li>
+</ul>
+<h3 id="8">步骤 8：用命令验证</h3>
+<p>启动服务后，先记录 pid，然后观察信号掩码：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'Sig(Blk|Ign|Cgt|Pnd)'</span><span class="w"> </span>/proc/&lt;pid&gt;/status
+</code></pre></div>
+
+<p>确认 <code>SIGTERM</code> 对应的位出现在 <code>SigBlk</code> 中，而不是只出现在 <code>SigCgt</code> 中。</p>
+<p>跟踪信号相关系统调用：</p>
+<div class="codehilite"><pre><span></span><code>strace<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>signal<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+</code></pre></div>
+
+<p>另开一个终端发送信号：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">kill</span><span class="w"> </span>-TERM<span class="w"> </span>&lt;pid&gt;
+</code></pre></div>
+
+<p>观察：</p>
+<ul>
+<li><code>strace</code> 中出现 <code>SIGTERM</code>；</li>
+<li>服务日志显示进入 draining；</li>
+<li>新连接被拒绝或立即关闭；</li>
+<li>在途请求完成；</li>
+<li>进程在 deadline 前退出，退出码符合预期。</li>
+</ul>
+<p>也可以直接查看信号编号：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">kill</span><span class="w"> </span>-l
+</code></pre></div>
+
+<p>如果进程没有按预期退出，优先检查：</p>
+<ul>
+<li>是否只有主线程屏蔽了信号；</li>
+<li>是否 <code>signalfd</code> 没有加入 <code>epoll</code>；</li>
+<li>是否读取 <code>signalfd</code> 后没有循环读到 <code>EAGAIN</code>；</li>
+<li>是否关闭监听 fd 后仍然在 keep-alive 连接上派发新请求；</li>
+<li>是否某个请求阻塞导致 <code>active_requests</code> 永远不归零；</li>
+<li>是否被 shell 包装导致 <code>SIGTERM</code> 没有到达业务进程。</li>
+</ul>
+<h3 id="9">步骤 9：验收标准</h3>
+<p>完成实践后，逐项检查：</p>
+<ul>
+<li>[ ] 信号处理器（如果存在）不调用 <code>printf</code>、<code>fprintf</code>、<code>syslog</code>、<code>malloc</code>、<code>exit</code> 等非异步信号安全函数。</li>
+<li>[ ] 使用 <code>signalfd</code> 时，所有线程在创建前屏蔽了 <code>SIGTERM</code>，<code>/proc/&lt;pid&gt;/status</code> 的 <code>SigBlk</code> 能证明这一点。</li>
+<li>[ ] 收到 <code>SIGTERM</code> 后，监听 fd 从 <code>epoll</code> 删除并关闭，新连接无法进入。</li>
+<li>[ ] draining 状态下不再启动新请求，keep-alive 连接不会继续带来新任务。</li>
+<li>[ ] 在途请求计数归零后正常退出；有明确的截止时间。</li>
+<li>[ ] 截止时间到达后强制退出，不会无限等待平台发送 <code>SIGKILL</code>。</li>
+<li>[ ] 能通过 <code>strace -e trace=signal</code> 观察到信号相关的系统调用和信号递送过程。</li>
+</ul>
+<hr />
+<h2 id="6_1">6. 自测题</h2>
+<h3 id="1_2">题目 1</h3>
+<p>为什么不能在 <code>SIGTERM</code> 处理器中调用 <code>printf</code> 或 <code>syslog</code>？<code>malloc</code> 明明是线程安全的，为什么也不能在处理器中调用？</p>
+<h3 id="1_3">答案 1</h3>
+<p>信号处理器可能打断任意普通代码，包括正在持有 stdio 锁、分配器锁或内部缓冲区的代码。<code>printf</code>、<code>syslog</code>、<code>malloc</code> 都不是异步信号安全的：</p>
+<ul>
+<li><code>printf</code> / <code>syslog</code> 可能使用锁、缓冲区和内存分配，处理器中调用可能死锁或破坏状态；</li>
+<li><code>malloc</code> 虽然是线程安全的，但线程安全只保证多线程并发调用的正确性，不保证信号处理器重入安全。如果信号打断了正在持有 <code>malloc</code> 锁的线程，处理器再次调用 <code>malloc</code> 就可能自死锁。</li>
+</ul>
+<p>正确做法是处理器只做最小动作：设置 <code>volatile sig_atomic_t</code> 标志、<code>write</code> 到 self-pipe，或使用 <code>signalfd</code> 把信号消费移到正常事件循环上下文。</p>
+<h3 id="2">题目 2</h3>
+<p>一个多线程服务使用 <code>signalfd</code> 处理 <code>SIGTERM</code>。为什么必须在 <code>pthread_create</code> 之前屏蔽 <code>SIGTERM</code>？只在主线程屏蔽可以吗？</p>
+<h3 id="2_1">答案 2</h3>
+<p>不可以只在主线程屏蔽。进程定向信号会被投递给任意一个没有屏蔽它的线程。如果工作线程没有屏蔽 <code>SIGTERM</code>，内核可能把信号投递给工作线程：</p>
+<ul>
+<li>如果该信号仍是默认处置，整个进程可能直接终止；</li>
+<li>如果工作线程有自己的处理器，处理器会在工作线程中执行，而不是由 <code>signalfd</code> 消费；</li>
+<li><code>signalfd</code> 只能读到被屏蔽后保持待决的信号。</li>
+</ul>
+<p>线程会继承创建时的信号掩码，所以在创建任何线程之前由主线程调用 <code>pthread_sigmask(SIG_BLOCK, ...)</code>，可以让所有新线程自动继承屏蔽字。之后工作线程不要解除这些信号的屏蔽。如果线程已经存在，就必须逐个线程配置屏蔽字。</p>
+<h3 id="3">题目 3</h3>
+<p>请设计一个基于 <code>SIGTERM</code> 的优雅退出流程。为什么必须有截止时间？截止时间与 Kubernetes 的 <code>SIGKILL</code> 有什么关系？</p>
+<h3 id="3_1">答案 3</h3>
+<p>流程：</p>
+<ol>
+<li>通过 <code>signalfd</code>（或安全的标志位/self-pipe）收到 <code>SIGTERM</code>。</li>
+<li>进入 draining 状态，记录 <code>CLOCK_MONOTONIC</code> 截止时间。</li>
+<li>从 <code>epoll</code> 删除并关闭监听 socket，停止接受新连接。</li>
+<li>对已有连接不再派发新请求；可以返回 <code>503</code> 并关闭 keep-alive 连接。</li>
+<li>等待在途请求计数归零。</li>
+<li>在途请求清空后，刷新必要日志/指标，关闭下游资源，正常退出。</li>
+<li>如果截止时间到达仍有请求未完成，记录固定信息后调用 <code>_exit</code> 强制退出。</li>
+</ol>
+<p>必须有截止时间，因为某个请求或下游依赖可能永远不返回。如果没有截止时间，进程会一直等待，最终被平台发送 <code>SIGKILL</code> 硬杀，导致日志、连接和事务都无法按计划收尾。</p>
+<p>Kubernetes 先发送 <code>SIGTERM</code>，等待 <code>terminationGracePeriodSeconds</code>，超时后发送 <code>SIGKILL</code>。<code>SIGKILL</code> 不可捕获、不可屏蔽，所以应用自己的 deadline 必须小于平台宽限期，给清理留出余量。systemd 同理，超时后会发送 <code>SIGKILL</code>。</p>
+<hr />
+<h2 id="7_1">7. 推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man7/signal-safety.7.html">信号与安全停机：Linux man-pages</a><br />
+  来源：man7.org｜语言：英文｜类型：文档｜难度：进阶｜免费：是<br />
+  推荐理由：重点阅读信号处置和屏蔽与 <code>async-signal-safe</code>，用于核对本节点实验的语义和边界。</li>
+</ul>
+<p>阅读时建议按节点 <code>sourceStudy</code> 的要求做：</p>
+<ol>
+<li>先核对异步信号安全的定义和函数列表，不要凭经验判断某个函数是否安全。</li>
+<li>阅读信号处理器相关的示例和错误处理路径，注意 <code>errno</code>、<code>EINTR</code>、<code>SA_RESTART</code> 等边界。</li>
+<li>记录适用版本和平台差异，尤其是 <code>signalfd</code> 的 Linux 专有属性，以及不同 libc、内核版本下的行为差异。</li>
+<li>把 man-pages 的约束与自己的代码逐条对照：处理器里调用了什么？屏蔽字在哪些线程生效？退出路径有没有 deadline？</li>
+</ol>
+<hr />
+<h2 id="8_1">8. 本课小结</h2>
+<ul>
+<li>信号是异步事件通知，可能在任意时刻打断普通代码。</li>
+<li>处置决定“信号来了做什么”：默认、忽略、捕获；<code>SIGKILL</code> / <code>SIGSTOP</code> 不可捕获、不可忽略、不可屏蔽。</li>
+<li>屏蔽不是忽略：被屏蔽的信号会待决，解除屏蔽后再递送；可用 <code>/proc/&lt;pid&gt;/status</code> 的 <code>SigBlk</code>、<code>SigIgn</code>、<code>SigCgt</code> 检查。</li>
+<li>多线程下，进程定向信号会投递给任意未屏蔽线程，因此要在创建线程前用 <code>pthread_sigmask</code> 配置好所有线程的屏蔽字。</li>
+<li>处理器只能调用异步信号安全函数；<code>write</code> 可以，<code>printf</code> / <code>malloc</code> / <code>syslog</code> 不行，可能死锁。稳妥做法是只设置 <code>volatile sig_atomic_t</code> 标志、写 self-pipe，或使用 <code>signalfd</code>。</li>
+<li><code>signalfd</code> 把信号变成可读 fd，纳入 <code>epoll</code>，让信号消费回到正常上下文；<code>SIGCHLD</code> 要配合 <code>waitpid</code> 回收子进程。</li>
+<li>优雅退出要关闭监听 socket、停止接入、排空在途请求，并在截止时间到达时强制退出；截止时间必须小于 systemd / Kubernetes 发送 <code>SIGKILL</code> 的宽限期。</li>
+<li>设计权衡：同步消费信号易维护，但前提是正确配置所有线程的屏蔽字。</li>
+</ul>
+<hr />
+<h2 id="_3">附：可运行的实践参考与验证脚本</h2>
+<p>下面是一个已在 Linux（gcc）上编译运行通过的最小参考实现：4 个工作线程在屏蔽 SIGTERM 之后才创建，signalfd 加入 epoll；每个连接是一个“慢请求”（<code>req_ms</code> 毫秒后回复 <code>ok</code>）。收到 SIGTERM 后从 epoll 删掉并关闭监听 fd，等在途请求排空后退出码 0；超过 <code>deadline_ms</code> 仍未排空就 <code>_exit(3)</code>。</p>
+<p>实测结果：全部 5 个线程的 <code>SigBlk</code> 都含 SIGTERM（<code>0x4000</code>）；3 个 1.5 秒请求在途时发 SIGTERM，新连接立刻被拒（connection refused），3 个请求全部拿到 <code>ok</code> 后退出码 0；请求需 10 秒、截止时间 1 秒时，约 1003ms 强制退出、退出码 3，客户端读到 EOF。脚本最后打印 <code>ALL_CHECKS_PASSED</code>。</p>
+<p>用法：<code>gcc -O1 -Wall -pthread -o srv srv.c &amp;&amp; ./test.sh</code></p>
+<h3 id="srvc">srv.c</h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;netinet/in.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;signal.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/epoll.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/signalfd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/socket.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cm">/* 用法: srv &lt;port&gt; &lt;req_ms&gt; &lt;deadline_ms&gt;</span>
+<span class="cm">   每个连接 = 一个请求：accept 后 req_ms 毫秒回复 "ok\n" 并关闭 */</span>
+<span class="cp">#define MAXC 256</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">now_ms</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span><span class="k">struct</span><span class="w"> </span><span class="nc">timespec</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="o">&amp;</span><span class="n">t</span><span class="p">);</span><span class="k">return</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">tv_sec</span><span class="o">*</span><span class="mf">1000L</span><span class="n">L</span><span class="o">+</span><span class="n">t</span><span class="p">.</span><span class="n">tv_nsec</span><span class="o">/</span><span class="mi">1000000</span><span class="p">;}</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">worker</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">){(</span><span class="kt">void</span><span class="p">)</span><span class="n">a</span><span class="p">;</span><span class="k">for</span><span class="p">(;;)</span><span class="n">pause</span><span class="p">();</span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="kt">char</span><span class="o">**</span><span class="n">argv</span><span class="p">){</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">port</span><span class="o">=</span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">req_ms</span><span class="o">=</span><span class="n">atoll</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span><span class="w"> </span><span class="n">dl_ms</span><span class="o">=</span><span class="n">atoll</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+<span class="w">  </span><span class="kt">sigset_t</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="n">sigemptyset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m</span><span class="p">);</span><span class="w"> </span><span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m</span><span class="p">,</span><span class="n">SIGTERM</span><span class="p">);</span><span class="w"> </span><span class="n">sigaddset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m</span><span class="p">,</span><span class="n">SIGINT</span><span class="p">);</span>
+<span class="w">  </span><span class="n">pthread_sigmask</span><span class="p">(</span><span class="n">SIG_BLOCK</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span><span class="w">          </span><span class="cm">/* 先屏蔽，再建线程 */</span>
+<span class="w">  </span><span class="n">pthread_t</span><span class="w"> </span><span class="n">th</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span><span class="w"> </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">th</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="nb">NULL</span><span class="p">,</span><span class="n">worker</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">sfd</span><span class="o">=</span><span class="n">signalfd</span><span class="p">(</span><span class="mi">-1</span><span class="p">,</span><span class="o">&amp;</span><span class="n">m</span><span class="p">,</span><span class="n">SFD_NONBLOCK</span><span class="o">|</span><span class="n">SFD_CLOEXEC</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">lfd</span><span class="o">=</span><span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span><span class="n">SOCK_STREAM</span><span class="o">|</span><span class="n">SOCK_NONBLOCK</span><span class="o">|</span><span class="n">SOCK_CLOEXEC</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">one</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">setsockopt</span><span class="p">(</span><span class="n">lfd</span><span class="p">,</span><span class="n">SOL_SOCKET</span><span class="p">,</span><span class="n">SO_REUSEADDR</span><span class="p">,</span><span class="o">&amp;</span><span class="n">one</span><span class="p">,</span><span class="k">sizeof</span><span class="w"> </span><span class="n">one</span><span class="p">);</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">sockaddr_in</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="p">{.</span><span class="n">sin_family</span><span class="o">=</span><span class="n">AF_INET</span><span class="p">,.</span><span class="n">sin_port</span><span class="o">=</span><span class="n">htons</span><span class="p">(</span><span class="n">port</span><span class="p">),.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span><span class="o">=</span><span class="n">htonl</span><span class="p">(</span><span class="mh">0x7f000001</span><span class="p">)};</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="n">lfd</span><span class="p">,(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="k">sizeof</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="n">listen</span><span class="p">(</span><span class="n">lfd</span><span class="p">,</span><span class="mi">64</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">){</span><span class="n">perror</span><span class="p">(</span><span class="s">"bind"</span><span class="p">);</span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;}</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">ep</span><span class="o">=</span><span class="n">epoll_create1</span><span class="p">(</span><span class="n">EPOLL_CLOEXEC</span><span class="p">);</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">epoll_event</span><span class="w"> </span><span class="n">ev</span><span class="o">=</span><span class="p">{.</span><span class="n">events</span><span class="o">=</span><span class="n">EPOLLIN</span><span class="p">};</span>
+<span class="w">  </span><span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="o">=</span><span class="n">sfd</span><span class="p">;</span><span class="w"> </span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span><span class="n">EPOLL_CTL_ADD</span><span class="p">,</span><span class="n">sfd</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="o">=</span><span class="n">lfd</span><span class="p">;</span><span class="w"> </span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span><span class="n">EPOLL_CTL_ADD</span><span class="p">,</span><span class="n">lfd</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ev</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">cfd</span><span class="p">[</span><span class="n">MAXC</span><span class="p">];</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">due</span><span class="p">[</span><span class="n">MAXC</span><span class="p">];</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">draining</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">accepted</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">served</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">deadline</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"READY pid=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">getpid</span><span class="p">());</span><span class="w"> </span><span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="p">(;;){</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">now</span><span class="o">=</span><span class="n">now_ms</span><span class="p">();</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">timeout</span><span class="o">=</span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nc</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">due</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;=</span><span class="n">now</span><span class="p">){</span><span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="n">cfd</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="s">"ok</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span><span class="w"> </span><span class="n">close</span><span class="p">(</span><span class="n">cfd</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"> </span><span class="n">served</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="n">cfd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">cfd</span><span class="p">[</span><span class="o">--</span><span class="n">nc</span><span class="p">];</span><span class="w"> </span><span class="n">due</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">due</span><span class="p">[</span><span class="n">nc</span><span class="p">];</span><span class="w"> </span><span class="n">i</span><span class="o">--</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">draining</span><span class="p">){</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">nc</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"DRAINED accepted=%d served=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">accepted</span><span class="p">,</span><span class="n">served</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">now</span><span class="o">&gt;=</span><span class="n">deadline</span><span class="p">){</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">"DEADLINE_FORCE_EXIT inflight=%d served=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">nc</span><span class="p">,</span><span class="n">served</span><span class="p">);</span><span class="w"> </span><span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span><span class="w"> </span><span class="n">_exit</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="n">timeout</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">deadline</span><span class="o">-</span><span class="n">now</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nc</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">due</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">now</span><span class="p">);</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">timeout</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">||</span><span class="n">t</span><span class="o">&lt;</span><span class="n">timeout</span><span class="p">)</span><span class="w"> </span><span class="n">timeout</span><span class="o">=</span><span class="n">t</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="n">t</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">epoll_event</span><span class="w"> </span><span class="n">evs</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="o">=</span><span class="n">epoll_wait</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span><span class="n">evs</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="n">timeout</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">){</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">errno</span><span class="o">==</span><span class="n">EINTR</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="o">=</span><span class="n">evs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">fd</span><span class="o">==</span><span class="n">sfd</span><span class="p">){</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">signalfd_siginfo</span><span class="w"> </span><span class="n">si</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">sfd</span><span class="p">,</span><span class="o">&amp;</span><span class="n">si</span><span class="p">,</span><span class="k">sizeof</span><span class="w"> </span><span class="n">si</span><span class="p">)</span><span class="o">==</span><span class="k">sizeof</span><span class="w"> </span><span class="n">si</span><span class="p">){</span>
+<span class="w">          </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">draining</span><span class="p">){</span><span class="w"> </span><span class="n">draining</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">deadline</span><span class="o">=</span><span class="n">now_ms</span><span class="p">()</span><span class="o">+</span><span class="n">dl_ms</span><span class="p">;</span>
+<span class="w">            </span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">ep</span><span class="p">,</span><span class="n">EPOLL_CTL_DEL</span><span class="p">,</span><span class="n">lfd</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span><span class="w"> </span><span class="n">close</span><span class="p">(</span><span class="n">lfd</span><span class="p">);</span><span class="w"> </span><span class="n">lfd</span><span class="o">=</span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">"SIGTERM from pid=%u, draining inflight=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="n">si</span><span class="p">.</span><span class="n">ssi_pid</span><span class="p">,</span><span class="n">nc</span><span class="p">);</span><span class="w"> </span><span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="w">      </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">fd</span><span class="o">==</span><span class="n">lfd</span><span class="p">){</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">;</span><span class="w"> </span><span class="k">while</span><span class="p">(</span><span class="n">nc</span><span class="o">&lt;</span><span class="n">MAXC</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">accept4</span><span class="p">(</span><span class="n">lfd</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="nb">NULL</span><span class="p">,</span><span class="n">SOCK_CLOEXEC</span><span class="p">))</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">){</span><span class="w"> </span><span class="n">cfd</span><span class="p">[</span><span class="n">nc</span><span class="p">]</span><span class="o">=</span><span class="n">c</span><span class="p">;</span><span class="w"> </span><span class="n">due</span><span class="p">[</span><span class="n">nc</span><span class="p">]</span><span class="o">=</span><span class="n">now_ms</span><span class="p">()</span><span class="o">+</span><span class="n">req_ms</span><span class="p">;</span><span class="w"> </span><span class="n">nc</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="n">accepted</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="testsh">test.sh</h3>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># Backend Atlas 第40课实践验证：signalfd + 优雅停机</span>
+<span class="nb">set</span><span class="w"> </span>-u<span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="nv">fail</span><span class="o">=</span><span class="m">0</span>
+gcc<span class="w"> </span>-O1<span class="w"> </span>-Wall<span class="w"> </span>-pthread<span class="w"> </span>-o<span class="w"> </span>srv<span class="w"> </span>srv.c<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+ok<span class="o">(){</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"PASS: </span><span class="nv">$1</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"> </span>bad<span class="o">(){</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"FAIL: </span><span class="nv">$1</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="nv">fail</span><span class="o">=</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="o">}</span>
+req<span class="o">(){</span><span class="w"> </span>python3<span class="w"> </span>-<span class="w"> </span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span><span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">import socket,sys</span>
+<span class="s">try:</span>
+<span class="s">    s=socket.create_connection(("127.0.0.1",int(sys.argv[1])),timeout=5); print(s.recv(10).decode().strip() or "EOF")</span>
+<span class="s">except Exception as e: print("REFUSED" if isinstance(e,ConnectionRefusedError) else type(e).__name__)</span>
+<span class="s">PY</span>
+<span class="o">}</span>
+<span class="c1"># 场景1：3 个 1.5s 慢请求在途时 SIGTERM，deadline 5s → 排空后退出0，新连接被拒</span>
+./srv<span class="w"> </span><span class="m">18440</span><span class="w"> </span><span class="m">1500</span><span class="w"> </span><span class="m">5000</span><span class="w"> </span>&gt;<span class="w"> </span>s1.log<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">P</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.3
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"SigBlk 主线程: </span><span class="k">$(</span>grep<span class="w"> </span>SigBlk<span class="w"> </span>/proc/<span class="nv">$P</span>/status<span class="k">)</span><span class="s2">"</span>
+<span class="nv">allblk</span><span class="o">=</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>t<span class="w"> </span><span class="k">in</span><span class="w"> </span>/proc/<span class="nv">$P</span>/task/*<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nv">b</span><span class="o">=</span><span class="k">$(</span>awk<span class="w"> </span><span class="s1">'/SigBlk/{print $2}'</span><span class="w"> </span><span class="nv">$t</span>/status<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="o">((</span><span class="w"> </span><span class="o">(</span>0x<span class="nv">$b</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>0x4000<span class="o">)</span><span class="w"> </span><span class="o">))</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nv">allblk</span><span class="o">=</span><span class="m">0</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<span class="nv">n</span><span class="o">=</span><span class="k">$(</span>ls<span class="w"> </span>/proc/<span class="nv">$P</span>/task<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$allblk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"全部 </span><span class="nv">$n</span><span class="s2"> 个线程 SigBlk 含 SIGTERM(0x4000)"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"有线程未屏蔽 SIGTERM"</span>
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">(</span>req<span class="w"> </span><span class="m">18440</span><span class="w"> </span>&gt;<span class="w"> </span>r1_<span class="nv">$i</span>.txt<span class="o">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="k">done</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.3
+<span class="nb">kill</span><span class="w"> </span>-TERM<span class="w"> </span><span class="nv">$P</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.2
+<span class="nv">nr</span><span class="o">=</span><span class="k">$(</span>req<span class="w"> </span><span class="m">18440</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">"</span><span class="nv">$nr</span><span class="s2">"</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>REFUSED<span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"SIGTERM 后新连接被拒绝"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"新连接结果=</span><span class="nv">$nr</span><span class="s2">"</span>
+<span class="nb">wait</span><span class="w"> </span><span class="nv">$P</span><span class="p">;</span><span class="w"> </span><span class="nv">rc</span><span class="o">=</span><span class="nv">$?</span><span class="p">;</span><span class="w"> </span><span class="nb">wait</span>
+<span class="nv">oks</span><span class="o">=</span><span class="k">$(</span>cat<span class="w"> </span>r1_*.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-c<span class="w"> </span>ok<span class="k">)</span>
+<span class="o">[</span><span class="w"> </span><span class="nv">$rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$oks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"在途 3 个请求全部完成后退出码 0"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"rc=</span><span class="nv">$rc</span><span class="s2"> ok=</span><span class="nv">$oks</span><span class="s2">"</span>
+cat<span class="w"> </span>s1.log
+<span class="c1"># 场景2：请求要 10s，deadline 1s → 到点强制退出码3</span>
+./srv<span class="w"> </span><span class="m">18441</span><span class="w"> </span><span class="m">10000</span><span class="w"> </span><span class="m">1000</span><span class="w"> </span>&gt;<span class="w"> </span>s2.log<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">P</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.3
+<span class="o">(</span>req<span class="w"> </span><span class="m">18441</span><span class="w"> </span>&gt;<span class="w"> </span>r2.txt<span class="o">)</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.2
+<span class="nv">t0</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%s%N<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nb">kill</span><span class="w"> </span>-TERM<span class="w"> </span><span class="nv">$P</span><span class="p">;</span><span class="w"> </span><span class="nb">wait</span><span class="w"> </span><span class="nv">$P</span><span class="p">;</span><span class="w"> </span><span class="nv">rc</span><span class="o">=</span><span class="nv">$?</span><span class="p">;</span><span class="w"> </span><span class="nv">t1</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%s%N<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nb">wait</span>
+<span class="nv">ms</span><span class="o">=</span><span class="k">$((</span><span class="w"> </span><span class="o">(</span><span class="nv">t1</span><span class="o">-</span><span class="nv">t0</span><span class="o">)/</span><span class="m">1000000</span><span class="w"> </span><span class="k">))</span>
+<span class="o">[</span><span class="w"> </span><span class="nv">$rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$ms</span><span class="w"> </span>-lt<span class="w"> </span><span class="m">2000</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"deadline 1s 到点强制退出 rc=3 用时 </span><span class="si">${</span><span class="nv">ms</span><span class="si">}</span><span class="s2">ms，客户端看到 </span><span class="k">$(</span>cat<span class="w"> </span>r2.txt<span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"rc=</span><span class="nv">$rc</span><span class="s2"> ms=</span><span class="nv">$ms</span><span class="s2">"</span>
+cat<span class="w"> </span>s2.log
+<span class="c1"># 场景3（反例）：处理器里 printf/malloc 的危险不易稳定复现，这里只用 strace（若有）看 signalfd4</span>
+<span class="k">if</span><span class="w"> </span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>strace<span class="w"> </span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>./srv<span class="w"> </span><span class="m">18442</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">10</span><span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">P</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.3<span class="p">;</span><span class="w"> </span>timeout<span class="w"> </span><span class="m">2</span><span class="w"> </span>strace<span class="w"> </span>-f<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>signal<span class="w"> </span>-p<span class="w"> </span><span class="nv">$P</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-5<span class="w"> </span><span class="p">&amp;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">0</span>.5<span class="p">;</span><span class="w"> </span><span class="nb">kill</span><span class="w"> </span>-TERM<span class="w"> </span><span class="nv">$P</span><span class="p">;</span><span class="w"> </span>wait<span class="p">;</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"SKIP: 无 strace"</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+<span class="o">[</span><span class="w"> </span><span class="nv">$fail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>ALL_CHECKS_PASSED
+</code></pre></div><div class="pn"><span><a href="39.html">← 管道、共享内存与IPC</a></span><span>下一课 待更新</span></div></main></div></body></html>
