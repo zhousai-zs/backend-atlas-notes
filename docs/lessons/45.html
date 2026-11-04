@@ -1,0 +1,737 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>45. 资源限制与/proc诊断 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（45/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（13/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="cur" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 45 课 · 领域 C · 阶段 3</p><p class="dl"><a href="../files/45-c-limits.md" download>⬇ 本课 Markdown</a></p><h1 id="45208-proc">第 45/208 课：资源限制与/proc诊断</h1>
+<blockquote>
+<p>课程信息</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主题</td>
+<td>资源限制与/proc诊断（Resource Limits）</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>C / 阶段 3</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>隔离与资源治理</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置</td>
+<td>c-fd、c-vm</td>
+</tr>
+<tr>
+<td>标签</td>
+<td>Resource Limits、C、C++</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>上一课谈动态装载与重入边界；本课回到进程与系统的<strong>硬天花板</strong>——fd、线程、地址空间等资源限制，以及用 <code>/proc</code> 读出当前占用时必须对齐内核语义的问题。</p>
+<p>进程不是无限容器。长连接网关把 <code>accept</code> 打满、日志线程把线程数顶穿、某个泄漏把 RSS 推到 OOM——表面上是业务故障，根因往往是：<strong>软/硬限制、系统级配额、以及你对 <code>/proc</code> 字段的误读</strong>。本课目标是把这套诊断链路练成肌肉记忆。</p>
+<hr />
+<h2 id="_1">学习目标</h2>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li>解释 <strong>rlimit（进程级）</strong> 与 <strong>系统级限制</strong>（如 <code>fs.file-max</code>、<code>pid_max</code>、cgroup）的层次关系，以及它们如何共同约束后端进程。</li>
+<li>用 <code>/proc/&lt;pid&gt;/fd</code>、<code>/proc/&lt;pid&gt;/status</code>、<code>/proc/&lt;pid&gt;/smaps</code>（或 <code>smaps_rollup</code>）读出 fd 占用、内存与映射概况，并知道字段解释必须对照内核文档，不能凭感觉。</li>
+<li>区分 <strong>soft limit</strong> 与 <strong>hard limit</strong>：谁能改、改到哪里、对 <code>ulimit</code>/<code>prlimit</code>/<code>setrlimit</code> 的实际影响。</li>
+<li>独立完成：降低 <code>nofile</code> 限制触发接入失败，验证<strong>预留 fd</strong> 与<strong>降载策略</strong>；能区分 <code>EMFILE</code> 与 <code>ENFILE</code>；能用<strong>时间序列证据</strong>判断是否在泄漏。</li>
+</ol>
+<p>验收标准：</p>
+<ul>
+<li>能区分 <code>EMFILE</code> 与 <code>ENFILE</code>。</li>
+<li>能用时间序列证据判断泄漏。</li>
+</ul>
+<hr />
+<h2 id="_2">为什么后端要懂</h2>
+<h3 id="_3">场景一：长连接网关「突然接不进来」</h3>
+<p>微信公众号后台常见长连接/网关接入层：客户端心跳保活，单机持有大量 socket。某天峰值一到，新连接开始失败，日志里只有：</p>
+<div class="codehilite"><pre><span></span><code>accept: Too many open files
+</code></pre></div>
+
+<p>你会立刻想到「把 <code>ulimit -n</code> 调大」。有时这能救急，有时只是把爆点推迟几小时——因为真正问题是连接泄漏、或系统级 <code>file-max</code> 已满、或 cgroup 另有配额。不懂 rlimit 与系统限制的层次，排障会停在「调大 ulimit」这一层。</p>
+<h3 id="enomem">场景二：ENOMEM 不一定是「没内存」</h3>
+<p>后台进程 <code>malloc</code>/<code>mmap</code> 失败返回 <code>ENOMEM</code>，或被 OOM killer 杀掉。可能原因包括：</p>
+<ul>
+<li>物理内存 / swap 真不够；</li>
+<li>进程 <code>RLIMIT_AS</code>（虚拟地址空间）或 <code>RLIMIT_DATA</code> 触顶；</li>
+<li>cgroup memory 上限；</li>
+<li>过度碎片或映射过多导致地址空间耗尽（尤其 32 位或受限地址空间）。</li>
+</ul>
+<p><code>/proc/&lt;pid&gt;/status</code> 里的 <code>VmSize</code>/<code>VmRSS</code>/<code>VmPeak</code>，以及 <code>smaps_rollup</code>，是区分「RSS 真涨」还是「虚地址打满」的入口。字段含义必须以内核文档为准。</p>
+<h3 id="_4">场景三：资源泄漏被「调高限制」掩盖</h3>
+<p>运维把 <code>nofile</code> 从 65535 调到 100 万后，告警暂时消失。两周后机器 fd 表膨胀、延迟抖动、最终仍崩。<strong>调高限制不能修复资源泄漏</strong>——它只改变爆炸半径与爆炸时间。本课会强调用时间序列（fd 数、RSS、映射数随时间单调爬升）证明泄漏，而不是用「再调大一点」代替根因分析。</p>
+<hr />
+<h2 id="0">0. 一张图建立直觉</h2>
+<div class="codehilite"><pre><span></span><code>                    ┌─────────────────────────────┐
+                    │  系统 / 命名空间 / cgroup     │
+                    │  fs.file-max, pid_max, mem… │
+                    └──────────────┬──────────────┘
+                                   │ 再收紧
+                    ┌──────────────▼──────────────┐
+                    │  进程 rlimit (soft / hard)   │
+                    │  RLIMIT_NOFILE, NPROC, AS…  │
+                    └──────────────┬──────────────┘
+                                   │ 实际占用
+              ┌────────────────────┼────────────────────┐
+              ▼                    ▼                    ▼
+        /proc/pid/fd         /proc/pid/status      /proc/pid/smaps*
+        打开了哪些 fd         汇总计数与信号等       映射与内存细节
+              │                    │                    │
+              └────────────────────┴────────────────────┘
+                                   │
+                         打满 → EMFILE / ENFILE / ENOMEM
+                         泄漏 → 时间序列单调上升（不是瞬时尖刺）
+</code></pre></div>
+
+<p>记住三句话：</p>
+<ol>
+<li><strong>系统限制是天花板，rlimit 是进程自己的安全带</strong>；</li>
+<li><strong>soft 是当前生效上限，hard 是 soft 能被抬到的天花板（无特权通常不能超 hard）</strong>；</li>
+<li><strong><code>/proc</code> 给现状，内核文档给语义；泄漏靠时间序列，不靠单次快照。</strong></li>
+</ol>
+<hr />
+<h2 id="1-rlimit">1. rlimit 与系统级限制</h2>
+<h3 id="11-rlimit">1.1 什么是 rlimit</h3>
+<p>Linux 为每个进程维护一组资源限制，核心 API：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/resource.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">getrlimit</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">resource</span><span class="p">,</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="o">*</span><span class="n">rlim</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">setrlimit</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">resource</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="o">*</span><span class="n">rlim</span><span class="p">);</span>
+<span class="cm">/* Linux 还有更灵活的 prlimit(2) */</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">rlim_t</span><span class="w"> </span><span class="n">rlim_cur</span><span class="p">;</span><span class="w">  </span><span class="cm">/* soft limit：当前生效上限 */</span>
+<span class="w">    </span><span class="kt">rlim_t</span><span class="w"> </span><span class="n">rlim_max</span><span class="p">;</span><span class="w">  </span><span class="cm">/* hard limit：soft 的上限 */</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>与后台最相关的几项：</p>
+<table>
+<thead>
+<tr>
+<th>resource</th>
+<th>含义</th>
+<th>典型触顶现象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RLIMIT_NOFILE</code></td>
+<td>进程可打开的最大 fd 数（含 0/1/2）</td>
+<td><code>accept</code>/<code>socket</code>/<code>open</code> → <code>EMFILE</code></td>
+</tr>
+<tr>
+<td><code>RLIMIT_NPROC</code></td>
+<td>该用户可创建的进程/线程数（实现相关）</td>
+<td><code>pthread_create</code>/<code>fork</code> 失败</td>
+</tr>
+<tr>
+<td><code>RLIMIT_AS</code></td>
+<td>进程虚拟地址空间上限</td>
+<td><code>mmap</code>/<code>malloc</code> → <code>ENOMEM</code></td>
+</tr>
+<tr>
+<td><code>RLIMIT_RSS</code></td>
+<td>历史遗留，现代 Linux 上常不强制</td>
+<td>不要依赖它做硬隔离</td>
+</tr>
+<tr>
+<td><code>RLIMIT_CORE</code></td>
+<td>core dump 大小</td>
+<td>崩溃无 core / core 被截断</td>
+</tr>
+<tr>
+<td><code>RLIMIT_CPU</code></td>
+<td>CPU 时间</td>
+<td><code>SIGXCPU</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>注意：<code>RLIMIT_NOFILE</code> 的语义是「最大文件描述符编号相关的上限」，实践中常理解为进程可持有的 fd 数量上限；精确边界以 <code>getrlimit(2)</code> man 页与当前内核为准。</p>
+</blockquote>
+<h3 id="12-rlimit">1.2 系统级限制（进程 rlimit 之上）</h3>
+<p>即使进程 soft/hard 很大，仍可能被系统配额卡住：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 系统可分配的文件句柄总数（近似）</span>
+sysctl<span class="w"> </span>fs.file-max
+cat<span class="w"> </span>/proc/sys/fs/file-max
+
+<span class="c1"># 当前系统已用 / 最大（file-nr：allocated, unused, max）</span>
+cat<span class="w"> </span>/proc/sys/fs/file-nr
+
+<span class="c1"># 进程数上限</span>
+sysctl<span class="w"> </span>kernel.pid_max
+
+<span class="c1"># 若在容器 / cgroup v2 中，还要看</span>
+<span class="c1"># /sys/fs/cgroup/.../memory.max, pids.max 等</span>
+</code></pre></div>
+
+<p>网关机上常见组合拳：</p>
+<ol>
+<li>进程 <code>nofile</code> soft=65535，但 <code>fs.file-max</code> 更小或已接近耗尽 → 新打开失败更像 <strong><code>ENFILE</code></strong>（系统级）；</li>
+<li>进程 soft 触顶 → <strong><code>EMFILE</code></strong>（进程级）；</li>
+<li>容器 <code>pids.max</code> 触顶 → 建线程失败，错误码因运行时而异。</li>
+</ol>
+<h3 id="13">1.3 命令行查看与临时修改</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 当前 shell 的 soft 限制</span>
+<span class="nb">ulimit</span><span class="w"> </span>-n<span class="w">          </span><span class="c1"># nofile soft</span>
+<span class="nb">ulimit</span><span class="w"> </span>-Hn<span class="w">         </span><span class="c1"># nofile hard</span>
+<span class="nb">ulimit</span><span class="w"> </span>-a<span class="w">          </span><span class="c1"># 一览</span>
+
+<span class="c1"># 只对当前 shell 临时降低 soft（演示用）</span>
+<span class="nb">ulimit</span><span class="w"> </span>-n<span class="w"> </span><span class="m">32</span>
+
+<span class="c1"># 更精确：对指定 pid 读写（需要权限）</span>
+prlimit<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$$</span><span class="w"> </span>--nofile
+prlimit<span class="w"> </span>--pid<span class="w"> </span><span class="nv">$$</span><span class="w"> </span>--nofile<span class="o">=</span><span class="m">64</span>:64<span class="w">   </span><span class="c1"># soft:hard</span>
+
+<span class="c1"># 进程自身视角</span>
+cat<span class="w"> </span>/proc/self/limits
+</code></pre></div>
+
+<p><code>/proc/self/limits</code> 示例（字段以本机为准）：</p>
+<div class="codehilite"><pre><span></span><code>Limit                     Soft Limit           Hard Limit           Units
+Max open files            1024                 1048576              files
+Max processes             127728               127728               processes
+Max address space         unlimited            unlimited            bytes
+...
+</code></pre></div>
+
+<p>短 C 示例：查询并故意压低 <code>nofile</code> soft：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/resource.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="n">rl</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">getrlimit</span><span class="p">(</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rl</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"getrlimit"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"nofile soft=%llu hard=%llu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span><span class="w">                 </span><span class="cm">/* 只降 soft */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">)</span>
+<span class="w">        </span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">setrlimit</span><span class="p">(</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rl</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"setrlimit"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">getrlimit</span><span class="p">(</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rl</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"after: soft=%llu hard=%llu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>无特权进程：<strong>可以把 soft 在 <code>[0, hard]</code> 内调整</strong>；可以把 hard <strong>降低</strong>；一般<strong>不能</strong>把 hard 抬高超过原 hard（需要 <code>CAP_SYS_RESOURCE</code> 等能力）。systemd 服务常用 <code>LimitNOFILE=</code> 在启动时设定。</p>
+<h3 id="14">1.4 和微信后台长连接的对应关系</h3>
+<p>假设接入进程：</p>
+<ul>
+<li>监听 fd、健康检查、日志、配置热加载、内部 RPC 各占若干 fd；</li>
+<li>每个活跃长连接至少 1 个 socket fd（再加 timerfd/eventfd 等则更多）；</li>
+<li>epoll 本身占 1 个 fd。</li>
+</ul>
+<p>容量估算不能只看「<code>ulimit -n</code> 很大」：</p>
+<div class="codehilite"><pre><span></span><code>可用连接 ≈ soft_nofile - 预留(listen/log/内部) - 安全余量
+每连接成本 ≈ socket 结构 + sk_buff 缓冲 + 用户态会话对象 + ...
+</code></pre></div>
+
+<p>高上限提升容量，也必须预算<strong>每连接真实内存和内核成本</strong>——后面「设计权衡」会展开。</p>
+<hr />
+<h2 id="2-procpidfdstatus-smaps">2. /proc/pid/fd、status 和 smaps</h2>
+<p><code>/proc</code> 是诊断窗口，不是故事书。字段名看起来像「人话」，语义却随内核版本演进；<strong>解释必须对应内核文档 / man 页</strong>（本课资源：<code>getrlimit(2)</code>，并延伸阅读 <code>proc(5)</code>）。</p>
+<h3 id="21-procpidfd">2.1 <code>/proc/&lt;pid&gt;/fd</code>：打开了什么</h3>
+<div class="codehilite"><pre><span></span><code>pidof<span class="w"> </span>your_gateway
+ls<span class="w"> </span>/proc/<span class="nv">$PID</span>/fd<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="w">          </span><span class="c1"># 当前 fd 数量</span>
+ls<span class="w"> </span>-l<span class="w"> </span>/proc/<span class="nv">$PID</span>/fd<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+<span class="c1"># 常见输出：socket:[inode]、pipe:[inode]、anon_inode:[eventfd]、文件路径</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li>目录下的<strong>数字名</strong>是 fd 号；软链目标揭示类型。</li>
+<li><code>ls | wc -l</code> 统计的是<strong>当前仍打开的 fd 个数</strong>，不是历史峰值。</li>
+<li>若怀疑泄漏：对同一 pid <strong>周期性采样</strong>（见实践节），看是否单调上升。</li>
+<li><code>ls -l</code> 对已删除但仍打开的文件会显示 <code>(deleted)</code>——日志轮转后仍占 fd 的经典坑。</li>
+</ul>
+<p>配合：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 更友好的汇总（若安装了 lsof）</span>
+lsof<span class="w"> </span>-p<span class="w"> </span><span class="nv">$PID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'{print $5,$9}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-nr<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+
+<span class="c1"># 只关心 socket</span>
+ls<span class="w"> </span>-l<span class="w"> </span>/proc/<span class="nv">$PID</span>/fd<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>socket<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<h3 id="22-procpidstatus">2.2 <code>/proc/&lt;pid&gt;/status</code>：汇总快照</h3>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'^(Name|Pid|FDSize|Threads|VmPeak|VmSize|VmRSS|VmData|VmStk|VmExe|VmLib|voluntary|nonvoluntary)'</span><span class="w"> </span>/proc/<span class="nv">$PID</span>/status
+</code></pre></div>
+
+<p>常见字段直觉（<strong>以你机器内核的 <code>proc(5)</code> 为准</strong>）：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>用途直觉</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FDSize</code></td>
+<td>内核为该进程 fd 表分配的槽位数（≥ 实际打开数，会按需扩张）</td>
+</tr>
+<tr>
+<td><code>Threads</code></td>
+<td>线程数（含主线程）</td>
+</tr>
+<tr>
+<td><code>VmSize</code> / <code>VmPeak</code></td>
+<td>虚拟地址空间当前 / 峰值</td>
+</tr>
+<tr>
+<td><code>VmRSS</code></td>
+<td>常驻物理内存近似</td>
+</tr>
+<tr>
+<td><code>VmData</code> / <code>VmStk</code> / <code>VmLib</code></td>
+<td>数据、栈、共享库等粗分</td>
+</tr>
+</tbody>
+</table>
+<p>注意：</p>
+<ul>
+<li><code>FDSize</code> <strong>不是</strong>「当前打开 fd 数」。当前打开数请数 <code>/proc/pid/fd</code> 或读更合适的接口。</li>
+<li><code>VmRSS</code> 是诊断入口，精细归因要靠 <code>smaps</code> / <code>smaps_rollup</code> / cgroup 指标。</li>
+<li>单次 <code>status</code> 只能说明「此刻」；判断泄漏必须<strong>时间序列</strong>。</li>
+</ul>
+<h3 id="23-procpidsmaps-smaps_rollup">2.3 <code>/proc/&lt;pid&gt;/smaps</code> 与 <code>smaps_rollup</code></h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 全量映射（大进程上可能很大，生产慎用频繁 cat）</span>
+head<span class="w"> </span>-40<span class="w"> </span>/proc/<span class="nv">$PID</span>/smaps
+
+<span class="c1"># 汇总版（较新内核提供）：一眼看 RSS/PSS 等</span>
+cat<span class="w"> </span>/proc/<span class="nv">$PID</span>/smaps_rollup
+</code></pre></div>
+
+<p><code>smaps_rollup</code> 示例字段直觉：</p>
+<div class="codehilite"><pre><span></span><code>Rss:    ... kB
+Pss:    ... kB
+Private_Dirty: ... kB
+Swap:   ... kB
+</code></pre></div>
+
+<ul>
+<li><strong>Rss</strong>：该进程页驻留总量近似；</li>
+<li><strong>Pss</strong>：按共享比例分摊后的「公平份额」，多进程共享库场景更适合做容量账；</li>
+<li><strong>Private_Dirty</strong>：私有脏页，接近「进程自己写脏的内存」。</li>
+</ul>
+<p>定位 <code>ENOMEM</code> 时的分层问题：</p>
+<ol>
+<li>RSS / cgroup memory 是否触顶？</li>
+<li><code>VmSize</code> 是否逼近 <code>RLIMIT_AS</code>？</li>
+<li>是否 mmap 过多小映射导致管理开销或地址空间碎片？</li>
+</ol>
+<p>后台长连接场景：连接对象、接收缓冲、写出队列若按连接线性增长，你会在时间序列里看到 <code>Private_Dirty</code>/<code>Rss</code> 与连接数同向爬升；若 fd 数爬升而 Rss 几乎不动，更像「空连接/泄漏的 fd」而非大缓冲泄漏。</p>
+<h3 id="24-proc">2.4 把三类 /proc 信息拼成一张诊断表</h3>
+<table>
+<thead>
+<tr>
+<th>怀疑</th>
+<th>先看</th>
+<th>再验证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fd 打满 / 泄漏</td>
+<td><code>ls /proc/pid/fd \| wc -l</code>、<code>/proc/self/limits</code></td>
+<td><code>accept</code> errno；时间序列</td>
+</tr>
+<tr>
+<td>线程打满</td>
+<td><code>status</code> 的 <code>Threads</code>、<code>RLIMIT_NPROC</code></td>
+<td><code>pthread_create</code> 失败路径</td>
+</tr>
+<tr>
+<td>内存 / 地址空间</td>
+<td><code>status</code> Vm*、<code>smaps_rollup</code>、cgroup</td>
+<td><code>ENOMEM</code> 调用栈；<code>RLIMIT_AS</code></td>
+</tr>
+<tr>
+<td>系统句柄耗尽</td>
+<td><code>/proc/sys/fs/file-nr</code></td>
+<td>多进程同时失败 → <code>ENFILE</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-soft-hard">3. soft / hard 限制</h2>
+<h3 id="31">3.1 定义</h3>
+<ul>
+<li><strong>Soft limit（<code>rlim_cur</code>）</strong>：内核当前对进程强制的上限。触顶就失败或发信号（视资源类型）。</li>
+<li><strong>Hard limit（<code>rlim_max</code>）</strong>：soft 能被设置到的最大值。无特权用户不能超过 hard；可以降低 hard，一旦降低通常难以再自行抬回。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>0  ≤  soft  ≤  hard  ≤  （内核/特权允许的更大上限）
+         ▲
+    日常真正卡你的是 soft
+</code></pre></div>
+
+<h3 id="32">3.2 谁在改它们</h3>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ulimit</code>（shell 内建）</td>
+<td>交互调试、临时实验</td>
+</tr>
+<tr>
+<td><code>setrlimit</code> / <code>prlimit</code></td>
+<td>程序自愈、启动后主动收紧</td>
+</tr>
+<tr>
+<td>systemd <code>LimitNOFILE=</code> 等</td>
+<td>服务启动时统一设定</td>
+</tr>
+<tr>
+<td>PAM /login 配置</td>
+<td>用户登录会话默认值</td>
+</tr>
+<tr>
+<td>容器运行时</td>
+<td>把宿主机默认映射进容器</td>
+</tr>
+</tbody>
+</table>
+<p>生产建议：<strong>在服务管理器里显式声明</strong>，不要依赖「某个运维登录后手动 ulimit」。接入进程启动日志应打印 <code>nofile soft/hard</code>，避免「配置了但没生效」。</p>
+<h3 id="33-soft">3.3 只降 soft 做演练：为什么安全且有用</h3>
+<p>故障演练时，把 soft 降到很小（例如 32），hard 保持不变：</p>
+<ul>
+<li>容易复现 <code>EMFILE</code>；</li>
+<li>演练结束后把 soft 调回（仍 ≤ hard）即可；</li>
+<li>避免一上来改系统 <code>file-max</code> 影响整机。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 演示：仅当前 shell</span>
+<span class="nb">ulimit</span><span class="w"> </span>-Hn<span class="w">   </span><span class="c1"># 记下 hard</span>
+<span class="nb">ulimit</span><span class="w"> </span>-Sn<span class="w"> </span><span class="m">32</span>
+cat<span class="w"> </span>/proc/self/limits<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'open files'</span>
+</code></pre></div>
+
+<h3 id="34-soft-vs-hard">3.4 soft 触顶 vs hard 触顶</h3>
+<p>对 <code>RLIMIT_NOFILE</code>：进程打开到 soft 上限就会失败（<code>EMFILE</code>）。你不能「不知不觉用到 hard」——必须先成功把 soft 抬高到更大值（且 ≤ hard）。因此监控应报 <strong>相对 soft 的使用率</strong>，而不是只看 hard。</p>
+<hr />
+<h2 id="4">4. 常见误区与设计权衡</h2>
+<h3 id="41">4.1 误区：调高限制就能修复资源泄漏</h3>
+<p><strong>调高限制不能修复资源泄漏。</strong></p>
+<p>泄漏的本质是「申请与释放不匹配」。把 <code>nofile</code> 从 10 万调到 100 万，只会让：</p>
+<ul>
+<li>暴露时间更晚；</li>
+<li>故障爆炸时占用更多内核内存与表项；</li>
+<li>更难在测试环境复现。</li>
+</ul>
+<p>正确顺序：</p>
+<ol>
+<li>用时间序列证明泄漏（fd / RSS / 映射数）；</li>
+<li>找到泄漏路径（未 <code>close</code>、未从连接表移除、异常分支跳过清理）；</li>
+<li>修复后，再评估合理上限与余量。</li>
+</ol>
+<h3 id="42-emfile-enfile">4.2 误区：<code>EMFILE</code> 和 <code>ENFILE</code> 混为一谈</h3>
+<table>
+<thead>
+<tr>
+<th>errno</th>
+<th>含义（直觉）</th>
+<th>典型对策方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EMFILE</code></td>
+<td><strong>本进程</strong> fd 太多（触 soft <code>RLIMIT_NOFILE</code>）</td>
+<td>查本进程泄漏/预留/降载；必要时合理提高本进程 nofile</td>
+</tr>
+<tr>
+<td><code>ENFILE</code></td>
+<td><strong>系统</strong>打开文件总数达上限</td>
+<td>查 <code>file-nr</code>/<code>file-max</code>、整机其他进程、是否恶意耗尽</td>
+</tr>
+</tbody>
+</table>
+<p>网关日志必须把 <code>errno</code> 打出来；只写「Too many open files」而不区分，会带偏整次排障。</p>
+<h3 id="43-fdsize">4.3 误区：把 <code>FDSize</code> 当成打开数</h3>
+<p><code>status</code> 里的 <code>FDSize</code> 是内核 fd 表容量相关字段，可能大于当前打开数。容量规划与告警请用「实际打开数」或应用自己的连接计数。</p>
+<h3 id="44-vs">4.4 设计权衡：高上限 vs 每连接真实成本</h3>
+<p><strong>高上限提升容量，也要预算每连接真实内存和内核成本。</strong></p>
+<ul>
+<li>把 <code>nofile</code> 调到 100 万，并不等于机器能扛 100 万长连接；</li>
+<li>每条连接还有：socket 结构、TCP 缓冲、用户态会话、加解密上下文、定时器等；</li>
+<li>内核 fd 表、epoll 兴趣集、定时轮也会随规模变贵；</li>
+<li>更合理的做法是：<strong>容量 = min(fd 余量, 内存预算, CPU, 带宽, 下游限额)</strong>，并在接近软阈值时主动降载。</li>
+</ul>
+<p>预留 fd 策略（接入层常用）：</p>
+<div class="codehilite"><pre><span></span><code>启动时：打开并持有若干「应急 fd」（或至少算清预留配额）
+接近 soft 时：
+  1) 停止 accept / 对监听 fd 做限流（降载）
+  2) 保证日志、管理端口、健康检查仍可用（预留）
+  3) 拒绝新连接优于拖死整个进程
+</code></pre></div>
+
+<p>伪代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">RESERVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="p">};</span><span class="w">  </span><span class="cm">/* 日志、admin、health、内部 RPC 等 */</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">can_accept_more</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="n">rl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">getrlimit</span><span class="p">(</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rl</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">count_open_fds</span><span class="p">();</span><span class="w">   </span><span class="cm">/* 读 /proc/self/fd 或自维护计数 */</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">RESERVE</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">accept_loop</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">lfd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">can_accept_more</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="cm">/* 降载：暂停 accept、对外返回过载、打点告警 */</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">cfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accept</span><span class="p">(</span><span class="n">lfd</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cfd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EMFILE</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ENFILE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="cm">/* 区分打点；EMFILE 可尝试关闭预留应急 fd 再救一次日志 */</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">cfd</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>「预留 fd」的一种经典手法：启动时 <code>open("/dev/null", …)</code> 若干个，真正 <code>EMFILE</code> 时先 <code>close</code> 掉预留，腾出额度写完日志/指标再优雅退出或降载——这是<strong>救观测性</strong>，不是鼓励泄漏。</p>
+<hr />
+<h2 id="5">5. 动手实践</h2>
+<p>目标：降低 <code>nofile</code> 限制触发接入失败，验证预留 fd 与降载策略；验收能区分 <code>EMFILE</code>/<code>ENFILE</code>，并能用时间序列判断泄漏。</p>
+<blockquote>
+<p>建议在个人开发机或容器内完成，不要在共用生产机上把系统 <code>file-max</code> 改到极端值。</p>
+</blockquote>
+<h3 id="a">步骤 A：准备一个「伪接入」小服务</h3>
+<p>将下列代码保存为 <code>tiny_accept.c</code>（演示用，非生产）：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;arpa/inet.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;netinet/in.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/resource.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/socket.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="cp">#define RESERVE_N 8</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">reserve_fds</span><span class="p">[</span><span class="n">RESERVE_N</span><span class="p">];</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">reserve_open</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">RESERVE_N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">reserve_fds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="s">"/dev/null"</span><span class="p">,</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reserve_fds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"reserve open"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">reserve_release_one</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">RESERVE_N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">reserve_fds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">close</span><span class="p">(</span><span class="n">reserve_fds</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">            </span><span class="n">reserve_fds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">fd_usage</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4096</span><span class="p">;</span><span class="w"> </span><span class="n">fd</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">F_GETFD</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="n">n</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">rlimit</span><span class="w"> </span><span class="n">rl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">getrlimit</span><span class="p">(</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rl</span><span class="p">);</span>
+<span class="w">    </span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">;</span><span class="w">                 </span><span class="cm">/* 故意压低 soft */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">)</span><span class="w"> </span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_max</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">setrlimit</span><span class="p">(</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rl</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"setrlimit"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">reserve_open</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">lfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span><span class="w"> </span><span class="n">SOCK_STREAM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">setsockopt</span><span class="p">(</span><span class="n">lfd</span><span class="p">,</span><span class="w"> </span><span class="n">SOL_SOCKET</span><span class="p">,</span><span class="w"> </span><span class="n">SO_REUSEADDR</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">on</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">on</span><span class="p">);</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">sockaddr_in</span><span class="w"> </span><span class="n">addr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">memset</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">addr</span><span class="p">);</span>
+<span class="w">    </span><span class="n">addr</span><span class="p">.</span><span class="n">sin_family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AF_INET</span><span class="p">;</span>
+<span class="w">    </span><span class="n">addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">htonl</span><span class="p">(</span><span class="n">INADDR_LOOPBACK</span><span class="p">);</span>
+<span class="w">    </span><span class="n">addr</span><span class="p">.</span><span class="n">sin_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">htons</span><span class="p">(</span><span class="mi">18080</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">bind</span><span class="p">(</span><span class="n">lfd</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">sockaddr</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">addr</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"bind"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">listen</span><span class="p">(</span><span class="n">lfd</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"listen 127.0.0.1:18080 soft_nofile=%llu reserve=%d used=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">,</span><span class="w"> </span><span class="n">RESERVE_N</span><span class="p">,</span><span class="w"> </span><span class="n">fd_usage</span><span class="p">());</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">used</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fd_usage</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">used</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="cm">/* 降载阈值：预留余量 */</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">"DEGRADE used=%d soft=%llu — pause accept, sleep 1s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                   </span><span class="n">used</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">rl</span><span class="p">.</span><span class="n">rlim_cur</span><span class="p">);</span>
+<span class="w">            </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">            </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">cfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accept</span><span class="p">(</span><span class="n">lfd</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cfd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EMFILE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"EMFILE: process fd limit (used=%d)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">fd_usage</span><span class="p">());</span>
+<span class="w">                </span><span class="n">reserve_release_one</span><span class="p">();</span><span class="w"> </span><span class="cm">/* 腾额度写完关键日志 */</span>
+<span class="w">                </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"after reserve release used=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">fd_usage</span><span class="p">());</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ENFILE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"ENFILE: system-wide file table full</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">perror</span><span class="p">(</span><span class="s">"accept"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">            </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">"accepted fd=%d used=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">cfd</span><span class="p">,</span><span class="w"> </span><span class="n">fd_usage</span><span class="p">());</span>
+<span class="w">        </span><span class="cm">/* 故意不 close，模拟泄漏；对照实验可改为 close(cfd) */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译运行：</p>
+<div class="codehilite"><pre><span></span><code>gcc<span class="w"> </span>-O2<span class="w"> </span>-o<span class="w"> </span>tiny_accept<span class="w"> </span>tiny_accept.c
+./tiny_accept
+</code></pre></div>
+
+<h3 id="b-nofile">步骤 B：降低 nofile，触发接入失败</h3>
+<p>另开终端：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 观察服务进程 limits 与 fd</span>
+<span class="nv">pid</span><span class="o">=</span><span class="k">$(</span>pidof<span class="w"> </span>tiny_accept<span class="k">)</span>
+cat<span class="w"> </span>/proc/<span class="nv">$pid</span>/limits<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">'open files'</span>
+ls<span class="w"> </span>/proc/<span class="nv">$pid</span>/fd<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+
+<span class="c1"># 用短连接打满（泄漏版会很快触顶）</span>
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">40</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>nc<span class="w"> </span>-d<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span><span class="m">18080</span><span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="p">&amp;</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>预期观察：</p>
+<ol>
+<li>服务在阈值前打印 <code>DEGRADE</code>（降载，主动暂停 accept）；</li>
+<li>若仍触顶，日志出现 <strong><code>EMFILE</code></strong>（进程级），而不是笼统的「打满了」；</li>
+<li>释放一个预留 fd 后，短暂能再写日志 / 再 accept 一次——验证预留策略。</li>
+</ol>
+<h3 id="c-enfile">步骤 C：对照 <code>ENFILE</code>（可选、谨慎）</h3>
+<p><code>ENFILE</code> 需要系统级压力，演示成本高。认知上掌握：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/proc/sys/fs/file-nr
+<span class="c1"># 三个数：已分配句柄数、空闲、上限(file-max)</span>
+</code></pre></div>
+
+<p>若多个无关进程同时出现「Too many open files」，且本进程 <code>ls /proc/pid/fd | wc -l</code> <strong>远低于</strong> soft limit，应转向系统级 / 其他进程，怀疑 <code>ENFILE</code> 或别的进程占满。</p>
+<p>在日志与打点中<strong>分开计数</strong> <code>EMFILE</code> vs <code>ENFILE</code>，是本课硬验收点。</p>
+<h3 id="d">步骤 D：用时间序列证据判断泄漏</h3>
+<p>不要只看一次快照。对 pid 采样 1–5 分钟：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">pid</span><span class="o">=</span><span class="k">$(</span>pidof<span class="w"> </span>tiny_accept<span class="k">)</span>
+rm<span class="w"> </span>-f<span class="w"> </span>/tmp/fd_series.txt
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">30</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nv">ts</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%H:%M:%S<span class="k">)</span>
+<span class="w">  </span><span class="nv">n</span><span class="o">=</span><span class="k">$(</span>ls<span class="w"> </span>/proc/<span class="nv">$pid</span>/fd<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l<span class="k">)</span>
+<span class="w">  </span><span class="nv">rss</span><span class="o">=</span><span class="k">$(</span>awk<span class="w"> </span><span class="s1">'/VmRSS/{print $2}'</span><span class="w"> </span>/proc/<span class="nv">$pid</span>/status<span class="k">)</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$ts</span><span class="s2"> fd=</span><span class="nv">$n</span><span class="s2"> rss_kB=</span><span class="nv">$rss</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/tmp/fd_series.txt
+<span class="w">  </span>sleep<span class="w"> </span><span class="m">2</span>
+<span class="k">done</span>
+cat<span class="w"> </span>/tmp/fd_series.txt
+</code></pre></div>
+
+<p>判断标准：</p>
+<ul>
+<li><strong>泄漏</strong>：在负载模式不变（或连接应已结束）时，<code>fd=</code> 或 <code>rss_kB=</code> <strong>台阶式/单调爬升</strong>，无法回到基线；</li>
+<li><strong>正常峰值</strong>：打压测时上升，压测结束后回到基线附近；</li>
+<li><strong>单次尖刺</strong>：短暂升高立刻回落，通常不是泄漏。</li>
+</ul>
+<p>把「故意不 close」改成 <code>close(cfd)</code> 再跑一轮，时间序列应在客户端退出后回落——这就是对照实验。</p>
+<h3 id="e">步骤 E：验收清单</h3>
+<ul>
+<li>[ ] 能说明本次失败是 <code>EMFILE</code> 还是 <code>ENFILE</code>，并指出证据（本进程 fd vs soft；或 <code>file-nr</code>）。</li>
+<li>[ ] 展示至少一份时间序列（时间戳 + fd 数，和/或 RSS），据此判断泄漏或非泄漏。</li>
+<li>[ ] 演示降载（阈值前暂停 accept）与预留 fd（触顶后释放应急 fd 恢复可观测性）。</li>
+</ul>
+<hr />
+<h2 id="6">6. 自测题</h2>
+<p><strong>题 1.</strong> 接入进程 soft <code>nofile=1024</code>，<code>ls /proc/self/fd | wc -l</code> 已是 1024，此时 <code>accept</code> 最可能返回什么 errno？若 soft 仍富余但 <code>/proc/sys/fs/file-nr</code> 显示系统已用尽，又更可能是什么？</p>
+<details><summary>答案</summary>
+
+前者是进程级上限触顶，典型为 **`EMFILE`**。后者是系统打开文件数耗尽，典型为 **`ENFILE`**。排障时两者对策完全不同：一个查本进程泄漏/预留/降载，一个查整机 `file-max` 与其他进程。
+
+</details>
+
+<p><strong>题 2.</strong> 无特权服务能否把 <code>RLIMIT_NOFILE</code> 的 hard 从 4096 提升到 1048576？soft 与 hard 的关系是什么？</p>
+<details><summary>答案</summary>
+
+一般**不能**自行抬高 hard（需要特权/`CAP_SYS_RESOURCE` 或在具备权限的启动器里设置）。约束是 **`0 ≤ soft ≤ hard`**：日常强制的是 soft；hard 是 soft 可被设置到的天花板。可降低 soft 做演练；无特权降低 hard 后通常无法自行改回。
+
+</details>
+
+<p><strong>题 3.</strong> 有人把生产 <code>nofile</code> 调到 100 万后告警消失，宣称「泄漏已修复」。如何用本课方法证伪或证实？</p>
+<details><summary>答案</summary>
+
+**调高限制不能修复资源泄漏。** 应对同一进程做时间序列采样（fd 数、`VmRSS`/`smaps_rollup`、连接表长度）。若在负载平稳甚至连接应释放后计数仍单调上升，则泄漏仍在，只是触顶被推迟。修复应落在释放路径与降载/预留策略；上限调整只是容量规划，不是根因治疗。
+
+</details>
+
+<hr />
+<h2 id="7">7. 推荐资源</h2>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://man7.org/linux/man-pages/man2/getrlimit.2.html">资源限制与/proc诊断：Linux man-pages</a></td>
+<td>man7.org 文档（英文）。重点阅读 rlimit 与系统级限制，并结合同页与 <code>proc(5)</code> 理解 <code>/proc/pid/fd</code>、<code>status</code>、<code>smaps</code> 语义与边界；核对本课实验时对照适用内核版本。进阶 / 免费。</td>
+</tr>
+</tbody>
+</table>
+<p>学习建议（节点 sourceStudy）：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件——尤其是 <code>RLIMIT_RSS</code> 是否生效、<code>smaps_rollup</code> 是否存在、容器 cgroup 是否另有配额。</p>
+<hr />
+<h2 id="8">8. 本课小结</h2>
+<ol>
+<li><strong>rlimit</strong> 约束进程，<strong>系统级限制 / cgroup</strong> 再盖一层；网关容量取所有层的最小值。</li>
+<li><strong><code>/proc/pid/fd</code>、<code>status</code>、<code>smaps(_rollup)</code></strong> 提供现状；字段解释必须对齐内核文档；<strong>泄漏靠时间序列</strong>。</li>
+<li><strong>soft / hard</strong>：soft 当前生效，hard 是天花板；演练优先只降 soft。</li>
+<li><strong><code>EMFILE</code> ≠ <code>ENFILE</code></strong>；日志与指标必须分开。</li>
+<li><strong>调高限制 ≠ 修复泄漏</strong>；高上限要配套每连接内存/内核成本预算，以及预留 fd 与降载。</li>
+</ol>
+<p>下一课将继续在「隔离与资源治理」脉络里，把这些上限与更完整的治理手段串起来。遇到接入失败时，先问：是进程天花板、系统天花板，还是泄漏把余量吃光了？</p><div class="pn"><span><a href="44.html">← 动态加载、懒绑定与可重入性</a></span><span>下一课 待更新</span></div></main></div></body></html>
