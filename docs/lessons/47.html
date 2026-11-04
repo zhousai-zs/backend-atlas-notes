@@ -1,0 +1,614 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>47. cgroup v2与资源治理 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（47/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（15/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="cur" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 47 课 · 领域 C · 阶段 4</p><p class="dl"><a href="../files/47-c-cgroup.md" download>⬇ 本课 Markdown</a></p><h1 id="47208-cgroup-v2">第 47/208 课：cgroup v2与资源治理</h1>
+<blockquote>
+<p>所属阶段：第 4 阶段 · 隔离与资源治理<br />
+前置课程：c-namespace、c-schedule<br />
+关键词：cgroup v2、cpu.max、节流、memory.max、OOM、层次化资源分配、容器限流、throttling</p>
+</blockquote>
+<h2 id="0">0. 本课导读</h2>
+<p>微信公众号后台的某个接口服务，部署在 Kubernetes 里。监控上看宿主 CPU 利用率只有 30%，内存也远没打满，但业务侧 p99 延迟突然抬升，部分请求排队甚至超时。另一台机器上，某个容器被杀掉，日志里出现 OOM，可宿主 <code>free</code> 还显示有可用内存。还有一种更隐蔽的情况：容器里 <code>nproc</code> 显示 8，开发以为能吃满 8 核，实际上被限额卡在大约 1 核的 CPU 预算上。</p>
+<p>这些现象往往不是“机器不够”，而是 <strong>cgroup 在控制资源分配</strong>。上一课讲的 namespace 改变的是进程看到的视图；本课的 cgroup 把进程组织成层次，并控制 CPU 带宽与内存上限，从而改变服务延迟和故障模式。本课从直觉到原理讲清三点：<code>cpu.max</code> 与节流、<code>memory.current</code>/<code>max</code> 和 OOM、层次化资源分配；最后在受控容器中限制 CPU 和内存，记录 throttling、p99 与 OOM 事件。</p>
+<h2 id="1">1. 学习目标</h2>
+<p>完成本课后，你应当能够：</p>
+<ol>
+<li>解释 cgroup v2 中 <code>cpu.max</code> 的格式与语义，并能从 <code>cpu.stat</code> 辨认 CPU 配额节流。</li>
+<li>说明 <code>memory.current</code>、<code>memory.max</code>、<code>memory.peak</code>、<code>memory.events</code> 的含义，并能区分进程/cgroup OOM 与系统级内存压力。</li>
+<li>理解层次化资源分配：子组份额受父组约束，容器限额不等于宿主空闲资源可随意占用。</li>
+<li>在受控环境中用 Docker、<code>systemd-run</code> 或直接操作 <code>/sys/fs/cgroup</code> 限制 CPU 和内存，记录 throttling、延迟分位与 OOM 相关事件。</li>
+<li>识别常见误区：容器可见 CPU 数不一定等于实际可用 CPU 预算；理解严格限额在隔离性与尾延迟之间的权衡。</li>
+</ol>
+<p>对应节点的验收标准：</p>
+<ul>
+<li>能辨认 CPU 配额节流；</li>
+<li>能区分进程 OOM 与系统级内存压力。</li>
+</ul>
+<h2 id="2">2. 为什么后端要懂</h2>
+<p><strong>解释容器限流。</strong> 公众号后台接口高峰时，某个推送服务或回调处理服务可能突然变慢。若该服务被设置了较低的 CPU 配额，cgroup 会在每个调度周期内强制“刹车”，表现为 <code>cpu.stat</code> 中 <code>nr_throttled</code> / <code>throttled_usec</code> 上升，应用侧看到排队、超时、p99 升高。宿主整体空闲，并不否定某个 cgroup 正在被节流。</p>
+<p><strong>解释 OOM 与故障模式。</strong> 内存上限会改变故障形态：没有 <code>memory.max</code> 时，某个泄漏进程可能拖垮整台宿主；有严格上限时，往往是该容器被 OOM kill，其他服务仍可运行。对微信公众号这类多服务共部署场景，隔离内存故障面非常关键，但也要能读懂是 cgroup 触发的 OOM，还是系统级内存压力导致的全局回收与杀进程。</p>
+<p><strong>解释“宿主看似空闲但请求排队”。</strong> CPU 利用率是全局或节点视角的平均指标；请求延迟取决于你的服务所在 cgroup 是否拿到足够的 CPU 时间片。配额用尽后，即使同机其他核空闲，你的进程也可能被强制等待下一个 period。这正是“机器很闲、接口却排队”的典型根因之一。</p>
+<p><strong>几个真实场景。</strong></p>
+<ul>
+<li>K8s 给 Pod 配了 <code>limits.cpu: "1"</code>，容器内仍能看到 8 个 CPU；压测时 QPS 上不去，<code>cpu.stat</code> 显示大量 throttled。</li>
+<li>容器 <code>memory.max=512M</code>，业务缓存膨胀后容器被杀，宿主 <code>free</code> 仍有数 GB 可用。</li>
+<li>同一节点上 A 服务 <code>CPUQuota=200%</code>，B 服务无配额；A 高峰时宿主 CPU 仍有空闲，但 A 的 p99 已经恶化。</li>
+<li>压测脚本只看平均 CPU，忽略 <code>throttled_usec</code> 与 p99，得出“资源够用”的错误结论。</li>
+</ul>
+<h2 id="3-cgroup">3. 直觉：cgroup 是“预算本”，不是“房间门牌”</h2>
+<p>上一课把 namespace 比作楼层指南：改变你看到的编号、地图和设备清单。cgroup 更像财务预算：</p>
+<ul>
+<li>不管你能看到多少间会议室（可见 CPU 数），财务只批给你每月固定额度（CPU 带宽配额）。</li>
+<li>不管楼里还有多少空房间（宿主空闲内存），你的部门账户有硬顶（<code>memory.max</code>），超了就停你的卡或清退占用（OOM）。</li>
+<li>大部门下面还有小组：父组预算约束所有子组之和，子组再怎么内部分配，也不能超过父组上限。</li>
+</ul>
+<p>一句话对照：</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>主要改变什么</th>
+<th>典型体感</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>namespace</td>
+<td>资源视图与命名空间</td>
+<td>容器里 PID、网卡、挂载与宿主不同</td>
+</tr>
+<tr>
+<td>cgroup</td>
+<td>资源计量与限额</td>
+<td>容器再怎么“看起来有 8 核”，也可能只用到 1 核预算</td>
+</tr>
+<tr>
+<td>调度器（上一前置课）</td>
+<td>谁先跑、跑多久策略</td>
+<td>CFS/权重影响相对份额；cgroup 限额则是硬预算</td>
+</tr>
+</tbody>
+</table>
+<p><strong>命名空间让你“看见不同的世界”；cgroup 让你“在同一个世界里只能花自己的配额”。</strong></p>
+<h2 id="4-sysfscgroup">4. 核心模型：统一层次、控制器与 <code>/sys/fs/cgroup</code></h2>
+<h3 id="41-cgroup-v2">4.1 cgroup v2 的统一层次</h3>
+<p>cgroup v1 按控制器拆多棵树，配置分散、语义容易冲突。cgroup v2 采用<strong>统一层次（unified hierarchy）</strong>：所有控制器挂在同一棵树上，默认挂载点通常是：</p>
+<div class="codehilite"><pre><span></span><code>mount<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>cgroup2
+ls<span class="w"> </span>/sys/fs/cgroup
+</code></pre></div>
+
+<p>常见输出会看到根 cgroup 下的接口文件，以及 <code>system.slice</code>、<code>user.slice</code>、<code>docker</code> 或 <code>kubepods</code> 等子目录。每个目录代表一个 cgroup；目录中的进程由 <code>cgroup.procs</code>（线程组）或 <code>cgroup.threads</code> 管理。</p>
+<p>查看当前 shell 属于哪个 cgroup：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/proc/self/cgroup
+<span class="c1"># cgroup v2 典型输出类似：</span>
+<span class="c1"># 0::/user.slice/user-1000.slice/session-3.scope</span>
+</code></pre></div>
+
+<h3 id="42">4.2 控制器与启用方式</h3>
+<p>根或中间节点通过 <code>cgroup.controllers</code> 列出可用控制器，通过 <code>cgroup.subtree_control</code> 向子树启用：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/sys/fs/cgroup/cgroup.controllers
+<span class="c1"># 例如：cpuset cpu io memory hugetlb pids rdma misc</span>
+
+<span class="c1"># 向子树启用 cpu 与 memory（需有权限，且通常由 systemd/容器运行时管理）</span>
+<span class="c1"># echo '+cpu +memory' &gt; /sys/fs/cgroup/cgroup.subtree_control</span>
+</code></pre></div>
+
+<p>本课聚焦节点要求的三点相关接口：</p>
+<ul>
+<li><strong>cpu</strong>：<code>cpu.max</code>、<code>cpu.weight</code>、<code>cpu.stat</code></li>
+<li><strong>memory</strong>：<code>memory.current</code>、<code>memory.max</code>、<code>memory.peak</code>、<code>memory.events</code>、<code>memory.stat</code></li>
+<li><strong>层次</strong>：父组限制约束子组可用上限</li>
+</ul>
+<p>生产环境通常不要手工乱改系统根树；优先用 Docker、<code>systemd-run</code> 或在自己创建的临时 cgroup 子树中实验。</p>
+<h3 id="43-cgroup">4.3 进程如何进入 cgroup</h3>
+<p>把线程组 PID 写入目标 cgroup 的 <code>cgroup.procs</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span>&lt;pid&gt;<span class="w"> </span>&gt;<span class="w"> </span>/sys/fs/cgroup/mydemo/cgroup.procs
+</code></pre></div>
+
+<p>容器运行时会在创建容器时建立对应 cgroup，并把容器内进程放进去。你在容器外看到的路径可能类似：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Docker 常见路径（发行版与版本不同，路径可能略有差异）</span>
+find<span class="w"> </span>/sys/fs/cgroup<span class="w"> </span>-name<span class="w"> </span><span class="s1">'*cgroup-demo*'</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
+<span class="c1"># 或通过容器主进程：</span>
+<span class="nv">pid</span><span class="o">=</span><span class="k">$(</span>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.Pid}}'</span><span class="w"> </span>cgroup-demo<span class="k">)</span>
+cat<span class="w"> </span>/proc/<span class="nv">$pid</span>/cgroup
+</code></pre></div>
+
+<h2 id="5-cpumax">5. cpu.max 与节流</h2>
+<h3 id="51-cpumax">5.1 <code>cpu.max</code> 的格式与语义</h3>
+<p>cgroup v2 中，CPU 带宽硬限制写在 <code>cpu.max</code>：</p>
+<div class="codehilite"><pre><span></span><code>$MAX $PERIOD
+</code></pre></div>
+
+<ul>
+<li><code>$MAX</code>：在一个长度为 <code>$PERIOD</code> 微秒的周期内，该 cgroup 最多可获得的 CPU 时间（微秒）。</li>
+<li><code>$PERIOD</code>：配额周期，默认通常为 <code>100000</code>（100ms）。</li>
+<li>特殊值：<code>$MAX</code> 为字符串 <code>max</code> 表示<strong>不限制</strong>（仅受权重等相对份额影响，没有带宽硬顶）。</li>
+</ul>
+<p>示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 最多使用约 1 个 CPU（每个 100ms 周期最多跑 100ms）</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'100000 100000'</span><span class="w"> </span>&gt;<span class="w"> </span>cpu.max
+
+<span class="c1"># 最多使用约 0.5 个 CPU</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'50000 100000'</span><span class="w"> </span>&gt;<span class="w"> </span>cpu.max
+
+<span class="c1"># 最多使用约 2 个 CPU</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'200000 100000'</span><span class="w"> </span>&gt;<span class="w"> </span>cpu.max
+
+<span class="c1"># 不设硬顶</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'max 100000'</span><span class="w"> </span>&gt;<span class="w"> </span>cpu.max
+
+<span class="c1"># 读取</span>
+cat<span class="w"> </span>cpu.max
+</code></pre></div>
+
+<p>对应 Docker：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--cpus<span class="o">=</span><span class="m">1</span>.5<span class="w"> </span>...
+<span class="c1"># 运行时通常映射为约 150000 100000 的 cpu.max（具体以实现为准）</span>
+</code></pre></div>
+
+<p>对应 systemd：</p>
+<div class="codehilite"><pre><span></span><code>systemd-run<span class="w"> </span>-p<span class="w"> </span><span class="nv">CPUQuota</span><span class="o">=</span><span class="m">150</span>%<span class="w"> </span>--unit<span class="o">=</span>cg-cpu-demo<span class="w"> </span>stress-ng<span class="w"> </span>--cpu<span class="w"> </span><span class="m">4</span><span class="w"> </span>--timeout<span class="w"> </span>60s
+<span class="c1"># CPUQuota=150% 表示约 1.5 核的带宽配额</span>
+</code></pre></div>
+
+<h3 id="52-throttling">5.2 节流（throttling）是什么</h3>
+<p>当 cgroup 在当前 period 内已经用尽 <code>$MAX</code> 微秒的 CPU 时间，即使宿主还有空闲核，该 cgroup 内的任务也会被<strong>强制等待</strong>到下一个 period。这就是 CPU 配额节流。</p>
+<p>节流不是“进程 bug”，而是限额生效的正常机制。对业务的体感是：</p>
+<ul>
+<li>吞吐上不去，CPU 利用率曲线被“削平”；</li>
+<li>延迟抖动变大，p99/p999 升高；</li>
+<li>线程看起来 runnable，却拿不到 CPU。</li>
+</ul>
+<h3 id="53-cpustat">5.3 从 <code>cpu.stat</code> 辨认节流</h3>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/sys/fs/cgroup/&lt;path&gt;/cpu.stat
+</code></pre></div>
+
+<p>与配额相关的关键字段（名称以内核文档为准，常见包括）：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>usage_usec</code></td>
+<td>该 cgroup 累计使用的 CPU 时间（微秒）</td>
+</tr>
+<tr>
+<td><code>user_usec</code> / <code>system_usec</code></td>
+<td>用户态 / 内核态累计时间</td>
+</tr>
+<tr>
+<td><code>nr_periods</code></td>
+<td>经历的配额周期数</td>
+</tr>
+<tr>
+<td><code>nr_throttled</code></td>
+<td>发生过节流的周期数</td>
+</tr>
+<tr>
+<td><code>throttled_usec</code></td>
+<td>因节流被强制等待的累计微秒数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>辨认方法（对应验收标准）：</strong></p>
+<ol>
+<li>给工作负载设置明确的 <code>cpu.max</code>（例如 <code>50000 100000</code>）。</li>
+<li>用 <code>stress-ng</code> 或业务压测打满该配额。</li>
+<li>观察 <code>nr_throttled</code> 与 <code>throttled_usec</code> 持续增长。</li>
+<li>同时看应用侧延迟直方图或 <code>hey</code>/<code>wrk</code> 的 p99。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 示例：循环读取节流计数</span>
+<span class="k">while</span><span class="w"> </span>true<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>date<span class="w"> </span><span class="s1">'+%F %T'</span>
+<span class="w">  </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'nr_throttled|throttled_usec|nr_periods'</span><span class="w"> </span>/sys/fs/cgroup/&lt;path&gt;/cpu.stat
+<span class="w">  </span>sleep<span class="w"> </span><span class="m">1</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>若 <code>nr_throttled</code> 接近 <code>nr_periods</code>，说明几乎每个周期都被掐过一次，配额明显不足。</p>
+<h3 id="54-cpuweight-cpumax">5.4 <code>cpu.weight</code> 与 <code>cpu.max</code> 的分工</h3>
+<ul>
+<li><code>cpu.weight</code>（默认 100）：在<strong>没有打到硬顶</strong>、或多个 cgroup 竞争同一父组剩余带宽时，按相对权重分配。</li>
+<li><code>cpu.max</code>：硬顶。到了顶就节流，与“宿主是否空闲”无关。</li>
+</ul>
+<p>公众号后台常见误配：只设了较低的 limit（对应 <code>cpu.max</code>），压测时把限流当成“代码性能问题”；或只看 weight/请求份额，忽略 limit 已经把突发削平。</p>
+<h3 id="55-cpu">5.5 与可见 CPU 数的关系</h3>
+<p>容器内常见接口：</p>
+<div class="codehilite"><pre><span></span><code>nproc
+getconf<span class="w"> </span>_NPROCESSORS_ONLN
+ls<span class="w"> </span>/sys/fs/cgroup/cpuset.cpus.effective<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+cat<span class="w"> </span>/proc/cpuinfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-c<span class="w"> </span>processor
+</code></pre></div>
+
+<p>这些反映的是<strong>可见/可调度的 CPU 集合</strong>，不等于 <code>cpu.max</code> 给出的<strong>时间预算</strong>。例如：可见 8 核，但 <code>cpu.max=100000 100000</code>，长期可持续算力大约只有 1 核。线程池若按 <code>nproc</code> 开 8 个重计算线程，只会加剧上下文切换与排队，更容易在配额内互相争抢。</p>
+<h2 id="6-memorycurrent-max-oom">6. memory.current / max 和 OOM</h2>
+<h3 id="61">6.1 关键接口</h3>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>memory.current<span class="w">   </span><span class="c1"># 当前该 cgroup 计入的内存用量（字节）</span>
+cat<span class="w"> </span>memory.max<span class="w">       </span><span class="c1"># 硬上限；max 表示不限制</span>
+cat<span class="w"> </span>memory.peak<span class="w">      </span><span class="c1"># 历史峰值（若内核支持并已启用）</span>
+cat<span class="w"> </span>memory.high<span class="w">      </span><span class="c1"># 软限：超过后积极回收，通常不直接 OOM kill</span>
+cat<span class="w"> </span>memory.events<span class="w">    </span><span class="c1"># 事件计数：low, high, max, oom, oom_kill 等</span>
+cat<span class="w"> </span>memory.stat<span class="w">      </span><span class="c1"># 详细统计：anon, file, kernel 等</span>
+</code></pre></div>
+
+<p>设置硬上限示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="k">$((</span><span class="m">512</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="m">1024</span><span class="k">))</span><span class="w"> </span>&gt;<span class="w"> </span>memory.max<span class="w">   </span><span class="c1"># 512 MiB</span>
+<span class="nb">echo</span><span class="w"> </span>max<span class="w"> </span>&gt;<span class="w"> </span>memory.max<span class="w">                      </span><span class="c1"># 取消硬上限</span>
+</code></pre></div>
+
+<p>Docker：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--memory<span class="o">=</span>512m<span class="w"> </span>--memory-swap<span class="o">=</span>512m<span class="w"> </span>...
+<span class="c1"># 将容器 memory 硬限设为 512MiB；swap 相关行为依赖运行时与宿主配置</span>
+</code></pre></div>
+
+<p>systemd：</p>
+<div class="codehilite"><pre><span></span><code>systemd-run<span class="w"> </span>-p<span class="w"> </span><span class="nv">MemoryMax</span><span class="o">=</span>512M<span class="w"> </span>-p<span class="w"> </span><span class="nv">MemorySwapMax</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>--unit<span class="o">=</span>cg-mem-demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>stress-ng<span class="w"> </span>--vm<span class="w"> </span><span class="m">1</span><span class="w"> </span>--vm-bytes<span class="w"> </span>800M<span class="w"> </span>--timeout<span class="w"> </span>30s
+</code></pre></div>
+
+<h3 id="62-memorymax-cgroup-oom">6.2 <code>memory.max</code> 触发的 cgroup OOM</h3>
+<p>当 cgroup 用量触及 <code>memory.max</code>，且回收无法把用量压下去时，内核会在该 cgroup 内触发 OOM killer，选出受害者进程杀掉。这是<strong>cgroup / 容器级 OOM</strong>，不一定等于整机内存耗尽。</p>
+<p>观察：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>memory.events
+<span class="c1"># 关注：</span>
+<span class="c1"># oom &lt;次数&gt;        # 进入过 OOM 路径</span>
+<span class="c1"># oom_kill &lt;次数&gt;   # 实际杀掉进程的次数</span>
+
+dmesg<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span>
+<span class="c1"># 或 journalctl -k -n 50</span>
+<span class="c1"># 常见关键字：Memory cgroup out of memory、Killed process、oom-kill</span>
+</code></pre></div>
+
+<p>容器场景：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.OOMKilled}}'</span><span class="w"> </span>&lt;container&gt;
+docker<span class="w"> </span>events<span class="w"> </span>--filter<span class="w"> </span><span class="nv">container</span><span class="o">=</span>&lt;container&gt;
+</code></pre></div>
+
+<h3 id="63-cgroup-oom-vs">6.3 区分：进程/cgroup OOM vs 系统级内存压力</h3>
+<p>这是本课验收标准之一，务必分清：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>cgroup / 进程侧 OOM</th>
+<th>系统级内存压力</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>触发条件</td>
+<td>该 cgroup 触及 <code>memory.max</code>（或等价 limit）</td>
+<td>整机可用内存紧张，全局 reclaim / 全局 OOM</td>
+</tr>
+<tr>
+<td>典型证据</td>
+<td>该 cgroup 的 <code>memory.events</code> 中 <code>oom</code>/<code>oom_kill</code> 增加；容器 <code>OOMKilled=true</code>；dmesg 含 Memory cgroup out of memory</td>
+<td>宿主 <code>free</code>/<code>MemAvailable</code> 很低；多个无关服务同时变慢或被杀；<code>/proc/pressure/memory</code> 持续高压力；dmesg 为系统级 OOM，不一定带 cgroup 限额语义</td>
+</tr>
+<tr>
+<td>宿主空闲内存</td>
+<td>往往<strong>仍然充足</strong></td>
+<td>通常<strong>不充足</strong></td>
+</tr>
+<tr>
+<td>故障面</td>
+<td>主要限于该容器/服务</td>
+<td>可能影响同机所有负载</td>
+</tr>
+<tr>
+<td>处理方向</td>
+<td>调高 limit、修泄漏、降缓存、拆分热点</td>
+<td>扩容节点、降密度、查全局泄漏、排查缓存与抖动</td>
+</tr>
+</tbody>
+</table>
+<p><strong>后端排障口诀：</strong> 先看受害服务的 cgroup <code>memory.current</code> 是否贴着 <code>memory.max</code>，再看宿主是否真的空闲。贴着 max 且宿主空闲 → 优先当容器限额问题；宿主也不空闲 → 同时考虑系统级压力。</p>
+<h3 id="64-memoryhigh">6.4 <code>memory.high</code> 与故障模式选择</h3>
+<ul>
+<li><code>memory.high</code>：超过后内核对该 cgroup 更积极地回收，并可能对分配方施加节流，<strong>通常不直接杀进程</strong>。</li>
+<li><code>memory.max</code>：硬顶，回收失败则 OOM kill。</li>
+</ul>
+<p>对公众号后台这类延迟敏感服务：过低的 <code>memory.max</code> 会把偶发缓存膨胀直接变成进程死亡与请求失败；只用很高的 <code>memory.high</code>、不设合理 max，则隔离性变弱，极端情况仍可能逼近系统级压力。工程上常组合：合理 max 防拖垮宿主，监控 <code>memory.current</code>/<code>peak</code> 与 <code>memory.events</code>，对接近 high/max 提前告警。</p>
+<h3 id="65-cgroup-oom">6.5 短例：制造并观察 cgroup OOM</h3>
+<p>在受控环境：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--name<span class="w"> </span>mem-oom-demo<span class="w"> </span>--memory<span class="o">=</span>128m<span class="w"> </span>--memory-swap<span class="o">=</span>128m<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>polinux/stress<span class="w"> </span>--vm<span class="w"> </span><span class="m">1</span><span class="w"> </span>--vm-bytes<span class="w"> </span>200M<span class="w"> </span>--vm-hang<span class="w"> </span><span class="m">0</span><span class="w"> </span>--timeout<span class="w"> </span>20s
+</code></pre></div>
+
+<p>然后检查：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.OOMKilled}} {{.State.ExitCode}}'</span><span class="w"> </span>mem-oom-demo<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="c1"># 若容器已退出，可在运行过程中另开终端观察：</span>
+<span class="c1"># cat $(找到对应 cgroup)/memory.events</span>
+dmesg<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s1">'oom|killed process'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail
+</code></pre></div>
+
+<p>预期：进程因 cgroup 内存上限被杀；宿主可能仍有空闲内存。这就是“限额改变故障模式”。</p>
+<h2 id="7">7. 层次化资源分配</h2>
+<h3 id="71">7.1 父约束子</h3>
+<p>cgroup 是树。子 cgroup 的有效上限不能突破祖先的限制：</p>
+<ul>
+<li>父组 <code>cpu.max = 100000 100000</code>（约 1 核），两个子组即使各自写成 <code>100000 100000</code>，合起来也不能稳定吃到 2 核；竞争发生在父组预算之内。</li>
+<li>父组 <code>memory.max = 1G</code>，子组设 <code>2G</code> 没有意义——有效硬顶仍受父组约束（具体生效规则以 v2 文档为准：子树用量计入父组，父组 max 会限制整棵子树）。</li>
+</ul>
+<p>直觉：部门总预算 100 万，两个小组各报 100 万，并不等于公司会掏 200 万。</p>
+<h3 id="72">7.2 为什么后端要关心层次</h3>
+<p>在 Docker / Kubernetes 中，层次大致是：</p>
+<div class="codehilite"><pre><span></span><code>/sys/fs/cgroup
+  └─ ... kubepods / docker ...
+        ├─ burstable / besteffort / guaranteed（或 runtime 自己的层级）
+        │    └─ pod...
+        │         └─ container...
+</code></pre></div>
+
+<p>于是会出现：</p>
+<ul>
+<li>节点总体仍有空闲，但某 Pod 的父级或同级竞争导致你的容器拿不到预期 CPU；</li>
+<li>只调容器 limit，不理解节点可分配资源与 eviction，仍然会在高峰被挤；</li>
+<li><code>requests</code> 影响调度与相对保障，<code>limits</code> 更贴近硬顶（CPU limit → 配额/节流，memory limit → 触及后 OOM）。</li>
+</ul>
+<p>对微信公众号后台多服务同节点部署：推送、回调、素材、统计若共用节点，层次化配额决定了“谁挤占谁”以及“谁先被 OOM”。</p>
+<h3 id="73">7.3 权重、配额与请求的配合（概念层）</h3>
+<ul>
+<li><strong>requests</strong>：调度与相对保障，偏预留/期望。</li>
+<li><strong>limits</strong>：硬顶。CPU limit 过紧 → 节流与尾延迟差；memory limit 过紧 → 更易 cgroup OOM；完全不设 limit → 隔离差，可能拖垮邻居或宿主。</li>
+</ul>
+<h3 id="74">7.4 用临时子树感受层次（需权限，仅限受控环境）</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 警告：仅在自己的实验机、可回滚环境操作；不要在生产节点乱写系统 cgroup。</span>
+<span class="nv">ROOT</span><span class="o">=</span>/sys/fs/cgroup/cgroup-lesson-demo
+sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$ROOT</span><span class="s2">/parent/child-a"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$ROOT</span><span class="s2">/parent/child-b"</span>
+
+<span class="c1"># 启用控制器（若尚未启用，且你有权限）</span>
+<span class="c1"># echo '+cpu +memory' | sudo tee /sys/fs/cgroup/cgroup.subtree_control</span>
+<span class="c1"># echo '+cpu +memory' | sudo tee "$ROOT/cgroup.subtree_control"</span>
+<span class="c1"># echo '+cpu +memory' | sudo tee "$ROOT/parent/cgroup.subtree_control"</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'100000 100000'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span><span class="s2">"</span><span class="nv">$ROOT</span><span class="s2">/parent/cpu.max"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'80000 100000'</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span><span class="s2">"</span><span class="nv">$ROOT</span><span class="s2">/parent/child-a/cpu.max"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s1">'80000 100000'</span><span class="w">  </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span><span class="s2">"</span><span class="nv">$ROOT</span><span class="s2">/parent/child-b/cpu.max"</span>
+
+<span class="c1"># 把压力进程分别放进 child-a / child-b，观察二者合计不会稳定超过父组约 1 核</span>
+</code></pre></div>
+
+<p>读两边的 <code>cpu.stat</code>，对照父组 <code>cpu.stat</code>，能更直观理解“子组份额受父组约束”。</p>
+<h2 id="8-systemd">8. 容器、systemd 与观察命令速查</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Docker 限额：--cpus → cpu.max；--memory → memory.max</span>
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>cgroup-demo<span class="w"> </span>--cpus<span class="o">=</span><span class="m">0</span>.5<span class="w"> </span>--memory<span class="o">=</span>256m<span class="w"> </span>--memory-swap<span class="o">=</span>256m<span class="w"> </span>alpine<span class="w"> </span>sleep<span class="w"> </span><span class="m">3600</span>
+docker<span class="w"> </span>stats<span class="w"> </span>cgroup-demo
+<span class="nv">pid</span><span class="o">=</span><span class="k">$(</span>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.Pid}}'</span><span class="w"> </span>cgroup-demo<span class="k">)</span>
+cat<span class="w"> </span>/proc/<span class="nv">$pid</span>/cgroup
+<span class="c1"># 进入该路径后读：cpu.max、cpu.stat、memory.current/max/peak/events</span>
+<span class="c1"># 路径因发行版而异（system.slice/docker-....scope 或 docker/&lt;id&gt;），以 /proc/&lt;pid&gt;/cgroup 为准</span>
+
+<span class="c1"># systemd-run</span>
+systemd-run<span class="w"> </span>--scope<span class="w"> </span>-p<span class="w"> </span><span class="nv">CPUQuota</span><span class="o">=</span><span class="m">50</span>%<span class="w"> </span>-p<span class="w"> </span><span class="nv">MemoryMax</span><span class="o">=</span>256M<span class="w"> </span>--unit<span class="o">=</span>lesson-cg-scope<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>stress-ng<span class="w"> </span>--cpu<span class="w"> </span><span class="m">2</span><span class="w"> </span>--timeout<span class="w"> </span>20s
+
+<span class="c1"># 压力与 p99：把压测分位与 throttled_usec、nr_throttled 放同一时间轴</span>
+stress-ng<span class="w"> </span>--cpu<span class="w"> </span><span class="m">4</span><span class="w"> </span>--timeout<span class="w"> </span>60s
+stress-ng<span class="w"> </span>--vm<span class="w"> </span><span class="m">2</span><span class="w"> </span>--vm-bytes<span class="w"> </span>300M<span class="w"> </span>--timeout<span class="w"> </span>30s
+<span class="c1"># hey -z 30s -c 20 http://127.0.0.1:8080/api</span>
+</code></pre></div>
+
+<h2 id="9">9. 常见误区</h2>
+<p><strong>误区一：容器可见 CPU 数等于实际可用 CPU 预算。</strong><br />
+这是节点明确标出的坑。<code>nproc</code>、<code>/proc/cpuinfo</code>、Go 的 <code>runtime.NumCPU()</code>、Java 某些版本对可用处理器的判断，反映的往往是可见 CPU，而不是 <code>cpu.max</code> 预算。按可见核数配置线程池、并行度或压测期望，会系统性高估算力，并在限额下放大排队与尾延迟。</p>
+<p><strong>误区二：宿主 CPU 空闲，所以我的服务不可能在排队。</strong><br />
+错。节流看的是<strong>你的 cgroup 配额是否用尽</strong>，不是宿主平均值。宿主 30% 利用率与你的服务每个 period 都被 throttle 可以同时成立。</p>
+<p><strong>误区三：容器 OOM 等于机器内存不够。</strong><br />
+不一定。先查该容器 <code>memory.current</code> 是否顶着 <code>memory.max</code>，以及 <code>memory.events</code> 的 <code>oom</code>/<code>oom_kill</code>。宿主仍空闲却容器被杀，是典型的 cgroup 限额故障模式。</p>
+<p><strong>误区四：namespace 已经隔离了，所以资源自然也被隔离。</strong><br />
+错。上一课强调过：namespace 管视图，cgroup 管配额。只有 namespace、没有合理 cgroup 限额的容器，仍可能打满宿主。</p>
+<p><strong>误区五：把 <code>cpu.weight</code> 当成硬顶。</strong><br />
+weight 是相对份额；没有 <code>cpu.max</code>（或等价 limit）时，空闲资源可能被单容器吃光。隔离突发要靠硬顶，或上层准入与弹性策略。</p>
+<p><strong>误区六：<code>memory.high</code> 与 <code>memory.max</code> 混为一谈。</strong><br />
+high 偏回收与减速，max 是硬顶并可走向 OOM kill。监控和告警策略应分开设计。</p>
+<p><strong>误区七：只盯 <code>docker stats</code> 的平均 CPU%，不看节流计数。</strong><br />
+平均利用率可能“看起来健康”，但 <code>nr_throttled</code> 已经很高，p99 已恶化。限额场景必须把 throttling 指标纳入排障清单。</p>
+<p><strong>误区八：子组 limit 写很大就能突破父组。</strong><br />
+不能。层次化分配下，有效能力受祖先约束。K8s/节点层级的父组限制同样会卡住你。</p>
+<h2 id="10">10. 设计权衡</h2>
+<p>节点给出的权衡是：<strong>严格限额提高隔离性，也可能放大突发负载尾延迟。</strong></p>
+<p><strong>严格限额的收益。</strong></p>
+<ul>
+<li>故障隔离：内存泄漏或 CPU 狂奔更可能只打到当事容器。</li>
+<li>多租户/多服务密度：公众号后台多种服务共机时，邻居更可控。</li>
+<li>容量可预期：按 limit 规划节点承载，避免“偶发打满整机”。</li>
+</ul>
+<p><strong>严格限额的代价。</strong></p>
+<ul>
+<li>CPU 硬顶直接制造节流，短时突发被削平，排队变长，p99/p999 变差。</li>
+<li>内存硬顶把“可回收缓存偏高”变成“直接 OOM”，可用性抖动可能更刺耳。</li>
+<li>可见资源与预算不一致，导致框架默认并发度失配。</li>
+</ul>
+<p><strong>工程上常见折中。</strong></p>
+<ul>
+<li>CPU：对延迟敏感的入口服务慎设过紧 limit；用请求保障 + 监控 throttling；突发明显时考虑提高 limit、拆分热点、或用 HPA/垂直扩容，而不是盲目加线程。</li>
+<li>内存：max 保护宿主；同时监控 <code>memory.current</code>/<code>peak</code>，对缓存型服务区分“工作集”与“可回收页”；避免把 limit 设得刚好贴着平均用量。</li>
+<li>层次：节点级预留系统与运维组件；应用层再分子组，防止某一业务线吃光整机。</li>
+<li>观测：把 <code>throttled_usec</code>、<code>oom_kill</code>、容器 <code>OOMKilled</code>、应用 p99 放在同一张排障图里。</li>
+</ul>
+<p>没有免费午餐：要隔离，就要接受硬顶带来的另一种失败模式；要吃突发，就要接受更弱的邻居隔离或更高的容量成本。</p>
+<h2 id="11-cpu-throttlingp99-oom">11. 动手实践：在受控容器限制 CPU 和内存，记录 throttling、p99 与 OOM</h2>
+<p>本实践必须在<strong>受控开发环境</strong>中进行（个人开发机、测试虚拟机或实验集群），不要在生产节点上随意改 cgroup 或对线上容器施压。需要：Linux（cgroup v2）、Docker 或 Podman、可选 <code>stress-ng</code>/<code>hey</code>、能读 <code>/sys/fs/cgroup</code> 与 <code>dmesg</code> 的权限。</p>
+<h3 id="111-cgroup-v2">11.1 步骤一：确认 cgroup v2</h3>
+<div class="codehilite"><pre><span></span><code>mount<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'cgroup2|cgroup'</span>
+stat<span class="w"> </span>-fc<span class="w"> </span>%T<span class="w"> </span>/sys/fs/cgroup
+<span class="c1"># 期望看到 cgroup2fs</span>
+cat<span class="w"> </span>/proc/self/cgroup
+</code></pre></div>
+
+<p>验收点：确认当前系统以 cgroup v2 统一层次为主（若仍是混合/v1，本课接口名可能不同，应换到 v2 实验环境）。</p>
+<h3 id="112-cpu">11.2 步骤二：启动带 CPU / 内存限制的容器</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>cg-cpu-demo<span class="w"> </span>cg-mem-demo<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>cg-cpu-demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--cpus<span class="o">=</span><span class="m">0</span>.5<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--memory<span class="o">=</span>512m<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>alpine<span class="w"> </span>sleep<span class="w"> </span><span class="m">3600</span>
+
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>cg-mem-demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--memory<span class="o">=</span>128m<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--memory-swap<span class="o">=</span>128m<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>alpine<span class="w"> </span>sleep<span class="w"> </span><span class="m">3600</span>
+
+docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'cpuNano={{.HostConfig.NanoCpus}} mem={{.HostConfig.Memory}}'</span><span class="w"> </span>cg-cpu-demo
+docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'mem={{.HostConfig.Memory}}'</span><span class="w"> </span>cg-mem-demo
+</code></pre></div>
+
+<h3 id="113-cgroup">11.3 步骤三：定位 cgroup 路径并记录基线</h3>
+<div class="codehilite"><pre><span></span><code><span class="nv">cpu_pid</span><span class="o">=</span><span class="k">$(</span>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.Pid}}'</span><span class="w"> </span>cg-cpu-demo<span class="k">)</span>
+<span class="nv">mem_pid</span><span class="o">=</span><span class="k">$(</span>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.Pid}}'</span><span class="w"> </span>cg-mem-demo<span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"cpu_pid=</span><span class="nv">$cpu_pid</span><span class="s2"> mem_pid=</span><span class="nv">$mem_pid</span><span class="s2">"</span>
+cat<span class="w"> </span>/proc/<span class="nv">$cpu_pid</span>/cgroup
+cat<span class="w"> </span>/proc/<span class="nv">$mem_pid</span>/cgroup
+</code></pre></div>
+
+<p>把输出中的路径记为 <code>CPU_CG</code>、<code>MEM_CG</code>（形如 <code>/sys/fs/cgroup/system.slice/docker-....scope</code>，以实际为准），然后：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 将下面路径替换为真实 CPU_CG</span>
+cat<span class="w"> </span><span class="s2">"</span><span class="nv">$CPU_CG</span><span class="s2">/cpu.max"</span>
+cat<span class="w"> </span><span class="s2">"</span><span class="nv">$CPU_CG</span><span class="s2">/cpu.stat"</span>
+cat<span class="w"> </span><span class="s2">"</span><span class="nv">$MEM_CG</span><span class="s2">/memory.max"</span>
+cat<span class="w"> </span><span class="s2">"</span><span class="nv">$MEM_CG</span><span class="s2">/memory.current"</span>
+cat<span class="w"> </span><span class="s2">"</span><span class="nv">$MEM_CG</span><span class="s2">/memory.events"</span>
+</code></pre></div>
+
+<p>验收点：能读到 <code>cpu.max</code> 大致对应 0.5 核（例如 <code>50000 100000</code>），<code>memory.max</code> 对应 128MiB 量级。</p>
+<h3 id="114-cpu-throttling">11.4 步骤四：打 CPU 负载并记录 throttling</h3>
+<p>在容器内制造 CPU 压力（Alpine 可先装 <code>stress-ng</code>，或改用已有工具镜像）：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-d<span class="w"> </span>cg-cpu-demo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'while true; do :; done'</span>
+<span class="c1"># 更好的方式（若镜像可用）：</span>
+<span class="c1"># docker run --rm --cpus=0.5 --name cg-cpu-stress polaris/stress-ng \</span>
+<span class="c1">#   stress-ng --cpu 4 --timeout 45s</span>
+</code></pre></div>
+
+<p>另开终端，每秒采样：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">20</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"==== sample </span><span class="nv">$i</span><span class="s2"> ===="</span>
+<span class="w">  </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'nr_periods|nr_throttled|throttled_usec|usage_usec'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CPU_CG</span><span class="s2">/cpu.stat"</span>
+<span class="w">  </span>sleep<span class="w"> </span><span class="m">1</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>记录：<code>nr_throttled</code> 是否上升、<code>throttled_usec</code> 增量、以及你对“宿主是否空闲”的观察：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 宿主视角</span>
+uptime
+nproc
+<span class="c1"># 容器内可见 CPU（对比误区）</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>cg-cpu-demo<span class="w"> </span>nproc<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>cg-cpu-demo<span class="w"> </span>getconf<span class="w"> </span>_NPROCESSORS_ONLN
+</code></pre></div>
+
+<p>验收点（对应“能辨认 CPU 配额节流”）：能指出至少一次 <code>nr_throttled</code>/<code>throttled_usec</code> 增长，并说明这与 <code>cpu.max</code> 有关，而不是宿主没有空闲核。</p>
+<h3 id="115-p99">11.5 步骤五：粗测延迟分位（p99）</h3>
+<p>若你有本地 HTTP 演示服务，可把它放进同样的 <code>--cpus</code> 限制下，用压测工具对比“无 CPU 限制”与“有 CPU 限制”的 p99。若暂时没有业务服务，可用“完成固定计算的耗时分布”代替：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 示例：在受限容器内反复跑一段计算，记录耗时（示意）</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--cpus<span class="o">=</span><span class="m">0</span>.5<span class="w"> </span>alpine<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'</span>
+<span class="s1">  for i in $(seq 1 30); do</span>
+<span class="s1">    start=$(date +%s%N)</span>
+<span class="s1">    # 空转一小段</span>
+<span class="s1">    j=0; while [ $j -lt 200000 ]; do j=$((j+1)); done</span>
+<span class="s1">    end=$(date +%s%N)</span>
+<span class="s1">    echo $(( (end - start)/1000000 ))</span>
+<span class="s1">  done</span>
+<span class="s1">'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-n<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'</span>
+<span class="s1">  { a[NR]=$1 }</span>
+<span class="s1">  END {</span>
+<span class="s1">    n=NR</span>
+<span class="s1">    print "count", n</span>
+<span class="s1">    print "p50_ms", a[int(n*0.50)]</span>
+<span class="s1">    print "p90_ms", a[int(n*0.90)]</span>
+<span class="s1">    print "p99_ms", a[int(n*0.99)]</span>
+<span class="s1">  }'</span>
+</code></pre></div>
+
+<p>再与 <code>--cpus=2</code> 或不设 <code>--cpus</code> 的对照组比较。预期：更紧的 CPU 配额下，尾部耗时更大、更不稳定。把数字与步骤四的 <code>throttled_usec</code> 对照记录。</p>
+<h3 id="116-oom">11.6 步骤六：制造并记录 OOM 事件</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 观察基线</span>
+cat<span class="w"> </span><span class="s2">"</span><span class="nv">$MEM_CG</span><span class="s2">/memory.events"</span>
+cat<span class="w"> </span><span class="s2">"</span><span class="nv">$MEM_CG</span><span class="s2">/memory.current"</span>
+
+<span class="c1"># 在 128m 限制的容器里尝试分配更大内存</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>cg-mem-demo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">'</span>
+<span class="s1">  # BusyBox/Alpine 未必有 stress；用 dd 尝试吃内存（可能很快被杀）</span>
+<span class="s1">  dd if=/dev/zero of=/dev/shm/hog bs=1M count=300 2&gt;/dev/null || true</span>
+<span class="s1">'</span>
+
+<span class="c1"># 更可控：单独跑一次性容器</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--name<span class="w"> </span>cg-oom-once<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--memory<span class="o">=</span>128m<span class="w"> </span>--memory-swap<span class="o">=</span>128m<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>polinux/stress<span class="w"> </span>--vm<span class="w"> </span><span class="m">1</span><span class="w"> </span>--vm-bytes<span class="w"> </span>300M<span class="w"> </span>--timeout<span class="w"> </span>20s<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+</code></pre></div>
+
+<p>检查：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'OOMKilled={{.State.OOMKilled}} Exit={{.State.ExitCode}}'</span><span class="w"> </span>cg-oom-once<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+dmesg<span class="w"> </span>-T<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>-E<span class="w"> </span><span class="s1">'oom|killed process|memory cgroup'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span><span class="m">20</span>
+free<span class="w"> </span>-h
+</code></pre></div>
+
+<p>验收点（对应“能区分进程 OOM 与系统级内存压力”）：</p>
+<ul>
+<li>若容器 <code>OOMKilled=true</code> 或 dmesg 出现 Memory cgroup out of memory，且 <code>free -h</code> 仍显示宿主有可用内存 → <strong>cgroup/进程侧 OOM</strong>；</li>
+<li>若宿主 <code>MemAvailable</code> 也很低、多个无关进程异常、压力是全局性的 → 才倾向 <strong>系统级内存压力</strong>。</li>
+</ul>
+<p>把 <code>memory.events</code> 中 <code>oom</code>/<code>oom_kill</code> 的前后差值记入实验笔记。</p>
+<h3 id="117-systemd-run">11.7 步骤七：可选——systemd-run 对照</h3>
+<div class="codehilite"><pre><span></span><code>systemd-run<span class="w"> </span>--scope<span class="w"> </span>-p<span class="w"> </span><span class="nv">CPUQuota</span><span class="o">=</span><span class="m">50</span>%<span class="w"> </span>-p<span class="w"> </span><span class="nv">MemoryMax</span><span class="o">=</span>128M<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--unit<span class="o">=</span>lesson47-demo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>stress-ng<span class="w"> </span>--cpu<span class="w"> </span><span class="m">2</span><span class="w"> </span>--vm<span class="w"> </span><span class="m">1</span><span class="w"> </span>--vm-bytes<span class="w"> </span>200M<span class="w"> </span>--timeout<span class="w"> </span>20s<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+
+<span class="c1"># 查找对应 scope 的 cgroup 并阅读 cpu.stat / memory.events</span>
+systemctl<span class="w"> </span>show<span class="w"> </span>lesson47-demo.scope<span class="w"> </span>-p<span class="w"> </span>ControlGroup
+</code></pre></div>
+
+<h3 id="118">11.8 步骤八：清理</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>cg-cpu-demo<span class="w"> </span>cg-mem-demo<span class="w"> </span>cg-oom-once<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>cg-cpu-stress<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+sudo<span class="w"> </span>rmdir<span class="w"> </span>/sys/fs/cgroup/cgroup-lesson-demo/parent/child-a<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>/sys/fs/cgroup/cgroup-lesson-demo/parent/child-b<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>/sys/fs/cgroup/cgroup-lesson-demo/parent<span class="w"> </span><span class="se">\</span>
+<span class="w">           </span>/sys/fs/cgroup/cgroup-lesson-demo<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+</code></pre></div>
+
+<h3 id="119">11.9 实践验收清单</h3>
+<ul>
+<li>[ ] 我能确认系统使用 cgroup v2，并找到容器对应的 cgroup 目录。</li>
+<li>[ ] 我能读懂 <code>cpu.max</code> 的 <code>$MAX $PERIOD</code> 格式，并知道 <code>max</code> 表示不限制。</li>
+<li>[ ] 我能在负载下观察 <code>cpu.stat</code> 的 <code>nr_throttled</code> / <code>throttled_usec</code> 增长，从而辨认 CPU 配额节流。</li>
+<li>[ ] 我记录了至少一组与节流对照的延迟分位（p99）或耗时分位。</li>
+<li>[ ] 我能读 <code>memory.current</code> / <code>memory.max</code> / <code>memory.events</code>，并解释 OOM 相关字段。</li>
+<li>[ ] 我能说明一次容器 OOM 时，为何宿主仍可能空闲——从而区分 cgroup OOM 与系统级内存压力。</li>
+<li>[ ] 我能说出“可见 CPU 数 ≠ CPU 预算”，并举出 <code>nproc</code> 与 <code>cpu.max</code> 不一致的例子。</li>
+<li>[ ] 我理解严格限额提高隔离性，也可能放大突发尾延迟。</li>
+</ul>
+<h2 id="12">12. 自测题</h2>
+<h3 id="cpumax-100000-100000-8-25-p99-cpustat-nr_throttled">题一：某容器 <code>cpu.max</code> 为 <code>100000 100000</code>，宿主 8 核且整体利用率只有 25%。容器内压测时 p99 升高，<code>cpu.stat</code> 中 <code>nr_throttled</code> 持续增加。这可能吗？为什么？</h3>
+<p><strong>参考答案：</strong> 可能。<code>cpu.max</code> 的语义是每个 period（这里 100000 微秒）内该 cgroup 最多使用 100000 微秒 CPU 时间，约等于 1 核带宽硬顶。节流取决于<strong>该 cgroup 是否用尽自己的配额</strong>，不取决于宿主平均利用率。宿主整体空闲时，该容器仍会在配额用尽后被强制等待下一个 period，于是出现“宿主很闲、请求却排队、p99 升高”，同时 <code>nr_throttled</code>/<code>throttled_usec</code> 上升。这正是 CPU 配额节流的典型辨认方式。</p>
+<h3 id="nproc-8k8s-limitscpu-1-8">题二：容器内 <code>nproc</code> 输出 8，K8s <code>limits.cpu</code> 为 <code>"1"</code>。把线程池设为 8 是否合理？可能带来什么问题？</h3>
+<p><strong>参考答案：</strong> 不合理，至少不能默认合理。可见 CPU 数反映的是 CPU 集合可见性，不等于实际可用 CPU 预算；<code>limits.cpu: "1"</code> 通常对应约 1 核的 <code>cpu.max</code> 配额。按 8 去设重计算线程池，会在大约 1 核的预算里塞进过多可运行线程，加剧争抢、上下文切换与排队，更容易触发节流并放大尾延迟。更稳妥的做法是按有效配额（或实测可持续 CPU）配置并发，并把 throttling 与 p99 纳入观测。</p>
+<h3 id="dmesg-oom-free-h-gb-cgroup-oom">题三：服务进程被杀，dmesg 出现 OOM 相关日志，但 <code>free -h</code> 显示宿主仍有数 GB 可用。如何判断这是 cgroup/进程侧 OOM 还是系统级内存压力？还要看哪些信号？</h3>
+<p><strong>参考答案：</strong> 优先查该服务所在 cgroup 的 <code>memory.current</code> 是否接近或达到 <code>memory.max</code>，看 <code>memory.events</code> 中 <code>oom</code>/<code>oom_kill</code> 是否增加，容器场景查 <code>OOMKilled</code>，并读 dmesg 是否包含 Memory cgroup out of memory 一类描述。若限额触顶且宿主内存仍充足，应判定为 <strong>cgroup/进程侧 OOM</strong>（限额改变了故障模式）。系统级内存压力则通常伴随宿主 <code>MemAvailable</code> 很低、<code>/proc/pressure/memory</code> 持续压力、多个无关负载同时受害，且不一定有“单容器 max 触顶”的证据。二者处理方向不同：前者调 limit/修泄漏/降缓存；后者还要考虑节点扩容、降密度与全局回收问题。</p>
+<h2 id="13">13. 推荐资源</h2>
+<ul>
+<li><strong>cgroup v2与资源治理：参考文档 / 原始资料</strong><br />
+  https://docs.kernel.org/admin-guide/cgroup-v2.html<br />
+  来源：docs.kernel.org；语言：英文；类型：文档；难度：深入；免费。<br />
+  说明：重点阅读 <code>cpu.max</code> 与节流，以及 <code>memory.current</code>/<code>max</code> 和 OOM 相关章节，用于核对本节点实验的语义和边界。建议对照本课实践，在受控环境中边读边验证 <code>cpu.stat</code>、<code>memory.events</code> 字段。</li>
+</ul>
+<p>本地可继续查阅：</p>
+<div class="codehilite"><pre><span></span><code>man<span class="w"> </span><span class="m">7</span><span class="w"> </span>cgroups
+man<span class="w"> </span><span class="m">1</span><span class="w"> </span>systemd-run
+man<span class="w"> </span><span class="m">5</span><span class="w"> </span>systemd.resource-control
+<span class="c1"># 内核文档（若本地有 kernel-doc 包）</span>
+<span class="c1"># /usr/share/doc/... 或线上 admin-guide/cgroup-v2.html</span>
+</code></pre></div>
+
+<h2 id="14">14. 本课小结</h2>
+<ul>
+<li>cgroup 把进程组织成层次并控制资源分配；CPU 带宽与内存上限会改变服务延迟和故障模式。</li>
+<li><code>cpu.max</code> 格式为 <code>$MAX $PERIOD</code>；<code>max</code> 表示不限制。配额用尽后即使宿主空闲也会节流，辨认看 <code>cpu.stat</code> 的 <code>nr_throttled</code>/<code>throttled_usec</code>。</li>
+<li><code>memory.current</code> 是当前用量，<code>memory.max</code> 是硬顶；触顶且回收失败会走 cgroup OOM。要区分它与系统级内存压力：前者常伴随宿主仍空闲，后者是整机压力。</li>
+<li>层次化分配下，子组受父组约束；容器/K8s 中的 limits 必须放在整棵树的语境里理解。</li>
+<li>常见误区：容器可见 CPU 数不一定等于实际可用 CPU 预算。</li>
+<li>设计权衡：严格限额提高隔离性，也可能放大突发负载尾延迟。</li>
+<li>实践上：在受控容器限制 CPU 和内存，同时记录 throttling、p99 与 OOM 事件，才能把原理连到公众号后台真实的限流与排障现场。</li>
+</ul><div class="pn"><span><a href="46.html">← namespace与隔离边界</a></span><span>下一课 待更新</span></div></main></div></body></html>
