@@ -1,0 +1,1212 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>41. 调度、亲和性与上下文切换 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（41/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（9/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="cur" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li class="todo">42. futex与用户态同步慢路径 <em>待更新</em></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 41 课 · 领域 C · 阶段 3</p><p class="dl"><a href="../files/41-c-schedule.md" download>⬇ 本课 Markdown</a><a href="../files/practice41.tar.gz" download>⬇ 练习包 practice41.tar.gz</a></p><h1 id="41208">第 41/208 课：调度、亲和性与上下文切换</h1>
+<blockquote>
+<p><strong>节点</strong>：<code>c-schedule</code>（Scheduling）<br />
+<strong>领域 / 阶段 / 难度</strong>：C / 3 / 进阶<br />
+<strong>子类</strong>：进程、线程与调度<br />
+<strong>先修</strong>：<code>c-thread</code>、<code>a-memory</code><br />
+<strong>标签</strong>：Scheduling、C、C++<br />
+<strong>一句话</strong>：调度器在可运行任务间分配 CPU，CPU 亲和性限制运行位置，切换成本随工作集与调度场景变化。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 学习目标</h2>
+<p>完成本课后，你应该能够：</p>
+<ol>
+<li>解释<strong>可运行（runnable）</strong>与<strong>阻塞（blocked）</strong>的区别，并能用 <code>ps</code>、<code>/proc/&lt;pid&gt;/status</code>、<code>/proc/&lt;pid&gt;/schedstat</code>、<code>vmstat</code> 等工具区分“在等 CPU”和“在等事件”。</li>
+<li>解释 <code>nice</code>、调度策略、CPU 亲和性分别控制什么，以及它们与 CFS/EEVDF、容器 CPU 配额、NUMA 的关系。</li>
+<li>解释<strong>自愿上下文切换</strong>与<strong>非自愿上下文切换</strong>的成因，知道为什么不能把某次测得的切换耗时当作通用常数。</li>
+<li>独立完成实验：对线程池设置不同大小和亲和性，记录吞吐、p99 与切换率，并给出有数据支撑的结论。</li>
+</ol>
+<p>本节点的实践目标是：</p>
+<blockquote>
+<p>对线程池设置不同大小和亲和性，记录吞吐、p99 与切换率。</p>
+</blockquote>
+<p>验收标准是：</p>
+<ul>
+<li>能区分<strong>阻塞等待</strong>与<strong>可运行排队</strong>。</li>
+<li>不把<strong>固定切换耗时</strong>当通用常数。</li>
+</ul>
+<hr />
+<h2 id="2">2. 为什么后端工程师要懂调度</h2>
+<p>以腾讯微信公众号后台这类服务为例：请求处理里既有 CPU 工作（协议解析、JSON 序列化、签名校验、业务逻辑），也有阻塞工作（数据库、缓存、RPC、日志落盘）。很多线上问题并不是“CPU 真的跑满了”，而是“任务在等 CPU”或“任务被限流了”。</p>
+<h3 id="21-cpu">2.1 CPU 未满，为什么延迟还高</h3>
+<p><code>top</code> 看到整机 CPU 只有 40%，并不代表你的请求没有被 CPU 调度影响。常见情况有：</p>
+<ul>
+<li><strong>局部 CPU 争用</strong>：所有工作线程被绑到 CPU 0，CPU 0 已经 100%，其他核空闲。整机利用率看起来不高，但 CPU 0 的运行队列很长。</li>
+<li><strong>容器 CPU 配额限流</strong>：容器 <code>cpu.max</code> 只给 0.5 个 CPU，短时间突发把配额用完，剩余时间被 throttle 到下一个周期。宿主机很闲，但容器内请求 p99 飙升。</li>
+<li><strong>阻塞等待</strong>：请求卡在数据库、磁盘、下游 RPC 上，线程处于 <code>S</code> 或 <code>D</code> 状态，CPU 自然不高。此时加线程通常只会增加“更多在等”的线程。</li>
+<li><strong>锁竞争或唤醒延迟</strong>：线程可运行但抢不到锁，或者被唤醒后没有及时拿到 CPU。</li>
+<li><strong>迁核与缓存失效</strong>：任务在 CPU 之间迁移，L1/L2 缓存、TLB、分支预测器状态变冷，单次请求的执行时间变长。</li>
+</ul>
+<p>所以，<strong>CPU 利用率回答的是“CPU 忙不忙”，不是“请求等多久”</strong>。后端要同时看运行队列、阻塞状态、切换率、限流指标和尾延迟。</p>
+<h3 id="22">2.2 线程数过多会发生什么</h3>
+<p>线程池开得太大，对 CPU 密集型工作通常不是好事：</p>
+<ul>
+<li>可运行线程数超过有效 CPU 数，任务开始在运行队列里排队。</li>
+<li>上下文切换增多，缓存和 TLB 被反复污染。</li>
+<li>每个线程的栈、调度实体和队列开销增加。</li>
+<li>尾延迟先恶化：平均吞吐可能还没明显下降，p99 已经抖动。</li>
+<li>在容器里还会叠加 <code>cpu.max</code> 限流：线程越多，越容易在短时间内打满配额，然后整组被 throttle。</li>
+</ul>
+<p>可以用排队论直觉理解：当并发工作接近或超过服务能力时，排队延迟会非线性上升。线程池大小应该由<strong>有效 CPU 配额</strong>、工作类型和尾延迟目标共同决定，而不是“越大越安全”。</p>
+<h3 id="23">2.3 迁核为什么会影响延迟</h3>
+<p>CPU 亲和性允许任务在多个核上运行，调度器会做负载均衡，这可能把任务迁到另一个核。迁移的代价包括：</p>
+<ul>
+<li>原核上的 L1/L2 缓存变冷，工作集需要重新加载。</li>
+<li>TLB 可能失效，页表遍历增加。</li>
+<li>分支预测器、预取器等微架构状态丢失。</li>
+<li>如果跨 NUMA 节点，还可能访问远端内存，延迟和带宽都变差。</li>
+</ul>
+<p>迁核不一定是坏事：负载均衡能避免某些核过载。但在延迟敏感场景，频繁迁移会把“偶发尾延迟”放大。是否绑核，要用数据判断。</p>
+<hr />
+<h2 id="3">3. 从直觉到原理</h2>
+<h3 id="31">3.1 可运行与阻塞</h3>
+<h4 id="_1">直觉</h4>
+<p>把 CPU 想成服务窗口，任务想成顾客：</p>
+<ul>
+<li><strong>可运行（runnable）</strong>：顾客已经准备好，站在队伍里等窗口。可能正在被服务，也可能在排队。</li>
+<li><strong>阻塞（blocked）</strong>：顾客还没准备好，比如在等材料、等电话，暂时不在队伍里。材料到了才会重新排队。</li>
+</ul>
+<p>调度器只从<strong>可运行队列</strong>里挑任务。阻塞任务不在运行队列里，所以“线程很多”不等于“运行队列很长”；关键看有多少线程同时处于可运行状态。</p>
+<h4 id="linux-rsd">Linux 任务状态：R、S、D</h4>
+<p><code>ps -o stat</code> 里的状态字母：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+<th>是否占运行队列</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>R</code></td>
+<td>Running / Runnable：正在 CPU 上运行，或已就绪等待 CPU</td>
+<td>是</td>
+<td>CPU 计算、刚被唤醒</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td>Interruptible sleep：可中断睡眠</td>
+<td>否</td>
+<td>等网络、等锁、<code>sleep</code>、<code>epoll_wait</code></td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td>Uninterruptible sleep：不可中断睡眠</td>
+<td>否</td>
+<td>磁盘 I/O、某些内核路径、NFS</td>
+</tr>
+<tr>
+<td><code>T</code></td>
+<td>Stopped：被暂停</td>
+<td>否</td>
+<td><code>SIGSTOP</code>、调试</td>
+</tr>
+<tr>
+<td><code>Z</code></td>
+<td>Zombie：已退出但未被回收</td>
+<td>否</td>
+<td>父进程未 <code>wait</code></td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>Idle：空闲内核线程</td>
+<td>否</td>
+<td>内核后台线程</td>
+</tr>
+</tbody>
+</table>
+<p><code>ps</code> 还可能显示修饰符，例如：</p>
+<ul>
+<li><code>&lt;</code>：高优先级</li>
+<li><code>N</code>：低优先级（nice）</li>
+<li><code>L</code>：有页面被锁定在内存</li>
+<li><code>s</code>：会话首进程</li>
+<li><code>l</code>：多线程</li>
+<li><code>+</code>：前台进程组</li>
+</ul>
+<p>常用命令：</p>
+<div class="codehilite"><pre><span></span><code>ps<span class="w"> </span>-o<span class="w"> </span>pid,stat,wchan:32,comm<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+ps<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>pid,tid,psr,stat,comm,ni,pri,rtprio<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+</code></pre></div>
+
+<p><code>wchan</code> 显示内核等待通道，能帮助判断 <code>S</code>/<code>D</code> 在等什么。<code>psr</code> 显示任务最近运行的 CPU，可用于观察迁移。</p>
+<h4 id="schedstat">运行队列等待时间：<code>schedstat</code> 的第二个字段</h4>
+<p><code>/proc/&lt;pid&gt;/schedstat</code> 每行通常有三个字段：</p>
+<div class="codehilite"><pre><span></span><code>&lt;on_cpu_ns&gt; &lt;runqueue_wait_ns&gt; &lt;timeslices&gt;
+</code></pre></div>
+
+<ul>
+<li>第 1 个字段：任务在 CPU 上运行的时间（纳秒）。</li>
+<li>第 2 个字段：任务<strong>可运行但在运行队列中等待</strong>的时间（纳秒）。</li>
+<li>第 3 个字段：任务运行过的 timeslice 次数。</li>
+</ul>
+<p>第二个字段非常关键：它直接度量“已经准备好、但还没轮到 CPU”的时间。它和 CPU 利用率不是一回事。</p>
+<p>一个短小的读取示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">path</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">"/proc/%d/schedstat"</span><span class="p">,</span><span class="w"> </span><span class="n">getpid</span><span class="p">());</span>
+
+<span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">"r"</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">on_cpu</span><span class="p">,</span><span class="w"> </span><span class="n">wait</span><span class="p">,</span><span class="w"> </span><span class="n">slices</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">fscanf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s">"%llu %llu %llu"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">on_cpu</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">wait</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">slices</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">"on_cpu=%llu ns, runqueue_wait=%llu ns, slices=%llu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">               </span><span class="n">on_cpu</span><span class="p">,</span><span class="w"> </span><span class="n">wait</span><span class="p">,</span><span class="w"> </span><span class="n">slices</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意：</p>
+<ul>
+<li><code>/proc/&lt;pid&gt;/schedstat</code> 对应进程的主线程；要看每个线程，使用 <code>/proc/&lt;pid&gt;/task/&lt;tid&gt;/schedstat</code>。</li>
+<li>这是<strong>累计值</strong>，应取两次采样的差值，再除以请求数或时间，得到平均排队延迟。</li>
+<li>被 cgroup 限流的任务不一定是“在运行队列里等”，它可能直接被 throttle 到下一个周期；这部分要看 <code>cpu.stat</code>，不能只看 <code>schedstat</code>。</li>
+</ul>
+<h4 id="cpu">可运行排队与 CPU 利用率的区别</h4>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>回答的问题</th>
+<th>高值说明什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CPU 利用率</td>
+<td>CPU 有多少时间在忙</td>
+<td>CPU 忙，但不一定代表请求在等</td>
+</tr>
+<tr>
+<td><code>vmstat</code> 的 <code>r</code></td>
+<td>有多少可运行任务</td>
+<td>运行队列有压力，可能有排队</td>
+</tr>
+<tr>
+<td><code>vmstat</code> 的 <code>b</code></td>
+<td>有多少阻塞任务</td>
+<td>可能在等 I/O、锁或内核事件</td>
+</tr>
+<tr>
+<td><code>schedstat</code> 第二字段</td>
+<td>任务可运行后等了多久</td>
+<td>直接反映运行队列等待</td>
+</tr>
+<tr>
+<td><code>schedstat</code> 第一字段</td>
+<td>任务真正跑了多久</td>
+<td>反映 CPU 服务时间</td>
+</tr>
+<tr>
+<td><code>cpu.stat</code> 的 throttled</td>
+<td>容器是否被限流</td>
+<td>配额耗尽导致停顿</td>
+</tr>
+</tbody>
+</table>
+<p>一个典型误区是：看到 CPU 利用率不高，就认为“不是 CPU 问题”。如果线程都绑在少数核上，或者容器被限流，整机 CPU 可能不高，但请求仍然在等 CPU。</p>
+<p><code>vmstat 1</code> 示例：</p>
+<div class="codehilite"><pre><span></span><code>procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 8  0      0  ...    ...    ...     0    0    10    20 1200 4500 45  5 45  5  0
+</code></pre></div>
+
+<ul>
+<li><code>r=8</code>：有 8 个可运行任务。若长期大于有效 CPU 数，说明运行队列有压力。</li>
+<li><code>b=0</code>：没有明显的不可中断阻塞。</li>
+<li><code>cs=4500</code>：每秒约 4500 次上下文切换。要和负载、线程数一起看，不能孤立判断好坏。</li>
+</ul>
+<h4 id="_2">阻塞等待与可运行排队的区分方法</h4>
+<p>可以按下面的顺序排查：</p>
+<ol>
+<li><strong>看状态</strong>：<code>ps -o stat</code> 中大量 <code>S</code>/<code>D</code>，更像阻塞；大量 <code>R</code> 且 CPU 数有限，更像可运行排队。</li>
+<li><strong>看 <code>vmstat</code></strong>：<code>r</code> 高、<code>b</code> 低，偏向可运行排队；<code>b</code> 高，偏向不可中断阻塞。</li>
+<li><strong>看 <code>schedstat</code></strong>：第二字段增长快，说明可运行后等 CPU 久；第一字段增长快，说明真正在跑。</li>
+<li><strong>看 <code>cpu.stat</code></strong>：<code>nr_throttled</code>、<code>throttled_usec</code> 增长，说明容器配额限流。</li>
+<li><strong>看线程数和亲和性</strong>：线程数远超有效 CPU，或全部绑到同一核，都会制造局部排队。</li>
+</ol>
+<h3 id="32-nice">3.2 nice、策略与亲和性</h3>
+<h4 id="nice">nice 与权重：不是硬限制，是相对份额</h4>
+<p><code>nice</code> 的取值范围通常是 <code>-20</code> 到 <code>19</code>：</p>
+<ul>
+<li>值越小，优先级越高；<code>-20</code> 最高，<code>19</code> 最低。</li>
+<li>普通用户只能降低优先级（增大 nice 值）；提高优先级通常需要 <code>CAP_SYS_NICE</code>。</li>
+<li><code>nice</code> 只对普通调度类（如 <code>SCHED_OTHER</code>、<code>SCHED_BATCH</code>）有相对份额意义，不是硬性 CPU 上限。</li>
+</ul>
+<p>在 CFS 中，nice 会映射成权重。常见权重如下（不同内核版本数值可能有差异，但比例关系稳定）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">nice</th>
+<th style="text-align: right;">权重</th>
+<th style="text-align: right;">相对 nice 0 的份额</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">-20</td>
+<td style="text-align: right;">88761</td>
+<td style="text-align: right;">约 86.7 倍</td>
+</tr>
+<tr>
+<td style="text-align: right;">-10</td>
+<td style="text-align: right;">9548</td>
+<td style="text-align: right;">约 9.3 倍</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1024</td>
+<td style="text-align: right;">1 倍</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">335</td>
+<td style="text-align: right;">约 0.327 倍</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">110</td>
+<td style="text-align: right;">约 0.107 倍</td>
+</tr>
+<tr>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">约 0.015 倍</td>
+</tr>
+</tbody>
+</table>
+<p>所以 nice 0 与 nice 5 的线程在同一个竞争域内，份额大约是 <code>1024 : 335 ≈ 3.06 : 1</code>。这只是竞争时的相对比例，不是“nice 5 最多只能用 24% CPU”的硬限制；如果 nice 0 的线程阻塞了，nice 5 仍然可以用满 CPU。</p>
+<h4 id="cfs-eevdf">CFS 与 EEVDF 的直觉</h4>
+<ul>
+<li><strong>CFS（Completely Fair Scheduler）</strong>：给每个任务维护虚拟运行时间 <code>vruntime</code>，优先运行虚拟时间最落后的任务。nice 权重决定 <code>vruntime</code> 增长快慢：权重越高，<code>vruntime</code> 增长越慢，获得 CPU 越多。</li>
+<li><strong>EEVDF（Earliest Eligible Virtual Deadline First）</strong>：Linux 6.6 起成为默认的普通任务调度器，在 CFS 的虚拟时间基础上引入“虚拟截止时间”，优先选择最早截止且 eligible 的任务，以改善延迟敏感任务的响应。nice 仍然映射为权重，份额直觉仍然适用。</li>
+</ul>
+<p>不需要背公式，但要记住两点：</p>
+<ol>
+<li>nice 是<strong>相对权重</strong>，不是绝对配额。</li>
+<li>调度器追求公平和吞吐，不承诺单个任务的固定延迟。</li>
+</ol>
+<h4 id="_3">调度策略</h4>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>类型</th>
+<th>行为直觉</th>
+<th>适用与注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SCHED_OTHER</code></td>
+<td>普通</td>
+<td>默认策略，CFS/EEVDF，按 nice 权重分享 CPU</td>
+<td>大多数后端线程</td>
+</tr>
+<tr>
+<td><code>SCHED_BATCH</code></td>
+<td>普通</td>
+<td>偏批处理，减少唤醒抢占，偏向吞吐</td>
+<td>CPU 密集型后台任务；交互延迟不保证</td>
+</tr>
+<tr>
+<td><code>SCHED_IDLE</code></td>
+<td>普通</td>
+<td>权重极低，只在 CPU 空闲时运行</td>
+<td>低优先级后台清理</td>
+</tr>
+<tr>
+<td><code>SCHED_FIFO</code></td>
+<td>实时</td>
+<td>优先级 1–99，无时间片，运行到阻塞/让出或被更高实时任务抢占</td>
+<td>严格低延迟；使用不当会饿死系统</td>
+</tr>
+<tr>
+<td><code>SCHED_RR</code></td>
+<td>实时</td>
+<td>实时轮转，同优先级按时间片轮换</td>
+<td>多个同优先级实时任务</td>
+</tr>
+</tbody>
+</table>
+<p>实时策略要特别小心：一个不阻塞的 <code>SCHED_FIFO</code> 线程可能长期占住 CPU，导致其他任务得不到调度。容器里还可能没有权限设置实时策略。</p>
+<p>常用命令：</p>
+<div class="codehilite"><pre><span></span><code>nice<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span><span class="w"> </span>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span>
+renice<span class="w"> </span>-n<span class="w"> </span><span class="m">5</span><span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+
+chrt<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+chrt<span class="w"> </span>-f<span class="w"> </span><span class="m">10</span><span class="w"> </span>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span><span class="w">      </span><span class="c1"># SCHED_FIFO，优先级 10，谨慎使用</span>
+chrt<span class="w"> </span>-r<span class="w"> </span><span class="m">10</span><span class="w"> </span>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span><span class="w">      </span><span class="c1"># SCHED_RR</span>
+chrt<span class="w"> </span>-b<span class="w"> </span><span class="m">0</span><span class="w"> </span>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span><span class="w">       </span><span class="c1"># SCHED_BATCH</span>
+chrt<span class="w"> </span>-i<span class="w"> </span><span class="m">0</span><span class="w"> </span>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span><span class="w">       </span><span class="c1"># SCHED_IDLE</span>
+</code></pre></div>
+
+<h4 id="cpu_1">CPU 亲和性：限制任务能跑在哪些核上</h4>
+<p>亲和性分两类：</p>
+<ul>
+<li><strong>硬亲和性</strong>：通过 <code>sched_setaffinity</code>、<code>taskset</code>、cgroup <code>cpuset</code> 明确限制任务可运行的 CPU 集合。</li>
+<li><strong>软亲和性</strong>：调度器尽量让任务留在原 CPU，但为了负载均衡仍可能迁移。</li>
+</ul>
+<p>C 代码设置亲和性：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sched.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">pin_cpu</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">cpu</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">cpu_set_t</span><span class="w"> </span><span class="n">set</span><span class="p">;</span>
+<span class="w">    </span><span class="n">CPU_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+<span class="w">    </span><span class="n">CPU_SET</span><span class="p">(</span><span class="n">cpu</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sched_setaffinity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">set</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">set</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"sched_setaffinity: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>pid=0</code> 表示当前线程。常见错误：</p>
+<ul>
+<li><code>EINVAL</code>：CPU 编号无效，或不在当前 cpuset 允许范围内。</li>
+<li><code>EPERM</code>：权限不足。</li>
+<li>在容器中，<code>sched_setaffinity</code> 不能突破 cgroup <code>cpuset</code> 的限制。</li>
+</ul>
+<p>命令行工具：</p>
+<div class="codehilite"><pre><span></span><code>taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span>-3<span class="w"> </span>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span>
+taskset<span class="w"> </span>-pc<span class="w"> </span>&lt;pid&gt;
+taskset<span class="w"> </span>-pc<span class="w"> </span><span class="m">0</span>-1<span class="w"> </span>&lt;pid&gt;
+</code></pre></div>
+
+<p>查看允许的 CPU 和内存节点：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'Cpus_allowed_list|Mems_allowed_list'</span><span class="w"> </span>/proc/&lt;pid&gt;/status
+</code></pre></div>
+
+<h4 id="_4">亲和性、缓存局部性与迁核</h4>
+<p>绑核的主要收益是<strong>缓存局部性</strong>：</p>
+<ul>
+<li>任务留在同一个物理核/同一 L3 域，工作集更容易命中缓存。</li>
+<li>减少迁移带来的 TLB 和微架构状态失效。</li>
+<li>对延迟敏感的线程，能降低尾延迟抖动。</li>
+</ul>
+<p>但绑核也有代价：</p>
+<ul>
+<li>调度器失去把任务搬到空闲核上的弹性。</li>
+<li>如果绑到繁忙核、中断核或“吵闹邻居”所在的核，局部争用会更严重。</li>
+<li>所有线程绑到同一个核，会制造一个很长的局部运行队列，而其他核空闲。</li>
+<li>在容器里，<code>cpuset</code> 可能本来就很窄，再绑核可能进一步压缩可用 CPU。</li>
+<li>绑了 CPU 不等于绑了内存；NUMA 下仍可能访问远端内存。</li>
+</ul>
+<p>查看迁移情况：</p>
+<div class="codehilite"><pre><span></span><code>ps<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>pid,tid,psr,stat,comm<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+grep<span class="w"> </span>nr_migrations<span class="w"> </span>/proc/&lt;pid&gt;/sched
+</code></pre></div>
+
+<p><code>psr</code> 是最近运行的 CPU；<code>nr_migrations</code> 是迁移计数。迁移次数多不一定是问题，要结合工作集和 p99 判断。</p>
+<h4 id="cpu-cfs">容器 CPU 配额与 CFS 带宽限流</h4>
+<p>cgroup v2 的 <code>cpu.max</code> 格式是：</p>
+<div class="codehilite"><pre><span></span><code>&lt;quota&gt; &lt;period&gt;
+</code></pre></div>
+
+<p>例如：</p>
+<div class="codehilite"><pre><span></span><code>50000 100000
+</code></pre></div>
+
+<p>表示每 100ms 周期最多使用 50ms CPU，即 <strong>0.5 个 CPU</strong>。<code>max 100000</code> 表示不限制。</p>
+<p>关键点：</p>
+<ul>
+<li><code>cpu.max</code> 是<strong>带宽上限</strong>，不是绑核。任务仍然可以在允许的多个 CPU 上运行。</li>
+<li><code>cpu.weight</code> 是竞争时的相对份额，不是硬上限。</li>
+<li>配额用完后，cgroup 内的任务会被 <strong>throttle</strong> 到下一个周期，期间不能运行。</li>
+<li>这会造成“宿主机很闲、容器内 p99 很高”的现象。</li>
+</ul>
+<p>查看：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/sys/fs/cgroup/cpu.max
+cat<span class="w"> </span>/sys/fs/cgroup/cpu.stat
+</code></pre></div>
+
+<p><code>cpu.stat</code> 常见字段：</p>
+<div class="codehilite"><pre><span></span><code>nr_periods 1000
+nr_throttled 200
+throttled_usec 12345678
+</code></pre></div>
+
+<ul>
+<li><code>nr_periods</code>：经过的周期数。</li>
+<li><code>nr_throttled</code>：发生限流的周期数。</li>
+<li><code>throttled_usec</code>：累计被限流的微秒数。</li>
+</ul>
+<p>cgroup v1 的路径和字段不同，常见为 <code>cpu.cfs_quota_us</code>、<code>cpu.cfs_period_us</code>，<code>cpu.stat</code> 中可能是 <code>throttled_time</code>。看容器实际挂载的 cgroup 版本再读。</p>
+<p>还要注意：<code>nproc</code> 通常反映的是<strong>CPU 亲和性/ cpuset 允许的 CPU 数</strong>，不一定反映 <code>cpu.max</code> 的配额。一个 <code>--cpus=0.5</code> 的容器里，<code>nproc</code> 可能仍然显示很多核。线程池如果按 <code>nproc</code> 来开，很容易超配。</p>
+<h4 id="numa">NUMA</h4>
+<p>NUMA（Non-Uniform Memory Access）下，CPU 访问本地节点内存快，访问远端节点内存慢。绑核但不绑内存，可能出现“CPU 在节点 0、内存却在节点 1”的情况。</p>
+<p>常用命令：</p>
+<div class="codehilite"><pre><span></span><code>lscpu<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>numa
+numactl<span class="w"> </span>--hardware
+numactl<span class="w"> </span>--cpunodebind<span class="o">=</span><span class="m">0</span><span class="w"> </span>--membind<span class="o">=</span><span class="m">0</span><span class="w"> </span>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span>
+numactl<span class="w"> </span>--localalloc<span class="w"> </span>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+
+<p>在容器和 Kubernetes 中，NUMA 感知取决于运行时和拓扑管理策略。不要假设绑核就自动获得本地内存。</p>
+<h3 id="33">3.3 自愿和非自愿上下文切换</h3>
+<h4 id="_5">直觉</h4>
+<ul>
+<li><strong>自愿切换（voluntary context switch）</strong>：任务自己让出 CPU。比如等 I/O、等锁、<code>sleep</code>、<code>usleep</code>、<code>epoll_wait</code>、<code>futex</code> 等待。</li>
+<li><strong>非自愿切换（involuntary context switch）</strong>：任务并不想停，但被调度器换下。比如时间片用完、被更高优先级任务抢占、被实时任务抢占。</li>
+</ul>
+<p>高自愿切换不一定是坏事：I/O 密集型服务本来就会频繁阻塞。高非自愿切换通常意味着 CPU 竞争、线程过多或优先级压力。</p>
+<h4 id="_6">观察切换</h4>
+<p><code>/proc/&lt;pid&gt;/status</code>：</p>
+<div class="codehilite"><pre><span></span><code>voluntary_ctxt_switches:        1234
+nonvoluntary_ctxt_switches:      567
+</code></pre></div>
+
+<p>注意这些计数是<strong>按任务/线程</strong>统计的。<code>/proc/&lt;pid&gt;/status</code> 对应主线程；要汇总所有线程：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-H<span class="w"> </span>ctxt_switches<span class="w"> </span>/proc/&lt;pid&gt;/task/*/status
+</code></pre></div>
+
+<p><code>pidstat -w</code>：</p>
+<div class="codehilite"><pre><span></span><code>pidstat<span class="w"> </span>-w<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">5</span>
+pidstat<span class="w"> </span>-w<span class="w"> </span>-t<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">5</span>
+</code></pre></div>
+
+<p>输出中的：</p>
+<ul>
+<li><code>cswch/s</code>：每秒自愿上下文切换。</li>
+<li><code>nvcswch/s</code>：每秒非自愿上下文切换。</li>
+</ul>
+<p><code>/proc/&lt;pid&gt;/sched</code> 也能看到：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'nr_switches|nr_voluntary_switches|nr_involuntary_switches|nr_migrations'</span><span class="w"> </span>/proc/&lt;pid&gt;/sched
+</code></pre></div>
+
+<h4 id="_7">自愿切换的短例</h4>
+<p>下面的代码每轮 <code>usleep(1000)</code> 主动睡眠，进入 <code>S</code> 状态，每次都是一次自愿切换（注意：读 <code>/dev/zero</code> 这类永远有数据的文件并不会阻塞，不产生自愿切换）：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3000</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">        </span><span class="n">usleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 进入睡眠，主动让出 CPU */</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>运行后观察：</p>
+<div class="codehilite"><pre><span></span><code>./voluntary<span class="w"> </span><span class="p">&amp;</span>
+<span class="nv">PID</span><span class="o">=</span><span class="nv">$!</span>
+grep<span class="w"> </span>ctxt_switches<span class="w"> </span>/proc/<span class="nv">$PID</span>/status
+pidstat<span class="w"> </span>-w<span class="w"> </span>-p<span class="w"> </span><span class="nv">$PID</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">3</span>
+</code></pre></div>
+
+<h4 id="_8">非自愿切换的短例</h4>
+<p>CPU 密集型线程数超过有效 CPU 数时，很容易出现非自愿切换。可以用本课后面的线程池实验观察：</p>
+<div class="codehilite"><pre><span></span><code>./pool<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">0</span>
+pidstat<span class="w"> </span>-w<span class="w"> </span>-t<span class="w"> </span>-p<span class="w"> </span><span class="k">$(</span>pgrep<span class="w"> </span>-n<span class="w"> </span>pool<span class="k">)</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">5</span>
+</code></pre></div>
+
+<p>如果 <code>nvcswch/s</code> 很高，同时 <code>vmstat</code> 的 <code>r</code> 长期大于有效 CPU 数，说明存在明显的可运行竞争。</p>
+<h4 id="_9">为什么切换成本不是固定常数</h4>
+<p>不要记住“上下文切换固定耗时 3 微秒”这类说法，然后拿切换次数乘一个常数估算延迟。切换成本至少受这些因素影响：</p>
+<ul>
+<li>切换的是同进程线程还是不同进程：跨进程切换可能涉及地址空间切换，成本更高。</li>
+<li>工作集大小：缓存越热，切换后重新加载越少；工作集大时，缓存污染更严重。</li>
+<li>缓存和 TLB 状态：迁移、跨 NUMA、页表变化都会增加成本。</li>
+<li>CPU 微架构和频率：不同代际、不同频率差异明显。</li>
+<li>内核版本和调度器路径：统计、安全缓解、cgroup 记账等都会影响。</li>
+<li>切换原因：自愿阻塞可能伴随唤醒路径成本；抢占可能伴随调度器负载均衡成本。</li>
+<li>系统负载：高负载下间接成本（排队、缓存争用）远大于寄存器保存/恢复的直接成本。</li>
+</ul>
+<p>因此正确做法是：<strong>在你的环境里测量</strong>，并且把切换率与吞吐、p99、运行队列等待、限流指标放在一起看。切换次数本身不是目标，尾延迟和有效吞吐才是。</p>
+<hr />
+<h2 id="4">4. 一次完整的排障路径</h2>
+<p>当线上出现“CPU 不高但 p99 高”时，可以按下面顺序收集证据：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. 全局可运行/阻塞/切换</span>
+vmstat<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">5</span>
+
+<span class="c1"># 2. 进程与线程状态、所在 CPU、nice、实时优先级</span>
+ps<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>pid,tid,psr,stat,comm,ni,pri,rtprio<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+
+<span class="c1"># 3. 切换计数</span>
+grep<span class="w"> </span>-H<span class="w"> </span>ctxt_switches<span class="w"> </span>/proc/&lt;pid&gt;/task/*/status
+pidstat<span class="w"> </span>-w<span class="w"> </span>-t<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">5</span>
+
+<span class="c1"># 4. 运行队列等待与运行时间</span>
+<span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span>/proc/&lt;pid&gt;/task/*/schedstat<span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$f</span><span class="s2">: </span><span class="k">$(</span>cat<span class="w"> </span><span class="s2">"</span><span class="nv">$f</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+
+<span class="c1"># 5. 亲和性与允许的 CPU/内存节点</span>
+taskset<span class="w"> </span>-pc<span class="w"> </span>&lt;pid&gt;
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'Cpus_allowed_list|Mems_allowed_list'</span><span class="w"> </span>/proc/&lt;pid&gt;/status
+
+<span class="c1"># 6. 容器配额与限流</span>
+cat<span class="w"> </span>/sys/fs/cgroup/cpu.max
+cat<span class="w"> </span>/sys/fs/cgroup/cpu.stat
+
+<span class="c1"># 7. NUMA 拓扑</span>
+numactl<span class="w"> </span>--hardware
+</code></pre></div>
+
+<p>判断思路：</p>
+<ul>
+<li><code>r</code> 高、<code>b</code> 低、<code>schedstat</code> 第二字段增长快：可运行排队。</li>
+<li><code>b</code> 高、<code>S</code>/<code>D</code> 多：阻塞等待，先查 I/O、锁、下游。</li>
+<li><code>nvcswch/s</code> 高、<code>r</code> 高：线程过多或 CPU 配额不足。</li>
+<li><code>nr_throttled</code>/<code>throttled_usec</code> 增长：容器 CPU 限流。</li>
+<li><code>psr</code> 频繁变化、<code>nr_migrations</code> 增长快：迁核明显，结合缓存和 NUMA 判断。</li>
+<li>所有线程都在同一个核、其他核空闲：绑核造成的局部争用。</li>
+</ul>
+<hr />
+<h2 id="5">5. 常见误区</h2>
+<ol>
+<li>
+<p><strong>“CPU 没满，就不是 CPU 问题。”</strong><br />
+   错。可能是局部核争用、容器限流、运行队列等待或阻塞。要看 <code>r</code>、<code>schedstat</code> 第二字段、<code>cpu.stat</code>。</p>
+</li>
+<li>
+<p><strong>“线程越多，吞吐越高。”</strong><br />
+   对 CPU 密集型工作，线程超过有效 CPU 后，排队和切换会增加，p99 往往先恶化。</p>
+</li>
+<li>
+<p><strong>“绑核一定更快。”</strong><br />
+   绑核可能提高缓存局部性，但也可能失去调度弹性并加重局部争用。没有测量就不要绑。</p>
+</li>
+<li>
+<p><strong>“上下文切换固定耗时多少微秒。”</strong><br />
+   错。切换成本随工作集、缓存/TLB、NUMA、内核、CPU、切换类型变化，不能当通用常数。</p>
+</li>
+<li>
+<p><strong>“nice 是硬性 CPU 上限。”</strong><br />
+   错。nice 是相对权重，只在竞争时体现；空闲时低优先级任务仍可用满 CPU。</p>
+</li>
+<li>
+<p><strong>“<code>schedstat</code> 第二个字段是 CPU 时间。”</strong><br />
+   错。第一个字段是运行时间，第二个字段是运行队列等待时间。</p>
+</li>
+<li>
+<p><strong>“<code>ps</code> 里是 <code>R</code> 就一定在 CPU 上跑。”</strong><br />
+   错。<code>R</code> 包括正在运行和已就绪等待 CPU。</p>
+</li>
+<li>
+<p><strong>“<code>D</code> 状态可以随便 <code>kill -9</code>。”</strong><br />
+   通常不行。<code>D</code> 是不可中断睡眠，要等内核路径返回；应先排查 I/O、存储、驱动等问题。</p>
+</li>
+<li>
+<p><strong>“<code>cpu.max</code> 会绑定 CPU。”</strong><br />
+   错。<code>cpu.max</code> 限制带宽，绑核要用 <code>cpuset</code> 或 <code>sched_setaffinity</code>。</p>
+</li>
+<li>
+<p><strong>“<code>nproc</code> 就是容器可用 CPU 配额。”</strong><br />
+    不一定。<code>nproc</code> 反映亲和性/cpuset，未必反映 <code>cpu.max</code> 的配额。</p>
+</li>
+<li>
+<p><strong>“切换次数越少越好。”</strong><br />
+    不一定。I/O 密集型任务本来就会自愿切换；关键是尾延迟和有效吞吐是否改善。</p>
+</li>
+<li>
+<p><strong>“实时策略能解决所有延迟问题。”</strong><br />
+    实时策略可能饿死其他任务，且容器中常无权限。它是隔离手段，不是万能药。</p>
+</li>
+</ol>
+<hr />
+<h2 id="6">6. 设计权衡</h2>
+<h3 id="61-vs">6.1 亲和性：局部性 vs 弹性</h3>
+<ul>
+<li><strong>收益</strong>：减少迁核，提升缓存/TLB 命中，降低延迟抖动。</li>
+<li><strong>代价</strong>：调度器不能灵活搬运负载；绑到忙核会加重局部争用；容器 cpuset 可能很窄；NUMA 内存未必本地。</li>
+<li><strong>建议</strong>：先不绑，测出迁移和 p99 的关系；只对延迟敏感线程做小范围绑核；同时设置内存策略；保留一定的 CPU 余量。</li>
+</ul>
+<h3 id="62-vs">6.2 线程池大小：吞吐 vs 尾延迟</h3>
+<ul>
+<li>CPU 密集型：接近有效 CPU 数，通常不超过太多；有效 CPU 要按 <code>cpu.max</code> 配额折算，而不是只看 <code>nproc</code>。</li>
+<li>I/O 密集型：可以高于 CPU 数，但要有上界；用队列长度、下游超时和 p99 控制，而不是无限加线程。</li>
+<li>监控：吞吐、p50/p99、运行队列等待、非自愿切换、限流时间一起看。</li>
+</ul>
+<h3 id="63-nice">6.3 nice 与实时策略</h3>
+<ul>
+<li>nice 适合做相对优先级，不适合做硬 SLA。</li>
+<li>实时策略适合严格低延迟场景，但需要隔离 CPU、限制运行时间，并防止饿死系统。</li>
+<li>在共享容器环境里，优先考虑 cgroup 配额和权重，而不是随意用实时优先级。</li>
+</ul>
+<h3 id="64-numa">6.4 容器配额与 NUMA</h3>
+<ul>
+<li>容器里先确认 <code>cpu.max</code>、<code>cpu.weight</code>、<code>cpuset.cpus</code> 和 <code>cpu.stat</code>。</li>
+<li>如果绑核，同时考虑 NUMA 内存绑定；否则可能“绑了 CPU，却访问远端内存”。</li>
+<li>在 Kubernetes 中，CPU limit 往往对应 CFS quota，CPU request 对应权重；线程池要按 limit 设计，避免 throttle。</li>
+</ul>
+<hr />
+<h2 id="7">7. 动手实践：线程池大小与亲和性实验</h2>
+<p>目标：对线程池设置不同大小和亲和性，记录<strong>吞吐、p99、切换率</strong>，并解释结果。</p>
+<h3 id="71">7.1 准备实验程序</h3>
+<p>保存为 <code>pool.c</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sched.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="cp">#define OPS 50000</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">tid</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span><span class="w">   </span><span class="cm">/* 0=不绑核, 1=分散绑核, 2=全部绑到 CPU0 */</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="n">lat</span><span class="p">;</span><span class="w">  </span><span class="cm">/* 每个操作的延迟样本，单位 ns */</span>
+<span class="p">}</span><span class="w"> </span><span class="n">arg_t</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">now_ns</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">timespec</span><span class="w"> </span><span class="n">ts</span><span class="p">;</span>
+<span class="w">    </span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ts</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">ts</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">1000000000L</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">ts</span><span class="p">.</span><span class="n">tv_nsec</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">pin_cpu</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">cpu</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">cpu_set_t</span><span class="w"> </span><span class="n">set</span><span class="p">;</span>
+<span class="w">    </span><span class="n">CPU_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+<span class="w">    </span><span class="n">CPU_SET</span><span class="p">(</span><span class="n">cpu</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">set</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">sched_setaffinity</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">set</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">set</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"sched_setaffinity"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">worker</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">arg_t</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">ncpu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">sysconf</span><span class="p">(</span><span class="n">_SC_NPROCESSORS_ONLN</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="n">pin_cpu</span><span class="p">(</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">tid</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">ncpu</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="o">-&gt;</span><span class="n">mode</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">pin_cpu</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">volatile</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">OPS</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">long</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2000</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">x</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">k</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 模拟一小段 CPU 工作 */</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">a</span><span class="o">-&gt;</span><span class="n">lat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">cmp_long</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">a</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">b</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">nthread</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nthread</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">nthread</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"nthread must be 1..64</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">pthread_t</span><span class="w"> </span><span class="n">th</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">    </span><span class="n">arg_t</span><span class="w"> </span><span class="n">args</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="n">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">OPS</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">nthread</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">all</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nthread</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">tid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">        </span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mode</span><span class="p">;</span>
+<span class="w">        </span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">lat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">all</span><span class="p">[(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">OPS</span><span class="p">];</span>
+<span class="w">        </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">th</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nthread</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pthread_join</span><span class="p">(</span><span class="n">th</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">wall</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_ns</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">OPS</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">nthread</span><span class="p">;</span>
+<span class="w">    </span><span class="n">qsort</span><span class="p">(</span><span class="n">all</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">long</span><span class="p">),</span><span class="w"> </span><span class="n">cmp_long</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">p99</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">long</span><span class="p">)(</span><span class="n">n</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.99</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">p99</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="n">p99</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">throughput</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">n</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">((</span><span class="kt">double</span><span class="p">)</span><span class="n">wall</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"threads=%d mode=%d wall=%.3fs throughput=%.0f ops/s "</span>
+<span class="w">           </span><span class="s">"p50=%.1fus p99=%.1fus</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">           </span><span class="n">nthread</span><span class="p">,</span><span class="w"> </span><span class="n">mode</span><span class="p">,</span><span class="w"> </span><span class="n">wall</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="p">,</span><span class="w"> </span><span class="n">throughput</span><span class="p">,</span>
+<span class="w">           </span><span class="n">all</span><span class="p">[</span><span class="n">n</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">,</span><span class="w"> </span><span class="n">all</span><span class="p">[</span><span class="n">p99</span><span class="p">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">all</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>说明：</p>
+<ul>
+<li><code>mode=0</code>：不绑核，交给调度器。</li>
+<li><code>mode=1</code>：线程分散绑到不同 CPU。</li>
+<li><code>mode=2</code>：所有线程绑到 CPU 0，用来制造局部争用。</li>
+<li>注意这个程序没有任务队列，测的是“每段 CPU 工作被抢占/排队拉长了多少”；真正带队列、按到达速率投递任务的线程池版本见文末「附：已验证的实践脚本」。</li>
+<li>程序是 CPU 密集型；如果要模拟 I/O 型，可以在每个操作里加入 <code>usleep</code> 或阻塞读取，再单独观察。</li>
+</ul>
+<p>编译：</p>
+<div class="codehilite"><pre><span></span><code>cc<span class="w"> </span>-O2<span class="w"> </span>-pthread<span class="w"> </span>pool.c<span class="w"> </span>-o<span class="w"> </span>pool
+</code></pre></div>
+
+<h3 id="72">7.2 基线：只改线程数</h3>
+<p>先确认机器/容器的有效 CPU：</p>
+<div class="codehilite"><pre><span></span><code>nproc
+nproc<span class="w"> </span>--all
+cat<span class="w"> </span>/sys/fs/cgroup/cpu.max
+cat<span class="w"> </span>/sys/fs/cgroup/cpu.stat
+</code></pre></div>
+
+<p>依次运行：</p>
+<div class="codehilite"><pre><span></span><code>./pool<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">0</span>
+./pool<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">0</span>
+./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">0</span>
+./pool<span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">0</span>
+./pool<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+
+<p>记录每次的吞吐、p50、p99。重点观察：</p>
+<ul>
+<li>吞吐在哪个线程数附近达到平台。</li>
+<li>p99 是否在吞吐下降之前就开始恶化。</li>
+<li>线程数超过有效 CPU 后，延迟是否明显抖动。</li>
+</ul>
+<h3 id="73">7.3 改变亲和性</h3>
+<p>运行：</p>
+<div class="codehilite"><pre><span></span><code>./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">1</span>
+./pool<span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">1</span>
+./pool<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">1</span>
+./pool<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span>
+./pool<span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">2</span>
+./pool<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+
+<p>对比：</p>
+<ul>
+<li><code>mode=1</code> 是否降低迁移和 p99？</li>
+<li><code>mode=2</code> 是否出现“整机 CPU 不高，但单核打满、排队严重”？</li>
+<li>线程数越多，绑到同一核的局部争用是否越明显？</li>
+</ul>
+<h3 id="74">7.4 采集切换率与运行队列等待</h3>
+<p>在程序运行期间，另开终端采集。先找到进程：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">PID</span><span class="o">=</span><span class="k">$(</span>pgrep<span class="w"> </span>-n<span class="w"> </span>pool<span class="k">)</span>
+</code></pre></div>
+
+<p>采集状态与切换：</p>
+<div class="codehilite"><pre><span></span><code>ps<span class="w"> </span>-L<span class="w"> </span>-o<span class="w"> </span>pid,tid,psr,stat,comm,ni,pri,rtprio<span class="w"> </span>-p<span class="w"> </span><span class="nv">$PID</span>
+grep<span class="w"> </span>-H<span class="w"> </span>ctxt_switches<span class="w"> </span>/proc/<span class="nv">$PID</span>/task/*/status
+pidstat<span class="w"> </span>-w<span class="w"> </span>-t<span class="w"> </span>-p<span class="w"> </span><span class="nv">$PID</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">5</span>
+</code></pre></div>
+
+<p>采集运行队列与系统切换：</p>
+<div class="codehilite"><pre><span></span><code>vmstat<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">5</span>
+</code></pre></div>
+
+<p>采集每个线程的 <code>schedstat</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span>f<span class="w"> </span><span class="k">in</span><span class="w"> </span>/proc/<span class="nv">$PID</span>/task/*/schedstat<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$f</span><span class="s2">: </span><span class="k">$(</span>cat<span class="w"> </span><span class="s2">"</span><span class="nv">$f</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div>
+
+<p>采集亲和性：</p>
+<div class="codehilite"><pre><span></span><code>taskset<span class="w"> </span>-pc<span class="w"> </span><span class="nv">$PID</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'Cpus_allowed_list|Mems_allowed_list'</span><span class="w"> </span>/proc/<span class="nv">$PID</span>/status
+</code></pre></div>
+
+<p>建议在每次运行前后各读一次 <code>schedstat</code>，用差值计算：</p>
+<div class="codehilite"><pre><span></span><code>平均运行队列等待 ≈ Δ第二个字段 / 操作数
+</code></pre></div>
+
+<p>注意：如果容器被限流，<code>schedstat</code> 不一定能完整反映 throttle 的停顿，要同时看 <code>cpu.stat</code>。</p>
+<h3 id="75">7.5 容器配额实验</h3>
+<p>在一个临时容器或临时 cgroup 中，把 CPU 配额设为 0.5：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 示例：Docker</span>
+docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--cpus<span class="o">=</span><span class="m">0</span>.5<span class="w"> </span>-v<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">"</span>:/w<span class="w"> </span>-w<span class="w"> </span>/w<span class="w"> </span>gcc:13<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">'cc -O2 -pthread pool.c -o pool &amp;&amp; ./pool 4 0'</span>
+</code></pre></div>
+
+<p>或者使用 cgroup v2（路径按实际环境调整）：</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/sys/fs/cgroup/pooltest
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"50000 100000"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/fs/cgroup/pooltest/cpu.max
+sudo<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">'echo $$ &gt; /sys/fs/cgroup/pooltest/cgroup.procs; exec ./pool 4 0'</span>
+cat<span class="w"> </span>/sys/fs/cgroup/pooltest/cpu.stat
+</code></pre></div>
+
+<p>观察：</p>
+<ul>
+<li><code>nproc</code> 是否仍然显示很多 CPU。</li>
+<li><code>cpu.stat</code> 的 <code>nr_throttled</code>、<code>throttled_usec</code> 是否增长。</li>
+<li>线程数从 4 增加到 16 时，p99 是否因为更容易打满配额而恶化。</li>
+<li>与无配额时相比，吞吐和尾延迟差多少。</li>
+</ul>
+<h3 id="76">7.6 记录与分析</h3>
+<p>建议填写下表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">线程数</th>
+<th>亲和性</th>
+<th style="text-align: right;">吞吐 ops/s</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p99</th>
+<th style="text-align: right;">自愿切换/s</th>
+<th style="text-align: right;">非自愿切换/s</th>
+<th style="text-align: right;">运行队列等待/操作</th>
+<th>throttle 情况</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>无</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>无</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td>无</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">16</td>
+<td>无</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>分散</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">16</td>
+<td>分散</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>全绑 CPU0</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">16</td>
+<td>全绑 CPU0</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>无 + 0.5 CPU 配额</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">16</td>
+<td>无 + 0.5 CPU 配额</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>分析时回答：</p>
+<ol>
+<li>吞吐的平台点在哪里？和 <code>nproc</code>、<code>cpu.max</code> 的关系是什么？</li>
+<li>p99 是否早于吞吐拐点恶化？</li>
+<li><code>mode=2</code> 是否出现整机 CPU 低但 p99 高？证据是什么？</li>
+<li><code>mode=1</code> 是否降低了迁移和 p99？有没有引入新的局部争用？</li>
+<li>配额实验中，throttle 是否与 p99 峰值对应？</li>
+<li>切换率升高时，是自愿还是非自愿占主导？分别说明原因。</li>
+</ol>
+<h3 id="77">7.7 验收自查</h3>
+<ul>
+<li>[ ] 我能用 <code>vmstat</code> 的 <code>r</code>/<code>b</code>、<code>ps</code> 的 <code>R</code>/<code>S</code>/<code>D</code>、<code>schedstat</code> 的第二字段，区分可运行排队和阻塞等待。</li>
+<li>[ ] 我能解释 <code>schedstat</code> 第一字段与第二字段的区别，以及它们和 CPU 利用率的区别。</li>
+<li>[ ] 我能说出至少三个影响上下文切换成本的因素，并说明为什么不能把固定耗时当通用常数。</li>
+<li>[ ] 我能解释绑核的收益与风险，并说明容器 CPU 配额和 NUMA 为什么要一起考虑。</li>
+<li>[ ] 我完成了实验表格，并给出了有数据支撑的线程池大小建议。</li>
+</ul>
+<hr />
+<h2 id="8">8. 自测题</h2>
+<h3 id="1_1">题 1</h3>
+<p>某服务 <code>top</code> 显示整机 CPU 约 35%，但 p99 很高。<code>vmstat 1</code> 显示 <code>r=16</code>、<code>b=0</code>、<code>cs</code> 很高；<code>pidstat -w</code> 显示非自愿切换很高；<code>cpu.stat</code> 中 <code>throttled_usec</code> 持续增长。请分析可能原因，并说明如何区分“可运行排队”“绑核导致的局部争用”和“cgroup 限流”。</p>
+<p><strong>参考答案</strong></p>
+<p>可能原因不是单一的，至少有三类：</p>
+<ol>
+<li><strong>可运行排队/线程过多</strong>：<code>r=16</code> 且非自愿切换高，说明很多线程已就绪但拿不到 CPU。线程数可能超过有效 CPU 数。</li>
+<li><strong>局部争用</strong>：如果线程都绑在少数核上，整机 CPU 可能只有 35%，但被绑的核已经 100%，<code>schedstat</code> 第二字段会快速增长。</li>
+<li><strong>cgroup 限流</strong>：<code>throttled_usec</code> 增长说明配额被打满，任务被 throttle 到下一个周期，期间不是“在运行队列里等”，而是被限流。</li>
+</ol>
+<p>区分方法：</p>
+<ul>
+<li>看 <code>ps -L -o psr,stat</code> 和 <code>taskset -pc</code>：是否所有线程都在同一个/少数 CPU 上，其他核空闲。</li>
+<li>看 <code>/proc/&lt;pid&gt;/task/*/schedstat</code>：第二字段增长快，支持“可运行排队”；第一字段增长快，说明确实在跑。</li>
+<li>看 <code>vmstat</code> 的 <code>b</code> 和 <code>ps</code> 的 <code>D</code>：若 <code>b</code> 高、<code>D</code> 多，则更偏阻塞而非可运行排队。</li>
+<li>看 <code>cpu.stat</code> 的 <code>nr_throttled</code>/<code>throttled_usec</code>：增长明显则是限流。</li>
+<li>看 <code>nproc</code>、<code>cpu.max</code>、线程数：判断是否超配。</li>
+</ul>
+<p>结论要基于多组证据，不能只看 CPU 利用率。</p>
+<h3 id="2_1">题 2</h3>
+<p>有人说：“上下文切换固定耗时 3 微秒，所以每秒 10 万次切换就会吃掉 0.3 秒 CPU，延迟直接加 0.3 秒。”这句话错在哪里？你会怎么测量？</p>
+<p><strong>参考答案</strong></p>
+<p>错在把切换成本当成通用常数，并且把切换次数直接线性映射成请求延迟。切换成本受多种因素影响：</p>
+<ul>
+<li>同进程线程切换还是跨进程切换；是否切换地址空间。</li>
+<li>工作集大小、缓存和 TLB 状态；迁移和 NUMA 会影响。</li>
+<li>CPU 微架构、频率、内核版本和调度器路径。</li>
+<li>切换原因（阻塞唤醒、时间片抢占、优先级抢占）和系统负载。</li>
+<li>间接成本（缓存污染、排队、锁竞争）通常比寄存器保存/恢复更大。</li>
+</ul>
+<p>测量方法：在目标环境用基准程序或真实负载，记录切换率（<code>pidstat -w</code>、<code>/proc/&lt;pid&gt;/status</code>）、吞吐、p50/p99、<code>schedstat</code> 运行队列等待和 <code>cpu.stat</code> 限流；做对照实验（改变线程数、亲和性、配额），观察延迟变化。不要拿单一常数外推。</p>
+<h3 id="3_1">题 3</h3>
+<p>在同一个 cgroup 内，两个 CPU 密集型线程分别使用 nice 0 和 nice 5。它们的 CPU 份额大约是多少？如果把两个线程都绑到同一个 CPU，会发生什么？还需要考虑哪些因素？</p>
+<p><strong>参考答案</strong></p>
+<p>在 CFS/EEVDF 的权重表中，nice 0 的权重约为 1024，nice 5 约为 335，所以竞争时份额约为 <code>1024 : 335 ≈ 3.06 : 1</code>。这是相对份额，不是硬上限；如果 nice 0 的线程阻塞，nice 5 仍可使用 CPU。</p>
+<p>把两个线程都绑到同一个 CPU：</p>
+<ul>
+<li>它们只能在这一个 CPU 上竞争，另一个线程无法利用其他空闲核。</li>
+<li>会形成局部运行队列，增加运行队列等待和非自愿切换。</li>
+<li>如果这个 CPU 还处理中断或有其他忙任务，局部争用会更严重。</li>
+<li>绑核可能提高缓存局部性，但在这个场景下更可能损失调度弹性。</li>
+</ul>
+<p>还需要考虑：</p>
+<ul>
+<li>容器 <code>cpu.max</code> 配额和 <code>cpu.stat</code> 限流；即使绑核，配额仍可能 throttle。</li>
+<li><code>cpuset</code> 是否允许目标 CPU。</li>
+<li>NUMA：绑了 CPU 后内存是否本地；跨节点访问会增加延迟。</li>
+<li>是否有实时任务或中断干扰。</li>
+<li>线程的实际工作集和 I/O 比例；CPU 密集型与 I/O 密集型的最优策略不同。</li>
+</ul>
+<hr />
+<h2 id="9">9. 推荐资源</h2>
+<ul>
+<li><strong>调度、亲和性与上下文切换：Linux man-pages</strong><br />
+  https://man7.org/linux/man-pages/man7/sched.7.html<br />
+  来源：man7.org ｜ 语言：英文 ｜ 类型：文档 ｜ 难度：进阶 ｜ 免费：是<br />
+  阅读重点：可运行与阻塞、nice/策略/亲和性；用于核对本节点实验的语义和边界。</li>
+</ul>
+<p>可配合本地 man 页查阅：</p>
+<div class="codehilite"><pre><span></span><code>man<span class="w"> </span><span class="m">7</span><span class="w"> </span>sched
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span>sched_setaffinity
+man<span class="w"> </span><span class="m">5</span><span class="w"> </span>proc
+man<span class="w"> </span><span class="m">1</span><span class="w"> </span>taskset
+man<span class="w"> </span><span class="m">1</span><span class="w"> </span>chrt
+man<span class="w"> </span><span class="m">1</span><span class="w"> </span>nice
+man<span class="w"> </span><span class="m">8</span><span class="w"> </span>pidstat
+</code></pre></div>
+
+<hr />
+<h2 id="10">10. 版本与边界条件</h2>
+<p>按 <code>sourceStudy</code> 的要求，使用资源中的定义、示例和错误处理路径核对实现时，记录以下边界：</p>
+<ol>
+<li><strong>调度器版本</strong>：CFS 长期是普通任务默认调度器；Linux 6.6 起默认演进为 EEVDF。nice 权重语义仍然适用，但具体延迟行为可能不同。</li>
+<li><strong>cgroup 版本</strong>：cgroup v1 与 v2 的路径和字段不同。v2 使用 <code>cpu.max</code>、<code>cpu.weight</code>、<code>cpu.stat</code>；v1 常见 <code>cpu.cfs_quota_us</code>、<code>cpu.cfs_period_us</code>、<code>cpu.stat</code> 中的 <code>throttled_time</code>。</li>
+<li><strong><code>/proc</code> 语义</strong>：<code>schedstat</code>、<code>status</code>、<code>sched</code> 的字段可能随内核版本变化；切换计数通常是按线程统计，进程级汇总要遍历 <code>task/</code>。</li>
+<li><strong>工具可用性</strong>：<code>pidstat</code> 来自 sysstat，未必默认安装；<code>chrt</code>、<code>taskset</code> 需要相应权限；容器可能限制实时策略和亲和性设置。</li>
+<li><strong>错误处理</strong>：<code>sched_setaffinity</code> 可能返回 <code>EINVAL</code>（CPU 不在允许集合）或 <code>EPERM</code>（权限不足）；<code>nice</code> 负值需要权限；实时策略需要 <code>CAP_SYS_NICE</code>。</li>
+<li><strong>容器边界</strong>：<code>nproc</code> 不必然等于 <code>cpu.max</code> 配额；<code>cpu.max</code> 只限带宽，不绑核；<code>cpuset</code> 才限制可运行 CPU 集合。</li>
+<li><strong>NUMA 边界</strong>：绑核不等于绑内存；需要配合 <code>numactl</code>/<code>set_mempolicy</code>，且容器运行时可能限制。</li>
+<li><strong>性能数字不可移植</strong>：切换耗时、吞吐、p99 都依赖机器、内核、编译选项和负载，实验结论要带环境说明。</li>
+</ol>
+<hr />
+<h2 id="11">11. 本课小结</h2>
+<ul>
+<li><strong>可运行不等于正在运行</strong>：<code>R</code> 包括在运行队列中等待的任务；<code>S</code>/<code>D</code> 是阻塞，不在运行队列里。</li>
+<li><strong>CPU 利用率不等于延迟</strong>：要同时看运行队列、<code>schedstat</code> 第二字段、切换率和容器限流。</li>
+<li><strong>nice 是相对权重</strong>：CFS/EEVDF 下按权重分享 CPU，不是硬上限；实时策略是另一套机制。</li>
+<li><strong>亲和性提高局部性，但牺牲弹性</strong>：绑核可能降低迁核，也可能加重局部争用；要结合 cgroup 配额和 NUMA。</li>
+<li><strong>自愿切换和非自愿切换含义不同</strong>：前者多与阻塞/等待有关，后者多与 CPU 竞争和抢占有关。</li>
+<li><strong>切换成本不是常数</strong>：不要用固定微秒数外推延迟；在目标环境测量，并和吞吐、p99、排队、限流一起分析。</li>
+<li><strong>实验结论要落到数据</strong>：线程数、亲和性、配额三个维度做对照，记录吞吐、p99 和切换率，才能给出可靠的线程池配置建议。</li>
+</ul>
+<hr />
+<h2 id="practice41">附：已验证的实践脚本（practice41）</h2>
+<p>下面这套是在 8 核 Linux 云主机（无 cgroup cpu.max 限额）上实际跑通的版本：<code>state.c</code> 演示阻塞与可运行排队，<code>pool.c</code> 是一个真正带任务队列的线程池（生产者按约 80% CPU 容量的速率投递每个 200us 的任务，延迟从入队算到完成），<code>test.sh</code> 自动断言。</p>
+<p>本机一次实测输出（你的机器数字会不同，这正是“切换成本和延迟不是常数”的体现）：</p>
+<div class="codehilite"><pre><span></span><code>sleep 进程: stat=S vol=1407 nonvol=0 schedstat=10243454 69687 1409
+spin  进程: stat=R vol=1 nonvol=127 schedstat=509798527 1016407682 128
+PASS: 阻塞进程以自愿切换为主 (1418 vs 0)，CPU 只用了 10ms
+PASS: 可运行排队：运行 509ms 却在队列里等了 1016ms，非自愿切换 127
+PASS: nice0:nice10 CPU 时间比 8.8（权重比≈9.3，不是“优先级高就独占”）
+threads=8 aff=none tasks=4000 thr=30169/s p50=407us p99=621us vcsw=2911 nvcsw=91
+threads=64 aff=none tasks=4000 thr=26663/s p50=524us p99=3401us vcsw=13796 nvcsw=968
+threads=8 aff=spread tasks=4000 thr=30236/s p50=406us p99=611us vcsw=3714 nvcsw=796
+threads=8 aff=one tasks=4000 thr=4996/s p50=336949us p99=665902us vcsw=1250 nvcsw=199
+PASS: 线程数 8→64：p99 621us→3401us 变差
+PASS: 全部绑到 CPU0：p99 665902us，绑核失去调度弹性
+ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p>读法：睡眠进程是 <code>S</code>、几乎全是自愿切换、schedstat 第二字段（队列等待）只有 0.07ms；三个进程挤在 CPU0 上自旋时是 <code>R</code>，跑了 0.5s 却在运行队列里等了 1s——这就是“可运行排队”，和“阻塞等待”完全不同。线程数从 8 开到 64，吞吐没涨反降、p99 涨了 5 倍多、自愿切换涨了近 5 倍；把 8 个线程全绑到一个核，吞吐掉到 1/6，p99 到了 666ms。分散绑核（spread）在这台机器上和不绑几乎一样，说明绑核不是免费收益，要实测。</p>
+<h3 id="statec">state.c</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 阻塞 vs 可运行：./state sleep|spin 毫秒</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">ms</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span><span class="k">struct</span><span class="w"> </span><span class="nc">timespec</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="o">&amp;</span><span class="n">t</span><span class="p">);</span><span class="k">return</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">tv_sec</span><span class="o">*</span><span class="mf">1000L</span><span class="o">+</span><span class="n">t</span><span class="p">.</span><span class="n">tv_nsec</span><span class="o">/</span><span class="mi">1000000</span><span class="p">;}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="kt">char</span><span class="o">**</span><span class="n">v</span><span class="p">){</span><span class="kt">long</span><span class="w"> </span><span class="n">e</span><span class="o">=</span><span class="n">ms</span><span class="p">()</span><span class="o">+</span><span class="n">atol</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+<span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="s">"sleep"</span><span class="p">))</span><span class="k">while</span><span class="p">(</span><span class="n">ms</span><span class="p">()</span><span class="o">&lt;</span><span class="n">e</span><span class="p">)</span><span class="n">usleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="k">volatile</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="k">while</span><span class="p">(</span><span class="n">ms</span><span class="p">()</span><span class="o">&lt;</span><span class="n">e</span><span class="p">)</span><span class="n">x</span><span class="o">++</span><span class="p">;}</span>
+<span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;}</span>
+</code></pre></div>
+
+<h3 id="poolc">pool.c</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 线程池压测：./pool &lt;线程数&gt; &lt;亲和性: none|one|spread&gt; &lt;任务数&gt; &lt;每任务自旋us&gt;</span>
+<span class="c1">// 输出 吞吐、p50/p99（入队到完成）、自愿/非自愿切换、跑队列等待</span>
+<span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sched.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/resource.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">now_ns</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span><span class="k">struct</span><span class="w"> </span><span class="nc">timespec</span><span class="w"> </span><span class="n">t</span><span class="p">;</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="o">&amp;</span><span class="n">t</span><span class="p">);</span><span class="k">return</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">tv_sec</span><span class="o">*</span><span class="mf">1000000000L</span><span class="o">+</span><span class="n">t</span><span class="p">.</span><span class="n">tv_nsec</span><span class="p">;}</span>
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="p">{</span><span class="kt">long</span><span class="w"> </span><span class="n">enq</span><span class="p">;}</span><span class="w"> </span><span class="n">task_t</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="n">task_t</span><span class="w"> </span><span class="o">*</span><span class="n">q</span><span class="p">;</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">qh</span><span class="p">,</span><span class="n">qt</span><span class="p">,</span><span class="n">qn</span><span class="p">,</span><span class="n">done_prod</span><span class="p">;</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="n">lat</span><span class="p">;</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">nlat</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="n">pthread_mutex_t</span><span class="w"> </span><span class="n">mu</span><span class="o">=</span><span class="n">PTHREAD_MUTEX_INITIALIZER</span><span class="p">;</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">pthread_cond_t</span><span class="w"> </span><span class="n">cv</span><span class="o">=</span><span class="n">PTHREAD_COND_INITIALIZER</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">spin_us</span><span class="p">;</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">aff</span><span class="p">;</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ncpu</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">waitns_total</span><span class="p">;</span><span class="w"> </span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">spin</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">us</span><span class="p">){</span><span class="kt">long</span><span class="w"> </span><span class="n">e</span><span class="o">=</span><span class="n">now_ns</span><span class="p">()</span><span class="o">+</span><span class="n">us</span><span class="o">*</span><span class="mf">1000L</span><span class="p">;</span><span class="k">while</span><span class="p">(</span><span class="n">now_ns</span><span class="p">()</span><span class="o">&lt;</span><span class="n">e</span><span class="p">);}</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">rq_wait_ns</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span><span class="w"> </span><span class="c1">// /proc/thread-self/schedstat 第二个字段：在运行队列上等待的纳秒</span>
+<span class="w">  </span><span class="kt">FILE</span><span class="o">*</span><span class="n">f</span><span class="o">=</span><span class="n">fopen</span><span class="p">(</span><span class="s">"/proc/thread-self/schedstat"</span><span class="p">,</span><span class="s">"r"</span><span class="p">);</span><span class="kt">long</span><span class="w"> </span><span class="n">a</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="k">if</span><span class="p">(</span><span class="n">f</span><span class="p">){</span><span class="k">if</span><span class="p">(</span><span class="n">fscanf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="s">"%ld %ld"</span><span class="p">,</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="o">&amp;</span><span class="n">b</span><span class="p">)</span><span class="o">!=</span><span class="mi">2</span><span class="p">)</span><span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);}</span><span class="k">return</span><span class="w"> </span><span class="n">b</span><span class="p">;}</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">worker</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">arg</span><span class="p">){</span>
+<span class="w">  </span><span class="kt">long</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">arg</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">aff</span><span class="p">,</span><span class="s">"none"</span><span class="p">)){</span><span class="kt">cpu_set_t</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="n">CPU_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="p">);</span><span class="n">CPU_SET</span><span class="p">(</span><span class="n">strcmp</span><span class="p">(</span><span class="n">aff</span><span class="p">,</span><span class="s">"one"</span><span class="p">)</span><span class="o">?</span><span class="n">id</span><span class="o">%</span><span class="n">ncpu</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span><span class="o">&amp;</span><span class="n">s</span><span class="p">);</span><span class="n">pthread_setaffinity_np</span><span class="p">(</span><span class="n">pthread_self</span><span class="p">(),</span><span class="k">sizeof</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="o">&amp;</span><span class="n">s</span><span class="p">);}</span>
+<span class="w">  </span><span class="k">for</span><span class="p">(;;){</span>
+<span class="w">    </span><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="n">qh</span><span class="o">==</span><span class="n">qt</span><span class="o">&amp;&amp;!</span><span class="n">done_prod</span><span class="p">)</span><span class="n">pthread_cond_wait</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cv</span><span class="p">,</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">qh</span><span class="o">==</span><span class="n">qt</span><span class="o">&amp;&amp;</span><span class="n">done_prod</span><span class="p">){</span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span><span class="k">break</span><span class="p">;}</span>
+<span class="w">    </span><span class="n">task_t</span><span class="w"> </span><span class="n">t</span><span class="o">=</span><span class="n">q</span><span class="p">[</span><span class="n">qh</span><span class="o">++</span><span class="p">];</span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">spin</span><span class="p">(</span><span class="n">spin_us</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">l</span><span class="o">=</span><span class="n">now_ns</span><span class="p">()</span><span class="o">-</span><span class="n">t</span><span class="p">.</span><span class="n">enq</span><span class="p">;</span>
+<span class="w">    </span><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span><span class="n">lat</span><span class="p">[</span><span class="n">nlat</span><span class="o">++</span><span class="p">]</span><span class="o">=</span><span class="n">l</span><span class="p">;</span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">long</span><span class="w"> </span><span class="n">w</span><span class="o">=</span><span class="n">rq_wait_ns</span><span class="p">();</span><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span><span class="n">waitns_total</span><span class="o">+=</span><span class="n">w</span><span class="p">;</span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;}</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">cmp</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="n">b</span><span class="p">){</span><span class="kt">long</span><span class="w"> </span><span class="n">x</span><span class="o">=*</span><span class="p">(</span><span class="kt">long</span><span class="o">*</span><span class="p">)</span><span class="n">a</span><span class="p">,</span><span class="n">y</span><span class="o">=*</span><span class="p">(</span><span class="kt">long</span><span class="o">*</span><span class="p">)</span><span class="n">b</span><span class="p">;</span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="o">&lt;</span><span class="n">y</span><span class="o">?</span><span class="mi">-1</span><span class="o">:</span><span class="n">x</span><span class="o">&gt;</span><span class="n">y</span><span class="p">;}</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="p">,</span><span class="kt">char</span><span class="o">**</span><span class="n">v</span><span class="p">){</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">nt</span><span class="o">=</span><span class="n">atoi</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="n">aff</span><span class="o">=</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span><span class="n">qn</span><span class="o">=</span><span class="n">atoi</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span><span class="n">spin_us</span><span class="o">=</span><span class="n">atoi</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">4</span><span class="p">]);</span><span class="n">ncpu</span><span class="o">=</span><span class="n">sysconf</span><span class="p">(</span><span class="n">_SC_NPROCESSORS_ONLN</span><span class="p">);</span>
+<span class="w">  </span><span class="n">q</span><span class="o">=</span><span class="n">calloc</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span><span class="k">sizeof</span><span class="o">*</span><span class="n">q</span><span class="p">);</span><span class="n">lat</span><span class="o">=</span><span class="n">calloc</span><span class="p">(</span><span class="n">qn</span><span class="p">,</span><span class="k">sizeof</span><span class="o">*</span><span class="n">lat</span><span class="p">);</span>
+<span class="w">  </span><span class="n">pthread_t</span><span class="w"> </span><span class="n">th</span><span class="p">[</span><span class="n">nt</span><span class="p">];</span><span class="k">for</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nt</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">th</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="n">worker</span><span class="p">,(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="n">i</span><span class="p">);</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">rusage</span><span class="w"> </span><span class="n">r0</span><span class="p">;</span><span class="n">getrusage</span><span class="p">(</span><span class="n">RUSAGE_SELF</span><span class="p">,</span><span class="o">&amp;</span><span class="n">r0</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">long</span><span class="w"> </span><span class="n">t0</span><span class="o">=</span><span class="n">now_ns</span><span class="p">();</span>
+<span class="w">  </span><span class="c1">// 生产者按固定速率投递：每个间隔投递一批，模拟请求到达</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">batch</span><span class="o">=</span><span class="n">ncpu</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">qn</span><span class="p">;</span><span class="n">i</span><span class="o">+=</span><span class="n">batch</span><span class="p">){</span>
+<span class="w">    </span><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="o">=</span><span class="n">i</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">i</span><span class="o">+</span><span class="n">batch</span><span class="o">&amp;&amp;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">qn</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">){</span><span class="n">q</span><span class="p">[</span><span class="n">qt</span><span class="p">].</span><span class="n">enq</span><span class="o">=</span><span class="n">now_ns</span><span class="p">();</span><span class="n">qt</span><span class="o">++</span><span class="p">;}</span>
+<span class="w">    </span><span class="n">pthread_cond_broadcast</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cv</span><span class="p">);</span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">e</span><span class="o">=</span><span class="n">now_ns</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="kt">long</span><span class="p">)</span><span class="n">spin_us</span><span class="o">*</span><span class="mi">1000</span><span class="o">*</span><span class="n">batch</span><span class="o">/</span><span class="n">ncpu</span><span class="o">*</span><span class="mi">10</span><span class="o">/</span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="c1">// 到达速率≈80% 的 CPU 容量</span>
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="n">now_ns</span><span class="p">()</span><span class="o">&lt;</span><span class="n">e</span><span class="p">)</span><span class="n">usleep</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span><span class="n">done_prod</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">pthread_cond_broadcast</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cv</span><span class="p">);</span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">nt</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="n">pthread_join</span><span class="p">(</span><span class="n">th</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">long</span><span class="w"> </span><span class="n">t1</span><span class="o">=</span><span class="n">now_ns</span><span class="p">();</span><span class="k">struct</span><span class="w"> </span><span class="nc">rusage</span><span class="w"> </span><span class="n">r1</span><span class="p">;</span><span class="n">getrusage</span><span class="p">(</span><span class="n">RUSAGE_SELF</span><span class="p">,</span><span class="o">&amp;</span><span class="n">r1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">qsort</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span><span class="n">nlat</span><span class="p">,</span><span class="k">sizeof</span><span class="o">*</span><span class="n">lat</span><span class="p">,</span><span class="n">cmp</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">sec</span><span class="o">=</span><span class="p">(</span><span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)</span><span class="o">/</span><span class="mf">1e9</span><span class="p">;</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"threads=%d aff=%s tasks=%d thr=%.0f/s p50=%.0fus p99=%.0fus vcsw=%ld nvcsw=%ld rqwait_avg=%.1fms</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">    </span><span class="n">nt</span><span class="p">,</span><span class="n">aff</span><span class="p">,</span><span class="n">nlat</span><span class="p">,</span><span class="n">nlat</span><span class="o">/</span><span class="n">sec</span><span class="p">,</span><span class="n">lat</span><span class="p">[</span><span class="n">nlat</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span><span class="n">lat</span><span class="p">[</span><span class="n">nlat</span><span class="o">*</span><span class="mi">99</span><span class="o">/</span><span class="mi">100</span><span class="p">]</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span>
+<span class="w">    </span><span class="n">r1</span><span class="p">.</span><span class="n">ru_nvcsw</span><span class="o">-</span><span class="n">r0</span><span class="p">.</span><span class="n">ru_nvcsw</span><span class="p">,</span><span class="n">r1</span><span class="p">.</span><span class="n">ru_nivcsw</span><span class="o">-</span><span class="n">r0</span><span class="p">.</span><span class="n">ru_nivcsw</span><span class="p">,</span><span class="n">waitns_total</span><span class="o">/</span><span class="mf">1e6</span><span class="o">/</span><span class="n">nt</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="testsh">test.sh</h3>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/bin/bash</span>
+<span class="c1"># Backend Atlas 第41课实践验证：可运行 vs 阻塞、nice 权重、线程池大小与亲和性</span>
+<span class="nb">set</span><span class="w"> </span>-u<span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$0</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="nv">fail</span><span class="o">=</span><span class="m">0</span>
+gcc<span class="w"> </span>-O1<span class="w"> </span>-Wall<span class="w"> </span>-pthread<span class="w"> </span>-o<span class="w"> </span>pool<span class="w"> </span>pool.c<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>gcc<span class="w"> </span>-O1<span class="w"> </span>-o<span class="w"> </span>state<span class="w"> </span>state.c<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+ok<span class="o">(){</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"PASS: </span><span class="nv">$1</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="o">}</span><span class="p">;</span><span class="w"> </span>bad<span class="o">(){</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"FAIL: </span><span class="nv">$1</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="nv">fail</span><span class="o">=</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="o">}</span>
+f<span class="o">(){</span><span class="w"> </span>awk<span class="w"> </span>-v<span class="w"> </span><span class="nv">k</span><span class="o">=</span><span class="s2">"</span><span class="nv">$2</span><span class="s2">:"</span><span class="w"> </span><span class="s1">'$1==k{print $2}'</span><span class="w"> </span>/proc/<span class="nv">$1</span>/status<span class="p">;</span><span class="w"> </span><span class="o">}</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"nproc=</span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2">  cgroup cpu.max=</span><span class="k">$(</span>cat<span class="w"> </span>/sys/fs/cgroup/cpu.max<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>无<span class="k">)</span><span class="s2">"</span>
+<span class="c1"># 1) 阻塞：睡眠进程处于 S，几乎全是自愿切换，跑队列等待很小</span>
+./state<span class="w"> </span>sleep<span class="w"> </span><span class="m">3000</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">S</span><span class="o">=</span><span class="nv">$!</span>
+<span class="c1"># 2) 可运行排队：3 个自旋进程挤在 CPU0 上，处于 R，非自愿切换多，等待时间大</span>
+<span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">0</span><span class="w"> </span>./state<span class="w"> </span>spin<span class="w"> </span><span class="m">3000</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="k">done</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">1</span>.5
+<span class="nv">P</span><span class="o">=</span><span class="k">$(</span>pgrep<span class="w"> </span>-f<span class="w"> </span><span class="s1">'state spin'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"sleep 进程: stat=</span><span class="k">$(</span>ps<span class="w"> </span>-o<span class="w"> </span><span class="nv">stat</span><span class="o">=</span><span class="w"> </span>-p<span class="w"> </span><span class="nv">$S</span><span class="k">)</span><span class="s2"> vol=</span><span class="k">$(</span>f<span class="w"> </span><span class="nv">$S</span><span class="w"> </span>voluntary_ctxt_switches<span class="k">)</span><span class="s2"> nonvol=</span><span class="k">$(</span>f<span class="w"> </span><span class="nv">$S</span><span class="w"> </span>nonvoluntary_ctxt_switches<span class="k">)</span><span class="s2"> schedstat=</span><span class="k">$(</span>cat<span class="w"> </span>/proc/<span class="nv">$S</span>/schedstat<span class="k">)</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"spin  进程: stat=</span><span class="k">$(</span>ps<span class="w"> </span>-o<span class="w"> </span><span class="nv">stat</span><span class="o">=</span><span class="w"> </span>-p<span class="w"> </span><span class="nv">$P</span><span class="k">)</span><span class="s2"> vol=</span><span class="k">$(</span>f<span class="w"> </span><span class="nv">$P</span><span class="w"> </span>voluntary_ctxt_switches<span class="k">)</span><span class="s2"> nonvol=</span><span class="k">$(</span>f<span class="w"> </span><span class="nv">$P</span><span class="w"> </span>nonvoluntary_ctxt_switches<span class="k">)</span><span class="s2"> schedstat=</span><span class="k">$(</span>cat<span class="w"> </span>/proc/<span class="nv">$P</span>/schedstat<span class="k">)</span><span class="s2">"</span>
+<span class="nb">read</span><span class="w"> </span>sr<span class="w"> </span>sw<span class="w"> </span>_<span class="w"> </span>&lt;<span class="w"> </span>/proc/<span class="nv">$S</span>/schedstat<span class="p">;</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>pr<span class="w"> </span>pw<span class="w"> </span>_<span class="w"> </span>&lt;<span class="w"> </span>/proc/<span class="nv">$P</span>/schedstat
+<span class="nv">sv</span><span class="o">=</span><span class="k">$(</span>f<span class="w"> </span><span class="nv">$S</span><span class="w"> </span>voluntary_ctxt_switches<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nv">sn</span><span class="o">=</span><span class="k">$(</span>f<span class="w"> </span><span class="nv">$S</span><span class="w"> </span>nonvoluntary_ctxt_switches<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nv">pn</span><span class="o">=</span><span class="k">$(</span>f<span class="w"> </span><span class="nv">$P</span><span class="w"> </span>nonvoluntary_ctxt_switches<span class="k">)</span>
+<span class="o">[</span><span class="w"> </span><span class="nv">$sv</span><span class="w"> </span>-gt<span class="w"> </span><span class="k">$((</span><span class="nv">sn</span><span class="o">*</span><span class="m">10</span><span class="k">))</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"阻塞进程以自愿切换为主 (</span><span class="nv">$sv</span><span class="s2"> vs </span><span class="nv">$sn</span><span class="s2">)，CPU 只用了 </span><span class="k">$((</span><span class="nv">sr</span><span class="o">/</span><span class="m">1000000</span><span class="k">))</span><span class="s2">ms"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"sleep vol=</span><span class="nv">$sv</span><span class="s2"> nonvol=</span><span class="nv">$sn</span><span class="s2">"</span>
+<span class="o">[</span><span class="w"> </span><span class="nv">$pw</span><span class="w"> </span>-gt<span class="w"> </span><span class="k">$((</span><span class="nv">pr</span><span class="o">/</span><span class="m">2</span><span class="k">))</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$pn</span><span class="w"> </span>-gt<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"可运行排队：运行 </span><span class="k">$((</span><span class="nv">pr</span><span class="o">/</span><span class="m">1000000</span><span class="k">))</span><span class="s2">ms 却在队列里等了 </span><span class="k">$((</span><span class="nv">pw</span><span class="o">/</span><span class="m">1000000</span><span class="k">))</span><span class="s2">ms，非自愿切换 </span><span class="nv">$pn</span><span class="s2">"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"spin run=</span><span class="nv">$pr</span><span class="s2"> wait=</span><span class="nv">$pw</span><span class="s2"> nonvol=</span><span class="nv">$pn</span><span class="s2">"</span>
+<span class="nb">wait</span>
+<span class="c1"># 3) nice：同一核上 nice 0 vs nice 10，CPU 时间比接近权重比 1024:110≈9.3</span>
+taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>./state<span class="w"> </span>spin<span class="w"> </span><span class="m">3000</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">A</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span>taskset<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span>nice<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span><span class="w"> </span>./state<span class="w"> </span>spin<span class="w"> </span><span class="m">3000</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="nv">B</span><span class="o">=</span><span class="nv">$!</span><span class="p">;</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">1</span>.5
+<span class="nb">read</span><span class="w"> </span>ar<span class="w"> </span>_<span class="w"> </span>&lt;<span class="w"> </span>/proc/<span class="nv">$A</span>/schedstat<span class="p">;</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>br<span class="w"> </span>_<span class="w"> </span>&lt;<span class="w"> </span>/proc/<span class="nv">$B</span>/schedstat<span class="p">;</span><span class="w"> </span><span class="nb">wait</span>
+<span class="nv">ratio</span><span class="o">=</span><span class="k">$(</span>awk<span class="w"> </span>-v<span class="w"> </span><span class="nv">a</span><span class="o">=</span><span class="nv">$ar</span><span class="w"> </span>-v<span class="w"> </span><span class="nv">b</span><span class="o">=</span><span class="nv">$br</span><span class="w"> </span><span class="s1">'BEGIN{printf "%.1f", a/b}'</span><span class="k">)</span>
+awk<span class="w"> </span>-v<span class="w"> </span><span class="nv">r</span><span class="o">=</span><span class="nv">$ratio</span><span class="w"> </span><span class="s1">'BEGIN{exit !(r&gt;5 &amp;&amp; r&lt;15)}'</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"nice0:nice10 CPU 时间比 </span><span class="nv">$ratio</span><span class="s2">（权重比≈9.3，不是“优先级高就独占”）"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"ratio=</span><span class="nv">$ratio</span><span class="s2">"</span>
+<span class="c1"># 4) 线程池：大小与亲和性</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"--- 线程池（每任务 200us CPU，到达率约 80% 容量）---"</span>
+<span class="k">for</span><span class="w"> </span>cfg<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2"> none"</span><span class="w"> </span><span class="s2">"</span><span class="k">$((</span><span class="w"> </span><span class="k">$(</span>nproc<span class="k">)</span><span class="o">*</span><span class="m">8</span><span class="w"> </span><span class="k">))</span><span class="s2"> none"</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2"> spread"</span><span class="w"> </span><span class="s2">"</span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2"> one"</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>./pool<span class="w"> </span><span class="nv">$cfg</span><span class="w"> </span><span class="m">4000</span><span class="w"> </span><span class="m">200</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>pool.log<span class="p">;</span><span class="w"> </span><span class="k">done</span>
+p99<span class="o">(){</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">"threads=</span><span class="nv">$1</span><span class="s2"> aff=</span><span class="nv">$2</span><span class="s2"> "</span><span class="w"> </span>pool.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">'s/.*p99=\([0-9]*\)us.*/\1/'</span><span class="p">;</span><span class="w"> </span><span class="o">}</span>
+<span class="nv">N</span><span class="o">=</span><span class="k">$(</span>nproc<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nv">a</span><span class="o">=</span><span class="k">$(</span>p99<span class="w"> </span><span class="nv">$N</span><span class="w"> </span>none<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nv">b</span><span class="o">=</span><span class="k">$(</span>p99<span class="w"> </span><span class="k">$((</span><span class="nv">N</span><span class="o">*</span><span class="m">8</span><span class="k">))</span><span class="w"> </span>none<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="nv">c</span><span class="o">=</span><span class="k">$(</span>p99<span class="w"> </span><span class="nv">$N</span><span class="w"> </span>one<span class="k">)</span>
+<span class="o">[</span><span class="w"> </span><span class="nv">$b</span><span class="w"> </span>-gt<span class="w"> </span><span class="nv">$a</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"线程数 </span><span class="si">${</span><span class="nv">N</span><span class="si">}</span><span class="s2">→</span><span class="k">$((</span><span class="nv">N</span><span class="o">*</span><span class="m">8</span><span class="k">))</span><span class="s2">：p99 </span><span class="si">${</span><span class="nv">a</span><span class="si">}</span><span class="s2">us→</span><span class="si">${</span><span class="nv">b</span><span class="si">}</span><span class="s2">us 变差"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"p99 </span><span class="nv">$a</span><span class="s2"> vs </span><span class="nv">$b</span><span class="s2">"</span>
+<span class="o">[</span><span class="w"> </span><span class="nv">$c</span><span class="w"> </span>-gt<span class="w"> </span><span class="k">$((</span><span class="nv">a</span><span class="o">*</span><span class="m">10</span><span class="k">))</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ok<span class="w"> </span><span class="s2">"全部绑到 CPU0：p99 </span><span class="si">${</span><span class="nv">c</span><span class="si">}</span><span class="s2">us，绑核失去调度弹性"</span><span class="w"> </span><span class="o">||</span><span class="w"> </span>bad<span class="w"> </span><span class="s2">"one p99=</span><span class="nv">$c</span><span class="s2">"</span>
+rm<span class="w"> </span>-f<span class="w"> </span>pool.log
+<span class="o">[</span><span class="w"> </span><span class="nv">$fail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>ALL_CHECKS_PASSED
+</code></pre></div><div class="pn"><span><a href="40.html">← 信号与安全停机</a></span><span>下一课 待更新</span></div></main></div></body></html>
