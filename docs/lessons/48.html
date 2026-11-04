@@ -1,0 +1,481 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>48. 内核路径与运行时边界 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（48/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="cur" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 48 课 · 领域 C · 阶段 5</p><p class="dl"><a href="../files/48-c-kernel.md" download>⬇ 本课 Markdown</a></p><h1 id="48208">第 48/208 课：内核路径与运行时边界</h1>
+<blockquote>
+<p>所属阶段：第 5 阶段 · 隔离与资源治理<br />
+前置课程：c-cgroup、c-elf<br />
+关键词：Kernel Internals、内核版本与配置、系统调用路径、ftrace、tracepoint、spinlock、mutex、RCU、进程上下文、软中断、运行时边界</p>
+</blockquote>
+<h2 id="0">0. 本课导读</h2>
+<p>微信公众号后台的长连接 Gateway，用 <code>epoll</code> 管理海量客户端与上游连接；接口服务里又有大量同步 <code>read</code>/<code>write</code> 去读回调 body、读本地 Unix socket、读管道。某天监控显示 Gateway 的 p99 突然抬升，业务线程池看起来并不饱和，宿主 CPU、内存也“还行”。值班同学开始争论：是用户态 event loop 处理慢了，还是内核没有及时把 socket 就绪事件递上来？另一条线：某个批量读配置的任务卡住，<code>strace</code> 里停在 <code>read</code>，但到底卡在 VFS、页缓存，还是块设备？</p>
+<p>这些问题的共同点是：<strong>可观察现象在用户态，真正的路径边界往往在内核。</strong> 只背“read → vfs_read → …”“epoll_wait → do_epoll_wait → …”的调用链名字不够；要把<strong>当前内核版本与配置</strong>固定下来，从系统调用入口沿源码走进子系统，再用 ftrace / tracepoint 把实际跑过的路径钉死。上一课的 cgroup 告诉你资源预算如何改延迟与故障模式；本课则教你在预算与 ELF/进程边界之上，如何验证网络、内存或调度瓶颈到底卡在哪一段内核路径。</p>
+<p>本课从直觉到原理讲清三点：内核版本与配置；系统调用到子系统路径；锁、RCU 与上下文约束。最后选择 <code>read</code> 或 <code>epoll_wait</code>，固定内核 tag，追踪实现并对照 trace 证据。</p>
+<h2 id="1">1. 学习目标</h2>
+<p>完成本课后，你应当能够：</p>
+<ol>
+<li>解释本机（或目标环境）的内核版本字符串含义，并能定位、阅读关键 <code>CONFIG_*</code> 配置项（如 ftrace、epoll、相关调试选项）。</li>
+<li>从 <code>read</code> 或 <code>epoll_wait</code> 的系统调用入口出发，沿<strong>当前内核版本</strong>的源码追踪到相关子系统（VFS / eventpoll 等），说清主要函数与数据结构，而不是背一份过时调用链。</li>
+<li>理解 spinlock、mutex、RCU 的基本适用场景，以及 process context 与 softirq 等上下文对“能不能睡、能不能拿某把锁”的约束。</li>
+<li>用 ftrace / tracepoint（或 <code>perf trace</code>）对照一次真实调用，把源码路径与运行时证据连起来。</li>
+<li>在报告中标明版本与配置，并能指出哪些结论是 Linux 实现细节，而非 POSIX 保证。</li>
+</ol>
+<p>对应节点的验收标准：</p>
+<ul>
+<li>报告标明版本与配置；</li>
+<li>能指出哪些结论是 Linux 实现而非 POSIX 保证。</li>
+</ul>
+<h2 id="2">2. 为什么后端要懂</h2>
+<p><strong>能够验证网络、内存或调度瓶颈的具体原因。</strong> 公众号后台不是“调参玄学场”：长连接推送延迟、回调接口超时、容器内偶发卡顿，都需要你能把现象拆到可证伪的一层。</p>
+<p><strong>验证网络路径。</strong> Gateway 的 p99 升高时，可能是用户态业务慢，也可能是 <code>epoll_wait</code> 唤醒路径、socket 接收队列、软中断处理在拖后腿。会沿 <code>epoll_wait</code> 看 eventpoll 与唤醒关系，再用 tracepoint 看真实进入/退出，才能避免“只改业务线程数”的无效循环。</p>
+<p><strong>验证内存与 I/O 路径。</strong> 同步 <code>read</code> 卡住时，可能在等页缓存填充、在等管道对端、也可能在文件系统或块层。把版本固定后从 <code>sys_read</code>/<code>vfs_read</code> 往下看，对照 <code>sys_enter_read</code> / 相关事件，才能判断是“内核路径问题”还是“对端没数据”。</p>
+<p><strong>验证调度与上下文干扰。</strong> 同一核上 softirq 过重、锁竞争、RCU 宽限期拖长，都会表现为“用户态代码看起来没跑多久，延迟却上去了”。不懂上下文约束，就容易在中断/软中断语境里误用会睡眠的接口，或把 Linux 特有行为当成可移植保证。</p>
+<p><strong>几个真实场景。</strong></p>
+<ul>
+<li>公众号长连接 Gateway：连接数上来后 p99 抖，怀疑 <code>epoll</code>；需要确认是就绪列表处理慢，还是根本没进 <code>sys_enter_epoll_wait</code> 的预期模式。</li>
+<li>回调接口服务：某次 <code>read</code> 大 body 偶发超长，要区分慢客户端、页缓存缺失与 cgroup 内存回收（可结合上一课）。</li>
+<li>容器节点滚动升级内核后，旧笔记里的函数名对不上，排障文档失效——典型的版本漂移。</li>
+<li>把 POSIX 文档里的 <code>read</code>/<code>epoll</code> 语义直接当成 Linux 保证，在边缘行为（如 <code>epoll</code> 与 <code>fork</code>、边缘触发易漏事件）上踩坑。</li>
+</ul>
+<h2 id="3">3. 直觉：先钉住“哪一版内核的哪条路”，再谈调用链</h2>
+<p>把内核想成一座会改装修的地铁站：</p>
+<ul>
+<li><strong>版本（uname）</strong> 是站名与通车年份：5.15 和 6.1 可能改线、改站名。</li>
+<li>*<em>配置（CONFIG_<em>）</em></em> 是今天哪些闸机、安检仪实际装上了：没开 <code>CONFIG_FTRACE</code>，你就没有那套观测闸机。</li>
+<li><strong>系统调用入口</strong> 是检票口：用户态 <code>read</code>/<code>epoll_wait</code> 都从这里进站。</li>
+<li><strong>子系统路径</strong> 是换乘：VFS、eventpoll、网络协议栈……</li>
+<li><strong>锁 / RCU / 上下文</strong> 是运行图约束：有的通道禁止停车睡觉（不能 schedule），有的允许多人同时只读扫一眼（RCU）。</li>
+</ul>
+<p><strong>只背调用链 = 背一张不知年份的旧地图。</strong> 正确姿势是：先固定 tag/版本与配置，再从入口追到子系统，最后用 trace 证明“这次运行真的走了这条路”。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>你在回答什么</th>
+<th>典型工具</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>版本与配置</td>
+<td>我面对的是哪套实现？有哪些能力？</td>
+<td><code>uname -r</code>、<code>/boot/config-*</code>、<code>/proc/config.gz</code></td>
+</tr>
+<tr>
+<td>系统调用→子系统</td>
+<td>入口之后进了谁的代码？</td>
+<td>对应 tag 的源码、<code>SYSCALL_DEFINE*</code></td>
+</tr>
+<tr>
+<td>运行时证据</td>
+<td>这次进程是否真的进了这些函数/事件？</td>
+<td>ftrace、tracepoint、<code>perf trace</code></td>
+</tr>
+<tr>
+<td>同步与上下文</td>
+<td>这条路上能不能睡？用什么锁？</td>
+<td>spinlock/mutex/RCU、<code>in_interrupt()</code> 等</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4">4. 内核版本与配置</h2>
+<h3 id="41">4.1 版本字符串在说什么</h3>
+<div class="codehilite"><pre><span></span><code>uname<span class="w"> </span>-r
+<span class="c1"># 例：5.15.0-105-generic  或  6.1.0-22-cloud-amd64</span>
+uname<span class="w"> </span>-a
+cat<span class="w"> </span>/proc/version
+</code></pre></div>
+
+<p>常见构成大致是：<code>VERSION.PATCHLEVEL.SUBLEVEL[-EXTRA]</code>，发行版还会带上自己的后缀（<code>-generic</code>、<code>-cloud</code>、厂商定制号）。对排障而言你至少要记下：</p>
+<ol>
+<li><strong>完整 <code>uname -r</code></strong>（写进报告）；</li>
+<li>若在容器内，确认看的是<strong>宿主内核</strong>（容器一般不自带另一套内核，除非特殊虚拟化）；</li>
+<li>若对照源码，尽量找到与之最接近的 <strong>stable tag</strong>（如 <code>v5.15.105</code>），而不是随手打开 <code>master</code>。</li>
+</ol>
+<p>公众号后台若跑在多代内核的混合集群上，同一段“经验贴”可能对一部分机器成立、对另一部分不成立——所以版本是第一验收项。</p>
+<h3 id="42">4.2 配置从哪里读</h3>
+<p>内核编译时的 <code>CONFIG_*</code> 决定功能是否编入、编成内建还是模块。常见读取方式：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 许多发行版提供与运行内核匹配的配置</span>
+ls<span class="w"> </span>/boot/config-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'CONFIG_FTRACE|CONFIG_EPOLL|CONFIG_FUNCTION_TRACER|CONFIG_BPF'</span><span class="w"> </span>/boot/config-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
+
+<span class="c1"># 若内核启用了 IKCONFIG</span>
+zcat<span class="w"> </span>/proc/config.gz<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'CONFIG_FTRACE|CONFIG_EPOLL|CONFIG_IKCONFIG'</span>
+<span class="c1"># 或</span>
+cat<span class="w"> </span>/proc/config.gz<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"IKCONFIG available"</span>
+</code></pre></div>
+
+<p>与本课实践强相关的配置直觉：</p>
+<ul>
+<li><strong>观测</strong>：<code>CONFIG_FTRACE</code>、<code>CONFIG_FUNCTION_TRACER</code>、各类 <code>CONFIG_TRACEPOINTS</code>、事件相关选项；没有它们，后面的“对照 trace 证据”会缺工具。</li>
+<li><strong>能力</strong>：<code>epoll</code> 在现代通用内核中几乎总是开启；但你仍应养成“先看配置再下结论”的习惯，尤其是裁剪过的嵌入式/定制内核。</li>
+<li><strong>调试与安全</strong>：某些发行版默认限制 <code>debugfs</code>、<code>kptr_restrict</code>、<code>perf_event_paranoid</code>，会影响你是否看得到符号与 trace。</li>
+</ul>
+<p><code>make menuconfig</code> 是编译前的配置界面；生产排障通常<strong>不是</strong>去改宿主 menuconfig，而是<strong>读取正在运行的配置</strong>，确认假设成立。</p>
+<h3 id="43">4.3 为何“版本 + 配置”必须写进报告</h3>
+<p>同一大版本号下，发行版可能 backport 补丁；函数名、静态 inline、trace 事件字段都可能变。验收要求“报告标明版本与配置”，不是形式主义，而是让结论可复现：别人换一台 6.x 机器，不能默认你的 5.15 笔记仍然逐行成立。</p>
+<h2 id="5">5. 系统调用到子系统路径</h2>
+<h3 id="51">5.1 总览：从用户态落到内核</h3>
+<p>用户态调用 C 库的 <code>read</code> / <code>epoll_wait</code>，经 syscall 指令（或 vdso/syscall wrapper）进入内核。内核侧用 <code>SYSCALL_DEFINE*</code> 宏生成入口，再进入子系统。</p>
+<p>粗粒度地图（<strong>具体函数名以你固定的 tag 为准</strong>）：</p>
+<div class="codehilite"><pre><span></span><code>用户态 read(fd, buf, count)
+  → 系统调用入口（如 ksys_read / sys_read 一代命名）
+  → vfs_read()
+  → file-&gt;f_op-&gt;read_iter / read 等
+  → 具体文件类型：socket、pipe、常规文件、eventfd……
+
+用户态 epoll_wait(epfd, events, maxevents, timeout)
+  → 系统调用入口
+  → do_epoll_wait() 一类实现（eventpoll 子系统）
+  → 等待就绪列表 / 阻塞在 wait queue
+  → 被文件就绪、超时或信号唤醒后拷贝事件回用户态
+</code></pre></div>
+
+<p>节点强调：<strong>从具体系统调用与数据结构入手，连接可观察现象和实现，避免只背调用链。</strong></p>
+<h3 id="52-read-vfs">5.2 以 <code>read</code> 为例：入口与 VFS</h3>
+<p>在常见 Linux 源码树中（路径随版本微调）：</p>
+<ul>
+<li>声明与宏：<code>include/linux/syscalls.h</code>、<code>fs/read_write.c</code> 一带；</li>
+<li><code>read</code> 参数是 <code>(fd, buf, count)</code>，入口多为 <code>SYSCALL_DEFINE3(read, ...)</code>（不要死记成错误的 DEFINE 参数个数）；</li>
+<li>核心会走到 <code>vfs_read()</code>，再根据 <code>struct file</code> 的 <code>f_op</code> 分派。</li>
+</ul>
+<p>你可以在固定 tag 的源码中这样搜：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 假设源码在 ~/linux，且已 checkout 到与 uname 接近的 tag</span>
+<span class="nb">cd</span><span class="w"> </span>~/linux
+git<span class="w"> </span>describe<span class="w"> </span>--tags
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s1">'SYSCALL_DEFINE3\(read'</span><span class="w"> </span>fs/<span class="w"> </span>include/
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s1">'^vfs_read\(|vfs_read\('</span><span class="w"> </span>fs/read_write.c
+</code></pre></div>
+
+<p>对公众号后台更有意义的分派直觉：</p>
+<table>
+<thead>
+<tr>
+<th><code>fd</code> 背后是什么</th>
+<th><code>read</code> 往往进入谁</th>
+<th>卡顿时你可能看到</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP/Unix socket</td>
+<td>socket 的 <code>read_iter</code> 等</td>
+<td>对端没数据、接收队列、协议处理</td>
+</tr>
+<tr>
+<td>管道 / eventfd</td>
+<td>pipe、eventfd 实现</td>
+<td>对端未写、缓冲空</td>
+</tr>
+<tr>
+<td>常规文件</td>
+<td>文件系统 + page cache</td>
+<td>缺页、磁盘、锁</td>
+</tr>
+</tbody>
+</table>
+<p><strong>POSIX 保证的是语义轮廓</strong>（例如成功返回字节数、错误码类别）；<strong>Linux 保证的是这棵具体调用树与扩展行为</strong>。例如某些 <code>flags</code>、重启语义与具体文件系统行为，不能从 POSIX 一行字推出来。</p>
+<h3 id="53-epoll_wait-eventpoll">5.3 以 <code>epoll_wait</code> 为例：eventpoll 子系统</h3>
+<p><code>epoll</code> 是 Linux 特有的 I/O 事件多路复用机制（对比：POSIX 有 <code>poll</code>/<code>select</code>，但没有规定 <code>epoll</code>）。长连接 Gateway 几乎必然依赖它。</p>
+<p>常见追踪线索（名称随版本变化，见误区）：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>~/linux
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s1">'SYSCALL_DEFINE.*\(epoll_wait'</span><span class="w"> </span>fs/eventpoll.c
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s1">'do_epoll_wait|ep_poll\('</span><span class="w"> </span>fs/eventpoll.c
+</code></pre></div>
+
+<p>直觉步骤：</p>
+<ol>
+<li>校验 <code>epfd</code> 对应的 eventpoll 文件；</li>
+<li>在超时时间内等待“就绪列表”非空，或超时/信号返回；</li>
+<li>把就绪事件拷贝到用户态数组；</li>
+<li>边缘触发（<code>EPOLLET</code>）下，若用户态没一次读到 EAGAIN，可能长期看不到新事件——这是<strong>使用契约</strong>问题，常被误报成“内核丢事件”。</li>
+</ol>
+<p>对照微信公众号长连接场景：连接 socket 被加入 epoll 后，数据到达 → 文件层标记就绪 → 唤醒阻塞在 <code>epoll_wait</code> 的线程 → 用户态再 <code>read</code>。p99 异常时，要会问：是唤醒慢、是用户态处理慢导致事件堆积，还是根本没走到你以为的那条路径？</p>
+<h3 id="54-trace">5.4 用 trace 把“源码路径”钉成“这次真的走了”</h3>
+<p>源码是静态地图；trace 是行车记录仪。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 权限与 debugfs（路径因发行版而异）</span>
+sudo<span class="w"> </span>mount<span class="w"> </span>-t<span class="w"> </span>debugfs<span class="w"> </span>debugfs<span class="w"> </span>/sys/kernel/debug<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+ls<span class="w"> </span>/sys/kernel/debug/tracing
+
+<span class="c1"># 查看与 syscall 相关的事件（名称以本机为准）</span>
+sudo<span class="w"> </span>cat<span class="w"> </span>/sys/kernel/debug/tracing/available_events<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'sys_enter_read|sys_exit_read|sys_enter_epoll_wait|sys_exit_epoll_wait'</span>
+
+<span class="c1"># 使能事件（示例）</span>
+<span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/kernel/debug/tracing/tracing_on
+<span class="nb">echo</span><span class="w"> </span>&gt;<span class="w"> </span>/sys/kernel/debug/tracing/trace
+<span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/kernel/debug/tracing/events/syscalls/sys_enter_read/enable
+<span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/kernel/debug/tracing/events/syscalls/sys_exit_read/enable
+<span class="c1"># 若追踪 epoll：</span>
+<span class="c1"># echo 1 | sudo tee /sys/kernel/debug/tracing/events/syscalls/sys_enter_epoll_wait/enable</span>
+<span class="c1"># echo 1 | sudo tee /sys/kernel/debug/tracing/events/syscalls/sys_exit_epoll_wait/enable</span>
+<span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/kernel/debug/tracing/tracing_on
+
+<span class="c1"># 另开终端制造一次调用后读取</span>
+<span class="c1"># cat /sys/kernel/debug/tracing/trace | head</span>
+
+<span class="c1"># 结束后关闭</span>
+<span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/kernel/debug/tracing/tracing_on
+<span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/kernel/debug/tracing/events/syscalls/sys_enter_read/enable
+<span class="nb">echo</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/sys/kernel/debug/tracing/events/syscalls/sys_exit_read/enable
+</code></pre></div>
+
+<p>更省事的用户态封装：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 跟踪某进程的 syscall（示例）</span>
+perf<span class="w"> </span>trace<span class="w"> </span>-e<span class="w"> </span>raw_syscalls:sys_enter,raw_syscalls:sys_exit<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;<span class="w"> </span>--<span class="w"> </span>sleep<span class="w"> </span><span class="m">2</span>
+<span class="c1"># 或聚焦名字（工具版本不同，选项略异）</span>
+strace<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;<span class="w"> </span>-e<span class="w"> </span>read,epoll_wait<span class="w"> </span>-c
+</code></pre></div>
+
+<p><strong>注意：</strong> <code>set_ftrace_filter</code> 过滤的是<strong>函数 tracer 的函数名</strong>，不是 <code>syscalls/sys_enter_*</code> 这种 trace event。事件应写到 <code>events/.../enable</code>，不要把 event 路径误喂给 <code>set_ftrace_filter</code>。</p>
+<h2 id="6-rcu">6. 锁、RCU 与上下文约束</h2>
+<h3 id="61">6.1 三种同步手段的直觉</h3>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>直觉</th>
+<th>典型约束</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spinlock</td>
+<td>短临界区，持锁自旋等待</td>
+<td>持锁期间通常不能睡眠；中断/软中断路径常用</td>
+</tr>
+<tr>
+<td>mutex</td>
+<td>可以睡的锁，适合较长临界区</td>
+<td>进程上下文；不能在原子上下文里盲目 <code>mutex_lock</code></td>
+</tr>
+<tr>
+<td>RCU</td>
+<td>读多写少：读者极轻量，写者更新后等宽限期</td>
+<td>读者在 RCU read-side critical section 有规则；用于保护大量只读查找结构</td>
+</tr>
+</tbody>
+</table>
+<p>内核路径里常见模式：查找结构用 RCU 读；短更新用 spinlock；可能阻塞的资源获取用 mutex。<strong>背名字无意义，要问：这段代码会不会睡？当前能不能睡？</strong></p>
+<h3 id="62-api">6.2 上下文：能不能睡，决定你能用什么 API</h3>
+<div class="codehilite"><pre><span></span><code>硬中断 → 软中断（softirq）/ tasklet 等 → 进程上下文（syscall、内核线程）
+</code></pre></div>
+
+<p>粗规则（便于建立边界感，细节以文档与源码注释为准）：</p>
+<ul>
+<li><strong>进程上下文</strong>（系统调用路径上）：在允许的点可以调度/睡眠；<code>read</code> 等对端无数据时阻塞，属于正常现象。</li>
+<li><strong>原子上下文 / 中断、软中断</strong>：不能睡眠；只能用不会睡的同步原语与分配标志（如 <code>GFP_ATOMIC</code> 一类约束）。</li>
+<li>辅助判断：<code>in_interrupt()</code> 等（具体 API 随版本演进，以你的 tag 文档为准）帮助区分“此刻是否在中断相关上下文”。</li>
+</ul>
+<p>对后端排障的直接含义：</p>
+<ol>
+<li>你在用户态看到的 <code>read</code> 阻塞，常常是<strong>故意睡眠等待</strong>，不是死锁；要用 trace 区分“在睡等数据”和“锁/资源异常”。</li>
+<li>网络收包大量走 softirq，若 softirq 过重，会表现为延迟升高——问题可能不在你的业务函数行数，而在同核的中断后半部。</li>
+<li>在内核模块或错误示例里把会睡的锁拿到软中断里，属于经典事故；用户态工程师也要懂，才能读懂 oops/lockdep 线索。</li>
+</ol>
+<h3 id="63-read-epoll_wait">6.3 和 <code>read</code> / <code>epoll_wait</code> 的关系</h3>
+<ul>
+<li><code>read</code> 在无数据且阻塞式 fd 上，会进入可中断/可重启的睡眠等待；这是进程上下文路径。</li>
+<li><code>epoll_wait</code> 在超时前等待事件，同样是可睡眠的等待；唤醒可能来自文件就绪回调（回调本身的上下文要更小心）。</li>
+<li>eventpoll 内部用锁保护就绪列表等结构；版本不同，锁类型与 RCU 用法会调整——再次印证“固定 tag 再读”。</li>
+</ul>
+<h2 id="7">7. 常见误区</h2>
+<p><strong>不同内核版本的函数名与实现路径会变化。</strong> 这是本节点明确指出的陷阱。</p>
+<p>具体表现：</p>
+<ol>
+<li>博客里的 <code>sys_epoll_wait</code> / <code>ep_poll</code> / 某静态函数，在你的 6.x 树里可能改名、inline 掉或拆分。</li>
+<li>发行版 backport 让“看起来是 5.15”的树带有更新行为。</li>
+<li>把某次 <code>ftrace</code> 函数图当成永恒真理，升级内核后脚本全红。</li>
+</ol>
+<p>对策：</p>
+<ul>
+<li>报告写明 <code>uname -r</code> 与关键 <code>CONFIG_*</code>；</li>
+<li>源码研究固定 tag（<code>git checkout vX.Y.Z</code>）；</li>
+<li>结论区分：<strong>POSIX 可移植语义</strong> vs <strong>Linux 实现细节</strong>；</li>
+<li>用本机 trace 事件名（以 <code>available_events</code> 为准），不要抄过时路径。</li>
+</ul>
+<p>其他连带误区：</p>
+<ul>
+<li>把 <code>strace</code> 看到的 libc 包装语义直接当成内核保证；</li>
+<li>认为容器里的“内核版本”可以和宿主不同（通常不能）；</li>
+<li>边缘触发 epoll 用错导致“以为内核丢事件”。</li>
+</ul>
+<h2 id="8">8. 设计权衡</h2>
+<p><strong>深入源码耗时，应由可证伪的运行时问题驱动。</strong></p>
+<p>权衡双方：</p>
+<ul>
+<li><strong>深入的收益</strong>：能验证网络/内存/调度瓶颈的具体原因，避免错误加机器、错误加线程。</li>
+<li><strong>深入的成本</strong>：读内核、搭 trace、对齐版本，非常耗时；无目标的“通读 subsystem”容易沉没。</li>
+</ul>
+<p>实践策略（呼应 sourceStudy）：</p>
+<ol>
+<li>先有可观测问题（p99、阻塞栈、超时）；</li>
+<li>固定内核 tag 与配置；</li>
+<li>只从相关系统调用入口追到必要子系统；</li>
+<li>用 tracepoint 验证实际路径；</li>
+<li>写清哪些是 Linux 特有结论。</li>
+</ol>
+<p>对公众号后台：优先追 <code>epoll_wait</code>/<code>read</code>/<code>write</code>/<code>sendto</code>/<code>recvfrom</code> 等热路径，而不是先去通读整个网络栈。</p>
+<h2 id="9">9. 动手实践</h2>
+<p>目标：选择 <code>read</code> 或 <code>epoll_wait</code>，沿<strong>当前内核版本</strong>追踪实现并对照 trace 证据。<br />
+验收：报告标明版本与配置；能指出哪些结论是 Linux 实现而非 POSIX 保证。</p>
+<h3 id="91">9.1 步骤一：固定版本与配置（必做）</h3>
+<div class="codehilite"><pre><span></span><code>uname<span class="w"> </span>-r<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>lesson48-version.txt
+uname<span class="w"> </span>-a<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>lesson48-version.txt
+cat<span class="w"> </span>/proc/version<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>lesson48-version.txt
+
+<span class="nv">CONF</span><span class="o">=</span>/boot/config-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$CONF</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'CONFIG_FTRACE|CONFIG_FUNCTION_TRACER|CONFIG_EPOLL|CONFIG_IKCONFIG|CONFIG_TRACEPOINTS'</span><span class="w"> </span><span class="s2">"</span><span class="nv">$CONF</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>lesson48-config-snippet.txt
+<span class="k">else</span>
+<span class="w">  </span>zcat<span class="w"> </span>/proc/config.gz<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'CONFIG_FTRACE|CONFIG_FUNCTION_TRACER|CONFIG_EPOLL|CONFIG_IKCONFIG'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>lesson48-config-snippet.txt<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"未找到 config，记录发行版文档中的获取方式"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>lesson48-config-snippet.txt
+<span class="k">fi</span>
+</code></pre></div>
+
+<p>验收点：你有一份写明版本的文件，并记录了与 ftrace/epoll 相关的配置有无。</p>
+<h3 id="92-tag">9.2 步骤二：准备对照用的源码 tag</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 示例：用内核官方树或发行版源码包；以下为示意</span>
+<span class="c1"># git clone --depth 1 --branch v5.15 https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git</span>
+<span class="c1"># 将 v5.15 换成与 uname 最接近、你能获取的 tag</span>
+
+<span class="nb">cd</span><span class="w"> </span>/path/to/linux
+git<span class="w"> </span>describe<span class="w"> </span>--tags<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>~/lesson48-kernel-tag.txt
+</code></pre></div>
+
+<p>若暂时无法完整克隆，可用 <a href="https://elixir.bootlin.com/linux">https://elixir.bootlin.com/linux</a> 选择接近的版本浏览，但仍须在报告中写明你对照的版本号。</p>
+<h3 id="93">9.3 步骤三：选择一条调用并静态追踪</h3>
+<p><strong>方案 A：<code>read</code>（适合接口读 body、读文件）。</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/path/to/linux
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s1">'SYSCALL_DEFINE3\(read'</span><span class="w"> </span>
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s1">'vfs_read'</span><span class="w"> </span>fs/read_write.c<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+<span class="c1"># 继续向下阅读 f_op 分派；针对你关心的 fd 类型（socket/文件）再往下跳</span>
+</code></pre></div>
+
+<p><strong>方案 B：<code>epoll_wait</code>（适合长连接 Gateway）。</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/path/to/linux
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s1">'epoll_wait'</span><span class="w"> </span>fs/eventpoll.c<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-40
+<span class="c1"># 阅读从 SYSCALL_DEFINE* 到等待/就绪列表的主路径</span>
+<span class="c1"># 记下你跟踪到的函数名（以该 tag 为准）</span>
+</code></pre></div>
+
+<p>在笔记中画一张<strong>仅含你亲见函数</strong>的路径图，禁止从旧博客整页粘贴。</p>
+<h3 id="94">9.4 步骤四：写一个最小用户态触发器</h3>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* save as lesson48_touch.c — 以 read 为例；epoll 版可自行改写 */</span>
+<span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">));</span><span class="w"> </span><span class="cm">/* 从 stdin 读，便于控制 */</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">perror</span><span class="p">(</span><span class="s">"read"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"read returned %zd</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>cc<span class="w"> </span>-O0<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>lesson48_touch<span class="w"> </span>lesson48_touch.c
+<span class="c1"># 触发：printf 'hello' | ./lesson48_touch</span>
+</code></pre></div>
+
+<p><code>epoll_wait</code> 版可用一小段创建 <code>epoll</code>、加入 timerfd/eventfd、再 <code>epoll_wait</code> 的程序（此处从略）；关键是<strong>可重复、可单独 attach</strong>。</p>
+<h3 id="95-trace">9.5 步骤五：对照 trace 证据</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 以 read 为例；需要 root 或相应能力</span>
+sudo<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">'</span>
+<span class="s1">  TR=/sys/kernel/debug/tracing</span>
+<span class="s1">  echo 0 &gt; $TR/tracing_on</span>
+<span class="s1">  echo &gt; $TR/trace</span>
+<span class="s1">  echo 1 &gt; $TR/events/syscalls/sys_enter_read/enable</span>
+<span class="s1">  echo 1 &gt; $TR/events/syscalls/sys_exit_read/enable</span>
+<span class="s1">  echo 1 &gt; $TR/tracing_on</span>
+<span class="s1">'</span>
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'hello'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>./lesson48_touch
+sudo<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">'</span>
+<span class="s1">  TR=/sys/kernel/debug/tracing</span>
+<span class="s1">  echo 0 &gt; $TR/tracing_on</span>
+<span class="s1">  grep -E "sys_(enter|exit)_read" $TR/trace | tail -n 20 | tee lesson48-trace.txt</span>
+<span class="s1">  echo 0 &gt; $TR/events/syscalls/sys_enter_read/enable</span>
+<span class="s1">  echo 0 &gt; $TR/events/syscalls/sys_exit_read/enable</span>
+<span class="s1">'</span>
+</code></pre></div>
+
+<p>若权限或事件名不同，改用：</p>
+<div class="codehilite"><pre><span></span><code>strace<span class="w"> </span>-o<span class="w"> </span>lesson48-strace.txt<span class="w"> </span>-e<span class="w"> </span><span class="nb">read</span><span class="w"> </span>./lesson48_touch<span class="w"> </span><span class="o">&lt;&lt;&lt;</span><span class="s1">'hello'</span>
+<span class="c1"># 或</span>
+perf<span class="w"> </span>trace<span class="w"> </span>-e<span class="w"> </span>syscalls:sys_enter_read,syscalls:sys_exit_read<span class="w"> </span>--<span class="w"> </span>./lesson48_touch<span class="w"> </span><span class="o">&lt;&lt;&lt;</span><span class="s1">'hello'</span>
+</code></pre></div>
+
+<p>把 trace 片段与步骤三的函数路径写在同一份报告里：<strong>源码说会进 A，trace 显示本次确实发生了 enter/exit（或等价证据）。</strong></p>
+<h3 id="96-linux-posix">9.6 步骤六：区分 Linux 实现与 POSIX 保证（验收）</h3>
+<p>在报告中增加一小节，至少列出两条对比，例如：</p>
+<table>
+<thead>
+<tr>
+<th>结论</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>read</code> 从 fd 读至多 <code>count</code> 字节，返回值语义</td>
+<td>POSIX 层面有规定的可移植语义（细节仍看标准）</td>
+</tr>
+<tr>
+<td>经 <code>vfs_read</code> → 某 <code>f_op-&gt;read_iter</code> 的具体函数名与锁</td>
+<td><strong>Linux 实现</strong>，随版本变</td>
+</tr>
+<tr>
+<td>存在 <code>epoll_wait</code> / <code>EPOLLET</code> 行为</td>
+<td><strong>Linux 特有</strong>（非 POSIX 规定的 epoll）</td>
+</tr>
+<tr>
+<td>某次 ftrace 里出现的内部符号</td>
+<td><strong>Linux 实现 + 本机构建</strong></td>
+</tr>
+</tbody>
+</table>
+<p>验收点：读者能看出你不是把内核函数名误标成“标准保证”。</p>
+<h3 id="97">9.7 实践验收清单</h3>
+<ul>
+<li>[ ] 报告写明 <code>uname -r</code>（及 <code>uname -a</code>/<code>/proc/version</code>）与关键配置片段。</li>
+<li>[ ] 固定并对齐了源码 tag（或明确写了 elixir 上的版本号）。</li>
+<li>[ ] 选择了 <code>read</code> 或 <code>epoll_wait</code>，并从系统调用入口追踪到子系统关键函数（名称来自该 tag）。</li>
+<li>[ ] 有 ftrace/tracepoint/<code>perf</code>/<code>strace</code> 之一的对照证据。</li>
+<li>[ ] 明确列出至少两条“Linux 实现而非 POSIX 保证”的结论。</li>
+<li>[ ] 理解函数名/路径会随版本变化，下次换内核要重做对齐。</li>
+</ul>
+<h2 id="10">10. 自测题</h2>
+<h3 id="5x">题一：为什么排障报告里只写“内核 5.x”不够？还需要哪些信息？与本课哪条验收对应？</h3>
+<p><strong>参考答案：</strong> 大版本号过粗，发行版后缀、stable 小版本、以及关键 <code>CONFIG_*</code>（如是否具备 ftrace/tracepoint）都会改变你能看到的路径与工具。同一“5.x”下函数名与 backport 行为也可能不同。本课验收要求<strong>报告标明版本与配置</strong>，通常至少包含完整 <code>uname -r</code>（更好加上 <code>/proc/version</code>）以及与结论相关的配置片段，并固定对照的源码 tag。</p>
+<h3 id="epoll">题二：把网上一篇旧文里的 <code>epoll</code> 调用链原样背到生产环境有什么风险？应如何做？</h3>
+<p><strong>参考答案：</strong> 不同内核版本的函数名与实现路径会变化，旧文可能已过时；且未对照本机配置与 trace 时，无法证明当前故障真走了那条路。正确做法是：固定与运行环境接近的内核 tag，从系统调用入口自己追到 eventpoll 子系统，再用 <code>sys_enter_epoll_wait</code> 等 trace 证据核对，并区分 Linux 实现细节与 POSIX 可移植语义。</p>
+<h3 id="gateway-epoll_wait">题三：长连接 Gateway 的线程阻塞在 <code>epoll_wait</code>，能否据此断定“内核网络栈故障”？锁与上下文知识如何帮助你避免误判？</h3>
+<p><strong>参考答案：</strong> 不能直接断定。阻塞在 <code>epoll_wait</code> 常常只是<strong>进程上下文里正常的可睡眠等待</strong>——没有就绪事件时睡眠是设计行为。需要结合：是否有数据包到达、softirq/接收路径是否异常、用户态是否因 <code>EPOLLET</code> 漏读、以及 cgroup CPU 节流等（上一课）综合判断。锁与上下文知识帮助你理解：唤醒与就绪列表维护有同步约束；若问题在软中断过重或锁竞争，表现也可能是延迟升高，但不能把“停在 epoll_wait”本身等同于内核故障。应用 trace 看 enter/exit 与超时模式，才能把猜想变成证据。</p>
+<h2 id="11">11. 推荐资源</h2>
+<ul>
+<li><strong>内核路径与运行时边界：参考文档 / 原始资料</strong><br />
+  https://docs.kernel.org/core-api/index.html<br />
+  来源：docs.kernel.org；语言：英文；类型：文档；难度：专家；免费。<br />
+  说明：重点阅读与内核核心 API、同步（锁/RCU）及可与系统调用到子系统路径互证的章节，用于核对本节点实验的语义和边界。建议固定内核版本后，对照本课的 <code>read</code>/<code>epoll_wait</code> 追踪与 trace 实践阅读。</li>
+</ul>
+<p>本地可继续查阅：</p>
+<div class="codehilite"><pre><span></span><code>man<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="nb">read</span>
+man<span class="w"> </span><span class="m">7</span><span class="w"> </span>epoll
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span>epoll_wait
+<span class="c1"># 内核文档树中的 core-api、locking、RCU 相关章节</span>
+<span class="c1"># 以及 /sys/kernel/debug/tracing/README（若存在）</span>
+</code></pre></div>
+
+<h2 id="12">12. 本课小结</h2>
+<ul>
+<li>内核源码研究应从<strong>具体系统调用与数据结构</strong>入手，连接可观察现象和实现，避免只背调用链。</li>
+<li>先固定<strong>内核版本与配置</strong>，再谈路径；报告必须写明版本与配置。</li>
+<li>从 <code>read</code>/<code>epoll_wait</code> 入口进入 VFS 或 eventpoll 等子系统，用 ftrace/tracepoint 对照实际路径。</li>
+<li>理解 spinlock、mutex、RCU 以及 process/softirq 等上下文约束，才能解释“为什么能睡/不能睡、瓶颈可能在哪”。</li>
+<li>常见误区：不同内核版本函数名与实现路径会变。</li>
+<li>设计权衡：深入源码耗时，应由可证伪的运行时问题驱动；固定 tag，从入口追踪，并用 trace 验证。</li>
+<li>验收时还能指出：哪些结论只是 Linux 实现，而非 POSIX 保证——这对公众号后台的跨环境排障与文档沉淀至关重要。</li>
+</ul><div class="pn"><span><a href="47.html">← cgroup v2与资源治理</a></span><span>下一课 待更新</span></div></main></div></body></html>
