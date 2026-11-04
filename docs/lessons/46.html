@@ -1,0 +1,635 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>46. namespace与隔离边界 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（46/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（14/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="cur" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 46 课 · 领域 C · 阶段 3</p><p class="dl"><a href="../files/46-c-namespace.md" download>⬇ 本课 Markdown</a></p><h1 id="46208-namespace">第 46/208 课：namespace与隔离边界</h1>
+<blockquote>
+<p>所属阶段：第 3 阶段 · 隔离与资源治理<br />
+前置课程：c-process、c-ipc<br />
+关键词：Linux Namespaces、PID、mount、network、user namespace、unshare、setns、容器隔离</p>
+</blockquote>
+<h2 id="0">0. 本课导读</h2>
+<p>一个已经容器化部署的微信公众号后台服务，本地运行正常，进容器后却出现怪现象：容器里 <code>ps -ef</code> 只看到一两个进程；日志打印的 PID 是 <code>1</code>、<code>7</code>，宿主上却找不到；容器里 <code>ip addr</code> 只有 <code>lo</code>；容器内 <code>uname -r</code> 与宿主一模一样。</p>
+<p>这些通常不是程序写错了，而是你正在观察两个不同的 <strong>namespace 视图</strong>。namespace 让一组进程看到独立的系统资源视图，但它不复制内核，也不自动限制 CPU 和内存。本课从直觉到原理讲清 PID、mount、network、user namespace，以及 <code>unshare</code>、<code>setns</code> 和共享内核的安全边界，最后完成一次宿主与容器的 namespace/PID 对比实践。</p>
+<h2 id="1">1. 学习目标</h2>
+<p>完成本课后，你应当能够：</p>
+<ol>
+<li>解释 PID、mount、network、user namespace 分别在隔离什么，边界在哪里。</li>
+<li>说明 <code>unshare</code> 与 <code>setns</code> 的区别：前者创建新 namespace，后者加入已有 namespace。</li>
+<li>解释容器为什么轻量：容器进程与宿主共享同一个内核。</li>
+<li>在受控开发环境中查看容器 namespace 链接，对比容器内 PID 与宿主 PID，并解释差异。</li>
+<li>区分 namespace、cgroup、capabilities、seccomp 各自负责什么，不把 namespace 当资源配额或完整安全沙箱。</li>
+</ol>
+<p>对应节点的验收标准：</p>
+<ul>
+<li>能解释容器共享宿主内核；</li>
+<li>不把 namespace 当资源配额。</li>
+</ul>
+<h2 id="2">2. 为什么后端要懂</h2>
+<p><strong>部署背景。</strong> 微信公众号后台通常由多个服务组成，运行在容器或 Kubernetes Pod 中。理解 namespace，才能理解为什么容器里的 <code>localhost</code> 和宿主不是同一个网络空间，为什么容器监听 <code>8080</code> 后宿主还要做端口映射，为什么容器里的 <code>/proc</code>、根文件系统和宿主不同。</p>
+<p><strong>排障容易看错视图。</strong> <code>ps</code>、<code>ss</code>、<code>top</code>、<code>cat /proc/...</code> 读到的内容都受 namespace 影响。容器内 <code>ps</code> 只看到 PID 1，不代表宿主空闲；容器内 <code>ps</code> 看到宿主进程，也不一定代表没有隔离，可能是 <code>/proc</code> 没有按新的 PID namespace 重新挂载。</p>
+<p><strong>安全边界与运行时配置直接相关。</strong> 容器共享宿主内核。namespace 提供可见性隔离，但不能阻止拥有过多 capability 的进程执行危险系统调用。因此还要关注非 root 运行、capability 裁剪、seccomp、LSM、user namespace 和最小挂载。</p>
+<p><strong>几个真实场景。</strong></p>
+<ul>
+<li>容器日志打印 <code>pid=1</code>，宿主上用 <code>docker inspect</code> 查到主进程宿主 PID 是 <code>34821</code>：两个数字指向同一个进程。</li>
+<li>容器内服务监听 <code>0.0.0.0:8080</code>，宿主 <code>ss -lntp</code> 看不到，因为 network namespace 不同，宿主看到的是端口映射或 veth 一侧。</li>
+<li>容器内改了配置文件，宿主文件没变，因为 mount namespace 让容器有独立挂载表。</li>
+<li>容器内 <code>uname -r</code> 与宿主完全一致，因为容器没有自己的内核。</li>
+</ul>
+<h2 id="3-namespace">3. 直觉：namespace 是“视图”，不是“分区”</h2>
+<p>把内核想象成一栋大楼，进程是楼里的工作人员。namespace 不是给每个人复制一栋楼，而是发不同的“楼层指南”：</p>
+<ul>
+<li>PID namespace 改变“人员编号簿”：同一个进程，在你眼里是 1 号，在宿主眼里是 34821 号。</li>
+<li>mount namespace 改变“房间地图”：你看到的挂载点和别人不一样。</li>
+<li>network namespace 改变“通信设备清单”：你有自己的网卡、路由和端口空间。</li>
+<li>user namespace 改变“身份映射表”：你在自己的区域里可以是 root，在大楼管理处看来只是普通用户。</li>
+</ul>
+<p>关键点是：<strong>楼还是同一栋楼，内核还是同一个内核。</strong> namespace 改变进程能观察到的资源视图和命名空间，不改变资源的物理数量，也不复制内核。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>namespace 改变什么</th>
+<th>namespace 不改变什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PID</td>
+<td>进程编号、可见进程集合、PID 1 的含义</td>
+<td>CPU 时间、进程总数上限</td>
+</tr>
+<tr>
+<td>mount</td>
+<td>挂载表、根文件系统视图</td>
+<td>磁盘容量、I/O 带宽</td>
+</tr>
+<tr>
+<td>network</td>
+<td>网卡、路由、端口、iptables 视图</td>
+<td>物理带宽、宿主总连接数</td>
+</tr>
+<tr>
+<td>user</td>
+<td>UID/GID 映射、namespace 内 capability 范围</td>
+<td>宿主内核漏洞、全部安全策略</td>
+</tr>
+<tr>
+<td>资源</td>
+<td>基本不负责</td>
+<td>CPU、内存、I/O、进程数配额，这些是 cgroup 的职责</td>
+</tr>
+</tbody>
+</table>
+<p>看到“容器隔离”时，要在心里补一句：<strong>隔离的是视图，不是全部资源和全部权限。</strong></p>
+<h2 id="4-task_structnsproxy-inode">4. 核心模型：task_struct、nsproxy 与 inode</h2>
+<p>Linux 内核用 <code>task_struct</code> 表示进程或线程，每个任务通过 <code>nsproxy</code> 关联一组 namespace：PID、mount、network、user、UTS、IPC、cgroup、time 等。一个进程在任一时刻，对每一类 namespace 都有一个“当前所属”的实例；多个进程可以共享同一个实例。</p>
+<p>最直接的观察方式是：</p>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>/proc/self/ns
+</code></pre></div>
+
+<p>输出类似：</p>
+<div class="codehilite"><pre><span></span><code>lrwxrwxrwx 1 dev dev 0 Nov  4 10:00 cgroup -&gt; 'cgroup:[4026531835]'
+lrwxrwxrwx 1 dev dev 0 Nov  4 10:00 ipc -&gt; 'ipc:[4026531839]'
+lrwxrwxrwx 1 dev dev 0 Nov  4 10:00 mnt -&gt; 'mnt:[4026531841]'
+lrwxrwxrwx 1 dev dev 0 Nov  4 10:00 net -&gt; 'net:[4026531840]'
+lrwxrwxrwx 1 dev dev 0 Nov  4 10:00 pid -&gt; 'pid:[4026531836]'
+lrwxrwxrwx 1 dev dev 0 Nov  4 10:00 pid_for_children -&gt; 'pid:[4026531836]'
+lrwxrwxrwx 1 dev dev 0 Nov  4 10:00 user -&gt; 'user:[4026531837]'
+lrwxrwxrwx 1 dev dev 0 Nov  4 10:00 uts -&gt; 'uts:[4026531838]'
+</code></pre></div>
+
+<p>方括号中的数字是 namespace 的 inode 号。它有两个用途：</p>
+<ol>
+<li><strong>判断两个进程是否在同一 namespace</strong>：读取同一个链接目标，inode 相同，就是同一个实例。</li>
+<li><strong>作为 <code>setns</code> 的入口</strong>：打开 <code>/proc/&lt;pid&gt;/ns/&lt;type&gt;</code>，把文件描述符传给 <code>setns</code>。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>readlink<span class="w"> </span>/proc/self/ns/pid
+readlink<span class="w"> </span>/proc/1/ns/pid
+readlink<span class="w"> </span>/proc/<span class="nv">$$</span>/ns/mnt
+</code></pre></div>
+
+<p>注意 <code>pid</code> 和 <code>pid_for_children</code> 的区别：前者是进程当前所在的 PID namespace，后者是它将来 fork 出的子进程将进入的 PID namespace。<code>unshare(CLONE_NEWPID)</code> 之后，调用者的 <code>pid</code> 链接不变，但 <code>pid_for_children</code> 会指向新 namespace。</p>
+<p><code>lsns</code> 可以从全局视角列出 namespace：</p>
+<div class="codehilite"><pre><span></span><code>lsns
+lsns<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+lsns<span class="w"> </span>-t<span class="w"> </span>pid
+lsns<span class="w"> </span>-t<span class="w"> </span>net
+</code></pre></div>
+
+<p><code>NPROCS</code> 表示共享该 namespace 的进程数，可用来判断某个 namespace 是只有容器里的少数进程在用，还是系统上大量进程共享的初始 namespace。</p>
+<h2 id="5-pid-namespace">5. PID namespace：独立的进程编号体系</h2>
+<h3 id="51">5.1 基本语义</h3>
+<p>PID namespace 隔离进程 ID 的编号空间和“哪些进程可见”。</p>
+<ul>
+<li>每个 PID namespace 中，第一个被创建的进程获得 PID 1。</li>
+<li>该 namespace 内的进程只能看到同一 namespace 或其后代 namespace 中的进程。</li>
+<li>祖先 namespace 可以看到后代 namespace 中的进程，但看到的是祖先 namespace 中的 PID。</li>
+<li>一个进程只属于一个 PID namespace，但它的子进程可以进入新的、嵌套的 PID namespace。</li>
+</ul>
+<p>因此同一个进程可能同时拥有多个 PID：容器内是小数字，宿主上是另一个数字，二者都指向同一个 <code>task_struct</code>。</p>
+<h3 id="52-pid-1">5.2 PID 1 的特殊性</h3>
+<p>容器里的 PID 1 不是普通进程：</p>
+<ul>
+<li>它是该 PID namespace 中的孤儿进程收养者，失去父进程的进程会被 reparent 到它。</li>
+<li>对于没有安装处理函数的信号，PID 1 往往不会像普通进程那样被默认动作终止。这解释了为什么容器主进程是 shell 或某些不转发信号的程序时，<code>docker stop</code> 可能等很久，最后只能 <code>SIGKILL</code>。</li>
+<li>从祖先 namespace 发送的 <code>SIGKILL</code> 或 <code>SIGSTOP</code> 仍然可以作用于它。</li>
+<li>PID 1 退出后，内核会向该 namespace 内其他进程发送 <code>SIGKILL</code>，整个 namespace 终止。</li>
+</ul>
+<h3 id="53-unshare-pid-namespace">5.3 用 <code>unshare</code> 观察 PID namespace</h3>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>unshare<span class="w"> </span>--pid<span class="w"> </span>--fork<span class="w"> </span>--mount-proc<span class="w"> </span>bash
+</code></pre></div>
+
+<p>进入后执行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="nv">$$</span>
+ps<span class="w"> </span>-ef
+ls<span class="w"> </span>-l<span class="w"> </span>/proc/self/ns/pid
+</code></pre></div>
+
+<p>当前 shell 的 PID 很可能变成 1 或很小的数字，<code>ps</code> 也只显示这个 namespace 里的进程。三个参数要分清：</p>
+<ul>
+<li><code>--pid</code>：创建新的 PID namespace。</li>
+<li><code>--fork</code>：<code>unshare</code> 自己进入新 namespace 不会改变已有 PID，必须 fork 子进程，子进程才成为新 namespace 的 PID 1。</li>
+<li><code>--mount-proc</code>：在新的 mount namespace 中重新挂载 <code>/proc</code>。否则 <code>ps</code> 读取旧 <code>/proc</code>，可能显示宿主进程和宿主 PID。</li>
+</ul>
+<p>如果只执行 <code>sudo unshare --pid bash</code>，shell 的 PID 通常不变。这不是命令失效，而是只有之后 fork 出的子进程才进入新 PID namespace。</p>
+<h3 id="54-pid-pid">5.4 对比容器内 PID 与宿主 PID</h3>
+<p>假设容器主进程宿主 PID 是 <code>34821</code>：</p>
+<div class="codehilite"><pre><span></span><code>readlink<span class="w"> </span>/proc/34821/ns/pid
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;container&gt;<span class="w"> </span>readlink<span class="w"> </span>/proc/1/ns/pid
+</code></pre></div>
+
+<p>若两个 inode 相同，说明它们指向同一个 PID namespace 实例。容器内路径是 <code>/proc/1/...</code>，宿主路径是 <code>/proc/34821/...</code>，但链接目标可以相同。</p>
+<p>再执行：</p>
+<div class="codehilite"><pre><span></span><code>ps<span class="w"> </span>-o<span class="w"> </span>pid,ppid,user,comm<span class="w"> </span>-p<span class="w"> </span><span class="m">34821</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>&lt;container&gt;<span class="w"> </span>ps<span class="w"> </span>-ef
+</code></pre></div>
+
+<p>宿主的 PID 是 <code>34821</code>，容器内是 <code>1</code>，但进程是同一个。<code>docker inspect -f '{{.State.Pid}}' &lt;container&gt;</code> 取得的是宿主 PID，<code>docker top &lt;container&gt;</code> 显示的通常也是宿主视角 PID。</p>
+<h3 id="55-clone-pid-namespace">5.5 用 <code>clone</code> 创建 PID namespace</h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sched.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;signal.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/wait.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#define STACK_SIZE (1024 * 1024)</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">child_main</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">arg</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"child: getpid()=%d, getppid()=%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">getpid</span><span class="p">(),</span><span class="w"> </span><span class="n">getppid</span><span class="p">());</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">STACK_SIZE</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stack</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"malloc"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">clone</span><span class="p">(</span><span class="n">child_main</span><span class="p">,</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">STACK_SIZE</span><span class="p">,</span>
+<span class="w">                      </span><span class="n">CLONE_NEWPID</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SIGCHLD</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"clone"</span><span class="p">);</span><span class="w"> </span><span class="n">free</span><span class="p">(</span><span class="n">stack</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"waitpid"</span><span class="p">);</span><span class="w"> </span><span class="n">free</span><span class="p">(</span><span class="n">stack</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">stack</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>子进程打印的 <code>getpid()</code> 是 <code>1</code>，<code>getppid()</code> 是 <code>0</code>，因为父进程在新 PID namespace 之外，对它不可见。宿主上通过 <code>ps</code> 看到的仍是子进程的宿主 PID，而不是 1。</p>
+<h3 id="56-unshare-pid-namespace">5.6 用 <code>unshare</code> 系统调用创建 PID namespace</h3>
+<p><code>unshare(2)</code> 对 PID namespace 的关键语义是：<strong>影响之后创建的子进程，而不是调用者自己。</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sched.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/wait.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">unshare</span><span class="p">(</span><span class="n">CLONE_NEWPID</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"unshare"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"fork"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">"child PID in new namespace: %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">getpid</span><span class="p">());</span>
+<span class="w">        </span><span class="n">execlp</span><span class="p">(</span><span class="s">"sh"</span><span class="p">,</span><span class="w"> </span><span class="s">"sh"</span><span class="p">,</span><span class="w"> </span><span class="s">"-c"</span><span class="p">,</span>
+<span class="w">               </span><span class="s">"ls -l /proc/self/ns/pid; echo '---'; ps -ef"</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"execlp"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_exit</span><span class="p">(</span><span class="mi">127</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"waitpid"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>unshare(CLONE_NEWPID)</code> 之后调用 <code>fork()</code>，子进程才进入新 PID namespace，并成为其中的 PID 1；父进程仍留在原 PID namespace。</p>
+<h2 id="6-mount-namespace">6. mount namespace：独立的挂载表</h2>
+<p>mount namespace 隔离进程看到的挂载点集合，也就是文件系统树。每个 mount namespace 有自己的挂载表，一个 namespace 中的 <code>mount</code>、<code>umount</code>、<code>pivot_root</code> 操作，在另一个 namespace 中不一定可见。</p>
+<p>容器运行时会利用它：</p>
+<ul>
+<li>为容器准备独立根文件系统；</li>
+<li>挂载 <code>/proc</code>、<code>/sys</code>、<code>/dev</code>；</li>
+<li>把镜像目录绑定挂载到指定位置；</li>
+<li>通过 <code>pivot_root</code> 切换根目录，让容器看不到宿主完整文件系统。</li>
+</ul>
+<p>但这不意味着容器有独立磁盘。容器根文件系统仍是宿主文件系统上的目录、镜像层或联合文件系统视图。</p>
+<p>观察命令：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/proc/self/mountinfo
+findmnt
+sudo<span class="w"> </span>unshare<span class="w"> </span>--mount<span class="w"> </span>bash
+mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/ns-mount-demo
+mount<span class="w"> </span>-t<span class="w"> </span>tmpfs<span class="w"> </span>tmpfs<span class="w"> </span>/tmp/ns-mount-demo
+findmnt<span class="w"> </span>/tmp/ns-mount-demo
+</code></pre></div>
+
+<p>在另一个宿主 shell 中执行 <code>findmnt /tmp/ns-mount-demo</code>。若看不到该挂载，说明 mount namespace 是隔离的，并且传播类型为 private。</p>
+<p><strong>挂载传播容易被忽略。</strong> 常见类型有 <code>shared</code>、<code>slave</code>、<code>private</code>、<code>unbindable</code>。很多系统默认根挂载是 <code>shared</code>，创建新 mount namespace 后，挂载事件可能仍传播回宿主。做隔离实验时常见做法是：</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>unshare<span class="w"> </span>--mount<span class="w"> </span>--propagation<span class="w"> </span>private<span class="w"> </span>bash
+</code></pre></div>
+
+<p>或在新 namespace 内执行 <code>mount --make-rprivate /</code>。这不是 namespace“漏了”，而是传播规则在起作用。</p>
+<p><strong><code>/proc</code> 要与 PID namespace 配合。</strong> <code>/proc</code> 在挂载时与某个 PID namespace 关联。只创建新 PID namespace 却继续用旧 <code>/proc</code>，<code>ps</code> 读到的仍是旧 namespace 的信息。因此需要新的 mount namespace，并在其中重新挂载 <code>/proc</code>。这就是 <code>unshare --pid --fork --mount-proc</code> 中 <code>--mount-proc</code> 的意义。</p>
+<h2 id="7-network-namespace">7. network namespace：独立的网络栈视图</h2>
+<p>network namespace 隔离网络资源视图，包括网络接口、IPv4/IPv6 地址、路由表、ARP 表、端口空间、iptables/nftables 规则以及部分 <code>/proc/net</code> 信息。每个 network namespace 默认只有一张 <code>lo</code> 回环接口，而且通常处于 down 状态。</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>unshare<span class="w"> </span>--net<span class="w"> </span>bash
+ip<span class="w"> </span>link
+ip<span class="w"> </span>addr
+ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>lo<span class="w"> </span>up
+ping<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">127</span>.0.0.1
+</code></pre></div>
+
+<p>新 namespace 里最初只看到：</p>
+<div class="codehilite"><pre><span></span><code>1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</code></pre></div>
+
+<p>这解释了为什么手工创建的 network namespace 或精简容器里，<code>127.0.0.1</code> 可能不通：不是服务写错，而是 <code>lo</code> 没有启用。</p>
+<p><code>ip netns</code> 可以按名字管理 network namespace：</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span>add<span class="w"> </span>demo
+sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span>list
+sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>demo<span class="w"> </span>ip<span class="w"> </span>link
+sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>demo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>lo<span class="w"> </span>up
+sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>demo<span class="w"> </span>ip<span class="w"> </span>addr
+</code></pre></div>
+
+<p>连接两个 namespace 通常用 veth pair：</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>add<span class="w"> </span>veth-host<span class="w"> </span><span class="nb">type</span><span class="w"> </span>veth<span class="w"> </span>peer<span class="w"> </span>name<span class="w"> </span>veth-demo
+sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>veth-demo<span class="w"> </span>netns<span class="w"> </span>demo
+sudo<span class="w"> </span>ip<span class="w"> </span>addr<span class="w"> </span>add<span class="w"> </span><span class="m">10</span>.200.0.1/24<span class="w"> </span>dev<span class="w"> </span>veth-host
+sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>veth-host<span class="w"> </span>up
+sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>demo<span class="w"> </span>ip<span class="w"> </span>addr<span class="w"> </span>add<span class="w"> </span><span class="m">10</span>.200.0.2/24<span class="w"> </span>dev<span class="w"> </span>veth-demo
+sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>demo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>veth-demo<span class="w"> </span>up
+sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>demo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span>lo<span class="w"> </span>up
+ping<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">10</span>.200.0.2
+</code></pre></div>
+
+<p>容器网络不是魔法，通常由 veth pair、bridge、路由和 NAT 组合而成：network namespace 提供隔离端点，veth 提供连接通道，宿主转发规则提供出口。</p>
+<p><code>nsenter</code> 可以进入目标进程的 network namespace：</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>nsenter<span class="w"> </span>-t<span class="w"> </span><span class="m">34821</span><span class="w"> </span>-n<span class="w"> </span>ip<span class="w"> </span>addr
+sudo<span class="w"> </span>nsenter<span class="w"> </span>-t<span class="w"> </span><span class="m">34821</span><span class="w"> </span>-n<span class="w"> </span>ss<span class="w"> </span>-lntp
+sudo<span class="w"> </span>nsenter<span class="w"> </span>-t<span class="w"> </span><span class="m">34821</span><span class="w"> </span>-n<span class="w"> </span>ip<span class="w"> </span>route
+sudo<span class="w"> </span>nsenter<span class="w"> </span>-t<span class="w"> </span><span class="m">34821</span><span class="w"> </span>-n<span class="w"> </span>-p<span class="w"> </span>-m<span class="w"> </span>bash
+</code></pre></div>
+
+<p>分别表示 network、PID、mount namespace。实际使用时注意：进入 PID namespace 通常需要 fork 子进程才能获得新的 PID 视图，而进入 network namespace 调用者会立即进入。</p>
+<p><strong>端口空间独立。</strong> 容器里监听 <code>8080</code> 指容器 network namespace 中的 <code>8080</code>；宿主上的 <code>8080</code> 是另一个 network namespace 中的端口，除非运行时做映射或代理。排查“端口不通”时依次确认：</p>
+<ol>
+<li>服务是否真的在容器内监听；</li>
+<li>监听地址是 <code>127.0.0.1</code> 还是 <code>0.0.0.0</code>；</li>
+<li>宿主是否有端口映射或负载均衡；</li>
+<li>防火墙、iptables、安全组是否放行；</li>
+<li>是否进错了 network namespace。</li>
+</ol>
+<p><strong>网络隔离不等于带宽隔离。</strong> network namespace 不负责限制带宽、每秒连接数，也不保证固定带宽。带宽和连接数限制通常由 cgroup、tc、eBPF 或运行时配置完成。</p>
+<h2 id="8-user-namespaceuidgid">8. user namespace：UID/GID 映射与能力范围</h2>
+<p>user namespace 隔离用户和组 ID 的映射关系，以及 capability 的作用范围。在新的 user namespace 中，进程可以拥有“看起来是 root”的 UID 0，但这个 UID 0 在宿主上可能映射到普通用户，比如 UID 1000。</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>/proc/self/uid_map
+cat<span class="w"> </span>/proc/self/gid_map
+cat<span class="w"> </span>/proc/self/setgroups
+</code></pre></div>
+
+<p>映射示例：</p>
+<div class="codehilite"><pre><span></span><code>         0       1000          1
+</code></pre></div>
+
+<p>表示 namespace 内的 UID 0 映射到宿主 UID 1000，长度为 1。范围映射可能写成：</p>
+<div class="codehilite"><pre><span></span><code>         0       100000      65536
+</code></pre></div>
+
+<p>表示 namespace 内 UID 0 到 65535 映射到宿主 100000 到 165535。</p>
+<p>创建 user namespace：</p>
+<div class="codehilite"><pre><span></span><code>unshare<span class="w"> </span>--user<span class="w"> </span>--map-root-user<span class="w"> </span>bash
+id
+cat<span class="w"> </span>/proc/self/uid_map
+</code></pre></div>
+
+<p>你可能在这个 namespace 中变成 root，但宿主上的真实 UID 没有改变。user namespace 还允许非特权用户创建其他类型的 namespace：先创建 user namespace，再在其中创建 PID、mount、network namespace。这是 rootless 容器的基础之一。</p>
+<p>Linux 把传统 root 权限拆成 capability，例如 <code>CAP_SYS_ADMIN</code>、<code>CAP_NET_ADMIN</code>、<code>CAP_NET_BIND_SERVICE</code>、<code>CAP_SYS_CHROOT</code>、<code>CAP_KILL</code>、<code>CAP_SYS_PTRACE</code>。user namespace 会影响 capability 的作用范围：进程可以在自己的 user namespace 内拥有完整 capability 集合，但这些能力不会自动作用于祖先 user namespace 或其他 namespace 中的资源。</p>
+<p>所以“容器内是 root”不必然意味着“能在宿主上为所欲为”，但也不代表绝对安全。内核漏洞、错误挂载、过度 capability、宿主目录误挂载，都可能让隔离失效。</p>
+<p>user namespace 主要解决 UID/GID 映射、非特权用户创建 namespace、capability 作用范围；它不自动解决容器能执行哪些系统调用、能用多少 CPU 和内存、能否访问宿主设备、镜像是否利用内核漏洞等问题。它只是安全拼图中的一块。</p>
+<h2 id="9-unshare-setns">9. unshare 与 setns：创建还是加入</h2>
+<h3 id="91-unshare-namespace">9.1 <code>unshare</code>：创建新 namespace</h3>
+<p><code>unshare(2)</code> 让调用者脱离某些当前共享资源，并在指定类型上创建新 namespace。常见标志有 <code>CLONE_NEWPID</code>、<code>CLONE_NEWNS</code>、<code>CLONE_NEWNET</code>、<code>CLONE_NEWUSER</code>、<code>CLONE_NEWUTS</code>、<code>CLONE_NEWIPC</code>、<code>CLONE_NEWCGROUP</code>。对应命令行工具是 <code>unshare(1)</code>：</p>
+<div class="codehilite"><pre><span></span><code>unshare<span class="w"> </span>--pid<span class="w"> </span>--fork<span class="w"> </span>--mount-proc<span class="w"> </span>bash
+unshare<span class="w"> </span>--net<span class="w"> </span>bash
+unshare<span class="w"> </span>--mount<span class="w"> </span>--propagation<span class="w"> </span>private<span class="w"> </span>bash
+unshare<span class="w"> </span>--user<span class="w"> </span>--map-root-user<span class="w"> </span>bash
+</code></pre></div>
+
+<p>不同 namespace 对调用者影响不同：</p>
+<ul>
+<li><code>CLONE_NEWPID</code>：调用者本身不改变 PID，之后 fork 的子进程进入新 PID namespace。</li>
+<li><code>CLONE_NEWNET</code>：调用者立即进入新 network namespace。</li>
+<li><code>CLONE_NEWNS</code>：调用者立即进入新 mount namespace。</li>
+<li><code>CLONE_NEWUSER</code>：调用者立即进入新 user namespace，但 UID 映射需要额外配置。</li>
+</ul>
+<h3 id="92-setns-namespace">9.2 <code>setns</code>：加入已有 namespace</h3>
+<p><code>setns(2)</code> 让调用者加入一个已经存在的 namespace，通常接收指向 <code>/proc/&lt;pid&gt;/ns/&lt;type&gt;</code> 的文件描述符。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sched.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/wait.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">"usage: %s /proc/&lt;pid&gt;/ns/&lt;type&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">open</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">O_RDONLY</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"open"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">setns</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"setns"</span><span class="p">);</span><span class="w"> </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/* PID namespace 必须 fork 后子进程才真正进入 */</span>
+<span class="w">    </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fork</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"fork"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pid</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">execlp</span><span class="p">(</span><span class="s">"sh"</span><span class="p">,</span><span class="w"> </span><span class="s">"sh"</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"execlp"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">_exit</span><span class="p">(</span><span class="mi">127</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">waitpid</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"waitpid"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意：</p>
+<ul>
+<li>打开 namespace 链接和 <code>setns</code> 通常需要相应权限，常见要求是目标 user namespace 中的 <code>CAP_SYS_ADMIN</code>。</li>
+<li>对 PID namespace，<code>setns</code> 不改变调用者自己的 PID，而是让之后 fork 的子进程进入目标 PID namespace。</li>
+<li>不能通过 <code>setns</code> 加入祖先 PID namespace。</li>
+<li>加入 mount namespace 还涉及 <code>CAP_SYS_CHROOT</code> 等额外约束。</li>
+</ul>
+<p><code>nsenter(1)</code> 本质上是对 <code>setns</code> 的封装，额外处理打开文件、fork、执行命令等细节。排障时优先用 <code>nsenter</code> 更省事；理解 <code>setns</code> 能帮助你明白它到底做了什么。</p>
+<h3 id="93">9.3 对比</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th><code>unshare</code></th>
+<th><code>setns</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目的</td>
+<td>创建新 namespace</td>
+<td>加入已有 namespace</td>
+</tr>
+<tr>
+<td>入口</td>
+<td>系统调用标志</td>
+<td><code>/proc/&lt;pid&gt;/ns/&lt;type&gt;</code> 文件描述符</td>
+</tr>
+<tr>
+<td>PID namespace</td>
+<td>影响之后 fork 的子进程</td>
+<td>影响之后 fork 的子进程</td>
+</tr>
+<tr>
+<td>network/mount</td>
+<td>调用者立即进入新 namespace</td>
+<td>调用者立即进入目标 namespace</td>
+</tr>
+<tr>
+<td>常见工具</td>
+<td><code>unshare(1)</code></td>
+<td><code>nsenter(1)</code></td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>启动容器、创建隔离环境</td>
+<td>进入容器排障、检查某进程视图</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-capability">10. capability 与宿主内核共享</h2>
+<h3 id="101">10.1 容器没有自己的内核</h3>
+<p>这是本课最重要的结论：</p>
+<blockquote>
+<p>容器共享宿主内核。namespace 没有复制内核，也没有启动新内核。</p>
+</blockquote>
+<p>验证方式：</p>
+<div class="codehilite"><pre><span></span><code>uname<span class="w"> </span>-r
+cat<span class="w"> </span>/proc/version
+</code></pre></div>
+
+<p>在宿主和容器中执行，输出通常完全一致。还可以观察：容器内不能加载只属于“容器内核”的模块；宿主内核升级后所有容器使用的内核随之变化；宿主内核漏洞影响所有容器；容器内的系统调用最终由宿主内核处理。</p>
+<p>这与虚拟机有本质区别。虚拟机有独立内核，容器没有。容器轻量也源于此：启动容器不需要启动内核，只需创建 namespace、配置 cgroup、准备根文件系统、启动进程。</p>
+<h3 id="102-capabilityseccompcgroup">10.2 capability、seccomp、cgroup 的分工</h3>
+<p>传统 Unix 中 root 拥有几乎全部权限，Linux capability 把 root 权限拆成细粒度能力。容器运行时通常会裁剪 capability，只保留业务真正需要的能力，例如绑定低端口时添加 <code>CAP_NET_BIND_SERVICE</code>，避免使用 <code>--privileged</code>。</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>Cap<span class="w"> </span>/proc/self/status
+capsh<span class="w"> </span>--print
+</code></pre></div>
+
+<p>seccomp 允许运行时限制容器可以执行哪些系统调用。namespace 改变“能看到什么资源”，seccomp 改变“能调用哪些内核接口”，二者不能互相替代。</p>
+<p>cgroup 负责资源计量和限制，例如 CPU 使用时间、内存上限、块设备 I/O、进程数量上限。namespace 不负责这些：一个容器可以有独立 PID namespace，仍然可以吃满宿主 CPU；也可以有独立 network namespace，仍然可以占满带宽。</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>主要职责</th>
+<th>典型问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>namespace</td>
+<td>隔离资源视图和命名空间</td>
+<td>容器内看到的 PID、网卡、挂载点与宿主不同</td>
+</tr>
+<tr>
+<td>cgroup</td>
+<td>限制和计量 CPU、内存、I/O、进程数</td>
+<td>容器能吃多少资源</td>
+</tr>
+<tr>
+<td>capabilities</td>
+<td>拆分 root 权限</td>
+<td>容器内 root 能做什么管理操作</td>
+</tr>
+<tr>
+<td>seccomp</td>
+<td>过滤系统调用</td>
+<td>容器能调用哪些内核接口</td>
+</tr>
+<tr>
+<td>LSM</td>
+<td>强制访问控制</td>
+<td>容器能访问哪些文件、网络、对象</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11">11. 常见误区</h2>
+<p><strong>误区一：namespace 会自动限制 CPU 和内存。</strong> 错误。namespace 主要提供视图隔离，CPU 配额、内存上限、I/O 限速、进程数上限由 cgroup 负责。容器即使有独立 PID、network、mount namespace，也可能打满宿主 CPU 或触发宿主 OOM。</p>
+<p><strong>误区二：namespace 是完整安全沙箱。</strong> 错误。namespace 是重要基础，但容器与宿主共享内核。内核漏洞、过多 capability、错误挂载、未启用 seccomp、以 root 运行且未启用 user namespace、运行时配置错误，都可能削弱隔离。生产环境通常需要组合使用非 root、capability 裁剪、seccomp、LSM、只读文件系统、最小挂载和网络策略。</p>
+<p><strong>误区三：容器里看到的 PID 就是宿主 PID。</strong> 错误。容器内通常是容器 PID namespace 中的编号，宿主上是另一个编号。找容器主进程宿主 PID 用：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.Pid}}'</span><span class="w"> </span>&lt;container&gt;
+docker<span class="w"> </span>top<span class="w"> </span>&lt;container&gt;
+</code></pre></div>
+
+<p><code>docker top</code> 显示的通常是宿主视角 PID。</p>
+<p><strong>误区四：容器里 <code>ps</code> 看到宿主进程，说明没有隔离。</strong> 不一定。更常见的原因是 <code>/proc</code> 没有针对新 PID namespace 重新挂载。检查：</p>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>/proc/self/ns/pid
+readlink<span class="w"> </span>/proc/self/ns/pid
+cat<span class="w"> </span>/proc/self/mountinfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">' /proc '</span>
+</code></pre></div>
+
+<p><strong>误区五：<code>unshare --pid</code> 之后当前 shell 的 PID 立刻变成 1。</strong> 错误。需要 <code>--fork</code>，子进程才进入新 namespace 并成为 PID 1。</p>
+<p><strong>误区六：<code>setns</code> 进入 PID namespace 后当前进程立刻获得新 PID。</strong> 错误。它主要影响之后 fork 的子进程。</p>
+<p><strong>误区七：有 network namespace 就有独立带宽。</strong> 错误。带宽限制需要 tc、cgroup、eBPF 或运行时配置。</p>
+<p><strong>误区八：容器里的 root 就是宿主 root。</strong> 不一定。启用 user namespace 映射后，容器 UID 0 可能映射到宿主普通 UID；即使没启用，容器 root 通常也被 capability 裁剪和 seccomp 限制。</p>
+<h2 id="12">12. 设计权衡</h2>
+<p><strong>容器为什么轻量。</strong> 共享宿主内核，不需要为每个容器启动完整内核；启动快、资源开销小、镜像可分层复用、密度高，适合微服务和弹性伸缩。namespace 让多个容器在同一内核上拥有相对独立的视图，cgroup 让它们共享资源但受到限制。</p>
+<p><strong>轻量的代价。</strong> 共享内核意味着内核漏洞影响面更大，隔离强度通常弱于虚拟机，运行时配置对安全影响极大，容器逃逸后果可能严重。安全要求很高的场景可能选择 gVisor、Kata Containers 或其他更强隔离方案，或把敏感服务放在独立节点、独立集群。</p>
+<p><strong>隔离强度与运维复杂度的权衡。</strong></p>
+<ul>
+<li>namespace + cgroup：轻量、简单，但安全边界依赖运行时配置。</li>
+<li>加 user namespace：降低容器内 root 风险，但增加 UID 映射、卷权限、镜像兼容性的复杂度。</li>
+<li>加 seccomp 和 LSM：提高安全性，但可能导致某些应用行为异常，需要调试策略。</li>
+<li>使用 gVisor、Kata、VM：安全性更高，但启动更慢、资源开销更大、运维更复杂。</li>
+</ul>
+<p>没有“默认正确”的答案，只有与业务风险、性能要求和运维能力匹配的选择。</p>
+<p><strong>可观测性与排障的权衡。</strong> namespace 让容器拥有独立视图，也让排障变复杂：容器内 PID 与宿主 PID 不一致，网络和挂载视图也不一致。好的实践是：日志中同时记录容器内 PID 和可关联的请求 ID；排障时先确认自己在哪个 namespace；使用 <code>docker inspect</code>、<code>nsenter</code>、<code>lsns</code> 建立宿主与容器的对应关系；不要把容器内 PID 直接当作宿主 PID 去 <code>kill</code>。</p>
+<h2 id="13-namespace-pid">13. 动手实践：查看容器 namespace 链接，对比宿主和容器 PID</h2>
+<p>本实践必须在<strong>受控开发环境</strong>中进行，例如自己的开发机、测试集群或临时虚拟机。不要在生产节点上随意创建 namespace、修改挂载或执行 <code>nsenter</code>。准备一台 Linux 开发机、可用的 Docker 或 Podman、可执行 <code>docker</code>/<code>lsns</code>/<code>readlink</code> 的权限；部分 <code>nsenter</code> 命令可能需要 <code>sudo</code>。示例容器使用 Alpine，命令中的容器名、PID 和路径请按实际环境替换。</p>
+<h3 id="131-namespace">13.1 步骤一：观察宿主当前进程的 namespace 链接</h3>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>/proc/self/ns
+readlink<span class="w"> </span>/proc/self/ns/pid
+readlink<span class="w"> </span>/proc/self/ns/mnt
+readlink<span class="w"> </span>/proc/self/ns/net
+readlink<span class="w"> </span>/proc/self/ns/user
+lsns
+</code></pre></div>
+
+<p>记录每个链接的 inode 号，尤其是 <code>pid</code>、<code>mnt</code>、<code>net</code>、<code>user</code>。验收点：能说出 <code>/proc/self/ns</code> 中每个链接代表哪类 namespace，以及方括号中的数字是什么。</p>
+<h3 id="132">13.2 步骤二：启动测试容器</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>ns-demo<span class="w"> </span>alpine<span class="w"> </span>sleep<span class="w"> </span><span class="m">3600</span>
+docker<span class="w"> </span>ps<span class="w"> </span>--filter<span class="w"> </span><span class="nv">name</span><span class="o">=</span>ns-demo
+</code></pre></div>
+
+<h3 id="133-pid">13.3 步骤三：获取容器主进程的宿主 PID</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.Pid}}'</span><span class="w"> </span>ns-demo
+</code></pre></div>
+
+<p>记下输出，例如 <code>34821</code>。这是<strong>宿主 PID namespace 中的 PID</strong>，不是容器内看到的 PID。也可以执行 <code>docker top ns-demo</code>，观察 PID 列。验收点：能解释 <code>docker inspect</code> 得到的 PID 属于哪个 PID namespace 的编号体系。</p>
+<h3 id="134-pid-pid">13.4 步骤四：对比容器内 PID 与宿主 PID</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>ns-demo<span class="w"> </span>ps<span class="w"> </span>-ef
+</code></pre></div>
+
+<p>这里的 <code>1</code> 是容器 PID namespace 中的 PID。回到宿主：</p>
+<div class="codehilite"><pre><span></span><code>ps<span class="w"> </span>-o<span class="w"> </span>pid,ppid,user,comm<span class="w"> </span>-p<span class="w"> </span><span class="m">34821</span>
+readlink<span class="w"> </span>/proc/34821/ns/pid
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ns-demo<span class="w"> </span>readlink<span class="w"> </span>/proc/1/ns/pid
+</code></pre></div>
+
+<p>宿主上能看到 <code>sleep 3600</code>，但 PID 是 <code>34821</code>。若两条 <code>readlink</code> 输出的 inode 相同，说明正在从两个视角观察同一个 PID namespace。验收点：能用一句话解释“为什么容器内是 PID 1，宿主上是 PID 34821”。</p>
+<h3 id="135-namespace">13.5 步骤五：查看容器进程的 namespace 链接</h3>
+<div class="codehilite"><pre><span></span><code>ls<span class="w"> </span>-l<span class="w"> </span>/proc/34821/ns
+lsns<span class="w"> </span>-p<span class="w"> </span><span class="m">34821</span>
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ns-demo<span class="w"> </span>ls<span class="w"> </span>-l<span class="w"> </span>/proc/self/ns
+</code></pre></div>
+
+<p>与步骤一记录的宿主 namespace inode 对比。通常可以看到：容器的 <code>pid</code>、<code>mnt</code>、<code>net</code> namespace 与宿主不同；取决于运行时配置，<code>user</code> namespace 可能相同也可能不同；<code>uts</code>、<code>ipc</code> 等通常也不同。验收点：能指出哪些 namespace 不同，并解释这些差异分别影响什么可见性。</p>
+<h3 id="136-network-namespace">13.6 步骤六：进入容器的 network namespace 观察</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ns-demo<span class="w"> </span>ip<span class="w"> </span>addr
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ns-demo<span class="w"> </span>ip<span class="w"> </span>route
+sudo<span class="w"> </span>nsenter<span class="w"> </span>-t<span class="w"> </span><span class="m">34821</span><span class="w"> </span>-n<span class="w"> </span>ip<span class="w"> </span>addr
+sudo<span class="w"> </span>nsenter<span class="w"> </span>-t<span class="w"> </span><span class="m">34821</span><span class="w"> </span>-n<span class="w"> </span>ip<span class="w"> </span>route
+sudo<span class="w"> </span>nsenter<span class="w"> </span>-t<span class="w"> </span><span class="m">34821</span><span class="w"> </span>-n<span class="w"> </span>ss<span class="w"> </span>-lntp
+ip<span class="w"> </span>addr
+ip<span class="w"> </span>route
+ss<span class="w"> </span>-lntp
+</code></pre></div>
+
+<p>对比容器内、容器 network namespace、宿主三者的网络视图。容器内的 <code>eth0</code>、路由和端口空间与宿主不同，容器内的 <code>127.0.0.1</code> 也只属于容器的 network namespace。验收点：能解释为什么容器内监听 <code>127.0.0.1:8080</code> 时，宿主不能直接通过宿主 <code>127.0.0.1:8080</code> 访问。</p>
+<h3 id="137">13.7 步骤七：对比内核版本</h3>
+<div class="codehilite"><pre><span></span><code>uname<span class="w"> </span>-r
+uname<span class="w"> </span>-a
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ns-demo<span class="w"> </span>uname<span class="w"> </span>-r
+docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ns-demo<span class="w"> </span>uname<span class="w"> </span>-a
+</code></pre></div>
+
+<p>两者通常完全一致，或至少内核版本一致。这直接说明容器共享宿主内核，没有独立内核。验收点：能根据 <code>uname -r</code> 的输出解释“容器不是虚拟机”。</p>
+<h3 id="138">13.8 步骤八：清理</h3>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>ns-demo
+<span class="c1"># 如果做过第 7 节的 ip netns 实验，再清理：</span>
+sudo<span class="w"> </span>ip<span class="w"> </span>netns<span class="w"> </span>del<span class="w"> </span>demo
+sudo<span class="w"> </span>ip<span class="w"> </span>link<span class="w"> </span>del<span class="w"> </span>veth-host<span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</code></pre></div>
+
+<h3 id="139">13.9 实践验收清单</h3>
+<ul>
+<li>[ ] 我能找到 <code>/proc/&lt;pid&gt;/ns/</code> 下各类 namespace 的链接。</li>
+<li>[ ] 我能用 <code>readlink</code> 读出 namespace inode。</li>
+<li>[ ] 我能用 <code>lsns</code> 查看进程所属 namespace。</li>
+<li>[ ] 我能用 <code>docker inspect</code> 获取容器主进程的宿主 PID。</li>
+<li>[ ] 我能对比容器内 PID 与宿主 PID，并解释差异。</li>
+<li>[ ] 我能用 <code>nsenter</code> 进入容器的 network namespace 观察网络。</li>
+<li>[ ] 我能用 <code>uname -r</code> 说明容器与宿主共享内核。</li>
+<li>[ ] 我能明确说出 namespace 不负责 CPU、内存和系统调用权限限制。</li>
+<li>[ ] 我能说出 cgroup、capabilities、seccomp 各自负责什么。</li>
+</ul>
+<h2 id="14">14. 自测题</h2>
+<h3 id="ps-ef-pid-1">题一：容器内 <code>ps -ef</code> 只看到 PID 1 和当前命令，宿主上却有很多进程。为什么？</h3>
+<p><strong>参考答案：</strong> 容器运行在独立的 PID namespace 中。PID namespace 隔离进程编号和可见进程集合，容器内进程只能看到同一 PID namespace 及其后代 namespace 中的进程，所以通常只能看到自己的主进程和当前命令。宿主处于祖先 PID namespace，可以看到包括容器进程在内的更多进程。两个视角看到的 PID 编号也可能不同：容器内是 1，宿主上是另一个数字，但指向同一个进程。如果容器内反而看到宿主全部进程，要检查 <code>/proc</code> 是否针对新 PID namespace 正确挂载，而不是直接断定“没有 PID namespace”。</p>
+<h3 id="pidmountnetwork-namespace-2-cpu-4-gb">题二：给容器配置了 PID、mount、network namespace，是否意味着它最多只能用 2 核 CPU 和 4 GB 内存？</h3>
+<p><strong>参考答案：</strong> 不是。namespace 负责资源视图和命名空间隔离，不负责资源配额。CPU 核数、CPU 时间、内存上限、I/O 带宽、进程数上限由 cgroup 或运行时资源限制负责。一个拥有独立 namespace 的容器仍然可能吃满宿主 CPU 或耗尽内存。要限制资源，需要设置 cgroup 限制，例如 CPU quota、memory limit、pids limit。</p>
+<h3 id="uname-r">题三：容器内执行 <code>uname -r</code> 与宿主完全一致，说明了什么？这对安全有什么含义？</h3>
+<p><strong>参考答案：</strong> 说明容器与宿主共享同一个内核。容器没有自己的内核，namespace 只是让容器进程看到独立的资源视图；<code>uname</code> 读取的是宿主内核信息，所以结果一致。安全含义是：宿主内核漏洞会影响所有容器；容器内执行系统调用最终由宿主内核处理；容器安全边界不仅依赖 namespace，还依赖 capability 裁剪、seccomp、LSM、user namespace、只读文件系统、最小挂载和运行时配置。容器轻量，但不能因此认为它等价于完整虚拟机。</p>
+<h2 id="15">15. 推荐资源</h2>
+<ul>
+<li><strong>namespace与隔离边界：Linux man-pages</strong><br />
+  https://man7.org/linux/man-pages/man7/namespaces.7.html<br />
+  来源：man7.org；语言：英文；类型：文档；难度：进阶。<br />
+  说明：重点阅读 PID、mount、network 与 user namespace，以及 <code>unshare</code> 和 <code>setns</code> 相关章节，用于核对本节点实验的语义和边界。建议结合本课实践步骤，边看边在受控环境中验证。</li>
+</ul>
+<p>本地可继续查阅：</p>
+<div class="codehilite"><pre><span></span><code>man<span class="w"> </span><span class="m">7</span><span class="w"> </span>namespaces
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span>unshare
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span>setns
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span>clone
+man<span class="w"> </span><span class="m">1</span><span class="w"> </span>unshare
+man<span class="w"> </span><span class="m">1</span><span class="w"> </span>nsenter
+man<span class="w"> </span><span class="m">1</span><span class="w"> </span>lsns
+man<span class="w"> </span><span class="m">5</span><span class="w"> </span>proc
+</code></pre></div>
+
+<h2 id="16">16. 本课小结</h2>
+<ul>
+<li>namespace 是 Linux 内核提供的资源视图隔离机制，是容器的基础之一，但不是完整虚拟机。</li>
+<li>PID namespace 隔离进程编号和可见进程集合；mount namespace 隔离挂载表；network namespace 隔离网络设备和端口空间；user namespace 隔离 UID/GID 映射和 capability 作用范围。</li>
+<li><code>unshare</code> 创建新 namespace，<code>setns</code> 加入已有 namespace；PID namespace 对两者的影响都主要体现在之后 fork 的子进程。</li>
+<li>容器与宿主共享内核，<code>uname -r</code> 一致是直接证据。</li>
+<li>namespace 不限制 CPU、内存和系统调用权限；资源限制靠 cgroup，权限控制靠 capabilities，系统调用过滤靠 seccomp，强制访问控制靠 LSM。</li>
+<li>容器轻量、密度高，但安全边界需要运行时配置共同保证。排障时先确认自己在看哪个 namespace 的视图，再解读 PID、端口和挂载路径。</li>
+</ul><div class="pn"><span><a href="45.html">← 资源限制与/proc诊断</a></span><span>下一课 待更新</span></div></main></div></body></html>
