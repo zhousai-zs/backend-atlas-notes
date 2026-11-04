@@ -1,0 +1,267 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>42. futex与用户态同步慢路径 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（42/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details open><summary>领域 C（10/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="cur" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li class="todo">43. ELF、装载与符号 <em>待更新</em></li><li class="todo">45. 资源限制与/proc诊断 <em>待更新</em></li><li class="todo">46. namespace与隔离边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">44. 动态加载、懒绑定与可重入性 <em>待更新</em></li><li class="todo">47. cgroup v2与资源治理 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">48. 内核路径与运行时边界 <em>待更新</em></li></ul></details><details><summary>领域 D（0/16）</summary><div>阶段 2</div><ul><li class="todo">49. TCP状态机与连接生命周期 <em>待更新</em></li><li class="todo">50. UDP报文与可靠性设计 <em>待更新</em></li><li class="todo">51. Socket服务端基础 <em>待更新</em></li><li class="todo">52. 非阻塞IO与读写状态机 <em>待更新</em></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 42 课 · 领域 C · 阶段 3</p><p class="dl"><a href="../files/42-c-futex.md" download>⬇ 本课 Markdown</a></p><h1 id="42208-futex">第 42/208 课：futex与用户态同步慢路径</h1>
+<blockquote>
+<p>领域：C ｜ 阶段：3 ｜ 难度：进阶 ｜ 子类：进程、线程与调度
+前置：<code>c-thread</code>（线程）、<code>c-syscall</code>（系统调用）</p>
+</blockquote>
+<p><strong>一句话</strong>：futex 让锁在<strong>无竞争时完全在用户态</strong>靠原子操作完成，只有<strong>发生竞争时</strong>才进内核，由内核按“用户内存地址”把线程挂起和唤醒。</p>
+<hr />
+<h2 id="1">1. 学习目标 &amp; 为什么后端要懂</h2>
+<p>学完本课你应该能：</p>
+<ul>
+<li>解释<strong>用户态快路径</strong>：为什么 <code>pthread_mutex_lock</code> 大多数时候根本不进内核；</li>
+<li>独立完成：<strong>观察互斥锁在低竞争和高竞争时的 futex 调用，并画出等待时序</strong>；</li>
+<li>说明“<strong>先检查再睡眠</strong>”会丢唤醒，以及 futex 的“比较并等待”怎样堵住这个窗口；</li>
+<li>明白 <strong>futex 只是积木，不是一把完整的锁</strong>。</li>
+</ul>
+<p><strong>为什么后端要懂</strong>：节点给出的核心问题是——<em>互斥锁为何既需要原子操作又需要系统调用？</em></p>
+<ul>
+<li>只用原子操作（纯自旋）：抢不到锁就空转烧 CPU，临界区一长就浪费整核。</li>
+<li>每次都走系统调用：哪怕没人竞争也要陷入内核，开销大。</li>
+<li>futex = 两者结合：<strong>无竞争走原子操作（快），有竞争才系统调用睡眠（省 CPU）</strong>。</li>
+</ul>
+<p>后台场景：公众号后台某服务用一把全局锁保护连接池或计数器。QPS 低时一切正常；大促流量上来后 p99 抖动，<code>strace -c</code> 一看 <code>futex</code> 调用量和耗时冲到第一。这就是锁从“快路径”掉进了“慢路径”。看懂 futex，你才能判断这是锁竞争问题，而不是“系统调用太慢”。</p>
+<hr />
+<h2 id="2">2. 核心要点：从直觉到原理</h2>
+<h3 id="21">2.1 用户态快路径</h3>
+<p><strong>直觉</strong>：大部分时间锁没人抢。既然没人抢，何必麻烦内核？在用户态用一条原子指令（CAS）把锁变量从 0 改成 1，成功就拿到锁了。</p>
+<p><strong>原理</strong>：锁就是一个普通的 32 位整数，放在用户内存里（可以是进程私有的，也可以在共享内存里）。</p>
+<ul>
+<li>加锁：<code>CAS(&amp;lock, 0, 1)</code> 成功 → 拿到锁，<strong>零系统调用</strong>。</li>
+<li>解锁：如果确定没人在等，直接写 0，<strong>零系统调用</strong>。</li>
+<li>只有 CAS 失败（有人持锁）时才需要考虑“睡眠”，这时候才需要内核——<strong>慢路径</strong>。</li>
+</ul>
+<p>glibc 的 <code>pthread_mutex_t</code> 底层就是这样：无竞争的 lock/unlock 用 <code>strace</code> 是看不到任何 <code>futex</code> 调用的。</p>
+<h3 id="22-futex_wait">2.2 比较并等待（FUTEX_WAIT）</h3>
+<p><strong>直觉</strong>：抢不到锁，想睡觉等别人叫醒。朴素写法：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">lock</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">      </span><span class="c1">// ① 检查：锁被占用</span>
+<span class="w">    </span><span class="n">sleep_until_woken</span><span class="p">();</span><span class="w"> </span><span class="c1">// ② 睡眠</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>问题在 ① 和 ② 之间：如果持锁者恰好在这之间释放了锁并发出“唤醒”，此时你还没睡下，唤醒就<strong>丢了</strong>；接着你睡下去，可能再也没人来叫你。这就是<strong>先检查再睡眠的丢唤醒风险</strong>（lost wake-up）。</p>
+<p><strong>原理</strong>：futex 把“检查”和“睡眠”交给内核<strong>原子地</strong>完成：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">syscall</span><span class="p">(</span><span class="n">SYS_futex</span><span class="p">,</span><span class="w"> </span><span class="n">uaddr</span><span class="p">,</span><span class="w"> </span><span class="n">FUTEX_WAIT</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div>
+
+<p>语义：内核在把调用者挂到等待队列之前，检查 <code>*uaddr</code> 是否<strong>仍等于</strong> <code>val</code>：</p>
+<ul>
+<li>相等 → 挂起，直到被 <code>FUTEX_WAKE</code> 唤醒（或超时、被信号打断）；</li>
+<li>不相等 → 立即返回，<code>errno = EAGAIN</code>，意思是“值已经变了，你回去重新看看”。</li>
+</ul>
+<p>这个检查与入队相对于同一地址上的 <code>FUTEX_WAKE</code> 是原子的，所以“我看到锁被占→我睡下”之间不会漏掉唤醒：要么值已经变了（直接返回），要么我已经在队列里（唤醒能找到我）。</p>
+<p>内核用<strong>用户内存地址</strong>作为等待队列的键（私有 futex 用“地址空间+虚拟地址”，共享的用底层页面），内核里并不存在一个“锁对象”——锁的状态始终在用户内存里。</p>
+<h3 id="23-futex_wake">2.3 唤醒、竞态与虚假唤醒（FUTEX_WAKE）</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">syscall</span><span class="p">(</span><span class="n">SYS_futex</span><span class="p">,</span><span class="w"> </span><span class="n">uaddr</span><span class="p">,</span><span class="w"> </span><span class="n">FUTEX_WAKE</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// 最多唤醒 n 个等待者</span>
+</code></pre></div>
+
+<p>需要牢记三点：</p>
+<ol>
+<li><strong>唤醒 ≠ 拿到锁</strong>：被唤醒只是“你可以再试一次了”。醒来的线程要重新 CAS，可能被刚到的新线程抢先（插队）。</li>
+<li><strong>唤醒 ≠ 立即运行</strong>：被唤醒的线程只是变成可运行，什么时候上 CPU 由调度器决定（回顾第 41 课）。</li>
+<li><strong>虚假唤醒</strong>：<code>FUTEX_WAIT</code> 可能因为信号（<code>EINTR</code>）、超时、或者别的原因返回，而条件并未满足。所以<strong>等待永远要写在循环里，醒来重新检查条件</strong>。</li>
+</ol>
+<h3 id="24">2.4 一个简化的三状态锁（教学示例）</h3>
+<p>参考 Ulrich Drepper 论文《Futexes Are Tricky》中的思路。状态：<code>0</code> = 未锁，<code>1</code> = 已锁无等待者，<code>2</code> = 已锁且可能有等待者。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// futex_lock.c —— 教学用简化锁，不是生产级实现</span>
+<span class="cp">#define _GNU_SOURCE</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;linux/futex.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdatomic.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/syscall.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="nf">futex</span><span class="p">(</span><span class="kt">atomic_int</span><span class="w"> </span><span class="o">*</span><span class="n">uaddr</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">val</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">syscall</span><span class="p">(</span><span class="n">SYS_futex</span><span class="p">,</span><span class="w"> </span><span class="n">uaddr</span><span class="p">,</span><span class="w"> </span><span class="n">op</span><span class="p">,</span><span class="w"> </span><span class="n">val</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">lock</span><span class="p">(</span><span class="kt">atomic_int</span><span class="w"> </span><span class="o">*</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// 快路径：0 -&gt; 1，成功就返回，不进内核</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">atomic_compare_exchange_strong</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// 慢路径：标记为 2（有等待者），然后睡</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+<span class="w">        </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atomic_exchange</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 只有当 *m 仍为 2 时才睡；否则 EAGAIN 立即返回再试</span>
+<span class="w">        </span><span class="n">futex</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">FUTEX_WAIT_PRIVATE</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">        </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atomic_exchange</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">   </span><span class="c1">// 醒来后重新抢（可能被插队）</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">unlock</span><span class="p">(</span><span class="kt">atomic_int</span><span class="w"> </span><span class="o">*</span><span class="n">m</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 原值为 1：没人等，直接返回（快路径，无系统调用）</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">atomic_fetch_sub</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 原值为 2：可能有人在等</span>
+<span class="w">        </span><span class="n">atomic_store</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">futex</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">FUTEX_WAKE_PRIVATE</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li><code>lock</code> 的快路径只是一次 CAS；<code>unlock</code> 在状态为 1 时也不进内核。</li>
+<li>醒来后用 <code>exchange(m, 2)</code> 而不是 <code>1</code>：因为不知道是否还有其他等待者，保守地标 2，代价是偶尔多一次无用的 <code>FUTEX_WAKE</code>。</li>
+<li><code>FUTEX_PRIVATE_FLAG</code>（<code>*_PRIVATE</code>）告诉内核这个 futex 只在本进程内使用，内核可以省去跨进程查找共享页的开销。glibc 对进程内 mutex 默认使用私有 futex。</li>
+</ul>
+<p><strong>为什么说它不是完整的锁？</strong> 它没有：错误检查与递归锁、持有者记录、健壮锁（持有者崩溃后的恢复，<code>robust futex</code>）、优先级继承（<code>FUTEX_LOCK_PI</code>）、超时、公平性、自适应自旋……这些都是 glibc <code>pthread_mutex</code> 在 futex 之上额外做的。<strong>futex 只提供“按地址睡/醒”的原语</strong>，正确的锁协议得由用户态代码设计，而且很容易写错——论文标题就叫“Futexes Are Tricky”。</p>
+<hr />
+<h2 id="3-linux">3. Linux 观测命令</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 只跟踪 futex 系统调用（-f 跟踪所有线程，-T 显示每次耗时，-tt 时间戳）</span>
+strace<span class="w"> </span>-f<span class="w"> </span>-tt<span class="w"> </span>-T<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>futex<span class="w"> </span>./bench<span class="w"> </span><span class="m">4</span>
+
+<span class="c1"># 统计各系统调用次数与耗时，看 futex 是否占大头</span>
+strace<span class="w"> </span>-f<span class="w"> </span>-c<span class="w"> </span>./bench<span class="w"> </span><span class="m">16</span>
+
+<span class="c1"># 对运行中的服务挂上去看 10 秒（注意 strace 本身开销很大，线上慎用）</span>
+timeout<span class="w"> </span><span class="m">10</span><span class="w"> </span>strace<span class="w"> </span>-f<span class="w"> </span>-c<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;
+
+<span class="c1"># 开销更低的替代：perf trace</span>
+perf<span class="w"> </span>trace<span class="w"> </span>-e<span class="w"> </span>futex<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;<span class="w"> </span>--<span class="w"> </span>sleep<span class="w"> </span><span class="m">5</span>
+perf<span class="w"> </span>trace<span class="w"> </span>-s<span class="w"> </span>./bench<span class="w"> </span><span class="m">16</span><span class="w">        </span><span class="c1"># 按线程汇总系统调用</span>
+
+<span class="c1"># 上下文切换：高竞争时自愿切换（睡在 futex 上）显著增多</span>
+perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>context-switches,cpu-migrations<span class="w"> </span>./bench<span class="w"> </span><span class="m">16</span>
+grep<span class="w"> </span>ctxt_switches<span class="w"> </span>/proc/&lt;pid&gt;/status
+cat<span class="w"> </span>/proc/&lt;pid&gt;/task/*/status<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>voluntary
+</code></pre></div>
+
+<p><code>strace</code> 输出里常见形态（示意）：</p>
+<div class="codehilite"><pre><span></span><code>futex(0x5581..., FUTEX_WAIT_PRIVATE, 2, NULL) = 0          &lt;- 睡下后被唤醒
+futex(0x5581..., FUTEX_WAIT_PRIVATE, 2, NULL) = -1 EAGAIN  &lt;- 值已变，没睡就返回
+futex(0x5581..., FUTEX_WAKE_PRIVATE, 1) = 1                &lt;- 唤醒了 1 个等待者
+futex(0x5581..., FUTEX_WAKE_PRIVATE, 1) = 0                &lt;- 没人在等（多余的唤醒）
+</code></pre></div>
+
+<p><code>EAGAIN</code> 正是“比较并等待”在起作用：检查发现值已变，拒绝睡眠，避免了丢唤醒。</p>
+<hr />
+<h2 id="4">4. 常见误区</h2>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>正确理解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>看到 <code>futex</code> 调用就说是“系统调用慢”</td>
+<td>futex 出现意味着<strong>发生了竞争</strong>；根因通常是锁粒度太粗或临界区太长</td>
+</tr>
+<tr>
+<td><code>FUTEX_WAKE</code> 返回 1 就说明那个线程拿到锁了</td>
+<td><strong>唤醒不代表调用者立即获得锁或立即运行</strong>，它还要被调度、再去抢</td>
+</tr>
+<tr>
+<td><code>FUTEX_WAIT</code> 返回 0 就说明条件满足</td>
+<td>可能是虚假唤醒；必须在循环里重新检查</td>
+</tr>
+<tr>
+<td>futex 就是一把锁</td>
+<td>futex 只是“按地址睡/醒”的原语，<strong>不是完整锁实现</strong></td>
+</tr>
+<tr>
+<td>先读一下变量，看到被占再调用 sleep 就行</td>
+<td>先检查再睡眠存在丢唤醒窗口，要靠 FUTEX_WAIT 的原子比较</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5">5. 设计权衡：自旋还是休眠？</h2>
+<p>节点给出的权衡：<strong>自旋与休眠的切换点依赖临界区长度和负载</strong>。</p>
+<ul>
+<li><strong>临界区很短</strong>（几十纳秒，比如加个计数）：持锁者马上就会释放，自旋几圈往往比“睡下 + 被唤醒 + 重新调度”（涉及两次系统调用和上下文切换）更划算。</li>
+<li><strong>临界区长或持锁者可能被换出</strong>：自旋就是白烧 CPU，应该尽快睡。</li>
+<li><strong>负载高、CPU 已满</strong>：自旋会抢走持锁者需要的 CPU，反而更慢。</li>
+</ul>
+<p>所以常见做法是“<strong>先自旋一小会儿，再休眠</strong>”，例如 glibc 的 <code>PTHREAD_MUTEX_ADAPTIVE_NP</code> 自适应互斥锁。但最根本的手段往往不是调锁，而是<strong>减少竞争</strong>：分片锁、每线程本地计数后再汇总、无锁队列、把慢操作（IO、日志）移出临界区。</p>
+<hr />
+<h2 id="6-futex">6. 动手实践：观察低竞争与高竞争的 futex 调用</h2>
+<p><strong>目标</strong>：观察互斥锁低竞争和高竞争时的 futex 调用，绘制等待时序。</p>
+<p><strong>步骤 1：写压测程序</strong> <code>bench.c</code>：N 个线程各自对一个全局计数器加锁自增 <code>ITER</code> 次，临界区可选加一段空循环来模拟“长临界区”。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// gcc -O2 -pthread bench.c -o bench</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pthread.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">pthread_mutex_t</span><span class="w"> </span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PTHREAD_MUTEX_INITIALIZER</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">counter</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ITER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200000</span><span class="p">,</span><span class="w"> </span><span class="n">WORK</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="nf">worker</span><span class="p">(</span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">arg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">ITER</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pthread_mutex_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="n">counter</span><span class="o">++</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">volatile</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">WORK</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">;</span><span class="w">   </span><span class="c1">// 模拟临界区长度</span>
+<span class="w">        </span><span class="n">pthread_mutex_unlock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="n">WORK</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">pthread_t</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">pthread_create</span><span class="p">(</span><span class="o">&amp;</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">pthread_join</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"threads=%d counter=%ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>步骤 2：低竞争基线</strong>（单线程）</p>
+<div class="codehilite"><pre><span></span><code>strace<span class="w"> </span>-f<span class="w"> </span>-c<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>futex<span class="w"> </span>./bench<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+
+<p>预期：几乎没有 <code>futex</code> 调用——这就是用户态快路径。</p>
+<p><strong>步骤 3：逐步加大竞争</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span>n<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">16</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"== </span><span class="nv">$n</span><span class="s2"> threads"</span><span class="p">;</span><span class="w"> </span>strace<span class="w"> </span>-f<span class="w"> </span>-c<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>futex<span class="w"> </span>./bench<span class="w"> </span><span class="nv">$n</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-4
+<span class="k">done</span>
+<span class="c1"># 再加长临界区对比</span>
+strace<span class="w"> </span>-f<span class="w"> </span>-c<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>futex<span class="w"> </span>./bench<span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">200</span>
+</code></pre></div>
+
+<p>记录每组的 futex 调用次数、错误数（EAGAIN）、总耗时。</p>
+<p><strong>步骤 4：记录时序</strong></p>
+<div class="codehilite"><pre><span></span><code>strace<span class="w"> </span>-f<span class="w"> </span>-tt<span class="w"> </span>-T<span class="w"> </span>-e<span class="w"> </span><span class="nv">trace</span><span class="o">=</span>futex<span class="w"> </span>-o<span class="w"> </span>trace.txt<span class="w"> </span>./bench<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">200</span>
+grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'WAIT|WAKE'</span><span class="w"> </span>trace.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-50
+</code></pre></div>
+
+<p><strong>步骤 5：绘制等待时序</strong>。从 <code>trace.txt</code> 里挑 2 个线程（按 tid），在时间轴上标出：<code>FUTEX_WAIT</code> 开始 → 返回（睡了多久，看 <code>&lt;耗时&gt;</code>）、另一个线程何时发 <code>FUTEX_WAKE</code>、被唤醒线程返回后又过多久再次 WAIT。手画或用 Python/matplotlib 画甘特图都行。重点观察：WAKE 之后，被唤醒的线程<strong>不一定马上</strong>拿到锁，可能紧接着又 WAIT（被插队了）。</p>
+<p><strong>步骤 6：交叉验证</strong></p>
+<div class="codehilite"><pre><span></span><code>perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>context-switches<span class="w"> </span>./bench<span class="w"> </span><span class="m">1</span>
+perf<span class="w"> </span>stat<span class="w"> </span>-e<span class="w"> </span>context-switches<span class="w"> </span>./bench<span class="w"> </span><span class="m">16</span>
+</code></pre></div>
+
+<p>上下文切换次数应该随竞争明显上升。</p>
+<p><strong>验收标准</strong>：</p>
+<ul>
+<li>[ ] 能说明先检查再睡眠的丢唤醒风险（并能在 trace 中指出 EAGAIN 的含义）；</li>
+<li>[ ] 不把 futex 当完整锁实现（能列出 pthread_mutex 在 futex 之上多做了哪些事）。</li>
+</ul>
+<blockquote>
+<p>注意：strace 会大幅拖慢程序、改变时序，适合定性观察；要测真实性能用 <code>perf stat</code> / <code>perf trace</code>。</p>
+</blockquote>
+<hr />
+<h2 id="7">7. 自测题</h2>
+<p><strong>Q1</strong>：单线程程序反复 <code>pthread_mutex_lock/unlock</code> 一百万次，<code>strace -c</code> 里能看到多少次 <code>futex</code>？为什么？</p>
+<details><summary>答案</summary>
+基本为 0。没有竞争时加锁/解锁只是用户态的原子操作（快路径），无需进入内核；只有加锁失败需要睡眠，或解锁时发现有等待者需要唤醒，才会调用 futex。
+</details>
+
+<p><strong>Q2</strong>：<code>FUTEX_WAIT</code> 为什么要传一个期望值 <code>val</code>？如果去掉它会发生什么？</p>
+<details><summary>答案</summary>
+内核在挂起线程前原子地检查 `*uaddr == val`，不等就返回 EAGAIN。这样“检查锁被占”与“睡下”之间不会漏掉别人的释放和唤醒。如果没有这个比较，线程在用户态看到锁被占后、真正睡下前，持锁者可能已经释放并发出唤醒，唤醒就丢了，等待者可能永久睡眠（丢唤醒）。
+</details>
+
+<p><strong>Q3</strong>：线上 strace 看到 <code>futex(..., FUTEX_WAKE_PRIVATE, 1) = 1</code>，同事说“说明等待的请求线程已经拿到锁开始处理了”。对吗？</p>
+<details><summary>答案</summary>
+不对。返回 1 只说明唤醒了 1 个等待者，让它变成可运行。它还要等调度器给它 CPU，醒来后还要重新抢锁，可能被新来的线程插队后再次睡眠。唤醒不代表立即获得锁，也不代表立即运行。
+</details>
+
+<hr />
+<h2 id="8">8. 推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/futex.2.html">futex(2) — Linux man-pages</a>（man7.org，英文文档，进阶，免费）：重点阅读用户态快路径与比较并等待，用于核对本节点实验的语义和边界。</li>
+</ul>
+<p><strong>源码研读建议</strong>：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件（例如 <code>EAGAIN</code>、<code>EINTR</code>、<code>ETIMEDOUT</code> 各在什么情况下返回）。</p><div class="pn"><span><a href="41.html">← 调度、亲和性与上下文切换</a></span><span>下一课 待更新</span></div></main></div></body></html>
