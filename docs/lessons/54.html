@@ -1,0 +1,922 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>54. poll与就绪集合扫描 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（54/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（6/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="cur" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 54 课 · 领域 D · 阶段 2</p><p class="dl"><a href="../files/54-d-poll.md" download>⬇ 本课 Markdown</a><a href="../files/practice54.tar.gz" download>⬇ 练习包 practice54.tar.gz</a></p><h1 id="54208-poll">第 54/208 课：poll与就绪集合扫描</h1>
+<ul>
+<li><strong>阶段</strong>：第 2 阶段 · IO模型与事件</li>
+<li><strong>前置课程</strong>：d-select</li>
+<li><strong>关键词</strong>：poll、pollfd、events、revents、POLLIN、POLLOUT、POLLHUP、POLLERR、POLLNVAL、timeout、超时、nfds、多路复用、描述符数组、水平触发</li>
+<li><strong>难度</strong>：基础</li>
+<li><strong>所属领域</strong>：D · IO模型与事件</li>
+<li><strong>标签</strong>：Poll、D、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课我们用 <code>select</code> 把「一大批连接」交给内核，一条线程等待「其中至少一个就绪」。<code>select</code> 的心智模型是<strong>三张 fd 位图</strong>：</p>
+<div class="codehilite"><pre><span></span><code>readfds / writefds / exceptfds
+        │
+        ├── 按 fd 编号寻址（位图）
+        ├── nfds = max_fd + 1
+        └── 受 FD_SETSIZE（Linux 常见 1024）硬限制
+</code></pre></div>
+
+<p>它还留下两个让人难受的约束：</p>
+<ol>
+<li><strong>fd 编号不能太大</strong>：默认 <code>fd_set</code> 管不了编号 ≥ <code>FD_SETSIZE</code> 的描述符；</li>
+<li><strong>每次返回后集合被改写成「就绪子集」</strong>，下一轮必须整套重建。</li>
+</ol>
+<p>本课换成另一种多路复用接口——<code>poll</code>。节点 summary 把它说得很清楚：</p>
+<blockquote>
+<p>poll使用描述符数组消除fd_set固定集合形式，但每轮仍提交并扫描关注项。</p>
+</blockquote>
+<p>这句话有两个重点：</p>
+<ul>
+<li><strong>描述符数组</strong>：你不再维护一张按 fd 编号寻址的位图，而是维护一个 <code>struct pollfd</code> 数组。数组里每一项显式写出「哪个 fd、关心什么事件、实际发生了什么事件」。</li>
+<li><strong>每轮仍提交并扫描</strong>：<code>poll</code> 不是「把关注项注册进内核后就不管了」。每次调用仍要把整个数组交给内核，内核仍要逐项检查并填 <code>revents</code>；用户态也仍要扫描返回结果。它消除了 <code>fd_set</code> 的固定集合形式，但没有消除线性扫描成本。</li>
+</ul>
+<p>放到腾讯微信公众号后台的长连接接入场景里，这仍然是同一类问题：</p>
+<ul>
+<li>网关要同时盯住大量设备的 TCP 长连接；</li>
+<li>每条连接随时可能有上行数据、可写空间、对端关闭或错误；</li>
+<li>不能为每条连接开一条阻塞线程，而要用少量事件线程轮转处理。</li>
+</ul>
+<p><code>poll</code> 是这条演进路线上的中间站：比 <code>select</code> 更直白、没有 <code>FD_SETSIZE</code> 位图上限；比 <code>epoll</code> 更简单、更可移植，但要自己管理数组并承担整表扫描。本课要弄清三件事：</p>
+<ol>
+<li><code>pollfd</code> 的 <code>events</code> 与 <code>revents</code> 到底谁进谁出；</li>
+<li><code>POLLIN</code> / <code>POLLHUP</code> / <code>POLLERR</code> / <code>POLLNVAL</code> 同时出现时按什么顺序处理；</li>
+<li>数组如何增删、超时如何设置，才能写出不丢数据、不空转的事件循环。</li>
+</ol>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>解释 <code>pollfd</code> 和 <code>revents</code></strong>
+   - 说清 <code>fd</code>、<code>events</code>、<code>revents</code> 三个字段各自的职责。
+   - 知道 <code>events</code> 是「我关心什么」的输入位掩码，<code>revents</code> 是「实际发生了什么」的输出位掩码。
+   - 知道 <code>poll</code> <strong>不会</strong>像 <code>select</code> 那样把输入集合改写成结果集合；但数组的增删仍要你自己维护。
+   - 知道 <code>nfds</code> 是<strong>数组元素个数</strong>，不是 <code>max_fd + 1</code>。</p>
+</li>
+<li>
+<p><strong>能独立完成实践：把 <code>select</code> 版本替换为 <code>poll</code></strong>
+   - 用 <code>poll</code> 同时监听 listen fd 与多个 client fd。
+   - 用 <code>select.poll()</code> 的 <code>register</code> / <code>modify</code> / <code>unregister</code>，或用 C 的 <code>struct pollfd</code> 数组。
+   - 测试「数据与 HUP 同时返回」：对端先发数据再关闭，服务端必须先读完缓冲中的数据，再处理 HUP。
+   - 构造并验证 <code>POLLNVAL</code>：注册的 fd 已失效时，不做 <code>recv</code>/<code>send</code>，正确清理并移出数组。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准</strong>
+   - <strong>HUP 时仍能读取缓冲中的剩余数据</strong>。
+   - <strong>正确处理 <code>POLLNVAL</code></strong>。
+   - 能说明 <code>poll</code> 为什么「没有 <code>FD_SETSIZE</code> 上限，但仍不适合大集合稀疏活跃」的场景。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：</p>
+<blockquote>
+<p>比较多路复用接口的语义而非只记复杂度标签。</p>
+</blockquote>
+<h3 id="1-on">1. 「O(n)」这个标签会掩盖真正的差异</h3>
+<p>你可能背过一张表：</p>
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>复杂度标签</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>select</code></td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td><code>poll</code></td>
+<td>O(n)</td>
+</tr>
+<tr>
+<td><code>epoll</code></td>
+<td>O(活跃数)</td>
+</tr>
+</tbody>
+</table>
+<p>但工程上真正决定你写不写得对的，不是这三个字母，而是<strong>语义</strong>：</p>
+<ul>
+<li><code>select</code> 的 <code>n</code> 是「最大 fd 编号」量级，因为你按编号扫位图；</li>
+<li><code>poll</code> 的 <code>n</code> 是「数组元素个数」，与 fd 编号大小无关；</li>
+<li><code>epoll</code> 的 <code>n</code> 是「本次真正就绪的条目数」，关注项由内核持久保存。</li>
+</ul>
+<p>同样是「O(n)」，<code>select</code> 和 <code>poll</code> 的 <code>n</code> 含义不同，容量瓶颈也不同。<code>poll</code> 可以轻松管理编号 10000 的 fd，只要数组里只有 3 项；<code>select</code> 则连 <code>FD_SET(10000, ...)</code> 都不该做。</p>
+<h3 id="2">2. 就绪事件的语义直接决定数据会不会丢</h3>
+<p>节点 pitfalls 只有一句话，但它是生产事故级的问题：</p>
+<blockquote>
+<p>HUP不意味着可以直接丢弃未读数据。</p>
+</blockquote>
+<p>连接对端关闭时，内核可能已经把「对端发来的最后一段数据」放进了接收缓冲，同时报告 <code>POLLHUP</code>。如果你看到 HUP 就立刻 <code>close</code>，这段数据就永远读不到了。公众号后台的上行事件、设备最后一条状态、审计日志，都可能是这样丢的。</p>
+<p><code>select</code> 课里我们用「可读 + <code>recv</code> 返回 0」处理 EOF；到了 <code>poll</code>，你必须理解 <strong>HUP 是通道挂断信号，不是「缓冲已空」信号</strong>。后面的 <code>epoll</code> 课还会反复出现同样的语义。</p>
+<h3 id="3-poll">3. 数组管理是 <code>poll</code> 的主要工程成本</h3>
+<p><code>poll</code> 没有 <code>FD_SETSIZE</code> 位图限制，但它把「注册表」交给了用户态：</p>
+<ul>
+<li>新连接进来，你要往数组里加一项；</li>
+<li>连接关闭，你要把对应项移除或标记为 <code>fd = -1</code>；</li>
+<li>关注事件变化（比如输出缓冲从空变为非空），你要更新 <code>events</code>；</li>
+<li>每次调用还要把数组整体传给内核。</li>
+</ul>
+<p>如果数组里残留了已关闭的 fd，轻则收到 <code>POLLNVAL</code>，重则该 fd 编号被系统复用给新连接，你的事件循环就会把「旧连接的条目」当成「新连接」处理。这类 bug 很难靠日志一眼看出。</p>
+<h3 id="4-epoll">4. 它是理解 <code>epoll</code> 的对照物</h3>
+<p>生产 Linux 网关大多最终会用 <code>epoll</code>。但 <code>epoll</code> 的很多设计，正是为了修掉 <code>poll</code> 的这些问题：</p>
+<ul>
+<li><code>poll</code> 每次提交整张数组 → <code>epoll_ctl</code> 只注册一次；</li>
+<li><code>poll</code> 内核每次扫描全部条目 → <code>epoll_wait</code> 直接返回就绪链表；</li>
+<li><code>poll</code> 只有水平触发 → <code>epoll</code> 支持边缘触发；</li>
+<li><code>poll</code> 的 fd 失效要靠 <code>POLLNVAL</code> 发现 → <code>epoll</code> 有 <code>EPOLL_CTL_DEL</code> 与自动清理规则。</li>
+</ul>
+<p>先把 <code>poll</code> 的语义吃透，后面才不会把 <code>epoll</code> 当成「更快的 poll」死记。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="pollfd-revents">一、pollfd 和 revents</h3>
+<h4 id="1">1. 接口长什么样</h4>
+<p>C 原型（见 <code>poll(2)</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;poll.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">poll</span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pollfd</span><span class="w"> </span><span class="o">*</span><span class="n">fds</span><span class="p">,</span><span class="w"> </span><span class="kt">nfds_t</span><span class="w"> </span><span class="n">nfds</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">timeout</span><span class="p">);</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">pollfd</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w">   </span><span class="n">fd</span><span class="p">;</span><span class="w">       </span><span class="cm">/* 要关注的描述符 */</span>
+<span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">events</span><span class="p">;</span><span class="w">   </span><span class="cm">/* 输入：我关心哪些事件 */</span>
+<span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">revents</span><span class="p">;</span><span class="w">  </span><span class="cm">/* 输出：内核告诉我实际发生了哪些事件 */</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>和 <code>select</code> 最大的不同：</p>
+<ul>
+<li><code>select</code> 用<strong>位图</strong>表达「关注集合」，fd 编号就是位下标；</li>
+<li><code>poll</code> 用<strong>数组</strong>表达「关注列表」，每一项显式带一个 fd。</li>
+</ul>
+<p>直觉上可以把它想成一张「问询表」：</p>
+<div class="codehilite"><pre><span></span><code>你填：  fd=7  events=POLLIN     ← 我想知道 7 号可不可读
+内核填：fd=7  revents=POLLIN    ← 7 号现在可读
+
+你填：  fd=9  events=POLLOUT    ← 我想知道 9 号可不可写
+内核填：fd=9  revents=0         ← 9 号这次没事件
+</code></pre></div>
+
+<p><code>events</code> 和 <code>revents</code> 分离，是 <code>poll</code> 比 <code>select</code> 好用的地方：<strong>输入不会被结果覆盖</strong>。你在下一轮仍然知道「我原本关心的是什么」，不必每轮重新构造关注集合。但这不等于数组永远不用维护——连接增删、关注事件变化时，仍要你手动改数组。</p>
+<h4 id="2-nfds-max_fd-1">2. nfds 是数组长度，不是 max_fd + 1</h4>
+<p>这是从 <code>select</code> 迁移过来最容易写错的地方：</p>
+<div class="codehilite"><pre><span></span><code>select: nfds = 所有关心 fd 中的最大编号 + 1
+poll:   nfds = fds 数组中的元素个数
+</code></pre></div>
+
+<p>例子：</p>
+<table>
+<thead>
+<tr>
+<th>关注方式</th>
+<th>数组内容</th>
+<th><code>poll</code> 的 <code>nfds</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3 个连接，fd 为 3、5、900</td>
+<td><code>[{3,...},{5,...},{900,...}]</code></td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td>2 个连接 + 1 个占位空项</td>
+<td><code>[{3,...},{-1,...},{900,...}]</code></td>
+<td><code>3</code></td>
+</tr>
+<tr>
+<td>关闭 900 后只留 3、5</td>
+<td><code>[{3,...},{5,...}]</code></td>
+<td><code>2</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>nfds</code> 的类型是 <code>nfds_t</code>，本质是无符号计数。内核只检查数组的前 <code>nfds</code> 项，和 fd 的数值大小无关。所以 <code>poll</code> 不受 <code>FD_SETSIZE</code> 的位图上限约束。</p>
+<h4 id="3-fd">3. fd 为负数：官方的「空位」写法</h4>
+<p><code>poll(2)</code> 明确允许：</p>
+<blockquote>
+<p>If the <code>fd</code> field is negative, then the <code>events</code> field is ignored and the <code>revents</code> field is set to zero.</p>
+</blockquote>
+<p>这给你两种数组管理方式：</p>
+<p><strong>方式 A：紧凑数组</strong></p>
+<p>只把存活连接放进数组，删除时用「与末尾交换再缩短」：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fds</span><span class="p">[</span><span class="n">nfds</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="n">nfds</span><span class="o">--</span><span class="p">;</span>
+</code></pre></div>
+
+<p>优点是没有空位、<code>nfds</code> 始终等于存活连接数；缺点是要维护 <code>fd -&gt; 下标</code> 的映射，否则删除时找不到 <code>i</code>。</p>
+<p><strong>方式 B：固定槽位</strong></p>
+<p>数组下标对应连接槽位，删除时把 <code>fd</code> 置为 <code>-1</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">revents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</code></pre></div>
+
+<p>优点是槽位稳定、实现简单；缺点是 <code>nfds</code> 可能包含很多空位，内核仍会扫描这些项。对长连接网关来说，如果连接频繁上下线，空位会越来越多，需要定期压缩，否则扫描成本会虚高。</p>
+<h4 id="4-c">4. 最小 C 骨架</h4>
+<p>下面只演示「listen + 一个 client」的结构，重点看数组和 <code>revents</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;poll.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">pollfd</span><span class="w"> </span><span class="n">fds</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="kt">nfds_t</span><span class="w"> </span><span class="n">nfds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="n">fds</span><span class="p">[</span><span class="n">nfds</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pollfd</span><span class="p">){</span><span class="w"> </span><span class="p">.</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">POLLIN</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">revents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+<span class="n">fds</span><span class="p">[</span><span class="n">nfds</span><span class="o">++</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">pollfd</span><span class="p">){</span><span class="w"> </span><span class="p">.</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client_fd</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">POLLIN</span><span class="p">,</span><span class="w"> </span><span class="p">.</span><span class="n">revents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+
+<span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">poll</span><span class="p">(</span><span class="n">fds</span><span class="p">,</span><span class="w"> </span><span class="n">nfds</span><span class="p">,</span><span class="w"> </span><span class="mi">2000</span><span class="p">);</span><span class="w">   </span><span class="cm">/* 最多等 2000 ms */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 被信号打断：重试 */</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"poll"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="cm">/* 超时：做心跳、空闲连接清扫 */</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">nfds_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nfds</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">short</span><span class="w"> </span><span class="n">re</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">revents</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">re</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">fd</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">listen_fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">re</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">POLLIN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="cm">/* accept 新连接，追加到数组（下一轮生效） */</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">fd</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">client_fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">re</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">POLLNVAL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="cm">/* fd 无效：不要 recv/send，直接清理条目 */</span>
+<span class="w">                </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">re</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">POLLIN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="cm">/* 读数据；注意可能读到 EOF */</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">re</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">POLLHUP</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">POLLERR</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="cm">/* 先尽量读完剩余数据，再关闭 */</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>真实工程不会用固定两个元素的数组，而是 <code>std::vector&lt;pollfd&gt;</code> 或动态分配；但语义一模一样。</p>
+<h4 id="5-python-selectpoll">5. Python 的 <code>select.poll</code></h4>
+<p>Python 在 Unix 上提供了薄封装：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">select</span>
+
+<span class="n">poller</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
+<span class="n">poller</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span> <span class="n">select</span><span class="o">.</span><span class="n">POLLIN</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">poller</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>     <span class="c1"># 超时单位是毫秒</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">events</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"IDLE heartbeat"</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="k">for</span> <span class="n">fd</span><span class="p">,</span> <span class="n">revents</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>     <span class="c1"># 只返回 revents 非零的项</span>
+        <span class="k">if</span> <span class="n">fd</span> <span class="o">==</span> <span class="n">listen_fd</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">revents</span> <span class="o">&amp;</span> <span class="n">select</span><span class="o">.</span><span class="n">POLLIN</span><span class="p">:</span>
+                <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">listen_sock</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+                <span class="n">poller</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">select</span><span class="o">.</span><span class="n">POLLIN</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">handle_client</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">revents</span><span class="p">)</span>
+</code></pre></div>
+
+<p>常用方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>register(fd, eventmask)</code></td>
+<td>注册 fd 与关注事件；未传掩码时默认 <code>POLLIN | POLLPRI | POLLOUT</code></td>
+</tr>
+<tr>
+<td><code>modify(fd, eventmask)</code></td>
+<td>修改关注事件</td>
+</tr>
+<tr>
+<td><code>unregister(fd)</code></td>
+<td>移除 fd；未注册时抛 <code>KeyError</code></td>
+</tr>
+<tr>
+<td><code>poll(timeout=None)</code></td>
+<td>等待事件，返回 <code>(fd, revents)</code> 列表；<code>None</code> 表示永久阻塞，单位毫秒</td>
+</tr>
+</tbody>
+</table>
+<p>注意：<code>select.poll</code> 是 <strong>Unix 专有</strong>，Windows 上没有。跨平台代码要另做适配。</p>
+<p>C++ 里通常直接使用系统 <code>poll</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;poll.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="k">struct</span><span class="w"> </span><span class="nc">pollfd</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fds</span><span class="p">;</span>
+<span class="n">fds</span><span class="p">.</span><span class="n">push_back</span><span class="p">({</span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="n">POLLIN</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">});</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">poll</span><span class="p">(</span><span class="n">fds</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">fds</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="mi">2000</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">pfd</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">fds</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pfd</span><span class="p">.</span><span class="n">revents</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="cm">/* ... */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意 <code>fds.push_back</code> 可能触发扩容，导致之前的指针/迭代器失效；如果内核调用与异步回调交错，要避免持有旧指针。</p>
+<hr />
+<h3 id="pollin-hup-err">二、POLLIN / HUP / ERR</h3>
+<h4 id="1_1">1. 常见事件位</h4>
+<p><code>events</code> 和 <code>revents</code> 都是位掩码。下面是最常打交道的几位：</p>
+<table>
+<thead>
+<tr>
+<th>位</th>
+<th>含义</th>
+<th>可放入 <code>events</code>？</th>
+<th>常见场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POLLIN</code></td>
+<td>有数据可读（普通优先级）</td>
+<td>是</td>
+<td>对端发来数据；监听 fd 有新连接；读到 EOF</td>
+</tr>
+<tr>
+<td><code>POLLOUT</code></td>
+<td>现在可以写</td>
+<td>是</td>
+<td>发送缓冲有空间；非阻塞 connect 完成</td>
+</tr>
+<tr>
+<td><code>POLLPRI</code></td>
+<td>有紧急/带外数据可读</td>
+<td>是</td>
+<td>TCP urgent data 等</td>
+</tr>
+<tr>
+<td><code>POLLRDHUP</code></td>
+<td>对端关闭了写方向（半关闭）</td>
+<td>是（Linux 专有）</td>
+<td>对端 <code>shutdown(SHUT_WR)</code></td>
+</tr>
+<tr>
+<td><code>POLLHUP</code></td>
+<td>通道挂断</td>
+<td><strong>否</strong>，只在 <code>revents</code> 出现</td>
+<td>对端完全关闭；管道写端关闭</td>
+</tr>
+<tr>
+<td><code>POLLERR</code></td>
+<td>发生错误条件</td>
+<td><strong>否</strong>，只在 <code>revents</code> 出现</td>
+<td>套接字错误等</td>
+</tr>
+<tr>
+<td><code>POLLNVAL</code></td>
+<td>fd 未打开/无效</td>
+<td><strong>否</strong>，只在 <code>revents</code> 出现</td>
+<td>数组里残留了已关闭的 fd</td>
+</tr>
+</tbody>
+</table>
+<p><code>POLLHUP</code>、<code>POLLERR</code>、<code>POLLNVAL</code> 是<strong>输出专用位</strong>。把它们写进 <code>events</code> 没有意义；只要对应条件成立，内核就会在 <code>revents</code> 里置位，哪怕你的 <code>events</code> 是 0。</p>
+<p>还有一个容易忽略的点：</p>
+<blockquote>
+<p><code>poll</code> 返回的是「就绪」，不是「读完了」。</p>
+</blockquote>
+<p><code>POLLIN</code> 只说明「现在调用 <code>read</code> 不会阻塞（至少能读到一点，或已经 EOF）」，不说明「一次能读到完整消息」，也不说明「下次还会不会可读」。它默认是<strong>水平触发</strong>：只要接收缓冲里还有未读数据，下一次 <code>poll</code> 还会报告 <code>POLLIN</code>。所以正确的读法是循环读到 <code>EAGAIN</code>（非阻塞）或 EOF（返回 0），或者按应用层消息边界读够为止。</p>
+<h4 id="2-pollin">2. 监听套接字上的 POLLIN</h4>
+<p>对监听 fd 来说，<code>POLLIN</code> 表示「有新的连接可以 <code>accept</code>」。和上一课一样：</p>
+<ul>
+<li>listen fd 设为非阻塞；</li>
+<li>在 <code>POLLIN</code> 分支里循环 <code>accept</code>，直到返回 <code>EAGAIN</code>；</li>
+<li>每个新 fd 注册进 <code>poll</code> 数组，关注 <code>POLLIN</code>；</li>
+<li>如果暂时不想收某条连接的读事件，可以用 <code>modify</code> 把 <code>events</code> 改成 0 或只留 <code>POLLOUT</code>。</li>
+</ul>
+<h4 id="3-hup">3. 数据与 HUP 同时返回</h4>
+<p>这是本课实践的核心。典型时序：</p>
+<div class="codehilite"><pre><span></span><code>客户端：send("last-event")  →  close()
+                    │
+                    ▼
+服务端内核接收缓冲：["last-event"]，同时通道挂断
+                    │
+                    ▼
+poll 返回：revents = POLLIN | POLLHUP
+</code></pre></div>
+
+<p>此时如果你先处理 HUP：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">revents</span> <span class="o">&amp;</span> <span class="n">select</span><span class="o">.</span><span class="n">POLLHUP</span><span class="p">:</span>
+    <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>          <span class="c1"># 错：缓冲里的 "last-event" 还没读</span>
+</code></pre></div>
+
+<p>就会丢数据。正确顺序是：</p>
+<ol>
+<li><strong>先处理 <code>POLLNVAL</code></strong>：fd 已经无效，任何 I/O 都不做，直接清理。</li>
+<li><strong>再处理 <code>POLLIN</code></strong>：循环读到 <code>EAGAIN</code> 或 EOF，把缓冲里的数据全部取出并交给业务。</li>
+<li><strong>最后处理 <code>POLLHUP</code> / <code>POLLERR</code></strong>：确认数据已读完（或确认错误不可恢复）后，再关闭并移出数组。</li>
+</ol>
+<p><code>poll(2)</code> 对 HUP 的说明正好支持这一点：</p>
+<blockquote>
+<p>当从管道或流式套接字读取时，<code>POLLHUP</code> 只表示对端关闭了通道；<strong>只有通道中所有未完成的数据都被消费之后</strong>，后续读取才会返回 0（EOF）。</p>
+</blockquote>
+<p>也就是说，HUP 和「缓冲为空」不是一回事。先读后关，是必须遵守的顺序。</p>
+<p>可以用一段 Python 复现「数据 + HUP」：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">select</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+
+<span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socketpair</span><span class="p">()</span>
+<span class="n">right</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s2">"payload-before-hup"</span><span class="p">)</span>
+<span class="n">right</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>                    <span class="c1"># 对端关闭，但数据仍在 left 的接收缓冲中</span>
+
+<span class="n">poller</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
+<span class="n">poller</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">select</span><span class="o">.</span><span class="n">POLLIN</span><span class="p">)</span>
+
+<span class="n">fd</span><span class="p">,</span> <span class="n">revents</span> <span class="o">=</span> <span class="n">poller</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"revents ="</span><span class="p">,</span> <span class="n">revents</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"POLLIN ="</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">revents</span> <span class="o">&amp;</span> <span class="n">select</span><span class="o">.</span><span class="n">POLLIN</span><span class="p">),</span>
+      <span class="s2">"POLLHUP ="</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">revents</span> <span class="o">&amp;</span> <span class="n">select</span><span class="o">.</span><span class="n">POLLHUP</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"first recv ="</span><span class="p">,</span> <span class="n">left</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">))</span>   <span class="c1"># b'payload-before-hup'</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"second recv ="</span><span class="p">,</span> <span class="n">left</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">))</span>  <span class="c1"># b''，此时才真正 EOF</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"after EOF ="</span><span class="p">,</span> <span class="n">poller</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>     <span class="c1"># HUP 仍会持续报告</span>
+</code></pre></div>
+
+<p>在 Linux 上你通常会看到 <code>POLLIN | POLLHUP</code> 同时置位，而且第一次 <code>recv</code> 能拿到完整 payload。这个实验建议亲手跑一遍，比背十遍结论都有效。</p>
+<h4 id="4-pollerr">4. POLLERR 不是「可读」的同义词</h4>
+<p><code>POLLERR</code> 表示该 fd 上出现了错误条件。处理原则：</p>
+<ul>
+<li>不要仅凭 <code>POLLERR</code> 就认定「没有数据可读」；</li>
+<li>可以先尝试把可读数据读出来（如果同时有 <code>POLLIN</code>）；</li>
+<li>再通过 <code>getsockopt(fd, SOL_SOCKET, SO_ERROR, ...)</code> 或 <code>recv</code>/<code>send</code> 的返回值确认错误；</li>
+<li>错误不可恢复时，关闭连接并移出数组。</li>
+</ul>
+<p><code>POLLERR</code> 和 <code>POLLHUP</code> 都可能在 <code>events</code> 未请求时出现，所以你的循环不能只检查自己注册过的位。</p>
+<h4 id="5-pollnvalfd">5. POLLNVAL：fd 已经无效</h4>
+<p><code>POLLNVAL</code> 表示 <code>fds[i].fd</code> 当前不是一个打开的描述符。常见原因：</p>
+<ul>
+<li>连接已经 <code>close</code>，但忘记从 <code>poll</code> 数组/<code>poll</code> 对象中移除；</li>
+<li>数组槽位被重复关闭；</li>
+<li>文件描述符被别的逻辑提前关闭。</li>
+</ul>
+<p>正确处理：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">revents</span> <span class="o">&amp;</span> <span class="n">select</span><span class="o">.</span><span class="n">POLLNVAL</span><span class="p">:</span>
+    <span class="c1"># 1. 不要对这个 fd 调用 recv/send/close</span>
+    <span class="c1"># 2. 从 poller 中移除（若还在）</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">poller</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="c1"># 3. 清理应用层连接对象</span>
+    <span class="n">clients</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">continue</span>
+</code></pre></div>
+
+<p>两个关键细节：</p>
+<ol>
+<li><strong><code>POLLNVAL</code> 不是「连接错误」</strong>，它只说明「这个 fd 编号现在无效」。不要把它当成 <code>POLLERR</code> 去读 <code>SO_ERROR</code>。</li>
+<li><strong>不要依赖 <code>POLLNVAL</code> 来发现你自己关闭的 fd</strong>。你 <code>close(fd)</code> 之后，这个编号可能立刻被新 <code>accept</code>/<code>open</code> 复用；如果旧条目还留在数组里，<code>poll</code> 会把它当成新 fd 来报告，而不是报 <code>POLLNVAL</code>。所以正确做法永远是：<strong>关闭前/关闭时就把条目移出数组</strong>，<code>POLLNVAL</code> 只是最后一道防线。</li>
+</ol>
+<h4 id="6">6. 处理顺序建议</h4>
+<p>把每个条目的处理写成一个明确的分支顺序，能避免大多数丢数据和误关闭：</p>
+<div class="codehilite"><pre><span></span><code>revents 非零
+    │
+    ├─ POLLNVAL ───────────────▶ 清理条目，绝不做 I/O
+    │
+    ├─ POLLIN ─────────────────▶ 循环读，直到 EAGAIN 或 EOF
+    │                              └─ 有数据则交给业务/广播
+    │
+    ├─ POLLOUT ────────────────▶ 从输出缓冲继续写，直到 EAGAIN
+    │
+    └─ POLLHUP / POLLERR ──────▶ 先确认剩余数据已读（或错误不可恢复）
+                                   └─ 关闭连接，移出数组
+</code></pre></div>
+
+<p>注意：这些位可能同时出现。不要写成 <code>else if</code> 链，除非你非常确定某个分支必须互斥。</p>
+<hr />
+<h3 id="_5">三、数组管理与超时</h3>
+<h4 id="1-poll">1. poll 是「每轮提交整张表」</h4>
+<p><code>select</code> 和 <code>poll</code> 都属于「无状态」的多路复用调用：</p>
+<div class="codehilite"><pre><span></span><code>用户态数组/集合 ──每次调用拷贝──▶ 内核扫描 ──▶ 填 revents/就绪集合 ──▶ 返回
+</code></pre></div>
+
+<p>内核不会帮你记住「上次注册了哪些 fd」。所以：</p>
+<ul>
+<li>新增连接 → 往数组里加一项；</li>
+<li>删除连接 → 从数组里移除，或置 <code>fd = -1</code>；</li>
+<li>关注事件变化 → 修改 <code>events</code>；</li>
+<li>每轮调用 → 把整个数组和 <code>nfds</code> 再传一次。</li>
+</ul>
+<p>这就是 summary 里「每轮仍提交并扫描关注项」的含义。<code>poll</code> 解决的是<strong>表达形式</strong>问题（数组 vs 位图），不是<strong>注册与通知</strong>问题（那是 <code>epoll</code> 的路线）。</p>
+<h4 id="2_1">2. 增删的两种实现</h4>
+<p><strong>紧凑数组 + fd 到下标的映射：</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* fd -&gt; index 的映射由应用层维护 */</span>
+<span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">index_of</span><span class="p">[</span><span class="n">fd</span><span class="p">];</span>
+<span class="n">fds</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fds</span><span class="p">[</span><span class="n">nfds</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="n">index_of</span><span class="p">[</span><span class="n">fds</span><span class="p">[</span><span class="n">idx</span><span class="p">].</span><span class="n">fd</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">idx</span><span class="p">;</span>
+<span class="n">nfds</span><span class="o">--</span><span class="p">;</span>
+<span class="n">index_of</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</code></pre></div>
+
+<p>删除是 O(1)，但遍历 <code>poll</code> 结果时要注意：如果你在循环中交换了元素，当前下标可能变成「刚从末尾换过来的项」，需要重新检查同一个下标，或者先收集要关闭的 fd，循环结束后再统一删除。</p>
+<p><strong>固定槽位 + <code>fd = -1</code>：</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w">      </span><span class="cm">/* poll 会忽略，revents 置 0 */</span>
+<span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</code></pre></div>
+
+<p>实现简单，适合连接数稳定、槽位复用的服务器。但空位会一直参与内核扫描，<code>nfds</code> 也不会因为删除而下降。长连接频繁重连时，记得定期压缩数组。</p>
+<h4 id="3">3. 关注事件要跟着状态走</h4>
+<p>一个常见的性能陷阱：<strong>永远注册 <code>POLLOUT</code></strong>。</p>
+<p><code>POLLOUT</code> 表示「发送缓冲有空间」。大多数时候它都是真的，于是 <code>poll</code> 每轮都立刻返回、你的循环每轮都发现「没什么可写」，CPU 直接空转。正确做法是：</p>
+<ul>
+<li>输出缓冲为空时，<code>events</code> 只留 <code>POLLIN</code>（以及你关心的 HUP/RDHUP）；</li>
+<li>应用产生待发数据、或上次 <code>send</code> 返回 <code>EAGAIN</code> 时，用 <code>modify</code> 加上 <code>POLLOUT</code>；</li>
+<li>输出缓冲写空后，再用 <code>modify</code> 去掉 <code>POLLOUT</code>。</li>
+</ul>
+<p>这和第 52 课的非阻塞输出状态机是配套的：<code>poll</code> 负责通知「现在可写」，状态机负责「还有多少没写」。</p>
+<h4 id="4">4. 超时语义</h4>
+<p>C 的 <code>poll</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">poll</span><span class="p">(</span><span class="n">fds</span><span class="p">,</span><span class="w"> </span><span class="n">nfds</span><span class="p">,</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">);</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th><code>timeout</code></th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>负值（常用 <code>-1</code>）</td>
+<td>无限等待，直到有事件或信号打断</td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>立即返回，相当于非阻塞探测</td>
+</tr>
+<tr>
+<td>正值</td>
+<td>最多等待这么多毫秒；超时返回 0</td>
+</tr>
+</tbody>
+</table>
+<p>注意：</p>
+<ul>
+<li><code>poll</code> 的超时单位是<strong>毫秒</strong>，不是 <code>select</code> 的 <code>timeval</code>；</li>
+<li>超时时间会被系统时钟粒度向上取整，且受调度延迟影响，可能略长于设定值；</li>
+<li>返回值 <code>0</code> 表示超时，<code>-1</code> 表示出错（查 <code>errno</code>），正数表示 <code>revents</code> 非零的条目数；</li>
+<li><code>EINTR</code> 表示被信号打断，通常应重新计算剩余时间后继续，而不是直接把超时当成「没有事件」。</li>
+</ul>
+<p>Python 的 <code>poll.poll(timeout)</code> 同样使用毫秒；<code>timeout=None</code> 表示永久阻塞，<code>timeout=0</code> 表示立即返回。</p>
+<h4 id="5">5. 周期任务的超时写法</h4>
+<p>如果每轮都固定传 <code>2000</code>，处理事件耗时会让心跳周期不断漂移。更稳的写法是用单调时钟维护 deadline：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="mf">2.0</span>
+
+<span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+    <span class="n">remaining_ms</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">((</span><span class="n">deadline</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">())</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">))</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">poller</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="n">remaining_ms</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">events</span><span class="p">:</span>
+        <span class="n">do_heartbeat</span><span class="p">()</span>
+        <span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="mf">2.0</span>
+        <span class="k">continue</span>
+
+    <span class="k">for</span> <span class="n">fd</span><span class="p">,</span> <span class="n">revents</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+        <span class="n">handle</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">revents</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">deadline</span><span class="p">:</span>
+        <span class="n">do_heartbeat</span><span class="p">()</span>
+        <span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="mf">2.0</span>
+</code></pre></div>
+
+<p>这样即使中间处理了很多事件，也不会把「每 2 秒一次」拖成「每 5 秒一次」。</p>
+<h4 id="6_1">6. 返回后仍要扫描</h4>
+<p><code>poll</code> 的返回值 <code>n</code> 只是「有几个条目有事件」，不是「哪几个条目有事件」。你仍然要遍历数组，检查每一项的 <code>revents</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">poll</span><span class="p">(</span><span class="n">fds</span><span class="p">,</span><span class="w"> </span><span class="n">nfds</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">nfds_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nfds</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fds</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">revents</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="cm">/* 处理 fds[i] */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Python 的 <code>poll()</code> 帮你做了这一步，直接返回 <code>(fd, revents)</code> 列表；但底层仍然是线性扫描。</p>
+<h4 id="7">7. 为什么大集合稀疏活跃时仍然贵</h4>
+<p>假设你有 10 万条长连接，但每秒只有 100 条活跃：</p>
+<ul>
+<li><code>poll</code> 每次调用都要把 10 万个 <code>pollfd</code>（每项通常 8 字节，约 800 KB）拷贝进内核；</li>
+<li>内核要逐项检查 10 万次；</li>
+<li>用户态拿到结果后还要再扫一遍数组。</li>
+</ul>
+<p>真正干活的只有 100 条，但成本按 10 万条算。这就是节点 tradeoffs 说的：</p>
+<blockquote>
+<p>少量连接时poll简单足够，大集合稀疏活跃时需评估扫描成本。</p>
+</blockquote>
+<p>注意，这不是说 <code>poll</code> 的复杂度标签「更差」，而是说它的 <code>n</code> 是<strong>关注项总数</strong>，而 <code>epoll</code> 的 <code>n</code> 是<strong>本次活跃数</strong>。选型时要看的是「活跃比例」和「集合规模」，不是只看大 O。</p>
+<hr />
+<h2 id="_6">常见误区与设计权衡</h2>
+<h3 id="pitfalls">误区（pitfalls）</h3>
+<p><strong>1. 看到 <code>POLLHUP</code> 就直接关闭，丢掉未读数据</strong></p>
+<p>节点原话：</p>
+<blockquote>
+<p>HUP不意味着可以直接丢弃未读数据。</p>
+</blockquote>
+<p><code>POLLHUP</code> 只表示对端关闭了通道；接收缓冲里可能还有数据。必须先读到 <code>EAGAIN</code> 或 EOF，再关闭。正确顺序是 <code>POLLNVAL</code> → <code>POLLIN</code> → <code>POLLHUP/POLLERR</code>。</p>
+<p><strong>2. 把 <code>nfds</code> 当成 <code>max_fd + 1</code></strong></p>
+<p>这是从 <code>select</code> 带过来的习惯。<code>poll</code> 的 <code>nfds</code> 是数组元素个数。3 个 fd（编号 3、5、900）对应 <code>nfds = 3</code>，不是 901。</p>
+<p><strong>3. 用 <code>events</code> 去读结果</strong></p>
+<p><code>events</code> 是你填的输入，<code>revents</code> 才是内核填的输出。不要写 <code>if (fds[i].events &amp; POLLIN)</code> 来判断就绪。</p>
+<p><strong>4. 永远注册 <code>POLLOUT</code></strong></p>
+<p>可写条件通常长期成立，会导致 <code>poll</code> 立即返回、事件循环空转。只在确实有数据要写或上次 <code>send</code> 遇到 <code>EAGAIN</code> 时才关注 <code>POLLOUT</code>。</p>
+<p><strong>5. 关闭 fd 后不清理数组条目</strong></p>
+<p>后果有两种：</p>
+<ul>
+<li>fd 没有复用 → 下次 <code>poll</code> 返回 <code>POLLNVAL</code>；</li>
+<li>fd 被复用 → 旧条目指向新连接，事件处理错乱，甚至把新连接的数据当成旧连接的。</li>
+</ul>
+<p>两者都很糟。关闭连接时同步删除/失效数组条目，是硬性要求。</p>
+<p><strong>6. 把 <code>POLLNVAL</code> 当成普通错误去 <code>recv</code></strong></p>
+<p><code>POLLNVAL</code> 说明 fd 编号无效，任何 I/O 都可能失败或作用到错误对象上。正确动作是清理条目，不是读 <code>SO_ERROR</code>，也不是再 <code>close</code> 一次。</p>
+<p><strong>7. 以为 <code>POLLIN</code> 代表「一条完整消息」</strong></p>
+<p>TCP 是字节流。<code>POLLIN</code> 只保证「现在读不会阻塞」，不保证半包/粘包已经被处理好。应用层协议边界仍要自己维护。</p>
+<p><strong>8. 忽略 <code>EINTR</code></strong></p>
+<p>信号打断时 <code>poll</code> 返回 <code>-1</code> 且 <code>errno == EINTR</code>。如果不处理，事件循环可能直接退出。正确做法是重新计算超时并继续。</p>
+<p><strong>9. 用 <code>poll</code> 监听普通文件</strong></p>
+<p>普通文件的读写通常总是「就绪」，<code>poll</code> 会立即返回。它适合套接字、管道、终端等会阻塞/可等待的对象，不适合用来做磁盘文件的事件驱动。</p>
+<p><strong>10. 以为 <code>poll</code> 是边缘触发</strong></p>
+<p>Linux 的 <code>poll</code> 默认是<strong>水平触发</strong>：未读数据会反复报告 <code>POLLIN</code>，未接受的连接会反复报告监听 fd 的 <code>POLLIN</code>。必须主动排空，否则会忙循环。边缘触发是 <code>epoll</code> 的选项，不是 <code>poll</code> 的。</p>
+<h3 id="tradeoffs">权衡（tradeoffs）</h3>
+<p>节点原话：</p>
+<blockquote>
+<p>少量连接时poll简单足够，大集合稀疏活跃时需评估扫描成本。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>select</th>
+<th>poll</th>
+<th>epoll（后续课程）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关注项表达</td>
+<td>三张 fd 位图</td>
+<td><code>pollfd</code> 数组</td>
+<td>内核兴趣列表</td>
+</tr>
+<tr>
+<td>fd 编号上限</td>
+<td><code>FD_SETSIZE</code>（常 1024）</td>
+<td>无位图上限；受内存/<code>RLIMIT_NOFILE</code> 约束</td>
+<td>同左</td>
+</tr>
+<tr>
+<td><code>nfds</code> 含义</td>
+<td><code>max_fd + 1</code></td>
+<td>数组元素个数</td>
+<td>注册项数（由内核管理）</td>
+</tr>
+<tr>
+<td>输入是否被改写</td>
+<td>是，每轮重建</td>
+<td>否，<code>events</code>/<code>revents</code> 分离</td>
+<td>不适用</td>
+</tr>
+<tr>
+<td>每次调用成本</td>
+<td>拷贝 + 扫描到 max_fd</td>
+<td>拷贝 + 扫描数组</td>
+<td>返回就绪列表，通常按活跃数</td>
+</tr>
+<tr>
+<td>触发方式</td>
+<td>水平触发</td>
+<td>水平触发</td>
+<td>水平/边缘触发</td>
+</tr>
+<tr>
+<td>可移植性</td>
+<td>最广</td>
+<td>Unix 常见</td>
+<td>Linux 专有</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td>小规模、教学、老代码</td>
+<td>中等规模、语义清晰、跨平台</td>
+<td>大规模长连接网关</td>
+</tr>
+</tbody>
+</table>
+<p><code>poll</code> 的甜点区是「连接数不大，或者活跃比例较高，且你希望代码简单可移植」。当连接数到十万级、每秒活跃比例很低时，整表拷贝与扫描会成为瓶颈，此时应评估 <code>epoll</code>。但即便迁移到 <code>epoll</code>，本课关于 <code>POLLIN</code>/<code>POLLHUP</code>/<code>POLLERR</code>/<code>POLLNVAL</code> 的处理顺序仍然适用——<code>epoll</code> 只是换了通知机制，没有改变「就绪不等于读完」的语义。</p>
+<hr />
+<h2 id="_7">动手实践</h2>
+<p>节点 practice：</p>
+<blockquote>
+<p>把select版本替换为poll，测试数据与HUP同时返回的情况。</p>
+</blockquote>
+<p>验收（acceptance）：</p>
+<ul>
+<li><strong>HUP 时仍能读取缓冲中的剩余数据</strong>；</li>
+<li><strong>正确处理 <code>POLLNVAL</code></strong>。</li>
+</ul>
+<p>并呼应 sourceStudy：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>请对照 <a href="https://man7.org/linux/man-pages/man2/poll.2.html">poll(2)</a> 核对：<code>pollfd</code> 三字段、<code>nfds</code> 是数组长度、<code>timeout</code> 毫秒语义、<code>POLLIN/HUP/ERR/NVAL</code> 的输入输出方向、<code>fd &lt; 0</code> 的忽略规则、<code>EINTR</code> 与返回值。记录你实验机的内核版本、Python 版本，以及 <code>POLLRDHUP</code> 是否可用。</p>
+<h3 id="_8">步骤拆解</h3>
+<ol>
+<li>
+<p><strong>准备基线</strong><br />
+   把上一课 <code>practice53/</code> 的 <code>select</code> 聊天服务复制为 <code>practice54/</code>，保留客户端、测试脚本和日志格式。先确认原版能跑通，再动手替换，避免把旧 bug 和新 bug 混在一起。</p>
+</li>
+<li>
+<p><strong>创建 poller</strong><br />
+   Python 用 <code>select.poll()</code>；C/C++ 用 <code>std::vector&lt;struct pollfd&gt;</code>。<br />
+   监听 fd 注册 <code>POLLIN</code>。<br />
+   维护 <code>fd -&gt; 连接对象</code> 的字典/映射，并确保关闭时同步移除。</p>
+</li>
+<li>
+<p><strong>替换事件循环</strong><br />
+   把 <code>select.select(rlist, [], [], 2.0)</code> 改成 <code>poller.poll(2000)</code>。<br />
+   返回空列表时打印 <code>IDLE heartbeat</code>，验证超时分支。<br />
+   返回 <code>(fd, revents)</code> 列表时，按 fd 分发，而不是按列表下标猜测。</p>
+</li>
+<li>
+<p><strong>处理 accept</strong><br />
+   listen fd 的 <code>POLLIN</code> 分支里循环 <code>accept</code> 直到 <code>EAGAIN</code>。<br />
+   每个新连接设非阻塞，<code>register(fd, POLLIN)</code>。<br />
+   如果 fd 数量超过你设定的上限，明确拒绝并 <code>close</code>；<code>poll</code> 虽然没有 <code>FD_SETSIZE</code> 位图限制，但你的内存和 <code>RLIMIT_NOFILE</code> 仍然有上限。</p>
+</li>
+<li>
+<p><strong>处理读事件</strong><br />
+   对 client 的 <code>POLLIN</code>，循环 <code>recv</code> 直到 <code>EAGAIN</code> 或返回 0。<br />
+   有数据就按聊天协议广播给其他连接。<br />
+   读到 EOF 时记录「读方向结束」，但不要立刻丢弃还没发完的输出缓冲（如果该连接还有下行数据要发，可进入半关闭状态）。</p>
+</li>
+<li>
+<p><strong>处理 HUP / ERR</strong><br />
+   在 <code>POLLIN</code> 之后检查 <code>POLLHUP</code> / <code>POLLERR</code>。<br />
+   先确保接收缓冲已经读空（或 <code>recv</code> 已经返回错误），再关闭。<br />
+   日志里打印 <code>HUP fd=... drained=... bytes=...</code>，方便验收「HUP 前读到了剩余数据」。</p>
+</li>
+<li>
+<p><strong>测试「数据 + HUP」</strong><br />
+   给客户端加一个 <code>--half-close</code> 或 <code>--send-then-close</code> 模式：<br />
+<code>sendall(b"last-event\n")</code> 后立即 <code>shutdown(SHUT_WR)</code> 或 <code>close()</code>。<br />
+   服务端应广播 <code>last-event</code>，然后才清理连接。<br />
+   也可以直接用 <code>socketpair</code> 写一个 20 行的小脚本，不经过完整服务，先验证你对 <code>revents</code> 的理解。</p>
+</li>
+<li>
+<p><strong>测试 POLLNVAL</strong><br />
+   构造一个残留条目：注册一个 fd 后关闭它，但不调用 <code>unregister</code>，下一轮 <code>poll</code> 应返回 <code>POLLNVAL</code>。<br />
+   服务端必须打印 <code>POLLNVAL fd=...</code>，跳过所有 I/O，移除条目，并且不重复 <code>close</code>。<br />
+   更进阶的做法是：关闭后立刻 <code>accept</code> 一个新连接，观察 fd 编号是否被复用，从而理解「为什么不能依赖 <code>POLLNVAL</code> 兜底」。</p>
+</li>
+<li>
+<p><strong>更新关注事件</strong><br />
+   为输出缓冲增加 <code>POLLOUT</code> 动态开关：<br />
+   有数据待发 → <code>modify(fd, POLLIN | POLLOUT)</code>；<br />
+   写空 → <code>modify(fd, POLLIN)</code>。<br />
+   观察 CPU 占用是否从「空转 100%」降下来。</p>
+</li>
+<li>
+<p><strong>对照 man page 记录边界</strong><br />
+    在笔记里写清：</p>
+<ul>
+<li><code>nfds</code> 是数组长度，不是 <code>max_fd + 1</code>；</li>
+<li><code>POLLHUP/POLLERR/POLLNVAL</code> 只在 <code>revents</code> 中出现；</li>
+<li><code>fd &lt; 0</code> 的条目会被忽略；</li>
+<li><code>timeout</code> 单位是毫秒，<code>-1</code> 无限等，<code>0</code> 立即返回；</li>
+<li><code>EINTR</code> 要重试；</li>
+<li><code>POLLRDHUP</code> 是 Linux 扩展，需要相应头文件/宏；</li>
+<li><code>poll</code> 是水平触发，必须排空。</li>
+</ul>
+</li>
+</ol>
+<h3 id="_9">预期现象</h3>
+<ul>
+<li>两个以上客户端：一人发消息，其他人收到广播；</li>
+<li>客户端「发完即关」：服务端日志先出现收到 <code>last-event</code>，再出现 <code>HUP</code> 与清理；</li>
+<li>空闲时周期性出现 <code>IDLE heartbeat</code>；</li>
+<li>构造失效 fd 时出现 <code>POLLNVAL</code>，且服务不崩溃、不对该 fd 做读写；</li>
+<li>关闭高编号连接后，服务端数组长度（或存活项数）下降；<code>poll</code> 不要求 <code>nfds = max_fd + 1</code>；</li>
+<li>动态开关 <code>POLLOUT</code> 后，空闲 CPU 占用明显下降；</li>
+<li>二次绑定同端口仍能给出明确的 <code>EADDRINUSE</code> 错误。</li>
+</ul>
+<h3 id="_10">验收清单</h3>
+<div class="codehilite"><pre><span></span><code>[ ] HUP 时先读数据、后关闭，日志能证明数据已收到
+[ ] POLLNVAL 分支不做 recv/send，条目被清理且不重复 close
+[ ] nfds 使用数组元素个数，而不是 max_fd + 1
+[ ] events 与 revents 没有混用
+[ ] POLLOUT 只在需要时注册
+[ ] 超时、EINTR 都有明确分支
+[ ] 关闭连接时同步移除 poll 条目
+</code></pre></div>
+
+<hr />
+<h2 id="_11">自测题</h2>
+<p><strong>题 1</strong><br />
+<code>poll</code> 的 <code>fds</code> 数组里有 3 项，fd 分别是 3、5、900。调用 <code>poll(fds, nfds, 1000)</code> 时，<code>nfds</code> 应该传多少？</p>
+<p>A. 3<br />
+B. 900<br />
+C. 901<br />
+D. 908</p>
+<p><strong>题 2</strong><br />
+某连接 <code>poll</code> 返回 <code>revents = POLLIN | POLLHUP</code>，此时正确的处理顺序是？</p>
+<p>A. 立即 <code>close</code>，HUP 表示连接已经不可用，缓冲数据可以丢弃<br />
+B. 先处理 HUP 关闭，再尝试从已关闭的 fd 读数据<br />
+C. 先循环读取直到 <code>EAGAIN</code> 或 EOF，确认剩余数据读完后再关闭<br />
+D. 只处理 <code>POLLHUP</code>，忽略 <code>POLLIN</code>，因为 HUP 优先级更高</p>
+<p><strong>题 3</strong><br />
+<code>poll</code> 对某个条目返回 <code>POLLNVAL</code>，最合适的处理是？</p>
+<p>A. 调用 <code>recv</code> 确认错误码，再决定是否关闭<br />
+B. 从数组中移除/失效该条目，不做 I/O，也不重复 <code>close</code>，并清理应用层对象<br />
+C. 把 <code>events</code> 改成 <code>POLLOUT</code> 后继续等待<br />
+D. 认为连接只是暂时不可读，下一轮会自动恢复</p>
+<hr />
+<h3 id="_12">自测题参考答案</h3>
+<p><strong>题 1：A</strong><br />
+<code>poll</code> 的 <code>nfds</code> 是数组元素个数，与 fd 编号大小无关。数组有 3 项就传 3。C 是 <code>select</code> 的思维（<code>max_fd + 1</code>），在这里是错的。</p>
+<p><strong>题 2：C</strong><br />
+<code>POLLHUP</code> 只表示对端关闭通道；接收缓冲中可能还有未读数据。正确顺序是先处理 <code>POLLIN</code> 把数据读空（读到 <code>EAGAIN</code> 或 EOF），再处理 <code>POLLHUP</code> 并关闭。A 会丢数据，B 是对已关闭 fd 做 I/O，D 忽略了可读数据。</p>
+<p><strong>题 3：B</strong><br />
+<code>POLLNVAL</code> 表示 fd 编号当前无效。不能对它做 <code>recv</code>/<code>send</code>，也不应重复 <code>close</code>。正确处理是清理 poll 条目和应用层连接对象。还要记住：不要依赖 <code>POLLNVAL</code> 发现「自己关闭但忘记移除」的 fd，因为该编号可能已被复用。</p>
+<hr />
+<h2 id="_13">推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/poll.2.html">poll与就绪集合扫描：Linux man-pages — poll(2)</a>（man7.org，英文文档，进阶）</li>
+<li>重点阅读：<code>struct pollfd</code> 的 <code>fd</code>/<code>events</code>/<code>revents</code>、<code>nfds</code> 的数组语义、<code>timeout</code> 的毫秒与负值/零值语义、<code>POLLIN</code>/<code>POLLHUP</code>/<code>POLLERR</code>/<code>POLLNVAL</code> 的输入输出方向、<code>fd &lt; 0</code> 的忽略规则、返回值与 <code>EINTR</code>。</li>
+<li>特别核对 <code>POLLHUP</code> 段落：对端关闭后，<strong>未读数据消费完之前</strong>，后续读取才会返回 EOF。这是本课「HUP 时仍能读取缓冲中的剩余数据」的文档依据。</li>
+<li>同时留意 <code>POLLRDHUP</code> 的版本说明与 <code>_GNU_SOURCE</code> 要求，记录它在你的实验环境是否可用。</li>
+</ul>
+<hr />
+<h2 id="_14">本课小结</h2>
+<ol>
+<li><strong><code>poll</code> 用描述符数组替代 <code>fd_set</code> 位图</strong>：每个 <code>struct pollfd</code> 显式包含 <code>fd</code>、<code>events</code>（输入关注）、<code>revents</code>（输出结果）。它消除了 <code>FD_SETSIZE</code> 的位图上限，<code>nfds</code> 是数组元素个数，不是 <code>max_fd + 1</code>。</li>
+<li><strong><code>events</code> 和 <code>revents</code> 分离</strong>：输入不会被结果覆盖，但连接增删和关注事件变化仍要你手动维护数组。<code>fd &lt; 0</code> 的条目会被内核忽略。</li>
+<li><strong><code>POLLIN</code> 表示就绪，不表示读完</strong>：<code>poll</code> 是水平触发，必须循环读到 <code>EAGAIN</code> 或 EOF；监听 fd 上则要循环 <code>accept</code> 到 <code>EAGAIN</code>。</li>
+<li><strong><code>POLLHUP</code> 不意味着可以丢弃未读数据</strong>：对端关闭时缓冲里可能还有最后一段数据。正确处理顺序是 <code>POLLNVAL</code> → <code>POLLIN</code> → <code>POLLHUP/POLLERR</code>：先读空，再关闭。</li>
+<li><strong><code>POLLNVAL</code> 是 fd 无效信号</strong>：不做 I/O，清理条目，不重复 <code>close</code>；并且不要依赖它来兜底「关闭后忘记移除」的问题，因为 fd 编号可能被复用。</li>
+<li><strong>数组管理与超时是工程重点</strong>：新增/删除连接、动态开关 <code>POLLOUT</code>、处理 <code>EINTR</code>、用 deadline 避免超时漂移。少量连接时 <code>poll</code> 简单够用；大集合稀疏活跃时，整表拷贝与扫描成本会显现，应评估 <code>epoll</code>。</li>
+<li><strong>复杂度标签不如语义重要</strong>：<code>select</code> 的 <code>n</code> 与最大 fd 编号相关，<code>poll</code> 的 <code>n</code> 是数组长度，<code>epoll</code> 的 <code>n</code> 是活跃条目数。选型看活跃比例和集合规模，写对则取决于对就绪、HUP、ERR、NVAL 语义的把握。</li>
+</ol>
+<p>后续课程会继续深入 IO 模型与事件；请先把 <code>practice54</code> 的 HUP 与 <code>POLLNVAL</code> 两个用例跑到通过，再进入后续内容。</p>
+<hr />
+<h2 id="_15">配套练习</h2>
+<p>目录：<a href="./practice54/"><code>practice54/</code></a></p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server.py</code></td>
+<td><code>select.poll</code> 聊天服务；HUP/EOF 时先读尽再关；<code>__INJECT_NVAL__</code> 注入 stale fd 演示 <code>POLLNVAL</code>；空闲心跳</td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>可连接、发送、按期望子串等待广播；<code>--send-then-close</code> / <code>--send-then-shutdown</code> 制造数据+HUP；可 <code>--hold</code></td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>自动化验收：互广播、<strong>HUP 残留数据</strong>、<strong>POLLNVAL</strong>、关闭后集合更新、空闲心跳、端口占用</td>
+</tr>
+</tbody>
+</table>
+<p>运行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice54<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./test.sh
+</code></pre></div>
+
+<p>期望末行：<code>ALL_CHECKS_PASSED</code>。</p>
+<p>实测要点（Asia/Shanghai，本机验证时对照）：</p>
+<ul>
+<li>2+ 客户端互相收到广播；</li>
+<li>客户端 <code>send-then-close</code> 后，服务端日志出现 <code>RECV ... last-event-payload</code> 与 <code>HUP fd=... drained&gt;0</code>，其他客户端仍收到该残留数据；</li>
+<li>发送 <code>__INJECT_NVAL__</code> 后出现 <code>INJECT_NVAL</code> 与 <code>POLLNVAL fd=... skip_io cleanup</code>，服务不崩溃且继续广播；</li>
+<li>关闭一个客户端后服务继续，剩余客户端仍可用；</li>
+<li>出现 <code>IDLE heartbeat</code>（<code>poll</code> 超时毫秒语义）；</li>
+<li>二次绑定同端口打印 <code>EADDRINUSE</code>，退出码 2。</li>
+</ul>
+<p>NOTE：Python <code>select.poll</code> 映射 <code>POLLIN/POLLHUP/POLLERR/POLLNVAL</code>；本练习用「注册后立刻 close、故意不 unregister」构造 <code>POLLNVAL</code>。生产代码应在 <code>close</code> 时同步摘掉 poll 条目，把 <code>POLLNVAL</code> 当作最后防线而非常规路径。海量长连接请使用后续课程的 <code>epoll</code>。</p><div class="pn"><span><a href="53.html">← select与fd集合</a></span><span>下一课 待更新</span></div></main></div></body></html>
