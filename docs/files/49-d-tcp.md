@@ -1,0 +1,997 @@
+# 第 49/208 课：TCP状态机与连接生命周期
+
+- **阶段**：第 2 阶段 · 传输与Socket
+- **前置课程**：a-network、c-fd
+- **关键词**：TCP Connections、三次握手、序列号、FIN、RST、半关闭、TIME_WAIT、ss、tcpdump、连接生命周期
+- **难度**：基础
+- **所属领域**：D · 传输与Socket
+
+---
+
+## 导读
+
+先想象一个很普通的线上夜晚。
+
+你负责的微信公众号后台有一组长连接推送网关。手机端、网页端和第三方回调都在往网关上建连接。监控突然报警：某个网关节点的文件描述符使用率冲到 90%，`ss -s` 显示 `time-wait` 数量持续上涨，`ss -tan` 里还出现大量 `CLOSE-WAIT`。与此同时，业务侧反馈“部分用户收不到模板消息推送”，日志里零散出现 `Connection reset by peer`、`Broken pipe`，还有同事说“客户端明明已经发完请求了，我们为什么还在等它”。
+
+这些现象看起来像三个问题，实际上都落在同一张图里：**TCP 连接状态机**。
+
+- 长连接堆积，往往是没有正确理解连接的建立、保活与回收。
+- `TIME_WAIT` 占满，往往是“谁先关闭连接”和端口资源的关系没算清楚。
+- 异常断连与半关闭误判，往往是把“收到 FIN”误解成“连接已经彻底结束”。
+
+微信公众号后台的典型链路大致有三类：
+
+1. **HTTP/HTTPS 短连接回调**：微信服务器回调你的业务地址，一次请求一次响应，连接可能复用，也可能很快关闭。
+2. **长连接推送网关**：设备或客户端与网关维持 TCP 长连接，用于下行通知、在线状态、消息推送。
+3. **内部 RPC / 数据库连接池**：服务之间通过连接池复用 TCP 连接，池满、连接失效、半开连接都会直接影响可用性。
+
+本课不讲“TCP 是什么”的百科式定义，而是把连接当成一个有生命周期的资源来管理：它如何建立、如何传输字节、如何关闭、异常时如何被重置，以及内核和应用各自负责哪一部分。
+
+---
+
+## 学习目标
+
+完成本课学习后，你应当能够：
+
+1. **解释三次握手和序列号**
+   - 说清 SYN、SYN+ACK、ACK 三个阶段各自确认了什么。
+   - 说清序列号为什么存在、初始序列号为什么随机、SYN 和 FIN 为什么会消耗一个序列号。
+   - 能在抓包结果里指出三次握手的三个包，并读懂 `seq`、`ack`、`Flags`。
+
+2. **独立完成实践：抓包观察连接建立、正常关闭及异常退出，关联 ss 状态统计**
+   - 会用 `tcpdump` 抓取本机回环或指定端口的 TCP 报文。
+   - 会用 `ss -tan`、`ss -s`、`/proc/net/sockstat` 观察状态分布。
+   - 能区分正常四次挥手与 RST 异常终止。
+   - 能把抓包中的状态变化与 `ss` 输出对应起来。
+
+3. **满足本课验收标准**
+   - 能说明 TCP 不保留消息边界：TCP 是字节流，不是消息流。
+   - 能解释主动关闭方为什么常常出现 `TIME_WAIT`，以及它为什么不是“bug”。
+
+---
+
+## 为什么后端要懂
+
+节点里给出的理由是：**定位连接堆积、重传、TIME_WAIT 与异常断连**。这句话可以拆成四个非常具体的工程问题。
+
+### 1. 定位连接堆积
+
+连接堆积通常不是一个抽象概念，而是某个状态的数量异常。常见的有：
+
+- `ESTABLISHED` 很多：可能是正常流量，也可能是连接泄漏、连接池只借不还、长连接没有空闲回收。
+- `CLOSE-WAIT` 很多：几乎总是应用层问题。对端已经发送 FIN，本端内核已回复 ACK，但应用没有调用 `close()`，连接资源就一直挂着。`CLOSE-WAIT` 堆积是“文件描述符泄漏”的经典信号。
+- `SYN-RECV` 很多：可能是握手没有完成，常见于 SYN Flood、半开扫描，或服务端 `accept` 队列/半连接队列压力过大。
+- `FIN-WAIT-2` 很多：主动关闭方已经收到对方的 ACK，但对方迟迟不发 FIN。可能是对端应用没有关闭，也可能是对端进程卡住。
+- `TIME-WAIT` 很多：主动关闭方留下的正常状态，但数量过大时要结合连接速率、端口范围和业务模型判断。
+
+如果你只会看“连接数”，你看到的是总数；如果你会看“状态分布”，你才能判断问题发生在建立、传输、关闭还是应用没有收尾。
+
+### 2. 定位重传
+
+TCP 承诺可靠有序，但可靠不是“网络不会丢包”，而是“丢了会重传、乱了会排序”。当出现超时、重复 ACK、快速重传时，应用层看到的是延迟抖动、请求变慢、连接卡顿。
+
+抓包里如果看到同一个序列号区间被反复发送，或者 `tcpdump` 输出里出现 `retransmission` 之类的提示，就说明链路或对端有问题。后端需要能区分：
+
+- 偶发丢包导致的单次重传；
+- 持续拥塞或对端接收窗口耗尽；
+- 对端进程卡死，导致数据送达但应用不读，窗口逐渐变成 0；
+- 连接已经失效但应用不知道，仍在往一个“半开连接”里写数据。
+
+### 3. 定位 TIME_WAIT
+
+`TIME_WAIT` 是主动关闭方在完成关闭后保留的一段状态。它不是异常，而是 TCP 为了处理“最后一个 ACK 丢失”和“旧报文干扰新连接”而设计的安全期。
+
+但如果你的服务是短连接、且服务端经常先关闭连接，那么大量 `TIME_WAIT` 会占用本地端口和少量内存。高并发下可能出现：
+
+- 本地临时端口不够用，`connect()` 报 `Cannot assign requested address`；
+- 端口复用冲突，绑定或连接行为异常；
+- 监控误判为“连接泄漏”。
+
+理解 `TIME_WAIT` 的归属，才能决定是调整关闭方、使用连接池、扩大端口范围，还是谨慎启用相关内核参数，而不是一上来就“调内核”。
+
+### 4. 定位异常断连
+
+真实网络里，连接不会总是优雅地四次挥手。进程崩溃、机器重启、NAT 表项过期、负载均衡器超时、对端强制关闭，都可能让连接以 RST 结束，或者让双方对“连接是否还活着”产生分歧。
+
+典型表现：
+
+- 读操作返回 `ECONNRESET`；
+- 写操作触发 `SIGPIPE` 或返回 `EPIPE`；
+- 连接看起来还在，但对端早已消失，形成“半开连接”；
+- 应用把 FIN 当成“整个连接结束”，提前释放资源，导致后续响应发不出去。
+
+后端工程师如果不懂状态机，就只能根据日志猜；懂了状态机，就能从 `ss`、抓包和应用错误码三方对齐，快速定位。
+
+---
+
+## 直觉 → 原理
+
+### 一、三次握手和序列号
+
+#### 1. 连接建立到底在确认什么
+
+TCP 是面向连接的可靠字节流协议。要开始传输，双方至少需要确认三件事：
+
+1. 双方都存在，且网络路径可达；
+2. 双方的发送能力和接收能力都正常；
+3. 双方对“从哪个字节开始编号”达成一致。
+
+三次握手就是同时完成这三件事的过程。
+
+```
+客户端                                     服务端
+  |                                           |
+  |  SYN, seq=x                               |
+  |  （我想建立连接，我的初始序列号是 x）        |
+  | ----------------------------------------> |
+  |                                           |
+  |  SYN+ACK, seq=y, ack=x+1                  |
+  |  （我同意，我的初始序列号是 y，             |
+  |    我已收到你到 x 为止的字节）              |
+  | <---------------------------------------- |
+  |                                           |
+  |  ACK, seq=x+1, ack=y+1                    |
+  |  （我收到你的 SYN，连接建立）               |
+  | ----------------------------------------> |
+  |                                           |
+  |               ESTABLISHED                 |
+```
+
+对应内核状态变化：
+
+- 客户端：`CLOSED` → `SYN-SENT` → `ESTABLISHED`
+- 服务端：`LISTEN` → `SYN-RECEIVED` → `ESTABLISHED`
+
+服务端在 `LISTEN` 状态下收到 SYN，会创建一个“半连接”请求；第三次 ACK 到达后，连接进入 `ESTABLISHED`，并等待应用调用 `accept()` 把它取走。这里有两个容易混淆的队列：
+
+- **SYN 队列**（半连接队列）：收到 SYN、尚未完成三次握手的连接。
+- **accept 队列**（全连接队列）：握手已完成、等待应用 `accept()` 的连接。
+
+应用层如果长时间不 `accept()`，全连接队列会堆满，后续连接可能被丢弃或收到 RST。这就是“服务端明明在监听，客户端却连接失败”的常见原因之一。
+
+#### 2. 为什么是三次，而不是两次
+
+两次握手只能确认：
+
+- 客户端能发、服务端能收；
+- 服务端能发、客户端能收（其实第二次已经能证明一部分）。
+
+但它不能可靠地让双方都确认“对方已经收到了我的初始序列号”。更具体地说：
+
+- 客户端发送 SYN，服务端收到后回复 SYN+ACK。此时服务端知道客户端的序列号，但客户端还不知道服务端是否收到了自己的 SYN。
+- 客户端再发一个 ACK，服务端收到后，才确认客户端确实收到了自己的 SYN+ACK。
+
+此外，三次握手还能避免历史重复 SYN 造成的错误连接：如果网络中延迟送达一个旧的 SYN，服务端不能仅凭它就直接建立连接，否则可能对应到一个早已不存在的客户端上下文。
+
+#### 3. 序列号：TCP 的“字节编号”
+
+TCP 的序列号不是“第几个包”，而是“第几个字节”。假设一个方向上的初始序列号是 `ISN`，那么：
+
+- 第一个数据字节的序列号是 `ISN + 1`；
+- 发送了 `N` 个字节后，下一个字节的序列号是 `ISN + 1 + N`；
+- 接收方用 ACK 号告诉对方：“我已经连续收到了这个序号之前的所有字节，下一个期望的字节是这个序号。”
+
+注意两个细节：
+
+1. **SYN 消耗一个序列号**。所以客户端 SYN 的 `seq=x`，服务端回复的 `ack=x+1`。
+2. **FIN 也消耗一个序列号**。因为 FIN 表示“这个方向的数据流到此结束”，它是字节流里的一个位置标记，而不是一个可以随便重复的普通控制包。
+
+序列号的初始值不是从 0 开始，而是随机选择（现代实现还会结合时间、地址等做一定混淆）。原因包括：
+
+- 降低旧连接残留报文被新连接误接收的概率；
+- 提高伪造和注入的难度；
+- 避免同一四元组上的序列号可预测。
+
+#### 4. 一个最小 C 示例
+
+下面是最小化的客户端/服务端骨架，重点观察 `socket`、`bind`、`listen`、`accept`、`connect` 的职责划分：
+
+```c
+// 服务端（伪代码，省略错误处理展开）
+int lfd = socket(AF_INET, SOCK_STREAM, 0);
+
+int yes = 1;
+setsockopt(lfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
+
+struct sockaddr_in addr;
+memset(&addr, 0, sizeof(addr));
+addr.sin_family = AF_INET;
+addr.sin_addr.s_addr = htonl(INADDR_ANY);
+addr.sin_port = htons(8080);
+
+bind(lfd, (struct sockaddr *)&addr, sizeof(addr));
+listen(lfd, 128);   // backlog 不是“最大连接数”的精确值，但影响排队能力
+
+for (;;) {
+    struct sockaddr_in peer;
+    socklen_t len = sizeof(peer);
+
+    int fd = accept(lfd, (struct sockaddr *)&peer, &len);
+    if (fd < 0) {
+        if (errno == EINTR) continue;
+        // 处理 EMFILE / EAGAIN 等
+        break;
+    }
+
+    // fd 对应一条已经完成三次握手的连接
+    handle_client(fd);
+}
+```
+
+```c
+// 客户端
+int fd = socket(AF_INET, SOCK_STREAM, 0);
+struct sockaddr_in addr;
+// 填充服务端地址与端口
+
+int rc = connect(fd, (struct sockaddr *)&addr, sizeof(addr));
+if (rc < 0) {
+    // ECONNREFUSED：对端端口未监听或收到 RST
+    // ETIMEDOUT：握手超时或网络不可达
+}
+```
+
+这里有一个重要的认知：**`listen()` 之后，连接建立主要由内核完成；应用只负责把已建立的连接从 accept 队列里取走。** 因此很多“连接建立问题”并不是业务代码能直接控制的，而是队列、backlog、内核参数和网络共同作用的结果。
+
+#### 5. 顺带说清 TCP_NODELAY
+
+TCP 默认可能启用 Nagle 算法：如果已有小数据在途，后续小数据会等待 ACK 或攒够一定量再发，以减少小包数量。这对吞吐友好，但对延迟敏感的场景不友好。
+
+`TCP_NODELAY` 的作用是尽量不让小数据等待：
+
+```c
+int one = 1;
+setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &one, sizeof(one));
+```
+
+常见于 RPC、实时推送、交互式请求。但不要把它当成“性能银弹”：关闭 Nagle 可能增加小包数量，带来更高的网络开销。是否开启要结合请求大小、延迟目标和链路状况判断。
+
+---
+
+### 二、FIN、RST 与半关闭
+
+#### 1. FIN 的含义：我只关“发送方向”
+
+TCP 连接是全双工的：客户端到服务端一个方向，服务端到客户端一个方向。`FIN` 只表示**发送 FIN 的一方不再发送数据了**，它并不表示这个方向上的接收能力也立刻消失，更不表示整个连接马上消失。
+
+这就是“半关闭”（half-close）：
+
+```
+客户端                                     服务端
+  |                                           |
+  |  FIN, seq=u                               |
+  |  （我不再发送数据了，但我还可以接收）        |
+  | ----------------------------------------> |
+  |                                           |
+  |  ACK, ack=u+1                             |
+  | <---------------------------------------- |
+  |                                           |
+  |  （客户端处于 FIN-WAIT-2，                     |
+  |    服务端处于 CLOSE-WAIT）                   |
+  |                                           |
+  |  服务端仍然可以继续发送数据                  |
+  | <---------------------------------------- |
+  |                                           |
+  |  FIN, seq=v                               |
+  | <---------------------------------------- |
+  |                                           |
+  |  ACK, ack=v+1                             |
+  | ----------------------------------------> |
+```
+
+正常关闭通常需要四个报文，因为两个方向要分别关闭：
+
+1. 主动关闭方发送 FIN；
+2. 被动关闭方回复 ACK；
+3. 被动关闭方处理完剩余数据后发送 FIN；
+4. 主动关闭方回复 ACK。
+
+状态变化：
+
+- 主动关闭方：`ESTABLISHED` → `FIN-WAIT-1` → `FIN-WAIT-2` → `TIME-WAIT` → `CLOSED`
+- 被动关闭方：`ESTABLISHED` → `CLOSE-WAIT` → `LAST-ACK` → `CLOSED`
+
+#### 2. 为什么“收到 FIN”不等于“通信立刻结束”
+
+这是本课最重要的误区之一。节点里的 pitfalls 原文是：
+
+> 收到 FIN 只表示对端发送方向关闭，不等于双方通信立刻结束。
+
+放到微信公众号后台的场景里，非常容易踩：
+
+- 客户端把请求发完，调用 `shutdown(fd, SHUT_WR)`，发送 FIN。它仍然期待读取服务端的响应。
+- 服务端读到 `read() == 0`，这表示对端不再发送数据，而不表示自己不能写。
+- 如果服务端一看到 EOF 就立刻 `close()`，就可能把还没发出去的响应丢掉，或者让客户端收到 RST。
+
+正确的处理思路是：
+
+1. 读到 0 时，先确认本端是否还有数据要发送；
+2. 如果需要响应，先把响应写完，再关闭本端发送方向；
+3. 只有双方都关闭后，连接才真正结束。
+
+一个典型的“读完后仍可写”的处理过程：
+
+```c
+for (;;) {
+    ssize_t n = read(fd, buf, sizeof(buf));
+    if (n > 0) {
+        // 处理请求数据
+        continue;
+    }
+    if (n == 0) {
+        // 对端关闭了发送方向（半关闭），但本端仍可写
+        write_response(fd);
+        shutdown(fd, SHUT_WR);  // 本端也发 FIN
+        // 如果不再需要读取，可继续 close
+        break;
+    }
+    if (errno == EINTR) continue;
+    // 处理错误
+    break;
+}
+close(fd);
+```
+
+理解 `shutdown` 和 `close` 的差异也很重要：
+
+- `shutdown(fd, SHUT_WR)`：直接关闭该 socket 的写方向，向对端发送 FIN，但读方向仍然可用。
+- `shutdown(fd, SHUT_RD)`：关闭读方向。
+- `shutdown(fd, SHUT_RDWR)`：两个方向都关闭。
+- `close(fd)`：减少文件描述符引用计数。只有最后一个引用被关闭时，才会真正触发连接关闭流程。
+
+如果同一个 socket 被 `dup()` 或 `fork()` 共享，单独 `close()` 一个描述符不一定发送 FIN。这是很多“为什么连接没有关闭”问题的根源。
+
+#### 3. RST：异常终止，不是优雅关闭
+
+`RST` 是复位报文。它表示连接被立即中止，不保证未发送的数据送达，也不走正常的四次挥手流程。
+
+常见触发场景：
+
+- 连接到一个没有监听的端口，内核回复 RST；
+- 进程崩溃或机器重启，对端再发数据时收到 RST；
+- 应用设置了 `SO_LINGER` 且 `l_linger = 0`，调用 `close()` 时直接发 RST；
+- 接收缓冲区里还有未读数据时直接关闭，可能触发 RST；
+- 中间设备、NAT、防火墙清理了连接状态，后续报文被视为非法而回复 RST；
+- 半开连接上继续写数据，对端认为该连接不存在。
+
+`SO_LINGER` 的危险写法：
+
+```c
+struct linger lg;
+lg.l_onoff = 1;
+lg.l_linger = 0;   // close 时丢弃发送缓冲区并发送 RST
+setsockopt(fd, SOL_SOCKET, SO_LINGER, &lg, sizeof(lg));
+close(fd);
+```
+
+这会让关闭“很快”，但代价是可能丢数据、让对端看到连接被重置。除非你非常清楚自己在做什么，否则不要用它来“解决 TIME_WAIT”。
+
+应用层要学会区分：
+
+- 读到 0：对端有序关闭了发送方向，通常是正常 EOF；
+- `ECONNRESET`：收到 RST，连接被异常终止；
+- `EPIPE`：向已经关闭的写方向写数据；
+- `ETIMEDOUT`：连接或操作超时，可能对端不可达或中间链路静默丢弃。
+
+#### 4. CLOSE-WAIT 堆积说明了什么
+
+如果 `ss -tan` 中大量连接停留在 `CLOSE-WAIT`，说明：
+
+- 对端已经发 FIN；
+- 本端内核已经 ACK；
+- 但本端应用还没有调用 `close()`。
+
+原因通常不是内核，而是应用：
+
+- 连接对象没有被释放；
+- 异常路径忘了关闭 fd；
+- 连接池回收逻辑有 bug；
+- 工作线程卡住，无法执行到关闭逻辑；
+- 把 `CLOSE-WAIT` 误认为“还在正常通信”，没有处理 EOF。
+
+所以看到 `CLOSE-WAIT` 堆积，应优先检查应用代码和资源管理，而不是调内核参数。
+
+---
+
+### 三、TIME_WAIT 和连接资源
+
+#### 1. 谁进入 TIME_WAIT
+
+**主动关闭方**在发送最后一个 ACK 后进入 `TIME_WAIT`。被动关闭方通常不进入这个状态（除非它也主动关闭了另一条连接）。
+
+这也是一个常见误解：很多人以为“服务端一定会有 TIME_WAIT”。实际上，如果服务端是主动关闭方，TIME_WAIT 就在服务端；如果客户端先关闭，TIME_WAIT 就在客户端。
+
+用 `ss` 可以直观看到：
+
+```bash
+ss -tan state time-wait
+ss -tan state close-wait
+ss -tan state established
+ss -s
+```
+
+`ss -s` 的输出类似：
+
+```
+Total: 1234
+TCP:   800 (estab 500, closed 200, orphaned 0, timewait 150)
+...
+```
+
+`/proc/net/sockstat` 也能看到协议层统计：
+
+```bash
+cat /proc/net/sockstat
+```
+
+典型内容包括 `sockets: used`、`TCP: inuse`、`TCP: orphan`、`TCP: tw`、`TCP: alloc`、`TCP: mem` 等。不同内核版本字段可能略有差异，阅读时要结合实际输出。
+
+#### 2. TIME_WAIT 为什么存在
+
+TIME_WAIT 通常持续 2 倍 MSL（Maximum Segment Lifetime）。在 Linux 上常见实现是固定约 60 秒，而不是严格按某个可配置 MSL 动态计算。它有两个核心目的：
+
+1. **保证最后一个 ACK 能到达对端**
+   - 如果主动关闭方发送的最后一个 ACK 丢失，被动关闭方会重传 FIN。
+   - 主动关闭方仍处于 TIME_WAIT，可以重新回复 ACK。
+   - 如果立刻进入 CLOSED，收到重传 FIN 时可能回复 RST，导致对端异常关闭。
+
+2. **让旧连接的重复报文在网络中消亡**
+   - 同一四元组上的旧报文如果延迟到达，可能干扰新连接。
+   - TIME_WAIT 期间不允许同一四元组立即建立新连接，降低旧报文被误收的概率。
+
+所以 TIME_WAIT 不是“没关干净”，而是 TCP 的保守设计。它用一小段资源换取关闭过程的正确性。
+
+#### 3. TIME_WAIT 的成本
+
+TIME_WAIT 占用的主要不是大量内存，而是：
+
+- 一个本地端口（四元组中的本地地址+端口）；
+- 一条内核连接状态记录；
+- 少量文件描述符/内存资源。
+
+对于客户端角色，如果它主动关闭大量短连接，本地临时端口会被 TIME_WAIT 占住。Linux 的临时端口范围可通过 `ip_local_port_range` 查看：
+
+```bash
+cat /proc/sys/net/ipv4/ip_local_port_range
+```
+
+假设范围是 32768–60999，大约 2.8 万个端口。如果每秒主动关闭上千条短连接，且 TIME_WAIT 持续 60 秒，就可能出现端口耗尽。此时新的 `connect()` 可能失败，报 `Cannot assign requested address`。
+
+对于服务端角色，TIME_WAIT 会占用连接表项和少量内存。高并发短连接服务如果服务端总是先关闭，也会积累大量 TIME_WAIT。
+
+#### 4. 常见应对方式
+
+理解成本之后，处理方式才有方向：
+
+1. **改变关闭方**
+   - 尽量让客户端先关闭，服务端作为被动关闭方，TIME_WAIT 就落在客户端侧。
+   - 但这不是万能规则，要结合协议语义和谁更需要保留资源来判断。
+
+2. **使用连接池和长连接**
+   - 减少连接建立/关闭次数，直接降低 TIME_WAIT 产生速率。
+   - 这也是长连接推送网关和内部 RPC 连接池的核心价值。
+
+3. **启用 `SO_REUSEADDR`**
+   - 主要解决服务端重启时绑定地址遇到 `TIME_WAIT` 的问题。
+   - 它不等于“允许同一四元组同时存在两条活跃连接”，不要误解其语义。
+
+4. **谨慎使用 `tcp_tw_reuse`**
+   - 允许在特定条件下复用 TIME_WAIT 连接用于新的出站连接。
+   - 涉及时间戳等条件，跨 NAT 场景要特别小心。
+   - 不要把它当成无脑优化项。
+
+5. **不要使用 `tcp_tw_recycle`**
+   - 该参数在现代 Linux 中已被移除（Linux 4.12 起移除），且历史上在 NAT 环境下问题很多。
+   - 看到旧资料建议开启它，应保持警惕。
+
+6. **扩大临时端口范围**
+   - 在客户端角色明确、端口确实不足时，可以评估调整 `ip_local_port_range`。
+   - 但这只是扩容，不解决连接模型本身的问题。
+
+7. **监控而不是恐慌**
+   - TIME_WAIT 有一个与连接速率相关的稳态数量。只要端口和内存充足，它通常是正常的。
+   - 真正要关注的是：是否持续增长、是否影响新建连接、是否伴随端口耗尽。
+
+---
+
+## 常见误区与设计权衡
+
+### 误区一：收到 FIN 就代表连接彻底结束
+
+这是本课节点明确列出的 pitfall。FIN 只关闭发送方向，接收方向仍然可用。服务端读到 EOF 后，仍应完成必要的响应发送，再关闭自己的发送方向。把 FIN 当成“整个连接消失”，会导致响应丢失、半关闭处理错误，甚至让对端看到 RST。
+
+### 误区二：TIME_WAIT 是 bug，必须消灭
+
+TIME_WAIT 是主动关闭方的正常状态，是 TCP 正确性的一部分。目标不是“让 TIME_WAIT 归零”，而是“让 TIME_WAIT 不成为瓶颈”。如果连接速率高、端口不足，应该从连接模型、关闭方选择、端口范围、连接池等层面处理。
+
+### 误区三：CLOSE-WAIT 是内核没关
+
+CLOSE-WAIT 表示内核已经收到 FIN 并 ACK，但应用还没关闭。它几乎总是应用层资源管理问题。看到 CLOSE-WAIT 堆积，先查代码，不要先调内核。
+
+### 误区四：TCP 会保留消息边界
+
+TCP 是字节流协议，不保留应用层消息边界。发送方调用两次 `write()`，接收方可能一次 `read()` 读到两段数据，也可能分多次读到一段数据。应用必须自己定义 framing，例如：
+
+- 固定长度；
+- 长度前缀（最常见）；
+- 分隔符；
+- 自描述协议（如 HTTP 的头部与 `Content-Length`）。
+
+这也是本课验收标准之一。
+
+### 误区五：长连接一定比短连接好
+
+长连接减少了三次握手和关闭成本，也减少了 TIME_WAIT 的产生速率，但它不是免费的：
+
+- 需要保活机制（应用层心跳或 TCP keepalive）；
+- 需要空闲连接回收；
+- 需要故障探测和重连；
+- 中间设备可能悄悄清理空闲连接，形成半开连接；
+- 连接数受文件描述符、内存和负载均衡能力限制。
+
+节点里的 tradeoffs 说得很准确：**长连接减少握手成本，也需要保活、空闲回收和故障探测。** 选择长连接还是短连接，本质上是把成本从“频繁建连”转移到“连接管理与故障检测”。
+
+### 设计权衡：谁先关闭
+
+“让客户端先关闭”可以减少服务端 TIME_WAIT，但也要考虑：
+
+- 客户端是否愿意承担 TIME_WAIT；
+- 协议是否允许半关闭；
+- 服务端是否需要在关闭前发送最后一段数据；
+- 中间设备是否会因为空闲超时先断开。
+
+没有绝对正确的关闭方，只有与业务模型匹配的关闭策略。
+
+---
+
+## 动手实践
+
+本节把节点中的 practice 拆成可执行步骤：
+
+> 抓包观察连接建立、正常关闭及异常退出，关联 ss 状态统计。
+
+建议在 Linux 本机用回环地址完成，避免网络环境干扰。以下命令以服务端监听 `127.0.0.1:18080` 为例。
+
+### 步骤 0：准备一个可观察的服务端
+
+可以用 Python 写一个最小 TCP 服务端，方便观察正常关闭和 RST：
+
+```python
+# /tmp/tcp_demo_server.py
+import socket
+
+HOST = "127.0.0.1"
+PORT = 18080
+
+srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+srv.bind((HOST, PORT))
+srv.listen(16)
+
+print(f"listening on {HOST}:{PORT}", flush=True)
+
+while True:
+    conn, addr = srv.accept()
+    print("accepted", addr, flush=True)
+
+    data = conn.recv(4096)
+    print("recv:", data, flush=True)
+
+    if data == b"half-close":
+        # 对端 shutdown(SHUT_WR) 后，本端仍可写
+        conn.sendall(b"response-after-eof\n")
+        conn.shutdown(socket.SHUT_WR)
+
+    elif data == b"rst":
+        # 模拟异常：不读剩余数据，直接关闭，通常触发 RST
+        conn.close()
+        continue
+
+    else:
+        conn.sendall(b"ok\n")
+        conn.shutdown(socket.SHUT_WR)
+
+    conn.close()
+```
+
+启动服务端：
+
+```bash
+python3 /tmp/tcp_demo_server.py
+```
+
+### 步骤 1：启动抓包
+
+另开一个终端，抓取回环上的目标端口：
+
+```bash
+sudo tcpdump -i lo -nn -S 'tcp port 18080'
+```
+
+参数说明：
+
+- `-i lo`：抓回环接口。
+- `-nn`：不解析主机名和端口名，直接显示数字。
+- `-S`：显示绝对序列号，便于观察 `seq/ack` 变化。
+- `'tcp port 18080'`：只抓目标端口相关的 TCP 报文。
+
+如果只想看连接建立/关闭相关的标志位，可以用：
+
+```bash
+sudo tcpdump -i lo -nn -S \
+  'tcp port 18080 and (tcp[tcpflags] & (tcp-syn|tcp-fin|tcp-rst) != 0)'
+```
+
+### 步骤 2：观察三次握手和正常关闭
+
+再开一个终端，用 Python 客户端连接并正常交互：
+
+```bash
+python3 - <<'PY'
+import socket
+
+s = socket.create_connection(("127.0.0.1", 18080))
+s.sendall(b"hello")
+print(s.recv(4096))
+s.shutdown(socket.SHUT_WR)
+s.close()
+PY
+```
+
+在 `tcpdump` 中应能看到类似过程（序列号为示例）：
+
+```
+IP 127.0.0.1.54321 > 127.0.0.1.18080: Flags [S], seq 1000, win 65495
+IP 127.0.0.1.18080 > 127.0.0.1.54321: Flags [S.], seq 2000, ack 1001, win 65483
+IP 127.0.0.1.54321 > 127.0.0.1.18080: Flags [.], ack 2001
+IP 127.0.0.1.54321 > 127.0.0.1.18080: Flags [P.], seq 1001:1006, ack 2001
+IP 127.0.0.1.18080 > 127.0.0.1.54321: Flags [P.], seq 2001:2004, ack 1006
+IP 127.0.0.1.54321 > 127.0.0.1.18080: Flags [F.], seq 1006, ack 2004
+IP 127.0.0.1.18080 > 127.0.0.1.54321: Flags [.], ack 1007
+IP 127.0.0.1.18080 > 127.0.0.1.54321: Flags [F.], seq 2004, ack 1007
+IP 127.0.0.1.54321 > 127.0.0.1.18080: Flags [.], ack 2005
+```
+
+要能读懂这些标记：
+
+- `[S]`：SYN。
+- `[S.]`：SYN+ACK。
+- `[.]`：ACK，没有数据。
+- `[P.]`：PSH+ACK，通常表示有数据推送。
+- `[F.]`：FIN+ACK。
+- `[R]` 或 `[R.]`：RST。
+
+注意：
+
+- SYN 的 `seq=1000`，对应的 ACK 是 `1001`，因为 SYN 消耗一个序列号。
+- FIN 的 `seq=1006`，对应的 ACK 是 `1007`，因为 FIN 也消耗一个序列号。
+- 客户端先 `shutdown(SHUT_WR)` 再 `close()`，所以客户端是主动关闭方，最终会进入 TIME_WAIT。
+
+### 步骤 3：观察 TIME_WAIT
+
+在客户端关闭后立刻执行：
+
+```bash
+ss -tan | grep 18080
+ss -tan state time-wait | grep 18080
+ss -s
+cat /proc/net/sockstat
+```
+
+你应该能看到客户端一侧的本地端口处于 `TIME-WAIT`，而服务端一侧通常是 `CLOSED` 或不再出现在连接表中。因为主动关闭方是客户端，TIME_WAIT 落在客户端。
+
+如果短时间内重复多次连接，可以观察 TIME_WAIT 数量增长：
+
+```bash
+for i in $(seq 1 20); do
+  python3 - <<'PY'
+import socket
+s = socket.create_connection(("127.0.0.1", 18080))
+s.sendall(b"x")
+s.recv(16)
+s.close()
+PY
+done
+
+ss -tan state time-wait | wc -l
+```
+
+### 步骤 4：观察半关闭
+
+启动一个会先关闭写方向的客户端：
+
+```bash
+python3 - <<'PY'
+import socket
+
+s = socket.create_connection(("127.0.0.1", 18080))
+s.sendall(b"half-close")
+s.shutdown(socket.SHUT_WR)   # 发送 FIN，但仍可读
+print("after shutdown, recv:", s.recv(4096))
+s.close()
+PY
+```
+
+观察点：
+
+- 客户端发送 FIN 后，服务端会看到 EOF（`recv()` 返回空）。
+- 服务端仍可以调用 `sendall()` 发送 `response-after-eof`。
+- 客户端在 `shutdown(SHUT_WR)` 之后仍然能读到这段响应。
+- 这说明 FIN 只关闭发送方向，不等于连接立即结束。
+
+同时用 `ss` 观察中间状态：
+
+```bash
+ss -tan | grep 18080
+```
+
+在服务端处理期间，可能看到一侧 `FIN-WAIT-2`、另一侧 `CLOSE-WAIT`。这正对应半关闭阶段。
+
+### 步骤 5：观察 RST 异常退出
+
+方式一：客户端向一个没有监听的端口发起连接：
+
+```bash
+python3 - <<'PY'
+import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    s.connect(("127.0.0.1", 18999))   # 未监听
+except OSError as e:
+    print("connect error:", e)
+PY
+```
+
+`tcpdump` 中通常能看到 SYN 后紧跟 RST，客户端 `connect()` 得到 `Connection refused`。
+
+方式二：服务端直接关闭带有未读数据的连接。上面的示例中发送 `rst` 可以模拟；也可以通过 `SO_LINGER` 设置为 0 来强制 RST：
+
+```python
+import socket, struct
+
+s = socket.create_connection(("127.0.0.1", 18080))
+s.sendall(b"keep-open")
+# 让对端还没读走数据时，本端强制 RST
+s.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack("ii", 1, 0))
+s.close()
+```
+
+观察 `tcpdump` 中是否出现 `[R]` 或 `[R.]`，以及应用层是否收到 `ECONNRESET`。
+
+注意：`SO_LINGER=0` 是演示手段，不应作为生产环境的常规关闭方式。
+
+### 步骤 6：把抓包与 ss 状态对齐
+
+建议按下面的对应关系记录实验结果：
+
+| 抓包现象 | 典型状态 | 含义 |
+| --- | --- | --- |
+| SYN → SYN+ACK → ACK | `SYN-SENT` / `SYN-RECV` → `ESTABLISHED` | 三次握手完成 |
+| 数据 + ACK | `ESTABLISHED` | 双向字节流传输 |
+| FIN → ACK | 主动方 `FIN-WAIT-1/2`，被动方 `CLOSE-WAIT` | 半关闭开始 |
+| FIN → ACK（另一方向） | `LAST-ACK` / `TIME-WAIT` | 双向关闭完成 |
+| RST | 直接进入 `CLOSED` 或异常终止 | 连接被重置 |
+| 大量 `CLOSE-WAIT` | 应用未关闭 | fd 或连接对象泄漏 |
+| 大量 `TIME-WAIT` | 主动关闭方 | 正常关闭残留，关注端口资源 |
+
+常用命令汇总：
+
+```bash
+# 查看所有 TCP 连接及状态
+ss -tan
+
+# 只看统计
+ss -s
+
+# 只看某类状态
+ss -tan state established
+ss -tan state time-wait
+ss -tan state close-wait
+ss -tan state syn-recv
+
+# 查看监听端口和进程
+ss -tlnp
+
+# 按端口过滤
+ss -tan 'sport = :18080'
+ss -tan 'dport = :18080'
+
+# 传统工具
+netstat -ant
+netstat -s
+
+# 内核协议统计
+cat /proc/net/sockstat
+cat /proc/net/sockstat6
+
+# 抓包并保存，便于反复分析
+sudo tcpdump -i lo -nn -S -w /tmp/tcp-demo.pcap 'tcp port 18080'
+sudo tcpdump -nn -r /tmp/tcp-demo.pcap
+```
+
+### 步骤 7：对照 sourceStudy 核对语义
+
+节点要求：
+
+> 沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。
+
+建议在完成实验后，打开 Linux man-pages 的 `tcp(7)`，重点核对：
+
+1. 三次握手和序列号相关描述；
+2. FIN、RST 与半关闭的语义；
+3. `TCP_NODELAY`、`SO_REUSEADDR`、`SO_LINGER` 等选项的边界；
+4. 你当前内核版本下相关行为是否有差异。
+
+记录方式可以很简单：
+
+```text
+实验环境：Linux 内核版本、发行版、Python 版本
+观察命令：tcpdump / ss / sockstat
+结论：
+- SYN/FIN 各消耗一个序列号
+- 主动关闭方进入 TIME_WAIT
+- FIN 只关闭发送方向
+边界：
+- TIME_WAIT 时长以本机实现为准
+- tcp_tw_recycle 在现代内核已移除
+```
+
+### 实践验收
+
+完成上述步骤后，检查自己能否回答：
+
+1. **能说明 TCP 不保留消息边界**
+   - 两次 `send` 的数据可能被合并，也可能被拆分。
+   - 应用必须用长度前缀、分隔符或协议头来界定消息。
+   - 抓包中看到的是字节流和序列号区间，不是“消息编号”。
+
+2. **能解释主动关闭方常出现 TIME_WAIT**
+   - 主动关闭方发送最后一个 ACK 后进入 TIME_WAIT。
+   - 目的是处理最后一个 ACK 丢失后的 FIN 重传，并让旧报文消亡。
+   - 因此谁先关闭，谁就承担 TIME_WAIT；这与“服务端/客户端”身份无关。
+
+3. **能把抓包与 ss 状态对应起来**
+   - 看到 SYN/FIN/RST 能推断状态；
+   - 看到 `CLOSE-WAIT` 能想到应用未关闭；
+   - 看到 `TIME-WAIT` 能想到主动关闭方和端口资源。
+
+---
+
+## 自测题
+
+### 题目 1
+
+为什么 TCP 建立连接需要三次握手？两次握手不够吗？请结合序列号说明。
+
+**参考答案**
+
+两次握手只能让双方确认基本的收发能力，但无法让双方都可靠确认“对方已经收到了自己的初始序列号”。第三次 ACK 让服务端确认客户端收到了自己的 SYN+ACK，从而完成双方序列号的同步。三次握手还可以降低历史重复 SYN 造成错误连接的风险。SYN 会消耗一个序列号，所以客户端 SYN 的 `seq=x` 对应服务端的 `ack=x+1`，第三次 ACK 则确认服务端的 `seq=y`，即 `ack=y+1`。
+
+### 题目 2
+
+服务端读到 `read()` 返回 0，是否意味着这条连接已经彻底结束、不能再写数据？为什么？
+
+**参考答案**
+
+不是。`read()` 返回 0 表示对端关闭了发送方向，即收到了 FIN，这属于半关闭。本端仍然可以继续向对端发送数据。服务端应先处理完需要发送的响应，再调用 `shutdown(fd, SHUT_WR)` 或 `close()` 完成本端关闭。如果把 FIN 误认为整个连接结束，可能丢失最后的响应，甚至触发 RST。节点中的 pitfall 正是强调这一点。
+
+### 题目 3
+
+某短连接服务在高峰期出现大量 `TIME_WAIT`，并伴随 `Cannot assign requested address`。请分析原因，并给出至少三种处理方向。
+
+**参考答案**
+
+`TIME_WAIT` 出现在主动关闭方。短连接服务如果由某一端频繁主动关闭，会在本地保留大量 TIME_WAIT 状态，占用本地端口。高峰期连接速率高，临时端口范围有限时可能耗尽端口，导致新的 `connect()` 失败并报 `Cannot assign requested address`。
+
+处理方向包括：
+
+1. 改变关闭方，尽量让客户端先关闭，把 TIME_WAIT 转移到客户端侧；
+2. 使用连接池或长连接，减少建连/关闭频率；
+3. 评估扩大 `ip_local_port_range`，增加可用临时端口；
+4. 正确使用 `SO_REUSEADDR` 解决服务端重启绑定问题；
+5. 谨慎评估 `tcp_tw_reuse`，不要使用已移除且问题较多的 `tcp_tw_recycle`；
+6. 增加监控，区分正常稳态 TIME_WAIT 与真正的端口耗尽。
+
+---
+
+## 推荐资源
+
+- **TCP状态机与连接生命周期：Linux man-pages**
+  - URL：https://man7.org/linux/man-pages/man7/tcp.7.html
+  - 来源：man7.org
+  - 语言：英文
+  - 类型：文档
+  - 难度：进阶
+  - 说明：重点阅读三次握手和序列号、FIN/RST 与半关闭、`TCP_NODELAY`、`SO_REUSEADDR`、`SO_LINGER` 等部分，用于核对本节点实验的语义和边界。阅读时注意结合自己的内核版本，记录行为差异和适用条件。
+
+---
+
+## 本课小结
+
+本课围绕 TCP 连接的生命周期，讲清了三件事。
+
+第一，**三次握手和序列号**。TCP 用 SYN、SYN+ACK、ACK 同步双方的初始序列号，建立可靠有序的字节流。序列号按字节计数，SYN 和 FIN 各消耗一个序列号。服务端还要区分 SYN 队列和 accept 队列，应用不 `accept()` 会导致连接堆积。
+
+第二，**FIN、RST 与半关闭**。FIN 只表示发送方向关闭，不表示整个连接立即结束；接收方仍可继续发送数据。RST 是异常终止，不保证数据送达。`CLOSE-WAIT` 堆积通常意味着应用没有关闭连接，是资源泄漏的重要信号。
+
+第三，**TIME_WAIT 和连接资源**。主动关闭方进入 TIME_WAIT，用于保证最后一个 ACK 丢失时还能重发 ACK，并让旧报文消亡。TIME_WAIT 会占用本地端口，短连接高并发时可能造成端口耗尽。解决思路应从关闭方选择、连接池/长连接、端口范围和谨慎的内核参数入手，而不是把 TIME_WAIT 当成必须消灭的 bug。
+
+最后记住两条验收标准：
+
+- **TCP 不保留消息边界**，应用必须自己做 framing；
+- **主动关闭方常出现 TIME_WAIT**，这是正常的设计，不是异常。
+
+当你在微信公众号后台看到连接堆积、异常断连、重传或 TIME_WAIT 报警时，先别急着改参数。用 `ss -tan` 看状态分布，用 `ss -s` 和 `/proc/net/sockstat` 看统计，用 `tcpdump` 看握手、FIN、RST 的真实过程，再把内核状态与应用错误码对齐。连接的生命周期一旦看清，问题通常就不再神秘。
+
+---
+
+## 附：已验证的实践脚本（practice49）
+
+本课正文的 `tcpdump` 步骤请在有抓包权限的机器上执行。本 box 无 `tcpdump`，下面脚本用 `ss` + Python socket 验证同一套语义（握手、半关闭、TIME_WAIT、字节流无消息边界、RST/拒绝连接、CLOSE-WAIT），已在本环境跑通并输出 `ALL_CHECKS_PASSED`。
+
+目录：`/workspace/atlas/lessons/practice49/`
+
+### server.py
+
+```python
+#!/usr/bin/env python3
+"""Minimal TCP demo server for Backend Atlas lesson 49."""
+import socket
+import sys
+import time
+
+HOST = "127.0.0.1"
+PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 18080
+
+srv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+srv.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+srv.bind((HOST, PORT))
+srv.listen(32)
+print(f"listening on {HOST}:{PORT}", flush=True)
+
+while True:
+    conn, addr = srv.accept()
+    try:
+        data = conn.recv(4096)
+        if data == b"half-close":
+            conn.sendall(b"response-after-eof\n")
+            conn.shutdown(socket.SHUT_WR)
+        elif data == b"hold-closewait":
+            time.sleep(2.0)
+            conn.close()
+            continue
+        elif data == b"stream":
+            more = conn.recv(4096)
+            conn.sendall(b"got:" + data + more)
+            conn.shutdown(socket.SHUT_WR)
+        elif data.startswith(b"rst"):
+            conn.close()
+            continue
+        else:
+            conn.sendall(b"ok\n")
+            conn.shutdown(socket.SHUT_WR)
+    except Exception as e:
+        print("err", e, flush=True)
+    finally:
+        try:
+            conn.close()
+        except Exception:
+            pass
+```
+
+### test.sh（摘要结果）
+
+运行：`cd practice49 && ./test.sh`
+
+实测结果（Asia/Shanghai）：
+
+- 握手后可见 `ESTABLISHED`
+- 半关闭：`shutdown(SHUT_WR)` 后仍读到 `response-after-eof`
+- 主动关闭方出现 `TIME_WAIT`（匹配端口条目 ≥1）
+- 字节流无消息边界：两次 `send` 在服务端拼成 `got:streamPART2`
+- 未监听端口 → `Connection refused`（errno 111，通常伴随 RST）
+- 对端发 FIN 后本端故意不关 → 观察到 `CLOSE-WAIT` + 对端 `FIN-WAIT-2`
+- `ALL_CHECKS_PASSED`
+
