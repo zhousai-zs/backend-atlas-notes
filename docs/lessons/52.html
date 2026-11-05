@@ -1,0 +1,491 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>52. 非阻塞IO与读写状态机 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（52/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（4/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="cur" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li class="todo">53. select与fd集合 <em>待更新</em></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 52 课 · 领域 D · 阶段 2</p><p class="dl"><a href="../files/52-d-nonblock.md" download>⬇ 本课 Markdown</a><a href="../files/practice52.tar.gz" download>⬇ 练习包 practice52.tar.gz</a></p><h1 id="52208-io">第 52/208 课：非阻塞IO与读写状态机</h1>
+<ul>
+<li><strong>阶段</strong>：第 2 阶段 · IO模型与事件</li>
+<li><strong>前置课程</strong>：d-socket</li>
+<li><strong>关键词</strong>：O_NONBLOCK、fcntl、EAGAIN、EWOULDBLOCK、部分读写、输出缓冲、非阻塞 connect、EINPROGRESS、SO_ERROR、状态机、select</li>
+<li><strong>难度</strong>：基础</li>
+<li><strong>所属领域</strong>：D · IO模型与事件</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课你已经能写出「能听端口、能多客户端 Echo、能处理 EOF / EINTR」的同步 Socket 服务端。那套代码语义清楚，适合当基准。</p>
+<p>但把它丢进微信公众号后台的<strong>长连接网关 / 接入层</strong>，马上会撞上另一个问题：</p>
+<blockquote>
+<p>事件线程（或「负责这一大片连接的那条线程」）里，只要有一个客户端读得很慢，<code>send</code> 就会卡住；卡住期间，同线程上的其他连接都得不到调度。</p>
+</blockquote>
+<p>节点 summary 一句话说清本质：</p>
+<blockquote>
+<p>非阻塞fd在不能立即推进时返回EAGAIN等状态，应用通过状态机保存尚未完成的读写。</p>
+</blockquote>
+<p>本课要把阻塞 Echo <strong>升级</strong>为：</p>
+<ol>
+<li>fd 设为 <code>O_NONBLOCK</code>；</li>
+<li>读/写遇到 <code>EAGAIN</code> / <code>EWOULDBLOCK</code> 时不傻等、不空转；</li>
+<li>用<strong>输出缓冲 + 状态机</strong>保存尚未发完的数据；</li>
+<li>故意限制单次 <code>send</code> 大小，并拿<strong>慢读客户端</strong>验收：剩余数据不丢不重，且 CPU 不被自旋打满。</li>
+</ol>
+<p>这正是后续 epoll / 事件循环课的前置肌肉记忆。</p>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>解释 O_NONBLOCK 和 EAGAIN</strong>
+   - 说清非阻塞 fd 在「现在推进不了」时返回什么，而不是把线程挂起。
+   - 分清 Linux 上 <code>EAGAIN</code> 与 <code>EWOULDBLOCK</code> 的常见关系。
+   - 知道「可读 / 可写通知」<strong>不保证</strong>一次就能读完或写完任意长度。</p>
+</li>
+<li>
+<p><strong>独立完成实践：将 Echo 改成非阻塞，限制单次发送大小并测试慢读客户端</strong>
+   - 监听套接字与已连接套接字都可设非阻塞。
+   - 用应用层输出缓冲保存短写剩余；<code>EAGAIN</code> 后让出，等下一次可写事件。
+   - 慢读客户端场景下：回显完整、不丢不重；同进程仍能服务其他连接；不 busy-loop 占满 CPU。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准</strong>
+   - 发送剩余数据不会丢失或重复。
+   - <code>EAGAIN</code> 后不会自旋占满 CPU。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：<strong>防止一个慢连接阻塞整个事件线程。</strong></p>
+<h3 id="1">1. 长连接网关里，「慢」是常态</h3>
+<p>公众号后台常见场景：</p>
+<ul>
+<li>手机切到后台、弱网、TCP 窗口缩小；</li>
+<li>客户端业务线程卡住，读 socket 很慢；</li>
+<li>下行推送突发，单连接瞬时积压。</li>
+</ul>
+<p>若你的接入线程对某个 fd 做<strong>阻塞 <code>send</code></strong>，这个慢客户端就把整条事件线程「钉死」了——心跳、鉴权、其他用户的消息全部排队。线上表现往往是：P99 延迟飙高、连接超时雪崩，而 CPU 并不高（线程在睡眠等 I/O）。</p>
+<h3 id="2-io">2. 非阻塞把「等 I/O」变成「可调度的状态」</h3>
+<p>阻塞调用的语义是：调用返回前，这件事已经做完（或失败）。</p>
+<p>非阻塞调用的语义是：</p>
+<ul>
+<li>能推进多少推进多少；</li>
+<li>现在推进不了 → 返回 <code>EAGAIN</code>，<strong>把未完成部分留给应用状态机</strong>；</li>
+<li>线程可以去处理别的连接，稍后再回来。</li>
+</ul>
+<h3 id="3">3. 状态机是代价，也是换并发的门票</h3>
+<p>节点 tradeoffs 写得很直白：</p>
+<blockquote>
+<p>状态机增加复杂度，但让线程可处理更多连接。</p>
+</blockquote>
+<p>你会多维护：<code>outbuf</code>、是否仍关心可读/可写、对端是否已 EOF、连接是否该关闭。换来的是：一条线程（或一个事件循环）能同时推进成千上万条连接——这是网关的基本盘。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="o_nonblock-eagain">一、O_NONBLOCK 和 EAGAIN</h3>
+<h4 id="1_1">1. 怎么打开非阻塞</h4>
+<p>Linux 上常见两种做法（等价目标：给 fd 打上 <code>O_NONBLOCK</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">F_GETFL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">flags</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* 查 errno */</span><span class="w"> </span><span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">F_SETFL</span><span class="p">,</span><span class="w"> </span><span class="n">flags</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_NONBLOCK</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* 查 errno */</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p>Python：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">sock</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># 内部即 O_NONBLOCK</span>
+<span class="c1"># 或</span>
+<span class="n">sock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>        <span class="c1"># 对 socket 对象也是非阻塞语义</span>
+</code></pre></div>
+
+<p><code>accept</code> 出来的已连接套接字<strong>不一定</strong>继承监听套接字的非阻塞标志（取决于平台与调用路径）。工程上习惯：<strong>accept 之后对 conn 再设一次非阻塞</strong>。</p>
+<h4 id="2">2. 不能立即完成时返回什么</h4>
+<p>对非阻塞 socket：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>「现在做不了」时常见结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>recv</code> / <code>read</code></td>
+<td>无数据可读 → <code>-1</code> + <code>EAGAIN</code> / <code>EWOULDBLOCK</code></td>
+</tr>
+<tr>
+<td><code>send</code> / <code>write</code></td>
+<td>发送缓冲暂不可写 → <code>-1</code> + <code>EAGAIN</code> / <code>EWOULDBLOCK</code></td>
+</tr>
+<tr>
+<td><code>accept</code></td>
+<td>无新连接 → 同上</td>
+</tr>
+<tr>
+<td><code>connect</code></td>
+<td>见第三节：<code>EINPROGRESS</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Linux 上对 socket，<code>EAGAIN</code> 与 <code>EWOULDBLOCK</code> 通常是同一个值。</strong> 可移植代码里两者都判断更稳妥：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EAGAIN</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EWOULDBLOCK</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* 稍后再试：登记到 epoll/select，而不是 while(1) 重试 */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Python 里常体现为 <code>BlockingIOError</code>（其 <code>errno</code> 仍是 <code>EAGAIN</code>/<code>EWOULDBLOCK</code>）。</p>
+<h4 id="3_1">3. 和「阻塞」对照记</h4>
+<div class="codehilite"><pre><span></span><code>阻塞 fd：  send(大缓冲) ──线程睡眠──▶ 内核慢慢发完或出错后才返回
+非阻塞 fd：send(大缓冲) ──立刻返回──▶ 可能只写了 N 字节，或 EAGAIN
+                                      剩余字节必须由你保存在状态机里
+</code></pre></div>
+
+<p>节点 why 的反面教材：你若在事件线程里对非阻塞 fd 写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">send</span><span class="p">(...)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EAGAIN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* 空转 */</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<p>那是把「阻塞」换成了「烧 CPU 的忙等」——更糟。正确做法是：<strong>离开，等可写事件</strong>。</p>
+<h4 id="4">4. 用命令感受「可写 / 不可写」</h4>
+<p>连接建立后可用 <code>ss -tan</code> 看 Send-Q：</p>
+<div class="codehilite"><pre><span></span><code>ss<span class="w"> </span>-tan<span class="w"> </span><span class="s1">'sport = :18052 or dport = :18052'</span>
+</code></pre></div>
+
+<p>慢读客户端会让对端 Receive Window 变小，本端 Send-Q 堆积；此时非阻塞 <code>send</code> 更容易 <code>EAGAIN</code>。排障时把「应用 outbuf 长度」和「内核 Send-Q」一起看。</p>
+<hr />
+<h3 id="_5">二、部分读写与输出缓冲</h3>
+<h4 id="1_2">1. 短读 / 短写不是异常</h4>
+<p>TCP 是字节流。即使阻塞 fd，<code>recv</code>/<code>send</code> 也不保证一次吞吐你请求的全部长度；非阻塞下更是常态。</p>
+<p>节点 pitfalls：</p>
+<blockquote>
+<p>可读或可写通知不保证任意长度操作立即完成。</p>
+</blockquote>
+<p>翻译成代码纪律：</p>
+<ul>
+<li>epoll 告诉你「可读」→ 你 <code>recv</code> 一次或多次，直到 <code>EAGAIN</code>；<strong>不要假设</strong>「可读 = 应用层一整帧到齐」。</li>
+<li>「可写」→ 你 <code>send</code> 一段，可能只发出去一部分；<strong>剩余必须留在自己的缓冲区</strong>。</li>
+</ul>
+<h4 id="2-echo">2. 输出缓冲状态机（Echo 最小模型）</h4>
+<p>把每个连接看成一台小状态机：</p>
+<div class="codehilite"><pre><span></span><code>                    ┌──────────────┐
+         recv 数据   │   outbuf     │   send(限长)
+    ────────────────▶│  (bytearray) │────────────────▶ 内核发送缓冲
+                    └──────────────┘
+                           │
+                           │ EAGAIN
+                           ▼
+                    等待「可写」事件后再 flush
+</code></pre></div>
+
+<p>伪代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">SEND_LIMIT</span> <span class="o">=</span> <span class="mi">64</span>  <span class="c1"># 实践里故意限小，逼出短写</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">on_readable</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">peer_closed</span> <span class="o">=</span> <span class="kc">True</span>   <span class="c1"># EOF；若 outbuf 仍有数据，先冲完再关</span>
+        <span class="k">return</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">outbuf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>      <span class="c1"># 先入队，稍后再发</span>
+    <span class="n">try_flush</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">try_flush</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+    <span class="k">while</span> <span class="n">conn</span><span class="o">.</span><span class="n">outbuf</span><span class="p">:</span>
+        <span class="n">nwant</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">SEND_LIMIT</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">outbuf</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">memoryview</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">outbuf</span><span class="p">)[:</span><span class="n">nwant</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">BlockingIOError</span><span class="p">:</span>
+            <span class="k">return</span>  <span class="c1"># EAGAIN：保留 outbuf，等可写</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">close</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span> <span class="k">return</span>
+        <span class="k">del</span> <span class="n">conn</span><span class="o">.</span><span class="n">outbuf</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>       <span class="c1"># 只丢掉真正发出去的前缀 —— 不丢不重</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ol>
+<li><strong>不丢</strong>：没发出去的字节仍在 <code>outbuf</code>；</li>
+<li><strong>不重</strong>：<code>del outbuf[:n]</code> 按 <code>send</code> 返回值推进，而不是按「我想发多少」；</li>
+<li><strong>不自旋</strong>：<code>EAGAIN</code> 立刻返回事件循环。</li>
+</ol>
+<h4 id="3_2">3. 限单次发送大小的教学意义</h4>
+<p>生产里不一定要把 <code>SEND_LIMIT</code> 设成 64。本课故意设小，是为了：</p>
+<ul>
+<li>稳定复现「一次可写也发不完」；</li>
+<li>强迫你写出正确的剩余缓冲逻辑；</li>
+<li>让慢读客户端更容易把路径走到 <code>EAGAIN</code>。</li>
+</ul>
+<p>真实网关可能按公平性、写入配额、syscall 次数做批量；但状态机骨架相同。</p>
+<h4 id="4_1">4. 水平触发下的一个隐蔽忙等</h4>
+<p>若用 <code>select</code>/<code>poll</code> 的水平触发语义：对端 <code>shutdown(WR)</code> 后，fd <strong>会一直显示可读</strong>（EOF）。如果你在 <code>peer_closed</code> 之后仍把该 fd 放进读集合，事件循环会「立刻醒来 → recv 得到空 → 再 select → 再立刻醒来」，<strong>CPU 被空转打满</strong>——看起来像「非阻塞」，其实是 bug。</p>
+<p>正确做法：EOF 后若只需冲刷 <code>outbuf</code>，就只监听<strong>可写</strong>；冲完再 <code>close</code>。</p>
+<p>这正好对应本课验收：<strong>EAGAIN 后不会自旋占满 CPU</strong>（以及更广的「事件循环不得空转」）。</p>
+<hr />
+<h3 id="connect-so_error">三、非阻塞 connect 与 SO_ERROR</h3>
+<p>服务端 Echo 用 <code>accept</code>；客户端或内部 RPC 连接池则要会<strong>非阻塞 connect</strong>。</p>
+<h4 id="1_3">1. 流程</h4>
+<div class="codehilite"><pre><span></span><code><span class="cm">/* fd 已 O_NONBLOCK */</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connect</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">addr</span><span class="p">,</span><span class="w"> </span><span class="n">addrlen</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* 极少见：本机立刻完成 */</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINPROGRESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* 握手进行中：等套接字可写（或 epoll OUT/ERR） */</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* 真正的失败 */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Python：<code>sock.connect()</code> 在非阻塞下常抛 <code>BlockingIOError</code>，其 errno 为 <code>EINPROGRESS</code>（或已连接时的 <code>EISCONN</code> 等，需按状态处理）。</p>
+<h4 id="2-so_error">2. 如何知道成功还是失败：SO_ERROR</h4>
+<p>可写并不能直接等同于「连接成功」。必须查待处理错误：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">socklen_t</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">err</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">getsockopt</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SOL_SOCKET</span><span class="p">,</span><span class="w"> </span><span class="n">SO_ERROR</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* getsockopt 本身失败 */</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* connect 失败，err 即失败原因（如 ECONNREFUSED） */</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* connect 成功，进入收发状态机 */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>直觉：</p>
+<div class="codehilite"><pre><span></span><code>connect(非阻塞)
+    ├─ 立刻成功 ────────────────────▶ 可收发
+    ├─ EINPROGRESS ─(等可写)─┬─ SO_ERROR==0 ──▶ 可收发
+    │                        └─ SO_ERROR!=0 ──▶ 失败关闭
+    └─ 其他 errno ──────────────────▶ 失败
+</code></pre></div>
+
+<h4 id="3_3">3. 和读写状态机如何拼在一起</h4>
+<p>一个客户端连接的生命周期常常是：</p>
+<ol>
+<li><code>CONNECTING</code>：非阻塞 <code>connect</code>，等可写，查 <code>SO_ERROR</code>；</li>
+<li><code>ESTABLISHED</code>：按协议读写；<code>outbuf</code> 管理短写；</li>
+<li><code>CLOSING</code>：冲完缓冲或双方 EOF 后关闭。</li>
+</ol>
+<p>服务端则是 <code>LISTENING → ACCEPTED → ESTABLISHED → CLOSING</code>。本课实践聚焦服务端 Echo 的读写状态机；<code>connect</code>/<code>SO_ERROR</code> 必须理解，为下一层客户端与连接池打底。</p>
+<hr />
+<h3 id="_6">四、把三块拼成「事件线程里的一帧」</h3>
+<p>公众号接入层一条工作线程，每一轮通常只做有限几步（示意）：</p>
+<div class="codehilite"><pre><span></span><code>1. 等待事件（select/epoll_wait）
+2. 若监听 fd 可读 → accept（循环到 EAGAIN）→ 新连接设 O_NONBLOCK、挂入连接表
+3. 若连接可读 → recv 到 EAGAIN 或 EOF → 字节入协议解析 / Echo 则入 outbuf
+4. 若连接可写且 outbuf 非空 → 限量 send → 按返回值推进
+5. 清理：peer_closed 且 outbuf 空 → close；错误 → close
+</code></pre></div>
+
+<p>注意第 3、4 步都可能「只推进一部分」。<strong>一帧事件循环的目标不是「服务完某个连接」，而是「让所有就绪连接各推进一步」。</strong> 这与节点 why 完全同向：慢连接只能让自己的 outbuf 变长，不能让整线程停住。</p>
+<h3 id="d-socket">五、和上一课（d-socket）的分工</h3>
+<table>
+<thead>
+<tr>
+<th>话题</th>
+<th>第 51 课 d-socket</th>
+<th>本课 d-nonblock</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>目标</td>
+<td>最小可调试同步服务</td>
+<td>慢连接不堵事件线程</td>
+</tr>
+<tr>
+<td>并发模型</td>
+<td>每连接一线程（易验证）</td>
+<td>单线程事件循环 + 状态机</td>
+</tr>
+<tr>
+<td>send/recv</td>
+<td>循环直到完成或错误</td>
+<td>可能 partial + EAGAIN</td>
+</tr>
+<tr>
+<td>复杂度</td>
+<td>低</td>
+<td>连接对象 / outbuf / 事件兴趣</td>
+</tr>
+<tr>
+<td>下一步</td>
+<td>本课</td>
+<td>epoll、定时器、协议状态机</td>
+</tr>
+</tbody>
+</table>
+<p>同步版仍然有价值：当事件驱动版本行为诡异时，用同步版对照「协议语义是否正确」。</p>
+<h3 id="c-fcntl-send">六、最小 C 片段：fcntl + 非阻塞 send</h3>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/socket.h&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">set_nonblock</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">F_GETFL</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fl</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">fcntl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">F_SETFL</span><span class="p">,</span><span class="w"> </span><span class="n">fl</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">O_NONBLOCK</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/* 返回：已写入字节数；*would_block=1 表示还需等待可写 */</span>
+<span class="k">static</span><span class="w"> </span><span class="kt">ssize_t</span><span class="w"> </span><span class="nf">send_some</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">would_block</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="o">*</span><span class="n">would_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">send</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EAGAIN</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EWOULDBLOCK</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">*</span><span class="n">would_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"> </span><span class="cm">/* 真错误 */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>应用层应维护 <code>buf + offset + total</code>，每次只对 <code>buf+offset</code> 调用 <code>send_some</code>，成功则 <code>offset += n</code>，<code>would_block</code> 则改听 <code>EPOLLOUT</code>。</p>
+<h2 id="_7">常见误区与设计权衡</h2>
+<h3 id="_8">误区：可读 / 可写 = 一次能读写任意长度</h3>
+<p>这是节点 pitfalls 的原文。事件只表示「现在有机会推进」，不表示「应用层消息边界到齐」或「你的 1MB 缓冲能一次写完」。</p>
+<h3 id="eagain-while">误区：<code>EAGAIN</code> 就原地 while 重试</h3>
+<p>那是 busy-wait。正确路径：保存状态 → 等事件 → 再试。</p>
+<h3 id="send">误区：短写后把「整段缓冲」再 send 一遍</h3>
+<p>若第一次 <code>send</code> 返回了 <code>n</code>，却不推进偏移，下一次会<strong>重复发送</strong>前缀——慢读客户端会看到错乱/重复，验收直接挂。</p>
+<h3 id="eof">误区：EOF 后仍监听可读（水平触发）</h3>
+<p>导致空转占 CPU。EOF 后按需只听可写，冲完再关。</p>
+<h3 id="connect-so_error_1">误区：忘记查非阻塞 connect 的 SO_ERROR</h3>
+<p>「可写了」就当握手成功，可能把 <code>ECONNREFUSED</code> 当成已连接，后续读写异常难查。</p>
+<h3 id="vs">权衡：状态机复杂度 vs 线程可服务连接数</h3>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>状态机增加复杂度，但让线程可处理更多连接。</p>
+</blockquote>
+<p>同步多线程 Echo（上一课）好懂，但一连接一线程在百万连接下不可接受。非阻塞 + 状态机 + 后续 epoll，是用<strong>显式复杂度</strong>换<strong>显式调度能力</strong>。工程上要用清晰的连接对象、明确的状态枚举、统一的关闭路径，把复杂度关进笼子。</p>
+<hr />
+<h2 id="_9">动手实践</h2>
+<p>节点 practice：</p>
+<blockquote>
+<p>将Echo服务改成非阻塞，限制单次发送大小并测试慢读客户端。</p>
+</blockquote>
+<p>验收：</p>
+<ul>
+<li>发送剩余数据不会丢失或重复；</li>
+<li><code>EAGAIN</code> 后不会自旋占满 CPU。</li>
+</ul>
+<p>并呼应 sourceStudy：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>请对照 <code>fcntl(2)</code> / <code>send(2)</code> / <code>connect(2)</code> / <code>getsockopt(2)</code> 核对本节语义；记录你实验机内核与 Python 版本。</p>
+<h3 id="_10">步骤拆解</h3>
+<ol>
+<li>
+<p><strong>从上一课阻塞 Echo 出发</strong><br />
+   保留 <code>SO_REUSEADDR</code>、<code>bind</code>/<code>listen</code>、端口占用明确报错。</p>
+</li>
+<li>
+<p><strong>全面非阻塞</strong><br />
+   监听 socket 与每个 <code>accept</code> 出的连接都 <code>setblocking(False)</code>。</p>
+</li>
+<li>
+<p><strong>事件循环</strong><br />
+   用 <code>select</code>（本课够用；生产多用 epoll）区分：可读（accept/recv）、可写（flush outbuf）。</p>
+</li>
+<li>
+<p><strong>输出缓冲 + 限长 send</strong><br />
+   例如 <code>SEND_LIMIT=64</code>；<code>send</code> 后按返回值推进；<code>BlockingIOError</code> 计数并返回。</p>
+</li>
+<li>
+<p><strong>慢读客户端</strong><br />
+   每次 <code>recv</code> 很少字节并 <code>sleep</code>；断言回显与发送完全一致。</p>
+</li>
+<li>
+<p><strong>并发冒烟</strong><br />
+   慢读进行中，另起普通客户端，确认事件线程未被堵住。</p>
+</li>
+<li>
+<p><strong>CPU 采样</strong><br />
+   在「有积压、客户端暂缓读」的窗口采样服务端 CPU，确认没有空转。</p>
+</li>
+<li>
+<p><strong>对照 man page</strong><br />
+   核对 <code>O_NONBLOCK</code>、<code>EAGAIN</code>、短写语义；把边界记进笔记（例如水平触发 EOF）。</p>
+</li>
+</ol>
+<h3 id="_11">预期现象（对照验收）</h3>
+<ul>
+<li>普通小包：<code>RESULT ok ... match=True</code></li>
+<li><code>ABCDEFGH</code> 重复 500 次（4000 字节）在 <code>SEND_LIMIT=64</code> 下仍完整回显</li>
+<li><code>slow_client</code> 与普通 <code>client</code> 交错时两者都成功</li>
+<li>服务日志关闭连接时可见 <code>eagain=N</code>（N 可为正，取决于缓冲与时序）</li>
+<li>CPU 采样窗口 ticks 远低于「占满单核」</li>
+<li>再次启动同端口服务：打印 <code>EADDRINUSE</code>，退出码 2</li>
+</ul>
+<p>若你自己改写为 C/<code>epoll</code>，验收标准不变：剩余数据不丢不重；<code>EAGAIN</code> 路径不空转。</p>
+<p>配套目录见文末 <code>practice52/</code>。</p>
+<hr />
+<h2 id="_12">自测题</h2>
+<p><strong>题 1</strong><br />
+非阻塞 <code>send</code> 返回 -1 且 <code>errno == EAGAIN</code>。下列哪项正确？</p>
+<p>A. 连接一定断了<br />
+B. 应立刻 <code>close</code><br />
+C. 保留未发送数据，等套接字可写后再发<br />
+D. 在 while 里疯狂重试直到成功  </p>
+<p><strong>题 2</strong><br />
+epoll/select 提示某 TCP socket「可读」。是否意味着一次 <code>recv(4096)</code> 一定能读到完整业务帧？为什么？</p>
+<p><strong>题 3</strong><br />
+非阻塞 <code>connect</code> 返回 <code>EINPROGRESS</code>，随后 socket 变为可写。下一步最关键的检查是什么？</p>
+<hr />
+<h3 id="_13">自测题参考答案</h3>
+<p><strong>题 1：C</strong><br />
+<code>EAGAIN</code> 表示「现在不能继续写」，不是致命错误。应把剩余字节留在输出缓冲，注册/等待可写事件。A/B 把暂时不可写误判成断开；D 是自旋，违反本课验收。</p>
+<p><strong>题 2：不意味着。</strong><br />
+可读只说明内核接收缓冲里<strong>至少有一些字节</strong>（或 EOF）。TCP 无消息边界；业务帧可能跨多次 <code>recv</code>，也可能一次 <code>recv</code> 含多帧。需要应用层再组帧。这正是 pitfalls：「可读通知不保证任意长度操作立即完成」。</p>
+<p><strong>题 3：用 <code>getsockopt(SOL_SOCKET, SO_ERROR, ...)</code> 查看待处理错误。</strong><br />
+<code>SO_ERROR == 0</code> 才表示连接建立成功；非 0 则是失败原因（如 <code>ECONNREFUSED</code>）。不能仅凭「可写」断定握手成功。</p>
+<hr />
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/fcntl.2.html">非阻塞IO与读写状态机：Linux man-pages — fcntl(2)</a>（man7.org，英文文档，进阶）</li>
+<li>重点阅读：<code>O_NONBLOCK</code>、与 <code>EAGAIN</code> / 部分读写相关的语义，用于核对本节点实验的边界。</li>
+<li>建议连带阅读同站：<code>send(2)</code>、<code>recv(2)</code>、<code>connect(2)</code>、<code>getsockopt(2)</code>（<code>SO_ERROR</code>）、<code>select(2)</code> / <code>poll(2)</code> / <code>epoll(7)</code>。</li>
+</ul>
+<hr />
+<h2 id="_15">本课小结</h2>
+<ol>
+<li><strong>非阻塞 fd</strong> 在不能立即推进时返回 <code>EAGAIN</code>/<code>EWOULDBLOCK</code>（Linux socket 上二者常等价），而不是把线程挂起。</li>
+<li><strong>部分读写是常态</strong>：用输出缓冲状态机保存未完成发送；按 <code>send</code> 返回值推进，才能不丢不重。</li>
+<li><strong>可读/可写事件 ≠ 一次完成任意长度操作</strong>；事件循环必须能「推进一点就走」。</li>
+<li><strong><code>EAGAIN</code> 后必须让出</strong>，等下一轮事件；禁止忙等；水平触发下 EOF 后勿继续无意义地监听可读。</li>
+<li><strong>非阻塞 connect</strong> 用 <code>EINPROGRESS</code> + 可写 + <code>SO_ERROR</code> 确认结果。</li>
+<li><strong>状态机更复杂，但能避免一个慢连接堵死整个事件线程</strong>——这是长连接网关的生死线。</li>
+</ol>
+<p>下一课将继续 IO 模型与事件主题；请先把 <code>practice52</code> 跑到 <code>ALL_CHECKS_PASSED</code>。</p>
+<hr />
+<h2 id="_16">配套练习</h2>
+<p>目录：<a href="./practice52/"><code>practice52/</code></a></p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server.py</code></td>
+<td>非阻塞 Echo；<code>SEND_LIMIT</code> 限短写；<code>outbuf</code> 状态机；<code>EAGAIN</code> 不自旋；EOF 后只冲写</td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>普通客户端；支持 <code>--repeat</code> 构造大包</td>
+</tr>
+<tr>
+<td><code>slow_client.py</code></td>
+<td>慢读客户端：小 <code>recv</code> + <code>sleep</code>，验收不丢不重</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>自动化验收：大包拼回、慢读并发、CPU 采样、EAGAIN 计数、端口占用</td>
+</tr>
+</tbody>
+</table>
+<p>运行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice52<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./test.sh
+</code></pre></div>
+
+<p>期望末行：<code>ALL_CHECKS_PASSED</code>。</p>
+<p>实测要点（Asia/Shanghai，本机验证时对照）：</p>
+<ul>
+<li>限 <code>send</code> 下大包回显完整匹配；</li>
+<li>慢读进行中其他连接仍可 echo；</li>
+<li>积压窗口内服务端 CPU 采样不占满单核；</li>
+<li>日志可见 <code>eagain&gt;0</code>；</li>
+<li>二次绑定同端口打印 <code>EADDRINUSE</code>，退出码 2。</li>
+</ul>
+<p>NOTE：教学实现将已连接套接字 <code>SO_SNDBUF</code> 调小，便于稳定触发 <code>EAGAIN</code>；生产环境请按容量规划设置，勿照搬。</p><div class="pn"><span><a href="51.html">← Socket服务端基础</a></span><span>下一课 待更新</span></div></main></div></body></html>
