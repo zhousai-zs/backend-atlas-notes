@@ -1,0 +1,555 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>53. select与fd集合 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（53/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（5/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="cur" href="../lessons/53.html">53. select与fd集合</a></li><li class="todo">54. poll与就绪集合扫描 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">55. epoll事件语义与工程边界 <em>待更新</em></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 53 课 · 领域 D · 阶段 2</p><p class="dl"><a href="../files/53-d-select.md" download>⬇ 本课 Markdown</a><a href="../files/practice53.tar.gz" download>⬇ 练习包 practice53.tar.gz</a></p><h1 id="53208-selectfd">第 53/208 课：select与fd集合</h1>
+<ul>
+<li><strong>阶段</strong>：第 2 阶段 · IO模型与事件</li>
+<li><strong>前置课程</strong>：d-nonblock</li>
+<li><strong>关键词</strong>：select、fd_set、FD_SET、FD_CLR、FD_ISSET、FD_ZERO、nfds、FD_SETSIZE、readfds、writefds、exceptfds、超时、timeval、IO多路复用、事件循环</li>
+<li><strong>难度</strong>：基础</li>
+<li><strong>所属领域</strong>：D · IO模型与事件</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课你把阻塞 Echo 升级成了<strong>非阻塞 + 输出缓冲状态机</strong>：遇到 <code>EAGAIN</code> 不再把线程钉死，而是把「还没发完的字节」存进 <code>outbuf</code>，等套接字再次可写。</p>
+<p>但状态机只回答了「推进不了时怎么办」，还缺另一半：</p>
+<blockquote>
+<p><strong>谁来告诉我：现在哪个 fd 可读、哪个可写？</strong></p>
+</blockquote>
+<p>如果用「一人一线程」——每个长连接一条阻塞线程——在微信公众号后台的<strong>长连接接入层 / 网关</strong>里立刻撑不住：百万级在线设备、心跳、下行推送，线程栈与调度成本会先把机器拖垮。</p>
+<p>节点 summary 一句话说清本课要解决的模型：</p>
+<blockquote>
+<p>select通过fd集合报告就绪状态，需要每次重建集合并处理集合大小及扫描成本。</p>
+</blockquote>
+<p><code>select</code> 是 Unix 上最早、最广为人知的 <strong>I/O 多路复用</strong>接口：一条线程把一批 fd 交给内核，内核在「其中至少一个就绪」或「超时」时返回，并告诉你<strong>哪些</strong>集合位被置上了。</p>
+<p>本课要把上一课的「非阻塞状态机」接到「就绪通知」上，弄清：</p>
+<ol>
+<li><code>readfds</code> / <code>writefds</code> / <code>exceptfds</code> 各自表示什么；</li>
+<li><code>nfds = max_fd + 1</code> 与 <code>FD_SETSIZE</code> 硬上限；</li>
+<li><strong>每次返回后集合被改写，必须重建</strong>；关闭连接后要从集合摘掉，并可能降低 <code>max_fd</code>。</li>
+</ol>
+<p>下一课才会走向 <code>poll</code> / <code>epoll</code>；先把 <code>select</code> 的约束吃透，后面那些接口的设计动机才站得住。</p>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>解释 read / write / except 集合</strong>
+   - 说清三个 <code>fd_set</code> 参数各自关心什么就绪条件。
+   - 知道 <code>exceptfds</code> <strong>并不</strong>代表所有普通 Socket 错误（节点 pitfalls）。
+   - 会用 <code>FD_ZERO</code> / <code>FD_SET</code> / <code>FD_CLR</code> / <code>FD_ISSET</code> 操作集合。</p>
+</li>
+<li>
+<p><strong>独立完成实践：实现 select 聊天服务，验证关闭连接后集合更新与最大 fd 变化</strong>
+   - 用 <code>select</code> 同时监听 listen fd 与多个 client fd。
+   - 一人发言、其他人收到广播。
+   - 连接关闭后从集合移除；关闭高编号 fd 后 <code>max_fd</code>（从而 <code>nfds</code>）下降。
+   - <strong>不对超出集合范围的 fd 做 <code>FD_SET</code>（或其语言等价操作）</strong>。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准</strong>
+   - 能解释 <code>nfds</code> 为何是「最大 fd 加一」。
+   - 不对超出集合范围的 fd 调用 <code>FD_SET</code>。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：<strong>理解 IO 多路复用的基本模型和传统接口约束。</strong></p>
+<h3 id="1">1. 接入层的核心问题是「同时盯住很多连接」</h3>
+<p>公众号后台长连接网关典型职责：</p>
+<ul>
+<li>维持海量设备在线（心跳、重连）；</li>
+<li>把下行消息推到正确连接；</li>
+<li>把上行事件交给业务集群。</li>
+</ul>
+<p>你不可能为每条连接开一条阻塞线程。事件驱动模型是：</p>
+<div class="codehilite"><pre><span></span><code>一条（或少量）事件线程
+    │
+    ▼
+等待「有人就绪」 ──select / poll / epoll──▶ 得到就绪集合
+    │
+    ▼
+对每个就绪 fd：非阻塞 read/write + 状态机推进一点
+    │
+    └─▶ 再回去等下一轮就绪
+</code></pre></div>
+
+<p><code>select</code> 是这条链路上<strong>最早、可移植性最好</strong>的一环。即便生产 Linux 网关几乎都用 <code>epoll</code>，面试与排障时你仍会遇到 <code>select</code>：老代码、跨平台库、嵌入式、教学 demo、以及「为什么 epoll 要这样设计」的对照物。</p>
+<h3 id="2">2. 传统接口的约束会直接变成容量上限</h3>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>可移植性较好，Linux fd_set限制使其不适合大型连接集合。</p>
+</blockquote>
+<p><code>FD_SETSIZE</code>（Linux 上常见 <strong>1024</strong>）意味着：用默认 <code>fd_set</code> 时，你基本不能把编号 ≥ 1024 的 fd 放进集合。连接数还没到「业务上的很大」，接口本身就先卡死了。此外每次调用都要<strong>拷贝并扫描</strong>集合，连接越多单次成本越高。</p>
+<p>搞不清这些约束，就会：</p>
+<ul>
+<li>把超过 <code>FD_SETSIZE</code> 的 fd <code>FD_SET</code> 进去 → 未定义行为 / 崩溃；</li>
+<li>关闭连接后忘记从集合摘掉 → 对坏 fd 调用 <code>recv</code>；</li>
+<li>关闭了当前最大 fd 却不更新 <code>nfds</code> → 多扫无意义的高位，或漏掉本应关注的语义一致性。</li>
+</ul>
+<h3 id="3">3. 「集合被修改」是写对事件循环的第一道坎</h3>
+<p><code>select</code> 返回后，传入的三个集合会被内核<strong>改写成「就绪子集」</strong>。若你下一轮不重建，集合里只剩上一轮就绪的那些位——新连接、其它客户端全都丢了。这是本课第三个核心要点，也是无数新手事件循环的第一只坑。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="read-write-except">一、read / write / except 集合</h3>
+<h4 id="1_1">1. 接口长什么样</h4>
+<p>C 原型（见 <code>select(2)</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">nfds</span><span class="p">,</span>
+<span class="w">           </span><span class="n">fd_set</span><span class="w"> </span><span class="o">*</span><span class="n">readfds</span><span class="p">,</span>
+<span class="w">           </span><span class="n">fd_set</span><span class="w"> </span><span class="o">*</span><span class="n">writefds</span><span class="p">,</span>
+<span class="w">           </span><span class="n">fd_set</span><span class="w"> </span><span class="o">*</span><span class="n">exceptfds</span><span class="p">,</span>
+<span class="w">           </span><span class="k">struct</span><span class="w"> </span><span class="nc">timeval</span><span class="w"> </span><span class="o">*</span><span class="n">timeout</span><span class="p">);</span>
+</code></pre></div>
+
+<p>直觉：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>你放进去的含义</th>
+<th>返回后集合里留下的含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>readfds</code></td>
+<td>关心「可读」的 fd</td>
+<td>其中<strong>真的可读</strong>（或 listen 可 accept、或读向 EOF）的子集</td>
+</tr>
+<tr>
+<td><code>writefds</code></td>
+<td>关心「可写」的 fd</td>
+<td>其中<strong>真的可写</strong>的子集</td>
+</tr>
+<tr>
+<td><code>exceptfds</code></td>
+<td>关心「异常条件」的 fd</td>
+<td>其中发生异常条件的子集（见下）</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>最多等多久</td>
+<td>见第三节</td>
+</tr>
+<tr>
+<td>返回值</td>
+<td>—</td>
+<td>就绪 fd 总数；<code>0</code>=超时；<code>-1</code>=出错（查 <code>errno</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>任一集合指针可为 <code>NULL</code>，表示「我不关心这类事件」。</p>
+<h4 id="2_1">2. 四个宏：集合就是位图</h4>
+<p><code>fd_set</code> 本质是一块位图。操作约定：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">fd_set</span><span class="w"> </span><span class="n">rfds</span><span class="p">;</span>
+<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span><span class="w">          </span><span class="cm">/* 清空 */</span>
+<span class="n">FD_SET</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 把 listen_fd 加进集合 */</span>
+<span class="n">FD_SET</span><span class="p">(</span><span class="n">client_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="n">FD_CLR</span><span class="p">(</span><span class="n">client_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 从集合摘掉 */</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="n">client_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* 返回后：这个 fd 就绪了 */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Python 标准库把「集合」简化成了<strong>可迭代的文件对象 / 描述符列表</strong>，底层仍走 <code>select</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">select</span>
+<span class="n">readable</span><span class="p">,</span> <span class="n">writable</span><span class="p">,</span> <span class="n">exceptional</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">listen_sock</span><span class="p">,</span> <span class="o">*</span><span class="n">client_socks</span><span class="p">],</span>  <span class="c1"># 等价 readfds</span>
+    <span class="p">[],</span>                             <span class="c1"># writefds</span>
+    <span class="p">[],</span>                             <span class="c1"># exceptfds</span>
+    <span class="mf">2.0</span><span class="p">,</span>                            <span class="c1"># 超时秒</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>教学与生产调试时，<strong>心智模型仍按 C 的 <code>fd_set</code> 来想</strong>：位图、上限、每次重建。</p>
+<h4 id="3_1">3. 三类就绪分别对应什么</h4>
+<p><strong><code>readfds</code> 可读</strong>（TCP 常见）：</p>
+<ul>
+<li>接收缓冲里有数据 → <code>recv</code> 能返回 &gt;0；</li>
+<li>对端关闭（EOF）→ <code>recv</code> 返回 0（水平触发下会一直「可读」，必须处理并摘掉）；</li>
+<li>监听套接字上有新连接 → <code>accept</code> 不会阻塞（非阻塞下可能 <code>EAGAIN</code>）。</li>
+</ul>
+<p><strong><code>writefds</code> 可写</strong>：</p>
+<ul>
+<li>发送缓冲有空间 → <code>send</code> 通常能推进一些字节；</li>
+<li>上一课非阻塞 connect 后，套接字变为可写时要用 <code>SO_ERROR</code> 确认结果。</li>
+</ul>
+<p><strong><code>exceptfds</code>——节点 pitfalls 的重点</strong>：</p>
+<blockquote>
+<p>exceptfds并不代表所有普通Socket错误。</p>
+</blockquote>
+<p>在 Linux TCP 上，<code>exceptfds</code> 主要对应<strong>带外数据（out-of-band / urgent data）</strong>等少数「异常条件」，<strong>不是</strong> <code>ECONNRESET</code>、<code>EPIPE</code>、<code>ETIMEDOUT</code> 的万能错误通道。普通错误通常在你对 fd 做 <code>recv</code>/<code>send</code> 时通过返回值 / <code>errno</code> 体现，或通过可读侧的 EOF / <code>recv</code> 错误体现。</p>
+<p>把「连接出错」全部押在 <code>exceptfds</code> 上，是典型误用。</p>
+<h4 id="4-listen-client">4. 极简「同时盯 listen + 一个 client」</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">fd_set</span><span class="w"> </span><span class="n">rfds</span><span class="p">;</span>
+<span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="n">FD_SET</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="n">FD_SET</span><span class="p">(</span><span class="n">client_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">nfds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">listen_fd</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">client_fd</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">listen_fd</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">client_fd</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">nfds</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 阻塞等到有人就绪 */</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* EINTR 等 */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* accept */</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="n">client_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* recv；若返回 0 → 关闭并从集合逻辑中摘掉 */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>公众号接入层直觉：<code>listen_fd</code> 是「新设备连上来」；每个 <code>client_fd</code> 是「这条长连接有上行或对端断开」。一条线程轮转处理，而不是一人一线程。</p>
+<hr />
+<h3 id="nfds-fd_setsize">二、nfds 和 FD_SETSIZE</h3>
+<h4 id="1-nfds-max_fd-1">1. nfds = max_fd + 1</h4>
+<p><code>nfds</code> <strong>不是</strong>「集合里有多少个 fd」，而是：</p>
+<blockquote>
+<p>内核要检查的描述符编号上界（开区间）：检查 <code>[0, nfds)</code>。</p>
+</blockquote>
+<p>因此正确公式永远是：</p>
+<div class="codehilite"><pre><span></span><code>nfds = （当前关心的所有 fd 中的最大值） + 1
+</code></pre></div>
+
+<p>例子：</p>
+<table>
+<thead>
+<tr>
+<th>关心的 fd</th>
+<th>max_fd</th>
+<th>nfds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{3}</code>（仅 listen）</td>
+<td>3</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>{3, 5, 7}</code></td>
+<td>7</td>
+<td>8</td>
+</tr>
+<tr>
+<td>关掉 7 后剩 <code>{3, 5}</code></td>
+<td>5</td>
+<td>6 ← <strong>必须下降</strong></td>
+</tr>
+</tbody>
+</table>
+<p>为什么是 max+1 而不是「个数」？因为 <code>fd_set</code> 是按下标（fd 编号）寻址的位图，内核按编号范围扫描，并不维护「集合元素个数」那种稀疏列表（那是 <code>poll</code> 的思路）。</p>
+<p>Python 的 <code>select.select(rlist, ...)</code> 帮你算了内部 <code>nfds</code>，但<strong>你自己用 C、或自己维护教学用的 <code>max_fd</code> 日志</strong>时，必须显式更新。本课实践要求你验证：关闭高编号 fd 后 <code>max_fd</code> 下降。</p>
+<h4 id="2-fd_setsize">2. FD_SETSIZE：硬上限</h4>
+<p>Linux 上 <code>FD_SETSIZE</code> 常为 <strong>1024</strong>（编译进 glibc/<code>fd_set</code> 大小）。含义：</p>
+<ul>
+<li>合法放入 <code>fd_set</code> 的 fd 编号应满足 <code>0 &lt;= fd &lt; FD_SETSIZE</code>；</li>
+<li>对 <code>fd &gt;= FD_SETSIZE</code> 做 <code>FD_SET</code> → <strong>错误 / 未定义行为</strong>（可能栈破坏）。</li>
+</ul>
+<p>注意两件容易混的事：</p>
+<ol>
+<li><strong>进程能 <code>open</code>/<code>accept</code> 出更大的 fd</strong>（<code>ulimit -n</code> 可以远大于 1024）；</li>
+<li><strong>但默认 <code>select</code> + <code>fd_set</code> 管不了它们</strong>。</li>
+</ol>
+<p>所以验收标准强调：<strong>不对超出集合范围的 fd 调用 <code>FD_SET</code>。</strong> 工程上要么拒绝该连接并 <code>close</code>，要么改用 <code>poll</code>/<code>epoll</code>。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">FD_SETSIZE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* 拒绝：关闭连接，不要 FD_SET */</span>
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">FD_SET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Python 里可用 <code>getattr(select, "FD_SETSIZE", 1024)</code> 做同样的守卫（本课 <code>practice53/server.py</code> 即如此）。</p>
+<h4 id="3-max_fd">3. 扫描成本随 max_fd 涨</h4>
+<p>即使你只关心 2 个 fd，若它们的编号是 <code>3</code> 和 <code>900</code>，<code>nfds=901</code>，内核仍可能按实现扫描很大范围。连接越多、fd 编号越高，<code>select</code> 每次调用的常量成本越明显——这也是 tradeoffs 里「不适合大型连接集合」的一部分。<code>epoll</code> 用就绪队列避开了「每次带全集、扫到 max_fd」的模型。</p>
+<hr />
+<h3 id="_5">三、超时及集合被修改</h3>
+<h4 id="1-timeval">1. timeval 超时语义</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">timeval</span><span class="w"> </span><span class="n">tv</span><span class="p">;</span>
+<span class="n">tv</span><span class="p">.</span><span class="n">tv_sec</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="n">tv</span><span class="p">.</span><span class="n">tv_usec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">nfds</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tv</span><span class="p">);</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th><code>timeout</code></th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NULL</code></td>
+<td>一直阻塞，直到有就绪或信号打断</td>
+</tr>
+<tr>
+<td><code>{0, 0}</code></td>
+<td>轮询：立即返回当前就绪情况（非阻塞探测）</td>
+</tr>
+<tr>
+<td>正值</td>
+<td>最多等待这么久；到期返回 <code>0</code>，集合被清空为「无就绪」</td>
+</tr>
+</tbody>
+</table>
+<p>注意：许多实现会<strong>改写</strong> <code>timeval</code> 为「剩余时间」；可移植代码若要循环等待固定总时长，应自己用单调时钟算 deadline，而不是假设 <code>tv</code> 不变。</p>
+<p>Python：<code>select.select(..., timeout=2.0)</code>；<code>timeout=0</code> 为轮询；省略 / <code>None</code> 为永久等。</p>
+<p>本课实践用约 2 秒超时打印 <code>IDLE heartbeat</code>，就是为了让你亲眼看见「没有人就绪时走超时分支」，而不是死堵在 <code>select</code> 上（网关还要做空闲检测、定时踢连接等）。</p>
+<h4 id="2_2">2. 返回后集合被改写 → 每轮必须重建</h4>
+<p>这是写对 <code>select</code> 循环的<strong>铁律</strong>：</p>
+<div class="codehilite"><pre><span></span><code>循环 {
+    FD_ZERO + 把「当前仍存活的 fd」全部 FD_SET   ← 重建
+    select(...)
+    根据 FD_ISSET 处理
+    若某连接关闭 → 从「存活集合」摘掉，更新 max_fd
+}
+</code></pre></div>
+
+<p>反例：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="n">FD_SET</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="n">FD_SET</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">select</span><span class="p">(</span><span class="n">nfds</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span><span class="w"> </span><span class="cm">/* 第一轮后 rfds 只剩就绪位！ */</span>
+<span class="w">    </span><span class="cm">/* 第二轮起：其它 fd 的位已经没了 */</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>正确骨架：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">fd_set</span><span class="w"> </span><span class="n">rfds</span><span class="p">;</span>
+<span class="w">    </span><span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="w">    </span><span class="n">FD_SET</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">max_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listen_fd</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="cm">/* each live client fd */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">FD_SET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fd</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">max_fd</span><span class="p">)</span><span class="w"> </span><span class="n">max_fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fd</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="n">max_fd</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tv</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* 超时：心跳 / 空闲扫描 */</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="cm">/* EINTR → continue；其它错误处理 */</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* accept，加入 live 集合 */</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="cm">/* each live client */</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">FD_ISSET</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rfds</span><span class="p">))</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="cm">/* recv；EOF 或错误 → close，从 live 摘掉，必要时降低 max_fd */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="3-max_fd_1">3. 关闭连接：摘集合 + 可能降低 max_fd</h4>
+<p>关闭步骤缺一不可：</p>
+<ol>
+<li><code>close(fd)</code>（或先从应用层 map 删掉再 close）；</li>
+<li>下一轮重建时<strong>自然不再 <code>FD_SET</code></strong>（不要对已关闭 fd 再 <code>FD_ISSET</code> 去读）；</li>
+<li>若关掉的是当前 <code>max_fd</code>，重新计算 <code>max_fd = max(剩余 fd)</code>，从而 <code>nfds</code> 下降。</li>
+</ol>
+<p>否则会出现：对已关闭编号做 I/O、或 <code>nfds</code> 长期虚高。实践课会打印：</p>
+<div class="codehilite"><pre><span></span><code>STATE after_close fd=6 clients=1 max_fd=4 nfds=5
+</code></pre></div>
+
+<p>让你用日志断言「高编号关闭后 max_fd 真的降了」。</p>
+<h4 id="4">4. 和上一课非阻塞的衔接</h4>
+<p><code>select</code> 说「可读/可写」≠「一次读写任意长度完成」（第 52 课 pitfalls）。正确组合是：</p>
+<ul>
+<li><code>select</code> 给出就绪；</li>
+<li>非阻塞 <code>recv</code>/<code>send</code> 推进一点；</li>
+<li><code>EAGAIN</code> → 离开，等下一轮事件；</li>
+<li>输出缓冲状态机保存剩余。</li>
+</ul>
+<p>本课聊天服务为聚焦「集合与 max_fd」，广播用 <code>sendall</code> 简化；你心里要清楚：生产接入层仍要接上第 52 课的短写状态机。</p>
+<hr />
+<h2 id="_6">常见误区与设计权衡</h2>
+<h3 id="pitfalls">误区（pitfalls）</h3>
+<p><strong>1. 以为 <code>exceptfds</code> 能捕获所有 Socket 错误</strong></p>
+<p>节点原话：<code>exceptfds并不代表所有普通Socket错误。</code><br />
+Linux 上更常见的是 OOB；<code>ECONNRESET</code> 等仍应在 <code>recv</code>/<code>send</code>/<code>getsockopt(SO_ERROR)</code> 路径处理。</p>
+<p><strong>2. 不重建集合</strong></p>
+<p>第一轮还能工作，第二轮开始「丢连接」。这是 <code>select</code> 特有坑（<code>epoll</code> 用另套注册模型）。</p>
+<p><strong>3. <code>nfds</code> 写成「fd 个数」</strong></p>
+<p>集合里 3 个 fd 编号为 3、7、20 时，<code>nfds</code> 必须是 <code>21</code>，不是 <code>3</code>。</p>
+<p><strong>4. 对 <code>fd &gt;= FD_SETSIZE</code> 仍 <code>FD_SET</code></strong></p>
+<p>进程 <code>ulimit</code> 很大 ≠ <code>select</code> 能管。超范围应拒绝并关闭，或换接口。</p>
+<p><strong>5. EOF 后仍把该 fd 留在 read 集合</strong></p>
+<p>水平触发下会反复「可读」，<code>recv</code> 一直返回 0，变成软自旋。关闭并从 live 集合摘掉。</p>
+<p><strong>6. 把 <code>select</code> 当「消息边界」</strong></p>
+<p>TCP 仍是字节流；一次可读可能是半包或粘包。广播聊天 demo 用换行只是教学简化。</p>
+<h3 id="tradeoffs">权衡（tradeoffs）</h3>
+<p>节点原话：</p>
+<blockquote>
+<p>可移植性较好，Linux fd_set限制使其不适合大型连接集合。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>select</th>
+<th>后续你会学到的方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>可移植性</td>
+<td>几乎处处都有</td>
+<td>epoll 偏 Linux；kqueue 偏 BSD</td>
+</tr>
+<tr>
+<td>集合大小</td>
+<td><code>FD_SETSIZE</code> 硬上限</td>
+<td>poll 无此位图上限；epoll 按兴趣列表</td>
+</tr>
+<tr>
+<td>每次调用成本</td>
+<td>拷贝集合 + 与 max_fd 相关的扫描</td>
+<td>epoll_wait 返回就绪列表</td>
+</tr>
+<tr>
+<td>API 心智</td>
+<td>简单，适合教学与小连接数</td>
+<td>生产网关主流 epoll</td>
+</tr>
+</tbody>
+</table>
+<p>公众号接入层若误用 <code>select</code> 扛十万级长连接，会在 fd 编号与扫描成本上先翻车——不是业务逻辑写错，而是<strong>模型选错</strong>。</p>
+<hr />
+<h2 id="_7">动手实践</h2>
+<p>节点 practice：</p>
+<blockquote>
+<p>实现select聊天服务，验证关闭连接后集合更新与最大fd变化。</p>
+</blockquote>
+<p>验收（acceptance）：</p>
+<ul>
+<li>能解释 <code>nfds</code> 为何是最大 fd 加一；</li>
+<li>不对超出集合范围的 fd 调用 <code>FD_SET</code>。</li>
+</ul>
+<p>并呼应 sourceStudy：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>请对照 <a href="https://man7.org/linux/man-pages/man2/select.2.html">select(2)</a> 核对：三个集合、<code>nfds</code>、<code>FD_SETSIZE</code>、超时、返回后集合被修改；记录你实验机内核与 Python 版本。</p>
+<h3 id="_8">步骤拆解</h3>
+<ol>
+<li>
+<p><strong>监听套接字</strong><br />
+<code>SO_REUSEADDR</code>、<code>bind</code>/<code>listen</code>；端口占用给出明确错误（如 <code>EADDRINUSE</code>，退出码 2）。listen fd 设非阻塞，便于 <code>accept</code> 循环直到 <code>EAGAIN</code>。</p>
+</li>
+<li>
+<p><strong>事件循环用 select</strong><br />
+   每轮重建：<code>rlist = [listen] + 所有 client</code>。<br />
+<code>max_fd = max(所有关心的 fd)</code>，心里记着 <code>nfds = max_fd + 1</code>（Python 自动算，但日志要打印）。</p>
+</li>
+<li>
+<p><strong>accept</strong><br />
+   listen 在 readable 中时循环 <code>accept</code>；新 fd 若 <code>&gt;= FD_SETSIZE</code> → 打印拒绝、<code>close</code>，<strong>绝不</strong>放进下一轮集合。</p>
+</li>
+<li>
+<p><strong>广播聊天</strong><br />
+   某 client <code>recv</code> 到数据 → 发给<strong>其他</strong>所有 client（不回环给自己亦可）。<br />
+<code>recv</code> 返回 0 或错误 → <code>close</code>，从 dict 摘掉，重算 <code>max_fd</code>。</p>
+</li>
+<li>
+<p><strong>超时心跳</strong><br />
+<code>select(..., timeout=2.0)</code>；返回空列表时打印 <code>IDLE heartbeat</code>，演示 timeval。</p>
+</li>
+<li>
+<p><strong>验证 max_fd 下降</strong><br />
+   顺序建立多个连接，关掉编号最大的那个，断言服务日志里 <code>STATE after_close ... max_fd=</code> 小于被关 fd。</p>
+</li>
+<li>
+<p><strong>对照 man page</strong><br />
+   标出：集合改写、<code>nfds</code> 开区间、<code>FD_SETSIZE</code>、except 非普通错误。把边界写进笔记。</p>
+</li>
+</ol>
+<h3 id="_9">预期现象</h3>
+<ul>
+<li>两个以上客户端：一人发、其他人收到同一内容；</li>
+<li>关掉其中一个后，服务继续，剩余客户端仍能收广播；</li>
+<li>日志出现 <code>CLOSE fd=...</code> 与 <code>STATE after_close ... max_fd=...</code>，且高编号关闭后 <code>max_fd</code> 下降；</li>
+<li>空闲时出现 <code>IDLE heartbeat</code>；</li>
+<li>二次绑定同端口：<code>EADDRINUSE</code>，退出码 2；</li>
+<li>超范围 fd 不会被加入集合。</li>
+</ul>
+<p>配套目录见文末 <code>practice53/</code>。</p>
+<hr />
+<h2 id="_10">自测题</h2>
+<p><strong>题 1</strong><br />
+当前关心 fd <code>{3, 5, 9}</code>。调用 <code>select</code> 时 <code>nfds</code> 应取？</p>
+<p>A. 3<br />
+B. 9<br />
+C. 10<br />
+D. 15</p>
+<p><strong>题 2</strong><br />
+<code>select</code> 成功返回后，下一轮循环前最关键的一步是什么？</p>
+<p>A. 把 <code>nfds</code> 改成返回值<br />
+B. 重新 <code>FD_ZERO</code> 并再次 <code>FD_SET</code> 所有仍存活的 fd<br />
+C. 清空 <code>exceptfds</code> 以外的集合即可<br />
+D. 调用 <code>FD_CLR</code> 清掉所有位后直接再次 <code>select</code> 而不加入任何 fd</p>
+<p><strong>题 3</strong><br />
+下列关于 <code>exceptfds</code> 的说法，哪项正确？</p>
+<p>A. 所有 <code>ECONNRESET</code> 都会只通过 <code>exceptfds</code> 通知<br />
+B. 它主要覆盖带外等异常条件，不能当成普通 Socket 错误的全集<br />
+C. Linux 上应把所有 client 都放入 <code>exceptfds</code> 才能发现断连<br />
+D. <code>exceptfds</code> 与 <code>readfds</code> 语义完全相同</p>
+<hr />
+<h3 id="_11">自测题参考答案</h3>
+<p><strong>题 1：C</strong><br />
+<code>nfds = max_fd + 1 = 9 + 1 = 10</code>。A 是个数；B 是 max_fd 本身（开区间上界应再 +1）。</p>
+<p><strong>题 2：B</strong><br />
+返回后集合被改写成就绪子集，必须重建。A 混淆了返回值与 <code>nfds</code>；D 会变成空等待。</p>
+<p><strong>题 3：B</strong><br />
+对应节点 pitfalls：<code>exceptfds并不代表所有普通Socket错误。</code> 断连与重置多在 <code>recv</code>/<code>send</code> 路径体现。</p>
+<hr />
+<h2 id="_12">推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/select.2.html">select与fd集合：Linux man-pages — select(2)</a>（man7.org，英文文档，进阶）</li>
+<li>重点阅读：read/write/except 集合、<code>nfds</code> 与 <code>FD_SETSIZE</code>、超时与返回后集合被修改，用于核对本节点实验的语义和边界。</li>
+<li>建议连带阅读同站：<code>poll(2)</code>、<code>epoll(7)</code>、以及上一课相关的 <code>fcntl(2)</code> / <code>recv(2)</code> / <code>send(2)</code>。</li>
+</ul>
+<hr />
+<h2 id="_13">本课小结</h2>
+<ol>
+<li><strong><code>select</code> 用三份 fd 集合报告就绪</strong>：<code>readfds</code> / <code>writefds</code> / <code>exceptfds</code>；用 <code>FD_ZERO</code>/<code>FD_SET</code>/<code>FD_CLR</code>/<code>FD_ISSET</code> 操作。</li>
+<li><strong><code>nfds = max_fd + 1</code></strong>，是编号开区间上界，不是集合元素个数；关闭高编号 fd 后必须降低 <code>max_fd</code>。</li>
+<li><strong><code>FD_SETSIZE</code>（常 1024）是硬上限</strong>；不对超范围 fd 做 <code>FD_SET</code>，应拒绝或换 <code>poll</code>/<code>epoll</code>。</li>
+<li><strong>每次返回后集合被改写，下一轮必须重建</strong>；关闭连接要从存活集合摘掉。</li>
+<li><strong><code>exceptfds</code> ≠ 普通错误全集</strong>（多为 OOB 等）；超时用 <code>timeval</code>（或 Python 浮点秒）做空闲/心跳。</li>
+<li><strong>可移植但不宜大型连接集合</strong>——这是 IO 多路复用的入门模型，也是后续 epoll 课的对照基线。</li>
+</ol>
+<p>下一课将继续 IO 模型与事件主题；请先把 <code>practice53</code> 跑到 <code>ALL_CHECKS_PASSED</code>。</p>
+<hr />
+<h2 id="_14">配套练习</h2>
+<p>目录：<a href="./practice53/"><code>practice53/</code></a></p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server.py</code></td>
+<td><code>select</code> 聊天服务；每轮重建集合；广播；关闭后更新 <code>max_fd</code>；拒绝 <code>fd &gt;= FD_SETSIZE</code>；空闲心跳</td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>可连接、发送、按期望子串等待广播；可 <code>--hold</code> 占住连接</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>自动化验收：互广播、关闭后集合更新、<code>max_fd</code> 下降、空闲心跳、端口占用</td>
+</tr>
+</tbody>
+</table>
+<p>运行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice53<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./test.sh
+</code></pre></div>
+
+<p>期望末行：<code>ALL_CHECKS_PASSED</code>。</p>
+<p>实测要点（Asia/Shanghai，本机验证时对照）：</p>
+<ul>
+<li>2+ 客户端互相收到广播；</li>
+<li>关闭一个客户端后服务继续，剩余客户端仍可用；</li>
+<li>关闭高编号 fd 后日志中 <code>max_fd</code> 下降；</li>
+<li>出现 <code>IDLE heartbeat</code>；</li>
+<li>二次绑定同端口打印 <code>EADDRINUSE</code>，退出码 2。</li>
+</ul>
+<p>NOTE：Python <code>select</code> 仍受平台 <code>FD_SETSIZE</code> 约束；本练习用显式守卫模拟「不对超范围 fd 做 FD_SET」。生产海量长连接请使用 <code>epoll</code> 等（后续课程）。</p><div class="pn"><span><a href="52.html">← 非阻塞IO与读写状态机</a></span><span>下一课 待更新</span></div></main></div></body></html>
