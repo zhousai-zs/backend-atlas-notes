@@ -1,0 +1,626 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>55. epoll事件语义与工程边界 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（55/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（7/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="cur" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li class="todo">56. 字节流分帧与协议解析 <em>待更新</em></li><li class="todo">57. Reactor与事件循环 <em>待更新</em></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 55 课 · 领域 D · 阶段 3</p><p class="dl"><a href="../files/55-d-epoll.md" download>⬇ 本课 Markdown</a><a href="../files/practice55.tar.gz" download>⬇ 练习包 practice55.tar.gz</a></p><h1 id="55208-epoll">第 55/208 课：epoll事件语义与工程边界</h1>
+<ul>
+<li><strong>阶段</strong>：第 3 阶段 · IO模型与事件</li>
+<li><strong>前置课程</strong>：d-poll、c-fd</li>
+<li><strong>关键词</strong>：epoll、epoll_create1、epoll_ctl、epoll_wait、EPOLLIN、EPOLLOUT、EPOLLET、EPOLLONESHOT、EPOLLRDHUP、EPOLLHUP、EPOLLERR、LT、ET、EAGAIN、EINTR、fd 复用、Reactor</li>
+<li><strong>难度</strong>：进阶</li>
+<li><strong>所属领域</strong>：D · IO模型与事件</li>
+<li><strong>标签</strong>：Epoll、D、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课我们用 <code>poll</code> 把「关注项」表达成一张 <code>struct pollfd</code> 数组：每轮仍要把整张表交给内核，内核再逐项检查并填 <code>revents</code>，用户态也要扫描返回结果。它消掉了 <code>select</code> 的 <code>FD_SETSIZE</code> 位图上限，但没有消掉「整表提交 + 线性扫描」的成本。</p>
+<p>节点 summary 对 <code>epoll</code> 的定位是：</p>
+<blockquote>
+<p>epoll维护关注集合并返回就绪事件，LT、ET与ONESHOT影响重新通知和并发处理方式。</p>
+</blockquote>
+<p>这句话拆开有三层意思：</p>
+<ol>
+<li><strong>维护关注集合</strong>：你把 fd 注册进内核兴趣列表（interest list），不必每轮把整张表再交一遍；</li>
+<li><strong>只返回就绪事件</strong>：<code>epoll_wait</code> 给你的是就绪列表（ready list），规模通常跟「本轮活跃数」相关，而不是跟「总连接数」相关；</li>
+<li><strong>LT / ET / ONESHOT 改变重新通知与并发策略</strong>：同样是「就绪」，不同触发模式决定「还会不会再次通知」「是否允许多个线程同时处理同一 fd」。</li>
+</ol>
+<p>放到腾讯微信公众号后台的长连接/网关场景里，这几乎是必经之路：</p>
+<ul>
+<li>接入层要同时盯住大量设备或上游的 TCP 长连接；</li>
+<li>每秒真正有流量的连接往往远少于总连接数（稀疏活跃）；</li>
+<li>单条连接上既有上行、又有下行积压、还有半关闭与错误；</li>
+<li>事件循环必须把「就绪通知」和「真正读完/写完」严格分开，否则会丢数据、忙循环，或在 fd 复用时把旧事件套到新连接上。</li>
+</ul>
+<p>本课要建立的不是「epoll 比 poll 更快」这种标签，而是一套可落地的工程语义：</p>
+<ol>
+<li><code>epoll_create1</code> / <code>epoll_ctl</code> / <code>epoll_wait</code> 各自做什么；</li>
+<li>LT 与 ET 对「排空到 EAGAIN」的要求差在哪里；</li>
+<li><code>EPOLLONESHOT</code>、<code>EPOLLRDHUP</code>、fd 复用如何影响连接对象的生命周期；</li>
+<li>为什么「就绪 ≠ IO 完成」，以及 <code>EPOLLOUT</code> 为什么必须按输出积压按需启停。</li>
+</ol>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释 <code>create1</code> / <code>ctl</code> / <code>wait</code></strong>
+   - 说清 <code>epoll_create1</code> 创建 epoll 实例（一个内核兴趣列表句柄）。
+   - 说清 <code>epoll_ctl</code> 的 <code>ADD</code> / <code>MOD</code> / <code>DEL</code> 如何维护关注集合与 <code>events</code> 掩码。
+   - 说清 <code>epoll_wait</code> 返回的是就绪事件数组，以及 <code>timeout</code>、<code>EINTR</code>、返回值语义。</p>
+</li>
+<li>
+<p><strong>能独立完成：实现 ET Echo Server，覆盖短读、半关闭、错误、慢客户端和重新 arm</strong>
+   - 非阻塞 <code>accept</code> / <code>read</code> / <code>write</code>，循环处理 <code>EINTR</code> 与 <code>EAGAIN</code>。
+   - 为连接维护输入、输出缓冲；半关闭时先冲完 outbuf 再关。
+   - 比较 LT 与 ET；用 <code>EPOLLONESHOT</code> 演示一次「漏 rearm → 连接停滞」。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - 能解释 ET 为何通常配合非阻塞。
+   - 关闭事件不会访问已释放连接。
+   - 客户端分片发送、慢速读取、半关闭及连接复用压力下，无数据截断与 use-after-free。
+   - 能用 strace 与日志说明一次事件丢失或忙循环原因；<strong>不把就绪通知等同 IO 已完成</strong>。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：</p>
+<blockquote>
+<p>构建可处理大量连接的Linux Reactor基础。</p>
+</blockquote>
+<h3 id="1">1. 大规模长连接的「通知成本」必须和「活跃数」挂钩</h3>
+<p><code>poll</code> 每轮提交并扫描整张关注表。连接数到十万、每秒只有几千活跃时，大量时间花在「确认这些 fd 仍然不就绪」上。<code>epoll</code> 把兴趣列表留在内核，返回列表按就绪项填充——这是 Reactor 能扛住稀疏活跃的基础。</p>
+<h3 id="2">2. 触发模式直接决定你会不会丢事件或忙循环</h3>
+<p>LT（水平触发）像 <code>poll</code>：条件仍成立就反复通知，漏处理一次通常还能被下一轮救回来，但写不好会空转占 CPU。<br />
+ET（边缘触发）只在状态变化时通知：更省通知次数，但<strong>要求你把可读/可写推进到 <code>EAGAIN</code></strong>，否则后续数据可能再也进不来。<br />
+这些不是性能调优细节，而是正确性边界。</p>
+<h3 id="3-epoll">3. 连接对象生命周期必须和 epoll 注册一致</h3>
+<p><code>EPOLLONESHOT</code>、fd 编号复用、半关闭、错误路径，都会把「内核里还有没有这条兴趣」「用户态对象还在不在」「旧事件会不会打到新连接」绑在一起。Muduo 一类 Reactor 的核心工作，很大一部分就是把 <code>Channel</code> 的注册、分发、注销和连接析构对齐。</p>
+<h3 id="4-reactor">4. 公众号后台网关就是典型 Reactor 场景</h3>
+<p>推送长连接、设备接入、上游代理：共同特征是「连接多、单连接状态机复杂、事件线程少」。不会 epoll 语义，就很难读懂、也很难安全地改这类事件循环。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="create1-ctl-wait">一、create1 / ctl / wait</h3>
+<h4 id="1_1">1. 三个系统调用各自的职责</h4>
+<div class="codehilite"><pre><span></span><code>epoll_create1(flags)  →  epfd（兴趣列表句柄）
+        │
+        ├── epoll_ctl(epfd, ADD/MOD/DEL, fd, &amp;event)
+        │         维护「我关心谁、关心什么」
+        │
+        └── epoll_wait(epfd, events, maxevents, timeout)
+                  取出「谁就绪了、发生了什么」
+</code></pre></div>
+
+<ul>
+<li><strong><code>epoll_create1</code></strong>：创建一个 epoll 实例。常用 <code>EPOLL_CLOEXEC</code>，避免 <code>fork</code>+<code>exec</code> 后子进程继承多余 fd。老接口 <code>epoll_create(size)</code> 的 <code>size</code> 在现代内核已被忽略，新代码优先 <code>create1</code>。</li>
+<li><strong><code>epoll_ctl</code></strong>：对单个 fd 做 <code>EPOLL_CTL_ADD</code> / <code>EPOLL_CTL_MOD</code> / <code>EPOLL_CTL_DEL</code>。<code>struct epoll_event</code> 里既有 <code>events</code> 位掩码，也有 <code>data</code>（常放 fd 或指针）。</li>
+<li><strong><code>epoll_wait</code></strong>：阻塞（或超时）等待，把就绪事件写入你提供的数组，返回就绪个数。<code>timeout</code> 单位是<strong>毫秒</strong>；<code>-1</code> 无限等，<code>0</code> 非阻塞探测。</li>
+</ul>
+<h4 id="2-c">2. 最小 C 骨架</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/epoll.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fcntl.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;errno.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">epfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">epoll_create1</span><span class="p">(</span><span class="n">EPOLL_CLOEXEC</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">epfd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* perror */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">epoll_event</span><span class="w"> </span><span class="n">ev</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">ev</span><span class="p">.</span><span class="n">events</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EPOLLIN</span><span class="p">;</span><span class="w">          </span><span class="cm">/* 默认 LT */</span>
+<span class="n">ev</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">listen_fd</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">epoll_ctl</span><span class="p">(</span><span class="n">epfd</span><span class="p">,</span><span class="w"> </span><span class="n">EPOLL_CTL_ADD</span><span class="p">,</span><span class="w"> </span><span class="n">listen_fd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ev</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">epoll_event</span><span class="w"> </span><span class="n">events</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">epoll_wait</span><span class="p">(</span><span class="n">epfd</span><span class="p">,</span><span class="w"> </span><span class="n">events</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">EINTR</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="cm">/* timeout：做心跳 / 定时任务 */</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">.</span><span class="n">fd</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">re</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">events</span><span class="p">;</span>
+<span class="w">        </span><span class="cm">/* 按 re 分发：IN / OUT / RDHUP / HUP / ERR */</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">fd</span><span class="p">;</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">re</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="3-python-selectepoll">3. Python 的 <code>select.epoll</code></h4>
+<p>Linux 上 Python 提供了薄封装，语义与 C 一致，适合本课练习：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">select</span>
+
+<span class="n">ep</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="n">epoll</span><span class="p">()</span>
+<span class="n">ep</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">listen_fd</span><span class="p">,</span> <span class="n">select</span><span class="o">.</span><span class="n">EPOLLIN</span><span class="p">)</span>          <span class="c1"># LT</span>
+<span class="c1"># ET：</span>
+<span class="c1"># ep.register(fd, select.EPOLLIN | select.EPOLLET)</span>
+<span class="c1"># ONESHOT：</span>
+<span class="c1"># ep.register(fd, select.EPOLLIN | select.EPOLLONESHOT)</span>
+
+<span class="k">for</span> <span class="n">fd</span><span class="p">,</span> <span class="n">events</span> <span class="ow">in</span> <span class="n">ep</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>  <span class="c1"># 秒；底层仍是毫秒</span>
+    <span class="k">if</span> <span class="n">events</span> <span class="o">&amp;</span> <span class="n">select</span><span class="o">.</span><span class="n">EPOLLIN</span><span class="p">:</span>
+        <span class="o">...</span>
+    <span class="k">if</span> <span class="n">events</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">select</span><span class="o">.</span><span class="n">EPOLLHUP</span> <span class="o">|</span> <span class="n">select</span><span class="o">.</span><span class="n">EPOLLERR</span><span class="p">):</span>
+        <span class="o">...</span>
+<span class="n">ep</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+<span class="n">ep</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+
+<p>注意：Python <code>epoll.poll(timeout)</code> 的 <code>timeout</code> 是<strong>秒</strong>（可浮点），和 C 的毫秒不同；<code>select.EPOLLET</code> / <code>EPOLLONESHOT</code> / <code>EPOLLRDHUP</code> 在 Linux 上可用。</p>
+<h4 id="4-data-fd">4. <code>data</code> 字段：fd 还是指针？</h4>
+<p><code>epoll_event.data</code> 是一个 union，常见两种用法：</p>
+<ul>
+<li>放 <code>fd</code>：简单，查找连接时再 <code>map[fd]</code>；</li>
+<li>放指向 <code>Channel</code> / 连接对象的指针：少一次查找，但<strong>必须保证对象在 epoll 注销前仍有效</strong>，否则就是经典 use-after-free。</li>
+</ul>
+<p>Muduo 选择「Channel 指针 + 严格生命周期」，正是为了把分发和析构对齐。教学代码用 <code>fd → Conn</code> 字典更直观，也更容易演示「关闭后立刻复用 fd 编号」的坑。</p>
+<hr />
+<h3 id="ltet-eagain">二、LT、ET 与排空到 EAGAIN</h3>
+<h4 id="1_2">1. 两种触发的直觉</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>LT（默认，Level Triggered）</th>
+<th>ET（<code>EPOLLET</code>，Edge Triggered）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通知条件</td>
+<td>条件<strong>仍然成立</strong>就反复通知</td>
+<td>条件<strong>从不成到成立</strong>（边沿）时通知</td>
+</tr>
+<tr>
+<td>漏处理一次</td>
+<td>通常下一轮还会再来</td>
+<td>可能再也收不到，直到下一次边沿</td>
+</tr>
+<tr>
+<td>典型要求</td>
+<td>处理一部分即可（但仍建议排空）</td>
+<td><strong>必须把该方向推进到 EAGAIN</strong>（或 EOF/错误）</td>
+</tr>
+<tr>
+<td>与阻塞 fd</td>
+<td>勉强可用（易阻塞事件线程）</td>
+<td><strong>几乎必须非阻塞</strong>，否则一次 <code>read</code> 就可能卡住整条 Reactor</td>
+</tr>
+</tbody>
+</table>
+<p>节点要点原话：</p>
+<blockquote>
+<p>LT、ET与排空到EAGAIN</p>
+</blockquote>
+<h4 id="2-et">2. 为什么 ET 通常必须非阻塞？</h4>
+<p>假设 fd 仍是阻塞的，ET 通知「可读」后你调用 <code>read</code>：</p>
+<ul>
+<li>第一次 <code>read</code> 读走部分数据；</li>
+<li>若内核缓冲里还有数据，阻塞 <code>read</code> 会<strong>继续阻塞等待更多数据或对端动作</strong>；</li>
+<li>事件线程被卡住，其他成千上万连接的事件都得不到处理。</li>
+</ul>
+<p>非阻塞下：<code>read</code>/<code>write</code> 在暂时不可继续时返回 <code>EAGAIN</code>/<code>EWOULDBLOCK</code>，你立刻回到 <code>epoll_wait</code>，把 CPU 让给别的就绪连接。这就是「ET 为何通常配合非阻塞」的验收点。</p>
+<h4 id="3">3. 「排空」到底排到什么程度？</h4>
+<p>正确含义是：<strong>在本轮事件处理中，把该方向的 I/O 推进到内核明确告诉你「暂时没有更多」</strong>——通常是 <code>EAGAIN</code>，或者读方向的 <code>read()==0</code>（EOF），或者明确错误。</p>
+<p>错误做法（节点 pitfalls 要打的）：</p>
+<blockquote>
+<p>不能仅因一次read未填满缓冲就认定已排空。</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code># 错：一次 read 没读满用户缓冲，就以为没数据了
+n = read(fd, buf, 4096);
+if (n &lt; 4096) { /* 以为排空了 —— 错！可能只是短读 */ }
+
+# 对：循环直到 EAGAIN / EOF / 错误
+for (;;) {
+    n = read(fd, buf, 4096);
+    if (n &gt; 0) { 消费 n 字节; continue; }
+    if (n == 0) { 读 EOF; break; }
+    if (errno == EINTR) continue;
+    if (errno == EAGAIN || errno == EWOULDBLOCK) break; /* 真正暂时没了 */
+    /* 其他错误 → 关闭 */
+}
+</code></pre></div>
+
+<p>写方向同理：有 outbuf 时循环 <code>write</code>/<code>send</code>，直到缓冲写空或遇到 <code>EAGAIN</code>。</p>
+<h4 id="4-lt">4. LT 下「不排空」会怎样？</h4>
+<p>LT 不会轻易「丢事件」，但会<strong>忙循环</strong>：</p>
+<ul>
+<li>接收缓冲里还有数据 → 每轮 <code>epoll_wait</code>（<code>timeout=0</code> 或很短）都立刻带着 <code>EPOLLIN</code> 返回；</li>
+<li>你每次只读一点点，甚至读了却没消费完应用层状态；</li>
+<li>CPU 被事件循环占满，看起来像「epoll 很忙」，其实是自己没排空。</li>
+</ul>
+<p>所以即便用 LT，生产级 Reactor 也几乎总是「非阻塞 + 读到 EAGAIN」。LT 的宽容是安全网，不是偷懒许可证。</p>
+<h4 id="5-accept">5. 监听套接字上的 accept</h4>
+<p>无论 LT/ET，listen fd 上的 <code>EPOLLIN</code> 表示「至少有一个待接受连接」。正确写法是<strong>循环 <code>accept</code> 直到 <code>EAGAIN</code></strong>，否则在突发建连时可能积压在 accept 队列里，ET 下还可能漏接。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">srv</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">BlockingIOError</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="c1"># register conn into epoll ...</span>
+</code></pre></div>
+
+<hr />
+<h3 id="oneshotrdhup-fd">三、ONESHOT、RDHUP 和 fd 复用</h3>
+<h4 id="1-epolloneshot">1. <code>EPOLLONESHOT</code>：通知一次后自动解除关注</h4>
+<p>加上 <code>EPOLLONESHOT</code> 后，该 fd 被送达一次事件后，内核会把它从兴趣列表的有效关注中「卸下」——<strong>必须再次 <code>epoll_ctl(MOD/ADD)</code> 才能继续收到事件</strong>。这常用于：</p>
+<ul>
+<li>多线程 Reactor：保证同一 fd 同一时刻只被一个工作线程处理；</li>
+<li>处理完后再 arm，避免并发踩同一连接状态机。</li>
+</ul>
+<p>代价也很直接：你若忘了 rearm，连接会<strong>永久停滞</strong>——对端还在发数据，你的 <code>epoll_wait</code> 却再也看不到它。本课 practice 会故意演示一次「漏 rearm」。</p>
+<h4 id="2-epollrdhup">2. <code>EPOLLRDHUP</code>：对端关闭了写方向</h4>
+<p><code>EPOLLRDHUP</code>（Linux）表示对端关闭了连接的写半部（你这边读方向将看到 EOF）。它比泛泛的 <code>EPOLLHUP</code> 更贴近「半关闭」语义，便于：</p>
+<ul>
+<li>继续把本地 outbuf 发完；</li>
+<li>再 <code>shutdown(SHUT_WR)</code> / <code>close</code>。</li>
+</ul>
+<p>处理时仍要遵守「先读尽再关」：<code>EPOLLIN|EPOLLRDHUP</code> 同时出现时，先循环读到 EOF/<code>EAGAIN</code>，再进入关闭流程。</p>
+<h4 id="3-fd">3. fd 复用：旧事件不能落到新连接</h4>
+<p>Linux 关闭 fd 后，编号很快会被 <code>accept</code>/<code>open</code> 复用。危险序列：</p>
+<div class="codehilite"><pre><span></span><code>1. 连接 A 使用 fd=7，注册进 epoll
+2. 关闭 A，但忘记 epoll_ctl(DEL) 或忘记清掉 map[7]
+3. 新连接 B accept 后也拿到 fd=7
+4. 内核里残留的兴趣 / 用户态残留指针 → 把 B 的事件当 A 处理
+   或对已释放的 Conn 做 use-after-free
+</code></pre></div>
+
+<p>硬性规则：</p>
+<ul>
+<li><code>close(fd)</code> <strong>之前或同时</strong>，保证 <code>epoll_ctl(DEL)</code>（或依赖 <code>close</code> 自动从所有 epoll 集合移除——仍要清用户态映射）；</li>
+<li><code>map[fd]</code> / <code>Channel*</code> 与 epoll 注册同生共死；</li>
+<li>不要把「延迟删除队列」拖过 fd 可能被复用的窗口而不做世代号/指针校验。</li>
+</ul>
+<p>节点要点：</p>
+<blockquote>
+<p>EPOLLRDHUP、EPOLLHUP、EPOLLERR 与 read()==0 的处理；fd 复用时避免把旧事件关联到新连接</p>
+</blockquote>
+<hr />
+<h3 id="_5">四、就绪不是完成</h3>
+<p>节点原话：</p>
+<blockquote>
+<p>就绪不是完成：事件后仍需处理 EAGAIN、EINTR、短读写；ET 读写状态通常推进到 EAGAIN</p>
+</blockquote>
+<p>把这句话落成检查清单：</p>
+<ol>
+<li>
+<p><strong><code>EPOLLIN</code> ≠ 读完了一条消息</strong><br />
+   TCP 是字节流。你可能读到半包、多包、或一次 <code>read</code> 少于你的 buffer。协议边界自己拼。</p>
+</li>
+<li>
+<p><strong><code>EPOLLOUT</code> ≠ 一次 <code>write</code> 能写完 outbuf</strong><br />
+   短写是常态。必须维护偏移/剩余长度，<code>EAGAIN</code> 时停，等下一次可写。</p>
+</li>
+<li>
+<p><strong><code>EINTR</code> 不是错误</strong><br />
+<code>epoll_wait</code> / <code>read</code> / <code>write</code> / <code>accept</code> 都可能被信号打断。正确动作是重试（并注意超时要按 deadline 重算）。</p>
+</li>
+<li>
+<p><strong>ET 下「停在短读」等于丢边沿</strong><br />
+   若你在 ET 下只读一次就回到 wait，而缓冲里还有数据，通常<strong>不会</strong>再有新的边沿，直到对端再次写入。于是连接「假死」。</p>
+</li>
+<li>
+<p><strong>日志与 strace 要能证明「通知 ≠ 完成」</strong><br />
+   一次 <code>epoll_wait</code> 返回后，你可能看到多次 <code>read</code>/<code>write</code>，中间夹杂 <code>EAGAIN</code>。若 strace 里每次通知只跟一次短读然后长期空闲，就要怀疑 ET 未排空。</p>
+</li>
+</ol>
+<hr />
+<h3 id="epollrdhup-epollhup-epollerr-read0">五、EPOLLRDHUP / EPOLLHUP / EPOLLERR 与 <code>read()==0</code></h3>
+<p>推荐处理顺序（与上一课 poll 一脉相承）：</p>
+<div class="codehilite"><pre><span></span><code>1. 查 EPOLLERR（必要时 getsockopt SO_ERROR）
+2. 若有 EPOLLIN 或可读迹象：循环 read
+      - &gt;0：消费数据
+      - =0：对端写方向结束（EOF）
+      - EAGAIN：本轮读方向暂尽
+      - 其他错误：进入关闭
+3. 再看 EPOLLRDHUP / EPOLLHUP
+4. 写方向：若 outbuf 非空且 EPOLLOUT，循环写到 EAGAIN 或写空
+5. 若读已 EOF 且 outbuf 已空 → 安全关闭并 DEL + 释放 Conn
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li><strong><code>read()==0</code></strong> 是字节流上「对端写关闭」的权威信号；</li>
+<li><strong><code>EPOLLRDHUP</code></strong> 提前提示半关闭，但仍应通过 <code>read</code> 把残留读尽；</li>
+<li><strong><code>EPOLLHUP</code></strong> 更常表示连接已不可用；仍优先保证不丢未读数据、不碰已释放对象；</li>
+<li><strong><code>EPOLLERR</code></strong> 不要当成普通 <code>EPOLLIN</code> 去盲目 <code>read</code> 完事；记下 <code>SO_ERROR</code> 再关。</li>
+</ul>
+<hr />
+<h3 id="epollout-oneshot">六、EPOLLOUT 按需启停；ONESHOT 与连接生命周期</h3>
+<h4 id="1-epollout">1. 为什么不能永远关注 <code>EPOLLOUT</code>？</h4>
+<p>套接字发送缓冲在多数空闲时间是「可写」的。若一直注册 <code>EPOLLOUT</code>：</p>
+<ul>
+<li>LT 下会<strong>持续就绪</strong> → <code>epoll_wait</code> 立刻返回 → CPU 空转；</li>
+<li>即使 ET，错误的状态机也可能在每次写空后再次误 arm，造成无意义唤醒。</li>
+</ul>
+<p>正确策略（节点要点）：</p>
+<blockquote>
+<p>EPOLLOUT 按输出积压按需启停</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code>outbuf 从空 → 非空：MOD 加上 EPOLLOUT
+outbuf 写空：     MOD 去掉 EPOLLOUT（只留 EPOLLIN|RDHUP 等）
+写遇到 EAGAIN：   保持 EPOLLOUT，等下一次可写
+</code></pre></div>
+
+<h4 id="2-oneshot-rearm">2. ONESHOT 的 rearm 必须与对象存活一致</h4>
+<div class="codehilite"><pre><span></span><code>工作线程拿到事件（ONESHOT 已自动卸关注）
+    → 处理读写
+    → 若连接仍存活：epoll_ctl(MOD, 重新带上需要的 events | ONESHOT)
+    → 若连接应销毁：DEL + 释放对象（绝不再 MOD）
+</code></pre></div>
+
+<p>漏 rearm → 停滞；对已销毁对象 MOD → use-after-free 或 <code>EBADF</code>；先释放对象再处理残留事件 → 同理崩溃。把「重新注册」和「连接对象销毁」绑成同一生命周期，是 Reactor 的基本功。</p>
+<h4 id="3-muduo-sourcestudy">3. 与 Muduo 的对照（sourceStudy）</h4>
+<p>节点要求：</p>
+<blockquote>
+<p>对照 Muduo EPollPoller::poll、updateChannel、EventLoop::loop 与 Channel::handleEvent；追踪一次 fd 注册、事件分发、注销和连接析构，不依赖未标注的内核版本细节。</p>
+</blockquote>
+<p>阅读路径建议：</p>
+<ol>
+<li><code>EPollPoller::updateChannel</code>：如何把 <code>Channel</code> 的 <code>events_</code> 翻译成 <code>epoll_ctl</code>；</li>
+<li><code>EPollPoller::poll</code>：<code>epoll_wait</code> → 填充 active channels；</li>
+<li><code>EventLoop::loop</code>：调用 poller，再逐个 <code>Channel::handleEvent</code>；</li>
+<li>连接关闭路径：<code>Channel</code> disableAll / remove，与 <code>TcpConnection</code> 析构顺序。</li>
+</ol>
+<p>你要自己在笔记里画一条时间线：<strong>ADD → 就绪 → handleEvent → MOD/DEL → 对象析构</strong>，标出哪一步之后指针不得再被使用。</p>
+<hr />
+<h2 id="_6">常见误区与设计权衡</h2>
+<h3 id="pitfalls">误区（pitfalls）</h3>
+<p>节点原话：</p>
+<blockquote>
+<p>不能仅因一次read未填满缓冲就认定已排空。</p>
+</blockquote>
+<p>展开成工程上常见的坑：</p>
+<p><strong>1. 短读当排空（ET 致命）</strong><br />
+一次 <code>read</code> 返回 <code>n &lt; bufsize</code> 只表示「这次内核给了你 n 字节」，在 ET 下<strong>不</strong>等价于「已经 EAGAIN」。必须读到 <code>EAGAIN</code> 或 EOF。</p>
+<p><strong>2. 把就绪通知当成 IO 完成</strong><br />
+<code>EPOLLIN</code> 后仍可能 <code>EAGAIN</code>、短读、<code>EINTR</code>。协议层、缓冲层都要能继续。</p>
+<p><strong>3. 永远注册 <code>EPOLLOUT</code></strong><br />
+导致 LT 忙循环。按 outbuf 积压启停。</p>
+<p><strong>4. ET + 阻塞 fd</strong><br />
+一次 <code>read</code>/<code>accept</code> 卡住整条事件线程。</p>
+<p><strong>5. 忘记 ONESHOT rearm</strong><br />
+连接无声停滞，难查。日志里应明确打印 <code>arm</code> / <code>rearm</code> / <code>skip_rearm</code>。</p>
+<p><strong>6. close 后不清用户态映射</strong><br />
+fd 复用 → 旧事件打到新连接，或 UAF。</p>
+<p><strong>7. 见 <code>EPOLLHUP</code> 立即关，丢掉未读数据</strong><br />
+与 poll 课相同：先读尽，再关。</p>
+<p><strong>8. 监听 fd 不循环 accept</strong><br />
+突发连接积压；ET 下可能漏接。</p>
+<p><strong>9. 忽略 <code>EINTR</code></strong><br />
+信号多的服务里事件循环会「随机」退出或丢超时计算。</p>
+<p><strong>10. 用 <code>EPOLLONESHOT</code> 却在多线程无锁改同一 <code>Conn</code></strong><br />
+ONESHOT 降低了「同 fd 同刻被两个线程 handle」的概率，但不自动保证你对共享结构的所有访问都安全。</p>
+<h3 id="tradeoffs">权衡（tradeoffs）</h3>
+<p>节点原话：</p>
+<blockquote>
+<p>ET可减少重复通知，也要求严格状态管理与公平性预算。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>LT</th>
+<th>ET</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实现难度</td>
+<td>较低，漏处理有机会被下一轮救回</td>
+<td>较高，必须排空到 EAGAIN，状态机要完整</td>
+</tr>
+<tr>
+<td>通知次数</td>
+<td>条件成立时可能反复通知</td>
+<td>边沿通知，通常更少</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>未排空时易空转</td>
+<td>排空正确时更省唤醒</td>
+</tr>
+<tr>
+<td>公平性</td>
+<td>仍需应用层限制单连接本轮读写量，避免饿死其他连接</td>
+<td>同样需要「公平性预算」：单连接本轮最多读/写 N 次或 M 字节，再到下一轮</td>
+</tr>
+<tr>
+<td>适用</td>
+<td>语义简单、先求正确</td>
+<td>高连接密度、想减少重复通知，且团队吃得准状态机</td>
+</tr>
+</tbody>
+</table>
+<p>实战建议：</p>
+<ul>
+<li>先用 <strong>非阻塞 + LT + 读到 EAGAIN</strong> 把正确性做稳；</li>
+<li>再在压测下切 ET，用日志/strace 证明没有漏排空、没有假死；</li>
+<li>无论 LT/ET，都给单连接设置本轮 I/O 预算，避免一个热点 fd 饿死整个 Reactor（这就是 tradeoffs 里的「公平性预算」）。</li>
+</ul>
+<hr />
+<h2 id="_7">动手实践</h2>
+<p>节点 practice：</p>
+<blockquote>
+<p>实现 C++17 非阻塞多客户端 Echo Server：accept/read/write 循环处理 EINTR 和 EAGAIN，为连接维护输入、输出缓冲；增加半关闭、慢读客户端与超大消息测试。比较 LT 与 ET，记录 fd 数、CPU、吞吐及 p99；最后以 EPOLLONESHOT 演示一次遗漏 rearm 的停滞故障。</p>
+</blockquote>
+<p>验收（acceptance）：</p>
+<ul>
+<li>能解释 ET 为何通常配合非阻塞；</li>
+<li>关闭事件不会访问已释放连接；</li>
+<li>客户端分片发送、慢速读取、半关闭及连接复用压力下无数据截断与 use-after-free；</li>
+<li>能用 strace 与日志说明一次事件丢失或忙循环原因；不把就绪通知等同 IO 已完成。</li>
+</ul>
+<p>并呼应 sourceStudy：对照 Muduo <code>EPollPoller::poll</code>、<code>updateChannel</code>、<code>EventLoop::loop</code> 与 <code>Channel::handleEvent</code>，追踪一次 fd 注册、事件分发、注销和连接析构。</p>
+<p>本课配套练习用 Python <code>select.epoll</code> 实现同等语义（ET Echo、短读到 EAGAIN、半关闭、慢客户端、按需 EPOLLOUT、ONESHOT 漏 rearm、EADDRINUSE），便于在无编译器依赖的环境里跑通验收。</p>
+<h3 id="_8">步骤拆解</h3>
+<ol>
+<li>
+<p><strong>创建 epoll 与监听套接字</strong><br />
+<code>socket</code> + <code>SO_REUSEADDR</code> + 非阻塞 + <code>listen</code>。<br />
+<code>epoll_create1</code> / <code>select.epoll()</code>，listen fd 注册 <code>EPOLLIN</code>（可先 LT，再加 ET）。</p>
+</li>
+<li>
+<p><strong>连接对象</strong><br />
+   每条连接：<code>sock</code>、<code>inbuf</code>/<code>outbuf</code>、读是否 EOF、是否已关闭、oneshot 模式标记。<br />
+<code>fd → Conn</code> 字典；关闭路径统一：<code>DEL/unregister</code> → <code>close</code> → <code>dict.pop</code>。</p>
+</li>
+<li>
+<p><strong>accept 循环</strong><br />
+   listen 可读时 <code>accept</code> 直到 <code>EAGAIN</code>；新连接设非阻塞，注册 <code>EPOLLIN|EPOLLRDHUP</code>（ET 则或上 <code>EPOLLET</code>；演示 ONESHOT 则或上 <code>EPOLLONESHOT</code>）。</p>
+</li>
+<li>
+<p><strong>读路径（ET 核心）</strong><br />
+   循环 <code>recv</code> 直到 <code>EAGAIN</code> 或 0。<br />
+   数据追加到 outbuf（Echo）或先入 inbuf 再按行回显。<br />
+<strong>不要</strong>因为一次 <code>recv</code> 未填满缓冲就停止。<br />
+   读到 0：标记 peer EOF；若 outbuf 空则关闭。</p>
+</li>
+<li>
+<p><strong>写路径与 EPOLLOUT</strong><br />
+   outbuf 非空时 <code>MOD</code> 加上 <code>EPOLLOUT</code>；循环 <code>send</code> 到写空或 <code>EAGAIN</code>。<br />
+   写空后去掉 <code>EPOLLOUT</code>。<br />
+   可用较小的 <code>SO_SNDBUF</code> + 慢读客户端稳定触发 <code>EAGAIN</code>。</p>
+</li>
+<li>
+<p><strong>半关闭</strong><br />
+   客户端 <code>send</code> 后 <code>shutdown(SHUT_WR)</code>：服务端应读尽、回显、再关。<br />
+   日志打印 <code>RDHUP</code>/<code>EOF</code>/<code>drained</code> 字节数。</p>
+</li>
+<li>
+<p><strong>ONESHOT 漏 rearm 故障演示</strong><br />
+   提供开关：处理完读事件故意不 <code>MOD</code> rearm。<br />
+   预期：后续客户端数据再也进不来，日志可看到「已停滞」。<br />
+   对照正确路径：每次处理完若连接仍存活则 rearm。</p>
+</li>
+<li>
+<p><strong>比较 LT / ET（可选记录）</strong><br />
+   同一负载下记录：fd 数、CPU、吞吐、p99。<br />
+   重点不是刷分，而是解释差异是否来自「重复通知」或「未排空导致的假死」。</p>
+</li>
+<li>
+<p><strong>strace / 日志</strong><br />
+   对服务进程 <code>strace -e epoll_wait,recvfrom,sendto,accept4</code>（环境若无 strace 则用详细日志）。<br />
+   证明：一次就绪后有多轮短读直到 <code>EAGAIN</code>；漏 rearm 时不再出现该 fd 的事件。</p>
+</li>
+<li>
+<p><strong>对照 man page 与 Muduo</strong><br />
+    阅读 <a href="https://man7.org/linux/man-pages/man7/epoll.7.html">epoll(7)</a> 的 LT/ET/ONESHOT 段落；打开 Muduo <code>EPollPoller.cc</code> 对照 <code>update</code>/<code>poll</code>。</p>
+</li>
+</ol>
+<h3 id="_9">预期现象</h3>
+<ul>
+<li>多客户端同时 echo，分片发送最终拼回完整 payload；</li>
+<li>慢读客户端不导致服务端丢数据或忙自旋；</li>
+<li>半关闭：服务端先读尽并回显，再关闭；</li>
+<li>ET 下日志出现多次 <code>RECV</code> 并以 <code>EAGAIN</code> 结束本轮；</li>
+<li>故意漏 rearm 后，该连接后续数据不再被处理（停滞故障）；</li>
+<li>二次 bind 同端口 → <code>EADDRINUSE</code>，退出码 2；</li>
+<li>关闭连接后无 UAF、无把旧 fd 事件套到新连接。</li>
+</ul>
+<h3 id="_10">验收清单</h3>
+<div class="codehilite"><pre><span></span><code>[ ] 能口头解释：ET 为什么必须非阻塞 + 读/写到 EAGAIN
+[ ] 短读不等于排空；代码以 EAGAIN/EOF 为停条件
+[ ] EPOLLOUT 仅在 outbuf 非空时关注
+[ ] EPOLLRDHUP/HUP/ERR 与 read()==0 路径不访问已释放 Conn
+[ ] ONESHOT 漏 rearm 可复现停滞；修复后恢复
+[ ] EADDRINUSE 有明确错误与退出码
+[ ] 对照过 epoll(7) 与 Muduo EPollPoller 的注册/分发/注销
+</code></pre></div>
+
+<hr />
+<h2 id="_11">自测题</h2>
+<p><strong>题 1</strong><br />
+在 ET（<code>EPOLLET</code>）模式下，一次 <code>EPOLLIN</code> 之后执行了一次 <code>read</code>，返回值 <code>n</code> 大于 0 且 <code>n &lt; 用户buffer大小</code>。此时最稳妥的下一步是？</p>
+<p>A. 认定已经排空，回到 <code>epoll_wait</code><br />
+B. 继续循环 <code>read</code>，直到 <code>EAGAIN</code>/<code>EWOULDBLOCK</code> 或 EOF/错误<br />
+C. 立刻 <code>close</code>，因为短读表示对端不会再发<br />
+D. 改为阻塞 <code>read</code> 把剩余数据读完</p>
+<p><strong>题 2</strong><br />
+为什么说「就绪不是完成」？下列哪一项正确？</p>
+<p>A. <code>epoll_wait</code> 返回时，对应的 <code>read</code>/<code>write</code> 一定已经在内核完成<br />
+B. <code>EPOLLIN</code> 只表示现在读大概率不阻塞，仍可能短读、遇 <code>EAGAIN</code>/<code>EINTR</code>，应用必须自己推进状态<br />
+C. 只要注册了 <code>EPOLLIN</code>，TCP 消息边界就会自动对齐<br />
+D. <code>EPOLLOUT</code> 保证一次 <code>write</code> 能写完整个 outbuf</p>
+<p><strong>题 3</strong><br />
+对某 fd 使用 <code>EPOLLONESHOT</code>，处理完事件后忘记 <code>epoll_ctl(MOD)</code> rearm。最可能的现象是？</p>
+<p>A. 该 fd 会在 LT 语义下不断通知，导致 CPU 空转<br />
+B. 该 fd 后续事件不再送达，连接表现为停滞，直到再次被正确 arm<br />
+C. 内核自动把该 fd 改为 ET<br />
+D. <code>close(fd)</code> 会被内核禁止，直到 rearm</p>
+<hr />
+<h3 id="_12">自测题参考答案</h3>
+<p><strong>题 1：B</strong><br />
+节点 pitfalls 明确：不能仅因一次 read 未填满缓冲就认定已排空。ET 下必须把读方向推进到 <code>EAGAIN</code> 或 EOF/错误，否则可能失去后续边沿通知。A 是典型事故；C/D 更错。</p>
+<p><strong>题 2：B</strong><br />
+就绪通知只说明「现在可以尝试 IO」，不保证一次做完，也不保证消息边界。短读、<code>EAGAIN</code>、<code>EINTR</code> 都要处理。A/C/D 都把通知误当成完成。</p>
+<p><strong>题 3：B</strong><br />
+<code>EPOLLONESHOT</code> 送达一次后会卸下有效关注，必须主动 rearm。忘记 rearm 的经典故障就是连接停滞。A 描述的是「永远关注 EPOLLOUT/未排空」类问题，不是 ONESHOT 漏 arm。</p>
+<hr />
+<h2 id="_13">推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man7/epoll.7.html">epoll事件语义与工程边界：Linux man-pages</a>（man7.org，英文文档，进阶）</li>
+<li>重点阅读：<code>epoll_create1</code> / <code>epoll_ctl</code> / <code>epoll_wait</code> 与 <strong>LT、ET 与排空到 EAGAIN</strong>，用于核对本节点实验的语义和边界。</li>
+<li>
+<p>同时核对 <code>EPOLLONESHOT</code>、<code>EPOLLRDHUP</code>、<code>EPOLLERR</code>/<code>EPOLLHUP</code> 的说明，记录与你实验环境一致的行为。</p>
+</li>
+<li>
+<p><a href="https://github.com/chenshuo/muduo/blob/master/muduo/net/poller/EPollPoller.cc">Muduo · EPollPoller 实现</a>（chenshuo/muduo，英文源码，进阶）</p>
+</li>
+<li>追踪 Poller 如何注册 fd、转译事件并把活动 Channel 交给事件循环。</li>
+<li>结合 <code>EventLoop::loop</code> 与 <code>Channel::handleEvent</code>，走通「注册 → 分发 → 注销 → 连接析构」整条链，避免只看局部 API。</li>
+</ul>
+<hr />
+<h2 id="_14">本课小结</h2>
+<ol>
+<li><strong><code>epoll</code> 维护内核兴趣列表，只返回就绪事件</strong>：<code>create1</code> 建实例，<code>ctl</code> 增删改关注，<code>wait</code> 取就绪；这是海量连接下 Reactor 的基础，对比 <code>poll</code> 每轮整表提交扫描。</li>
+<li><strong>LT / ET / ONESHOT 改变的是重新通知与并发策略</strong>：ET 必须配合非阻塞，并把读写推进到 <code>EAGAIN</code>；ONESHOT 必须显式 rearm，且与连接对象同生命周期。</li>
+<li><strong>就绪不是完成</strong>：事件后仍要处理短读写、<code>EAGAIN</code>、<code>EINTR</code>；不能把一次未填满缓冲的 <code>read</code> 当成排空。</li>
+<li><strong>关闭与错误路径要先读尽、再释放</strong>：<code>EPOLLRDHUP</code>/<code>HUP</code>/<code>ERR</code> 与 <code>read()==0</code> 协同；<code>close</code> 与 <code>DEL</code>、用户态 map 一致，防止 fd 复用误关联与 UAF。</li>
+<li><strong><code>EPOLLOUT</code> 按输出积压按需启停</strong>：避免 LT 下可写空转；慢客户端用 outbuf + 状态机消化背压。</li>
+<li><strong>权衡</strong>：ET 可减少重复通知，但要求严格状态管理与公平性预算；先正确，再谈切 ET 与刷指标。</li>
+<li><strong>对照 Muduo</strong>：用 <code>EPollPoller</code> + <code>EventLoop</code> + <code>Channel</code> 把注册、分发、注销、析构看成一条链，而不是四个孤立 API。</li>
+</ol>
+<p>后续课程会继续 IO 模型与事件主题；请先把本课 ET Echo 与「ONESHOT 漏 rearm」两个实验跑懂，再进入后续内容。</p>
+<hr />
+<h2 id="_15">配套练习</h2>
+<p>目录：<a href="./practice55/"><code>practice55/</code></a></p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server.py</code></td>
+<td><code>select.epoll</code> ET Echo；短读循环到 <code>EAGAIN</code>；半关闭 EOF；按需 <code>EPOLLOUT</code>；<code>--oneshot --leak-rearm</code> 演示漏 rearm 停滞</td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>分片发送、慢读、<code>shutdown(WR)</code> 半关闭、期望回显</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>自动化验收：分片 echo、<code>RECV_EAGAIN</code>、半关闭、慢读、IDLE、ONESHOT 漏 rearm、EADDRINUSE</td>
+</tr>
+</tbody>
+</table>
+<p>运行：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice55<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./test.sh
+</code></pre></div>
+
+<p>期望末行：<code>ALL_CHECKS_PASSED</code>。</p>
+<p>实测要点（Asia/Shanghai，本机验证时对照）：</p>
+<ul>
+<li>分片发送后客户端收到完整 payload；</li>
+<li>服务日志出现 <code>RECV_EAGAIN</code>（ET 排空到 EAGAIN）；</li>
+<li>客户端 <code>shutdown(WR)</code> 后仍完整回显，服务端有 <code>EOF</code>/<code>CLOSE</code>；</li>
+<li>慢读客户端无截断；</li>
+<li>空闲出现 <code>IDLE heartbeat</code>；</li>
+<li><code>--leak-rearm</code> 下首次事件后打印 <code>LEAK_REARM</code>，后续数据不再回显（<code>STALL_OK</code>）；</li>
+<li>二次绑定同端口打印 <code>EADDRINUSE</code>，退出码 2。</li>
+</ul>
+<p>NOTE：Python <code>select.epoll</code> 映射 <code>EPOLLIN/EPOLLOUT/EPOLLET/EPOLLONESHOT/EPOLLRDHUP/EPOLLHUP/EPOLLERR</code>。生产代码切勿故意漏 rearm；本练习仅用于复现 ONESHOT 停滞故障。C++17 版本可按节点 practice 自行扩展，并对照 Muduo <code>EPollPoller</code>。</p><div class="pn"><span><a href="54.html">← poll与就绪集合扫描</a></span><span>下一课 待更新</span></div></main></div></body></html>
