@@ -354,6 +354,8 @@ static ssize_t send_some(int fd, const void *buf, size_t len, int *would_block) 
 
 应用层应维护 `buf + offset + total`，每次只对 `buf+offset` 调用 `send_some`，成功则 `offset += n`，`would_block` 则改听 `EPOLLOUT`。
 
+---
+
 ## 常见误区与设计权衡
 
 ### 误区：可读 / 可写 = 一次能读写任意长度

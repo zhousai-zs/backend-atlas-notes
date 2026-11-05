@@ -329,6 +329,7 @@
 </code></pre></div>
 
 <p>应用层应维护 <code>buf + offset + total</code>，每次只对 <code>buf+offset</code> 调用 <code>send_some</code>，成功则 <code>offset += n</code>，<code>would_block</code> 则改听 <code>EPOLLOUT</code>。</p>
+<hr />
 <h2 id="_7">常见误区与设计权衡</h2>
 <h3 id="_8">误区：可读 / 可写 = 一次能读写任意长度</h3>
 <p>这是节点 pitfalls 的原文。事件只表示「现在有机会推进」，不表示「应用层消息边界到齐」或「你的 1MB 缓冲能一次写完」。</p>
