@@ -1,0 +1,964 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>58. 定时器、时间轮与单调时钟 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（58/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（10/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="cur" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 58 课 · 领域 D · 阶段 3</p><p class="dl"><a href="../files/58-d-timer.md" download>⬇ 本课 Markdown</a></p><h1 id="58208">第 58/208 课：定时器、时间轮与单调时钟</h1>
+<ul>
+<li><strong>阶段</strong>：第 3 阶段 · 传输与Socket</li>
+<li><strong>前置课程</strong>：d-reactor、a-tree</li>
+<li><strong>关键词</strong>：Timers、定时器、timerfd、单调时钟、steady_clock、CLOCK_MONOTONIC、CLOCK_REALTIME、最小堆、时间轮、hierarchical timing wheel、取消、重复定时、竞态、相对超时、心跳、空闲超时、重试退避</li>
+<li><strong>难度</strong>：进阶</li>
+<li><strong>所属领域</strong>：D · IO模型与事件（子类：调度与资源复用）</li>
+<li><strong>标签</strong>：Timers、D、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课我们搭好了 Reactor 骨架：Poller 等就绪、Channel 绑回调、EventLoop 串行维护连接状态，跨线程用 <code>queueInLoop</code> + <code>eventfd</code> 唤醒。到这里，「有事件就处理」已经通了——但接入层还有一类<strong>没有 socket 字节、却必须准时发生</strong>的事：</p>
+<ul>
+<li>长连接多久没读到包，判定空闲超时并踢掉；</li>
+<li>心跳包按固定间隔发出；</li>
+<li>推送失败后按指数退避重试；</li>
+<li>半关闭后的 linger、延迟销毁、限流窗口滑动……</li>
+</ul>
+<p>这些都依赖<strong>定时器</strong>：根据截止时间触发任务。</p>
+<p>节点 summary 对本课的定位是：</p>
+<blockquote>
+<p>定时器根据截止时间触发任务，单调时钟避免墙钟跳变影响超时判断；堆和时间轮适合不同规模。</p>
+</blockquote>
+<p>这句话拆开有三层意思：</p>
+<ol>
+<li><strong>截止时间驱动</strong>：任务不是「现在立刻跑」，而是「到点才跑」；</li>
+<li><strong>单调时钟</strong>：超时判断必须用不受 NTP / 人工改表影响的时钟，否则相对超时会被墙钟跳变毁掉；</li>
+<li><strong>堆 vs 时间轮</strong>：少量高精度定时器用最小堆够用；海量粗粒度定时器更适合时间轮批处理。</li>
+</ol>
+<p>放到腾讯微信公众号后台的长连接接入层，定时器几乎无处不在：</p>
+<ul>
+<li><strong>空闲超时</strong>：粉丝侧或第三方回调通道长时间无数据，释放 fd 与会话；</li>
+<li><strong>心跳</strong>：接入层按间隔发 ping / 期望 pong，超时则关闭；</li>
+<li><strong>推送重试</strong>：模板消息、客服消息下游失败后的退避队列；</li>
+<li><strong>限流与滑动窗口</strong>：按秒/分钟重置计数器。</li>
+</ul>
+<p>本课要建立的不是「<code>sleep</code> 一下再回调」这种玩具语义，而是一套可接入 Reactor 的工程能力：</p>
+<ol>
+<li><strong>steady / monotonic 时钟</strong>：为何 <code>CLOCK_REALTIME</code> 不能当相对超时基准，<code>timerfd_create(CLOCK_MONOTONIC)</code> 如何用；</li>
+<li><strong>最小堆与时间轮</strong>：按过期时间的堆、分层时间轮各自适合什么规模；</li>
+<li><strong>取消、重复定时和竞态</strong>：取消与触发同时发生时，回调绝不能碰已失效对象；如何用 timerfd Channel 接到 EventLoop。</li>
+</ol>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释 steady / monotonic 时钟</strong>
+   - 说清 <code>CLOCK_MONOTONIC</code> / <code>std::chrono::steady_clock</code> 与 <code>CLOCK_REALTIME</code> / 墙钟的区别。
+   - 说清 NTP 步进、管理员 <code>date -s</code>、夏令时调整为何会毁掉「相对超时」。
+   - 说清 Linux 上 <code>timerfd_create(CLOCK_MONOTONIC, ...)</code> + <code>timerfd_settime</code> 的基本用法。</p>
+</li>
+<li>
+<p><strong>能独立完成：给 Reactor 加入 timerfd 和可取消定时器，测试取消与触发同时发生</strong>
+   - 在 EventLoop 中持有一个 timerfd Channel；到期读 timerfd，再跑所有已到期回调。
+   - 定时器支持取消；取消与触发竞态时，已取消的回调不执行或不触碰失效对象。
+   - 支持一次性与重复（interval）定时器。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - 修改系统墙钟不影响相对超时。
+   - 取消后的回调不访问失效对象。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：</p>
+<blockquote>
+<p>实现连接超时、重试和心跳。</p>
+</blockquote>
+<h3 id="1">1. 没有可靠超时，长连接会「假活」</h3>
+<p>公众号后台接入层常年挂着大量长连接。若没有空闲超时：</p>
+<ul>
+<li>对端进程崩了、NAT 表项丢了、中间设备静默丢包，你的 epoll 可能很久收不到 <code>EPOLLRDHUP</code>；</li>
+<li>fd 与会话对象泄漏，内存与连接表被占满；</li>
+<li>监控显示「连接数很高」，实际有效会话很少。</li>
+</ul>
+<p><strong>空闲超时定时器</strong>是连接生命周期的安全网：每次读到数据就 <code>reset</code>，到期则主动关闭。</p>
+<h3 id="2">2. 心跳与重试都是「时间驱动的状态机」</h3>
+<p>心跳不是「另起一个线程 while sleep」，而是：</p>
+<ul>
+<li>注册一个 interval 定时器；</li>
+<li>到点检查「距上次收包是否超过阈值」；</li>
+<li>必要时发 ping，再设一个「等 pong」的一次性定时器。</li>
+</ul>
+<p>推送重试同理：失败 → 按退避表算下次截止时间 → 入定时器队列；成功或超过最大次数 → 取消。这些状态机若用错时钟或取消语义不清，会出现「重试风暴」或「永远不再重试」。</p>
+<h3 id="3">3. 墙钟跳变是线上真实事故源</h3>
+<p>运维改 NTP、虚拟机恢复快照、容器宿主机校时，都会让 <code>CLOCK_REALTIME</code> 向前/向后跳。若你用墙钟算「30 秒后超时」：</p>
+<ul>
+<li>时钟向前跳 1 小时 → 大批定时器瞬间全部到期 → 惊群关闭 / 重试风暴；</li>
+<li>时钟向后跳 1 小时 → 超时「永远不到」→ 连接永不清理。</li>
+</ul>
+<p>节点 acceptance 第一条就是：<strong>修改系统墙钟不影响相对超时</strong>。这是硬门槛，不是风格偏好。</p>
+<h3 id="4-reactor">4. 定时器与 Reactor 必须同线程协作</h3>
+<p>上一课强调连接状态只在 loop 线程改。定时器回调通常也要改连接状态（关连接、发心跳、改重试计数）。因此生产级做法是：</p>
+<ul>
+<li>定时器队列归属某个 EventLoop；</li>
+<li>用 <strong>一个 timerfd</strong>（或类似机制）把「最近到期点」变成 epoll 可读事件；</li>
+<li>在 loop 线程里串行执行到期回调——与 Channel 回调同一套线程亲和纪律。</li>
+</ul>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="0-sleep">0. 先建立直觉：从 sleep 到「可取消的截止时间队列」</h3>
+<p>最Naive的写法：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># naive_timer.py —— 示意，千万别用于接入层</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span><span class="o">,</span><span class="w"> </span><span class="nn">threading</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">after</span><span class="p">(</span><span class="n">seconds</span><span class="p">,</span> <span class="n">cb</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">runner</span><span class="p">():</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span>
+        <span class="n">cb</span><span class="p">()</span>
+    <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">runner</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></div>
+
+<p>它能跑 Demo，但缺三块工程能力：</p>
+<ol>
+<li><strong>时钟错误</strong>：<code>time.time()</code> / 墙钟 sleep 受系统时间影响；线程里 sleep 也不受统一调度；</li>
+<li><strong>无法高效取消与合并</strong>：一万个连接各起一线程 sleep，资源炸裂；取消要打断 sleep，语义混乱；</li>
+<li><strong>与 Reactor 脱节</strong>：回调可能在任意线程跑，直接改连接状态就破坏上一课的亲和性。</li>
+</ol>
+<p>正确方向：</p>
+<div class="codehilite"><pre><span></span><code>所有定时器 → 按过期时间排进一个队列（堆或时间轮）
+EventLoop 只关心「最近一个到期点」
+用 timerfd 把该点变成 epoll 事件
+到期后在 loop 线程批量执行回调
+</code></pre></div>
+
+<p>下面按节点三个 points 展开。</p>
+<h3 id="1-steady-monotonic">1. steady / monotonic 时钟</h3>
+<h4 id="11">1.1 两类时钟，两套用途</h4>
+<table>
+<thead>
+<tr>
+<th>时钟</th>
+<th>Linux 常量</th>
+<th>C++</th>
+<th>典型用途</th>
+<th>会跳变吗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>墙钟 / 实时时钟</strong></td>
+<td><code>CLOCK_REALTIME</code></td>
+<td><code>system_clock</code></td>
+<td>日志时间戳、订单「下单于几点」、对外展示</td>
+<td>会（NTP、手动改表）</td>
+</tr>
+<tr>
+<td><strong>单调时钟</strong></td>
+<td><code>CLOCK_MONOTONIC</code></td>
+<td><code>steady_clock</code></td>
+<td>超时、RTT、间隔、性能计时</td>
+<td>进程运行期间只向前（不受墙钟调整影响）</td>
+</tr>
+</tbody>
+</table>
+<p>直觉：</p>
+<ul>
+<li>问「现在几点了？」→ 墙钟；</li>
+<li>问「从刚才到现在过了多久？再过 30 秒该做什么？」→ <strong>单调时钟</strong>。</li>
+</ul>
+<h4 id="12">1.2 用命令亲眼看墙钟可被改、单调不可被墙钟拖走</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 读两种时钟（需要 util-linux 较新版本，或用自己的小程序）</span>
+<span class="c1"># 下面用 Python 演示语义</span>
+
+python3<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;'PY'</span>
+<span class="s">import time</span>
+<span class="s">print("wall  ", time.time())</span>
+<span class="s">print("mono  ", time.monotonic())</span>
+<span class="s">PY</span>
+
+<span class="c1"># 若你有权限（容器/实验机），可对比改表前后：</span>
+<span class="c1"># sudo date -s "2020-01-01 00:00:00"   # 墙钟大跳</span>
+<span class="c1"># 再跑上面脚本：wall 变了，monotonic 几乎连续</span>
+</code></pre></div>
+
+<p>验收实验（对应 acceptance）：</p>
+<ol>
+<li>启动服务，注册一个 10 秒相对超时；</li>
+<li>在第 3 秒把系统墙钟向前拨 1 小时；</li>
+<li><strong>正确实现</strong>：定时器仍约在第 10 秒（单调）触发，不会瞬间到期；</li>
+<li><strong>错误实现</strong>（用 <code>CLOCK_REALTIME</code> 绝对时间）：可能立刻全部触发。</li>
+</ol>
+<h4 id="13-linuxtimerfd_create">1.3 Linux：<code>timerfd_create</code> 绑定单调时钟</h4>
+<p>节点资源指向 <code>timerfd_create(2)</code>。核心 API：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/timerfd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;time.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdint.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/* 关键绑定 CLOCK_MONOTONIC 的 timerfd */</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">tfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timerfd_create</span><span class="p">(</span><span class="n">CLOCK_MONOTONIC</span><span class="p">,</span><span class="w"> </span><span class="n">TFD_NONBLOCK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">TFD_CLOEXEC</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tfd</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">perror</span><span class="p">(</span><span class="s">"timerfd_create"</span><span class="p">);</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">itimerspec</span><span class="w"> </span><span class="n">its</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="w">    </span><span class="cm">/* 3 秒后首次到期；interval=0 表示一次性 */</span>
+<span class="w">    </span><span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">    </span><span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">its</span><span class="p">.</span><span class="n">it_interval</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">its</span><span class="p">.</span><span class="n">it_interval</span><span class="p">.</span><span class="n">tv_nsec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="cm">/* flags=0：it_value 为相对时间（相对单调时钟） */</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">timerfd_settime</span><span class="p">(</span><span class="n">tfd</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">its</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"timerfd_settime"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">exp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/* 阻塞读：到期后内核写入「溢出次数」 */</span>
+<span class="w">    </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">tfd</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">exp</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">exp</span><span class="p">));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">exp</span><span class="p">))</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">"expired, overrun=%llu</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="p">)</span><span class="n">exp</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">close</span><span class="p">(</span><span class="n">tfd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li><strong><code>timerfd_create(CLOCK_MONOTONIC, ...)</code></strong>：到期判断走单调时钟；</li>
+<li><strong><code>timerfd_settime</code> 的 <code>flags</code></strong>：</li>
+<li><code>0</code>：<code>it_value</code> 是<strong>相对</strong>当前单调时钟的延时；</li>
+<li><code>TFD_TIMER_ABSTIME</code>：<code>it_value</code> 是绝对 monotonic 时间点；</li>
+<li><strong><code>read(timerfd)</code></strong>：返回 8 字节的 <code>uint64_t</code>，表示自上次 read 以来到期了多少次（重复定时器可能 &gt;1，即 overrun）；</li>
+<li>把 timerfd 当成普通 fd：<code>epoll_ctl</code> 加 <code>EPOLLIN</code>，就能融入上一课的 Reactor。</li>
+</ul>
+<h4 id="14-csteady_clock">1.4 C++：<code>steady_clock</code> 存截止时间</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">Steady</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="p">;</span>
+
+<span class="n">Steady</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="nf">deadline_after</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="w"> </span><span class="n">d</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Steady</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">d</span><span class="p">;</span><span class="w">   </span><span class="c1">// 相对超时 → 单调截止点</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="n">Steady</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">dl</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Steady</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">dl</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 反例：不要用 system_clock 做相对超时</span>
+<span class="c1">// auto bad = std::chrono::system_clock::now() + 30s;  // 墙钟一跳就错</span>
+</code></pre></div>
+
+<p>工程纪律：</p>
+<ul>
+<li><strong>定时器内部一律存 <code>steady_clock::time_point</code>（或单调 timespec）</strong>；</li>
+<li>日志若要打印「人类可读时间」，另取 <code>system_clock</code> 仅用于展示，<strong>不要把展示时钟写回超时逻辑</strong>；</li>
+<li>对外协议里的绝对时间戳（如 JWT exp）是业务语义，与「连接空闲 30s」是两回事——前者用墙钟/约定纪元，后者用单调。</li>
+</ul>
+<h4 id="15">1.5 公众号场景：空闲超时必须相对 + 单调</h4>
+<div class="codehilite"><pre><span></span><code>连接建立 → 启动 idle_timer = now_mono + 60s
+每次收到完整帧 → reset idle_timer = now_mono + 60s
+到期回调 → 主动关闭连接、清理会话
+
+运维此时 NTP 校时把墙钟拨快 5 分钟：
+  正确：idle 仍按单调剩余时间走，不会误杀刚活跃的连接
+  错误：若用墙钟绝对 deadline，可能整片连接被判超时
+</code></pre></div>
+
+<h3 id="2_1">2. 最小堆与时间轮</h3>
+<h4 id="21">2.1 最小堆：按过期时间排序</h4>
+<p>前置课 <code>a-tree</code> 里的堆（优先队列）在这里直接上场：堆顶永远是<strong>最早到期</strong>的定时器。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;queue&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">SteadyClock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Timer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="w">    </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">expiration</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="w"> </span><span class="n">interval</span><span class="p">;</span><span class="w"> </span><span class="c1">// 0 = 一次性</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cb</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">canceled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">TimerCmp</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">operator</span><span class="p">()(</span><span class="k">const</span><span class="w"> </span><span class="n">Timer</span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Timer</span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="o">-&gt;</span><span class="n">expiration</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="o">-&gt;</span><span class="n">expiration</span><span class="p">;</span><span class="w"> </span><span class="c1">// 小顶堆：更早的优先</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TimerQueue</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">duration</span><span class="w"> </span><span class="n">after</span><span class="p">,</span>
+<span class="w">                 </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cb</span><span class="p">,</span>
+<span class="w">                 </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">duration</span><span class="w"> </span><span class="n">interval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">duration</span><span class="o">::</span><span class="n">zero</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Timer</span><span class="p">{</span>
+<span class="w">            </span><span class="n">next_id_</span><span class="o">++</span><span class="p">,</span>
+<span class="w">            </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">after</span><span class="p">,</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">interval</span><span class="p">),</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cb</span><span class="p">),</span>
+<span class="w">            </span><span class="nb">false</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="n">heap_</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="w">        </span><span class="n">id_map_</span><span class="p">[</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">t</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">cancel</span><span class="p">(</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id_map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">id_map_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="o">-&gt;</span><span class="n">canceled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w"> </span><span class="c1">// 惰性删除：堆内先打标，取出时跳过</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 返回「距最近到期」的延时；若已有到期则为 0</span>
+<span class="w">    </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">duration</span><span class="w"> </span><span class="n">time_to_next</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">heap_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">duration</span><span class="p">{</span><span class="mi">-1</span><span class="p">};</span><span class="w"> </span><span class="c1">// 调用方解释为无限等</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">heap_</span><span class="p">.</span><span class="n">top</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">expiration</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">duration</span><span class="o">::</span><span class="n">zero</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">duration</span><span class="o">::</span><span class="n">zero</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">run_expired</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SteadyClock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">heap_</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">heap_</span><span class="p">.</span><span class="n">top</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">expiration</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Timer</span><span class="o">*</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">heap_</span><span class="p">.</span><span class="n">top</span><span class="p">();</span>
+<span class="w">            </span><span class="n">heap_</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">            </span><span class="n">id_map_</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">canceled</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">t</span><span class="o">-&gt;</span><span class="n">cb</span><span class="p">();</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">interval</span><span class="p">.</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">canceled</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">t</span><span class="o">-&gt;</span><span class="n">expiration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="o">-&gt;</span><span class="n">interval</span><span class="p">;</span>
+<span class="w">                    </span><span class="c1">// 注意：重复定时器若在回调里 cancel，下面不应再入堆</span>
+<span class="w">                    </span><span class="c1">// 更稳妥：回调后再查 canceled / 用 shared 状态</span>
+<span class="w">                    </span><span class="n">heap_</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">t</span><span class="p">);</span>
+<span class="w">                    </span><span class="n">id_map_</span><span class="p">[</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="w">                    </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">delete</span><span class="w"> </span><span class="n">t</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">next_id_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">priority_queue</span><span class="o">&lt;</span><span class="n">Timer</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Timer</span><span class="o">*&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">TimerCmp</span><span class="o">&gt;</span><span class="w"> </span><span class="n">heap_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="p">,</span><span class="w"> </span><span class="n">Timer</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">id_map_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>复杂度直觉：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>最小堆</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>插入</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td>查看最近到期</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>取出/触发</td>
+<td>O(log n)</td>
+</tr>
+<tr>
+<td>取消</td>
+<td>O(1) 打标 + 惰性清；或 O(n) 真删</td>
+</tr>
+</tbody>
+</table>
+<p>适合：<strong>每个 EventLoop 上成百上千级定时器</strong>，精度要求到毫秒，实现简单、取消语义清晰。muduo 的 <code>TimerQueue</code> 就是「timerfd + 按到期排序的容器」一路。</p>
+<h4 id="22">2.2 分层时间轮：海量粗粒度定时器</h4>
+<p>当定时器数量到<strong>十万、百万</strong>（例如每个连接一个空闲定时器，接入机单进程几十万连接），堆的 <code>log n</code> 与缓存不友好会成为热点。时间轮（timing wheel）把时间离散成一格一格的槽：</p>
+<div class="codehilite"><pre><span></span><code>简单单层时间轮（示意）：
+
+tick = 10ms，wheel_size = 1024
+→ 一轮覆盖约 10.24s
+
+当前 tick 指针每 10ms 前进一步；
+落在当前槽里的链表上的定时器全部到期（批处理）。
+
+超长延时：多层级联（hierarchical）
+  秒轮 → 分轮 → 时轮，类似水表进位。
+</code></pre></div>
+
+<p>简化 Python 示意（单层，仅讲结构）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># simple_timing_wheel.py —— 教学用，非生产</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span><span class="p">,</span> <span class="n">deque</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TimingWheel</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tick_ms</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tick_ms</span> <span class="o">=</span> <span class="n">tick_ms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slots</span> <span class="o">=</span> <span class="p">[</span><span class="n">deque</span><span class="p">()</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">now_mono_ms</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># 用单调毫秒推进，不用墙钟</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">,</span> <span class="n">timer_id</span><span class="p">,</span> <span class="n">cb</span><span class="p">):</span>
+        <span class="n">ticks</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">delay_ms</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_ms</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ticks</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"超出单层轮覆盖，需层级联或更大 size"</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">+</span> <span class="n">ticks</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">timer_id</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>  <span class="c1"># True=active</span>
+        <span class="k">return</span> <span class="n">idx</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timer_id</span><span class="p">):</span>
+        <span class="c1"># 生产实现常用 id→节点指针 O(1) 摘链；这里示意扫槽打标</span>
+        <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">tid</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">active</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">slot</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">tid</span> <span class="o">==</span> <span class="n">timer_id</span><span class="p">:</span>
+                    <span class="n">slot</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tid</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">advance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mono_ms_now</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""由外部按单调时钟推进；可一次跨多格（追赶）"""</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">now_mono_ms</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_ms</span> <span class="o">&lt;=</span> <span class="n">mono_ms_now</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">now_mono_ms</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_ms</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">due</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">slots</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">]</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">tid</span><span class="p">,</span> <span class="n">cb</span><span class="p">,</span> <span class="n">active</span> <span class="ow">in</span> <span class="n">due</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">active</span><span class="p">:</span>
+                    <span class="n">cb</span><span class="p">()</span>
+</code></pre></div>
+
+<h4 id="23">2.3 何时用堆、何时用轮</h4>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>最小堆 + timerfd</th>
+<th>分层时间轮</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定时器规模</td>
+<td>小～中（~10^3–10^4 / loop）</td>
+<td>大（~10^5–10^6）</td>
+</tr>
+<tr>
+<td>时间精度</td>
+<td>可为任意 deadline（受系统调度限制）</td>
+<td>受 tick 粒度限制（如 10ms）</td>
+</tr>
+<tr>
+<td>取消</td>
+<td>打标或直接擦除较直观</td>
+<td>需要把手柄/链表节点，跨轮迁移更绕</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>低</td>
+<td>中高（级联、降级、重新哈希）</td>
+</tr>
+<tr>
+<td>批处理</td>
+<td>每次弹堆顶</td>
+<td>整槽链表一次扫完，缓存友好</td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>通用 Reactor、muduo 风格</td>
+<td>Netty <code>HashedWheelTimer</code>、海量连接空闲检测</td>
+</tr>
+</tbody>
+</table>
+<p>公众号接入层经验法则：</p>
+<ul>
+<li><strong>先堆</strong>：单机连接未到极端规模时，堆 + timerfd 足够，正确性更好写；</li>
+<li><strong>再轮</strong>：空闲超时这种「精度 1s 就够、数量随连接爆炸」的场景，可把 idle 检测拆到时间轮；心跳/少量关键任务仍可留在堆。</li>
+</ul>
+<p>节点 tradeoffs 原话的工程翻译：<strong>时间轮批处理高效，但精度、跨轮管理与取消更复杂</strong>——不要为了「看起来高级」一上来就上轮。</p>
+<h4 id="24-timerfd">2.4 与 timerfd 的衔接：只把「最近到期」塞进内核</h4>
+<p>无论堆还是轮，Reactor 侧通常只维护<strong>一个</strong> timerfd：</p>
+<div class="codehilite"><pre><span></span><code>add/cancel 定时器
+  → 若「新的最近到期点」变了
+  → timerfd_settime(最近到期的相对/绝对 monotonic 时间)
+
+EventLoop::loop:
+  poll 返回
+  若 timerfd 可读:
+      read(timerfd) 清空
+      timer_queue.run_expired()   # 堆弹出所有到期；或时间轮 advance
+</code></pre></div>
+
+<p>伪代码（接上一课 Channel）：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">TimerQueue::addOrUpdateTimerfd</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">howlong</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">timeToNextExpired</span><span class="p">();</span><span class="w"> </span><span class="c1">// steady duration</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">itimerspec</span><span class="w"> </span><span class="n">its</span><span class="p">{};</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">howlong</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="n">ms</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 无定时器：解除 timerfd</span>
+<span class="w">        </span><span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">ns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">nanoseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">howlong</span><span class="p">);</span>
+<span class="w">        </span><span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_sec</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">ns</span><span class="p">.</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000000000</span><span class="p">;</span>
+<span class="w">        </span><span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ns</span><span class="p">.</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">1000000000</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_sec</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">            </span><span class="n">its</span><span class="p">.</span><span class="n">it_value</span><span class="p">.</span><span class="n">tv_nsec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// 已到期：尽快触发</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">::</span><span class="n">timerfd_settime</span><span class="p">(</span><span class="n">timerfd_</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">its</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span><span class="w"> </span><span class="c1">// 相对 MONOTONIC</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TimerQueue::handleRead</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">howmany</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="o">::</span><span class="n">read</span><span class="p">(</span><span class="n">timerfd_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">howmany</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">howmany</span><span class="p">);</span><span class="w"> </span><span class="c1">// 必须读，否则水平触发狂喷</span>
+<span class="w">    </span><span class="n">runExpiredTimers</span><span class="p">();</span><span class="w"> </span><span class="c1">// 执行到期回调；重复定时器重新插入并可能再次 settime</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="3_1">3. 取消、重复定时和竞态</h3>
+<h4 id="31">3.1 取消与触发的竞态长什么样</h4>
+<p>经典危险时间线：</p>
+<div class="codehilite"><pre><span></span><code>T0  定时器 A 即将到期，已在「本轮到期列表」快照中
+T1  业务线程/同 loop 上一段逻辑 cancel(A)，并销毁 A 关联的 Connection
+T2  到期分发执行到 A 的回调 → 回调里 conn-&gt;close() → UAF
+</code></pre></div>
+
+<p>节点 acceptance 第二条：<strong>取消后的回调不访问失效对象</strong>。</p>
+<p>对策组合（可叠加）：</p>
+<ol>
+<li><strong>惰性取消 + 执行前再检查 <code>canceled</code></strong>（同线程串行时很有效）；</li>
+<li><strong>回调只捕获 <code>weak_ptr</code> / 世代号</strong>，锁升级失败则直接 return；</li>
+<li><strong>取消时若已在「正在执行」列表，置标，执行入口统一判断</strong>；</li>
+<li><strong>绝不在定时器对象析构路径里假设回调不会再入</strong>。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 推荐：回调持有弱引用</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">Connection::startIdleTimer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">weak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weak_from_this</span><span class="p">();</span>
+<span class="w">    </span><span class="n">idle_timer_id_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loop_</span><span class="o">-&gt;</span><span class="n">runAfter</span><span class="p">(</span><span class="mi">60</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">weak</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weak</span><span class="p">.</span><span class="n">lock</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">self</span><span class="o">-&gt;</span><span class="n">forceClose</span><span class="p">();</span><span class="w">  </span><span class="c1">// 对象还在才碰</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="c1">// weak 升失败：说明连接已销毁，安全空过</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">Connection::onMessage</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loop_</span><span class="o">-&gt;</span><span class="n">cancel</span><span class="p">(</span><span class="n">idle_timer_id_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">startIdleTimer</span><span class="p">();</span><span class="w">  </span><span class="c1">// reset</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="32-interval">3.2 重复定时器（interval）</h4>
+<p>语义要先定清楚：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>含义</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>固定间隔（fixed rate）</strong></td>
+<td>理想触发点 = t0 + n*interval，赶不上就追赶或合并 overrun</td>
+<td>心跳采样、指标 scrape</td>
+</tr>
+<tr>
+<td><strong>固定延迟（fixed delay）</strong></td>
+<td>下次 = 本次回调结束时刻 + interval</td>
+<td>避免重入堆叠的业务轮询</td>
+</tr>
+</tbody>
+</table>
+<p><code>timerfd</code> 的 <code>it_interval</code> 是内核侧 fixed-rate；用户态堆实现里常见写法是「回调后再 <code>expiration = now + interval</code>」（偏 fixed delay）或「<code>expiration += interval</code> 并 while 追赶」（偏 fixed rate）。</p>
+<p>公众号心跳示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 每 30s 检查一次；若 90s 无读事件则踢连接</span>
+<span class="n">heartbeat_id_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">loop_</span><span class="o">-&gt;</span><span class="n">runEvery</span><span class="p">(</span><span class="mi">30</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">weak</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">weak</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Steady</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">self</span><span class="o">-&gt;</span><span class="n">last_read_</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">90</span><span class="n">s</span><span class="p">)</span>
+<span class="w">        </span><span class="n">self</span><span class="o">-&gt;</span><span class="n">forceClose</span><span class="p">();</span>
+<span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Steady</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">self</span><span class="o">-&gt;</span><span class="n">last_read_</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">30</span><span class="n">s</span><span class="p">)</span>
+<span class="w">        </span><span class="n">self</span><span class="o">-&gt;</span><span class="n">sendPing</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>取消重复定时器：<code>cancel(id)</code> 必须保证<strong>后续轮次不再跑</strong>；若回调正在执行中，本轮跑完后不再入队。</p>
+<h4 id="33-reactor">3.3 与 Reactor 集成的完整数据路径</h4>
+<div class="codehilite"><pre><span></span><code>                  EventLoop::loop()
+                        |
+              Poller::poll(timeout可交给timerfd)
+                        |
+        +---------------+----------------+
+        |                                |
+  socket Channels                  timerfd Channel
+  handleRead/Write                 TimerQueue::handleRead
+                                         |
+                                   read(timerfd)
+                                         |
+                                   弹出所有 expiration&lt;=now
+                                         |
+                                   逐个 cb()（仍在 loop 线程）
+                                         |
+                          可能 cancel / 重置 / 关连接 / queueInLoop
+</code></pre></div>
+
+<p>纪律回顾（衔接课 57）：</p>
+<ul>
+<li>定时器回调默认在 <strong>loop 线程</strong>——可直接改连接状态；</li>
+<li>若回调里有耗时工作，丢线程池，结果再 <code>queueInLoop</code>；</li>
+<li>关连接仍走延迟销毁，避免与本轮 Channel 列表打架。</li>
+</ul>
+<h4 id="34-linux-timerfd">3.4 用 Linux 命令辅助理解 timerfd</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># man 页（本课唯一指定资源）</span>
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span>timerfd_create
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span>timerfd_settime
+man<span class="w"> </span><span class="m">2</span><span class="w"> </span>timerfd_gettime
+
+<span class="c1"># 编译并跑本节 1.3 的最小示例</span>
+gcc<span class="w"> </span>-O2<span class="w"> </span>-o<span class="w"> </span>tfd_demo<span class="w"> </span>tfd_demo.c<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./tfd_demo
+<span class="c1"># 约 3 秒后打印 expired</span>
+
+<span class="c1"># 观察：进程打开了 timerfd</span>
+ls<span class="w"> </span>-l<span class="w"> </span>/proc/self/fd<span class="w">   </span><span class="c1"># 在你的服务进程里看 timerfd 是否存在</span>
+</code></pre></div>
+
+<p>阅读 man 页时重点核对：</p>
+<ul>
+<li><code>clockid</code> 取 <code>CLOCK_MONOTONIC</code> vs <code>CLOCK_REALTIME</code> 的语义；</li>
+<li><code>TFD_TIMER_ABSTIME</code> 与相对模式；</li>
+<li><code>read</code> 返回的 overrun 计数在 interval 模式下的含义；</li>
+<li>非阻塞 timerfd 在尚未到期时 <code>read</code> → <code>EAGAIN</code>。</li>
+</ul>
+<h4 id="35">3.5 推送重试退避：定时器状态机小品</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># push_retry.py —— 公众号模板消息下游失败后的退避示意</span>
+<span class="n">BACKOFF</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>  <span class="c1"># 秒，单调相对延时</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PushRetry</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop</span><span class="p">,</span> <span class="n">send_fn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loop</span> <span class="o">=</span> <span class="n">loop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_fn</span> <span class="o">=</span> <span class="n">send_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attempt</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_failure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">attempt</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">BACKOFF</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">give_up</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="n">BACKOFF</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">attempt</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attempt</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># 先取消未触发的旧重试，避免重复调度</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timer_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">run_after</span><span class="p">(</span><span class="n">delay</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fire</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fire</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send_fn</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_failure</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timer_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">timer_id</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timer_id</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attempt</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">give_up</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 记失败指标、告警、落死信——不要再 schedule</span>
+        <span class="k">pass</span>
+</code></pre></div>
+
+<p>这里「取消旧 timer 再加新 timer」是防止竞态的基本动作：若不去掉旧的，网络抖动下可能多个重试回调叠加，变成重试风暴。</p>
+<hr />
+<h2 id="_5">常见误区</h2>
+<p>节点 pitfalls：</p>
+<blockquote>
+<p>定时器触发时间受调度影响，不能当硬实时保证。</p>
+</blockquote>
+<p>展开几条上线前必排的坑：</p>
+<h3 id="1_1">误区 1：「定时器到点就会准时回调」</h3>
+<p>用户态定时器受：进程调度、loop 被业务回调堵住、<code>run_expired</code> 里慢回调拖死后续到期任务、容器 CPU throttle 等影响。</p>
+<p><strong>对策</strong>：把超时当「不会早于、但可能晚于」的软期限；硬实时请走内核实时路径/专用硬件，不在本课 Reactor 定时器范畴。心跳超时阈值要留余量（如间隔 30s、超时 90s）。</p>
+<h3 id="2-system_clock-gettimeofday-deadline">误区 2：「用 <code>system_clock</code> / <code>gettimeofday</code> 存 deadline」</h3>
+<p>墙钟一跳，相对超时全毁。这是 acceptance 明确反对的。</p>
+<p><strong>对策</strong>：内部截止时间只用 monotonic / steady；墙钟仅用于日志。</p>
+<h3 id="3cancel-free">误区 3：「cancel 之后回调绝不会再跑，所以可以直接 free 对象」</h3>
+<p>取消与「已进入到期快照 / 正在执行」之间仍有窗口；跨线程 cancel 更宽。</p>
+<p><strong>对策</strong>：回调用 <code>weak_ptr</code>；执行前查 <code>canceled</code>；对象释放仍遵守课 57 延迟销毁。</p>
+<h3 id="4-timerfd">误区 4：「每个定时器一个 timerfd / 一个线程」</h3>
+<p>十万连接 × 一个 timerfd = fd 耗尽；一线程一 sleep = 调度崩溃。</p>
+<p><strong>对策</strong>：每 EventLoop <strong>一个</strong> timerfd + 用户态队列（堆或轮）。</p>
+<h3 id="5">误区 5：「时间轮很酷，精度也可以当无限高」</h3>
+<p>tick=100ms 时，延时 1ms 与 99ms 可能落在同一槽；跨轮降级写错会丢定时器或重复触发。</p>
+<p><strong>对策</strong>：按业务选粒度；空闲 60s 用 1s tick 足够；先堆后轮。</p>
+<h3 id="6-sleep">误区 6：「重复定时器回调里再手动 sleep 对齐」</h3>
+<p>在 loop 线程 sleep = 整 loop 假死（课 57）。</p>
+<p><strong>对策</strong>：只用队列调度下一次 expiration，绝不在回调里阻塞等时间。</p>
+<hr />
+<h2 id="_6">设计权衡</h2>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>时间轮批处理高效，但精度、跨轮管理与取消更复杂。</p>
+</blockquote>
+<h3 id="a-vs">权衡 A：最小堆 vs 时间轮</h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优点</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>堆 + 单 timerfd</strong>（推荐起点）</td>
+<td>实现简单、任意精度 deadline、取消打标清晰</td>
+<td>大规模时 log n 与内存局部性变差</td>
+</tr>
+<tr>
+<td><strong>分层时间轮</strong></td>
+<td>海量定时器摊还 O(1)、槽内批处理快</td>
+<td>tick 精度、级联、取消手柄、追赶逻辑复杂</td>
+</tr>
+<tr>
+<td><strong>每个任务 <code>timer_create</code> POSIX 信号定时器</strong></td>
+<td>内核支持</td>
+<td>信号与 Reactor 难和谐；不适合高并发网络服务</td>
+</tr>
+</tbody>
+</table>
+<p>公众号接入层：通用超时/心跳先堆；若 idle 检测成为 CPU 热点，再对 idle 专用时间轮。</p>
+<h3 id="b-settime-vs-abstime">权衡 B：相对 settime vs 绝对 ABSTIME</h3>
+<ul>
+<li>相对：每次根据「现在→最近到期」重新 <code>timerfd_settime</code>，实现直观；</li>
+<li>绝对 monotonic：减少「计算 howlong 时的竞态窗口」，但要统一时间基。</li>
+</ul>
+<p>二者都应用 <code>CLOCK_MONOTONIC</code>；不要用 <code>CLOCK_REALTIME</code> + ABSTIME 做连接超时。</p>
+<h3 id="c">权衡 C：到期回调里做多少工作</h3>
+<p>与课 57「控制每轮工作量」同一哲学：一次弹出一万个到期回调、每个关连接又同步刷盘，会让后续 IO 饿死。</p>
+<p>工程手段：</p>
+<ul>
+<li>限制单次 <code>run_expired</code> 最大回调数，余下留待下一轮（并立刻再 arm timerfd）；</li>
+<li>重回调丢线程池；</li>
+<li>监控「定时器延迟 = 实际触发 − 期望截止」直方图。</li>
+</ul>
+<h3 id="d-vs">权衡 D：惰性删除 vs 堆内真删</h3>
+<ul>
+<li>惰性打标：实现简单，堆可能堆积已取消节点，需定期或在 pop 时回收；</li>
+<li>真删：需要句柄指向 heap index，交换删除，代码更易错。</li>
+</ul>
+<p>教学与多数生产实现先惰性；取消率极高时再优化。</p>
+<hr />
+<h2 id="_7">动手实践</h2>
+<p>节点 practice：</p>
+<blockquote>
+<p>给Reactor加入timerfd和可取消定时器，测试取消与触发同时发生。</p>
+</blockquote>
+<p>下面给一条可验收的最小路径（C++17 或 Python 语义对齐即可）。</p>
+<h3 id="1-timerfd-channel">步骤 1：创建 timerfd 并挂到 Channel</h3>
+<ul>
+<li><code>timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC)</code>；</li>
+<li>包装为 Channel，<code>enableReading</code>，<code>readCallback = TimerQueue::handleRead</code>；</li>
+<li>确认只在 loop 线程操作 timerfd / 堆。</li>
+</ul>
+<h3 id="2-timerqueue">步骤 2：实现 TimerQueue（最小堆版）</h3>
+<ul>
+<li><code>add(delay, cb)</code> / <code>addEvery(interval, cb)</code> → 返回 <code>timer_id</code>；</li>
+<li><code>cancel(timer_id)</code> → 置 <code>canceled</code>；</li>
+<li><code>runExpired</code>：弹出所有 <code>expiration &lt;= now</code>，跳过已取消，执行回调；重复者重新入堆；</li>
+<li>每次队列变更后 <code>timerfd_settime</code> 对准新的最近到期点。</li>
+</ul>
+<h3 id="3eventloop-api">步骤 3：EventLoop API 糖</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">TimerId</span><span class="w"> </span><span class="nf">EventLoop::runAfter</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">delay_sec</span><span class="p">,</span><span class="w"> </span><span class="n">Functor</span><span class="w"> </span><span class="n">cb</span><span class="p">);</span>
+<span class="n">TimerId</span><span class="w"> </span><span class="nf">EventLoop::runEvery</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">interval_sec</span><span class="p">,</span><span class="w"> </span><span class="n">Functor</span><span class="w"> </span><span class="n">cb</span><span class="p">);</span>
+<span class="kt">void</span><span class="w">    </span><span class="nf">EventLoop::cancel</span><span class="p">(</span><span class="n">TimerId</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+</code></pre></div>
+
+<p>内部全部转到本 loop 的 <code>TimerQueue</code>（跨线程调用则先 <code>runInLoop</code>）。</p>
+<h3 id="4-a">步骤 4：验收 A —— 墙钟不影响相对超时</h3>
+<div class="codehilite"><pre><span></span><code>1. loop.runAfter(5.0, flag_set)
+2. 启动后约 1s，把系统墙钟向前拨 1 小时（实验机/容器权限）
+3. 断言：flag 仍在大约第 5 秒（单调）被设置，而不是立刻或永远不
+4. 对照反例：故意用 CLOCK_REALTIME 的坏实现，应能复现「误触发」
+</code></pre></div>
+
+<p>验收对照：</p>
+<div class="codehilite"><pre><span></span><code>[ ] 修改系统墙钟不影响相对超时
+</code></pre></div>
+
+<h3 id="5-b">步骤 5：验收 B —— 取消与触发竞态</h3>
+<div class="codehilite"><pre><span></span><code>1. 注册 runAfter(0.05, cb)，cb 内访问 shared_ptr 对象字段
+2. 在即将到期的同一时间窗口：cancel(id) 并 reset shared_ptr
+3. 正确：cb 不跑，或 weak_ptr 升级失败后空过；ASAN 无 UAF
+4. 错误：cb 仍跑且解引用已释放对象 → ASAN 报错
+</code></pre></div>
+
+<p>建议构造「已进入到期列表之后才 cancel」的路径：例如在另一个定时器回调或 <code>queueInLoop</code> 里 cancel，与 <code>runExpired</code> 交错。</p>
+<p>验收对照：</p>
+<div class="codehilite"><pre><span></span><code>[ ] 取消后的回调不访问失效对象
+</code></pre></div>
+
+<h3 id="6">步骤 6：业务小场景三条</h3>
+<ol>
+<li><strong>空闲超时</strong>：mock 连接，3s 无 <code>onMessage</code> 则关闭标志置位；中途 <code>onMessage</code> 应 reset。</li>
+<li><strong>心跳</strong>：<code>runEvery(1s)</code> 计数，<code>cancel</code> 后计数停止增加。</li>
+<li><strong>推送退避</strong>：失败三次分别在 1s/2s/5s 左右重试，成功则取消后续。</li>
+</ol>
+<h3 id="7sourcestudy-man">步骤 7：sourceStudy（对照 man 页）</h3>
+<p>节点 sourceStudy：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>打开本课唯一资源：</p>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/timerfd_create.2.html">timerfd_create(2) — Linux man-pages</a></li>
+</ul>
+<p>追踪清单（写进笔记）：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>你在 man 页 / 实验里找到的答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CLOCK_MONOTONIC</code> 与 <code>CLOCK_REALTIME</code> 作 clockid 时，墙钟调整各有何影响？</td>
+<td></td>
+</tr>
+<tr>
+<td><code>timerfd_settime</code> flags=0 与 <code>TFD_TIMER_ABSTIME</code> 区别？</td>
+<td></td>
+</tr>
+<tr>
+<td>未到期时非阻塞 <code>read</code> 的 errno？</td>
+<td></td>
+</tr>
+<tr>
+<td>interval 模式下 <code>read</code> 返回值 &gt;1 代表什么？</td>
+<td></td>
+</tr>
+<tr>
+<td>为何必须在事件里 <code>read</code> 清空 timerfd？</td>
+<td></td>
+</tr>
+<tr>
+<td>你的内核 / glibc 版本与 man 页注明的特性是否一致？</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_8">预期现象</h3>
+<ul>
+<li>改墙钟后，相对超时仍按单调时间触发；</li>
+<li>高压 cancel/fire 交错下 ASAN 干净；</li>
+<li><code>runEvery</code> 在 cancel 后不再回调；</li>
+<li>loop 被故意 <code>sleep(1)</code> 堵住时，定时器「迟到」——印证非硬实时。</li>
+</ul>
+<h3 id="_9">验收清单</h3>
+<div class="codehilite"><pre><span></span><code>[ ] 能解释 monotonic/steady 与 realtime/system 的区别与用途
+[ ] EventLoop 集成了单一 timerfd Channel
+[ ] 支持 add / cancel / 一次性与重复定时器
+[ ] 修改系统墙钟不影响相对超时
+[ ] 取消与触发竞态下回调不访问失效对象
+[ ] 对照 man7 timerfd_create 完成 sourceStudy 表格
+[ ] 明白定时器非硬实时；时间轮与堆的选型权衡
+</code></pre></div>
+
+<hr />
+<h2 id="_10">自测题</h2>
+<p><strong>题 1</strong><br />
+关于相对超时应使用的时钟，下列哪一项最准确？</p>
+<p>A. 一律用 <code>CLOCK_REALTIME</code>，因为可读性好、便于对日志<br />
+B. 用 <code>CLOCK_MONOTONIC</code> / <code>steady_clock</code> 存截止与算间隔，避免墙钟跳变影响超时；墙钟仅用于展示<br />
+C. 用 CPU 时间戳计数器（TSC）裸读即可，不必走内核时钟<br />
+D. 用 <code>time()</code> 返回的秒数加延时，再转成 <code>itimerspec</code> 绝对时间</p>
+<p><strong>题 2</strong><br />
+接入层单 EventLoop 上有约 2000 个毫秒级定时器（心跳、重试），下列哪种结构最合适作为<strong>默认</strong>实现？</p>
+<p>A. 每个定时器 <code>pthread_create</code> + <code>sleep</code><br />
+B. 每个定时器一个 <code>timerfd</code> 全部丢进 epoll<br />
+C. 单 timerfd + 按 expiration 排序的最小堆（或等价有序容器），到期批量回调<br />
+D. 必须上分层时间轮，否则无法工作</p>
+<p><strong>题 3</strong><br />
+定时器回调关联的连接对象可能在 cancel 后被销毁。下列哪项最符合本课 acceptance？</p>
+<p>A. cancel 后立刻 <code>delete conn</code>，并假定回调不会再进入<br />
+B. 回调通过 <code>shared_ptr</code> 延长对象生命到回调结束即可，无需 cancel 标志<br />
+C. cancel 置位；回调用 <code>weak_ptr</code>（或等价世代检查），升级失败或不该跑则直接返回，保证不访问失效对象<br />
+D. 在任意工作线程直接跑定时器回调，加快取消生效</p>
+<hr />
+<h3 id="_11">自测题参考答案</h3>
+<p><strong>题 1：B</strong><br />
+节点 points 第一项即 steady/monotonic 时钟；acceptance 要求改墙钟不影响相对超时。A/D 把超时绑到墙钟；C 的 TSC 有频率与跨核问题，且不能替代本课 timerfd 语义教学。</p>
+<p><strong>题 2：C</strong><br />
+两千级规模堆完全可承受；单 timerfd 融入 Reactor。A 线程爆炸；B fd 与 epoll 项爆炸；D 时间轮是大规模/粗粒度优化，不是默认必选项（见 tradeoffs）。</p>
+<p><strong>题 3：C</strong><br />
+对应 acceptance「取消后的回调不访问失效对象」与 points「取消、重复定时和竞态」。A 忽视竞态窗口；B 只靠 shared_ptr 可能导致对象被定时器意外延长生命，且仍需处理「逻辑上已取消」；D 破坏 loop 线程亲和性。</p>
+<hr />
+<h2 id="_12">推荐资源</h2>
+<ul>
+<li><a href="https://man7.org/linux/man-pages/man2/timerfd_create.2.html">定时器、时间轮与单调时钟：Linux man-pages</a>（man7.org，英文，文档，进阶，免费）</li>
+<li>重点阅读 steady/monotonic 时钟与最小堆与时间轮相关实践所依赖的 timerfd 语义，用于核对本节点实验的边界。</li>
+<li>精读 <code>timerfd_create</code> 的 <code>clockid</code>、<code>timerfd_settime</code> 相对/绝对模式、<code>read</code> 的 overrun 计数与错误码；把结论记进 sourceStudy 笔记，并标注你实验环境的内核版本。</li>
+</ul>
+<hr />
+<h2 id="_13">本课小结</h2>
+<ol>
+<li><strong>定时器按截止时间触发任务</strong>：接入层用它做空闲超时、心跳、重试退避——是连接生命周期与可靠性的基础设施。</li>
+<li><strong>相对超时必须用单调时钟</strong>：<code>CLOCK_MONOTONIC</code> / <code>steady_clock</code>；<code>timerfd_create(CLOCK_MONOTONIC)</code>；改墙钟不得影响超时（acceptance）。</li>
+<li><strong>最小堆适合中小规模高精度调度；时间轮适合海量粗粒度批处理</strong>：先堆后轮；轮的精度、跨轮与取消更复杂（tradeoffs）。</li>
+<li><strong>每 EventLoop 一个 timerfd + 用户态队列</strong>：到期 <code>read</code> 清空再跑回调；融入课 57 的 Channel / 线程亲和模型。</li>
+<li><strong>取消、重复与竞态</strong>：cancel 打标 + 回调 <code>weak_ptr</code>；取消后的回调不访问失效对象（acceptance）。</li>
+<li><strong>非硬实时</strong>：触发时间受调度与 loop 负载影响（pitfalls）；超时阈值留余量。</li>
+<li><strong>对照 man7 timerfd 做 sourceStudy</strong>：用官方语义核对你的实现与边界条件。</li>
+</ol>
+<p>下一课会在 IO 模型与事件主题上继续向前；请先把 timerfd 挂进你的 EventLoop，完成「墙钟无关」与「取消竞态安全」两条验收，再进入后续内容。</p>
+<hr />
+<h2 id="_14">配套练习建议</h2>
+<p>若课程仓库后续补充 <code>practice58/</code>，建议最小文件集：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>timer_queue.h/cc</code> 或 <code>timer_queue.py</code></td>
+<td>堆 + cancel + 一次性/重复</td>
+</tr>
+<tr>
+<td><code>event_loop.*</code>（可基于 practice57）</td>
+<td>挂载 timerfd Channel；<code>runAfter</code>/<code>runEvery</code>/<code>cancel</code></td>
+</tr>
+<tr>
+<td><code>test_timer_monotonic.*</code></td>
+<td>改墙钟（或 mock 时钟）后相对超时仍正确</td>
+</tr>
+<tr>
+<td><code>test_timer_cancel_race.*</code></td>
+<td>取消与触发交错；ASAN / weak_ptr 断言</td>
+</tr>
+<tr>
+<td><code>demo_idle_heartbeat.*</code></td>
+<td>空闲超时 + 心跳 + 推送退避三条业务示意</td>
+</tr>
+<tr>
+<td><code>run.sh</code></td>
+<td>一键跑验收</td>
+</tr>
+</tbody>
+</table>
+<p>运行期望：</p>
+<div class="codehilite"><pre><span></span><code>./run.sh
+<span class="c1"># 末行：ALL_CHECKS_PASSED</span>
+</code></pre></div>
+
+<p>实测要点（Asia/Shanghai，本机验证时对照）：</p>
+<ul>
+<li><code>timerfd_create(CLOCK_MONOTONIC)</code> 后，拨动墙钟不影响 <code>runAfter(5s)</code> 的触发间隔；</li>
+<li>cancel 与 fire 压力交错下无 UAF；</li>
+<li><code>runEvery</code> 在 cancel 后计数停止；</li>
+<li>故意在回调里 <code>sleep</code> 可观察到后续定时器迟到（非硬实时体感）；</li>
+<li>man 页中 overrun、<code>EAGAIN</code>、相对/绝对模式能对应到你代码里的分支。</li>
+</ul>
+<p>NOTE：本课重点是时钟语义、与 Reactor 的集成、取消竞态与堆/轮选型；不要求一次性实现生产级分层时间轮。若实现轮，请单独加测试覆盖跨轮降级与取消手柄，避免「能跑 Demo、一上规模就丢定时器」。</p><div class="pn"><span><a href="57.html">← Reactor与事件循环</a></span><span>下一课 待更新</span></div></main></div></body></html>
