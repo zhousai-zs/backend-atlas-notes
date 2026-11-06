@@ -1,0 +1,659 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>61. 有栈协程与用户态调度 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（61/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（13/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="cur" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 61 课 · 领域 D · 阶段 3</p><p class="dl"><a href="../files/61-d-coroutine.md" download>⬇ 本课 Markdown</a><a href="../files/practice61.tar.gz" download>⬇ 练习包 practice61.tar.gz</a></p><h1 id="61208">第 61/208 课：有栈协程与用户态调度</h1>
+<ul>
+<li><strong>阶段</strong>：第 3 阶段 · 传输与Socket</li>
+<li><strong>前置课程</strong>：d-reactor、b-lifetime</li>
+<li><strong>关键词</strong>：Stackful Coroutines、有栈协程、独立栈、上下文切换、协作调度、yield、用户态调度、IO hook、libco、协程栈、TLS 共享、coctx_swap、poll</li>
+<li><strong>难度</strong>：进阶</li>
+<li><strong>所属领域</strong>：D · IO模型与事件（子类：调度与资源复用）</li>
+<li><strong>标签</strong>：Stackful Coroutines、D、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课连接池解决的是<strong>下游连接复用</strong>：握手贵、下游并发要有舱壁。再往前一课，线程池解决的是<strong>执行资源复用</strong>：别让 CPU/阻塞任务堵死 EventLoop。</p>
+<p>本课补上第三块拼图——<strong>调用形态复用</strong>：能不能用「看起来像同步」的写法，去组织非阻塞 IO？</p>
+<p>节点 summary 给出命题：</p>
+<blockquote>
+<p>有栈协程保存执行栈与寄存器上下文，由用户态调度器决定暂停和恢复；阻塞调用是否被 hook 取决于实现。</p>
+</blockquote>
+<p>拆开是三件事：</p>
+<ol>
+<li><strong>独立栈和上下文切换</strong>：每个协程有一份自己的栈；切换时保存/恢复寄存器与栈指针（<code>coctx_swap</code> / <code>setjmp</code> 类思路）。</li>
+<li><strong>协作调度与 yield</strong>：协程主动让出；调度器维护 run queue；对比抢占式线程。</li>
+<li><strong>IO hook 和事件循环</strong>：把 <code>read</code>/<code>write</code>/<code>connect</code>/<code>poll</code> 等换成「未就绪则 yield + 注册事件」；<strong>没被 hook 的阻塞调用会卡住同线程上所有协程</strong>。</li>
+</ol>
+<p>公众号后台的典型痛点是：接入层要调下游 RPC、读 Redis、写会话——若用回调/状态机，业务被拆得支离破碎；若直接阻塞在工作线程，线程数又要跟着「在飞 IO」涨。有栈协程（libco 类系统）给出第三种路径：</p>
+<div class="codehilite"><pre><span></span><code>粉丝消息进接入层
+  → 起一个协程跑「同步风格」业务：
+       user = redis_get(openid);      // 看起来像阻塞
+       profile = rpc_user(user);      // 看起来像阻塞
+       tpl = assemble_template(...);
+       send_downstream(tpl);
+  → 实际：hook 把上述调用变成「未就绪则 yield」
+  → 同一 OS 线程上可挂成千上万个等待中的协程
+  → 线程不被堵死，写法仍接近同步
+</code></pre></div>
+
+<p>本课承接 d-reactor（事件循环）和 b-lifetime（对象生命周期 / 栈上对象存活期），重点建立边界意识：</p>
+<ul>
+<li>切换便宜 ≠ 没有栈内存成本、没有调度成本；</li>
+<li>同步写法 ≠ 可以随便调任何阻塞 API；</li>
+<li>同线程协程共享 TLS（<code>thread_local</code>），这既是便利也是坑。</li>
+</ul>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释独立栈和上下文切换</strong>
+   - 说清「每协程一份栈」与「保存/恢复寄存器 + 栈指针」的关系。
+   - 能对照 <code>coctx_swap</code> / <code>setjmp</code>/<code>longjmp</code> 类思路，画出切换时发生了什么。
+   - 能说明为什么有栈协程可以在普通深层调用链中间暂停（对比无栈协程必须在协程函数内 <code>co_await</code>）。</p>
+</li>
+<li>
+<p><strong>能独立完成：阅读 libco 切换与 poll 路径，实现仅用于教学的协作调度示例</strong>
+   - 读通：<code>coctx_swap.S</code> → <code>co_resume</code> / <code>co_yield</code> → hook 后的 <code>poll</code> 等待路径。
+   - 实现：一个教学用协作调度器（run queue + yield + 简易「假 IO 就绪」唤醒）。
+   - 验收：能说明 TLS 仍由同线程协程共享；对「未 hook 阻塞调用」有明确验证。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - 能说明线程局部变量仍由同线程协程共享。
+   - 未 hook 阻塞调用影响有明确验证。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：</p>
+<blockquote>
+<p>理解 libco 类系统为何能够以同步写法组织非阻塞 IO。</p>
+</blockquote>
+<p>这句话直接决定你能不能正确使用（以及 debug）微信后台一类大量依赖协程框架的代码。</p>
+<h3 id="1">1. 同步写法 ≠ 阻塞线程</h3>
+<p>新人看到：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">));</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">resp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redis_get</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+</code></pre></div>
+
+<p>会本能地以为「这会卡住线程」。在 libco 风格系统里，若这些符号被 hook，语义变成：</p>
+<ol>
+<li>把 fd 设成非阻塞；</li>
+<li>试一次真实系统调用；</li>
+<li>若 <code>EAGAIN</code> / 未连接完成 → 注册到 epoll/poll，当前协程 <code>yield</code>；</li>
+<li>事件就绪后由调度器 <code>resume</code>，继续从调用点往下走。</li>
+</ol>
+<p>对业务作者，调用栈看起来连续；对调度器，这段「等待」期间 CPU 去跑别的协程。这就是「同步写法组织非阻塞 IO」的本质。</p>
+<h3 id="2-hook">2. 不知道 hook 边界就会埋雷</h3>
+<p>未 hook 的 <code>gethostbyname</code>、某些 SSL 同步握手、本地大文件 <code>read</code>、持锁后的慢路径……只要其中一个真阻塞，<strong>同线程上所有协程一起停</strong>。表象是「偶发全站卡死几百毫秒」，日志里却看不到锁竞争。</p>
+<h3 id="3">3. 和线程池、连接池的分工</h3>
+<table>
+<thead>
+<tr>
+<th>手段</th>
+<th>解决什么</th>
+<th>不解决什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线程池</td>
+<td>执行资源复用；保护 EventLoop</td>
+<td>写法仍可能是回调/投递；线程数有上限</td>
+</tr>
+<tr>
+<td>连接池</td>
+<td>下游连接复用；限制下游并发</td>
+<td>不改变「等 IO 时线程是否空转」</td>
+</tr>
+<tr>
+<td>有栈协程</td>
+<td>同步写法 + 用户态调度大量等待中任务</td>
+<td>不消灭 hook 边界、栈内存、重入问题</td>
+</tr>
+</tbody>
+</table>
+<p>公众号接入层常见组合：<strong>少量线程 × 每线程大量协程 × 下游连接池</strong>。三者缺一，容量模型都会偏。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="0">0. 先建立直觉：给每个「逻辑任务」一本自己的草稿本</h3>
+<p>线程切换贵：内核要保存大量状态、可能换地址空间、要过调度器。协程把「逻辑任务」缩小成用户态对象：</p>
+<ul>
+<li>每人一本草稿本（<strong>独立栈</strong>）；</li>
+<li>写到一半可以夹书签放下（<strong>保存寄存器 + SP</strong>）；</li>
+<li>调度员说「你继续」就把草稿本递回来（<strong>restore + 跳转</strong>）。</li>
+</ul>
+<p>关键差别：</p>
+<ul>
+<li><strong>协作</strong>：只有你主动 <code>yield</code>（或进入被 hook 的阻塞点）才会换人；没人能抢占你的时间片。</li>
+<li><strong>同线程</strong>：多个协程共享同一个 OS 线程，因此共享同一个 <code>thread_local</code> 命名空间。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code>OS 线程 T
+├── 协程 A 栈 [.... 卡在 redis_get ...]
+├── 协程 B 栈 [.... 正在拼模板消息 ...]
+├── 协程 C 栈 [.... 等 epoll 可读 ...]
+└── 调度器 run queue / 等待队列 / 事件循环
+</code></pre></div>
+
+<hr />
+<h3 id="1_1">1. 独立栈和上下文切换</h3>
+<h4 id="11">1.1 每协程一份栈</h4>
+<p>创建有栈协程时，运行时通常：</p>
+<ol>
+<li><code>mmap</code> / <code>malloc</code> 一块连续内存当栈（常见 128KB～1MB 量级，可配置）；</li>
+<li>把栈顶设好，构造一个「假返回地址 / 入口函数」；</li>
+<li>第一次 <code>resume</code> 时跳到协程入口。</li>
+</ol>
+<p>栈上放的就是普通 C/C++ 局部变量、返回地址、被调用者保存寄存器——所以你可以在 <code>foo() → bar() → baz()</code> 任意深度调用 <code>co_yield</code> / 被 hook 的 <code>read</code>，回来后局部变量还在。这是有栈相对无栈（C++20 协程帧）的最大工程优势：<strong>旧代码、同步库、深层调用链更容易「协程化」</strong>。</p>
+<p>代价也很直接：</p>
+<ul>
+<li>N 个协程 ≈ N × 栈大小的虚拟/物理内存压力（写时复制与未触碰页可缓解，但不能当零）；</li>
+<li>栈溢出不会像线程那样有很大默认栈，<strong>默认栈过小会默默打坏堆</strong>；</li>
+<li>调试时 <code>gdb</code> 看到的「当前栈」是正在跑的那个协程的栈。</li>
+</ul>
+<h4 id="12">1.2 上下文里有什么</h4>
+<p>一次切换至少要处理：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通用寄存器</td>
+<td>计算中间值、参数、返回值</td>
+</tr>
+<tr>
+<td>栈指针 SP</td>
+<td>指向该协程自己的栈</td>
+</tr>
+<tr>
+<td>指令指针 / 返回地址</td>
+<td>从哪里继续执行</td>
+</tr>
+<tr>
+<td>（可选）浮点/向量寄存器</td>
+<td>视 ABI 与实现</td>
+</tr>
+</tbody>
+</table>
+<p>libco 在汇编里做 <code>coctx_swap</code>：把「当前上下文」存到一块 <code>coctx_t</code>，再把「目标上下文」装进 CPU。逻辑上等价于：</p>
+<div class="codehilite"><pre><span></span><code>swap(from, to):
+  save CPU regs → from
+  save SP        → from
+  load  SP        ← to
+  load  CPU regs  ← to
+  jump / ret 到 to 上次停下的地方
+</code></pre></div>
+
+<p>教学上也可以用 <code>setjmp</code>/<code>longjmp</code> 近似（<strong>注意</strong>：不能正确处理 C++ 析构、部分寄存器与信号掩码；仅帮助建立直觉）：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;csetjmp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="kt">jmp_buf</span><span class="w"> </span><span class="n">main_buf</span><span class="p">,</span><span class="w"> </span><span class="n">co_buf</span><span class="p">;</span>
+<span class="k">alignas</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">co_stack</span><span class="p">[</span><span class="mi">64</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">];</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">coroutine_entry</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"co: first run</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">setjmp</span><span class="p">(</span><span class="n">co_buf</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">longjmp</span><span class="p">(</span><span class="n">main_buf</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w">  </span><span class="c1">// yield</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"co: resumed</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">longjmp</span><span class="p">(</span><span class="n">main_buf</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w">      </span><span class="c1">// 结束</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 省略：把 co_stack 顶端设成「调用 coroutine_entry」的陷阱帧</span>
+<span class="w">    </span><span class="c1">// 真实系统用汇编完成；这里只强调「保存点 + 换栈」的形状</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">co_stack</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>生产代码请直接读 libco 的 <code>coctx_swap.S</code>，不要用 <code>longjmp</code> 代替。</p>
+<h4 id="13">1.3 和线程切换比成本</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>OS 线程切换</th>
+<th>有栈协程切换</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谁做</td>
+<td>内核调度器</td>
+<td>用户态 <code>coctx_swap</code></td>
+</tr>
+<tr>
+<td>涉及</td>
+<td>内核态、可能 TLB/缓存更多扰动</td>
+<td>通常只动用户寄存器 + SP</td>
+</tr>
+<tr>
+<td>触发</td>
+<td>时间片、阻塞、唤醒</td>
+<td>主动 yield / hook 点</td>
+</tr>
+<tr>
+<td>TLS</td>
+<td>每线程一份</td>
+<td><strong>同线程协程共享</strong></td>
+</tr>
+<tr>
+<td>抢占</td>
+<td>可抢占</td>
+<td>默认协作，不抢占</td>
+</tr>
+</tbody>
+</table>
+<p>切换「便宜」指的是 CPU 路径短，<strong>不是</strong>「可以无限创建」。栈内存与缓存局部性仍是账单。</p>
+<h4 id="14">1.4 短伪代码：教学用上下文</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Ctx</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">regs</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span><span class="w">   </span><span class="c1">// 示意：真实 x86_64 要按 ABI 保存更多</span>
+<span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">sp</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">ip</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">extern</span><span class="w"> </span><span class="s">"C"</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">coctx_swap</span><span class="p">(</span><span class="n">Ctx</span><span class="o">*</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="n">Ctx</span><span class="o">*</span><span class="w"> </span><span class="n">to</span><span class="p">);</span><span class="w">  </span><span class="c1">// 汇编实现</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Coroutine</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Ctx</span><span class="w"> </span><span class="n">ctx</span><span class="p">{};</span>
+<span class="w">    </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">stack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">stack_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">READY</span><span class="p">,</span><span class="w"> </span><span class="n">RUNNING</span><span class="p">,</span><span class="w"> </span><span class="n">WAITING</span><span class="p">,</span><span class="w"> </span><span class="n">DEAD</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">READY</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">yield_to</span><span class="p">(</span><span class="n">Coroutine</span><span class="o">*</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">Coroutine</span><span class="o">*</span><span class="w"> </span><span class="n">other</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">self</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">READY</span><span class="p">;</span><span class="w">          </span><span class="c1">// 或 WAITING，取决于原因</span>
+<span class="w">    </span><span class="n">other</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RUNNING</span><span class="p">;</span>
+<span class="w">    </span><span class="n">coctx_swap</span><span class="p">(</span><span class="o">&amp;</span><span class="n">self</span><span class="o">-&gt;</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">other</span><span class="o">-&gt;</span><span class="n">ctx</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<hr />
+<h3 id="2-yield">2. 协作调度与 yield</h3>
+<h4 id="21">2.1 主动让出</h4>
+<p>协作调度的契约：</p>
+<blockquote>
+<p>正在运行的协程会一直跑，直到它调用 <code>yield</code>、结束、或进入「可挂起的等待」（通常由 hook 触发 yield）。</p>
+</blockquote>
+<p>没有时钟中断帮你抢回来。于是：</p>
+<ul>
+<li><strong>好处</strong>：临界区简单——同线程协程之间许多路径可不加锁（仍要注意可重入与共享堆结构）；</li>
+<li><strong>坏处</strong>：一个协程里写了 <code>while (true) { heavy_cpu(); }</code> 且从不 yield，同线程其它协程全部饿死。</li>
+</ul>
+<p>公众号业务里，CPU 很重的签名校验、大 JSON 解析，往往仍应丢到<strong>工作线程池</strong>，而不是占着协程线程空转；协程擅长的是「大量等待 IO」。</p>
+<h4 id="22-run-queue">2.2 调度器与 run queue</h4>
+<p>最小调度器长这样：</p>
+<div class="codehilite"><pre><span></span><code>while (true) {
+  while (!run_queue.empty()) {
+    co = run_queue.pop_front();
+    resume(co);          // coctx_swap 到 co
+    // resume 返回意味着：co 又 yield 了，或结束了
+    if (co.dead) destroy(co);
+  }
+  wait_for_io_or_timer(); // epoll_wait / poll
+  // 把就绪 fd 对应的协程推回 run_queue
+}
+</code></pre></div>
+
+<p>libco 的路径可以简化记忆为：</p>
+<ol>
+<li><code>co_create</code>：分配栈与控制块；</li>
+<li><code>co_resume</code>：若是主协程/调度协程切到目标；</li>
+<li><code>co_yield</code>：切回调度侧；</li>
+<li>hook 的 <code>poll</code>：把当前协程挂到「等事件」结构，然后 <code>yield</code>；事件循环发现就绪后再 <code>resume</code>。</li>
+</ol>
+<h4 id="23">2.3 与抢占式线程对比（公众号场景）</h4>
+<div class="codehilite"><pre><span></span><code>场景：1 万个「等 Redis」的在飞请求
+
+线程模型：
+  要么 1 万线程（栈 + 调度爆炸）
+  要么 少量线程 + 异步回调（写法痛苦）
+
+有栈协程：
+  例如 8 个 OS 线程 × 每线程上千协程
+  业务仍写成 redis_get()；hook 负责挂起
+</code></pre></div>
+
+<p>注意：<strong>协程不增加 CPU 并行度</strong>。同一线程上的协程是交错执行，不是并行。CPU 密集仍靠多线程/多进程。</p>
+<h4 id="24-io">2.4 教学示例：纯协作调度（无真实 IO）</h4>
+<p>下面是一个可编译的最小示例（<code>ucontext</code> 在部分环境已过时，这里用「逻辑伪调度」+ 明确注释；练习包里会给可运行版本）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 逻辑示意：run queue + 主动 yield</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;deque&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;functional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Sched</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Task</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="n">Sched</span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">done</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Sched</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">rq</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">spawn</span><span class="p">(</span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">rq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">t</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">yield</span><span class="p">(</span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">rq</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">self</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// 真实有栈协程此处 coctx_swap 回调度器；</span>
+<span class="w">        </span><span class="c1">// 教学版用「步进状态机」模拟多次 resume。</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">rq</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Task</span><span class="o">*</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rq</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="w">            </span><span class="n">rq</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">t</span><span class="o">-&gt;</span><span class="n">done</span><span class="p">)</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span>
+<span class="w">            </span><span class="n">t</span><span class="o">-&gt;</span><span class="n">body</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Sched</span><span class="w"> </span><span class="n">S</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">a</span><span class="p">{</span><span class="s">"A"</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Sched</span><span class="o">&amp;</span><span class="w"> </span><span class="n">S</span><span class="p">,</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">step</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"A: before yield</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">            </span><span class="n">self</span><span class="p">.</span><span class="n">step</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="n">S</span><span class="p">.</span><span class="n">yield</span><span class="p">(</span><span class="o">&amp;</span><span class="n">self</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"A: after resume</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">done</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}};</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">b</span><span class="p">{</span><span class="s">"B"</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Sched</span><span class="o">&amp;</span><span class="w"> </span><span class="n">S</span><span class="p">,</span><span class="w"> </span><span class="n">Task</span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">S</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"B: run once</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">self</span><span class="p">.</span><span class="n">done</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}};</span>
+<span class="w">    </span><span class="n">S</span><span class="p">.</span><span class="n">spawn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">);</span>
+<span class="w">    </span><span class="n">S</span><span class="p">.</span><span class="n">spawn</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">);</span>
+<span class="w">    </span><span class="n">S</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出顺序会是 <code>A before</code> → <code>B</code> → <code>A after</code>：这就是「yield 把执行权交还调度器，再轮到别人」。有栈版本只是把 <code>step</code> 状态机换成真实栈与 <code>coctx_swap</code>。</p>
+<hr />
+<h3 id="3-io-hook">3. IO hook 和事件循环</h3>
+<h4 id="31-hook">3.1 hook 在干什么</h4>
+<p>「同步写法」能成立，靠的是把阻塞点改成挂起点。libco 的 <code>co_hook_sys_call.cpp</code> 一类实现对常见 libc 符号做拦截（具体列表以仓库版本为准），典型包括：</p>
+<ul>
+<li><code>read</code> / <code>write</code> / <code>recv</code> / <code>send</code></li>
+<li><code>connect</code> / <code>accept</code></li>
+<li><code>poll</code> / <code>epoll_wait</code>（以及内部等待原语）</li>
+<li>有时还有 <code>sleep</code> / <code>usleep</code> / <code>gethostbyname</code> 等</li>
+</ul>
+<p>伪代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">ssize_t</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">co_is_enable_sys_hook</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">raw_read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span><span class="w">   </span><span class="c1">// 真阻塞</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">set_nonblock</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">raw_read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errno</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">EAGAIN</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">errno</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">EWOULDBLOCK</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// 未就绪：登记到事件循环，当前协程 yield</span>
+<span class="w">        </span><span class="n">wait_on_fd</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">READABLE</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// resume 后继续 for 循环再读</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>业务侧仍然写 <code>read(...)</code>；链接期/加载期走到 hook 版本。</p>
+<h4 id="32-reactor">3.2 和 Reactor 的关系</h4>
+<p>有栈协程并没有扔掉 Reactor，而是把 Reactor <strong>藏在 hook 后面</strong>：</p>
+<div class="codehilite"><pre><span></span><code>业务协程:  redis_get()
+    → hook read/write
+    → 未就绪: 注册 epoll + co_yield
+调度器线程:
+    → epoll_wait
+    → 就绪: co_resume(等待该 fd 的协程)
+</code></pre></div>
+
+<p>所以前置课 d-reactor 仍然重要：超时、边缘触发、惊群、wakeup（eventfd）等坑，在协程框架里一样存在，只是调用栈更「同步」。</p>
+<h4 id="33-hook">3.3 未 hook 的阻塞调用：同线程全灭</h4>
+<p>这是本课验收点之一。验证思路：</p>
+<div class="codehilite"><pre><span></span><code>线程 T 上跑协程 A、B、C
+
+A 调用未被 hook 的 sleep(5) 或阻塞 read(慢设备)
+→ A 不 yield，OS 线程 T 进入内核睡眠
+→ 调度器跑不了，B/C 即使「逻辑上就绪」也无法 resume
+→ 表现为：整条 worker 卡 5 秒
+</code></pre></div>
+
+<p>对比：</p>
+<div class="codehilite"><pre><span></span><code>A 调用被 hook 的 sleep / poll
+→ A yield，T 继续跑 B/C，并在事件循环里等超时
+→ 只有 A 挂起，其它协程正常
+</code></pre></div>
+
+<p>可用教学手段验证：</p>
+<ol>
+<li>在同线程起两个协程；</li>
+<li>一个里 <code>::sleep(2)</code>（绕过 hook）或直接 <code>syscall(SYS_read, ...)</code>；</li>
+<li>另一个里只做打印/计时；</li>
+<li>观察第二个协程的打印是否也被推迟约 2 秒。</li>
+</ol>
+<p>若使用 libco，注意确认 hook 是否启用（<code>co_enable_hook_sys</code> 一类开关，以源码为准）。</p>
+<h4 id="34-tls">3.4 TLS 共享：同线程协程的「隐形全局变量」</h4>
+<p><code>thread_local</code> 绑定的是 <strong>OS 线程</strong>，不是协程：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">thread_local</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">tls_req_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// 协程 1</span>
+<span class="n">tls_req_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1001</span><span class="p">;</span>
+<span class="k">co_yield</span><span class="p">();</span><span class="w">                 </span><span class="c1">// 切走</span>
+<span class="c1">// 协程 2</span>
+<span class="n">tls_req_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2002</span><span class="p">;</span><span class="w">          </span><span class="c1">// 改的是同一块 TLS</span>
+<span class="k">co_yield</span><span class="p">();</span>
+<span class="c1">// 协程 1 resume</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">tls_req_id</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2002</span><span class="p">);</span><span class="w"> </span><span class="c1">// 往往成立——已被别人改掉！</span>
+</code></pre></div>
+
+<p>因此：</p>
+<ul>
+<li>不要把「当前请求 ID / 当前连接指针」只放在 <code>thread_local</code> 里就指望协程安全；</li>
+<li>应放在协程局部栈、协程控制块、或显式 <code>CoLocal</code> 一类机制（若框架提供）；</li>
+<li>日志库、RPC stub 若用 TLS 缓存「当前上下文」，在协程环境必须确认是否做了协程级隔离。</li>
+</ul>
+<p>这是 acceptance 的另一句：<strong>能说明线程局部变量仍由同线程协程共享</strong>。</p>
+<h4 id="35">3.5 公众号后台例子串起来</h4>
+<div class="codehilite"><pre><span></span><code>协程 handle_mp_msg(Msg m):
+  co_enable_hook_sys();
+  auto session = redis_get("sess:" + m.openid);   // hook → 可能 yield
+  auto user    = rpc_call(user_svc, m.openid);    // hook → 可能 yield
+  auto media   = conn_pool.borrow(...);           // 上一课：连接池
+  auto body    = build_template(user, media);
+  rpc_call(send_svc, body);                       // 再 yield
+  // 全程同步观感；同线程其它粉丝消息的协程交错推进
+</code></pre></div>
+
+<p>若 <code>rpc_call</code> 内部某段走到未 hook 的阻塞 DNS，整个 worker 抖动——这就是 hook 边界要进 code review 清单的原因。</p>
+<hr />
+<h2 id="_5">常见误区</h2>
+<h3 id="1-pitfalls">1. 「切换便宜 ⇒ 可以无限造协程」（节点 pitfalls）</h3>
+<p>节点 pitfalls：</p>
+<blockquote>
+<p>协程切换低成本不意味着没有栈内存或调度成本。</p>
+</blockquote>
+<p>切换路径短，但：</p>
+<ul>
+<li>每协程有独立栈，触碰后占物理页；</li>
+<li>run queue、等待队列、fd→协程映射有 CPU 与缓存成本；</li>
+<li>过多协程会让尾延迟变差（调度扫描、缓存打散）。</li>
+</ul>
+<p>实践上要有<strong>每线程协程数上限</strong>和栈大小策略，并监控：活跃协程数、等待协程数、栈高水位。</p>
+<h3 id="2-tls">2. 把协程当线程用：乱加锁 / 乱用 TLS</h3>
+<p>同线程协程之间「看起来并行、实际交错」。你在协程 A 持有一把非可重入互斥锁时 <code>yield</code>，协程 B 再去抢同一把锁 → 死锁（因为解锁的人被挂起了，而同线程又跑不回去）。</p>
+<p>TLS 误用见上一节。</p>
+<h3 id="3-hook">3. 以为所有阻塞都被 hook 了</h3>
+<p>第三方 SDK、Java 风格「同步客户端」的 C 包装、自写 <code>while(read)</code> 对阻塞 fd、<code>fstream</code> 大文件、某些 SSL 配置……都可能漏网。<strong>默认假设：没审计过的调用都可能真阻塞。</strong></p>
+<h3 id="4">4. 栈太小 / 栈太大</h3>
+<ul>
+<li>太小：深层 JSON、递归、大缓冲局部数组 → 静默破坏；</li>
+<li>太大：协程一多 RSS 起飞。</li>
+</ul>
+<p>需要按业务画像设默认栈，并对可疑路径做栈高水位采样（许多框架提供）。</p>
+<h3 id="5-yield-api">5. 在持有跨协程共享结构锁时调用可能 yield 的 API</h3>
+<p>等价于在中断点持锁。规则：<strong>持锁区间禁止 hook 点 / 禁止 yield</strong>；或改用协程感知的锁，并想清楚唤醒关系。</p>
+<h3 id="6-b-lifetime">6. 忽略生命周期（呼应 b-lifetime）</h3>
+<p>协程栈上的对象，在 yield 期间仍然「活着」。若把栈上指针注册到 epoll 回调、或丢到别的线程，resume 前对象已析构 → UAF。有栈协程不免除生命周期纪律，只是把帧从「编译器协程帧」换成了「用户提供的栈」。</p>
+<hr />
+<h2 id="_6">设计权衡</h2>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>有栈协程兼容同步调用形态，但重入、栈大小和 hook 边界需谨慎。</p>
+</blockquote>
+<h3 id="_7">兼容同步形态（收益）</h3>
+<ul>
+<li>旧同步业务、同步客户端库更容易迁入；</li>
+<li>调用栈可读，排障时「从 yield 点往上看」更自然；</li>
+<li>减少手写状态机。</li>
+</ul>
+<h3 id="_8">重入与锁（成本）</h3>
+<ul>
+<li>协作调度 ≠ 无并发问题；同线程重入、跨线程共享仍在；</li>
+<li>条件变量/互斥锁语义要按「可能 yield」重新审查。</li>
+</ul>
+<h3 id="_9">栈大小（成本）</h3>
+<ul>
+<li>全局默认很难两全；可考虑大栈协程只给少数重路径，轻路径用小栈。</li>
+</ul>
+<h3 id="hook">hook 边界（成本）</h3>
+<ul>
+<li>收益完全建立在 hook 覆盖率与正确性上；</li>
+<li>升级 libc、换 SSL、新系统调用，都可能引入回归。</li>
+</ul>
+<h3 id="_10">和其他模型怎么选</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>更合适</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>纯 Reactor + 回调</td>
+<td>极致可控的 IO 路径、少业务逻辑</td>
+</tr>
+<tr>
+<td>线程池</td>
+<td>CPU 密集、或必须调用无法 hook 的阻塞库</td>
+</tr>
+<tr>
+<td>有栈协程（libco 类）</td>
+<td>大量 IO 等待 + 希望同步写法</td>
+</tr>
+<tr>
+<td>无栈协程（C++20）</td>
+<td>新代码、需要语言级状态机、接受改造调用链</td>
+</tr>
+</tbody>
+</table>
+<p>公众号后台常见答案不是单选，而是：<strong>接入与下游 IO 用协程；重 CPU 用线程池；下游连接用连接池。</strong></p>
+<hr />
+<h2 id="_11">动手实践</h2>
+<p>节点 practice：</p>
+<blockquote>
+<p>阅读 libco 切换与 poll 路径，实现仅用于教学的协作调度示例。</p>
+</blockquote>
+<p>sourceStudy：</p>
+<blockquote>
+<p>从 Tencent/libco 的 <code>coctx_swap.S</code>、<code>co_routine.cpp</code> 和 <code>co_hook_sys_call.cpp</code> 串联切换与等待。</p>
+</blockquote>
+<h3 id="1_2">步骤 1：克隆并定位三个文件</h3>
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>--depth<span class="w"> </span><span class="m">1</span><span class="w"> </span>https://github.com/Tencent/libco.git<span class="w"> </span>/tmp/libco
+<span class="nb">cd</span><span class="w"> </span>/tmp/libco
+ls<span class="w"> </span>coctx_swap.S<span class="w"> </span>co_routine.cpp<span class="w"> </span>co_hook_sys_call.cpp
+</code></pre></div>
+
+<p>阅读顺序建议：</p>
+<ol>
+<li><code>coctx_swap.S</code>：寄存器与栈如何交换；</li>
+<li><code>co_routine.cpp</code>：<code>co_create</code> / <code>co_resume</code> / <code>co_yield</code>、与 poll 相关的等待结构；</li>
+<li><code>co_hook_sys_call.cpp</code>：哪些符号被替换，未就绪时如何挂起。</li>
+</ol>
+<p>记录你仓库的 commit，避免「文档说一套、版本另一套」。</p>
+<h3 id="2">步骤 2：画一张串联图</h3>
+<p>要求自己能画出：</p>
+<div class="codehilite"><pre><span></span><code>业务 read()
+  → hook_read
+  → EAGAIN
+  → 把当前协程挂到 fd 等待表
+  → co_yield（coctx_swap 回调度）
+  → 事件循环 poll/epoll 就绪
+  → co_resume（再 swap 回去）
+  → hook_read 重试 raw_read
+</code></pre></div>
+
+<h3 id="3_1">步骤 3：实现教学用协作调度示例</h3>
+<p>目标不在「重新实现 libco」，而在验证两个 acceptance：</p>
+<ol>
+<li><strong>TLS 共享</strong>：同线程两协程读写同一 <code>thread_local</code>，证明会互相可见；</li>
+<li><strong>未 hook 阻塞影响</strong>：一协程 <code>sleep</code>/阻塞，另一协程推进被推迟。</li>
+</ol>
+<p>配套练习可放在 <code>/workspace/atlas/practice61/</code>（见文末）。最小自检：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/practice61
+./run.sh
+</code></pre></div>
+
+<h3 id="4_1">步骤 4：验收清单</h3>
+<ul>
+<li>[ ] 能口述独立栈 + <code>coctx_swap</code> 保存了什么；</li>
+<li>[ ] 能说明协作调度与抢占式线程的差异；</li>
+<li>[ ] 能说明 hook 如何把阻塞点变成挂起点；</li>
+<li>[ ] <strong>能说明 TLS 仍由同线程协程共享</strong>（有实验或推理链）；</li>
+<li>[ ] <strong>未 hook 阻塞调用影响有明确验证</strong>（有实验现象）；</li>
+<li>[ ] sourceStudy 笔记覆盖上述三个源文件的关键函数名。</li>
+</ul>
+<hr />
+<h2 id="_12">自测题</h2>
+<p><strong>题 1.</strong> 有栈协程在 <code>foo→bar→baz</code> 的 <code>baz</code> 里 yield，为什么回来后 <code>foo</code>/<code>bar</code> 的局部变量还在？这和 C++20 无栈协程的「暂停点限制」差在哪里？</p>
+<p><strong>题 2.</strong> 同 OS 线程上协程 A、B 都使用 <code>thread_local UserContext* ctx</code>。A 设置后 yield，B 修改后再 yield 回 A。A 读到的是什么？若要做「每请求上下文」，更合理的存放位置是？</p>
+<p><strong>题 3.</strong> 某 worker 线程上数千协程偶发卡住 3 秒，线程并未退出，CPU 也不高。如何用本课知识做最短排查？如何用实验证明「未 hook 阻塞」假说？</p>
+<h3 id="_13">自测题参考答案</h3>
+<p><strong>题 1.</strong> 有栈协程为每个协程分配独立栈，yield 时保存的是该栈的 SP 与寄存器；调用链上的栈帧都还在这份栈里，故局部变量仍在。无栈协程通常只保存编译器生成的协程帧，暂停点必须落在协程函数内的 <code>co_await</code> 等位置，普通中间函数不能「随便暂停」除非整条链都协程化。</p>
+<p><strong>题 2.</strong> A 读到的通常是 B 写入的值（同一线程同一块 TLS）。每请求上下文应放在协程栈上的对象、协程控制块字段，或框架提供的协程局部存储；不要只靠裸 <code>thread_local</code>。</p>
+<p><strong>题 3.</strong> 先看该线程是否卡在某个系统调用（<code>pstack</code>/<code>gdb</code>/<code>perf</code>）；若全线程协程停止推进且栈在未审计的阻塞调用，高度怀疑 hook 漏网。验证：同线程两协程，一个绕过 hook 阻塞，观察另一个是否一并停顿；对比换成 hook 版 <code>sleep</code>/<code>poll</code> 后是否恢复交错执行。</p>
+<hr />
+<h2 id="_14">推荐资源</h2>
+<ol>
+<li>
+<p><a href="https://github.com/Tencent/libco">有栈协程与用户态调度：参考文档 / 原始资料</a><br />
+   - 来源：github.com｜类型：源码｜难度：进阶｜免费<br />
+   - 重点阅读<strong>独立栈和上下文切换</strong>与<strong>协作调度与 yield</strong>，用于核对本节点实验的语义和边界。</p>
+</li>
+<li>
+<p><a href="https://github.com/Tencent/libco/blob/master/co_routine.cpp">libco · 协程上下文与调度</a><br />
+   - 来源：Tencent/libco｜类型：源码｜难度：进阶｜免费<br />
+   - 从 <code>co_resume</code>、<code>co_yield</code> 与 poll 关联路径理解有栈协程；以仓库版本为准。</p>
+</li>
+</ol>
+<p>建议同时打开同仓库的 <code>coctx_swap.S</code> 与 <code>co_hook_sys_call.cpp</code>，三件套对照阅读。</p>
+<hr />
+<h2 id="_15">本课小结</h2>
+<ul>
+<li><strong>有栈协程</strong>用独立栈 + 用户态上下文切换，让你可以在深层同步调用链中暂停/恢复。</li>
+<li><strong>协作调度</strong>靠主动 yield；调度器维护 run queue，并与事件循环衔接。</li>
+<li><strong>IO hook</strong> 是「同步写法组织非阻塞 IO」的秘密：未就绪则挂起，而不是堵死线程。</li>
+<li><strong>坑</strong>：切换便宜仍有栈与调度成本；TLS 同线程共享；未 hook 阻塞会拖垮同线程所有协程；重入与栈大小要显式设计。</li>
+<li>与前两课分工：线程池管执行资源，连接池管下游连接，协程管等待中的并发形态。</li>
+</ul>
+<hr />
+<h2 id="_16">配套练习建议</h2>
+<ol>
+<li><strong>读源码三联</strong>：<code>coctx_swap.S</code> → <code>co_routine.cpp</code> → <code>co_hook_sys_call.cpp</code>，写一页笔记只回答：一次 <code>read</code> 未就绪时，谁调用了 swap？谁在就绪后 resume？</li>
+<li><strong>跑 practice61</strong>：验证 TLS 共享与未 hook 阻塞影响（见 <code>/workspace/atlas/practice61</code>）。</li>
+<li><strong>对比无栈</strong>：回顾第 31 课 <code>b-coroutine</code>，列一张「有栈 vs 无栈」表：暂停点、栈内存、旧代码兼容、工具链成熟度。</li>
+<li><strong>线上意识</strong>：给自己的服务列「可能漏 hook 的 API」黑名单，并想清楚发现卡顿时的第一组命令（<code>gdb -p</code>、<code>cat /proc/pid/stack</code>、框架协程指标）。</li>
+</ol>
+<p>下一课将继续在「调度与资源复用」脉络上推进；先确保你能独立讲清：为什么 libco 类系统能「看起来同步、实际不堵线程」，以及它在什么条件下会失效。</p><div class="pn"><span><a href="60.html">← 连接池与长连接复用</a></span><span>下一课 待更新</span></div></main></div></body></html>
