@@ -1,0 +1,660 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>63. TCP流控、拥塞与队列 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（63/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（15/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="cur" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 63 课 · 领域 D · 阶段 4</p><p class="dl"><a href="../files/63-d-flow.md" download>⬇ 本课 Markdown</a></p><h1 id="63208-tcp">第 63/208 课：TCP流控、拥塞与队列</h1>
+<ul>
+<li><strong>阶段</strong>：第 4 阶段 · 高级后台工程师（TCP流控与拥塞）</li>
+<li><strong>前置课程</strong>：d-tcp、a-math</li>
+<li><strong>关键词</strong>：流控、拥塞控制、接收窗口、拥塞窗口、rwnd、cwnd、RTT、重传、BDP、带宽时延积、Nagle、延迟ACK、ss、tcpdump、队列</li>
+<li><strong>难度</strong>：深入</li>
+<li><strong>所属领域</strong>：D · 传输与Socket（子类：传输与Socket）</li>
+<li><strong>标签</strong>：Flow and Congestion、D、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课 Proactor / io_uring 解决的是 <strong>「提交与完成」</strong>：你把一次 IO 丢进 SQ，等 CQ 告诉你结果。那解决的是本机异步接口语义。</p>
+<p>本课回到 <strong>TCP 传输层</strong>——即便你已经用上完成通知、协程、连接池，数据能不能「尽快、稳定地」从一端流到另一端，仍然受两道闸门约束：</p>
+<blockquote>
+<p>流量控制保护接收方缓冲，拥塞控制适应网络承载能力，两者共同限制实际发送窗口。</p>
+</blockquote>
+<p>拆开是三件事（对应本课 points）：</p>
+<ol>
+<li><strong>接收窗口与拥塞窗口</strong>：对端能吞多少（<code>rwnd</code>）与网络允许发多少（<code>cwnd</code>），发送方真正能发的是 <code>min(rwnd, cwnd)</code>。</li>
+<li><strong>RTT、重传和带宽时延积</strong>：管道里需要多少 in-flight 字节才能打满带宽；丢包触发重传并让 <code>cwnd</code> 回退。</li>
+<li><strong>Nagle 和延迟 ACK</strong>：小包合并与 ACK 延迟如何互动，以及何时该开 <code>TCP_NODELAY</code>。</li>
+</ol>
+<p>微信公众号后台的典型痛点：</p>
+<div class="codehilite"><pre><span></span><code>模板消息 / 客服消息高峰
+  → 接入层到下游推送网关、或网关到长连接节点
+  → 监控：单连接吞吐掉崖，p99 延迟飙升，重传计数上涨
+  → 可能原因 A：对端应用读得慢 → 接收缓冲占满 → rwnd 变小甚至 0（流控）
+  → 可能原因 B：跨机房 / 公网链路拥塞丢包 → cwnd 收缩（拥塞控制）
+  → 可能原因 C：本机发送队列（qdisc / socket send buffer）堆积 → 排队延迟放大
+  → 不会用 ss / 抓包区分时，最常见的错误动作是：盲目加大 SO_SNDBUF / SO_RCVBUF
+</code></pre></div>
+
+<p>本课承接 d-tcp（连接生命周期、字节流、重传直觉）和 a-math（数量级与乘积估算），目标不是背拥塞算法名字，而是建立 <strong>可操作的诊断框架</strong>：看到吞吐低时，先分清是接收方慢、链路拥塞，还是本机队列问题——并且记住：<strong>增大 buffer 不是所有延迟问题的解法</strong>。</p>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释接收窗口与拥塞窗口</strong>
+   - 说清 <code>rwnd</code>（接收窗口）由谁通告、保护什么；<code>cwnd</code>（拥塞窗口）由谁维护、保护什么。
+   - 能写出有效发送窗口：<code>flight_size</code> 受 <code>min(rwnd, cwnd)</code>（再扣已在途未确认字节）约束。
+   - 能在 <code>ss -ti</code> 输出里指出与窗口、RTT、重传相关的字段含义（至少 rwnd / cwnd / rtt / retrans）。</p>
+</li>
+<li>
+<p><strong>能独立完成：在测试网络注入延迟丢包，观察 ss 与抓包中的窗口和重传变化</strong>
+   - 用 <code>tc netem</code>（或等价手段）注入延迟与丢包。
+   - 用 <code>ss -ti</code>、<code>tcpdump</code> 观察窗口收缩、重传、RTT 变化。
+   - 对照 Linux <code>tcp(7)</code> man-page，核对术语与边界条件，并记录内核/工具版本。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - <strong>能区分流控与拥塞控制</strong>。
+   - <strong>不把增大 buffer 作为所有延迟问题的解法</strong>。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：</p>
+<blockquote>
+<p>解释吞吐受 RTT、丢包和缓冲影响的原因。</p>
+</blockquote>
+<p>这句话直接决定你在公众号后台排障时，会不会把「慢」一律归咎于业务代码或「机器不够」。</p>
+<h3 id="1">1. 吞吐不是「带宽标称值」</h3>
+<p>一条 1 Gbps 链路，并不意味着你的 TCP 连接能跑满 1 Gbps。粗略上，稳态吞吐受限于：</p>
+<div class="codehilite"><pre><span></span><code>吞吐 ≈ 有效窗口 / RTT
+有效窗口 ≈ min(rwnd, cwnd, 本端发送缓冲相关上限…)
+</code></pre></div>
+
+<p>RTT 翻倍、窗口减半，吞吐都会明显掉。跨城、跨运营商、跨国链路的「带宽看起来很大但业务很慢」，往往是窗口 / RTT / 丢包在作怪，而不是 CPU 不够。</p>
+<h3 id="2">2. 丢包的代价不只是「再发一次」</h3>
+<p>TCP 发现丢包后会重传，并按拥塞控制规则收缩 <code>cwnd</code>（具体算法因内核与配置而异：Cubic、BBR 等行为不同）。一次突发丢包可能让连接长时间跑在「半速甚至更低」状态。高峰推送里，这表现为：连接还在、进程也正常，就是单连接吞吐掉崖。</p>
+<h3 id="3">3. 缓冲既是解药也是毒药</h3>
+<p>加大 <code>SO_SNDBUF</code> / <code>SO_RCVBUF</code>、加大网卡 / qdisc 队列，有时能支撑更高的带宽时延积（BDP），但也会：</p>
+<ul>
+<li>掩盖应用读慢（流控本该早点反馈）；</li>
+<li>放大排队延迟（bufferbloat）；</li>
+<li>让「看起来不丢包」但延迟变得不可接受。</li>
+</ul>
+<p>节点 tradeoffs 说得很直白：<strong>大缓冲支持高带宽链路，也可能放大排队延迟。</strong></p>
+<h3 id="4">4. 公众号后台里你会真正碰到的场景</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>更像流控</th>
+<th>更像拥塞</th>
+<th>更像本机队列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对端进程卡住 / 业务线程池堵死</td>
+<td><code>ss</code> 里对端通告窗口很小，抓包可见 Window=0 / ZeroWindow</td>
+<td>否</td>
+<td>可能伴随本端 send-q 上涨</td>
+</tr>
+<tr>
+<td>跨机房丢包、链路抖动</td>
+<td>否</td>
+<td>RTT 变大、retrans 上升、cwnd 下降</td>
+<td>可能次生</td>
+</tr>
+<tr>
+<td>本机出口打满、qdisc 背压</td>
+<td>否</td>
+<td>可能</td>
+<td><code>tc -s</code>、<code>ip -s link</code>、send-q 持续高</td>
+</tr>
+</tbody>
+</table>
+<p>不会区分时，值班同学最容易做的三件事：重启服务、加机器、把 buffer 调到最大值——其中至少有两件可能完全无效，甚至更糟。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="0">0. 先建立直觉：水管、水桶、阀门</h3>
+<p>把 TCP 发送想象成往对端倒水：</p>
+<div class="codehilite"><pre><span></span><code>发送方水箱 ──阀门──► 水管（网络）──► 接收方水桶
+              ▲                ▲
+              │                │
+         拥塞阀门           流控阀门
+         （cwnd）           （rwnd）
+</code></pre></div>
+
+<ul>
+<li><strong>流控（Flow Control）</strong>：接收方水桶快满了，就告诉你「别倒太快」——通告更小的 <code>rwnd</code>。保护的是<strong>对端应用还没读走的缓冲</strong>。</li>
+<li><strong>拥塞控制（Congestion Control）</strong>：水管中间堵了（路由器队列溢出、丢包），发送方自己把阀门关小——缩小 <code>cwnd</code>。保护的是<strong>共享网络</strong>，避免继续把链路挤崩。</li>
+<li><strong>实际能倒多少</strong>：两道阀门取更严的那道 → <code>min(rwnd, cwnd)</code>。</li>
+</ul>
+<p>公众号推送高峰时，你看到的「慢」，可能是对端水桶满了（下游读慢），也可能是水管堵了（机房出口拥塞）。<strong>工具上的区分点</strong>后面会落到 <code>ss</code> 与抓包。</p>
+<h3 id="1_1">1. 接收窗口与拥塞窗口</h3>
+<h4 id="11">1.1 滑动窗口一眼看懂</h4>
+<p>TCP 用序列号标识字节流。发送方维护「已发送未确认」「可以发送」「还不能发送」三段：</p>
+<div class="codehilite"><pre><span></span><code>         已确认          在途 (in-flight)        窗口内可发         窗口外
+|------|-------------|--------------------|-----------------|----------&gt;
+     SND.UNA      已发未ACK末尾         SND.UNA+SND.WND
+                                         ↑
+                         SND.WND ≈ min(rwnd, cwnd) 再扣策略细节
+</code></pre></div>
+
+<ul>
+<li><strong>rwnd（Receive Window）</strong>：接收方在 ACK 里通告「我现在还能收多少字节」。来自对端 TCP 通告，本质反映对端接收缓冲空闲空间（减去已接收未交付应用的数据等）。</li>
+<li><strong>cwnd（Congestion Window）</strong>：发送方本地维护的拥塞窗口，单位通常是字节（实现细节看内核）。连接新建时从小开始探测（慢启动），根据 ACK / 丢包信号增减。</li>
+<li><strong>有效发送窗口</strong>：发送方不会让 in-flight 超过 <code>min(rwnd, cwnd)</code>（再叠加本端发送缓冲、Nagle 等策略）。</li>
+</ul>
+<h4 id="12-ss-ti">1.2 用 <code>ss -ti</code> 看真实连接</h4>
+<p>在 Linux 上，对一条 ESTABLISHED 连接：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 替换成你的端口或地址</span>
+ss<span class="w"> </span>-ti<span class="w"> </span><span class="s1">'( dport = :8080 or sport = :8080 )'</span>
+</code></pre></div>
+
+<p>典型输出里你会看到类似字段（具体键名随内核/iproute2 版本略有差异）：</p>
+<div class="codehilite"><pre><span></span><code>cubic wscale:7,7 rto:204 rtt:12.5/6.2 ato:40 mss:1448
+cwnd:40 ssthresh:35 bytes_acked:... segs_out:...
+send 46.5Mbps lastsnd:... lastrcv:...
+pacing_rate ... delivery_rate ...
+retrans:0/3 rcv_rtt:... rcv_space:...
+</code></pre></div>
+
+<p>阅读时抓住几件事：</p>
+<table>
+<thead>
+<tr>
+<th>字段直觉</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cwnd</code></td>
+<td>拥塞窗口（段数或与字节相关，看版本/显示）</td>
+</tr>
+<tr>
+<td><code>rtt</code></td>
+<td>平滑 RTT / 均值方差一类信息</td>
+</tr>
+<tr>
+<td><code>retrans</code></td>
+<td>重传计数</td>
+</tr>
+<tr>
+<td>对端窗口 / <code>rcv_space</code> 等</td>
+<td>与接收侧空间相关的线索</td>
+</tr>
+<tr>
+<td><code>send</code> / <code>delivery_rate</code></td>
+<td>发送与交付速率估计</td>
+</tr>
+</tbody>
+</table>
+<p><strong>诊断口诀</strong>：</p>
+<ul>
+<li>对端窗口很小、本端 <code>Send-Q</code> 堆积、抓包出现 <code>Window Update</code> / Zero Window → <strong>偏流控</strong>。</li>
+<li><code>cwnd</code> 被压得很低、<code>retrans</code> 明显、RTT 抖动大 → <strong>偏拥塞</strong>。</li>
+<li>两者可以同时发生；先分主因，再动手。</li>
+</ul>
+<h4 id="13">1.3 短代码：观察发送阻塞与窗口</h4>
+<p>下面是一个教学向的最小 C++ 示例：服务端故意慢读，客户端狂写，观察客户端 <code>Send-Q</code> 与对端窗口变化（需在两台机器或 <code>tc</code> 环境下配合 <code>ss</code>/<code>tcpdump</code>）。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// slow_reader_server.cpp —— 故意读得很慢，触发对端流控</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;arpa/inet.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;netinet/in.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/socket.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstring&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span><span class="w"> </span><span class="n">SOCK_STREAM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">yes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="o">::</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">SOL_SOCKET</span><span class="p">,</span><span class="w"> </span><span class="n">SO_REUSEADDR</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">yes</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">yes</span><span class="p">));</span>
+
+<span class="w">    </span><span class="n">sockaddr_in</span><span class="w"> </span><span class="n">addr</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">addr</span><span class="p">.</span><span class="n">sin_family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AF_INET</span><span class="p">;</span>
+<span class="w">    </span><span class="n">addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">.</span><span class="n">s_addr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">htonl</span><span class="p">(</span><span class="n">INADDR_ANY</span><span class="p">);</span>
+<span class="w">    </span><span class="n">addr</span><span class="p">.</span><span class="n">sin_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">htons</span><span class="p">(</span><span class="mi">9000</span><span class="p">);</span>
+<span class="w">    </span><span class="o">::</span><span class="n">bind</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">sockaddr</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">),</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">));</span>
+<span class="w">    </span><span class="o">::</span><span class="n">listen</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">cfd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">accept</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="mi">4096</span><span class="p">];</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 每次只读一点，然后睡眠 —— 模拟业务线程池堵死</span>
+<span class="w">        </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">recv</span><span class="p">(</span><span class="n">cfd</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">50</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">cfd</span><span class="p">);</span>
+<span class="w">    </span><span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1">// fast_writer_client.cpp —— 尽快写满</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;arpa/inet.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;netinet/in.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;netinet/tcp.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;sys/socket.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstring&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"127.0.0.1"</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">socket</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span><span class="w"> </span><span class="n">SOCK_STREAM</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// 教学：可对比开/关 TCP_NODELAY（见第 3 节）</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="o">::</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">IPPROTO_TCP</span><span class="p">,</span><span class="w"> </span><span class="n">TCP_NODELAY</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">one</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">one</span><span class="p">));</span>
+
+<span class="w">    </span><span class="n">sockaddr_in</span><span class="w"> </span><span class="n">addr</span><span class="p">{};</span>
+<span class="w">    </span><span class="n">addr</span><span class="p">.</span><span class="n">sin_family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">AF_INET</span><span class="p">;</span>
+<span class="w">    </span><span class="n">addr</span><span class="p">.</span><span class="n">sin_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">htons</span><span class="p">(</span><span class="mi">9000</span><span class="p">);</span>
+<span class="w">    </span><span class="o">::</span><span class="n">inet_pton</span><span class="p">(</span><span class="n">AF_INET</span><span class="p">,</span><span class="w"> </span><span class="n">ip</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">addr</span><span class="p">.</span><span class="n">sin_addr</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">sockaddr</span><span class="o">*&gt;</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addr</span><span class="p">),</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">addr</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">perror</span><span class="p">(</span><span class="s">"connect"</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buf</span><span class="p">(</span><span class="mi">64</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="sc">'A'</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10000</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">send</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">buf</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">buf</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">perror</span><span class="p">(</span><span class="s">"send"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">break</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="c1">// 另开终端：ss -ti dst :9000</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">::</span><span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>观察命令：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 看 Send-Q / Recv-Q 与 TCP 细节</span>
+watch<span class="w"> </span>-n<span class="w"> </span><span class="m">0</span>.5<span class="w"> </span><span class="s1">'ss -tin dst :9000 or src :9000'</span>
+
+<span class="c1"># 抓窗口字段（Window）与 ZeroWindow</span>
+sudo<span class="w"> </span>tcpdump<span class="w"> </span>-ni<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">9000</span><span class="w"> </span>-vv<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">80</span>
+</code></pre></div>
+
+<p>当你看到对端 Window 持续变小甚至 0，而本端 <code>Send-Q</code> 上涨、应用 <code>send</code> 阻塞或返回短期可写字节变少——这就是 <strong>流控在起作用</strong>，不是「网卡坏了」。</p>
+<h4 id="14-vs">1.4 流控 vs 拥塞：一张对照表</h4>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>流控 Flow Control</th>
+<th>拥塞控制 Congestion Control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>保护对象</td>
+<td>接收方缓冲 / 接收应用</td>
+<td>网络路径上的共享资源</td>
+</tr>
+<tr>
+<td>信号来源</td>
+<td>对端通告的 rwnd（含 Zero Window）</td>
+<td>丢包、ECN、延迟、ACK 节奏等（算法相关）</td>
+</tr>
+<tr>
+<td>主要变量</td>
+<td>rwnd</td>
+<td>cwnd（及 ssthresh 等）</td>
+</tr>
+<tr>
+<td>典型根因</td>
+<td>应用读慢、业务卡死、下游反压</td>
+<td>链路丢包、瓶颈队列溢出、跨网抖动</td>
+</tr>
+<tr>
+<td>错误处方</td>
+<td>只加本端 buffer</td>
+<td>只加本端 buffer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>验收点回扣</strong>：能区分二者；不要默认「加大 buffer」。</p>
+<h3 id="2-rtt">2. RTT、重传和带宽时延积</h3>
+<h4 id="21-bdp">2.1 BDP：管道里要装多少水</h4>
+<p>带宽时延积（Bandwidth-Delay Product）：</p>
+<div class="codehilite"><pre><span></span><code>BDP = 带宽 × RTT
+</code></pre></div>
+
+<p>例子（心算，对应 a-math 的数量级感）：</p>
+<div class="codehilite"><pre><span></span><code>带宽 1 Gbps = 125 MB/s
+RTT  40 ms  = 0.04 s
+BDP ≈ 125 MB/s × 0.04 s = 5 MB
+</code></pre></div>
+
+<p>含义：要想「跑满」这条管道，连接上大约需要 <strong>约一个 BDP 的 in-flight 数据</strong>（未确认字节）。如果 <code>min(rwnd, cwnd)</code> 远小于 BDP，吞吐就会被窗口卡住：</p>
+<div class="codehilite"><pre><span></span><code>吞吐上限 ≈ 窗口 / RTT
+若窗口 = 64KB，RTT = 40ms
+→ ≈ 64KB / 0.04s ≈ 1.6 MB/s  ≪ 1 Gbps
+</code></pre></div>
+
+<p>这就是「专线带宽很大，单连接拷文件却只有几 MB/s」的经典原因之一：窗口 / 缓冲没跟上 BDP，或丢包把 <code>cwnd</code> 压下去了。</p>
+<h4 id="22-cwnd">2.2 丢包 → 重传 → cwnd 回退</h4>
+<p>可靠传输不是「不丢」，而是「丢了能发现并重发」：</p>
+<div class="codehilite"><pre><span></span><code>发送段 ──► (网络丢了) ──► 接收方缺口
+                │
+                ├─ 重复 ACK / SACK → 快速重传路径（常见）
+                └─ 超时 RTO → 超时重传（更痛，窗口回退通常更狠）
+</code></pre></div>
+
+<p>对公众号后台的工程含义：</p>
+<ol>
+<li><strong>偶发丢包</strong>：一次快速重传，短暂抖动。</li>
+<li><strong>持续丢包 / 高 RTT 方差</strong>：<code>cwnd</code> 起不来，长尾延迟恶化，模板消息「有的很快、有的很慢」。</li>
+<li><strong>误判</strong>：把拥塞当流控，去重启对端业务；或把流控当拥塞，去找网络组——都会浪费时间。</li>
+</ol>
+<h4 id="23-rtt">2.3 用命令把 RTT 与重传看见</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 连接级</span>
+ss<span class="w"> </span>-ti<span class="w"> </span>dst<span class="w"> </span>&lt;对端IP&gt;:443
+
+<span class="c1"># 系统级重传统计（字段随内核）</span>
+nstat<span class="w"> </span>-az<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-iE<span class="w"> </span><span class="s1">'TcpRetrans|TcpExtTCP|TCPTimeout'</span>
+<span class="c1"># 或</span>
+cat<span class="w"> </span>/proc/net/snmp<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span><span class="s1">' '</span><span class="w"> </span><span class="s1">'\n'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>paste<span class="w"> </span>-<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>tcp
+</code></pre></div>
+
+<p>抓包看重传（tcpdump / wireshark 都会标 retransmission）：</p>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>tcpdump<span class="w"> </span>-ni<span class="w"> </span>eth0<span class="w"> </span>host<span class="w"> </span>&lt;对端&gt;<span class="w"> </span>and<span class="w"> </span>tcp<span class="w"> </span>-vv<span class="w"> </span>-S
+<span class="c1"># 同一序列号区间反复出现 → 重传嫌疑</span>
+</code></pre></div>
+
+<h4 id="24-buffer">2.4 和缓冲的关系：为什么「加大 buffer」有时有效有时有害</h4>
+<ul>
+<li><strong>有效时</strong>：原先 <code>SO_RCVBUF</code>/<code>SO_SNDBUF</code> 太小，撑不起 BDP，窗口上不去；适当增大后 <code>rwnd</code> 通告变大，或本端能积更多 in-flight。</li>
+<li><strong>有害时</strong>：</li>
+<li>应用读慢 → 更大的接收缓冲只是延迟 Zero Window，<strong>让问题更晚暴露</strong>，端到端延迟更大；</li>
+<li>瓶颈链路队列很长 → 更大缓冲/队列 → <strong>bufferbloat</strong>，RTT 被排队拉高，吞吐公式里分母变大；</li>
+<li>掩盖真实反压，上游继续灌数据，最终在别处爆（磁盘、线程池、消息队列）。</li>
+</ul>
+<p>节点 pitfalls：</p>
+<blockquote>
+<p>吞吐低可能是应用读取慢，也可能是网络拥塞。</p>
+</blockquote>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>大缓冲支持高带宽链路，也可能放大排队延迟。</p>
+</blockquote>
+<p>把两句话钉在值班手册第一页并不过分。</p>
+<h3 id="3-nagle-ack">3. Nagle 和延迟 ACK</h3>
+<h4 id="31-vs-ack">3.1 问题从哪来：小包太多 vs ACK 太晚</h4>
+<p>TCP 默认有两套「省包」策略，本意都是减少小报文：</p>
+<ol>
+<li><strong>Nagle 算法</strong>：若已有小块数据在途未确认，新的小 <code>send</code> 可能被暂存，凑得更满或等 ACK 再发（细节以实现为准）。</li>
+<li><strong>延迟 ACK</strong>：接收方不一定每个段立刻 ACK，可能等待几十毫秒，期望与反向数据「捎带」ACK，或合并多个段的确认。</li>
+</ol>
+<p>两者叠在一起，会出现经典交互：</p>
+<div class="codehilite"><pre><span></span><code>客户端小请求（Nagle 等 ACK）  ←→  服务端延迟 ACK（等更多数据或超时）
+结果：每个小 RPC 多出 ~40ms 量级的「空等」（视实现与 sysctl）
+</code></pre></div>
+
+<p>公众号后台里，若某条内部协议是「大量小包请求/响应」且延迟敏感（实时客服消息、在线状态），这种交互会把 p99 拉高，而带宽其实很空。</p>
+<h4 id="32-tcp_nodelay-nagle">3.2 <code>TCP_NODELAY</code>：什么时候关 Nagle</h4>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="w"> </span><span class="n">IPPROTO_TCP</span><span class="p">,</span><span class="w"> </span><span class="n">TCP_NODELAY</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">one</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">one</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">perror</span><span class="p">(</span><span class="s">"TCP_NODELAY"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>经验法则（不是教条）：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>大块吞吐（批量落盘、大文件、批量推送体）</td>
+<td>通常保持默认即可；盲目 NODELAY 未必更快</td>
+</tr>
+<tr>
+<td>交互式小消息、RPC、游戏/IM 长连接心跳与信令</td>
+<td>常开 <code>TCP_NODELAY</code>，避免 Nagle×延迟 ACK</td>
+</tr>
+<tr>
+<td>应用自己已经做了良好批量组包</td>
+<td>开不开差异变小；关键在应用层聚合</td>
+</tr>
+</tbody>
+</table>
+<p>注意：开 <code>TCP_NODELAY</code> <strong>不是</strong>拥塞控制的替代品，也 <strong>不会</strong>修复 rwnd=0。它只影响「小段何时允许发出」。</p>
+<h4 id="33-ack">3.3 延迟 ACK 与应用层设计</h4>
+<p>你能控制的往往是应用行为：</p>
+<ul>
+<li><strong>请求-响应尽量可捎带</strong>：同连接上尽快有反向数据，ACK 更容易被捎带。</li>
+<li><strong>避免「写一点就等读一点」的半包乒乓</strong>，除非协议必须如此；可改为流水线或批量。</li>
+<li>用抓包确认：是否每个小请求都单独成段、是否 ACK 明显滞后。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 看小段与 ACK 时间间隔（示例）</span>
+sudo<span class="w"> </span>tcpdump<span class="w"> </span>-ni<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">9000</span><span class="w"> </span>-tttt
+</code></pre></div>
+
+<h4 id="34">3.4 和「队列」放在一起看</h4>
+<p>本课标题含「队列」，在工程上至少有三层队列，别混为一谈：</p>
+<div class="codehilite"><pre><span></span><code>应用写缓冲 / 用户态队列
+    → socket 发送缓冲（受 SO_SNDBUF 等约束）
+        → qdisc / 网卡环（本机出口排队）
+            → 路径上路由器/交换机队列（拥塞真正发生处）
+                → 对端 socket 接收缓冲（rwnd 相关）
+                    → 应用读队列 / 业务线程池
+</code></pre></div>
+
+<ul>
+<li>流控主要卡在「对端接收缓冲 ↔ 应用读」这一端。</li>
+<li>拥塞控制主要响应「路径队列溢出 / 延迟信号」。</li>
+<li>本机 qdisc 过深 → 本地 bufferbloat。</li>
+<li>业务线程池堵死 → 应用读慢 → 通告 rwnd↓ → 对端看起来「网络很慢」。</li>
+</ul>
+<p>排障时沿着这张图从上到下（或从下到上）逐层看 <code>Send-Q</code>/<code>Recv-Q</code>、<code>ss -ti</code>、<code>tc -s qdisc</code>、抓包 Window/retrans，比只盯业务日志快得多。</p>
+<hr />
+<h2 id="_5">常见误区与设计权衡</h2>
+<h3 id="1_2">误区 1：吞吐低 = 网络差</h3>
+<p><strong>真相</strong>：吞吐低可能是应用读取慢，也可能是网络拥塞（节点 pitfalls）。还有可能是本端发送队列堆积、CPU softirq、磁盘反压导致业务不读。</p>
+<p><strong>正确动作</strong>：先用 <code>ss</code> 看 <code>Send-Q</code>/<code>Recv-Q</code>、窗口与 <code>retrans</code>，再用抓包确认 Zero Window vs 重传，再决定找应用还是找网络。</p>
+<h3 id="2-buffer">误区 2：把所有延迟问题都用「加大 buffer」解决</h3>
+<p><strong>真相</strong>：大缓冲能支撑高 BDP，也可能放大排队延迟（节点 tradeoffs）。对「应用读慢」加大接收缓冲，只是把反压延后；对「已经拥塞」加大发送缓冲，可能让更多数据堆在路上，RTT 更差。</p>
+<p><strong>正确动作</strong>：先识别瓶颈是窗口类型（rwnd/cwnd）还是队列类型（qdisc/应用），再调参；调参后要看 <strong>延迟分布</strong>，不能只看平均吞吐。</p>
+<h3 id="3cwnd-bug">误区 3：<code>cwnd</code> 变小一定是「被攻击了」或「内核 bug」</h3>
+<p><strong>真相</strong>：丢包、超时、路径变化都会让拥塞控制主动降速——这是保护网络的正常行为。先看丢包率、RTT、ECN/队列，而不是先怀疑 TCP 实现。</p>
+<h3 id="4-tcp_nodelay-tcp">误区 4：开了 <code>TCP_NODELAY</code> 就等于优化完 TCP</h3>
+<p><strong>真相</strong>：NODELAY 只触及 Nagle。流控、拥塞、BDP、应用读速、线程池，一个都不会因此自动变好。</p>
+<h3 id="5">误区 5：单连接跑不满带宽 = 必须多连接「堆并行」</h3>
+<p><strong>真相</strong>：有时确实需要多流（尤其应用层已分片），但应先检查单连接是否窗口不足、丢包过多、CPU 单核瓶颈。盲目多连接可能把拥塞恶化，并放大服务端 accept/fd 压力——公众号接入层尤其要小心 fd 与连接状态堆积（回顾 d-tcp）。</p>
+<h3 id="_6">设计权衡小结</h3>
+<table>
+<thead>
+<tr>
+<th>选择</th>
+<th>收益</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>增大 socket buffer</td>
+<td>更易打满高 BDP 链路</td>
+<td>延迟↑、掩盖反压、内存占用↑</td>
+</tr>
+<tr>
+<td>减小 qdisc / 启用 AQM（如 fq / fq_codel 等，视环境）</td>
+<td>降低排队延迟</td>
+<td>配置复杂；错误配置可能损吞吐</td>
+</tr>
+<tr>
+<td><code>TCP_NODELAY</code></td>
+<td>降低小消息交互延迟</td>
+<td>小包增多，带宽浪费与 pps 压力</td>
+</tr>
+<tr>
+<td>应用层批量</td>
+<td>提高效率、减少交互延迟陷阱</td>
+<td>增加组包复杂度与尾延迟（等批量）</td>
+</tr>
+<tr>
+<td>多连接并行</td>
+<td>可能提高总吞吐</td>
+<td>连接管理、拥塞叠加、故障面变大</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_7">动手实践</h2>
+<blockquote>
+<p>实践目标（节点 practice）：在测试网络注入延迟丢包，观察 ss 与抓包中的窗口和重传变化。<br />
+验收（acceptance）：能区分流控与拥塞控制；不把增大 buffer 作为所有延迟问题的解法。<br />
+sourceStudy：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<h3 id="_8">环境与版本记录（先做）</h3>
+<div class="codehilite"><pre><span></span><code>uname<span class="w"> </span>-r
+ip<span class="w"> </span>-V
+ss<span class="w"> </span>-V<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
+man<span class="w"> </span>-w<span class="w"> </span><span class="m">7</span><span class="w"> </span>tcp
+<span class="c1"># 把上面输出抄进实验笔记：内核、iproute2、man-pages 版本</span>
+</code></pre></div>
+
+<p>打开并阅读：</p>
+<p><a href="https://man7.org/linux/man-pages/man7/tcp.7.html">https://man7.org/linux/man-pages/man7/tcp.7.html</a></p>
+<p>重点检索与本课对齐的关键词：<code>TCP_NODELAY</code>、buffer、window、cong（拥塞相关 socket 选项，若文档有）、<code>TCP_MAXSEG</code> 等。把「本机内核是否支持某选项」写成 checklist，而不是抄博客默认值。</p>
+<h3 id="1-tcp">步骤 1：准备一条可观测的 TCP 流</h3>
+<p>任选其一：</p>
+<ul>
+<li>用本课「慢读服务端 + 快写客户端」；</li>
+<li>或 <code>iperf3</code> / <code>nc</code> 产生稳定流量。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 终端 A</span>
+iperf3<span class="w"> </span>-s<span class="w"> </span>-p<span class="w"> </span><span class="m">5201</span>
+
+<span class="c1"># 终端 B</span>
+iperf3<span class="w"> </span>-c<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>-p<span class="w"> </span><span class="m">5201</span><span class="w"> </span>-t<span class="w"> </span><span class="m">60</span>
+</code></pre></div>
+
+<p>另开终端持续观察：</p>
+<div class="codehilite"><pre><span></span><code>watch<span class="w"> </span>-n<span class="w"> </span><span class="m">0</span>.5<span class="w"> </span><span class="s1">'ss -tin sport = :5201 or dport = :5201'</span>
+</code></pre></div>
+
+<p>先记录「基线」：rtt、cwnd、retrans、吞吐。</p>
+<h3 id="2_1">步骤 2：注入延迟（只加延迟，先不加丢包）</h3>
+<p>需要 <code>NET_ADMIN</code> 权限（本地网卡或 netns）。示例对 <code>lo</code> 或某 veth（<strong>不要在生产网卡上盲跑</strong>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 示例：给 lo 加 50ms 延迟（实验完务必删掉）</span>
+sudo<span class="w"> </span>tc<span class="w"> </span>qdisc<span class="w"> </span>add<span class="w"> </span>dev<span class="w"> </span>lo<span class="w"> </span>root<span class="w"> </span>netem<span class="w"> </span>delay<span class="w"> </span>50ms
+
+<span class="c1"># 观察 ss 中 rtt 是否上升，吞吐如何变</span>
+ss<span class="w"> </span>-ti<span class="w"> </span><span class="nv">dport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>:5201
+
+<span class="c1"># 清理</span>
+sudo<span class="w"> </span>tc<span class="w"> </span>qdisc<span class="w"> </span>del<span class="w"> </span>dev<span class="w"> </span>lo<span class="w"> </span>root
+</code></pre></div>
+
+<p>期望直觉：RTT↑ → 同样窗口下吞吐↓；若要维持吞吐，需要更大的 in-flight（更大有效窗口 / 缓冲），这正是 BDP 的含义。</p>
+<h3 id="3-cwnd">步骤 3：注入丢包，观察重传与 cwnd</h3>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>tc<span class="w"> </span>qdisc<span class="w"> </span>add<span class="w"> </span>dev<span class="w"> </span>lo<span class="w"> </span>root<span class="w"> </span>netem<span class="w"> </span>delay<span class="w"> </span>20ms<span class="w"> </span>loss<span class="w"> </span><span class="m">2</span>%
+
+<span class="c1"># 再跑 iperf3 / 自写客户端，同时：</span>
+ss<span class="w"> </span>-ti<span class="w"> </span><span class="nv">dport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>:5201
+nstat<span class="w"> </span>-az<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>retrans
+
+sudo<span class="w"> </span>tcpdump<span class="w"> </span>-ni<span class="w"> </span>lo<span class="w"> </span>port<span class="w"> </span><span class="m">5201</span><span class="w"> </span>-vv<span class="w"> </span>-c<span class="w"> </span><span class="m">100</span>
+
+<span class="c1"># 清理</span>
+sudo<span class="w"> </span>tc<span class="w"> </span>qdisc<span class="w"> </span>del<span class="w"> </span>dev<span class="w"> </span>lo<span class="w"> </span>root
+</code></pre></div>
+
+<p>在笔记里回答：</p>
+<ol>
+<li><code>retrans</code> 是否上升？</li>
+<li><code>cwnd</code> 相对基线是变大还是被压住？</li>
+<li>这更像流控还是拥塞？为什么？（提示：你并没有让接收方变慢。）</li>
+</ol>
+<h3 id="4_1">步骤 4：构造流控对照实验</h3>
+<p>跑「慢读服务端 + 快写客户端」（无 netem 丢包）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 终端 A：慢读</span>
+./slow_reader_server
+
+<span class="c1"># 终端 B：快写</span>
+./fast_writer_client<span class="w"> </span><span class="m">127</span>.0.0.1
+
+<span class="c1"># 终端 C：</span>
+watch<span class="w"> </span>-n<span class="w"> </span><span class="m">0</span>.2<span class="w"> </span><span class="s1">'ss -tin sport = :9000 or dport = :9000'</span>
+sudo<span class="w"> </span>tcpdump<span class="w"> </span>-ni<span class="w"> </span>lo<span class="w"> </span>port<span class="w"> </span><span class="m">9000</span><span class="w"> </span>-vv<span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>/tmp/flow-win.txt
+</code></pre></div>
+
+<p>在笔记里回答：</p>
+<ol>
+<li>是否出现 Window 变小 / Zero Window？</li>
+<li>本端 <code>Send-Q</code> 是否上涨？</li>
+<li>此时加大客户端 <code>SO_SNDBUF</code> 能否从根上解决问题？为什么不能作为「所有延迟问题的解法」？</li>
+</ol>
+<h3 id="5-nagle-tcp_nodelay">步骤 5：对比 Nagle / TCP_NODELAY（可选但推荐）</h3>
+<p>写一个「每次 send 1 字节请求、等 1 字节响应」的小 ping-pong，分别开关 <code>TCP_NODELAY</code>，量 1000 次 RTT。</p>
+<div class="codehilite"><pre><span></span><code>记录表：
+| 配置           | 平均 RTT | p99   | 抓包是否见延迟 ACK 间隙 |
+|----------------|----------|-------|-------------------------|
+| 默认           |          |       |                         |
+| TCP_NODELAY=1  |          |       |                         |
+</code></pre></div>
+
+<h3 id="6sourcestudy">步骤 6：sourceStudy 核对清单</h3>
+<p>对照 man7 <code>tcp(7)</code> 与本机 <code>man 7 tcp</code>：</p>
+<ul>
+<li>[ ] 文档中关于发送/接收缓冲的说明与默认行为</li>
+<li>[ ] <code>TCP_NODELAY</code> 语义</li>
+<li>[ ] 与窗口/拥塞相关的可调选项（若有）及版本边界</li>
+<li>[ ] 错误路径：<code>setsockopt</code> 失败时你的程序如何处理（不要静默忽略）</li>
+</ul>
+<p>写明：<strong>适用内核版本、发行版、以及你验证过的边界条件</strong>（例如容器里无 <code>NET_ADMIN</code> 时如何改用 netns 或同学协助）。</p>
+<h3 id="7">步骤 7：验收清单</h3>
+<ul>
+<li>[ ] 能用自己的话区分流控与拥塞控制（保护对象、信号、典型现象）</li>
+<li>[ ] 完成「延迟 + 丢包」注入实验，并保存 <code>ss</code>/抓包关键片段</li>
+<li>[ ] 完成「慢读」流控对照，能指出 Window / Send-Q 证据</li>
+<li>[ ] 明确写出：<strong>至少一种「加大 buffer 无效甚至有害」的情形</strong></li>
+<li>[ ] sourceStudy 笔记含版本与边界</li>
+</ul>
+<hr />
+<h2 id="_9">自测题</h2>
+<p><strong>题 1.</strong> 用自己的话说明：流量控制与拥塞控制分别保护什么？有效发送窗口为什么常常写成与 <code>min(rwnd, cwnd)</code> 相关？在公众号推送高峰时，若 <code>ss</code> 显示对端窗口很小且抓包有 Zero Window，优先怀疑应用问题还是链路拥塞？</p>
+<p><strong>题 2.</strong> 带宽 400 Mbps、RTT 80 ms，BDP 大约多少字节？若有效窗口只有 128 KB，粗算吞吐上限约为多少？若此时有人建议「把 SO_RCVBUF 调到 64 MB 一定能好」，你如何用本课的 pitfalls / tradeoffs 回应？</p>
+<p><strong>题 3.</strong> 解释 Nagle 与延迟 ACK 可能如何叠加拉高小 RPC 延迟。<code>TCP_NODELAY</code> 解决的是哪一层问题？它能否替代拥塞控制或修复 rwnd=0？动手实践里，如何用 <code>tc netem</code> + <code>ss</code>/<code>tcpdump</code> 区分「丢包导致的拥塞回退」与「慢读导致的流控」？</p>
+<h3 id="_10">自测题参考答案</h3>
+<p><strong>题 1.</strong> 流控保护接收方缓冲，防止发送方超过对端处理能力；拥塞控制保护网络共享路径，避免把瓶颈链路挤崩。发送方 in-flight 受两道限制中更严者约束，故与 <code>min(rwnd, cwnd)</code> 相关。Zero Window / 对端窗口极小优先怀疑<strong>对端应用读慢或反压（流控）</strong>，而不是先怪链路；若同时看到大量 retrans 与 cwnd 塌缩，再并行排查拥塞。</p>
+<p><strong>题 2.</strong> (400\ \mathrm{Mbps} = 50\ \mathrm{MB/s})，(80\ \mathrm{ms}=0.08\ \mathrm{s})，BDP (\approx 50\times 0.08 = 4\ \mathrm{MB})。窗口 128 KB 时吞吐粗算 (\approx 128\mathrm{KB}/0.08\mathrm{s} \approx 1.6\ \mathrm{MB/s})。「无脑调到 64 MB」可能对高 BDP 有帮助，但若根因是应用读慢或路径拥塞，大会放大排队延迟、掩盖反压——<strong>不能作为所有延迟问题的解法</strong>；应先分清 rwnd/cwnd/队列，再按需调整并观察延迟分布。</p>
+<p><strong>题 3.</strong> Nagle 可能因等待 ACK 而暂存小段，延迟 ACK 又可能故意晚回 ACK，两者叠加造成「你等我、我等你」的几十毫秒级空转。<code>TCP_NODELAY</code> 关闭 Nagle，改善小消息何时发出；<strong>不</strong>负责拥塞窗口，也<strong>不</strong>修复对端 rwnd=0。区分实验：<code>tc netem loss</code> 下应看到 retrans↑、cwnd 受压（拥塞侧）；慢读服务下应看到 Window↓/ZeroWindow、Send-Q↑（流控侧）。</p>
+<hr />
+<h2 id="_11">推荐资源</h2>
+<ol>
+<li><a href="https://man7.org/linux/man-pages/man7/tcp.7.html">TCP流控、拥塞与队列：Linux man-pages</a><br />
+   - 来源：man7.org｜语言：英文｜类型：文档｜难度：深入｜免费<br />
+   - 重点阅读 <strong>接收窗口与拥塞窗口</strong> 与 <strong>RTT、重传和带宽时延积</strong>，用于核对本节点实验的语义和边界。</li>
+</ol>
+<p>建议同时查阅本机 <code>man 7 tcp</code>、<code>man tc-netem</code>、<code>man ss</code>，并把内核版本与工具版本写进实验记录。</p>
+<hr />
+<h2 id="_12">本课小结</h2>
+<ul>
+<li><strong>流量控制</strong>保护接收方缓冲（<code>rwnd</code>）；<strong>拥塞控制</strong>适应网络承载能力（<code>cwnd</code>）；两者共同限制实际发送窗口：有效发送 ≈ 受 <code>min(rwnd, cwnd)</code> 约束。</li>
+<li><strong>吞吐受 RTT、丢包和缓冲影响</strong>：粗算吞吐 ≈ 窗口 / RTT；BDP = 带宽 × RTT，决定「管道要多少 in-flight」；丢包触发重传并回退 <code>cwnd</code>。</li>
+<li><strong>Nagle 与延迟 ACK</strong> 可能叠加抬高小消息延迟；<code>TCP_NODELAY</code> 按场景使用，不是万能开关。</li>
+<li><strong>队列有多层</strong>：应用、socket、qdisc、路径、对端接收——排障要分层，不要只看业务日志。</li>
+<li><strong>误区</strong>：吞吐低可能是读慢也可能是拥塞；<strong>大缓冲能撑高 BDP，也可能放大排队延迟</strong>——验收标准要求你真能区分，且不把加 buffer 当万金油。</li>
+<li><strong>实践</strong>：<code>tc netem</code> 注入延迟/丢包 + 慢读对照；用 <code>ss -ti</code> 与抓包看窗口与重传；对照 <code>tcp(7)</code> 记录版本与边界。</li>
+</ul>
+<hr />
+<h2 id="_13">配套练习建议</h2>
+<ol>
+<li><strong>默写对照表</strong>：流控 vs 拥塞（保护对象、信号、<code>ss</code>/抓包证据、错误处方）。</li>
+<li><strong>做完三组实验</strong>：基线、netem 延迟、netem 丢包、慢读流控；把关键输出贴进笔记。</li>
+<li><strong>BDP 算题</strong>：挑一条你们机房到某下游的实测 RTT，按链路标称带宽算 BDP，对比当前 <code>ss</code> 窗口是否数量级匹配。</li>
+<li><strong>代码审查</strong>：在接入层/推送路径搜 <code>TCP_NODELAY</code>、<code>SO_SNDBUF</code>、<code>SO_RCVBUF</code>，对每一处写下「为什么这样配、对应哪类延迟」。</li>
+<li><strong>值班演练</strong>：给新人一个「吞吐掉崖」案例，只允许先问 <code>ss</code>/<code>tcpdump</code>/<code>nstat</code>，禁止先改 buffer。</li>
+</ol>
+<p>下一课继续在传输与 Socket 脉络上推进；先确保你能独立讲清：何时是 rwnd、何时是 cwnd、何时是本机队列，以及为什么加大 buffer 不能包治百病。</p><div class="pn"><span><a href="62.html">← Proactor、完成通知与io_uring</a></span><span>下一课 待更新</span></div></main></div></body></html>
