@@ -1,0 +1,851 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>60. 连接池与长连接复用 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（60/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（12/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="cur" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 60 课 · 领域 D · 阶段 3</p><p class="dl"><a href="../files/60-d-pool.md" download>⬇ 本课 Markdown</a><a href="../files/practice60.tar.gz" download>⬇ 练习包 practice60.tar.gz</a></p><h1 id="60208">第 60/208 课：连接池与长连接复用</h1>
+<ul>
+<li><strong>阶段</strong>：第 3 阶段 · 传输与Socket</li>
+<li><strong>前置课程</strong>：d-tcp、d-timer</li>
+<li><strong>关键词</strong>：Connection Pooling、连接池、长连接、短连接、借用超时、空闲回收、失效探测、HTTP keep-alive、多路复用、HTTP/2、gRPC、brpc、池容量、下游并发</li>
+<li><strong>难度</strong>：进阶</li>
+<li><strong>所属领域</strong>：D · IO模型与事件（子类：调度与资源复用）</li>
+<li><strong>标签</strong>：Connection Pooling、D、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课我们解决的是<strong>服务端侧</strong>的执行资源复用：IO 线程只做读写与协议拆包，CPU/阻塞工作丢进有界工作线程池，结果再 <code>queueInLoop</code> 回投。线程池保护的是 EventLoop 的响应性。</p>
+<p>本课把镜头转向另一侧——<strong>客户端 / 下游侧</strong>的连接资源复用。</p>
+<p>公众号后台处理一条模板消息，往往不止碰一次自己的线程池，还要连续调用多个下游：</p>
+<div class="codehilite"><pre><span></span><code>粉丝触发 → 接入层 EventLoop
+         → 工作线程：签名校验 / JSON 解析
+         → 下游 RPC₁：用户资料服务（openid → 昵称/订阅状态）
+         → 下游 RPC₂：素材/媒体服务（取图文、缩略图）
+         → 下游 RPC₃：客服会话 / 模板消息下发通道
+         → 结果回投 IO 线程写回
+</code></pre></div>
+
+<p>如果每一次下游调用都「新建 TCP → TLS 握手 → 发请求 → 关连接」，成本会非常难看：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>典型开销（同机房量级，仅示意）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP 三次握手</td>
+<td>0.2–2 ms</td>
+</tr>
+<tr>
+<td>TLS 握手</td>
+<td>1–10+ ms（还可能有证书校验、会话票证未命中）</td>
+</tr>
+<tr>
+<td>应用层协议握手 / 鉴权</td>
+<td>再加几毫秒</td>
+</tr>
+<tr>
+<td>真正业务处理</td>
+<td>可能只要 1–3 ms</td>
+</tr>
+</tbody>
+</table>
+<p>也就是说：<strong>握手常常比业务本身还贵</strong>。高峰时每秒几万次短连接，等于把 CPU、端口、TIME_WAIT、下游 <code>accept</code> 队列一起打满。</p>
+<p>节点 summary 给出本课的核心命题：</p>
+<blockquote>
+<p>连接池管理可复用连接的建立、借出、健康与回收，复用策略取决于协议是否支持多路复用。</p>
+</blockquote>
+<p>拆开是三件事：</p>
+<ol>
+<li><strong>池容量与借用等待</strong>：池多大？满了是阻塞、失败，还是排队到超时？</li>
+<li><strong>失效探测和空闲回收</strong>：怎么发现对端已关、半开、空闲太久？怎么替换且不泄漏？</li>
+<li><strong>独占连接与多路复用</strong>：HTTP/1.1 keep-alive 一条连接同时只能跑一个请求；HTTP/2 / gRPC / brpc 可在单连接上多路并发——池模型完全不同。</li>
+</ol>
+<p>本课承接 d-tcp（连接生命周期）和 d-timer（超时与空闲计时），不追求「池越大越好」，而是建立可上线的边界：</p>
+<ul>
+<li>池过小会排队、借用超时；</li>
+<li>池过大会把压力直接砸到下游，并浪费空闲 fd / 内存；</li>
+<li>TCP keepalive 只能证明「链路大致还在」，<strong>不能代替业务截止时间</strong>。</li>
+</ul>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释池容量与借用等待</strong>
+   - 说清 <code>max_size</code>、空闲连接、借出连接、在建连接如何共同构成容量。
+   - 说清借用超时（borrow timeout）的阻塞 / 失败语义，以及为什么在线请求通常要「有上限地等待」。
+   - 能用指标回答：当前池深度、等待者数量、借用超时率、握手次数。</p>
+</li>
+<li>
+<p><strong>能独立完成：实现带借用超时的连接池，比较短连接与长连接压测</strong>
+   - 实现：借用超时、空闲回收、broken 替换、RAII/Guard 防止借出不还。
+   - 压测：同一负载下对比短连接与池化长连接的握手次数、CPU（或代理指标）、p99 延迟。
+   - 验收：过期/失效连接可替换且无泄漏；报告包含握手、CPU、p99 变化。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - 过期连接可替换且无泄漏。
+   - 报告包含握手、CPU 和 p99 变化。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：</p>
+<blockquote>
+<p>降低频繁握手开销并限制下游并发。</p>
+</blockquote>
+<p>这句话有两层，缺一不可。</p>
+<h3 id="1">1. 降低频繁握手开销</h3>
+<p>短连接的「正确」只在低频、无状态、对端不值得保活时成立。公众号后台这种「每条业务消息触发 2–N 次下游 RPC」的路径上，握手是纯浪费：</p>
+<ul>
+<li>本机：更多 <code>connect</code>、更多临时端口、更多 TIME_WAIT；</li>
+<li>CPU：TLS 握手特别吃对称/非对称运算；</li>
+<li>下游：<code>accept</code>、建会话、鉴权日志暴涨；</li>
+<li>延迟：p50/p99 被握手尾巴拉高，业务再快也救不回来。</li>
+</ul>
+<p>长连接复用把「建连」摊销到多次请求上。池化后握手次数近似等于「并发所需的连接上界」，而不是「请求总数」。</p>
+<h3 id="2">2. 限制下游并发</h3>
+<p>连接池不只是加速器，更是<strong>舱壁</strong>。<code>max_size=64</code> 意味着对某个下游，你最多同时占用 64 条连接（在独占模型下约等于 64 个在飞请求）。这比「工作线程想开多少并发就开多少」安全得多：</p>
+<ul>
+<li>保护下游不被瞬时打爆；</li>
+<li>保护本进程 fd / 内存；</li>
+<li>把过载显式变成「借用等待 / 借用超时」，而不是悄悄把延迟拖到用户超时。</li>
+</ul>
+<p>上一课的线程池限制的是<strong>本机执行并发</strong>；本课的连接池限制的是<strong>对下游的占用并发</strong>。两者经常要一起调。</p>
+<h3 id="3">3. 和上一课的分工</h3>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>上一课：线程池</th>
+<th>本课：连接池</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>复用对象</td>
+<td>工作线程</td>
+<td>TCP/TLS/RPC 连接</td>
+</tr>
+<tr>
+<td>主要保护</td>
+<td>EventLoop 不被慢任务堵住</td>
+<td>握手开销 + 下游容量</td>
+</tr>
+<tr>
+<td>满了怎么办</td>
+<td>有界队列拒绝 / 背压</td>
+<td>借用等待或超时失败</td>
+</tr>
+<tr>
+<td>泄漏形态</td>
+<td>任务引用已销毁 loop</td>
+<td>借出不还、broken 不销毁</td>
+</tr>
+<tr>
+<td>典型超时</td>
+<td>任务执行超时 / 停机 join</td>
+<td>借用超时、空闲超时、RPC deadline</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="0">0. 先建立直觉：连接是「贵且有限的通行证」</h3>
+<p>把下游服务想成一座只开有限个闸机的场馆：</p>
+<ul>
+<li>每次买票入场再立刻撕票离场（短连接）→ 闸机前永远在重新检票；</li>
+<li>办一张可复用的通票，用完还回去（连接池）→ 检票次数大降；</li>
+<li>通票总数有上限（<code>max_size</code>）→ 同时在馆内的人不会无限增长；</li>
+<li>领票要排队，但有截止时间（borrow timeout）→ 排太久就放弃，别堵死整条业务；</li>
+<li>通票可能过期或被判定无效（idle / health check）→ 要回收或换新票，不能把坏票继续借给别人。</li>
+</ul>
+<p>协议如果支持「一张通票同时带多人」（多路复用），闸机模型又会变：你需要的通票数量可以更少，但单票上的流控、队头阻塞、取消语义更复杂。</p>
+<hr />
+<h3 id="1_1">1. 池容量与借用等待</h3>
+<h4 id="11">1.1 池里到底有什么</h4>
+<p>一个可运行的连接池，状态至少要能回答四个数：</p>
+<div class="codehilite"><pre><span></span><code>max_size        容量上限
+idle            空闲可借的连接
+in_use          已借出、正在执行请求的连接
+creating        正在握手、已占名额但尚未可用的连接
+</code></pre></div>
+
+<p>容量约束通常是：</p>
+<div class="codehilite"><pre><span></span><code>idle + in_use + creating ≤ max_size
+</code></pre></div>
+
+<p>漏掉 <code>creating</code> 是常见坑：多个线程同时发现「池未满」一起 <code>connect</code>，会瞬时超过你以为的上限，把下游打出尖刺。</p>
+<h4 id="12-borrow">1.2 借用（borrow）状态机</h4>
+<div class="codehilite"><pre><span></span><code>borrow()
+  ├─ 有健康 idle ？ → 借出，标记 in_use
+  ├─ 未达 max_size ？ → 占位 creating → 握手 → 加入池并借出
+  └─ 否则 → 等待归还 / 回收
+        ├─ 在 borrow_timeout 内等到 → 再走上面分支
+        └─ 超时 → 失败（抛错 / 返回错误码 / 返回 503）
+</code></pre></div>
+
+<p>归还（release）：</p>
+<div class="codehilite"><pre><span></span><code>release(conn, broken=false)
+  ├─ broken 或 ping 失败 → 销毁，腾出名额，唤醒等待者
+  ├─ 池已关闭 → 销毁
+  └─ 否则 → 回到 idle，更新 last_used，唤醒等待者
+</code></pre></div>
+
+<h4 id="13">1.3 借用超时的语义：阻塞，但有界</h4>
+<p>「阻塞等待」和「立即失败」都有位置，但对在线 RPC，更常见的是<strong>有界等待</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>行为</th>
+<th>优点</th>
+<th>风险</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无限阻塞</td>
+<td>一直等到有连接</td>
+<td>不主动失败</td>
+<td>调用方线程/协程被挂死，延迟无上界</td>
+<td>几乎不适合在线路径</td>
+</tr>
+<tr>
+<td>立即失败</td>
+<td>无 idle 且已满则马上错</td>
+<td>失败快</td>
+<td>突发时误杀太多</td>
+<td>可快速重试且有上游限流</td>
+</tr>
+<tr>
+<td><strong>借用超时</strong></td>
+<td>最多等 T</td>
+<td>吸收短突发，又有截止</td>
+<td>T 要和上游 deadline 对齐</td>
+<td><strong>默认推荐</strong></td>
+</tr>
+</tbody>
+</table>
+<p>关键点：借用等待只是整条调用 deadline 的一部分。若上游 RPC 总超时 100ms，借用再等 80ms，留给真实业务只剩 20ms——成功率会断崖下跌。借用超时应明显小于业务超时，并在日志里分开打点。</p>
+<h4 id="14-python">1.4 代码骨架（Python）</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ConnectionPool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">borrow</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">FakeConn</span><span class="p">:</span>
+        <span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">borrow_timeout</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="p">:</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">PoolClosed</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_reclaim_idle_locked</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">())</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span><span class="p">:</span>
+                    <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">health_check_on_borrow</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">c</span><span class="o">.</span><span class="n">ping</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_destroy_locked</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="n">c</span><span class="o">.</span><span class="n">in_use</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">return</span> <span class="n">c</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_creating</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_creating</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">break</span>  <span class="c1"># 去锁外握手</span>
+                <span class="n">remaining</span> <span class="o">=</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">BorrowTimeout</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">remaining</span><span class="p">)</span>
+        <span class="c1"># 锁外 connect/handshake，避免堵死借还</span>
+        <span class="o">...</span>
+</code></pre></div>
+
+<p>注意两件实现细节：</p>
+<ol>
+<li><strong>握手必须在锁外</strong>：<code>connect</code> + TLS 可能要数毫秒到数十毫秒；持锁握手会让所有借还串行化。</li>
+<li><strong>占位 <code>_creating</code></strong>：名额在发起握手前就占上，防止超卖。</li>
+</ol>
+<h4 id="15-linux">1.5 Linux 上观察连接与等待</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 看本进程到某下游的连接数（ESTABLISHED）</span>
+ss<span class="w"> </span>-tnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">':port'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="nv">pid</span><span class="o">=</span>&lt;pid&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+
+<span class="c1"># 看 TIME_WAIT 是否被短连接打爆</span>
+ss<span class="w"> </span>-s
+
+<span class="c1"># 看连接状态分布</span>
+ss<span class="w"> </span>-ant<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">'{print $1}'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span><span class="p">|</span><span class="w"> </span>uniq<span class="w"> </span>-c<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-nr
+
+<span class="c1"># 粗看握手/连接建立延迟（对端需配合；或用应用埋点）</span>
+<span class="c1"># 应用指标更可靠：handshake_count、borrow_wait_ms、borrow_timeout_total</span>
+</code></pre></div>
+
+<p>应用层至少要有：</p>
+<div class="codehilite"><pre><span></span><code>pool_idle                 空闲连接数
+pool_in_use               借出连接数
+pool_creating             在建连接数
+pool_size / pool_max      当前/最大
+borrow_wait_seconds       借用等待直方图
+borrow_timeout_total      借用超时次数
+handshake_total           握手次数
+handshake_seconds         握手耗时
+conn_reclaimed_idle_total 空闲回收次数
+conn_replaced_broken_total 失效替换次数
+</code></pre></div>
+
+<p>没有 <code>borrow_wait</code> 和 <code>handshake_total</code>，你分不清「池太小」还是「下游太慢」。</p>
+<hr />
+<h3 id="2_1">2. 失效探测和空闲回收</h3>
+<h4 id="21">2.1 连接为什么会「看起来活着，其实已经死了」</h4>
+<p>长连接复用后，连接会在空闲时躺在池里。下列情况都会让你借到「坏连接」：</p>
+<ul>
+<li>对端重启、进程崩溃，RST 还没到达或被中间设备吃掉；</li>
+<li>NAT / L4LB / 防火墙空闲超时悄悄丢掉会话；</li>
+<li>对端主动 close，本端还没读到 EOF；</li>
+<li>TLS 会话或应用层登录态过期；</li>
+<li>半开连接：本端还能 <code>write</code>，但响应永远不来（直到超时）。</li>
+</ul>
+<p>所以池必须有：<strong>空闲回收 + 借用时探测 + 使用中失败后标记 broken</strong>。</p>
+<h4 id="22-idle-timeout">2.2 空闲回收（idle timeout）</h4>
+<div class="codehilite"><pre><span></span><code>若 now - last_used &gt; idle_timeout：
+  从 idle 队列移除并 close
+  腾出名额，允许后续重建
+</code></pre></div>
+
+<p><code>idle_timeout</code> 通常要<strong>小于</strong>中间设备的空闲砍线，又不能太短以至于每分钟都在重建。常见起点：</p>
+<ul>
+<li>同机房直连：30s–5min；</li>
+<li>经过云 LB / NAT：更保守，先对齐对方文档的 idle 上限（例如 60s）再留余量。</li>
+</ul>
+<p>空闲回收可以用：</p>
+<ul>
+<li>借用路径懒回收（实现简单，本课实践采用）；</li>
+<li>后台定时扫描（更及时，但要和借还锁协调）。</li>
+</ul>
+<p>这和 d-timer 一脉相承：空闲截止时间是定时器问题，不是「有空再看一眼」。</p>
+<h4 id="23-health-check">2.3 失效探测（health check）</h4>
+<p>常见三档：</p>
+<table>
+<thead>
+<tr>
+<th>档位</th>
+<th>做法</th>
+<th>成本</th>
+<th>漏检风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>借用时轻量检查</td>
+<td>看 socket 错误、<code>poll</code> 是否可读到 EOF、应用 <code>ping</code></td>
+<td>低–中</td>
+<td>仍可能有 TOCTOU</td>
+</tr>
+<tr>
+<td>周期性心跳</td>
+<td>空闲连接定时 ping</td>
+<td>中</td>
+<td>误杀：短暂抖动当死亡</td>
+</tr>
+<tr>
+<td>失败驱动</td>
+<td>RPC 超时/协议错 → mark broken → 销毁</td>
+<td>低</td>
+<td>第一次请求可能踩坑</td>
+</tr>
+</tbody>
+</table>
+<p>生产系统通常组合使用：<strong>失败驱动为主，借用前轻量检查为辅，必要时加低频心跳</strong>。</p>
+<p>伪代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">broken</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">broken</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">c</span><span class="o">.</span><span class="n">ping</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">replaced_broken</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_destroy_locked</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="o">.</span><span class="n">notify</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">in_use</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">last_used_at</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cv</span><span class="o">.</span><span class="n">notify</span><span class="p">()</span>
+</code></pre></div>
+
+<p>验收要求「过期连接可替换且无泄漏」：</p>
+<ul>
+<li>过期 / broken 的连接必须 <code>close</code> 并从 <code>_all</code> 移除；</li>
+<li>借出必须有对称的归还（Guard / <code>defer</code> / <code>finally</code>）；</li>
+<li>池 <code>close()</code> 后，空闲连接销毁；仍在途的连接在 <code>release</code> 时销毁，不能回流 idle。</li>
+</ul>
+<h4 id="24">2.4 泄漏的典型样子</h4>
+<div class="codehilite"><pre><span></span><code>borrow() 成功
+  → 业务异常 / 提前 return / 忘了 finally
+  → 连接既不在 idle，也不再被任何人 release
+  → in_use 只增不减
+  → 最终所有名额耗尽，所有人 BorrowTimeout
+</code></pre></div>
+
+<p>这比「池太小」更隐蔽：监控上 <code>pool_in_use == max_size</code>，但下游 QPS 很低。务必用 RAII：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">with</span> <span class="n">ConnectionGuard</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+    <span class="n">do_rpc</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="c1"># 异常也会 release；可 mark_broken 后销毁</span>
+</code></pre></div>
+
+<p>C++ 里同理：<code>std::unique_ptr</code> 自定义 deleter，或 <code>absl::Cleanup</code>。</p>
+<h4 id="25">2.5 用实验验证替换与无泄漏</h4>
+<p>本课实践目录 <code>/workspace/atlas/practice60/</code> 中：</p>
+<ul>
+<li><code>test_idle_reclaim_and_replace_broken</code>：空闲超时后旧连接被回收，broken 归还后被替换；</li>
+<li><code>test_no_leak_with_guard</code>：多线程借用，即使抛错也不留 <code>in_use</code>。</li>
+</ul>
+<hr />
+<h3 id="3_1">3. 独占连接与多路复用</h3>
+<h4 id="31">3.1 复用策略取决于协议</h4>
+<p>节点 summary 的后半句往往被忽略：</p>
+<blockquote>
+<p>复用策略取决于协议是否支持多路复用。</p>
+</blockquote>
+<p>两种极端：</p>
+<p><strong>A. 独占连接（HTTP/1.1 keep-alive 典型模型）</strong></p>
+<div class="codehilite"><pre><span></span><code>一条连接同一时刻只承载 1 个请求（或严格串行 pipelining，实践中很少用）
+并发 N 个在飞请求 ≈ 需要约 N 条连接
+池的 max_size ≈ 对该下游的最大并发
+</code></pre></div>
+
+<p><strong>B. 多路复用（HTTP/2、gRPC、许多 RPC 框架如 brpc）</strong></p>
+<div class="codehilite"><pre><span></span><code>一条连接上可同时跑多个 stream / 相关请求
+并发主要由「每连接流控窗口 + 连接数」共同决定
+池可能很小（每实例 1–4 条），甚至「单连接 + 多路」
+</code></pre></div>
+
+<p>把 HTTP/2 的池按 HTTP/1.1 的直觉调到几百，往往会：</p>
+<ul>
+<li>浪费握手和内存；</li>
+<li>在 LB 上制造不必要的连接风暴；</li>
+<li>反而失去多路复用的队头优化收益（或踩到另一类队头阻塞）。</li>
+</ul>
+<h4 id="32-http11-keep-alive">3.2 HTTP/1.1 keep-alive：长连接，但仍是独占</h4>
+<div class="codehilite"><pre><span></span><code><span class="err">Connection: keep-alive</span>
+</code></pre></div>
+
+<p>它解决的是「别每次短连接」，<strong>不是</strong>「一条连接并行打多个请求」。浏览器对每主机连接数有上限，服务端客户端库也通常是：</p>
+<div class="codehilite"><pre><span></span><code>borrow conn → 发请求 → 读完整响应 → release conn
+</code></pre></div>
+
+<p>因此 HTTP/1.1 客户端连接池几乎就是本课的独占池模型。</p>
+<h4 id="33-http2-grpc">3.3 HTTP/2 / gRPC：池的「容量」含义变了</h4>
+<div class="codehilite"><pre><span></span><code>max_concurrent_streams   单连接最大并行流
+connection_window        连接级流量窗口
+stream_window            流级窗口
+</code></pre></div>
+
+<p>这时：</p>
+<ul>
+<li>「借连接」可能变成「在已有连接上开 stream」；</li>
+<li>连接数可以很少；真正限制吞吐的是窗口与下游处理能力；</li>
+<li>单连接故障的爆炸半径更大（一条连接挂掉，上面所有 stream 一起失败）——所以仍常保留少量连接做分散。</li>
+</ul>
+<h4 id="34-brpc">3.4 brpc 客户端视角</h4>
+<p>本课推荐资源是 brpc 的 Client Basics：</p>
+<ul>
+<li><a href="https://brpc.apache.org/docs/client/basics/">https://brpc.apache.org/docs/client/basics/</a></li>
+</ul>
+<p>阅读时重点对照：</p>
+<ul>
+<li>连接建立与复用如何配置；</li>
+<li>超时（连接超时、RPC 超时）与重试；</li>
+<li>连接池 / 单连接 / 连接类型对并发的影响；</li>
+<li>错误与健康检查路径。</li>
+</ul>
+<p>brpc 这类框架通常把「协议是否多路复用」消化在客户端通道里，但<strong>你仍然要理解</strong>：你设的「连接数」到底限制的是 socket 数还是在飞请求数。</p>
+<h4 id="35">3.5 同一业务，两种池模型对比</h4>
+<p>假设下游 QPS 目标 8000，平均在途时间 10ms，则平均在飞约 <code>8000 × 0.01 = 80</code>。</p>
+<table>
+<thead>
+<tr>
+<th>协议模型</th>
+<th>粗算连接数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP/1.1 独占池</td>
+<td>≈ 80–120（含余量）</td>
+<td><code>max_size</code> 直接约等于并发</td>
+</tr>
+<tr>
+<td>HTTP/2 多路</td>
+<td>例如 4 条连接 × 每连接几十 stream</td>
+<td>还受 <code>max_concurrent_streams</code> 限制</td>
+</tr>
+<tr>
+<td>短连接</td>
+<td>≈ 请求数（无复用）</td>
+<td>握手与 TIME_WAIT 爆炸</td>
+</tr>
+</tbody>
+</table>
+<p>粗算只是起点；最终仍靠压测看握手次数、p99、下游 CPU、错误率。</p>
+<h4 id="36-vs">3.6 短连接 vs 长连接压测在证明什么</h4>
+<p>本课实践 <code>bench.py</code> 在同一 <code>workers × reqs</code> 下对比：</p>
+<div class="codehilite"><pre><span></span><code>短连接：每次请求都付出 handshake_ms
+池化：  预热后握手次数 ≈ pool_size，请求延迟接近 work_ms
+</code></pre></div>
+
+<p>一次本地实测（<code>workers=6, reqs=12, handshake=4ms, work=1ms, pool_size=6</code>）：</p>
+<div class="codehilite"><pre><span></span><code>short : handshakes=72  p99≈5.3ms  qps≈1122  cpu_proxy≈372ms
+pooled: handshakes=6   p99≈1.2ms  qps≈4665  cpu_proxy≈78ms
+</code></pre></div>
+
+<p>解读：</p>
+<ul>
+<li><strong>握手</strong>：72 → 6，降了一个数量级；</li>
+<li><strong>p99</strong>：从「握手+业务」变成接近「业务」；</li>
+<li><strong>CPU 代理（累计活跃时间）</strong>：显著下降——对应真实世界里 TLS/系统调用开销下降；</li>
+<li><strong>QPS</strong>：同硬件下池化吞吐明显更高。</li>
+</ul>
+<p>这正是 acceptance 要的报告：握手、CPU、p99 变化。</p>
+<hr />
+<h2 id="_5">常见误区</h2>
+<h3 id="1-tcp-pitfalls">1. TCP 保活不能代替业务截止时间（节点 pitfalls）</h3>
+<p>节点 pitfalls：</p>
+<blockquote>
+<p>TCP保活不能代替业务截止时间。</p>
+</blockquote>
+<p>展开讲：</p>
+<ul>
+<li><strong>TCP keepalive</strong>（<code>SO_KEEPALIVE</code>、<code>tcp_keepalive_time</code> 等）默认往往是<strong>小时级</strong>探测，目的是清理死连接，不是做 RPC 超时；</li>
+<li>即便你把 keepalive 调到秒级，它也只能回答「对端 TCP 栈是否还响应探测包」，<strong>不能</strong>回答「这个业务请求是否在 50ms 内返回」；</li>
+<li>半开故障、应用线程死锁、下游队列堵住时，TCP 连接仍可能显示 ESTABLISHED，keepalive 也长期成功；</li>
+<li>业务必须有自己的 <strong>RPC deadline / 读超时 / 总超时</strong>，并且超时后要取消或丢弃结果，避免迟到响应写回。</li>
+</ul>
+<p>正确分层：</p>
+<div class="codehilite"><pre><span></span><code>TCP keepalive     → 清理长时间死亡的空闲连接（分钟～小时）
+池 idle timeout   → 主动回收空闲，避免被中间设备默默砍线（秒～分钟）
+借用超时          → 拿不到连接就快失败（毫秒～百毫秒）
+RPC/业务 deadline → 单次调用的真正截止时间（毫秒～秒）
+</code></pre></div>
+
+<p>四者职责不同，<strong>用 keepalive 「代替」业务超时是结构性错误</strong>。</p>
+<h3 id="2_2">2. 借了不还 / 池泄漏</h3>
+<p>表现：<code>in_use</code> 缓慢爬到 <code>max_size</code>，之后全部 <code>BorrowTimeout</code>，但下游监控很闲。</p>
+<p>根因：异常路径没有 <code>release</code>。</p>
+<p>对策：Guard/RAII、<code>defer</code>、静态检查、泄漏检测指标（<code>in_use</code> 长期等于 <code>max</code> 且业务 QPS 低）。</p>
+<h3 id="3_2">3. 健康检查误杀</h3>
+<p>过于激进的 ping（短超时、高频率）会把短暂抖动当成死亡，导致：</p>
+<ul>
+<li>连接被批量销毁；</li>
+<li>紧接着握手风暴；</li>
+<li>下游与本端 CPU 同时升高。</li>
+</ul>
+<p>建议：失败要<strong>连续多次</strong>或<strong>结合业务错误码</strong>再标记 broken；抖动期用退避，而不是立刻清空池。</p>
+<h3 id="4">4. 把池当无限队列</h3>
+<p>有人把 <code>max_size</code> 调到很大，再把 <code>borrow_timeout</code> 调到很长，以为「总能等到连接」。这和上一课的无界队列同一类错误：</p>
+<ul>
+<li>等待中的调用占着线程/协程；</li>
+<li>延迟无上界；</li>
+<li>下游一旦变慢，本端所有人一起陪葬。</li>
+</ul>
+<p>池满时应该<strong>快速失败或有界等待</strong>，并把失败传导为限流 / 降级，而不是无限排队。</p>
+<h3 id="5-http11-http2">5. 无视协议模型，按 HTTP/1.1 经验调 HTTP/2 池</h3>
+<p>多路复用下「连接数 = 并发」不再成立。乱加连接可能提高尾延迟、打散缓存亲和，又吃掉内存。先问协议，再定池。</p>
+<h3 id="6">6. 只池化、不设下游超时</h3>
+<p>池化降低了握手，但请求仍可能在下游排队。没有业务超时，长连接只会让失败来得更晚、更同步。</p>
+<hr />
+<h2 id="_6">设计权衡</h2>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>池过小排队，过大增加下游压力和空闲资源。</p>
+</blockquote>
+<h3 id="_7">池过小</h3>
+<p>症状：</p>
+<ul>
+<li><code>borrow_wait</code> 升高，<code>borrow_timeout</code> 增多；</li>
+<li>本端线程池可能因等连接而阻塞（若借用在工作线程里同步做）；</li>
+<li>用户侧 p99 变差，但下游未必满载。</li>
+</ul>
+<p>处理：</p>
+<ul>
+<li>先看是不是泄漏；</li>
+<li>再看借用超时是否过短；</li>
+<li>最后才谨慎增大 <code>max_size</code>，并观察下游 CPU / 排队。</li>
+</ul>
+<h3 id="_8">池过大</h3>
+<p>症状：</p>
+<ul>
+<li>空闲连接占 fd 与内存；</li>
+<li>突发时瞬时并发打穿下游；</li>
+<li>对端 <code>accept</code>、线程池、DB 连接被连带打满；</li>
+<li>故障恢复时「重连风暴」更猛。</li>
+</ul>
+<p>处理：</p>
+<ul>
+<li>用 <code>max_size</code> 做硬舱壁；</li>
+<li>结合限流、重试预算、熔断；</li>
+<li>空闲回收避免长期占着峰值容量。</li>
+</ul>
+<h3 id="_9">怎么选起点</h3>
+<p>独占模型粗算：</p>
+<div class="codehilite"><pre><span></span><code>所需并发 ≈ QPS × 平均在途秒数
+max_size ≈ 所需并发 × (1.2 ~ 2.0)   # 余量看抖动
+borrow_timeout &lt;&lt; 业务超时
+idle_timeout &lt; 中间设备空闲砍线
+</code></pre></div>
+
+<p>然后压测校准：看握手次数是否仍过高（可能 idle 太短）、借用超时是否过高（可能池太小或下游太慢）、下游错误率是否随扩池上升（可能已经过大）。</p>
+<h3 id="_10">与线程池联调</h3>
+<p>工作线程里同步 <code>borrow + RPC</code> 时：</p>
+<ul>
+<li>连接池过小 → 工作线程堵在借用上 → 上一课的有界队列开始拒绝；</li>
+<li>连接池过大 → 工作线程全部打下游 → 下游崩。</li>
+</ul>
+<p>所以两者的容量要一起设计：<strong>线程池限制本机执行，连接池限制出站占用</strong>。</p>
+<hr />
+<h2 id="_11">动手实践</h2>
+<p>实践目标（节点 practice / acceptance）：</p>
+<blockquote>
+<p>实现带借用超时的连接池，比较短连接与长连接压测。<br />
+过期连接可替换且无泄漏；报告包含握手、CPU 和 p99 变化。</p>
+</blockquote>
+<p>配套目录：<code>/workspace/atlas/practice60/</code></p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>connection_pool.py</code></td>
+<td>带借用超时、空闲回收、broken 替换的连接池 + <code>ConnectionGuard</code></td>
+</tr>
+<tr>
+<td><code>bench.py</code></td>
+<td>短连接 vs 池化长连接压测与报告</td>
+</tr>
+<tr>
+<td><code>test_pool.py</code></td>
+<td>验收用例</td>
+</tr>
+<tr>
+<td><code>test.sh</code> / <code>run.sh</code></td>
+<td>一键运行</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1_2">步骤 1：跑通验收</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/practice60
+./test.sh
+<span class="c1"># 末行：ALL_CHECKS_PASSED</span>
+</code></pre></div>
+
+<h3 id="2_3">步骤 2：读懂借用超时</h3>
+<p><code>test_borrow_timeout</code>：<code>max_size=1</code> 时借住不还，第二次借用应在 <code>borrow_timeout</code> 附近失败。</p>
+<p>自行改超时时间，观察等待是否有界。</p>
+<h3 id="3_3">步骤 3：过期替换与无泄漏</h3>
+<p><code>test_idle_reclaim_and_replace_broken</code>：</p>
+<ul>
+<li>归还后睡眠超过 <code>idle_timeout</code>，再借用应触发回收/重建；</li>
+<li><code>mark_broken</code> 归还后不得回流 idle；</li>
+<li><code>leaked() == 0</code>。</li>
+</ul>
+<p><code>test_no_leak_with_guard</code>：多线程下即使抛错，<code>in_use</code> 最终为 0。</p>
+<h3 id="4-vs">步骤 4：短连 vs 长连报告</h3>
+<p><code>bench.py</code> 输出类似：</p>
+<div class="codehilite"><pre><span></span><code>=== short vs pooled report ===
+short:  n=72 handshakes=72 ... p99=5.338ms ... cpu_proxy=371.64ms
+pooled: n=72 handshakes=6  ... p99=1.238ms ... cpu_proxy=78.07ms
+BENCH_OK
+</code></pre></div>
+
+<p>请在笔记中记录三列变化：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>短连接</th>
+<th>池化长连接</th>
+<th>变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>握手次数</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>CPU 代理 / 实际 CPU</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>p99</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-brpc-sourcestudy">步骤 5：对照 brpc 文档做 sourceStudy</h3>
+<p>节点 sourceStudy：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>打开：</p>
+<ul>
+<li><a href="https://brpc.apache.org/docs/client/basics/">连接池与长连接复用：参考文档 / 原始资料</a></li>
+</ul>
+<p>追踪清单：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>你在文档/实验里找到的答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>客户端如何配置连接超时与 RPC 超时？二者谁更接近「业务截止时间」？</td>
+<td></td>
+</tr>
+<tr>
+<td>连接复用 / 连接池相关选项叫什么？默认偏向单连接还是池？</td>
+<td></td>
+</tr>
+<tr>
+<td>文档如何描述错误处理与重试？失败连接是否自动淘汰？</td>
+<td></td>
+</tr>
+<tr>
+<td>协议若支持多路复用，连接数与并发的关系如何表述？</td>
+<td></td>
+</tr>
+<tr>
+<td>你阅读的文档版本/日期？与本课模拟池的语义差异？</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="6_1">步骤 6：自己改参数做一张权衡表</h3>
+<p>建议矩阵：</p>
+<div class="codehilite"><pre><span></span><code>max_size: 2 / 6 / 32
+borrow_timeout: 50ms / 500ms / 5s
+idle_timeout: 100ms / 2s / 30s
+负载: workers=8, reqs=30, handshake=5ms, work=2ms
+</code></pre></div>
+
+<p>观察：</p>
+<ul>
+<li>池过小：timeouts 上升、p99 上升；</li>
+<li>池过大：handshakes 在突发时上升（对下游压力的代理）、空闲资源占用上升；</li>
+<li>idle 过短：握手次数无意义地升高；</li>
+<li>borrow 过长：失败变慢，线程被挂住。</li>
+</ul>
+<h3 id="_12">验收清单</h3>
+<div class="codehilite"><pre><span></span><code>[ ] 能解释 max_size / idle / in_use / creating / borrow_timeout
+[ ] 实现了带借用超时的连接池
+[ ] 空闲超时连接可回收替换
+[ ] broken 连接可销毁替换
+[ ] Guard/finally 保证无泄漏
+[ ] 短连接 vs 长连接报告含握手、CPU、p99
+[ ] ./test.sh 输出 ALL_CHECKS_PASSED
+[ ] 对照 brpc Client Basics 完成 sourceStudy 表格
+[ ] 理解 TCP keepalive ≠ 业务 deadline
+</code></pre></div>
+
+<hr />
+<h2 id="_13">自测题</h2>
+<p><strong>题 1</strong><br />
+某下游客户端连接池 <code>max_size=32</code>，监控长期显示 <code>in_use=32</code>、<code>idle=0</code>，但下游服务 CPU 很低、QPS 也不高。最可能的原因是？</p>
+<p>A. 池过大，把下游压垮了<br />
+B. 大量连接借出后未归还（泄漏），名额被占满<br />
+C. TCP keepalive 间隔太短，连接被误杀<br />
+D. 短连接比长连接更适合该场景，应关掉池</p>
+<p><strong>题 2</strong><br />
+关于 TCP keepalive 与业务超时，下列哪项正确？</p>
+<p>A. 打开 <code>SO_KEEPALIVE</code> 后可以不再设置 RPC 超时<br />
+B. keepalive 默认通常是秒级，足以替代读超时<br />
+C. keepalive 用于清理长时间死亡连接；业务截止时间必须单独设置<br />
+D. keepalive 失败就等于业务失败，二者语义相同</p>
+<p><strong>题 3</strong><br />
+HTTP/1.1 keep-alive 客户端池与 gRPC（HTTP/2）客户端在「需要多少连接才能支撑 100 个在飞请求」上，更合理的理解是？</p>
+<p>A. 两者都大约需要 100 条连接<br />
+B. HTTP/1.1 独占模型大约需要约 100 条连接；HTTP/2 可能用少得多的连接承载多路 stream<br />
+C. HTTP/2 必须比 HTTP/1.1 使用更多连接才能多路复用<br />
+D. 连接数只由 <code>idle_timeout</code> 决定，与协议无关</p>
+<hr />
+<h3 id="_14">自测题参考答案</h3>
+<p><strong>题 1：B</strong><br />
+下游很闲但本端 <code>in_use</code> 顶满，典型是借出未归还。A 会表现为下游忙；C 通常导致频繁握手而不是长期 <code>in_use</code> 占满；D 与现象无关。</p>
+<p><strong>题 2：C</strong><br />
+对应 pitfalls「TCP保活不能代替业务截止时间」。keepalive 与 RPC deadline 分层，职责不同。</p>
+<p><strong>题 3：B</strong><br />
+复用策略取决于协议是否支持多路复用。HTTP/1.1 keep-alive 仍是独占；HTTP/2/gRPC 可在单连接多路并发。</p>
+<hr />
+<h2 id="_15">推荐资源</h2>
+<ul>
+<li><a href="https://brpc.apache.org/docs/client/basics/">连接池与长连接复用：参考文档 / 原始资料</a>（brpc.apache.org，英文，文档，进阶，免费）</li>
+<li>重点阅读池容量与借用等待与失效探测和空闲回收，用于核对本节点实验的语义和边界。</li>
+<li>建议同时弄清：连接超时 vs RPC 超时、连接复用选项、错误/重试路径、以及多路复用协议下「连接数」的真实含义。</li>
+<li>阅读时记录文档版本与和本课模拟池的差异（本课是教学用独占池模型）。</li>
+</ul>
+<hr />
+<h2 id="_16">本课小结</h2>
+<ol>
+<li><strong>连接池是下游侧的资源复用与舱壁</strong>：降低握手开销，同时限制对下游的并发占用。</li>
+<li><strong>容量 = idle + in_use + creating ≤ max_size</strong>：握手要占位，且应在锁外进行。</li>
+<li><strong>借用要有超时</strong>：无限等连接会把过载变成无界延迟；借用超时必须嵌在业务 deadline 之内。</li>
+<li><strong>空闲回收 + 失效替换 + 借出必还</strong>：过期/broken 可替换且无泄漏，是上线底线。</li>
+<li><strong>TCP keepalive ≠ 业务截止时间</strong>：保活、idle、borrow、RPC deadline 分层配置。</li>
+<li><strong>协议决定池模型</strong>：HTTP/1.1 keep-alive 独占；HTTP/2/gRPC/brpc 多路复用下连接数与并发不再一一对应。</li>
+<li><strong>池过小排队，过大压下游</strong>：用压测看握手、CPU、p99 与下游错误率，而不是只看本端 QPS。</li>
+<li><strong>和线程池联调</strong>：线程池管执行，连接池管出站；任一无限化都会把问题转移到另一侧。</li>
+</ol>
+<p>下一课会继续在传输与 Socket / 资源复用主题上推进。请先完成 <code>practice60</code> 验收，并对照 brpc 文档填完 sourceStudy 表，再进入后续内容。</p>
+<hr />
+<h2 id="_17">配套练习建议</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>connection_pool.py</code></td>
+<td>池实现与 Guard</td>
+</tr>
+<tr>
+<td><code>bench.py</code></td>
+<td>短连/长连对比报告</td>
+</tr>
+<tr>
+<td><code>test_pool.py</code></td>
+<td>借用超时、回收替换、无泄漏、压测断言</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>一键验收</td>
+</tr>
+</tbody>
+</table>
+<p>运行期望：</p>
+<div class="codehilite"><pre><span></span><code>./test.sh
+<span class="c1"># 末行：ALL_CHECKS_PASSED</span>
+</code></pre></div>
+
+<p>建议压测参数：</p>
+<div class="codehilite"><pre><span></span><code>workers: 4 / 8 / 16
+handshake_ms: 2 / 5 / 10
+work_ms: 1 / 5
+pool_size: 2 / 8 / 32
+borrow_timeout: 0.05 / 0.5 / 2
+</code></pre></div>
+
+<p>观察：握手次数、借用超时次数、p50/p99、wall 时间、cpu_proxy（或 <code>time -v</code> / <code>perf</code>）。</p>
+<p>进阶练习：</p>
+<ol>
+<li>把 FakeConn 换成真实 TCP（本地 echo server），用 <code>ss</code> 观察 ESTABLISHED / TIME_WAIT；</li>
+<li>为池增加「借出最长租期」，超时强制视为 broken；</li>
+<li>模拟 HTTP/2：单连接多 stream 许可桶，对比独占池的 <code>max_size</code> 语义；</li>
+<li>注入 1% 半开连接，比较「仅失败驱动」与「借用前 ping」的尾延迟；</li>
+<li>与上一课线程池组合：worker 内同步 borrow+RPC，画出双池容量的过载曲面。</li>
+</ol><div class="pn"><span><a href="59.html">← IO线程与工作线程池</a></span><span>下一课 待更新</span></div></main></div></body></html>
