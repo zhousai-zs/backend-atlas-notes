@@ -1,0 +1,722 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>57. Reactor与事件循环 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（57/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details open><summary>领域 D（9/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="cur" href="../lessons/57.html">57. Reactor与事件循环</a></li><li class="todo">58. 定时器、时间轮与单调时钟 <em>待更新</em></li><li class="todo">59. IO线程与工作线程池 <em>待更新</em></li><li class="todo">60. 连接池与长连接复用 <em>待更新</em></li><li class="todo">61. 有栈协程与用户态调度 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">62. Proactor、完成通知与io_uring <em>待更新</em></li><li class="todo">63. TCP流控、拥塞与队列 <em>待更新</em></li><li class="todo">64. 海量连接与接入治理 <em>待更新</em></li></ul></details><details><summary>领域 E（0/16）</summary><div>阶段 2</div><ul><li class="todo">65. 数据竞争与线程安全契约 <em>待更新</em></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 57 课 · 领域 D · 阶段 3</p><p class="dl"><a href="../files/57-d-reactor.md" download>⬇ 本课 Markdown</a></p><h1 id="57208-reactor">第 57/208 课：Reactor与事件循环</h1>
+<ul>
+<li><strong>阶段</strong>：第 3 阶段 · 传输与Socket</li>
+<li><strong>前置课程</strong>：d-epoll、d-framing</li>
+<li><strong>关键词</strong>：Reactor Pattern、事件循环、Poller、Channel、EventLoop、线程亲和性、跨线程投递、pending functors、连接安全关闭、延迟销毁、重入、one loop per thread、eventfd、queueInLoop、runInLoop</li>
+<li><strong>难度</strong>：进阶</li>
+<li><strong>所属领域</strong>：D · IO模型与事件</li>
+<li><strong>标签</strong>：Reactor Pattern、D、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课我们把「何时就绪」落到了 <code>epoll</code>，又把「字节流如何切成消息」落到了分帧：<code>EPOLLIN</code> 之后 <code>recv</code>，再把字节喂给长度前缀解析器。到这里为止，你手里有两块砖——<strong>就绪通知</strong>和<strong>帧边界</strong>——但还缺一座楼：<strong>如何把大量连接上的回调组织成可维护的服务架构</strong>。</p>
+<p>节点 summary 对本课的定位是：</p>
+<blockquote>
+<p>Reactor等待就绪事件并分发回调，事件循环串行维护连接状态；耗时任务需转移或拆分。</p>
+</blockquote>
+<p>这句话拆开有三层意思：</p>
+<ol>
+<li><strong>Reactor 的职责</strong>：等待就绪事件，再把事件分发给对应连接上的回调（读、写、关闭、错误）；</li>
+<li><strong>事件循环串行维护连接状态</strong>：同一个 loop 线程里，连接对象的状态机按顺序推进，避免「多线程同时改同一条连接」；</li>
+<li><strong>耗时任务要转移或拆分</strong>：业务解码、DB、RPC、压缩若堵在 loop 线程，整条线程上的所有连接都会饿死。</li>
+</ol>
+<p>放到腾讯微信公众号后台的长连接接入层，典型形态几乎总是：</p>
+<ul>
+<li><strong>一个或几个 IO 线程</strong>各自跑一个事件循环（one loop per thread）；</li>
+<li>每个 loop 盯住一批连接的 epoll 就绪事件；</li>
+<li><strong>工作线程池</strong>承接耗时业务；</li>
+<li>业务结果再通过「跨线程投递」回到所属 loop，安全地写回 socket 或关闭连接。</li>
+</ul>
+<p>本课要建立的不是「用个 while + epoll_wait 就叫 Reactor」这种标签，而是一套可落地的工程分层：</p>
+<ol>
+<li><strong>Poller / Channel / Loop 分层</strong>：谁封装 epoll、谁绑定 fd+回调、谁驱动循环；</li>
+<li><strong>线程亲和性与回调</strong>：为何回调必须在 loop 线程跑，跨线程如何用 <code>queueInLoop</code> + <code>eventfd</code> 唤醒；</li>
+<li><strong>事件注册、销毁和重入</strong>：在回调里删连接为何不能立刻 <code>free</code>，如何用延迟销毁避免悬垂。</li>
+</ol>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释 Poller/Channel/Loop 分层</strong>
+   - 说清 Poller 如何封装 <code>epoll_create1</code> / <code>epoll_ctl</code> / <code>epoll_wait</code>。
+   - 说清 Channel 如何把「一个 fd + 关心的事件掩码 + 读写关闭回调」绑在一起。
+   - 说清 EventLoop 如何拥有 Poller、驱动 <code>loop()</code>、管理 pending functors 与唤醒。</p>
+</li>
+<li>
+<p><strong>能独立完成：实现 EventLoop 与 Channel 封装，支持跨线程投递及连接安全关闭</strong>
+   - 实现 <code>runInLoop</code> / <code>queueInLoop</code>：同线程可直接跑，跨线程入队并唤醒。
+   - 在读回调中关闭连接时，不立刻销毁对象，而是延迟到本轮事件分发结束或下一轮 functors。
+   - 保证事件线程不执行长时间阻塞任务（耗时工作丢线程池）。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - 回调中删除连接不触发悬垂访问。
+   - 事件线程不执行长时间阻塞任务。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点里的理由是：</p>
+<blockquote>
+<p>把epoll调用组织成可维护服务架构。</p>
+</blockquote>
+<h3 id="1-epoll">1. 裸 epoll 调用撑不住「产品级」接入层</h3>
+<p>在课 55 你已经能写出 ET Echo Server。但当连接数上千、协议要分帧、还要跨线程回写时，若每个业务模块直接调 <code>epoll_ctl</code>、直接持有 raw fd、在任意线程 <code>close</code>，很快会出现：</p>
+<ul>
+<li>谁负责 <code>DEL</code>？谁负责 <code>close</code>？顺序错了就是 UAF 或漏事件；</li>
+<li>工作线程算完结果要 <code>send</code>，却与 IO 线程的写缓冲并发，需要到处加锁；</li>
+<li>新同事读不懂「散落在各处的 epoll 调用」，改一处崩一片。</li>
+</ul>
+<p>Reactor 把这些收拢成：<strong>Poller 管内核兴趣表，Channel 管单个 fd 的回调，Loop 管循环与跨线程队列</strong>。</p>
+<h3 id="2">2. 「串行维护连接状态」是正确性手段，不是性能口号</h3>
+<p>微信公众号后台长连接上，一条连接往往有：输入缓冲、输出缓冲、分帧状态机、半关闭标志、待发送队列。若多线程同时改，锁粒度要么太粗（吞吐崩），要么太细（容易死锁/漏改）。</p>
+<p><strong>把连接状态的所有权固定在所属 EventLoop 线程</strong>：任何修改要么已在该线程，要么先投递到该线程再改。这是 muduo 一脉的核心纪律，也是节点 points 里「线程亲和性与回调」要讲透的原因。</p>
+<h3 id="3">3. 接入层稳定性取决于「销毁时机」</h3>
+<p>线上最阴的一类 bug：<code>EPOLLIN</code> 回调里发现对端关掉了，于是 <code>delete conn</code>；但本轮 <code>epoll_wait</code> 返回的就绪列表里后面还有这条 Channel 的 <code>EPOLLOUT</code>——于是访问已释放对象。节点 practice / acceptance 明确要求：<strong>回调中删除连接不触发悬垂访问</strong>。这不是细节，是 Reactor 能否上线的门槛。</p>
+<h3 id="4-loop">4. 耗时任务堵死 loop = 整批连接假死</h3>
+<p>一个 loop 管几千连接时，任何一个回调里同步打 DB 200ms，这 200ms 内该线程上所有连接的读事件都进不来，表现为「偶发超时」「心跳全断」。节点 summary 后半句就是这条铁律：<strong>耗时任务需转移或拆分</strong>。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="0-reactor">0. 先建立直觉：从「裸循环」到「可维护 Reactor」</h3>
+<p>最小可用事件循环长这样：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># naive_loop.py —— 示意，非生产</span>
+<span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="n">epoll_wait</span><span class="p">(</span><span class="n">epfd</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">fd</span><span class="p">,</span> <span class="n">revents</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">revents</span> <span class="o">&amp;</span> <span class="n">EPOLLIN</span><span class="p">:</span>
+            <span class="n">conns</span><span class="p">[</span><span class="n">fd</span><span class="p">]</span><span class="o">.</span><span class="n">handle_read</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">revents</span> <span class="o">&amp;</span> <span class="n">EPOLLOUT</span><span class="p">:</span>
+            <span class="n">conns</span><span class="p">[</span><span class="n">fd</span><span class="p">]</span><span class="o">.</span><span class="n">handle_write</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">revents</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">EPOLLERR</span> <span class="o">|</span> <span class="n">EPOLLHUP</span><span class="p">):</span>
+            <span class="n">conns</span><span class="p">[</span><span class="n">fd</span><span class="p">]</span><span class="o">.</span><span class="n">handle_close</span><span class="p">()</span>
+</code></pre></div>
+
+<p>它能跑 Demo，但缺三块工程能力：</p>
+<ol>
+<li><strong>fd → 回调</strong> 的映射散落在 <code>conns</code> 字典，事件掩码与业务对象生命周期缠在一起；</li>
+<li><strong>其他线程</strong>想安全地往某条连接写数据，没有标准入口；</li>
+<li><strong>回调里销毁连接</strong>时，后面的 <code>events</code> 列表可能仍指向同一对象。</li>
+</ol>
+<p>Reactor 模式（以及 muduo 的实现）把这三块拆开，对应本课三个 points。</p>
+<h3 id="1-poller-channel-loop">1. Poller / Channel / Loop 分层</h3>
+<h4 id="11">1.1 三层各自干什么</h4>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>职责</th>
+<th>典型操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Poller</strong></td>
+<td>封装 epoll 兴趣表与等待</td>
+<td><code>update(channel)</code>、<code>remove(channel)</code>、<code>poll(timeout) → activeChannels</code></td>
+</tr>
+<tr>
+<td><strong>Channel</strong></td>
+<td>绑定「一个 fd + 事件掩码 + 四个回调」</td>
+<td><code>enableReading()</code>、<code>disableWriting()</code>、<code>handleEvent(revents)</code></td>
+</tr>
+<tr>
+<td><strong>EventLoop</strong></td>
+<td>拥有 Poller，驱动循环，管理跨线程任务</td>
+<td><code>loop()</code>、<code>runInLoop(f)</code>、<code>queueInLoop(f)</code>、<code>quit()</code></td>
+</tr>
+</tbody>
+</table>
+<p>直觉图：</p>
+<div class="codehilite"><pre><span></span><code>                  EventLoop::loop()
+                        |
+          +-------------+--------------+
+          |                            |
+     Poller::poll()            doPendingFunctors()
+          |                            |
+   active Channels[]            跨线程投递的闭包
+          |
+   Channel::handleEvent()
+          |
+   readCallback / writeCallback / closeCallback / errorCallback
+          |
+   TcpConnection / Acceptor / TimerQueue ...
+</code></pre></div>
+
+<h4 id="12-channelfd">1.2 Channel：把「fd 的事件」变成「对象的方法」</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 示意结构，贴近 muduo::net::Channel 语义</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Channel</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">EventCallback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Channel</span><span class="p">(</span><span class="n">EventLoop</span><span class="o">*</span><span class="w"> </span><span class="n">loop</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setReadCallback</span><span class="p">(</span><span class="n">EventCallback</span><span class="w"> </span><span class="n">cb</span><span class="p">)</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">readCb_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setWriteCallback</span><span class="p">(</span><span class="n">EventCallback</span><span class="w"> </span><span class="n">cb</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">writeCb_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setCloseCallback</span><span class="p">(</span><span class="n">EventCallback</span><span class="w"> </span><span class="n">cb</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">closeCb_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">setErrorCallback</span><span class="p">(</span><span class="n">EventCallback</span><span class="w"> </span><span class="n">cb</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">errorCb_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">enableReading</span><span class="p">()</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="n">events_</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">kReadEvent</span><span class="p">;</span><span class="w">  </span><span class="n">update</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">disableWriting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">events_</span><span class="w"> </span><span class="o">&amp;=</span><span class="w"> </span><span class="o">~</span><span class="n">kWriteEvent</span><span class="p">;</span><span class="w"> </span><span class="n">update</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">disableAll</span><span class="p">()</span><span class="w">     </span><span class="p">{</span><span class="w"> </span><span class="n">events_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">update</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">remove</span><span class="p">();</span><span class="w">  </span><span class="c1">// 从 Poller 摘掉</span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">handleEvent</span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">revents</span><span class="p">);</span><span class="w">  </span><span class="c1">// 由 Loop 在 poll 后调用</span>
+
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">update</span><span class="p">();</span><span class="w">  </span><span class="c1">// loop_-&gt;updateChannel(this) → Poller</span>
+<span class="w">  </span><span class="n">EventLoop</span><span class="o">*</span><span class="w"> </span><span class="n">loop_</span><span class="p">;</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">fd_</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">events_</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w">      </span><span class="c1">// 关心的</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">revents_</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w">     </span><span class="c1">// 本轮就绪的</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">tied_</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span><span class="w">   </span><span class="c1">// 是否用 weak_ptr 绑住 TcpConnection</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li><strong>Channel 不拥有 fd 的关闭权</strong>（通常由 Socket / TcpConnection 管 <code>close</code>）；它只描述「这个 fd 当前关心什么、就绪了调谁」。</li>
+<li><code>update()</code> 最终落到 <code>epoll_ctl(ADD/MOD)</code>；<code>remove()</code> 落到 <code>DEL</code>。</li>
+<li><code>handleEvent</code> 内部按 <code>revents</code> 分发：先看 <code>EPOLLERR</code>/<code>EPOLLHUP</code>，再读，再写——顺序要和半关闭语义一致（课 55 已讲）。</li>
+</ul>
+<h4 id="13-pollerepoll">1.3 Poller：epoll 的薄封装</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Poller</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// 可有 EPollPoller 子类</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">explicit</span><span class="w"> </span><span class="n">Poller</span><span class="p">(</span><span class="n">EventLoop</span><span class="o">*</span><span class="w"> </span><span class="n">loop</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// 阻塞等待，填 activeChannels</span>
+<span class="w">  </span><span class="n">Timestamp</span><span class="w"> </span><span class="nf">poll</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">timeoutMs</span><span class="p">,</span><span class="w"> </span><span class="n">ChannelList</span><span class="o">*</span><span class="w"> </span><span class="n">activeChannels</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">updateChannel</span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span><span class="w"> </span><span class="n">channel</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">removeChannel</span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span><span class="w"> </span><span class="n">channel</span><span class="p">);</span>
+
+<span class="w"> </span><span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="n">EventLoop</span><span class="o">*</span><span class="w"> </span><span class="n">ownerLoop_</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">epollfd_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">epoll_event</span><span class="o">&gt;</span><span class="w"> </span><span class="n">events_</span><span class="p">;</span><span class="w">          </span><span class="c1">// 内核返回缓冲</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">Channel</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">channels_</span><span class="p">;</span><span class="w"> </span><span class="c1">// fd → Channel*</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>纪律：<strong>只有所属 EventLoop 线程能调 Poller</strong>（断言 <code>ownerLoop_-&gt;isInLoopThread()</code>）。这样 <code>channels_</code> 映射无需锁。</p>
+<h4 id="14-eventloop">1.4 EventLoop：把「等待」和「干活」串起来</h4>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">EventLoop::loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">looping_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">quit_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">activeChannels_</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="n">pollReturnTime_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">poller_</span><span class="o">-&gt;</span><span class="n">poll</span><span class="p">(</span><span class="n">kPollTimeMs</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">activeChannels_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">eventHandling_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Channel</span><span class="o">*</span><span class="w"> </span><span class="n">ch</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">activeChannels_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">currentActiveChannel_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ch</span><span class="p">;</span>
+<span class="w">      </span><span class="n">ch</span><span class="o">-&gt;</span><span class="n">handleEvent</span><span class="p">(</span><span class="n">pollReturnTime_</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">currentActiveChannel_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="w">    </span><span class="n">eventHandling_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="n">doPendingFunctors</span><span class="p">();</span><span class="w">  </span><span class="c1">// 跨线程投递 + 延迟任务</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">looping_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这就是节点 summary 里「等待就绪事件并分发回调」的代码形态。分帧解析器、业务回调，都挂在某个 Channel 的 <code>readCallback</code> 链上，而不是散落在 <code>loop()</code> 里写 <code>switch(fd)</code>。</p>
+<h4 id="15-python">1.5 用 Python 伪代码串一遍「新连接」路径</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 伪代码：accept → 建连接 → 注册读</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">on_accept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">client_fd</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listen_sock</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+    <span class="n">set_nonblocking</span><span class="p">(</span><span class="n">client_fd</span><span class="p">)</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">TcpConnection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="p">,</span> <span class="n">client_fd</span><span class="p">,</span> <span class="n">addr</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_read_callback</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">handle_read</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_write_callback</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">handle_write</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">set_close_callback</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">handle_close</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">enable_reading</span><span class="p">()</span>  <span class="c1"># → Poller.update → epoll_ctl ADD</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="n">conn</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">conn</span>
+</code></pre></div>
+
+<p>对比裸循环：业务只关心「连接对象的方法」，不再直接碰 epoll API。</p>
+<hr />
+<h3 id="2_1">2. 线程亲和性与回调</h3>
+<h4 id="21-one-loop-per-thread">2.1 One Loop Per Thread</h4>
+<p>muduo 的纪律可以记成一句话：</p>
+<blockquote>
+<p><strong>每个线程至多一个 EventLoop；每个 EventLoop 只在创建它的线程跑 <code>loop()</code>。</strong></p>
+</blockquote>
+<p>推论：</p>
+<ul>
+<li>连接对象归属某个 loop（通常由 <code>TcpServer</code> 的 round-robin 或固定哈希分配）；</li>
+<li>对该连接的所有状态修改、<code>send</code>、<code>shutdown</code>，最终都要在该 loop 线程执行；</li>
+<li>IO 线程之间互不抢同一条连接，天然减少锁。</li>
+</ul>
+<p>公众号接入层常见拓扑：</p>
+<div class="codehilite"><pre><span></span><code>                   +-- IO Loop #0  (连接子集 A)
+Main / Acceptor ---+-- IO Loop #1  (连接子集 B)
+                   +-- IO Loop #2  (连接子集 C)
+                          |
+                    Worker Thread Pool
+                    (解码 / 业务 / 下游 RPC)
+</code></pre></div>
+
+<p>Acceptor 可单独一个 loop，accept 后把 fd 交给某个 IO loop（通过跨线程投递）。</p>
+<h4 id="22-loop">2.2 为何回调必须在 loop 线程跑</h4>
+<p>假设工作线程直接改连接输出缓冲：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 危险：worker 与 IO 线程并发</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">TcpConnection::sendInAnyThread</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">outputBuffer_</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span><span class="w">          </span><span class="c1">// 竞态！</span>
+<span class="w">  </span><span class="n">channel_</span><span class="o">-&gt;</span><span class="n">enableWriting</span><span class="p">();</span><span class="w">          </span><span class="c1">// 可能与 IO 线程同时 epoll_ctl</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>正确做法：把「真正改状态」的动作封进闭包，投递回 loop：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">TcpConnection::send</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">loop_</span><span class="o">-&gt;</span><span class="n">isInLoopThread</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">sendInLoop</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">loop_</span><span class="o">-&gt;</span><span class="n">runInLoop</span><span class="p">([</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">sendInLoop</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="23-runinloop-queueinloop-eventfd">2.3 <code>runInLoop</code> / <code>queueInLoop</code> + <code>eventfd</code> 唤醒</h4>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">EventLoop::runInLoop</span><span class="p">(</span><span class="n">Functor</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">isInLoopThread</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">f</span><span class="p">();</span><span class="w">                    </span><span class="c1">// 同线程：立刻执行</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">queueInLoop</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">EventLoop::queueInLoop</span><span class="p">(</span><span class="n">Functor</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g</span><span class="p">(</span><span class="n">mutex_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">pendingFunctors_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">f</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="c1">// 若不在 loop 线程，或正在执行 pending，需要唤醒卡在 poll 的线程</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">isInLoopThread</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">callingPendingFunctors_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">wakeup</span><span class="p">();</span><span class="w">  </span><span class="c1">// write 1 字节到 eventfd</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>唤醒通道：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 构造 EventLoop 时</span>
+<span class="n">wakeupFd_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">::</span><span class="n">eventfd</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">EFD_NONBLOCK</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">EFD_CLOEXEC</span><span class="p">);</span>
+<span class="n">wakeupChannel_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Channel</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">wakeupFd_</span><span class="p">);</span>
+<span class="n">wakeupChannel_</span><span class="o">-&gt;</span><span class="n">setReadCallback</span><span class="p">([</span><span class="k">this</span><span class="p">]{</span><span class="w"> </span><span class="n">handleWakeup</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+<span class="n">wakeupChannel_</span><span class="o">-&gt;</span><span class="n">enableReading</span><span class="p">();</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">EventLoop::wakeup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="o">::</span><span class="n">write</span><span class="p">(</span><span class="n">wakeupFd_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">one</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">one</span><span class="p">);</span><span class="w">  </span><span class="c1">// 让 epoll_wait 返回</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">EventLoop::handleWakeup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">one</span><span class="p">;</span>
+<span class="w">  </span><span class="o">::</span><span class="n">read</span><span class="p">(</span><span class="n">wakeupFd_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">one</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="w"> </span><span class="n">one</span><span class="p">);</span><span class="w">   </span><span class="c1">// 清掉可读，避免 LT 忙循环</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>doPendingFunctors</code> 的经典写法（交换队列，缩小持锁时间）：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">EventLoop::doPendingFunctors</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Functor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">functors</span><span class="p">;</span>
+<span class="w">  </span><span class="n">callingPendingFunctors_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g</span><span class="p">(</span><span class="n">mutex_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">functors</span><span class="p">.</span><span class="n">swap</span><span class="p">(</span><span class="n">pendingFunctors_</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">functors</span><span class="p">)</span><span class="w"> </span><span class="n">f</span><span class="p">();</span>
+<span class="w">  </span><span class="n">callingPendingFunctors_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>为何 <code>callingPendingFunctors_</code> 为真时也要 <code>wakeup</code>？因为本轮正在跑的 functors 里若再 <code>queueInLoop</code>，新任务要等下一轮；若不唤醒，可能卡在下一次 <code>poll</code> 里迟迟不跑——跨线程「关闭连接」的延迟销毁尤其依赖这条路径。</p>
+<h4 id="24">2.4 小实验：跨线程投递延迟</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1"># demo_cross_thread.py —— 示意</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span><span class="o">,</span><span class="w"> </span><span class="nn">queue</span>
+
+<span class="n">pending</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+<span class="n">wake</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Event</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">loop_thread</span><span class="p">():</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># 模拟 epoll_wait：无事件时阻塞，被 wake 打断</span>
+        <span class="n">wake</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">wake</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">pending</span><span class="o">.</span><span class="n">get_nowait</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">f</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">worker</span><span class="p">():</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">task</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"ran in"</span><span class="p">,</span> <span class="n">threading</span><span class="o">.</span><span class="n">current_thread</span><span class="p">()</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">pending</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="n">wake</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>  <span class="c1"># 等价于 eventfd write</span>
+
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">loop_thread</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"IOLoop"</span><span class="p">,</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">worker</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"Worker"</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</code></pre></div>
+
+<p>期望：打印 <code>ran in IOLoop</code>——任务在 IO 线程执行，而不是 Worker。</p>
+<h4 id="25">2.5 耗时任务如何转移</h4>
+<p>节点 summary：「耗时任务需转移或拆分」。工程上常见两档：</p>
+<ol>
+<li><strong>整段业务丢线程池</strong>：<code>readCallback</code> 里只做分帧；完整消息 <code>pool.submit(handle_msg)</code>；结果用 <code>runInLoop</code> 回写。</li>
+<li><strong>可拆的计算切片</strong>：若必须在 loop 做（极少），把大任务切成多次 <code>queueInLoop</code>，每片限制微秒级，避免饿死其他 Channel。</li>
+</ol>
+<p>验收标准写得很硬：<strong>事件线程不执行长时间阻塞任务</strong>。自测时可用：在回调里故意 <code>sleep(1)</code>，观察同 loop 其他连接的心跳是否集体超时——用来建立「痛感」。</p>
+<hr />
+<h3 id="3_1">3. 事件注册、销毁和重入</h3>
+<h4 id="31">3.1 注册路径回顾</h4>
+<div class="codehilite"><pre><span></span><code>new TcpConnection
+  → Channel(loop, fd)
+  → set*Callback
+  → enableReading()
+      → EventLoop::updateChannel
+          → Poller::updateChannel
+              → epoll_ctl(ADD / MOD)
+</code></pre></div>
+
+<p>销毁时必须<strong>逆序且延迟</strong>：</p>
+<div class="codehilite"><pre><span></span><code>发现该关（对端关闭 / 协议错误 / 主动踢）
+  → channel.disableAll() + remove()   // 先从 epoll 摘掉
+  → 把「真正 delete / 从 map 擦除」queueInLoop
+  → 本轮 activeChannels 遍历结束后才释放对象
+</code></pre></div>
+
+<h4 id="32">3.2 经典陷阱：在回调里立刻销毁</h4>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">TcpConnection::handleClose</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">channel_</span><span class="o">-&gt;</span><span class="n">disableAll</span><span class="p">();</span>
+<span class="w">  </span><span class="n">channel_</span><span class="o">-&gt;</span><span class="n">remove</span><span class="p">();</span>
+<span class="w">  </span><span class="c1">// 危险：若此时仍在 EventLoop 遍历 activeChannels_</span>
+<span class="w">  </span><span class="c1">// 后面还有本 Channel 的 pending handleEvent，就会 UAF</span>
+<span class="w">  </span><span class="n">connectionCallback_</span><span class="p">(</span><span class="n">shared_from_this</span><span class="p">());</span><span class="w">  </span><span class="c1">// 通知上层</span>
+<span class="w">  </span><span class="c1">// 错误示范：</span>
+<span class="w">  </span><span class="c1">// delete this;  或  owner_-&gt;remove(this); 立刻释放</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>正确思路（muduo 风格）：</p>
+<ul>
+<li><code>TcpConnection</code> 用 <code>shared_ptr</code> 管理；</li>
+<li>Channel 用 <code>tie(std::weak_ptr&lt;void&gt;)</code> 在 <code>handleEvent</code> 开头 <code>lock()</code>，保证回调期间对象活着；</li>
+<li>上层 <code>TcpServer</code> 在 <code>removeConnection</code> 里 <strong><code>queueInLoop</code> 真正从 map 擦除并释放最后的 shared_ptr</strong>，确保：</li>
+<li>当前 <code>handleEvent</code> 栈帧已返回；</li>
+<li>本轮 <code>activeChannels</code> 不再触碰该指针。</li>
+</ul>
+<p>伪代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">TcpServer::removeConnection</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">TcpConnectionPtr</span><span class="o">&amp;</span><span class="w"> </span><span class="n">conn</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">loop_</span><span class="o">-&gt;</span><span class="n">runInLoop</span><span class="p">([</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">removeConnectionInLoop</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">TcpServer::removeConnectionInLoop</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">TcpConnectionPtr</span><span class="o">&amp;</span><span class="w"> </span><span class="n">conn</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">connections_</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">conn</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">());</span>
+<span class="w">  </span><span class="c1">// 再把「conn 析构」丢到连接所属 IO loop，避免在错误线程析构</span>
+<span class="w">  </span><span class="n">ioLoop</span><span class="o">-&gt;</span><span class="n">queueInLoop</span><span class="p">([</span><span class="n">conn</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* conn 引用计数到 0 → 析构 */</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>节点 acceptance：<strong>回调中删除连接不触发悬垂访问</strong>——用「延迟销毁 + shared_ptr/tie」落地。</p>
+<h4 id="33-channel">3.3 重入：同一轮里同一 Channel 被多次触及？</h4>
+<p>通常一轮 <code>poll</code> 每个 fd 至多出现一次。更危险的是<strong>逻辑重入</strong>：</p>
+<ul>
+<li><code>handleRead</code> → 用户回调 → 用户主动 <code>conn-&gt;forceClose()</code> → 再进 <code>handleClose</code>；</li>
+<li>或 <code>handleRead</code> 里 <code>send</code> 很大 → 同步写失败 → <code>enableWriting</code> → 同一函数栈里又改 Channel 状态。</li>
+</ul>
+<p>纪律：</p>
+<ol>
+<li>Channel 状态机要容忍「回调里 disable/remove」；</li>
+<li><code>eventHandling_</code> 期间禁止立刻释放 Channel 对象；</li>
+<li>关闭路径统一走「标记 + 延迟」，不要在深层业务回调里直接 <code>delete</code>。</li>
+</ol>
+<h4 id="34">3.4 用日志证明「延迟销毁」</h4>
+<p>建议在练习里打时间线：</p>
+<div class="codehilite"><pre><span></span><code>t0  poll 返回, active=[fd=10, fd=11]
+t1  fd=10 handleRead → 发现对端 FIN → queueInLoop(destroy fd10)
+t2  fd=11 handleRead ...
+t3  doPendingFunctors → 真正 erase fd10
+</code></pre></div>
+
+<p>若在 t1 就 <code>delete</code>，t2 之后若列表里还有 fd10（或 Channel 内部还有未完成逻辑），必然踩雷。</p>
+<h4 id="35-55-56">3.5 与课 55 / 56 的衔接</h4>
+<ul>
+<li><strong>课 55 epoll</strong>：告诉你就绪语义、ET 要排空、ONESHOT 要 rearm、关闭事件别碰已释放连接——本课把「别碰已释放」升级成<strong>架构级延迟销毁</strong>。</li>
+<li><strong>课 56 分帧</strong>：<code>handleRead</code> 里应是 <code>recv</code> → <code>framer.feed</code> → 完整消息列表；分帧状态机也是连接状态的一部分，必须只在 loop 线程改。</li>
+</ul>
+<hr />
+<h2 id="_5">常见误区</h2>
+<p>节点 pitfalls：</p>
+<blockquote>
+<p>事件循环单线程不意味着整个系统不存在竞态。</p>
+</blockquote>
+<p>展开几条上线前必排的坑：</p>
+<h3 id="1io">误区 1：「IO 单线程，所以不用想并发」</h3>
+<p>Loop 内串行 ≠ 系统无竞态。竞态常出现在：</p>
+<ul>
+<li>工作线程与 IO 线程共享连接对象、共享全局统计、共享下游客户端；</li>
+<li>多个 IO loop 误操作了不属于自己的连接；</li>
+<li>信号、定时器、后台任务直接碰 socket。</li>
+</ul>
+<p><strong>对策</strong>：跨线程只传「不可变消息」或「投递到正确 loop 的闭包」；共享可变状态加明确归属。</p>
+<h3 id="2-close-delete">误区 2：「在回调里 close + delete 最干净」</h3>
+<p>最脏。本轮就绪列表、Channel::tie、上层 map 迭代器都可能还握着指针。</p>
+<p><strong>对策</strong>：<code>disableAll</code> + <code>remove</code> + <code>queueInLoop(真正释放)</code>。</p>
+<h3 id="3-writefd">误区 3：「跨线程直接 write(fd) 更快」</h3>
+<p>绕过输出缓冲与事件掩码，会与 loop 内的 <code>handleWrite</code> 打架，出现乱序、重复写、漏 <code>EPOLLOUT</code>。</p>
+<p><strong>对策</strong>：统一 <code>conn-&gt;send</code> → <code>runInLoop</code> → <code>sendInLoop</code>。</p>
+<h3 id="4loop-rpc">误区 4：「反正有锁，loop 里也可以打 RPC」</h3>
+<p>锁解决不了「事件线程被阻塞」——acceptance 明确禁止长时间阻塞。持锁打 RPC 只会把延迟放大成死锁风险。</p>
+<h3 id="5pending-functors-queueinloop">误区 5：「pending functors 里再 queueInLoop 会丢任务」</h3>
+<p>不会丢，但可能延后一轮；若忘记在 <code>callingPendingFunctors_</code> 时 <code>wakeup</code>，可能延后到下一次 IO 事件才跑——关闭路径会「偶发挂死」。</p>
+<hr />
+<h2 id="_6">设计权衡</h2>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>串行状态简化推理，但需控制每轮工作量避免饥饿。</p>
+</blockquote>
+<h3 id="a-loop-vs">权衡 A：连接状态只在 loop 线程 vs 全丢给线程池</h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优点</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>状态只在 loop</strong>（推荐，muduo 路线）</td>
+<td>连接状态机无锁、推理简单、销毁时机清晰</td>
+<td>必须把耗时业务移出；跨线程投递有队列延迟</td>
+</tr>
+<tr>
+<td><strong>连接对象到处加锁，多线程直接操作</strong></td>
+<td>看似「任意线程都能 send」</td>
+<td>锁顺序、可重入、与 epoll_ctl 并发，极难测</td>
+</tr>
+<tr>
+<td><strong>纯线程池 per-request，无长连接状态</strong>**</td>
+<td>适合短连接 HTTP</td>
+<td>不适合公众号长连接、推送、会话态</td>
+</tr>
+</tbody>
+</table>
+<p>公众号后台接入层几乎总选第一行：<strong>串行状态 + 线程池算业务</strong>。</p>
+<h3 id="b">权衡 B：每轮做多少工作</h3>
+<p><code>handleEvent</code> + <code>doPendingFunctors</code> 若一次处理几千条消息或执行超长 functor 列表，后续连接的延迟会抖动。</p>
+<p>工程手段：</p>
+<ul>
+<li>限制单次 <code>read</code> 循环的最大字节 / 最大消息数，余下留到下一轮（注意 ET 下要结合缓冲策略，避免「未排空却不再通知」——课 55）；</li>
+<li>pending 队列过长时监控告警，回压到业务提交侧；</li>
+<li>多 IO 线程分摊连接，而不是把单 loop 塞爆。</li>
+</ul>
+<h3 id="cruninloop-vs-queueinloop">权衡 C：<code>runInLoop</code> 立刻执行 vs 一律 <code>queueInLoop</code></h3>
+<ul>
+<li>同线程 <code>runInLoop</code> 立刻执行：延迟最低，但可能加深调用栈、加重入；</li>
+<li>一律入队：重入更安全，但多一次延迟、关闭路径更「晚」。</li>
+</ul>
+<p>muduo 选择：同线程立刻跑，跨线程入队；并在文档与实现里小心 <code>callingPendingFunctors_</code>。你实现练习时应先对齐这一语义，再谈优化。</p>
+<hr />
+<h2 id="_7">动手实践</h2>
+<p>节点 practice：</p>
+<blockquote>
+<p>实现EventLoop与Channel封装，支持跨线程投递及连接安全关闭。</p>
+</blockquote>
+<p>下面给一条可验收的最小路径（C++17 或 Python 伪实现均可；语义对齐即可）。</p>
+<h3 id="1-channel">步骤 1：实现 Channel</h3>
+<ul>
+<li>字段：<code>loop</code>、<code>fd</code>、<code>events</code>、<code>revents</code>、读写关闭错误四个回调。</li>
+<li>方法：<code>enableReading</code> / <code>disableWriting</code> / <code>disableAll</code> / <code>remove</code> / <code>handleEvent</code>。</li>
+<li><code>update</code>/<code>remove</code> 转发到 <code>EventLoop</code>。</li>
+</ul>
+<h3 id="2-pollerepoll">步骤 2：实现 Poller（Epoll 版）</h3>
+<ul>
+<li><code>epoll_create1(EPOLL_CLOEXEC)</code>。</li>
+<li><code>updateChannel</code>：按「是否已在 map」选 <code>ADD</code> 或 <code>MOD</code>；<code>events==0</code> 可走 <code>DEL</code>。</li>
+<li><code>poll</code>：<code>epoll_wait</code> → 把 <code>data.ptr</code> 转成 <code>Channel*</code> 填入 <code>activeChannels</code>，并 <code>set_revents</code>。</li>
+<li>仅 loop 线程调用（可用 <code>threading.get_ident()</code> / <code>pthread_self</code> 断言）。</li>
+</ul>
+<h3 id="3-eventloop">步骤 3：实现 EventLoop</h3>
+<ul>
+<li>构造时创建 Poller、<code>eventfd</code>、wakeup Channel。</li>
+<li><code>loop()</code>：<code>poll</code> → 分发 → <code>doPendingFunctors</code>。</li>
+<li><code>runInLoop</code> / <code>queueInLoop</code> / <code>wakeup</code> / <code>quit</code>。</li>
+<li>提供 <code>isInLoopThread()</code>。</li>
+</ul>
+<h3 id="4">步骤 4：跨线程投递验收</h3>
+<div class="codehilite"><pre><span></span><code>主线程创建 loop，在 IO 线程跑 loop()
+工作线程调用 loop.runInLoop(lambda: flag.append(1))
+断言：flag 的修改发生在 IO 线程 tid
+断言：从 queueInLoop 到执行的延迟 &lt; 合理上限（例如 50ms，视机器而定）
+</code></pre></div>
+
+<h3 id="5">步骤 5：连接安全关闭验收</h3>
+<p>构造两信道场景（可用两个 pipe/socketpair 模拟）：</p>
+<ol>
+<li>注册 ch1、ch2，都关心读；</li>
+<li>让 ch1、ch2 同时可读，使一轮 <code>poll</code> 返回二者；</li>
+<li>在 ch1 的 <code>readCallback</code> 里触发「关闭并销毁 ch1」；</li>
+<li><strong>错误实现</strong>：立刻 <code>delete ch1</code> → 观察 ch1 后续事件或析构后访问是否崩；</li>
+<li><strong>正确实现</strong>：<code>queueInLoop</code> 延迟销毁 → 跑完本轮分发与 functors，无 UAF，无 ASAN 报错。</li>
+</ol>
+<p>验收对照节点 acceptance：</p>
+<div class="codehilite"><pre><span></span><code>[ ] 回调中删除连接不触发悬垂访问
+[ ] 事件线程不执行长时间阻塞任务（用代码审查 + 故意 sleep 反例演示）
+</code></pre></div>
+
+<h3 id="6sourcestudy-muduo">步骤 6：sourceStudy（阅读 Muduo）</h3>
+<p>节点 sourceStudy：</p>
+<blockquote>
+<p>阅读Muduo EventLoop、Channel与TcpConnection，追踪事件回调和延迟销毁。</p>
+</blockquote>
+<p>请打开：</p>
+<ol>
+<li><a href="https://github.com/chenshuo/muduo/tree/master/muduo/net">muduo/net 目录</a> —— 总览 Poller / Channel / EventLoop / TcpConnection 文件布局；</li>
+<li><a href="https://github.com/chenshuo/muduo/blob/master/muduo/net/EventLoop.cc">EventLoop.cc</a> —— 精读 <code>loop</code>、<code>queueInLoop</code>、<code>doPendingFunctors</code>、<code>wakeup</code>。</li>
+</ol>
+<p>追踪清单（写进你的笔记）：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>你在源码里找到的答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>poll</code> 返回后谁调 <code>Channel::handleEvent</code>？</td>
+<td></td>
+</tr>
+<tr>
+<td><code>runInLoop</code> 与 <code>queueInLoop</code> 分支条件？</td>
+<td></td>
+</tr>
+<tr>
+<td>为何 <code>callingPendingFunctors_</code> 时也要 wakeup？</td>
+<td></td>
+</tr>
+<tr>
+<td><code>TcpConnection::handleClose</code> 如何通知 TcpServer？</td>
+<td></td>
+</tr>
+<tr>
+<td><code>TcpServer::removeConnection</code> 为何再 queue 一次？</td>
+<td></td>
+</tr>
+<tr>
+<td>Channel::tie 解决什么 UAF？</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_8">预期现象</h3>
+<ul>
+<li>跨线程投递后，任务始终在 loop 线程执行；</li>
+<li>关闭连接的压力测试（高频短连接）下 ASAN/Valgrind 干净；</li>
+<li>在 read 回调里 <code>sleep(1)</code> 时，同 loop 另一连接的 ping-pong 延迟明显升高（反例）；移到线程池后延迟恢复。</li>
+</ul>
+<h3 id="_9">验收清单</h3>
+<div class="codehilite"><pre><span></span><code>[ ] 能白板画出 Poller / Channel / EventLoop 调用关系
+[ ] 能解释 one loop per thread 与连接状态归属
+[ ] 实现了 eventfd 唤醒与 pending functors
+[ ] 回调中销毁连接改为延迟释放，无悬垂访问
+[ ] 事件线程无长阻塞；耗时任务在线程池
+[ ] 对照阅读过 muduo EventLoop.cc 与相关类
+</code></pre></div>
+
+<hr />
+<h2 id="_10">自测题</h2>
+<p><strong>题 1</strong><br />
+关于 Poller / Channel / EventLoop 分层，下列哪一项描述最准确？</p>
+<p>A. Channel 负责 <code>epoll_wait</code>，EventLoop 只保存配置<br />
+B. Poller 封装 epoll，Channel 绑定 fd 与回调，EventLoop 拥有 Poller 并驱动循环与 pending 任务<br />
+C. Poller、Channel、EventLoop 是同一对象的三种别名<br />
+D. 业务线程应直接调用 Poller::poll 以提高吞吐量</p>
+<p><strong>题 2</strong><br />
+工作线程算完业务结果后，要向某条 TCP 连接发送响应。最符合本课纪律的做法是？</p>
+<p>A. 工作线程直接 <code>::write(conn-&gt;fd(), ...)</code><br />
+B. 工作线程锁住 <code>outputBuffer_</code> 并 <code>enableWriting</code><br />
+C. 调用 <code>conn-&gt;send(...)</code>，内部 <code>runInLoop</code>/<code>queueInLoop</code> 回到连接所属 EventLoop 再改缓冲与事件<br />
+D. 工作线程 <code>epoll_ctl</code> 加上 <code>EPOLLOUT</code> 后立刻返回</p>
+<p><strong>题 3</strong><br />
+在 <code>Channel::handleEvent</code>（由本轮 <code>activeChannels</code> 遍历调用）里发现连接应关闭。下列哪项最安全？</p>
+<p>A. 立刻 <code>delete tcpConnection</code> 并 <code>erase</code> 出全局 map<br />
+B. <code>disableAll</code> + <code>remove</code>，并把真正释放 <code>queueInLoop</code> 到本 EventLoop，确保当前分发栈与本轮列表不再使用该对象<br />
+C. 在工作线程异步 <code>delete</code>，越快越好<br />
+D. 只 <code>close(fd)</code>，对象泄漏到进程退出再回收即可</p>
+<hr />
+<h3 id="_11">自测题参考答案</h3>
+<p><strong>题 1：B</strong><br />
+节点 points 第一项即 Poller/Channel/Loop 分层：Poller 封装 epoll，Channel 绑定 fd+回调，Loop 拥有 Poller 并驱动循环。A 把职责弄反；C 抹平分层；D 破坏线程亲和性。</p>
+<p><strong>题 2：C</strong><br />
+线程亲和性要求连接状态只在 loop 线程修改；跨线程通过 <code>runInLoop</code>/<code>queueInLoop</code> + eventfd 唤醒。A/B/D 都会引入与 IO 线程的竞态或绕过输出缓冲语义。</p>
+<p><strong>题 3：B</strong><br />
+对应 acceptance「回调中删除连接不触发悬垂访问」与 points「事件注册、销毁和重入」。立刻释放会在本轮后续事件或栈上 UAF；跨线程 delete 更不可控；只 close fd 不释放对象会泄漏且易把旧事件套到 fd 复用后的新连接（课 55）。</p>
+<hr />
+<h2 id="_12">推荐资源</h2>
+<ul>
+<li><a href="https://github.com/chenshuo/muduo/tree/master/muduo/net">Reactor与事件循环：参考文档 / 原始资料</a>（github.com，英文源码，进阶）</li>
+<li>重点阅读 Poller/Channel/Loop 分层与线程亲和性与回调，用于核对本节点实验的语义和边界。</li>
+<li>
+<p>在目录中定位 <code>EventLoop</code>、<code>Channel</code>、<code>EPollPoller</code>、<code>TcpConnection</code>，对照本课分层表。</p>
+</li>
+<li>
+<p><a href="https://github.com/chenshuo/muduo/blob/master/muduo/net/EventLoop.cc">Muduo · EventLoop 实现</a>（chenshuo/muduo，英文源码，进阶）</p>
+</li>
+<li>阅读事件分发、跨线程唤醒和 pending functors，比较状态归属。</li>
+<li>精读 <code>loop</code>、<code>queueInLoop</code>、<code>doPendingFunctors</code>、<code>wakeup</code>/<code>handleRead</code>，把源码行号记进 sourceStudy 笔记。</li>
+</ul>
+<hr />
+<h2 id="_13">本课小结</h2>
+<ol>
+<li><strong>Reactor = 等待就绪 + 分发回调</strong>：事件循环串行维护连接状态；耗时任务必须转移或拆分。</li>
+<li><strong>Poller / Channel / Loop 分层</strong>把裸 epoll 调用收成可维护架构：Poller 管内核兴趣表，Channel 管 fd 与回调，Loop 驱动循环与跨线程队列。</li>
+<li><strong>One loop per thread</strong>：回调与连接状态归属固定线程；跨线程用 <code>runInLoop</code>/<code>queueInLoop</code> + <code>eventfd</code> 唤醒。</li>
+<li><strong>销毁必须延迟</strong>：回调里不能立刻 free；<code>disableAll</code> + <code>remove</code> + <code>queueInLoop</code> 释放，避免活跃列表与重入 UAF。</li>
+<li><strong>单线程 loop ≠ 无竞态</strong>：系统级竞态仍在共享状态与错误的跨线程 IO 上；串行简化的是连接状态推理。</li>
+<li><strong>权衡</strong>：串行状态好推理，但要控制每轮工作量，防止饥饿；对比「全丢线程池乱改连接」与「状态只在 loop」。</li>
+<li><strong>对照 muduo 做 sourceStudy</strong>：用真实源码验证你对 pending functors 与延迟销毁的理解。</li>
+</ol>
+<p>下一课会在 Reactor 骨架之上继续 IO 模型与事件主题；请先把本课 EventLoop/Channel 跑通，并完成跨线程投递与安全关闭两条验收，再进入后续内容。</p>
+<hr />
+<h2 id="_14">配套练习建议</h2>
+<p>若课程仓库后续补充 <code>practice57/</code>，建议最小文件集：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>event_loop.py</code> 或 <code>EventLoop.h/cc</code></td>
+<td>loop / queueInLoop / eventfd 唤醒</td>
+</tr>
+<tr>
+<td><code>channel.*</code> / <code>poller.*</code></td>
+<td>Channel + Epoll Poller</td>
+</tr>
+<tr>
+<td><code>test_reactor.*</code></td>
+<td>跨线程投递 tid 断言；关闭连接 UAF 回归</td>
+</tr>
+<tr>
+<td><code>run.sh</code></td>
+<td>一键跑验收</td>
+</tr>
+</tbody>
+</table>
+<p>运行期望：</p>
+<div class="codehilite"><pre><span></span><code>./run.sh
+<span class="c1"># 末行：ALL_CHECKS_PASSED</span>
+</code></pre></div>
+
+<p>实测要点（Asia/Shanghai，本机验证时对照）：</p>
+<ul>
+<li>工作线程投递的任务，<code>threading.get_ident()</code> / <code>pthread_self</code> 与 loop 线程一致；</li>
+<li>同轮多 Channel 就绪时，在首个回调里销毁连接，ASAN 无报；</li>
+<li>回调内 <code>sleep(1)</code> 的反例会使同 loop 延迟升高；移出后恢复；</li>
+<li>对照 <code>EventLoop.cc</code> 能指出 <code>doPendingFunctors</code> 与 <code>wakeup</code> 的对应行。</li>
+</ul>
+<p>NOTE：本课重点是架构语义与生命周期，不要求一次性写出完整 muduo；但命名与职责划分建议向 muduo 对齐，便于你入职后阅读微信系常见的 Reactor 风格代码。</p><div class="pn"><span><a href="56.html">← 字节流分帧与协议解析</a></span><span>下一课 待更新</span></div></main></div></body></html>
