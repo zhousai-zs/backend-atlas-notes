@@ -1,0 +1,880 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>70. C++内存序与发布订阅 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（70/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details open><summary>领域 E（6/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="cur" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 70 课 · 领域 E · 阶段 4</p><p class="dl"><a href="../files/70-e-order.md" download>⬇ 本课 Markdown</a></p><h1 id="70208-c">第 70/208 课：C++内存序与发布订阅</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段</td>
+<td>第 4 阶段 · 并发与内存模型（内存可见性与状态归属）</td>
+</tr>
+<tr>
+<td>前置</td>
+<td>e-atomic</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>领域</td>
+<td>E</td>
+</tr>
+<tr>
+<td>标签</td>
+<td>Memory Ordering、E、C++</td>
+</tr>
+<tr>
+<td>子分类</td>
+<td>内存可见性与状态归属</td>
+</tr>
+<tr>
+<td>节点 ID</td>
+<td>e-order</td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Memory Ordering</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>本课承接上一课「原子操作与复合不变量」。上一课解决的是“单个操作如何不可分割”，
+本课解决的是“一个线程写下的东西，另一个线程凭什么一定能看到、并且按什么顺序看到”。
+核心结论先放在这里：<strong>原子性不等于可见性，更不等于顺序性；
+<code>release</code> / <code>acquire</code> 只有在“读者读到了写者发布的那个值”时才建立同步。</strong>
+因此内存序不是一个可以凭感觉加的参数，而是一份需要被证明的协议。</p>
+</blockquote>
+<hr />
+<h2 id="_2">导读</h2>
+<p>上一课我们反复强调：<code>std::atomic</code> 只保证单个操作不可分割，多个原子字段拼不成事务。于是自然会冒出一个更深的问题：</p>
+<ul>
+<li>我把 <code>data</code> 写好了，再把 <code>ready</code> 置为 <code>true</code>，读者看到 <code>true</code> 之后，真的能安全地读 <code>data</code> 吗？</li>
+<li>如果两个线程都先写自己的标志、再读对方的标志，会不会同时看到对方“还没写”？</li>
+<li><code>memory_order_relaxed</code> 到底“松”掉了什么？它还是原子的吗？</li>
+<li>为什么有些代码在 x86 服务器上跑了三年都没事，换到 ARM 机器上就开始偶发读到旧值？</li>
+</ul>
+<p>这些问题的答案都在 C++ 内存模型里。它的基本语言是三个关系：<strong>sequenced-before（同线程内的先后）</strong>、<strong>synchronizes-with（跨线程的发布-获取配对）</strong>、<strong>happens-before（前两者加上传递闭包）</strong>。<code>release</code> / <code>acquire</code> / <code>relaxed</code> / <code>seq_cst</code> 不是“刷新缓存的开关”，而是用来构造这些关系的工具。</p>
+<p>放到微信公众号后台的真实场景里：</p>
+<ul>
+<li><strong>配置热更新</strong>：配置线程构造好新的 <code>Config</code> 对象，然后发布一个指针；工作线程拿到指针后直接读字段。如果发布和读取没有正确的内存序，工作线程可能拿到一个“指针已经可见、对象内容还没可见”的配置。</li>
+<li><strong>标志位发布</strong>：后台任务把一批素材处理完，写一个 <code>done = true</code>；前端线程轮询到 <code>done</code> 后去读结果。标志和数据之间的可见性必须由同步关系保证。</li>
+<li><strong>无锁队列的头尾指针</strong>：生产者写数据槽位，再推进 <code>head</code>；消费者读 <code>head</code>，再读槽位。<code>head</code> 的发布必须让“槽位写入”对消费者可见。头尾指针各自原子，并不自动保证槽位内容可见。</li>
+<li><strong>计数器与统计</strong>：阅读数、曝光数只需要原子性，不需要顺序，这时 <code>relaxed</code> 才是合适的工具，而不是无脑 <code>seq_cst</code>。</li>
+</ul>
+<p>本课的目标不是让你背下六种内存序的名字，而是让你能在一段发布订阅代码旁边，逐条写出：<strong>这条读从哪里取值、它和哪条写构成 synchronizes-with、由此推出了哪条 happens-before、所以哪次非原子访问不再构成数据竞争。</strong></p>
+<hr />
+<h2 id="_3">学习目标</h2>
+<h3 id="goals">goals</h3>
+<ul>
+<li>能解释 sequenced-before 和 happens-before 的区别与联系，并说明它们各自在什么范围内生效。</li>
+<li>能解释 <code>release</code> / <code>acquire</code> 的配对条件，特别是“读值匹配”这一必要条件。</li>
+<li>能解释 <code>relaxed</code> 只提供原子性、不建立跨线程顺序，并说明它适合什么、不适合什么。</li>
+<li>能解释 <code>seq_cst</code> 的全局单一顺序含义，以及它额外阻止的 StoreLoad 重排。</li>
+<li>能独立完成：写单次消息发布实验，标注每条 happens-before 边并使用模型化推理。</li>
+</ul>
+<h3 id="acceptance">acceptance</h3>
+<ul>
+<li>能证明非原子 payload 读取有同步：写出 <code>sb</code>、<code>sw</code>、<code>hb</code> 三类边，并据此说明 payload 的读写不构成数据竞争。</li>
+<li>能解释 <code>relaxed</code> 只提供原子性：能指出它不产生 <code>synchronizes-with</code>，因此不能用来发布非原子数据。</li>
+</ul>
+<hr />
+<h2 id="_4">为什么后端要懂</h2>
+<p>内存序是“并发代码从能跑到正确”的分水岭。后端工程师至少会在下面这些地方直接碰到它：</p>
+<ol>
+<li><strong>配置与路由表热更新</strong>：发布一个指针或版本号，让所有工作线程无锁读取。写错内存序，表现是“偶发读到半初始化配置”，而且极难复现。</li>
+<li><strong>无锁队列与环形缓冲</strong>：头尾索引的推进顺序决定了槽位内容是否可见。<code>relaxed</code> 和 <code>acquire/release</code> 用错，队列会偶发丢数据或读到脏槽。</li>
+<li><strong>一次性初始化与状态机</strong>：<code>initialized</code>、<code>running</code>、<code>stopping</code> 这类标志的发布，必须和它保护的状态一起建立 happens-before。</li>
+<li><strong>性能敏感路径</strong>：在热点路径上，<code>seq_cst</code> 可能引入额外的内存栅栏；<code>relaxed</code> 或 <code>acquire/release</code> 能省掉不必要的约束。但省约束的前提是你能证明协议正确，而不是“压测没崩”。</li>
+<li><strong>跨架构可移植性</strong>：x86 是较强的内存模型（TSO），很多弱序 bug 在 x86 上被掩盖；ARM、POWER 等弱内存模型平台会把它们暴露出来。云上混合架构部署时，这不是理论问题。</li>
+<li><strong>排查线上“玄学”问题</strong>：读到旧配置、看到半初始化对象、标志为真但数据为空，最后往往都能归结为“缺少一条 synchronizes-with 边”。</li>
+</ol>
+<p>一句话：<strong>懂内存序，你才知道自己的发布协议为什么正确；不懂内存序，你只是碰巧在某个 CPU 上正确。</strong></p>
+<hr />
+<h2 id="_5">直觉 → 原理</h2>
+<h3 id="1-sequenced-before-happens-before">1. sequenced-before 与 happens-before：两个不同范围的“先后”</h3>
+<h4 id="sequenced-before">sequenced-before：线程内的先后</h4>
+<p><code>sequenced-before</code>（简称 <code>sb</code>）描述的是<strong>同一个线程内部</strong>的求值顺序。它来自语言规则，例如：</p>
+<ul>
+<li>一条语句里的完整表达式按顺序求值；</li>
+<li>前一条语句的求值先于后一条语句；</li>
+<li>函数调用内部的求值先于调用返回后的求值；</li>
+<li>初始化、operator 的求值规则等。</li>
+</ul>
+<p>它只在一个线程内成立，不告诉你在另一个线程看来谁先谁后。看一段普通代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">        </span><span class="c1">// (1)</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">     </span><span class="c1">// (2)</span>
+</code></pre></div>
+
+<p>在同一个线程内，(1) sequenced-before (2)，所以 <code>y</code> 一定是 42。这是语言层面的顺序，不需要任何原子操作。</p>
+<p>但请注意：<strong><code>sequenced-before</code> 是偏序，不是所有操作之间都有边。</strong> 例如两个独立函数参数的求值顺序在 C++17 之前是未指定的（C++17 起函数参数求值顺序仍有未指定部分），不能想当然地认为“写在左边的先执行”。这也是为什么发布协议里不能依赖“看起来的代码顺序”。</p>
+<h4 id="happens-before">happens-before：跨线程的可见性顺序</h4>
+<p><code>happens-before</code>（简称 <code>hb</code>）是跨线程的偏序关系，定义可以概括为：</p>
+<blockquote>
+<p>如果 A <code>sequenced-before</code> B，则 A <code>happens-before</code> B；
+如果 A <code>synchronizes-with</code> B，则 A <code>happens-before</code> B；
+如果存在 C，使得 A <code>happens-before</code> C 且 C <code>happens-before</code> B，则 A <code>happens-before</code> B（传递闭包）。</p>
+</blockquote>
+<p>也就是说：</p>
+<div class="codehilite"><pre><span></span><code>sequenced-before（线程内）
+        +
+synchronizes-with（跨线程的发布-获取配对）
+        ↓ 传递闭包
+happens-before（跨线程的完整可见性顺序）
+</code></pre></div>
+
+<p>数据竞争的定义正是建立在 <code>hb</code> 上：</p>
+<blockquote>
+<p>两个来自不同线程的冲突访问（至少一个不是原子操作，或者至少一个不是 <code>relaxed</code> 原子操作），如果它们之间没有 <code>happens-before</code> 关系，就构成数据竞争，程序行为未定义。</p>
+</blockquote>
+<p>所以“我的非原子 <code>payload</code> 读取安全吗”这个问题，等价于“写 <code>payload</code> 和读 <code>payload</code> 之间是否存在一条 <code>happens-before</code> 链”。</p>
+<h4 id="-">一个最小的发布-获取例子</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1">// message_publish.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">g_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">                                   </span><span class="c1">// 非原子共享数据</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_ready</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span><span class="w">                    </span><span class="c1">// 发布标志</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">publisher</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">g_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">                                  </span><span class="c1">// (1) 写 payload</span>
+<span class="w">    </span><span class="n">g_ready</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span><span class="w">  </span><span class="c1">// (2) 发布</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">subscriber</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">g_ready</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// (3) 获取</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_payload</span><span class="p">;</span><span class="w">                               </span><span class="c1">// (4) 读 payload</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"payload = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">publisher</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">t2</span><span class="p">(</span><span class="n">subscriber</span><span class="p">);</span>
+<span class="w">    </span><span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"ok</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>message_publish.cpp<span class="w"> </span>-o<span class="w"> </span>message_publish
+./message_publish
+</code></pre></div>
+
+<p>把这段代码的边逐条标出来：</p>
+<div class="codehilite"><pre><span></span><code>sb: (1) -&gt; (2)      // 同线程，payload 写先于 release store
+sb: (3) -&gt; (4)      // 同线程，acquire load 先于 payload 读
+sw: (2) -&gt; (3)      // (3) 读到了 (2) 写入的 true，release/acquire 配对
+hb: (1) -&gt; (4)      // 由 (1) sb (2) sw (3) sb (4) 传递得到
+</code></pre></div>
+
+<p>因为 <code>hb(1, 4)</code> 成立，非原子的 <code>g_payload</code> 写和读之间不构成数据竞争，<code>assert</code> 有意义。这就是“发布订阅”的全部骨架。</p>
+<h4 id="_6">为什么必须是“读到了写者写的值”</h4>
+<p><code>synchronizes-with</code> 有一条容易被忽略的条件：<strong>acquire 读必须读到 release 写所写入的那个值（或该 release store 主导的 release sequence 中的值）。</strong> 仅仅“代码里有一个 release、有一个 acquire”不够。</p>
+<p>看一个坏例子：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// publish_initial_true.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">g_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_ready</span><span class="p">{</span><span class="nb">true</span><span class="p">};</span><span class="w">   </span><span class="c1">// 注意：初始值就是 true</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">publisher</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">g_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="w">    </span><span class="n">g_ready</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span><span class="w">  </span><span class="c1">// (P)</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">subscriber</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">g_ready</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w">   </span><span class="c1">// (C)</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">g_payload</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w">                     </span><span class="c1">// 可能失败</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>如果 <code>subscriber</code> 在 <code>publisher</code> 执行之前就运行，它在 <code>(C)</code> 读到的是<strong>初始化时的 <code>true</code></strong>，不是 <code>(P)</code> 写入的值。此时没有 <code>sw(P, C)</code>，也就没有 <code>hb(payload 写, payload 读)</code>，<code>assert</code> 可能看到 0。这个例子说明：<strong>同步关系是“按值匹配”的，不是“按变量存在”的。</strong></p>
+<p>工程上的做法是：发布标志初始为 <code>false</code>，只有真正准备好之后才用 release 写成 <code>true</code>；读者只在读到 <code>true</code> 后才访问 payload。这样“读到 true”就必然对应某次真实的发布。</p>
+<blockquote>
+<p><code>release sequence</code> 补充：如果 release store 之后，同一个原子对象上还有同线程的普通写或其他线程的 read-modify-write，这些操作可以构成一个序列，acquire 读到序列中的值也可能与最初的 release store 同步。日常发布协议通常只需要“release store 写 true，acquire load 读 true”这一种最简单的情形，但读 cppreference 时会看到这条扩展规则，不要把它和“任意读值都能同步”混为一谈。</p>
+</blockquote>
+<hr />
+<h3 id="2-release-acquire-relaxed">2. release / acquire 与 relaxed：分别约束了什么</h3>
+<h4 id="release">release：把之前的写“压”在这一步之前</h4>
+<p><code>memory_order_release</code> 用在 store（或读-改-写）上，语义是：</p>
+<blockquote>
+<p>这个 release 操作<strong>之前</strong>的所有读和写（包括非原子访问），都不能被重排到这个 release 操作之后。</p>
+</blockquote>
+<p>注意它只约束“之前的东西不能往后跑”，不约束“之后的东西不能往前跑”。所以单独一个 release store 并不构成同步，它只是“准备好了发布的内容”。</p>
+<h4 id="acquire">acquire：把之后的读“压”在这一步之后</h4>
+<p><code>memory_order_acquire</code> 用在 load（或读-改-写）上，语义是：</p>
+<blockquote>
+<p>这个 acquire 操作<strong>之后</strong>的所有读和写，都不能被重排到这个 acquire 操作之前。</p>
+</blockquote>
+<p>它只约束“之后的东西不能往前跑”。单独一个 acquire load 也不构成同步。</p>
+<h4 id="synchronizes-with">两者配对：synchronizes-with</h4>
+<p>当 acquire load 读到了 release store 写入的值时：</p>
+<div class="codehilite"><pre><span></span><code>release store 之前的所有写
+        |
+        |  (sb)
+        v
+   release store  ---- synchronizes-with ----&gt;  acquire load
+                                                      |
+                                                      |  (sb)
+                                                      v
+                                             acquire load 之后的所有读
+</code></pre></div>
+
+<p>于是 release 之前写的非原子数据，在 acquire 之后读就是安全的。这就是 <code>message_publish.cpp</code> 的原理。</p>
+<p>如果发布和获取跨越了多个线程，或者中间经过 RMW，还可以用 <code>memory_order_acq_rel</code>：它同时具有 acquire 和 release 语义，常用于 CAS 循环、引用计数、无锁队列的索引推进等“既读又写”的 RMW 操作。</p>
+<h4 id="relaxed">relaxed：只有原子性，没有顺序</h4>
+<p><code>memory_order_relaxed</code> 是最弱的序。它保证：</p>
+<ul>
+<li>这个操作本身是原子的，不会出现“改到一半被看见”；</li>
+<li>对同一个原子对象，所有线程看到的修改顺序是一致的（modification order），不会出现某个线程先看到新值、再看到旧值这种“倒流”。</li>
+</ul>
+<p>但它<strong>不建立 <code>synchronizes-with</code></strong>，也<strong>不约束周围非原子访问的重排</strong>。因此：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">counter</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">on_read</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">counter</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span><span class="w">  </span><span class="c1">// 原子，但无跨线程顺序</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这个计数器最终值仍然正确，因为 <code>fetch_add</code> 是 RMW，原子性足够。但它不能用来说明“我在 <code>fetch_add</code> 之前写的某个普通变量，别的线程在 <code>fetch_add</code> 之后一定看得到”。</p>
+<p>一个常见的错误是用 relaxed 做发布：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// publish_relaxed_bug.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">g_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_ready</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">publisher</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">g_payload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">                                    </span><span class="c1">// (1)</span>
+<span class="w">    </span><span class="n">g_ready</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span><span class="w">    </span><span class="c1">// (2)</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">subscriber</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">g_ready</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// (3)</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">g_payload</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w">                           </span><span class="c1">// (4) 可能是 0，甚至 UB</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里 <code>(2)</code> 和 <code>(3)</code> 都是 relaxed，即使 <code>(3)</code> 读到了 <code>true</code>，也不会产生 <code>sw(2,3)</code>，于是没有 <code>hb(1,4)</code>。<code>g_payload</code> 的写和读构成数据竞争，程序行为未定义。编译器甚至可以把 <code>(4)</code> 的读取提前到循环之前，直接读到一个旧值。</p>
+<p><strong>一句话对比：</strong></p>
+<table>
+<thead>
+<tr>
+<th>内存序</th>
+<th>原子性</th>
+<th>建立 synchronizes-with</th>
+<th>约束周围访问重排</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>relaxed</code></td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+<td>纯计数、统计、只关心单个原子对象</td>
+</tr>
+<tr>
+<td><code>release</code></td>
+<td>是</td>
+<td>只能作为“写”的一端</td>
+<td>之前的访问不能后移</td>
+<td>发布数据</td>
+</tr>
+<tr>
+<td><code>acquire</code></td>
+<td>是</td>
+<td>只能作为“读”的一端</td>
+<td>之后的访问不能前移</td>
+<td>获取数据</td>
+</tr>
+<tr>
+<td><code>acq_rel</code></td>
+<td>是</td>
+<td>RMW 同时可作两端</td>
+<td>两侧都约束</td>
+<td>CAS 循环、队列索引</td>
+</tr>
+<tr>
+<td><code>seq_cst</code></td>
+<td>是</td>
+<td>是</td>
+<td>全局单一顺序 + 阻止 StoreLoad</td>
+<td>默认、需要全局顺序时</td>
+</tr>
+</tbody>
+</table>
+<p>这里要特别纠正一个流传很广的说法：<strong>内存序不是“把缓存刷到内存”的命令。</strong> CPU 缓存一致性协议本来就会让同一地址的写最终可见；内存序约束的是<strong>不同地址之间的访问顺序</strong>以及<strong>跨线程的可见性关系</strong>。把它理解成“刷新缓存”，就会得出“加了 fence 就万事大吉”的错误结论，也会解释不了为什么 <code>relaxed</code> 明明是原子的却不能发布数据。</p>
+<hr />
+<h3 id="3-seq_cst">3. seq_cst 与重排序：什么时候“弱序”不够</h3>
+<p><code>memory_order_seq_cst</code> 是默认内存序，也是最强的。它有两层含义：</p>
+<ol>
+<li><strong>每个 <code>seq_cst</code> 操作都带有 acquire/release 语义</strong>：<code>seq_cst</code> store 是 release store，<code>seq_cst</code> load 是 acquire load，<code>seq_cst</code> RMW 是 acq_rel RMW。</li>
+<li><strong>所有 <code>seq_cst</code> 操作存在一个全局单一总顺序</strong>，所有线程都同意这个顺序，并且这个总顺序与 <code>happens-before</code> 一致。</li>
+</ol>
+<p>第 2 条是 <code>seq_cst</code> 独有的。<code>acquire/release</code> 可以建立跨线程的可见性，但它们不保证所有线程对“两个不同原子变量的操作”看到同一个全局顺序。</p>
+<h4 id="storeload-acquirerelease">StoreLoad 重排：acquire/release 管不到的地方</h4>
+<p><code>release</code> 只阻止“之前的访问后移”，<code>acquire</code> 只阻止“之后的访问前移”。那么一个线程里的 <strong>store 后面跟一个 load</strong> 呢？</p>
+<div class="codehilite"><pre><span></span><code>线程 A:  store x = 1   (release)
+         load  y       (acquire)
+
+线程 B:  store y = 1   (release)
+         load  x       (acquire)
+</code></pre></div>
+
+<p>release 不阻止后面的 load 前移，acquire 不阻止前面的 store 后移，于是两个线程都可能先完成自己的 store、再去读对方，结果<strong>双方都读到 0</strong>。这在 <code>acquire/release</code> 下是允许的，在 <code>seq_cst</code> 下不允许。这就是著名的 StoreLoad 重排，也是 Dekker 互斥算法的核心。</p>
+<p>一个可运行的验证程序：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// seqcst_store_load.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="cp">#ifdef USE_SEQ_CST</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order</span><span class="w"> </span><span class="n">kStore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_seq_cst</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order</span><span class="w"> </span><span class="n">kLoad</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_seq_cst</span><span class="p">;</span>
+<span class="cp">#else</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order</span><span class="w"> </span><span class="n">kStore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">;</span>
+<span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order</span><span class="w"> </span><span class="n">kLoad</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">y</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">thread_a</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">kStore</span><span class="p">);</span><span class="w">   </span><span class="c1">// A</span>
+<span class="w">    </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">kLoad</span><span class="p">);</span><span class="w">   </span><span class="c1">// B</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">thread_b</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">y</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">kStore</span><span class="p">);</span><span class="w">   </span><span class="c1">// C</span>
+<span class="w">    </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">kLoad</span><span class="p">);</span><span class="w">   </span><span class="c1">// D</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">kIters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20000</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kIters</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">x</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">        </span><span class="n">y</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">        </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">thread_a</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="n">thread_b</span><span class="p">);</span>
+<span class="w">        </span><span class="n">a</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">        </span><span class="n">b</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">r1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">r2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"observed both zero at iteration "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"never both zero in "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">kIters</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" iterations</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code><span class="c1"># 弱序版本：理论上允许 r1 == 0 &amp;&amp; r2 == 0</span>
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>seqcst_store_load.cpp<span class="w"> </span>-o<span class="w"> </span>weak
+./weak
+
+<span class="c1"># 顺序一致版本：不允许双方都读到 0</span>
+g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>-DUSE_SEQ_CST<span class="w"> </span>seqcst_store_load.cpp<span class="w"> </span>-o<span class="w"> </span>strong
+./strong
+</code></pre></div>
+
+<p>需要提醒：<strong>这个实验是“发现反例”的，不是“证明正确”的。</strong> 弱序版本在某些机器上可能跑很多次都不出现双 0（尤其 x86 的 store-load 重排窗口很小），但这不代表弱序版本正确；而只要出现一次双 0，就足以证明它不是 <code>seq_cst</code>。反过来，<code>seq_cst</code> 版本不出现双 0，也不能只靠压测证明，必须靠模型推理。</p>
+<h4 id="seq_cst">什么时候必须 seq_cst</h4>
+<ul>
+<li>你需要“所有线程对多个原子变量的操作顺序达成一致”；</li>
+<li>你在写类似 Dekker、Peterson 的互斥/握手协议；</li>
+<li>你有一个“先写自己的标志，再读对方标志”的对称协议；</li>
+<li>你不确定弱序是否够用，且该路径不是性能瓶颈。</li>
+</ul>
+<h4 id="_7">什么时候可以更弱</h4>
+<ul>
+<li>纯计数、统计、只关心单个原子对象：<code>relaxed</code>；</li>
+<li>单向发布数据：release store + acquire load；</li>
+<li>队列索引推进：生产者 release 写 head，消费者 acquire 读 head；消费者 release 写 tail，生产者 acquire 读 tail；</li>
+<li>需要 RMW 且两侧都要约束：<code>acq_rel</code>。</li>
+</ul>
+<p>选择的原则不是“越弱越快”，而是<strong>先写出协议需要的同步边，再选能提供这些边的最弱内存序</strong>。</p>
+<hr />
+<h2 id="_8">场景示例</h2>
+<h3 id="releaseacquire">场景一：配置热更新（release/acquire 发布指针）</h3>
+<p>后台配置经常是“读多写少”。用一把读写锁当然可以，但热路径上更常见的是发布一个不可变配置对象的指针，让读者无锁获取。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// config_publish.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Config</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">timeout_ms</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">max_retry</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">Config</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">g_current</span><span class="p">{</span><span class="nb">nullptr</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">publish</span><span class="p">(</span><span class="n">Config</span><span class="o">*</span><span class="w"> </span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">g_current</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span><span class="w">   </span><span class="c1">// 发布：之前的初始化对读者可见</span>
+<span class="p">}</span>
+
+<span class="n">Config</span><span class="o">*</span><span class="w"> </span><span class="nf">snapshot</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">g_current</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span><span class="w"> </span><span class="c1">// 获取：之后的读取不会被前移</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Config</span><span class="w"> </span><span class="n">c</span><span class="p">{</span><span class="mi">3000</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">};</span><span class="w">          </span><span class="c1">// 先构造完整对象</span>
+<span class="w">    </span><span class="n">publish</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c</span><span class="p">);</span><span class="w">                </span><span class="c1">// 再发布</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">reader</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Config</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">snapshot</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">p</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"timeout = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">timeout_ms</span>
+<span class="w">                      </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">", retry = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">p</span><span class="o">-&gt;</span><span class="n">max_retry</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="n">reader</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>config_publish.cpp<span class="w"> </span>-o<span class="w"> </span>config_publish
+./config_publish
+</code></pre></div>
+
+<p>这里的 <code>hb</code> 链是：</p>
+<div class="codehilite"><pre><span></span><code>构造 Config 的写  sb  publish() 的 release store
+release store  sw  snapshot() 的 acquire load（读到了该指针）
+acquire load  sb  读取 p-&gt;timeout_ms / p-&gt;max_retry
+=&gt; 构造的写 hb 字段读取
+</code></pre></div>
+
+<p>注意生命周期问题：本课只讨论“发布可见性”，不讨论“旧配置何时可以释放”。如果配置会不断替换，<code>delete</code> 旧对象的时机需要引用计数、RCU 或延迟回收来保证，否则读者可能拿到已释放的指针。<strong>内存序只保证可见性，不保证对象活得够久。</strong></p>
+<h3 id="_9">场景二：标志位发布（一次性任务完成）</h3>
+<p>这是最典型的“单次消息发布”：一个线程写结果，另一个线程等完成标志。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// result_publish.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Result</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">Result</span><span class="w"> </span><span class="n">g_result</span><span class="p">{};</span><span class="w">                                  </span><span class="c1">// 非原子 payload</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_done</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span><span class="w">                    </span><span class="c1">// 发布标志</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">g_result</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span><span class="w">                            </span><span class="c1">// (1)</span>
+<span class="w">    </span><span class="n">g_result</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123456789</span><span class="p">;</span><span class="w">                     </span><span class="c1">// (2)</span>
+<span class="w">    </span><span class="n">g_done</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span><span class="w">  </span><span class="c1">// (3) 一次性发布</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">waiter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">g_done</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// (4)</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">g_result</span><span class="p">.</span><span class="n">code</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">200</span><span class="p">);</span><span class="w">                   </span><span class="c1">// (5)</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">g_result</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">123456789</span><span class="p">);</span><span class="w">            </span><span class="c1">// (6)</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"result = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">g_result</span><span class="p">.</span><span class="n">value</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">t1</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">t2</span><span class="p">(</span><span class="n">waiter</span><span class="p">);</span>
+<span class="w">    </span><span class="n">t1</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">t2</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"ok</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>result_publish.cpp<span class="w"> </span>-o<span class="w"> </span>result_publish
+./result_publish
+</code></pre></div>
+
+<p>边标注：</p>
+<div class="codehilite"><pre><span></span><code>sb: (1) -&gt; (2) -&gt; (3)
+sb: (4) -&gt; (5) -&gt; (6)
+sw: (3) -&gt; (4)        // (4) 读到 true
+hb: (1) -&gt; (5), (2) -&gt; (6)
+</code></pre></div>
+
+<p>关键点：<code>(3)</code> 必须用 release，<code>(4)</code> 必须用 acquire。如果 <code>(4)</code> 只是 relaxed，即使它读到了 true，也不会把 <code>(1)(2)</code> 带到读者线程。</p>
+<h3 id="_10">场景三：无锁环形队列的头尾指针</h3>
+<p>单生产者单消费者（SPSC）队列是 <code>acquire/release</code> 最经典的应用。生产者写槽位，再推进 <code>head</code>；消费者读 <code>head</code>，再读槽位。反向地，消费者推进 <code>tail</code>，让生产者知道槽位可以复用。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// spsc_ring.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">N</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SpscRing</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static_assert</span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="s">"N must be a power of two &gt;= 2"</span><span class="p">);</span>
+
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">push</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head_</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">head</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">next</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">tail_</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">  </span><span class="c1">// 队列满</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">buf_</span><span class="p">[</span><span class="n">head</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
+<span class="w">        </span><span class="n">head_</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="n">next</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span><span class="w">  </span><span class="c1">// 发布槽位写入</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">pop</span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">tail</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tail_</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tail</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">head_</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">  </span><span class="c1">// 队列空</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">buf_</span><span class="p">[</span><span class="n">tail</span><span class="p">];</span>
+<span class="w">        </span><span class="n">tail_</span><span class="p">.</span><span class="n">store</span><span class="p">((</span><span class="n">tail</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">N</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span><span class="w">  </span><span class="c1">// 发布槽位释放</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">T</span><span class="w"> </span><span class="n">buf_</span><span class="p">[</span><span class="n">N</span><span class="p">]{};</span>
+<span class="w">    </span><span class="k">alignas</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">head_</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w">  </span><span class="c1">// 只有生产者写</span>
+<span class="w">    </span><span class="k">alignas</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tail_</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w">  </span><span class="c1">// 只有消费者写</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">kItems</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span>
+<span class="w">    </span><span class="n">SpscRing</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="mi">1024</span><span class="o">&gt;</span><span class="w"> </span><span class="n">q</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sum</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">producer</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kItems</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">consumer</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kItems</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">q</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">v</span><span class="p">))</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+<span class="w">            </span><span class="n">sum</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="n">producer</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">consumer</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"sum = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">sum</span><span class="p">.</span><span class="n">load</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"expected = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="mf">1L</span><span class="n">L</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">kItems</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">kItems</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>spsc_ring.cpp<span class="w"> </span>-o<span class="w"> </span>spsc_ring
+./spsc_ring
+</code></pre></div>
+
+<p>同步边：</p>
+<div class="codehilite"><pre><span></span><code>生产者: buf_[head] = v  sb  head_.store(next, release)
+消费者: head_.load(acquire) 读到 next  -&gt; sw
+        =&gt; buf_[head] = v hb out = buf_[tail]
+
+消费者: out = buf_[tail]  sb  tail_.store(..., release)
+生产者: tail_.load(acquire) 读到新 tail -&gt; sw
+        =&gt; 消费者读完槽位 hb 生产者复用槽位
+</code></pre></div>
+
+<p>注意这里 <code>head_</code> 和 <code>tail_</code> 的“本地读”用的是 <code>relaxed</code>，因为读写各自由单一所有者负责，不需要跨线程顺序；真正需要发布的是“推进索引”这一步，所以用 release；对端读索引用 acquire，从而看到索引背后的槽位内容。<strong>这就是“按需选最弱序”的典型例子。</strong></p>
+<h3 id="relaxed_1">场景四：什么时候 relaxed 就够了</h3>
+<p>如果状态只是一个独立计数器，不承载任何其他数据的发布，<code>relaxed</code> 完全够用：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// relaxed_counter.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_reads</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100000</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">g_reads</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">kThreads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ts</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kThreads</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="n">ts</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ts</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"reads = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">g_reads</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"expected = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">kThreads</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100000</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>relaxed_counter.cpp<span class="w"> </span>-o<span class="w"> </span>relaxed_counter
+./relaxed_counter
+</code></pre></div>
+
+<p>结果稳定为 800000。这里 relaxed 提供的是：</p>
+<ul>
+<li><code>fetch_add</code> 的原子性（不会丢失更新）；</li>
+<li>对同一原子对象的修改顺序一致性（不会看到计数倒退）。</li>
+</ul>
+<p>它不提供的是：不能用 <code>g_reads</code> 的读写去给别的非原子数据“打包票”。<strong>relaxed 只提供原子性，这句话是本课验收点之一。</strong></p>
+<hr />
+<h2 id="_11">常见误区与设计权衡</h2>
+<h3 id="1">误区 1：压力测试没失败，就认为弱内存序正确</h3>
+<p>这是本节点明确点出的陷阱。原因有三：</p>
+<ol>
+<li><strong>x86 是强内存模型</strong>：很多 acquire/release 甚至部分 seq_cst 的差异在 x86 上被硬件“顺手”保证了。代码在 x86 上跑一万次不失败，换到 ARM 就可能失败。</li>
+<li><strong>编译器重排与硬件重排是两回事</strong>：即使硬件不重排，编译器也可能基于 relaxed 语义把读提前、把写延后。<code>-O2</code> 下尤其要小心。</li>
+<li><strong>竞态窗口可能极小</strong>：依赖时序的 bug 可能只在特定负载、特定核数、特定调度下出现。没观察到反例，不等于没有反例。</li>
+</ol>
+<p>正确的态度是：<strong>用 happens-before 模型证明正确性；压测只用来发现反例，不用来证明正确性。</strong></p>
+<h3 id="2">误区 2：把内存序当成“刷新缓存”的命令</h3>
+<p><code>memory_order_release</code> 不是“把 cache line 刷回内存”，<code>acquire</code> 也不是“让缓存失效”。它们定义的是<strong>访问之间的顺序约束</strong>。理解这一点，才能明白：</p>
+<ul>
+<li>为什么 <code>relaxed</code> 是原子的，却不能发布数据；</li>
+<li>为什么 <code>release</code> / <code>acquire</code> 必须配对，单独一个没用；</li>
+<li>为什么“我加了 seq_cst 所以肯定对”也是错的——如果根本没有建立 <code>hb</code>，seq_cst 也救不了非原子的并发读写。</li>
+</ul>
+<h3 id="3-releaseacquire">误区 3：以为写了 release/acquire 就一定有同步</h3>
+<p>同步需要“读值匹配”。如果 acquire 读到的不是 release 写写入的值（比如读到了初值、读到了另一个 relaxed 写、或者读到了被覆盖后的值），就没有 <code>synchronizes-with</code>。发布标志一定要保证“只有发布者会写、读者只在发布后读到目标值”。</p>
+<h3 id="4-relaxed-seq_cst">误区 4：以为 relaxed 是“不安全”的，所以一律用 seq_cst</h3>
+<p><code>relaxed</code> 在“只关心单个原子对象”的场景下是完全正确的，而且通常更便宜。无脑 <code>seq_cst</code> 会带来不必要的栅栏和优化限制。真正的安全性来自协议，而不是最强的参数。</p>
+<h3 id="5">误区 5：把“原子变量”当成“它周围数据的保护伞”</h3>
+<p><code>std::atomic&lt;bool&gt; ready</code> 只保护 <code>ready</code> 自己。它不会自动保护 <code>payload</code>。只有当你用 <code>ready</code> 建立了一条 <code>hb</code> 边，<code>payload</code> 才被纳入保护范围。</p>
+<h3 id="6-storeload">误区 6：忽略了 StoreLoad 重排</h3>
+<p><code>acquire/release</code> 不是万能的。对称的“先写自己、再读对方”协议需要 <code>seq_cst</code>，否则双方可能都读到 0。看到“两个线程互相等待对方标志”的代码，先检查是不是需要全局顺序。</p>
+<h3 id="_12">设计权衡</h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>适合</th>
+<th>代价 / 风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>relaxed</code></td>
+<td>纯计数、统计、单对象原子性</td>
+<td>不能发布其他数据；误用会导致数据竞争</td>
+</tr>
+<tr>
+<td><code>release</code> / <code>acquire</code></td>
+<td>单向发布订阅、SPSC 队列</td>
+<td>需要精确配对；读值不匹配则无同步</td>
+</tr>
+<tr>
+<td><code>acq_rel</code></td>
+<td>RMW 需要两侧约束</td>
+<td>比 relaxed 贵；协议仍需证明</td>
+</tr>
+<tr>
+<td><code>seq_cst</code></td>
+<td>需要全局顺序、对称握手、默认安全</td>
+<td>可能引入额外栅栏；性能敏感路径需测量</td>
+</tr>
+<tr>
+<td>互斥锁 / 条件变量</td>
+<td>复杂状态、多字段事务</td>
+<td>阻塞、上下文切换、死锁风险</td>
+</tr>
+</tbody>
+</table>
+<p>一句话总结 tradeoff：<strong>弱内存序可能提升性能，但应由可说明的协议与测量支持。</strong> 如果说不清每条 <code>hb</code> 边从哪来，就不要为了省一点栅栏去用更弱的序；如果瓶颈确实在原子操作上，再用测量数据驱动优化。</p>
+<hr />
+<h2 id="_13">动手实践</h2>
+<h3 id="happens-before_1">任务：写单次消息发布实验，标注每条 happens-before 边</h3>
+<p>本实践对应 <code>practice</code>：写单次消息发布实验，标注每条 happens-before 边并使用模型化推理。验收对应：</p>
+<ul>
+<li>能证明非原子 payload 读取有同步；</li>
+<li>能解释 relaxed 只提供原子性。</li>
+</ul>
+<h4 id="1_1">步骤 1：实现正确的发布订阅</h4>
+<ol>
+<li>新建 <code>message_publish.cpp</code>，内容使用本课第 1 节的完整示例。</li>
+<li>编译运行：
+   <code>bash
+   g++ -std=c++17 -pthread -O2 message_publish.cpp -o message_publish
+   for i in $(seq 1 20); do ./message_publish; done</code></li>
+<li>在纸上或笔记里画出三条边：
+   <code>text
+   sb: (1) -&gt; (2)
+   sb: (3) -&gt; (4)
+   sw: (2) -&gt; (3)   // 因为 (3) 读到了 (2) 写的 true
+   hb: (1) -&gt; (4)   // 传递闭包</code></li>
+<li>用一句话说明为什么 <code>g_payload</code> 的非原子读不构成数据竞争：因为 <code>hb(写 payload, 读 payload)</code> 成立，两个冲突访问之间有 happens-before。</li>
+</ol>
+<h4 id="2-relaxed">步骤 2：把发布改成 relaxed，观察“没失败”的假象</h4>
+<ol>
+<li>复制一份 <code>message_publish_relaxed.cpp</code>，把 <code>(2)</code> 和 <code>(3)</code> 的 <code>memory_order_release</code> / <code>memory_order_acquire</code> 都改成 <code>memory_order_relaxed</code>。</li>
+<li>用同样的命令多跑几次，记录是否看到 <code>payload = 0</code> 或 assertion 失败。</li>
+<li>再打开优化和更多轮次：
+   <code>bash
+   g++ -std=c++17 -pthread -O3 message_publish_relaxed.cpp -o message_publish_relaxed
+   for i in $(seq 1 200); do ./message_publish_relaxed; done</code></li>
+<li>回答：即使 200 次都没失败，能否证明它正确？不能。请从“x86 TSO”“编译器重排”“竞态窗口”三个角度解释。</li>
+<li>用模型标注这个版本：
+   <code>text
+   sb: (1) -&gt; (2)
+   sb: (3) -&gt; (4)
+   sw: 无              // relaxed 不建立 synchronizes-with
+   hb: (1) -/-&gt; (4)    // 没有跨线程边，传递闭包无法连接</code>
+   结论：<code>(1)</code> 和 <code>(4)</code> 是不同线程的冲突访问，且无 <code>hb</code>，构成数据竞争，行为未定义。</li>
+</ol>
+<h4 id="3">步骤 3：验证“读值匹配”条件</h4>
+<ol>
+<li>把 <code>g_ready</code> 的初始值改成 <code>true</code>，保留 release/acquire，构造本课 <code>publish_initial_true.cpp</code> 的情形。</li>
+<li>让 <code>subscriber</code> 先启动、<code>publisher</code> 延迟一会儿再写（可以用 <code>std::this_thread::sleep_for</code>），观察读者可能读到初始 <code>true</code>。</li>
+<li>标注这个执行：
+   <code>text
+   (C) 读到的是初始化的 true，不是 (P) 写的 true
+   =&gt; 不存在 sw(P, C)
+   =&gt; 不存在 hb(payload 写, payload 读)</code></li>
+<li>修复方式：把标志初始化为 <code>false</code>，确保读者读到 <code>true</code> 时只能来自发布者的 release store。思考：如果确实需要一个“初始就有效”的配置，应该怎么设计协议？（提示：让初始状态也经过一次等价的发布，或使用版本号/序列号区分。）</li>
+</ol>
+<h4 id="4-spsc">步骤 4：做一个 SPSC 队列的边标注</h4>
+<ol>
+<li>编译运行 <code>spsc_ring.cpp</code>，确认 <code>sum</code> 与 <code>expected</code> 相等。</li>
+<li>标出生产者和消费者之间的两条 <code>sw</code> 边（<code>head</code> 的发布与获取、<code>tail</code> 的发布与获取）。</li>
+<li>把 <code>head_.store</code> 改成 relaxed，压力测试并观察是否出现数据错误。同样提醒：没出错不代表正确。</li>
+<li>解释为什么 <code>head_.load(relaxed)</code> 在生产者内部是安全的：因为只有生产者写 <code>head_</code>，它读自己写的值不需要跨线程同步；真正需要 acquire 的是消费者读 <code>head_</code>。</li>
+<li>回答：如果把消费者的 <code>head_.load(acquire)</code> 改成 relaxed，槽位内容的读取还安全吗？不安全，因为缺少 <code>sw</code> 边，<code>buf_[head]</code> 的写与读之间没有 <code>hb</code>。</li>
+</ol>
+<h4 id="5-seq_cst-storeload">步骤 5：用 seq_cst 做 StoreLoad 对照</h4>
+<ol>
+<li>编译运行 <code>seqcst_store_load.cpp</code> 的弱序版本和 <code>-DUSE_SEQ_CST</code> 版本。</li>
+<li>记录是否观察到 <code>both zero</code>。</li>
+<li>用模型解释：
+   <code>text
+   弱序：A sb B，C sb D，但 A 与 D、C 与 B 之间无 hb
+        =&gt; 允许 r1 == 0 &amp;&amp; r2 == 0
+   seq_cst：所有 seq_cst 操作有全局单一顺序
+        =&gt; 若 A 在 C 前，则 D 必在 A 后，r2 读到 1；反之 r1 读到 1
+        =&gt; 不可能双方都读到 0</code></li>
+<li>结论：这不是“压测出来的经验”，而是内存模型给出的约束。</li>
+</ol>
+<h4 id="acceptance_1">acceptance 自检</h4>
+<ul>
+<li>[ ] 能在 <code>message_publish.cpp</code> 上写出 <code>sb(1,2)</code>、<code>sb(3,4)</code>、<code>sw(2,3)</code>、<code>hb(1,4)</code> 四条边。</li>
+<li>[ ] 能说明 <code>g_payload</code> 的读写不构成数据竞争，理由是 <code>hb(写, 读)</code> 成立。</li>
+<li>[ ] 能解释 <code>relaxed</code> 版本为什么没有 <code>sw</code> 边，因此不能发布非原子 payload。</li>
+<li>[ ] 能说清 <code>relaxed</code> 仍然提供原子性和同一原子对象的修改顺序一致性，只是不提供跨线程顺序。</li>
+<li>[ ] 能说明“压力测试未失败不能证明弱内存序正确”，并给出至少两个原因。</li>
+<li>[ ] 能解释 <code>seq_cst</code> 额外提供的全局单一顺序，以及 StoreLoad 重排为什么需要它。</li>
+</ul>
+<h4 id="sourcestudy">sourceStudy</h4>
+<p>以 cppreference 的内存序定义为准，对代码逐条标出读取来源、synchronizes-with 及 happens-before 关系。建议按以下路径阅读并对照本课代码：</p>
+<ol>
+<li><strong><code>std::memory_order</code> 枚举</strong>：逐个核对 <code>relaxed</code>、<code>consume</code>、<code>acquire</code>、<code>release</code>、<code>acq_rel</code>、<code>seq_cst</code> 的定义与适用操作（本课不展开 <code>consume</code>，但要知道它存在且语义特殊）。</li>
+<li><strong>sequenced-before 与 happens-before 的正式定义</strong>：核对“同线程 sb”“跨线程 sw”“hb 是传递闭包”这三条，和本课第 1 节的标注一一对应。</li>
+<li><strong>synchronizes-with 的条件</strong>：重点确认“acquire 读必须读到 release 写写入的值或 release sequence 中的值”，并用 <code>publish_initial_true.cpp</code> 验证“读到初值不构成同步”。</li>
+<li><strong>release/acquire 的排序保证</strong>：核对 release 之前的访问不能后移、acquire 之后的访问不能前移，以及它们各自单独不构成同步。</li>
+<li><strong>seq_cst 的总顺序</strong>：核对“所有 seq_cst 操作存在单一总顺序且与 hb 一致”，并对照 <code>seqcst_store_load.cpp</code> 的 Dekker 例子。</li>
+<li><strong>数据竞争与未定义行为</strong>：核对“冲突访问 + 至少一个非原子 + 无 hb”这个定义，用它来判断本课每个 relaxed 反例为什么是 UB。</li>
+<li><strong>版本与平台</strong>：记录你使用的标准版本（C++17）、编译器版本、目标架构。若在 ARM 机器上能复现弱序反例，把结果写进实验笔记；若只在 x86 上跑过，明确标注“未在弱内存模型平台验证”。</li>
+</ol>
+<p>对每一段自己写的发布订阅代码，都做同样的动作：标出每个共享读的<strong>值来源</strong>，找出对应的 <code>sw</code>，再推出 <code>hb</code>。这比背六种内存序的名字有用得多。</p>
+<hr />
+<h2 id="_14">自测题</h2>
+<h3 id="1_2">题 1</h3>
+<p>下面代码中，<code>assert</code> 是否一定成立？如果把 <code>store</code> 改成 <code>memory_order_relaxed</code>，结论如何变化？请用 <code>sb</code> / <code>sw</code> / <code>hb</code> 说明。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ready</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">producer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ready</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">consumer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ready</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">7</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>答案：</strong> 在 release/acquire 版本中，<code>assert</code> 成立。推理：<code>data = 7</code> sequenced-before release store；consumer 的 acquire load 如果读到 <code>true</code>，它读到的正是 producer 的 release store 写入的值，因此 release store synchronizes-with acquire load；acquire load 又 sequenced-before <code>assert</code> 中的读取。于是 <code>hb(data 写, data 读)</code> 成立，非原子 <code>data</code> 的读写不构成数据竞争，读取必然看到 7。</p>
+<p>如果把 store 改成 <code>relaxed</code>，则没有 <code>sw</code> 边：即使 load 读到 <code>true</code>，也不建立任何跨线程顺序。<code>data</code> 的写和读来自不同线程且无 <code>hb</code>，构成数据竞争，程序行为未定义，<code>assert</code> 可能失败（也可能“看起来正常”，但那只是碰巧）。</p>
+<h3 id="2_1">题 2</h3>
+<p>有人说：“只要代码里一个线程用了 <code>release</code>，另一个线程用了 <code>acquire</code>，就一定有同步。”这句话对吗？请举一个反例并说明 <code>synchronizes-with</code> 成立的条件。</p>
+<p><strong>答案：</strong> 不对。<code>synchronizes-with</code> 还要求 acquire 读必须读到 release 写所写入的值（或该 release store 主导的 release sequence 中的值）。反例：发布标志初始就是 <code>true</code>，读者在发布者执行之前用 acquire 读到初始 <code>true</code>，此时它与发布者的 release store 没有读值关系，因此没有 <code>sw</code>，也就没有 <code>hb</code>，读者访问 payload 可能读到旧值。修复方式是让标志初始为 <code>false</code>，或确保读者只会读到发布者写入的目标值（例如使用版本号/序列号，并校验读到的是发布后的版本）。</p>
+<h3 id="3_1">题 3</h3>
+<p>下面的 Dekker 式代码，如果两个 store 都用 <code>memory_order_release</code>、两个 load 都用 <code>memory_order_acquire</code>，是否可能出现 <code>r1 == 0 &amp;&amp; r2 == 0</code>？为什么？<code>seq_cst</code> 能避免吗？</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">y</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">a</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">MO_STORE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">r1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">MO_LOAD</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">b</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">y</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">MO_STORE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">r2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">MO_LOAD</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>答案：</strong> 使用 release/acquire 时，<strong>可能</strong>出现双方都读到 0。原因是 release 只阻止之前的访问后移，acquire 只阻止之后的访问前移，二者都不阻止“store 后面跟 load”这种 StoreLoad 重排。两个线程都可能先完成自己的 store，再去读对方的变量，于是都读到 0。</p>
+<p><code>seq_cst</code> 能避免。因为所有 <code>seq_cst</code> 操作存在一个所有线程都同意的全局单一总顺序，且与 <code>happens-before</code> 一致。若 <code>a</code> 的 store 在总顺序中先于 <code>b</code> 的 store，则 <code>b</code> 的 load 一定在 <code>b</code> 的 store 之后，也就一定在 <code>a</code> 的 store 之后，因此 <code>r2</code> 会读到 1；反之 <code>r1</code> 会读到 1。所以不可能双方都读到 0。这也是“需要全局顺序的对称协议必须用 <code>seq_cst</code>”的典型理由。</p>
+<hr />
+<h2 id="_15">推荐资源</h2>
+<ul>
+<li><strong>C++内存序与发布订阅：参考文档 / 原始资料</strong></li>
+<li>链接：https://en.cppreference.com/w/cpp/atomic/memory_order.html</li>
+<li>来源：en.cppreference.com</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：深入</li>
+<li>是否免费：是</li>
+<li>
+<p>推荐理由：重点阅读 sequenced-before 和 happens-before 与 release/acquire 与 relaxed，用于核对本节点实验的语义和边界。</p>
+</li>
+<li>
+<p><strong>std::memory_order</strong></p>
+</li>
+<li>链接：https://en.cppreference.com/cpp/atomic/memory_order</li>
+<li>来源：cppreference</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：进阶</li>
+<li>是否免费：是</li>
+<li>推荐理由：核对 release/acquire 同步关系成立的条件，避免把内存序当成刷新缓存命令。</li>
+</ul>
+<hr />
+<h2 id="_16">本课小结</h2>
+<ol>
+<li><strong>sequenced-before 是线程内的先后，happens-before 是跨线程的可见性偏序。</strong> <code>hb</code> 由 <code>sb</code>、<code>sw</code> 和传递闭包共同构成；判断数据竞争，看的就是冲突访问之间有没有 <code>hb</code>。</li>
+<li><strong><code>release</code> / <code>acquire</code> 必须配对，而且要求读值匹配。</strong> acquire 读到 release 写入的值（或 release sequence 中的值）才产生 <code>synchronizes-with</code>；读到初值或无关的 relaxed 写，不产生同步。</li>
+<li><strong><code>relaxed</code> 只提供原子性和同一原子对象的修改顺序一致性。</strong> 它不建立 <code>synchronizes-with</code>，不能用来发布非原子数据；但纯计数、统计场景用它完全正确。</li>
+<li><strong><code>seq_cst</code> 额外提供全局单一总顺序。</strong> 它阻止 StoreLoad 重排，适合对称握手、Dekker 式协议，以及你不确定弱序是否够用的路径。</li>
+<li><strong>内存序不是“刷新缓存”，而是构造同步边的工具。</strong> 先写出协议需要的 <code>hb</code> 链，再选择能提供这些边的最弱内存序。</li>
+<li><strong>压力测试未失败不能证明弱内存序正确。</strong> x86 TSO、编译器重排、极小竞态窗口都会掩盖 bug；正确性必须靠模型化推理，压测只用于发现反例。</li>
+<li><strong>弱内存序可能提升性能，但应由可说明的协议与测量支持。</strong> 说不清每条边从哪来，就不要用更弱的序。</li>
+<li>下一课将在本课基础上继续深入并发与内存模型：把发布订阅、无锁结构与可见性协议放进更完整的工程语境里，讨论如何把这些模型化推理变成可检查、可维护的代码约束。</li>
+</ol><div class="pn"><span><a href="69.html">← 原子操作与复合不变量</a></span><span>下一课 待更新</span></div></main></div></body></html>
