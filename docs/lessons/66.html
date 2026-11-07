@@ -1,0 +1,883 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>66. 互斥锁与锁粒度 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（66/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details open><summary>领域 E（2/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="cur" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 66 课 · 领域 E · 阶段 2</p><p class="dl"><a href="../files/66-e-lock.md" download>⬇ 本课 Markdown</a></p><h1 id="66208">第 66/208 课：互斥锁与锁粒度</h1>
+<ul>
+<li><strong>阶段</strong>：第 2 阶段 · 并发与内存模型（同步与正确性）</li>
+<li><strong>前置课程</strong>：e-race、b-raii</li>
+<li><strong>关键词</strong>：互斥锁、mutex、lock_guard、unique_lock、临界区、锁顺序、粗粒度锁、分片锁、锁粒度、吞吐、p99</li>
+<li><strong>难度</strong>：基础</li>
+<li><strong>所属领域</strong>：E · 并发与内存模型（子类：同步与正确性）</li>
+<li><strong>标签</strong>：Mutexes、E、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课讲的是<strong>数据竞争与线程安全契约</strong>：把「偶发错误」变成可检查的共享状态规则——先问哪些状态被多个线程共享，再问这些访问之间有没有 happens-before，最后才问用什么同步原语。配套工具是 C++ memory model、<code>std::mutex</code>、<code>std::atomic</code> 和 ThreadSanitizer。</p>
+<p>本课进入最常用的同步工具——<strong>互斥锁（mutex）</strong>。节点把这件事总结得很精确：</p>
+<blockquote>
+<p>互斥锁把临界区串行化并建立同步关系，正确性取决于所有相关访问遵守同一契约。</p>
+</blockquote>
+<p>上一课让你能<strong>识别</strong>「这块内存有竞争」；本课让你能<strong>正确地用锁把它护住</strong>，并且在护住之后还问一个后端天天要答的问题：<strong>锁该粗还是该细？</strong></p>
+<p>微信公众号后台里，这类共享结构到处都有：</p>
+<ul>
+<li><strong>会话表</strong>：多个工作线程同时查、插、删同一张会话 map；</li>
+<li><strong>本地 KV 缓存</strong>：热点文章元数据、配置片段、鉴权结果缓存；</li>
+<li><strong>限流桶</strong>：按 appid / openid 计数，先查后扣必须在同一临界区；</li>
+<li><strong>连接状态表</strong>：IO 线程改状态，业务线程读缓冲与标志；</li>
+<li><strong>统计聚合</strong>：多个线程往同一张指标表里累加。</li>
+</ul>
+<p>它们的共同点是：<strong>必须有一把（或一组）锁把相关访问串起来</strong>；但锁太粗会把吞吐和 p99 拖垮，锁太细又容易死锁、难维护。本课把三件事串起来：</p>
+<ol>
+<li><strong>怎么加锁</strong>：<code>std::lock_guard</code> / <code>std::unique_lock</code>（RAII，作用域释放，后者可延迟、转移、配合条件变量）；</li>
+<li><strong>怎么划临界区与锁顺序</strong>：临界区尽量短；同一不变量用同一把锁；多锁时全局固定顺序；</li>
+<li><strong>怎么选粒度</strong>：一把大锁易验证但吞吐差；按 key hash 分片提高并行度，同时增加死锁与维护成本。</li>
+</ol>
+<p>本课与 e-race（数据竞争、happens-before、逻辑原子性）和 b-raii（资源获取即初始化、作用域释放）直接相连：<strong>互斥锁的正确用法几乎就是「用 RAII 包住临界区」</strong>；而锁粒度选择是在正确性之上做吞吐与可维护性的权衡。</p>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释 lock_guard 和 unique_lock</strong>
+   - 能说明为什么要用 RAII 加锁，而不是手写 <code>lock()</code> / <code>unlock()</code>。
+   - 能说清 <code>std::lock_guard</code> 的语义：构造时加锁，析构时解锁，不可移动、不可手动解锁。
+   - 能说清 <code>std::unique_lock</code> 相对 <code>lock_guard</code> 多出的能力：延迟加锁（<code>std::defer_lock</code>）、手动 <code>lock</code>/<code>unlock</code>、所有权转移、与条件变量配合。
+   - 能判断「这段代码该用 <code>lock_guard</code> 还是 <code>unique_lock</code>」。</p>
+</li>
+<li>
+<p><strong>能解释临界区与锁顺序</strong>
+   - 能把「临界区」定义成：为维护某个不变量，必须互斥执行的那段代码。
+   - 能说明「所有访问同一不变量的路径，必须遵守同一把锁的约定」。
+   - 能解释多锁死锁的经典形态（AB-BA），并给出「全局固定锁顺序」的解法。
+   - 能指出「临界区里做 IO / 调回调 / 拿另一把锁」带来的风险。</p>
+</li>
+<li>
+<p><strong>能解释粗粒度和分片锁</strong>
+   - 能对比「一把大锁护整张表」与「按 key hash 分片多把锁」的正确性与性能差异。
+   - 能说明分片锁如何提高并行度，以及它如何引入跨分片操作的死锁与一致性问题。
+   - 能用吞吐与 p99 证据选择锁粒度，而不是凭感觉说「细锁一定更快」。</p>
+</li>
+<li>
+<p><strong>能独立完成实践</strong>
+   - 为共享 KV 实现互斥保护（先粗锁，再分片锁）。
+   - 压测不同分片锁数量，记录吞吐与 p99。
+   - 沿 cppreference 核对 <code>mutex</code> / <code>lock_guard</code> / <code>unique_lock</code> 的定义、示例与错误处理路径，记录适用版本及边界条件。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - <strong>所有共享访问遵守锁约定</strong>：读、写、遍历、删除都走同一套锁契约，没有「锁写不锁读」。
+   - <strong>锁粒度选择有吞吐与 p99 证据</strong>：至少对比 1 / N / M 种分片数，给出数据和结论。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点给的 why 是：</p>
+<blockquote>
+<p>保护复合数据结构及不变量。</p>
+</blockquote>
+<p>这句话落到公众号后台，就是下面几件事。</p>
+<h3 id="1">1. 复合结构不是「几个字段各自加锁」就能对</h3>
+<p>假设会话表这样写：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Session</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">openid</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">last_active_ms</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">closed</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SessionTable</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">upsert</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 危险：无锁</span>
+<span class="w">        </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map_</span><span class="p">[</span><span class="n">id</span><span class="p">];</span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">openid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">last_active_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">;</span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">closed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">alive</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">now</span><span class="p">,</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">ttl</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">closed</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="p">(</span><span class="n">now</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">last_active_ms</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">ttl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>单线程完全正确。多线程下：</p>
+<ul>
+<li>线程 A 正在 <code>rehash</code>（插入触发扩容），线程 B 正在 <code>find</code> → 数据竞争，可能崩溃；</li>
+<li>线程 A 写 <code>closed=true</code>，线程 B 读 <code>last_active_ms</code> 做 TTL 判断 → 可能看到半更新状态；</li>
+<li>「先查后改」的复合操作被拆开，逻辑不变量（「closed 与 last_active 一致表达会话存活」）被破坏。</li>
+</ul>
+<p>互斥锁要保护的不是「某一个字段」，而是<strong>整张表作为复合结构的不变量</strong>。</p>
+<h3 id="2">2. 锁建立的是同步关系，不只是「别同时进」</h3>
+<p><code>mutex::unlock</code> 与后续另一个线程的 <code>mutex::lock</code> 之间建立 happens-before。这意味着：</p>
+<ul>
+<li>临界区内的写，对之后拿到同一把锁的线程可见；</li>
+<li>你不只是「串行化了」，还「同步了内存视图」。</li>
+</ul>
+<p>上一课讲的 happens-before，在本课里最常见的载体就是 mutex。不会用锁，就等于不会建立这条最常用的同步边。</p>
+<h3 id="3-p99">3. 锁粒度直接决定吞吐与 p99</h3>
+<p>公众号后台高峰期，本地缓存可能是每秒数十万次读。如果整张 KV 一把大锁：</p>
+<ul>
+<li>所有读互相排队；</li>
+<li>偶发一次写会让整条读路径抖动；</li>
+<li>p99 被锁等待尾巴拖长。</li>
+</ul>
+<p>如果按 key 分片成 64 / 256 把锁：</p>
+<ul>
+<li>不同 key 的访问可以并行；</li>
+<li>但「遍历全表」「跨 key 事务」「动态调整分片数」都变难；</li>
+<li>锁顺序一旦写错，死锁概率上升。</li>
+</ul>
+<p>后端工程师必须能<strong>用数据</strong>选粒度，而不是「听说细锁快就全细锁」。</p>
+<h3 id="4">4. 线上事故常见形态：锁写不锁读、临界区过长、锁顺序反了</h3>
+<p>值班时你常会看到：</p>
+<ul>
+<li>「只在 update 时加锁，get 觉得是只读就没加」→ 仍然是数据竞争；</li>
+<li>「锁里打日志、锁里 RPC、锁里调用户回调」→ 持锁时间爆炸，吞吐塌掉，甚至反向死锁；</li>
+<li>「线程 1 先锁 A 再锁 B，线程 2 先锁 B 再锁 A」→ 偶发卡死，重启后「好了」。</li>
+</ul>
+<p>这三件事本课都会给出可检查的规则。</p>
+<h3 id="5">5. 公众号后台你会真正碰到的场景</h3>
+<ul>
+<li>本地文章元数据缓存：读多写少，粗锁可能够用，热点写要用分片或读写锁（读写锁留后续课）；</li>
+<li>限流桶：按 appid 分片，单 appid 内必须串行「查令牌→扣令牌」；</li>
+<li>连接注册表：插入/删除要锁，回调最好锁外做；</li>
+<li>配置热更新：常常是「写端换 shared_ptr，读端无锁读快照」——那是另一类方案；若仍用 mutex，就要保证所有读路径也拿同一把锁。</li>
+</ul>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="0">0. 先建立直觉：洗手间门锁、公共白板、分楼层钥匙</h3>
+<p>用三个生活类比把本课三块内容钉住：</p>
+<ol>
+<li>
+<p><strong>洗手间门锁 = mutex</strong><br />
+   同一时间只能一个人进去（临界区串行化）。你进门上锁、出门开锁；如果进门后忘了开锁，后面所有人排队等到天荒地老。RAII 就是「用门把人带进去，人走了门自动开」——对应 <code>lock_guard</code>。</p>
+</li>
+<li>
+<p><strong>公共白板 = 被锁保护的共享结构</strong><br />
+   白板上写着会话表、KV、限流桶。规则是：<strong>谁要看或改白板，都必须先拿到同一把钥匙</strong>。只改不看也加锁、只看不改也加锁——因为「看的时候别人正在擦」，你看到的就不是一个完整画面。</p>
+</li>
+<li>
+<p><strong>一栋楼一把总钥匙 vs 每层一把钥匙 = 粗锁 vs 分片锁</strong><br />
+   总钥匙好管：谁进楼都清楚，不会拿错层。但所有人进任何一个房间都要抢同一把钥匙，高峰期门口大堵车（吞吐差、p99 差）。每层一把钥匙：不同层可以并行，但你要「同时开 3 层门做巡检」就必须规定开锁顺序，否则两个人反向开门会卡死在楼梯间（死锁）。</p>
+</li>
+</ol>
+<p>记住这三句，后面的 API 和代码都是在落实它们。</p>
+<h3 id="1-lock_guard-unique_lock">1. lock_guard 和 unique_lock</h3>
+<h4 id="11-lock-unlock">1.1 为什么不要手写 lock / unlock</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">bad_incr</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">mu</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span>
+<span class="w">    </span><span class="o">++</span><span class="n">count_</span><span class="p">;</span><span class="w">          </span><span class="c1">// 若这里抛异常，unlock 永远不会执行</span>
+<span class="w">    </span><span class="n">mu</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>问题：</p>
+<ul>
+<li>异常路径漏解锁 → 整进程永久卡住；</li>
+<li>早退 <code>return</code> 漏解锁 → 同上；</li>
+<li>代码审查时很难一眼看出「每一条路径都解锁了」。</li>
+</ul>
+<p>b-raii 课已经强调过：<strong>资源获取即初始化</strong>。锁就是一种资源。</p>
+<h4 id="12-stdlock_guard">1.2 std::lock_guard：最常用的默认选择</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">count_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">incr</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span><span class="w"> </span><span class="c1">// 构造时 lock</span>
+<span class="w">    </span><span class="o">++</span><span class="n">count_</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="c1">// 析构时 unlock，无论正常返回还是异常</span>
+</code></pre></div>
+
+<p>要点：</p>
+<ul>
+<li>构造函数调用 <code>mu.lock()</code>，析构函数调用 <code>mu.unlock()</code>；</li>
+<li>不可拷贝、不可移动（C++17 起有 <code>scoped_lock</code> 可锁多把，语义类似「只管理作用域」）；</li>
+<li><strong>不能</strong>中途手动解锁；</li>
+<li>临界区 = <code>lk</code> 这个对象的生命周期。</li>
+</ul>
+<p>编译与最小验证：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 文件：lock_guard_demo.cpp</span>
+c++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-O2<span class="w"> </span>-pthread<span class="w"> </span>lock_guard_demo.cpp<span class="w"> </span>-o<span class="w"> </span>lock_guard_demo
+./lock_guard_demo
+</code></pre></div>
+
+<h4 id="13-stdunique_lock">1.3 std::unique_lock：需要灵活性时再用</h4>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;condition_variable&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span><span class="w"> </span><span class="n">cv</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">wait_ready</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span><span class="w"> </span><span class="c1">// 默认构造即加锁</span>
+<span class="w">    </span><span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lk</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ready</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w">   </span><span class="c1">// wait 内部会解锁再加锁</span>
+<span class="w">    </span><span class="c1">// 此处仍持锁</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">signal_ready</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="c1">// 先解锁再 notify，避免无效唤醒后立刻抢锁失败的抖动（风格问题）</span>
+<span class="w">    </span><span class="n">cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>unique_lock</code> 相对 <code>lock_guard</code> 多出的能力：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>用法</th>
+<th>何时需要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>延迟加锁</td>
+<td><code>std::unique_lock&lt;std::mutex&gt; lk(mu, std::defer_lock);</code> 然后 <code>std::lock(lk1, lk2);</code></td>
+<td>多锁避免死锁</td>
+</tr>
+<tr>
+<td>手动解锁</td>
+<td><code>lk.unlock(); /* 非临界区工作 */ lk.lock();</code></td>
+<td>缩短持锁时间</td>
+</tr>
+<tr>
+<td>所有权转移</td>
+<td><code>auto lk2 = std::move(lk);</code></td>
+<td>把锁的持有权交给别的作用域/对象</td>
+</tr>
+<tr>
+<td>配合条件变量</td>
+<td><code>cv.wait(lk, pred);</code></td>
+<td>等待时必须能临时释放锁</td>
+</tr>
+</tbody>
+</table>
+<p>经验法则：</p>
+<ul>
+<li><strong>默认用 <code>lock_guard</code>（或 C++17 <code>scoped_lock</code>）</strong>；</li>
+<li>只有当你需要「中途解锁」「defer_lock + std::lock」「condition_variable」时，才上 <code>unique_lock</code>；</li>
+<li>不要因为「看起来更高级」就处处 <code>unique_lock</code>——多出来的状态（是否拥有锁）本身就是心智负担。</li>
+</ul>
+<h4 id="14-adopt_lock-try_to_lock">1.4 与 adopt_lock / try_to_lock</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">transfer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// std::lock 按算法同时锁住多把，避免 AB-BA 死锁</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// 告诉 lock_guard：锁已经持有，析构时负责 unlock，不要再 lock</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">adopt_lock</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk2</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">adopt_lock</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// ... 临界区 ...</span>
+<span class="p">}</span>
+
+<span class="kt">bool</span><span class="w"> </span><span class="nf">try_work</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">try_to_lock</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">lk</span><span class="p">.</span><span class="n">owns_lock</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w"> </span><span class="c1">// 没抢到，去做别的事或稍后重试</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// ... 临界区 ...</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>边界条件（对照 cppreference 时要记下）：</p>
+<ul>
+<li>对同一 <code>std::mutex</code>，同一线程二次 <code>lock</code> → <strong>未定义行为</strong>（非 recursive_mutex）；</li>
+<li><code>lock_guard</code> / <code>unique_lock</code> 管理的是「锁的所有权」，不是业务不变量本身——不变量仍靠你在临界区内维护；</li>
+<li><code>mutex</code> 不可移动、不可拷贝；把它放进容器要用 <code>std::unique_ptr&lt;std::mutex&gt;</code> 或 <code>std::vector</code> + 原地构造时注意实现限制（常见做法是固定大小数组或 <code>std::unique_ptr&lt;mutex[]&gt;</code>）。</li>
+</ul>
+<h3 id="2_1">2. 临界区与锁顺序</h3>
+<h4 id="21">2.1 什么是临界区</h4>
+<p>临界区（critical section）不是「被大括号包起来的任意代码」，而是：</p>
+<blockquote>
+<p>为了维护某个<strong>不变量</strong>，必须互斥执行的最短代码片段。</p>
+</blockquote>
+<p>例子：限流桶的不变量是「令牌数从不小于 0，且扣减基于最新值」。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TokenBucket</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">try_take</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tokens_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="n">tokens_</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">tokens_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>这里临界区必须覆盖「读 tokens_ + 写 tokens_」整段。若拆成：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 错误示范</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">try_take_broken</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">cur</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tokens_</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="c1">// 解锁后别的线程可能改 tokens_</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cur</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">tokens_</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="c1">// 可能减成负数</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>看起来「每次访问都加了锁」，但<strong>逻辑原子性</strong>已经碎了。上一课的「复合操作」在这里用锁重新表达：<strong>不变量相关的多个步骤必须在同一临界区内完成</strong>。</p>
+<h4 id="22">2.2 所有相关访问遵守同一契约</h4>
+<p>节点 summary 的后半句是关键：</p>
+<blockquote>
+<p>正确性取决于所有相关访问遵守同一契约。</p>
+</blockquote>
+<p>契约至少包含：</p>
+<ol>
+<li><strong>哪把锁保护哪些数据</strong>（文档或注释写清：<code>mu_</code> 保护 <code>map_</code>）；</li>
+<li><strong>读也要拿同一把锁</strong>（下一节误区会展开）；</li>
+<li><strong>不允许「临时解锁做点事再锁回来」时假设数据没变</strong>——除非你重新读取并重新验证不变量；</li>
+<li><strong>回调 / 日志 / IO 默认放锁外</strong>。</li>
+</ol>
+<p>反例：锁内回调导致重入死锁。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Registry</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cb</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">map_</span><span class="p">[</span><span class="n">id</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">notify_all</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cb</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">map_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">cb</span><span class="p">();</span><span class="w"> </span><span class="c1">// 若 cb 内部又调用 add()，同线程二次 lock → UB / 死锁</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">map_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>修法：锁内拷贝快照，锁外回调。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">notify_all_safe</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">snapshot</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">snapshot</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">map_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="p">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">cb</span><span class="p">]</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">map_</span><span class="p">)</span><span class="w"> </span><span class="n">snapshot</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">cb</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">cb</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">snapshot</span><span class="p">)</span><span class="w"> </span><span class="n">cb</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="23">2.3 多锁时的全局固定顺序</h4>
+<p>经典死锁：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_a</span><span class="p">,</span><span class="w"> </span><span class="n">mu_b</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">thread1</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk1</span><span class="p">(</span><span class="n">mu_a</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk2</span><span class="p">(</span><span class="n">mu_b</span><span class="p">);</span><span class="w"> </span><span class="c1">// 等待 B</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">thread2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk1</span><span class="p">(</span><span class="n">mu_b</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk2</span><span class="p">(</span><span class="n">mu_a</span><span class="p">);</span><span class="w"> </span><span class="c1">// 等待 A → 与 thread1 互相等待</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>三种常见解法：</p>
+<ol>
+<li><strong>全局固定顺序</strong>：规定永远先锁 <code>mu_a</code> 再锁 <code>mu_b</code>（按地址、按分片下标、按资源层级）。</li>
+<li><strong><code>std::lock</code> / <code>std::scoped_lock</code></strong>：一次性锁多把，标准库保证不因加锁顺序死锁。</li>
+<li><strong>避免同时持有多锁</strong>：能串行化成「锁 A 做事 → 解锁 → 锁 B 做事」就不要嵌套。</li>
+</ol>
+<p>公众号后台分片 KV 里，跨分片操作最容易踩死锁。规则示例：</p>
+<blockquote>
+<p>若一次操作需要锁分片 i 与 j，则先锁 <code>min(i,j)</code>，再锁 <code>max(i,j)</code>。</p>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">move_item</span><span class="p">(</span><span class="n">ShardedKV</span><span class="o">&amp;</span><span class="w"> </span><span class="n">kv</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">from</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">to</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kv</span><span class="p">.</span><span class="n">shard_for</span><span class="p">(</span><span class="n">from</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kv</span><span class="p">.</span><span class="n">shard_for</span><span class="p">(</span><span class="n">to</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">&amp;</span><span class="n">s1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">s1</span><span class="p">.</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="c1">// 同片内移动</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">*</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s1</span><span class="p">.</span><span class="n">mu</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">*</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">s2</span><span class="p">.</span><span class="n">mu</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">first</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">second</span><span class="p">)</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">swap</span><span class="p">(</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="n">second</span><span class="p">);</span><span class="w"> </span><span class="c1">// 按地址排序</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock</span><span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">second</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk1</span><span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">adopt_lock</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk2</span><span class="p">(</span><span class="o">*</span><span class="n">second</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">adopt_lock</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// 跨片移动</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="24">2.4 临界区尽量短</h4>
+<p>短临界区不是「少写几行」，而是：</p>
+<ul>
+<li>锁内只碰共享状态；</li>
+<li>内存分配、JSON 解析、磁盘 IO、网络 RPC、打日志、用户回调 → <strong>锁外</strong>；</li>
+<li>需要根据共享状态做重活时：锁内拷贝必要数据 → 解锁 → 锁外计算 → 若需写回再加锁并<strong>重新检查</strong>前提条件。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">build_response</span><span class="p">(</span><span class="n">Cache</span><span class="o">&amp;</span><span class="w"> </span><span class="n">cache</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">cache</span><span class="p">.</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="n">map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">cache</span><span class="p">.</span><span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="s">"miss"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span><span class="w"> </span><span class="c1">// 拷贝出去</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// 锁外做昂贵工作</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">heavy_format</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="3">3. 粗粒度和分片锁</h3>
+<h4 id="31">3.1 一把大锁：易验证，吞吐差</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CoarseKV</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">set</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">map_</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>优点：</p>
+<ul>
+<li>正确性直观：所有路径一把锁；</li>
+<li>遍历、清空、快照都简单；</li>
+<li>死锁面极小（只有一把锁）。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>读与读也互斥（<code>std::mutex</code> 不区分读写）；</li>
+<li>核数上去后，锁成为扩展瓶颈；</li>
+<li>单次慢操作会拖高全表 p99。</li>
+</ul>
+<p>适用：表很小、并发不高、正确性优先的控制面结构（配置表、少量连接元数据）。</p>
+<h4 id="32-key-hash">3.2 按 key hash 分片：提高并行度</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ShardedKV</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">ShardedKV</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">nshards</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">shards_</span><span class="p">(</span><span class="n">nshards</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">set</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shard_for</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">map</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shard_for</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 全表粗略 size：需要锁所有分片，注意顺序</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// 按下标顺序加锁，避免死锁</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">locks</span><span class="p">;</span>
+<span class="w">        </span><span class="n">locks</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">shards_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shards_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">locks</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shards_</span><span class="p">)</span><span class="w"> </span><span class="n">total</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">map</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">total</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">struct</span><span class="w"> </span><span class="nc">Shard</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">Shard</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">shard_for</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">{}(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">shards_</span><span class="p">[</span><span class="n">h</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">shards_</span><span class="p">.</span><span class="n">size</span><span class="p">()];</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">Shard</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">shard_for</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">h</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">{}(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">shards_</span><span class="p">[</span><span class="n">h</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">shards_</span><span class="p">.</span><span class="n">size</span><span class="p">()];</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Shard</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shards_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>注意：<code>std::vector&lt;Shard&gt;</code> 在移动/扩容时会出问题，因为 <code>mutex</code> 不可移动。上面构造时一次性定好 <code>nshards</code>，之后不再 <code>push_back</code>，这样是安全的。更稳妥可以用 <code>std::unique_ptr&lt;Shard[]&gt;</code> 或固定数组。</p>
+<p>优点：</p>
+<ul>
+<li>不同 key 落在不同分片时可并行；</li>
+<li>热点若均匀分布，吞吐近似随分片数上升（直到别的瓶颈）。</li>
+</ul>
+<p>代价：</p>
+<ul>
+<li>跨分片操作要多锁 + 固定顺序；</li>
+<li><code>size()</code> / 全局迭代变贵；</li>
+<li>分片数、hash 函数、热点 key 倾斜都会影响效果；</li>
+<li>代码与测试复杂度上升。</li>
+</ul>
+<h4 id="33-p99">3.3 用吞吐与 p99 说话</h4>
+<p>压测思路（实践环节会落地）：</p>
+<ol>
+<li>固定线程数（如 8）、固定操作混合（如 90% get / 10% set）、固定 key 空间；</li>
+<li>对比 <code>shards = 1, 8, 64, 256</code>；</li>
+<li>记录 QPS（吞吐）与延迟分位（p50 / p99）；</li>
+<li>观察：分片从 1→8 通常明显升；到某一档后收益变平甚至因缓存行/调度开销下降；</li>
+<li>再测「热点 key」（1% key 承担 50% 流量）——分片对热点帮助有限，需要别的手段（如热点拆分、本地缓存、读写锁）。</li>
+</ol>
+<p>结论模板：</p>
+<blockquote>
+<p>在 8 线程、90/10 读写、均匀 key 下，分片 64 相对粗锁吞吐 +X%，p99 -Yµs；分片 256 相对 64 收益 &lt;Z%，但 <code>size()</code> 延迟明显上升。故默认选 64，并在文档中写明跨分片锁顺序约定。</p>
+</blockquote>
+<hr />
+<h2 id="_5">常见误区与设计权衡</h2>
+<h3 id="1_1">误区 1：锁住写不锁读通常仍然存在竞争</h3>
+<p>这是节点 pitfalls 的原话，也是线上最高频的错觉：</p>
+<blockquote>
+<p>「get 是只读的，不会改数据，为什么要加锁？」</p>
+</blockquote>
+<p>因为：</p>
+<ul>
+<li>写线程可能正在 <code>rehash</code>，读线程的 <code>find</code> 会撞上未定义行为；</li>
+<li>写线程可能正在改 <code>string</code> 的内部缓冲，读线程解引用会崩溃或读到撕破的值；</li>
+<li>即便「看起来像原子的指针赋值」，在 C++ 里普通读写没有 happens-before 就是数据竞争。</li>
+</ul>
+<p>正确契约：<strong>凡是与写路径共享的数据，读路径也必须通过同一同步机制</strong>（同一把 mutex，或 atomic / RCU / 锁外快照等明确方案）。</p>
+<h3 id="2_2">误区 2：临界区里「顺便」做重活</h3>
+<p>锁内打日志、格式化字符串、分配大块内存、调 RPC，都会把持锁时间从纳秒级拉到毫秒级。表现是：</p>
+<ul>
+<li>CPU 不高但吞吐上不去；</li>
+<li>p99 尖刺与锁等待监控正相关；</li>
+<li>偶发「全线卡住」其实是某次锁内慢调用。</li>
+</ul>
+<p>修法：锁内只碰共享状态；重活锁外；写回时重新验证。</p>
+<h3 id="3_1">误区 3：细锁一定更快</h3>
+<p>分片过多时：</p>
+<ul>
+<li>每把锁自己的缓存行可能 false sharing（可用对齐缓解）；</li>
+<li>跨分片操作概率上升；</li>
+<li>代码路径更长，分支更多；</li>
+<li>若负载本身是单 key 热点，分片等于没分。</li>
+</ul>
+<p><strong>没有压测数字就不要宣称细锁胜利。</strong></p>
+<h3 id="4-recursive_mutex">误区 4：用 <code>recursive_mutex</code> 掩盖重入设计问题</h3>
+<p>同线程重入锁有时能「先跑起来」，但会：</p>
+<ul>
+<li>让「谁持锁」的推理变难；</li>
+<li>掩盖本该锁外做的回调；</li>
+<li>性能通常差于普通 mutex。</li>
+</ul>
+<p>优先重构为「锁内快照 + 锁外回调」，而不是默认 recursive。</p>
+<h3 id="5_1">误区 5：解锁后继续使用临界区内取得的引用/迭代器</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">bad_get</span><span class="p">(</span><span class="n">CoarseKV</span><span class="o">&amp;</span><span class="w"> </span><span class="n">kv</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">kv</span><span class="p">.</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">kv</span><span class="p">.</span><span class="n">map_</span><span class="p">[</span><span class="n">k</span><span class="p">];</span><span class="w"> </span><span class="c1">// 返回引用，锁已释放</span>
+<span class="p">}</span><span class="w"> </span><span class="c1">// 调用方读引用时，别人可能正在 erase / rehash</span>
+</code></pre></div>
+
+<p>应返回拷贝，或在锁外使用的数据结构是快照。</p>
+<h3 id="_6">设计权衡：粗锁易验证，细锁增加并行度也增加死锁与维护风险</h3>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>粗锁易验证，细锁增加并行度也增加死锁与维护风险。</p>
+</blockquote>
+<p>落地选择清单：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>偏粗锁</th>
+<th>偏分片/细锁</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正确性验证</td>
+<td>易</td>
+<td>难（锁顺序、跨片不变量）</td>
+</tr>
+<tr>
+<td>单核/低并发</td>
+<td>足够</td>
+<td>可能过度设计</td>
+</tr>
+<tr>
+<td>多核均匀负载</td>
+<td>易成瓶颈</td>
+<td>通常更好</td>
+</tr>
+<tr>
+<td>热点 key</td>
+<td>都难受</td>
+<td>仍难受，需额外策略</td>
+</tr>
+<tr>
+<td>全局操作</td>
+<td>简单</td>
+<td>贵且易错</td>
+</tr>
+<tr>
+<td>人员维护成本</td>
+<td>低</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<p>工程建议：</p>
+<ol>
+<li><strong>先粗锁做对</strong>（TSan 干净、不变量清晰）；</li>
+<li><strong>用压测证明粗锁是瓶颈</strong>（锁等待、p99）；</li>
+<li><strong>再分片</strong>，并写下锁顺序与跨片 API 规范；</li>
+<li><strong>持续用 TSan / 死锁检测 / 指标</strong>守护回归。</li>
+</ol>
+<hr />
+<h2 id="_7">动手实践</h2>
+<p>实践任务（节点 practice）：</p>
+<blockquote>
+<p>为共享KV实现互斥保护，压测不同分片锁数量。</p>
+</blockquote>
+<p>验收（acceptance）：</p>
+<ul>
+<li>所有共享访问遵守锁约定；</li>
+<li>锁粒度选择有吞吐与 p99 证据。</li>
+</ul>
+<p>并呼应 sourceStudy：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<h3 id="_8">环境与版本记录（先做）</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/atlas-e-lock<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/atlas-e-lock
+c++<span class="w"> </span>--version
+<span class="c1"># 记录：编译器版本、libstdc++/libc++、-std=c++17 或更高</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>versions.txt<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
+<span class="s">date: $(date)</span>
+<span class="s">cxx: $(c++ --version | head -1)</span>
+<span class="s">std: c++17</span>
+<span class="s">mutex: std::mutex / lock_guard / unique_lock per cppreference</span>
+<span class="s">EOF</span>
+</code></pre></div>
+
+<p>打开并阅读（至少浏览定义与示例）：</p>
+<ul>
+<li>https://en.cppreference.com/w/cpp/thread/mutex.html</li>
+<li>同页延伸：<code>lock_guard</code>、<code>unique_lock</code>、<code>scoped_lock</code>、<code>lock</code>、<code>adopt_lock</code>、<code>defer_lock</code></li>
+</ul>
+<p>在 <code>versions.txt</code> 追加：</p>
+<div class="codehilite"><pre><span></span><code>notes:
+- std::mutex: non-recursive; double-lock by same thread = UB
+- lock_guard: lock on ctor, unlock on dtor; not movable
+- unique_lock: can defer/try/adopt; movable; works with condition_variable
+- unlock/lock on mutex establishes synchronizes-with / happens-before
+</code></pre></div>
+
+<h3 id="1-kv">步骤 1：无锁 KV，制造可观测竞争</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// kv_race.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">NaiveKV</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">set</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">map_</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">NaiveKV</span><span class="w"> </span><span class="n">kv</span><span class="p">;</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100000</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">th</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">T</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">th</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">auto</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"k"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">((</span><span class="n">t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">                </span><span class="n">kv</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="s">"v"</span><span class="p">);</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">                </span><span class="n">kv</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">out</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">th</span><span class="p">)</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"size="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">kv</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>c++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-pthread<span class="w"> </span>kv_race.cpp<span class="w"> </span>-o<span class="w"> </span>kv_race_tsan
+./kv_race_tsan<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-80
+</code></pre></div>
+
+<p>预期：TSan 报告 data race。把报告关键栈保存到 <code>tsan_naive.txt</code>。</p>
+<h3 id="2-tsan">步骤 2：粗锁修复，确认 TSan 干净</h3>
+<p>把 <code>NaiveKV</code> 改成上一节的 <code>CoarseKV</code>（所有 <code>get</code>/<code>set</code>/<code>size</code> 持同一把 <code>mu_</code>）。</p>
+<div class="codehilite"><pre><span></span><code>c++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-pthread<span class="w"> </span>kv_coarse.cpp<span class="w"> </span>-o<span class="w"> </span>kv_coarse_tsan
+./kv_coarse_tsan<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>tsan_coarse.txt
+<span class="c1"># 应无 data race 报告</span>
+</code></pre></div>
+
+<p>自检清单：</p>
+<ul>
+<li>[ ] 读路径也加锁；</li>
+<li>[ ] 没有返回指向 map 内部的引用；</li>
+<li>[ ] 异常路径由 <code>lock_guard</code> 自动解锁。</li>
+</ul>
+<h3 id="3-kv">步骤 3：实现分片 KV</h3>
+<p>实现上一节 <code>ShardedKV</code>。注意：</p>
+<ul>
+<li>构造时固定分片数；</li>
+<li><code>shard_for</code> 用 <code>std::hash</code>；</li>
+<li><code>size()</code> 按下标顺序锁全部分片；</li>
+<li>不要在持锁时打印大量日志。</li>
+</ul>
+<p>单测：单线程 set/get；多线程随机 key；故意写一个「锁写不锁读」的坏版本对比 TSan。</p>
+<h3 id="4_1">步骤 4：压测不同分片数</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// bench_kv.cpp 核心逻辑伪代码</span>
+<span class="c1">// 对 shards in {1, 8, 64, 256}:</span>
+<span class="c1">//   预热 1s</span>
+<span class="c1">//   跑 5s：每线程循环随机 get/set（90/10），key 空间 100000</span>
+<span class="c1">//   汇总 ops，计算 QPS</span>
+<span class="c1">//   抽样延迟（可用 chrono::steady_clock 包住单次 get）估算 p99</span>
+</code></pre></div>
+
+<p>建议输出表：</p>
+<div class="codehilite"><pre><span></span><code>shards  threads  mix    qps      p50_us  p99_us
+1       8        90/10  ...      ...     ...
+8       8        90/10  ...      ...     ...
+64      8        90/10  ...      ...     ...
+256     8        90/10  ...      ...     ...
+</code></pre></div>
+
+<p>再跑一轮<strong>热点负载</strong>（key 从很小集合抽），观察分片收益是否消失。</p>
+<h3 id="5_2">步骤 5：锁顺序与死锁演练</h3>
+<p>写一个跨分片 <code>move</code>：错误版按「先 from 再 to」加锁（当 from/to 分片号反向时会死锁）；正确版按 <code>min/max</code> 或 <code>std::lock</code>。</p>
+<p>用两个线程反复反向 move，错误版应能复现卡住；正确版长时间跑不卡。可用 <code>timeout</code> 命令包裹：</p>
+<div class="codehilite"><pre><span></span><code>timeout<span class="w"> </span>10s<span class="w"> </span>./deadlock_demo_bad<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"bad version stuck/timed out as expected"</span>
+timeout<span class="w"> </span>10s<span class="w"> </span>./deadlock_demo_good<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"good version finished"</span>
+</code></pre></div>
+
+<h3 id="6sourcestudy">步骤 6：sourceStudy 核对清单</h3>
+<p>对照 https://en.cppreference.com/w/cpp/thread/mutex.html 及关联页，逐项打勾：</p>
+<ol>
+<li>[ ] <code>mutex::lock</code> / <code>unlock</code> / <code>try_lock</code> 的语义与异常声明；</li>
+<li>[ ] 同线程对非递归 mutex 二次 lock 为 UB；</li>
+<li>[ ] <code>lock_guard</code> 构造/析构；<code>adopt_lock</code> 含义；</li>
+<li>[ ] <code>unique_lock</code> 的 <code>defer_lock</code> / <code>try_to_lock</code> / <code>owns_lock</code> / 可移动；</li>
+<li>[ ] <code>std::lock</code> 对多 Lockable 的死锁避免算法；</li>
+<li>[ ] 记录你使用的 <code>-std=</code> 版本与实现（libstdc++/libc++）是否完整支持所用 API；</li>
+<li>[ ] 把「边界条件」写进 <code>versions.txt</code>（空临界区、try_lock 失败、异常中解锁）。</li>
+</ol>
+<h3 id="7">步骤 7：验收清单</h3>
+<ul>
+<li>[ ] 所有共享访问（get/set/size/move）遵守同一锁约定；故意去掉读锁时 TSan 能抓住；</li>
+<li>[ ] 粗锁与至少 3 档分片数有 QPS / p99 表；</li>
+<li>[ ] 有书面结论：默认分片数选多少、为什么、热点场景怎么办；</li>
+<li>[ ] 跨分片锁顺序有测试；</li>
+<li>[ ] sourceStudy 笔记完整。</li>
+</ul>
+<hr />
+<h2 id="_9">自测题</h2>
+<h3 id="1lock_guard-unique_lock">题目 1：<code>lock_guard</code> 和 <code>unique_lock</code> 怎么选？</h3>
+<p>说明二者的核心差异，并判断下列场景该用哪个（或 <code>scoped_lock</code>）：</p>
+<ol>
+<li>函数开头加锁，结束时解锁，中途不需要解锁；</li>
+<li>需要 <code>condition_variable::wait</code>；</li>
+<li>需要同时锁两把 mutex 且不想自己定顺序；</li>
+<li>临界区中间要做一段不碰共享状态的重活，希望临时解锁。</li>
+</ol>
+<h3 id="2_3">题目 2：为什么「锁写不锁读」仍然有数据竞争？</h3>
+<p>结合 <code>std::unordered_map</code> 的 <code>find</code> 与可能触发 <code>rehash</code> 的 <code>operator[]</code>，解释只在写路径加锁为何不够。正确契约是什么？</p>
+<h3 id="3-vs">题目 3：粗锁 vs 分片锁如何取舍？</h3>
+<p>节点 tradeoffs 说「粗锁易验证，细锁增加并行度也增加死锁与维护风险」。请给出一个你会采用的决策流程（至少 4 步），并说明跨分片操作如何避免死锁。</p>
+<hr />
+<h2 id="_10">自测题参考答案</h2>
+<h3 id="1_2">答案 1</h3>
+<p>核心差异：</p>
+<ul>
+<li><code>lock_guard</code>：极简 RAII，构造加锁、析构解锁，不可移动，不可手动解锁；</li>
+<li><code>unique_lock</code>：可延迟/尝试/接管加锁，可手动 lock/unlock，可移动，可与条件变量配合；多了「是否拥有锁」的状态。</li>
+</ul>
+<p>场景判断：</p>
+<ol>
+<li><strong><code>lock_guard</code>（或单锁时的 <code>scoped_lock</code>）</strong>——默认选择；</li>
+<li><strong><code>unique_lock</code></strong>——<code>wait</code> 需要在等待时释放锁；</li>
+<li><strong><code>std::scoped_lock</code> 或 <code>std::lock</code> + <code>adopt_lock</code> 的 <code>lock_guard</code>/<code>unique_lock</code></strong>——避免 AB-BA；</li>
+<li><strong><code>unique_lock</code></strong>——中途 <code>unlock()</code>，回来再 <code>lock()</code>，并重新读取共享状态。</li>
+</ol>
+<h3 id="2_4">答案 2</h3>
+<p><code>unordered_map</code> 的读（<code>find</code>、迭代）与写（插入导致 rehash、改节点）若无 happens-before，就是数据竞争：读线程可能正遍历桶链，写线程正在搬桶，表现为崩溃、死循环或错误结果。即便元素是直观「赋值」，<code>std::string</code> 的非原子写也会让并发读读到撕破状态。</p>
+<p>正确契约：所有相关访问（读、写、遍历、删除）遵守同一同步约定——通常是同一把（或同一组分片）mutex；或者改用有明确并发语义的结构/算法，而不是「我觉得只读就安全」。</p>
+<h3 id="3_2">答案 3</h3>
+<p>决策流程示例：</p>
+<ol>
+<li>先用粗锁把正确性做对（TSan 干净、不变量清晰）；</li>
+<li>压测量化锁是否成为瓶颈（锁等待、QPS、p99）；</li>
+<li>若是瓶颈且负载较均匀，引入分片，从较小档位逐步增大；</li>
+<li>用数据选默认分片数，并文档化跨分片锁顺序；热点场景单独治理；</li>
+<li>回归时保留 TSan 与死锁/超时测试。</li>
+</ol>
+<p>跨分片避免死锁：对需要同时持有的分片锁按<strong>全局固定顺序</strong>（分片下标或 mutex 地址）加锁，或使用 <code>std::lock</code> / <code>std::scoped_lock</code> 一次性锁定。</p>
+<hr />
+<h2 id="_11">推荐资源</h2>
+<ul>
+<li><strong>互斥锁与锁粒度：参考文档 / 原始资料</strong><br />
+  https://en.cppreference.com/w/cpp/thread/mutex.html  </li>
+<li>来源：en.cppreference.com  </li>
+<li>语言：英文 · 类型：文档 · 难度：进阶 · 免费  </li>
+<li>阅读重点：<code>lock_guard</code> 和 <code>unique_lock</code> 与临界区与锁顺序，用于核对本节点实验的语义和边界。  </li>
+<li>建议同步打开同站点的 <code>lock_guard</code>、<code>unique_lock</code>、<code>scoped_lock</code>、<code>std::lock</code> 页面，把「错误处理 / UB 边界」抄进 <code>versions.txt</code>。</li>
+</ul>
+<hr />
+<h2 id="_12">本课小结</h2>
+<ol>
+<li><strong>互斥锁把临界区串行化并建立同步关系</strong>；正确性取决于所有相关访问遵守同一契约。</li>
+<li><strong>默认用 <code>lock_guard</code>（RAII）</strong>；需要延迟、手动解锁、条件变量或所有权转移时再用 <code>unique_lock</code>。</li>
+<li><strong>临界区为不变量服务</strong>：复合操作放同一临界区；回调与重活放锁外；多锁遵循全局顺序。</li>
+<li><strong>粗锁易验证，分片锁换并行度</strong>：用吞吐与 p99 证据选择粒度，并承认细锁带来的死锁与维护成本。</li>
+<li><strong>锁写不锁读通常仍然存在竞争</strong>——读也是相关访问的一部分。</li>
+<li>下一课起，你会在更多同步原语（如条件变量、原子、内存序）上继续扩展；但「契约 + RAII + 粒度有据」这三板斧在后端并发里会反复出现。</li>
+</ol>
+<hr />
+<h2 id="_13">配套练习建议</h2>
+<ol>
+<li><strong>完整实现</strong>：把 <code>CoarseKV</code> / <code>ShardedKV</code> / bench 做成可编译仓库，README 含复现命令与结果表。</li>
+<li><strong>TSan 对照</strong>：保留「锁写不锁读」坏版本，作为教学用例归档报告。</li>
+<li><strong>死锁复现</strong>：AB-BA 与跨分片反向加锁各一则，配 <code>timeout</code> 脚本。</li>
+<li><strong>持锁时间审计</strong>：用简单 RAII 计时器统计持锁分位，故意在锁内 <code>sleep</code> 看 p99 崩坏。</li>
+<li><strong>热点 key</strong>：测量分片对热点无效，尝试「热点拆到独立分片」或本地线程缓存（注意一致性）。</li>
+<li><strong><code>scoped_lock</code> 重写</strong>：用 C++17 <code>std::scoped_lock</code> 替换手写 <code>std::lock</code> + <code>adopt_lock</code>。</li>
+<li><strong>源码级 sourceStudy</strong>：把 cppreference 中 mutex 相关 UB 条目与自己的测试行号对应表做进笔记。</li>
+<li><strong>代码审查清单</strong>：新增共享结构时必答——锁是谁、读路径是否覆盖、临界区是否最短、多锁顺序、跨片 API、压测证据。</li>
+<li><strong>与 e-race 串联</strong>：同一份 KV，先演示无锁竞争，再演示粗锁，再演示分片，形成一条完整故事线。</li>
+<li><strong>微信场景小品</strong>：选「会话表」或「限流桶」之一，写一页设计说明：不变量、锁契约、粒度选择与降级策略。</li>
+</ol><div class="pn"><span><a href="65.html">← 数据竞争与线程安全契约</a></span><span>下一课 待更新</span></div></main></div></body></html>
