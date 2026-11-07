@@ -1,0 +1,1181 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>67. 条件变量与状态谓词 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（67/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details open><summary>领域 E（3/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="cur" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 67 课 · 领域 E · 阶段 2</p><p class="dl"><a href="../files/67-e-condition.md" download>⬇ 本课 Markdown</a></p><h1 id="67208">第 67/208 课：条件变量与状态谓词</h1>
+<ul>
+<li><strong>阶段</strong>：第 2 阶段 · 并发与内存模型（同步与正确性）</li>
+<li><strong>前置课程</strong>：e-lock</li>
+<li><strong>难度</strong>：基础</li>
+<li><strong>所属领域</strong>：E · 并发与内存模型（子类：同步与正确性）</li>
+<li><strong>标签</strong>：Condition Variables、E、C++</li>
+<li><strong>关键词</strong>：条件变量、condition_variable、wait、谓词、虚假唤醒、notify_one、notify_all、优雅停机、有界队列</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课讲的是<strong>互斥锁与锁粒度</strong>：互斥锁把临界区串行化，并在 <code>unlock</code> 与后续 <code>lock</code> 之间建立 happens-before。它解决的是「多个线程不能同时读写同一份共享状态」的问题。</p>
+<p>但锁本身不会让线程「等到某个状态出现」。如果任务队列为空，消费者拿着锁反复检查队列，只有两条路：</p>
+<ol>
+<li><strong>忙等</strong>：<code>while (queue.empty()) {}</code>——占满 CPU，还可能忘记加锁；</li>
+<li><strong>自己解锁后睡眠</strong>：先 <code>unlock</code>，再 <code>sleep</code>，醒来再 <code>lock</code>——中间存在窗口，生产者可能恰好在这段时间修改状态并发出通知，消费者醒来后通知已经过去，于是永久睡死。</li>
+</ol>
+<p>条件变量就是为这件事设计的原语。节点把它的核心语义总结得很精确：</p>
+<blockquote>
+<p>条件变量用于等待共享状态变化，通知不是持久事件；谓词必须在互斥保护下反复检查。</p>
+</blockquote>
+<p>这句话里有三个关键点，本课会逐一拆开：</p>
+<ul>
+<li><strong>等待共享状态变化</strong>：条件变量本身不保存数据，它只是让线程在某个条件不满足时睡眠；</li>
+<li><strong>通知不是持久事件</strong>：<code>notify_one</code> / <code>notify_all</code> 不会像计数器一样累积。通知发出时如果没有等待者，这次通知就丢失了；</li>
+<li><strong>谓词必须在互斥保护下反复检查</strong>：因为虚假唤醒、因为通知可能丢失、因为状态可能在你醒来前又变了，所以正确写法永远是「拿着锁检查状态」，而不是「睡着等一个消息」。</li>
+</ul>
+<p>在腾讯微信公众号后台，条件变量最常见的三个落点是：</p>
+<ul>
+<li><strong>任务队列</strong>：生产者投递任务，worker 线程池从队列取任务；</li>
+<li><strong>worker 线程池</strong>：空闲 worker 等待「有新任务」或「要停机」；</li>
+<li><strong>优雅停机</strong>：进程收到退出信号后，关闭队列，唤醒所有仍在等待的 worker，让它们把手上任务处理完或安全退出。</li>
+</ul>
+<p>这三个场景的共同失败模式是<strong>丢唤醒</strong>：生产者以为已经通知了，消费者却还在睡；或者停机时只 <code>notify_one</code>，其余 worker 永远等下去。本课的目标，是让你写出「通知可以丢，但状态不会丢」的队列。</p>
+<p>本课与 e-lock 直接相连：条件变量永远要和一把互斥锁一起用；锁保护的是<strong>谓词所依赖的共享状态</strong>，条件变量负责的只是<strong>睡眠与唤醒</strong>。把这两件事混在一起，是并发 bug 的高发区。</p>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释 wait 的原子释放与重新获取</strong>
+   - 能说明 <code>condition_variable::wait</code> 在阻塞前会原子地释放互斥锁，被唤醒后再重新获取互斥锁。
+   - 能解释为什么这个「原子释放 + 睡眠」的窗口必须由条件变量内部完成，手写 <code>unlock</code> + <code>sleep</code> 会丢唤醒。
+   - 能说明为什么 <code>wait</code> 需要 <code>std::unique_lock&lt;std::mutex&gt;</code>，而不能直接用 <code>std::lock_guard</code>。
+   - 能说清「锁保护谓词」和「条件变量负责等待」的分工。</p>
+</li>
+<li>
+<p><strong>能解释谓词与虚假唤醒</strong>
+   - 能说明什么是虚假唤醒（spurious wakeup）：线程可能在没有人调用 <code>notify</code> 的情况下从 <code>wait</code> 返回。
+   - 能写出 <code>while (!pred()) wait(lock);</code> 或等价的 <code>wait(lock, pred)</code>。
+   - 能解释为什么 <code>if (!pred()) wait(lock);</code> 在虚假唤醒或状态再次变化时会出错。
+   - 能说明谓词必须在持锁状态下读取共享状态，并且谓词本身不应做阻塞或重活。</p>
+</li>
+<li>
+<p><strong>能解释通知、停止与超时</strong>
+   - 能区分 <code>notify_one</code> 与 <code>notify_all</code>，并说明各自适用场景。
+   - 能解释「先通知后等待」为什么不能依赖：通知没有被保存，条件变量不是信号量。
+   - 能设计 <code>closed_</code> 停止标志，让关闭操作唤醒所有等待的生产者和消费者。
+   - 能正确使用 <code>wait_for</code> / <code>wait_until</code> 及其返回值：超时不是条件成立；有谓词的重载返回 <code>bool</code>，无谓词的重载返回 <code>cv_status</code>，且可能虚假返回。</p>
+</li>
+<li>
+<p><strong>能独立完成实践</strong>
+   - 实现一个带关闭状态的<strong>有界队列</strong>：容量满时生产者等待，队列空时消费者等待。
+   - 覆盖关闭时生产者与消费者都在等待的场景，保证关闭后所有等待线程最终返回。
+   - 使用 <code>g++ -std=c++17 -pthread</code> 编译，并用 <code>-fsanitize=thread</code> 做数据竞争检查。
+   - 沿 cppreference 的定义、示例与错误处理路径核对实现，记录适用版本及边界条件。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - <strong>使用谓词循环处理唤醒</strong>：所有 <code>wait</code> 要么带谓词，要么显式写成 <code>while</code> 循环；不存在裸 <code>wait</code>。
+   - <strong>关闭后所有等待线程最终返回</strong>：生产者在关闭后 <code>push</code> 返回失败，消费者在关闭且队列排空后 <code>pop</code> 返回空，所有线程都能 <code>join</code>。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点给的 why 是：</p>
+<blockquote>
+<p>实现无丢唤醒的任务队列和停机等待。</p>
+</blockquote>
+<p>这句话落到公众号后台，就是下面几件事。</p>
+<h3 id="1">1. 任务队列不能忙等，也不能丢唤醒</h3>
+<p>一个最朴素的 worker 循环可能是：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">running_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w">   </span><span class="c1">// 忙等：CPU 空转</span>
+<span class="w">        </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="w">        </span><span class="n">queue_</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">task</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段代码在空闲时会把 CPU 打满，而且 <code>continue</code> 前释放锁、再重新拿锁，存在大量无意义竞争。改成「没任务就睡」之后，问题变成：</p>
+<ul>
+<li>消费者怎么在「队列空」时睡眠？</li>
+<li>生产者投递任务后怎么叫醒它？</li>
+<li>如果消费者在生产者通知之后才进入睡眠，通知会不会保存？</li>
+</ul>
+<p>答案就是条件变量加谓词：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>即使生产者已经通知过、消费者才进入 <code>wait</code>，只要队列里有任务，谓词为真，<code>wait</code> 会立刻返回，不会睡死。</p>
+<h3 id="2">2. 停机等待需要「广播」</h3>
+<p>优雅停机时，通常会有多个 worker 同时阻塞在队列上。如果关闭时只调用 <code>notify_one</code>：</p>
+<ul>
+<li>只有一个 worker 被唤醒；</li>
+<li>其余 worker 继续睡，<code>join</code> 永远不返回；</li>
+<li>进程退出流程卡住，表现为「停不干净」。</li>
+</ul>
+<p>因此停机路径通常要用 <code>notify_all</code>，并且让谓词包含停止条件：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>关闭后，所有等「非空」的消费者都会被唤醒，看到 <code>closed_ == true</code>，从 <code>pop</code> 返回；所有等「未满」的生产者也会被唤醒，看到 <code>closed_ == true</code>，从 <code>push</code> 返回失败。</p>
+<h3 id="3">3. 条件变量保护的是状态，不是「消息」</h3>
+<p>后端系统里经常把条件变量当消息通道用，写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="nl">producer</span><span class="p">:</span><span class="w"> </span><span class="n">cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="nl">consumer</span><span class="p">:</span><span class="w"> </span><span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span><span class="w">   </span><span class="c1">// 等一条“消息”</span>
+</code></pre></div>
+
+<p>这是错的。条件变量没有内部队列，通知不会排队：</p>
+<ul>
+<li>通知早于等待 → 通知丢失；</li>
+<li>多次通知 → 不保证累积；</li>
+<li>虚假唤醒 → 没通知也可能醒。</li>
+</ul>
+<p>正确心智模型是：<strong>共享状态是事实，通知只是提醒你去重新看事实</strong>。事实写在 <code>queue_</code>、<code>closed_</code> 这些变量里，由互斥锁保护；条件变量只负责在你没看到事实时让你睡，在事实可能变化时把你叫醒。</p>
+<h3 id="4">4. 线上事故常见形态</h3>
+<p>值班时你可能会遇到：</p>
+<ul>
+<li><strong>任务积压但 worker 全在睡</strong>：生产者 <code>notify_one</code> 时队列里已经有多个任务，但只有一个 worker 被叫醒；其余 worker 没有收到通知，直到下一次投递才可能醒来。</li>
+<li><strong>停机卡住</strong>：关闭标志设置了，但只通知了一个等待者；或者关闭标志没有放进谓词，线程醒来后继续睡。</li>
+<li><strong>偶发丢任务</strong>：消费者用 <code>if</code> 而不是 <code>while</code>，虚假唤醒后直接消费了不存在的任务；或者生产者没有在锁内修改状态，消费者检查谓词和进入等待之间出现窗口。</li>
+<li><strong>超时被当成成功</strong>：<code>wait_for</code> 返回后不检查谓词，直接把空队列当成有任务。</li>
+</ul>
+<p>这些问题都能用本课的「锁 + 谓词 + 循环 + 广播关闭」四件套解决。</p>
+<h3 id="5">5. 公众号后台你会真正碰到的场景</h3>
+<ul>
+<li><strong>异步消息投递队列</strong>：业务线程投递发送任务，多个 sender worker 消费；</li>
+<li><strong>本地批处理</strong>：日志、指标、审计事件先入有界队列，后台线程批量落盘；</li>
+<li><strong>线程池任务队列</strong>：线程池空闲时等待任务，关闭时等待所有 worker 退出；</li>
+<li><strong>配置/状态变更通知</strong>：配置加载完成后唤醒等待者，但等待者仍要检查版本号或 <code>closed</code> 状态；</li>
+<li><strong>优雅停机</strong>：先停止接收新任务，再关闭队列，再唤醒所有等待者，最后 <code>join</code>。</li>
+</ul>
+<p>这些场景的共同要求是：<strong>通知可以丢，状态不能错；唤醒可以多，谓词必须查</strong>。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="0">0. 先建立直觉：取餐叫号与取餐屏</h3>
+<p>把条件变量想成餐厅的<strong>取餐叫号</strong>：</p>
+<ul>
+<li>你点完餐，拿到一个号，然后等叫号；</li>
+<li>店员喊「A17 取餐」只是一次<strong>通知</strong>，不是一条会保存的消息；</li>
+<li>如果你在店员喊完之后才走到取餐口，你不会听到「刚才那声喊」，但你可以看<strong>取餐屏</strong>：如果屏上显示 A17 已就绪，你直接取餐；</li>
+<li>如果屏上还没好，你就继续等下一次叫号；</li>
+<li>有时候系统抽风，屏幕闪了一下把你叫醒，但餐还没好——你再确认屏幕，继续等。</li>
+</ul>
+<p>对应到 C++：</p>
+<ul>
+<li><strong>取餐屏上的状态</strong> = 受互斥锁保护的共享变量（<code>queue_</code>、<code>closed_</code>、<code>ready</code>）；</li>
+<li><strong>店员喊号</strong> = <code>notify_one</code> / <code>notify_all</code>；</li>
+<li><strong>看屏幕再决定是否继续等</strong> = 谓词循环；</li>
+<li><strong>走到取餐口的过程</strong> = 获取互斥锁；</li>
+<li><strong>在等待区坐下</strong> = <code>wait</code> 阻塞。</li>
+</ul>
+<p>关键句：<strong>叫号不保存，屏幕才保存</strong>。所以永远根据屏幕（状态）判断，而不是根据「我有没有听到喊号」判断。</p>
+<h3 id="1-wait">1. wait 原子释放与重新获取</h3>
+<h4 id="11">1.1 为什么不能忙等</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queue</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker_busy</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w">   </span><span class="c1">// 持续抢锁、空转</span>
+<span class="w">            </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+<span class="w">            </span><span class="n">queue</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">task</span><span class="p">.</span><span class="n">run</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>问题：</p>
+<ul>
+<li>空闲时 CPU 100%，白白消耗调度配额；</li>
+<li>多个 worker 同时空转，会把互斥锁打得更热；</li>
+<li>若再加一个 <code>closed</code> 标志，退出路径也很容易写错。</li>
+</ul>
+<h4 id="12-unlock-sleep">1.2 为什么不能自己 unlock 后 sleep</h4>
+<p>一个看似合理的改法是：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">lock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span><span class="w">          </span><span class="c1">// 先释放锁</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">10</span><span class="n">ms</span><span class="p">);</span><span class="w">  </span><span class="c1">// 再睡</span>
+<span class="w">    </span><span class="n">lock</span><span class="p">.</span><span class="n">lock</span><span class="p">();</span><span class="w">            </span><span class="c1">// 醒来重新加锁</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段代码有两个问题：</p>
+<ol>
+<li><strong>丢唤醒窗口</strong>：<code>unlock</code> 之后、真正睡眠之前，生产者可能已经投递任务并调用 <code>notify</code>。等消费者睡着后，通知已经过去，没人再叫它，只能等下一次投递。</li>
+<li><strong>睡眠时间不可控</strong>：只能轮询式地醒来，延迟和 CPU 开销都不理想。</li>
+</ol>
+<p>条件变量的 <code>wait</code> 把「释放锁 + 进入等待」做成一个原子步骤，正是为了消除这个窗口。</p>
+<h4 id="13-wait">1.3 wait 的语义</h4>
+<p>对 <code>std::condition_variable</code> 来说，一次 <code>wait(lock)</code> 大致等价于：</p>
+<div class="codehilite"><pre><span></span><code>1. 断言当前线程持有 lock 关联的 mutex；
+2. 原子地释放 mutex，并把当前线程挂到条件变量的等待队列上；
+3. 阻塞，直到被 notify 或虚假唤醒；
+4. 被唤醒后，重新获取 mutex（可能阻塞在这里）；
+5. 返回，此时调用方重新持有锁。
+</code></pre></div>
+
+<p>「原子地释放并挂起」是核心。这里的原子性不是指「整个等待过程不会被打断」，而是指<strong>释放锁与进入等待之间，不会给通知留下可乘之机</strong>：</p>
+<ul>
+<li>如果通知发生在释放锁之前，那么通知方必须持有同一把锁（或至少状态已经改变），等待方在检查谓词时能看到变化；</li>
+<li>如果通知发生在等待方已经挂起之后，通知能把它叫醒；</li>
+<li>不存在「状态已改、通知已发，但等待方还没挂起，于是永远睡下去」的窗口。</li>
+</ul>
+<h4 id="14-unique_lock">1.4 为什么必须是 unique_lock</h4>
+<p><code>std::condition_variable::wait</code> 的签名要求：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">template</span><span class="o">&lt;</span><span class="k">class</span><span class="w"> </span><span class="nc">Predicate</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">wait</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="n">Predicate</span><span class="w"> </span><span class="n">pred</span><span class="p">);</span>
+</code></pre></div>
+
+<p>它需要一个能在等待期间<strong>解锁、醒来后重新加锁</strong>的锁对象。<code>std::lock_guard</code> 不支持手动 <code>unlock</code>，也不支持移动，因此不能用于 <code>wait</code>；<code>std::unique_lock</code> 支持 <code>lock</code> / <code>unlock</code> / <code>owns_lock</code>，正好满足要求。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span><span class="w"> </span><span class="n">cv</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">consumer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span><span class="w">   </span><span class="c1">// 正确：unique_lock</span>
+<span class="w">    </span><span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ready</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="c1">// 此时重新持有 mu，且 ready == true</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>错误示例：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span><span class="w">   </span><span class="c1">// 编译失败：wait 不接受 lock_guard</span>
+</code></pre></div>
+
+<p>如果用的是 <code>std::condition_variable_any</code>，可以配合其他满足 BasicLockable 的锁类型，但本课统一使用 <code>std::condition_variable</code> + <code>std::unique_lock&lt;std::mutex&gt;</code>，这是后端代码中最常见的组合。</p>
+<h4 id="15">1.5 锁保护的是谓词，不是条件变量</h4>
+<p>一个常见误解是「条件变量需要锁保护」。准确说法是：</p>
+<ul>
+<li><strong>共享状态</strong>（队列、<code>closed_</code>、<code>ready</code>、版本号等）由互斥锁保护；</li>
+<li><strong>条件变量</strong>负责等待和唤醒，它自己不保存业务状态；</li>
+<li>修改共享状态时持锁，读谓词时也持锁，这样谓词读取不会与写发生数据竞争。</li>
+</ul>
+<p>因此，生产者的正确顺序是：</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">queue</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">task</span><span class="p">);</span><span class="w">   </span><span class="c1">// 在锁内改变谓词依赖的状态</span>
+<span class="p">}</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span><span class="w">             </span><span class="c1">// 可以在锁外通知</span>
+</code></pre></div>
+
+<p>注意：通知本身不要求持锁，但<strong>状态修改必须在锁内完成</strong>。如果通知放在锁内，被唤醒的线程会先醒来，再阻塞在 <code>lock()</code> 上，等通知方释放锁；这通常也能工作，但可能增加无谓的唤醒后等待。把 <code>notify</code> 放在解锁之后，是更常见的写法。</p>
+<p>需要强调的是：状态修改和通知的先后关系不能反过来理解成「通知保存了状态」。真正让正确性成立的是锁 + 谓词，<code>notify</code> 只是加速唤醒。</p>
+<h3 id="2_1">2. 谓词与虚假唤醒</h3>
+<h4 id="21">2.1 什么是虚假唤醒</h4>
+<p><code>condition_variable::wait</code> 允许在没有对应 <code>notify</code> 的情况下返回，这称为<strong>虚假唤醒（spurious wakeup）</strong>。标准允许它发生，底层实现也可能因为信号、调度或其他原因提前唤醒线程。</p>
+<p>因此，下面写法是错的：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span><span class="w">   </span><span class="c1">// 被虚假唤醒后，直接继续执行，但队列仍然为空</span>
+<span class="p">}</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span><span class="w">   </span><span class="c1">// 未定义行为：空队列取 front</span>
+</code></pre></div>
+
+<p><code>wait</code> 返回不代表条件成立，只代表「你被叫醒了，应该重新检查」。</p>
+<h4 id="22-while">2.2 while 循环</h4>
+<p>正确写法是把检查放进循环：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">closed_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// closed_ 为 true，且队列已排空</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+<span class="n">queue</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="k">return</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+</code></pre></div>
+
+<p>循环的含义：</p>
+<ol>
+<li>持锁检查谓词；</li>
+<li>谓词为假才进入 <code>wait</code>；</li>
+<li>被唤醒后重新持锁，再检查一次；</li>
+<li>如果谓词仍为假（虚假唤醒，或别的线程先一步消费了任务），继续等；</li>
+<li>谓词为真才继续执行业务逻辑。</li>
+</ol>
+<h4 id="23-waitlock-pred">2.3 wait(lock, pred) 的等价形式</h4>
+<p>C++ 提供了带谓词的重载，语义等价于：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">pred</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>因此下面两种写法是等价的：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+
+<span class="c1">// 写法 A：显式循环</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">closed_</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 写法 B：谓词重载</span>
+<span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>推荐写法 B：意图更集中，不容易漏掉某个条件。但无论用哪种，<strong>谓词都必须读取受同一把锁保护的状态</strong>。</p>
+<h4 id="24">2.4 谓词里不要做重活</h4>
+<p>谓词会在持锁状态下被反复调用。下面这些做法都应该避免：</p>
+<ul>
+<li>在谓词里打日志、格式化字符串；</li>
+<li>在谓词里做 RPC、磁盘 IO、<code>sleep</code>；</li>
+<li>在谓词里修改共享状态（谓词应当是只读判断）；</li>
+<li>在谓词里获取另一把锁（容易引入锁顺序问题）。</li>
+</ul>
+<p>谓词应该短小、只读、只依赖当前锁保护的状态。重活放到锁外，或放到谓词成立后的处理路径里。</p>
+<h4 id="25">2.5 为什么「先通知后等待」不能靠通知本身兜底</h4>
+<p>考虑下面的消费者：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span><span class="w">   </span><span class="c1">// 裸 wait，不检查任何状态</span>
+</code></pre></div>
+
+<p>如果生产者在这个 <code>wait</code> 之前已经完成：</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span><span class="w">   </span><span class="c1">// 此时没有等待者，通知被丢弃</span>
+</code></pre></div>
+
+<p>那么消费者之后调用 <code>cv.wait(lock)</code> 时，通知已经过去，条件变量不会记得它。线程可能永远阻塞，除非碰巧发生虚假唤醒或后续又有人通知。</p>
+<p>这就是节点所说的：</p>
+<blockquote>
+<p>先通知后等待不代表通知会被保存。</p>
+</blockquote>
+<p>修复方式不是「让通知保存」，而是<strong>让谓词成为事实来源</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ready</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+
+<p>即使通知丢了，只要 <code>ready == true</code>，<code>wait</code> 在进入等待前检查谓词就会直接返回。通知可以丢，状态不会丢。</p>
+<h4 id="26">2.6 为什么必须在同一把锁下修改状态</h4>
+<p>如果生产者这样写：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w">        </span><span class="c1">// 没有持锁</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span><span class="w">     </span><span class="c1">// 没有持锁</span>
+</code></pre></div>
+
+<p>而消费者这样写：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ready</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ready</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>仍然可能出问题：</p>
+<ul>
+<li><code>ready</code> 的读写没有 happens-before，是数据竞争；</li>
+<li>消费者检查 <code>ready == false</code> 后，生产者可能在消费者真正进入等待前修改 <code>ready</code> 并通知；虽然 <code>wait</code> 的原子释放会缩小窗口，但未受锁保护的写本身已经是未定义行为。</li>
+</ul>
+<p>正确契约：<strong>所有对谓词依赖状态的写，都必须与谓词读取使用同一把互斥锁</strong>。这不是可选的性能优化，而是正确性前提。</p>
+<h3 id="3_1">3. 通知、停止与超时</h3>
+<h4 id="31-notify_one-notify_all">3.1 notify_one 与 notify_all</h4>
+<p><code>std::condition_variable</code> 提供两个通知接口：</p>
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>行为</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>notify_one()</code></td>
+<td>唤醒至少一个等待线程（具体哪一个由实现决定）</td>
+<td>一次状态变化只够一个等待者继续，例如「队列里多了一个任务」</td>
+</tr>
+<tr>
+<td><code>notify_all()</code></td>
+<td>唤醒所有等待线程</td>
+<td>状态变化影响所有等待者，例如关闭队列、全局配置切换</td>
+</tr>
+</tbody>
+</table>
+<p>几个重要语义：</p>
+<ul>
+<li>通知不会排队，也不会计数。没有等待者时调用 <code>notify_one</code>，这次通知直接丢失；</li>
+<li>多次通知不保证对应多次唤醒。正确性应依赖谓词，而不是通知次数；</li>
+<li><code>notify_one</code> 唤醒的线程可能发现自己的谓词仍为假（例如它等的是另一种条件），于是重新睡下；</li>
+<li>如果多个线程等待的是<strong>不同的谓词</strong>，却共用一个条件变量，<code>notify_one</code> 可能叫错人，导致真正该醒的线程继续睡。此时要么为不同谓词使用不同条件变量，要么使用 <code>notify_all</code>。</li>
+</ul>
+<h4 id="32-closed_">3.2 停止标志 closed_</h4>
+<p>停机时，队列通常需要一个 <code>closed_</code> 标志。它必须参与所有等待谓词：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="nf">push</span><span class="p">(</span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">not_full_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">capacity_</span><span class="p">;</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">closed_</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="n">queue_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">task</span><span class="p">));</span>
+<span class="w">    </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+<span class="w">    </span><span class="n">queue_</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">    </span><span class="n">not_full_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>关闭操作：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">close</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">closed_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">notify_all</span><span class="p">();</span>
+<span class="w">    </span><span class="n">not_full_</span><span class="p">.</span><span class="n">notify_all</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>设计要点：</p>
+<ol>
+<li><strong>关闭在锁内设置</strong>：这样等待者要么在检查谓词前看到 <code>closed_</code>，要么已经挂起并会被后续通知唤醒；</li>
+<li><strong>两个条件变量都要通知</strong>：等「非空」的消费者和等「未满」的生产者都可能阻塞；</li>
+<li><strong>使用 notify_all</strong>：关闭影响所有等待者，不能只叫醒一个；</li>
+<li><strong>关闭后消费策略要明确</strong>：本课采用「关闭且队列排空后 <code>pop</code> 返回空」，这样已经入队的任务不会丢；<code>push</code> 在关闭后直接失败。</li>
+</ol>
+<h4 id="33">3.3 超时等待</h4>
+<p>有时线程不能无限等待，例如：</p>
+<ul>
+<li>定时批次需要在 100ms 内醒来检查一次；</li>
+<li>优雅停机有总超时，超时后强制退出；</li>
+<li>健康检查线程需要周期性上报。</li>
+</ul>
+<p>C++ 提供：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">cv</span><span class="p">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="n">duration</span><span class="p">);</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="n">duration</span><span class="p">,</span><span class="w"> </span><span class="n">pred</span><span class="p">);</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait_until</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="n">time_point</span><span class="p">);</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait_until</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="n">time_point</span><span class="p">,</span><span class="w"> </span><span class="n">pred</span><span class="p">);</span>
+</code></pre></div>
+
+<p>两类返回值的区别很重要：</p>
+<ul>
+<li><strong>无谓词版本</strong>返回 <code>std::cv_status</code>：<code>std::cv_status::timeout</code> 或 <code>std::cv_status::no_timeout</code>。但 <code>no_timeout</code> 也可能由虚假唤醒产生，所以不能直接当成条件成立；</li>
+<li><strong>有谓词版本</strong>返回 <code>bool</code>：返回谓词的最终结果。若因超时返回 <code>false</code>，说明时间到了但条件仍不成立；若返回 <code>true</code>，仍需按业务继续判断。</li>
+</ul>
+<p>推荐写法：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pop_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="w"> </span><span class="n">timeout</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ready</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span><span class="w">   </span><span class="c1">// 超时：条件仍未成立</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span><span class="w">   </span><span class="c1">// 已关闭且排空</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+<span class="w">    </span><span class="n">queue_</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">    </span><span class="n">not_full_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意：</p>
+<ul>
+<li><code>wait_for</code> 可能比指定时间晚返回，因为线程被唤醒后还要竞争锁、被调度；</li>
+<li><code>wait_until</code> 受系统时钟影响时可能提前或延后；对间隔测量优先用 <code>std::chrono::steady_clock</code>；</li>
+<li>超时返回 <code>false</code> 不代表队列关闭，也不代表永久失败，调用方要结合业务状态判断；</li>
+<li>不要把 <code>cv_status::no_timeout</code> 直接当成「有任务」，必须重新检查谓词。</li>
+</ul>
+<h4 id="34">3.4 完整示例：带关闭状态的有界队列</h4>
+<p>下面是一份可编译的完整实现和测试。它包含：</p>
+<ul>
+<li>有界队列 <code>BoundedQueue</code>；</li>
+<li><code>push</code> / <code>pop</code> / <code>pop_for</code> / <code>close</code>；</li>
+<li>消费者空等、生产者满等、关闭广播；</li>
+<li>容量为 0 的边界测试（用于让生产者和消费者同时处于等待状态）。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1">// bounded_queue.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;condition_variable&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstddef&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;deque&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;optional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="o">::</span><span class="nn">chrono_literals</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BoundedQueue</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">BoundedQueue</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">capacity</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">capacity_</span><span class="p">(</span><span class="n">capacity</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">push</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">not_full_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">capacity_</span><span class="p">;</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">closed_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">queue_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">        </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="w">        </span><span class="n">queue_</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">        </span><span class="n">not_full_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pop_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="w"> </span><span class="n">timeout</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="n">timeout</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ready</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="w">        </span><span class="n">queue_</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">        </span><span class="n">not_full_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">close</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">            </span><span class="n">closed_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">notify_all</span><span class="p">();</span>
+<span class="w">        </span><span class="n">not_full_</span><span class="p">.</span><span class="n">notify_all</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">closed</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">capacity_</span><span class="p">;</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span><span class="w"> </span><span class="n">not_empty_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span><span class="w"> </span><span class="n">not_full_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queue_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">basic_test</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">BoundedQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sum</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">consumers</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">consumers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">sum</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">pop</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="o">*</span><span class="n">value</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">queue</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">consumers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">thread</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"basic: sum="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">sum</span><span class="p">.</span><span class="n">load</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" expected=500500 queue="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">close_wakes_consumers</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">BoundedQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">returned</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">consumers</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">consumers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">returned</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="o">++</span><span class="n">returned</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">50</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">queue</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">consumers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">thread</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"close consumers: returned="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">returned</span><span class="p">.</span><span class="n">load</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" expected=8</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">close_wakes_producers</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">BoundedQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span><span class="w">   </span><span class="c1">// 队列已满</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rejected</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">producers</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">producers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rejected</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="o">++</span><span class="n">rejected</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">50</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">queue</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="kr">thread</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">producers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kr">thread</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"close producers: rejected="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">rejected</span><span class="p">.</span><span class="n">load</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" expected=8</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">zero_capacity_both_waiting</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">BoundedQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">producer</span><span class="p">([</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">consumer</span><span class="p">([</span><span class="o">&amp;</span><span class="n">queue</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">queue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+<span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="mi">50</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">queue</span><span class="p">.</span><span class="n">close</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">producer</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">consumer</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"zero capacity: producer and consumer both returned</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">timeout_test</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">BoundedQueue</span><span class="w"> </span><span class="n">queue</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">pop_for</span><span class="p">(</span><span class="mi">50</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"timeout: empty="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">value</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"yes"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"no"</span><span class="p">)</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" elapsed_ms="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">elapsed</span><span class="p">.</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">pop_for</span><span class="p">(</span><span class="mi">50</span><span class="n">ms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"timeout: ready="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">ready</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="o">*</span><span class="n">ready</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">basic_test</span><span class="p">();</span>
+<span class="w">    </span><span class="n">close_wakes_consumers</span><span class="p">();</span>
+<span class="w">    </span><span class="n">close_wakes_producers</span><span class="p">();</span>
+<span class="w">    </span><span class="n">zero_capacity_both_waiting</span><span class="p">();</span>
+<span class="w">    </span><span class="n">timeout_test</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译与运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-O2<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-pthread<span class="w"> </span>bounded_queue.cpp<span class="w"> </span>-o<span class="w"> </span>bounded_queue
+timeout<span class="w"> </span>20s<span class="w"> </span>./bounded_queue
+</code></pre></div>
+
+<p>预期输出类似：</p>
+<div class="codehilite"><pre><span></span><code>basic: sum=500500 expected=500500 queue=0
+close consumers: returned=8 expected=8
+close producers: rejected=8 expected=8
+zero capacity: producer and consumer both returned
+timeout: empty=yes elapsed_ms=...
+timeout: ready=7
+</code></pre></div>
+
+<p>再跑一次 ThreadSanitizer：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-pthread<span class="w"> </span>bounded_queue.cpp<span class="w"> </span>-o<span class="w"> </span>bounded_queue_tsan
+timeout<span class="w"> </span>30s<span class="w"> </span>./bounded_queue_tsan
+</code></pre></div>
+
+<p>需要说明：ThreadSanitizer 擅长发现数据竞争，但<strong>不擅长发现丢唤醒、逻辑死锁、通知丢失</strong>这类语义错误。条件变量的错误往往表现为「程序偶尔卡住」，因此还需要：</p>
+<ul>
+<li>用 <code>timeout</code> 包住测试，让卡死变成可观测失败；</li>
+<li>写关闭场景和满/空边界测试；</li>
+<li>用 pressure / 反复运行放大竞态窗口；</li>
+<li>在代码审查中强制检查「所有 wait 是否带谓词或 while」。</li>
+</ul>
+<hr />
+<h2 id="_5">常见误区与设计权衡</h2>
+<h3 id="1_1">误区 1：先通知后等待，通知会被保存</h3>
+<p>这是节点 pitfalls 的原话：</p>
+<blockquote>
+<p>先通知后等待不代表通知会被保存。</p>
+</blockquote>
+<p>条件变量不是信号量，也不是消息队列。它没有计数，没有缓冲区：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 生产者</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span><span class="w">   </span><span class="c1">// 没有等待者时，这次通知丢失</span>
+
+<span class="c1">// 消费者（错误：裸 wait）</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span><span class="w">     </span><span class="c1">// 可能永久阻塞，即使 ready 已经是 true</span>
+</code></pre></div>
+
+<p>正确做法是让谓词检查状态：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ready</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+</code></pre></div>
+
+<p>这样通知丢失也不会影响正确性：谓词为真时直接返回。</p>
+<h3 id="2-if-while">误区 2：用 if 而不是 while</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ...</span>
+<span class="p">}</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span><span class="w">   </span><span class="c1">// 虚假唤醒后继续执行，队列可能仍为空</span>
+</code></pre></div>
+
+<p><code>wait</code> 返回只说明「被唤醒」，不说明「条件成立」。必须用 <code>while</code> 或带谓词的 <code>wait</code>。</p>
+<h3 id="3-notify_one">误区 3：所有等待共用一个条件变量，却只 notify_one</h3>
+<p>如果生产者等待「队列未满」，消费者等待「队列非空」，两者共用一个 <code>cv</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span><span class="w"> </span><span class="p">});</span><span class="w">   </span><span class="c1">// 消费者</span>
+<span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">cap</span><span class="p">;</span><span class="w"> </span><span class="p">});</span><span class="w"> </span><span class="c1">// 生产者</span>
+</code></pre></div>
+
+<p>消费者消费一个任务后调用 <code>cv.notify_one()</code>，可能唤醒的是另一个生产者，而真正需要被唤醒的消费者仍在睡。虽然被错误唤醒的线程会检查谓词并重新睡下，但正确的那一方可能一直等不到通知。</p>
+<p>解决方案：</p>
+<ul>
+<li>为不同谓词使用不同条件变量（本课的 <code>not_empty_</code> 和 <code>not_full_</code>）；</li>
+<li>或在状态变化影响多个等待者时使用 <code>notify_all</code>。</li>
+</ul>
+<h3 id="4-notify_one">误区 4：关闭时只 notify_one</h3>
+<p>关闭是广播事件：</p>
+<ul>
+<li>所有等「非空」的消费者都应该醒来并退出；</li>
+<li>所有等「未满」的生产者都应该醒来并失败返回；</li>
+<li>只唤醒一个，其余线程可能永远阻塞，<code>join</code> 卡死。</li>
+</ul>
+<p>因此 <code>close()</code> 要同时 <code>not_empty_.notify_all()</code> 和 <code>not_full_.notify_all()</code>。</p>
+<h3 id="5-push">误区 5：关闭后仍然允许 push 成功</h3>
+<p>如果 <code>push</code> 的谓词只有「未满」，没有 <code>closed_</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">not_full_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">capacity_</span><span class="p">;</span><span class="w">   </span><span class="c1">// 关闭后仍然可能为真</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>那么关闭后生产者仍可能往队列里塞任务，消费者已经退出，任务永远无人处理。正确做法是把 <code>closed_</code> 放进谓词，并在唤醒后优先检查：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">not_full_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">capacity_</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">closed_</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+</code></pre></div>
+
+<h3 id="6">误区 6：等待超时后不检查谓词</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">cv</span><span class="p">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="n">ms</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 以为超时了，实际上可能只是虚假唤醒</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>无谓词版本的 <code>wait_for</code> 返回 <code>cv_status::no_timeout</code> 也可能来自虚假唤醒。要么使用带谓词的重载，要么在返回后重新检查状态。超时只表示「时间到了」，不表示「条件成立」或「条件不成立」。</p>
+<h3 id="7">误区 7：在谓词里做重活或加另一把锁</h3>
+<p>谓词在持锁状态下执行。如果在谓词里打日志、做 IO、获取第二把锁，会把临界区拉长，甚至引入死锁。谓词只做状态判断；复杂逻辑放到锁外。</p>
+<h3 id="8">误区 8：销毁时还有线程在等待</h3>
+<p>如果 <code>BoundedQueue</code> 析构时仍有线程阻塞在 <code>wait</code> 上，条件变量和互斥锁被销毁，行为未定义。停机顺序必须是：</p>
+<ol>
+<li>停止接收新任务；</li>
+<li><code>close()</code> 并唤醒所有等待者；</li>
+<li><code>join</code> 所有 worker；</li>
+<li>最后销毁队列、条件变量和互斥锁。</li>
+</ol>
+<h3 id="notify_one-notify_all">设计权衡：notify_one 减少惊群，notify_all 适合广播</h3>
+<p>节点 tradeoffs：</p>
+<blockquote>
+<p>notify_one 减少惊群，notify_all 适用于状态改变影响多个等待者的情况。</p>
+</blockquote>
+<p>落地选择清单：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每放入一个任务，只需要一个消费者处理</td>
+<td><code>notify_one</code></td>
+<td>避免所有 worker 同时醒来抢锁（惊群）</td>
+</tr>
+<tr>
+<td>每次取出一个任务，只需要一个生产者继续投递</td>
+<td><code>notify_one</code></td>
+<td>一个空位只够一个生产者使用</td>
+</tr>
+<tr>
+<td>关闭队列、停止服务</td>
+<td><code>notify_all</code></td>
+<td>所有等待的生产者和消费者都必须退出</td>
+</tr>
+<tr>
+<td>配置整体切换、版本号变化影响所有等待者</td>
+<td><code>notify_all</code></td>
+<td>每个等待者都需要重新检查并可能继续</td>
+</tr>
+<tr>
+<td>多个不同谓词共用一个条件变量</td>
+<td>优先拆分条件变量；必要时 <code>notify_all</code></td>
+<td><code>notify_one</code> 可能叫错等待者</td>
+</tr>
+</tbody>
+</table>
+<p>工程建议：</p>
+<ol>
+<li><strong>先保证正确性</strong>：所有等待都有谓词，关闭用 <code>notify_all</code>，状态修改在锁内；</li>
+<li><strong>再优化唤醒数量</strong>：只有确认「一次状态变化只服务一个等待者」时，才使用 <code>notify_one</code>；</li>
+<li><strong>用压力测试验证</strong>：反复运行满/空/关闭边界，使用 <code>timeout</code> 捕获卡死；</li>
+<li><strong>用 TSan 排除数据竞争</strong>，但要记住它不能证明没有丢唤醒；</li>
+<li><strong>为不同谓词拆分条件变量</strong>：<code>not_empty_</code> 和 <code>not_full_</code> 分开，比共用一个 <code>cv</code> 更清晰。</li>
+</ol>
+<hr />
+<h2 id="_6">动手实践</h2>
+<p>实践任务（节点 practice）：</p>
+<blockquote>
+<p>实现带关闭状态的有界队列，覆盖关闭时生产者和消费者同时等待。</p>
+</blockquote>
+<p>验收（acceptance）：</p>
+<ul>
+<li>使用谓词循环处理唤醒；</li>
+<li>关闭后所有等待线程最终返回。</li>
+</ul>
+<p>并呼应 sourceStudy：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<h3 id="_7">环境与版本记录（先做）</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/atlas-e-condition<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/atlas-e-condition
+g++<span class="w"> </span>--version
+cat<span class="w"> </span>&gt;<span class="w"> </span>versions.txt<span class="w"> </span><span class="s">&lt;&lt; EOF</span>
+<span class="s">date: $(date)</span>
+<span class="s">cxx: $(g++ --version | head -1)</span>
+<span class="s">std: c++17</span>
+<span class="s">threading: pthread</span>
+<span class="s">sanitizer: -fsanitize=thread</span>
+<span class="s">condition_variable: std::condition_variable + std::unique_lock&lt;std::mutex&gt;</span>
+<span class="s">EOF</span>
+</code></pre></div>
+
+<p>打开并阅读（至少浏览定义、成员函数与示例）：</p>
+<ul>
+<li>https://en.cppreference.com/w/cpp/thread/condition_variable.html</li>
+</ul>
+<p>重点核对：</p>
+<ul>
+<li><code>wait</code> / <code>wait_for</code> / <code>wait_until</code> 的参数、返回值与异常；</li>
+<li>带谓词重载的等价循环语义；</li>
+<li><code>notify_one</code> / <code>notify_all</code> 的行为；</li>
+<li>条件变量与互斥锁、<code>unique_lock</code> 的配合要求；</li>
+<li>销毁、虚假唤醒、超时等边界条件。</li>
+</ul>
+<p>把结论追加到 <code>versions.txt</code>，例如：</p>
+<div class="codehilite"><pre><span></span><code>notes:
+- wait requires a locked std::unique_lock&lt;std::mutex&gt; for std::condition_variable
+- wait atomically unlocks, blocks, then reacquires the mutex before returning
+- wait(lock, pred) behaves like while (!pred()) wait(lock)
+- notify without a waiter is not saved; condition_variable is not a counter
+- notify_one wakes one waiter; notify_all wakes all waiters
+- wait_for/wait_until without predicate may return no_timeout on spurious wakeup
+- all waiting threads must be joined before destroying the queue
+</code></pre></div>
+
+<h3 id="1_2">步骤 1：实现最小可用版本</h3>
+<p>先写一个只有 <code>push</code> / <code>pop</code> / <code>close</code> 的版本，要求：</p>
+<ul>
+<li><code>push</code> 在队列满时等待；</li>
+<li><code>pop</code> 在队列空时等待；</li>
+<li><code>close</code> 设置 <code>closed_</code> 并 <code>notify_all</code>；</li>
+<li>所有 <code>wait</code> 都使用谓词；</li>
+<li>关闭后 <code>push</code> 返回 <code>false</code>，<code>pop</code> 在排空后返回 <code>std::nullopt</code>。</li>
+</ul>
+<p>可以从本课完整示例中删除 <code>pop_for</code>、测试函数，只保留核心类，先确保单线程逻辑正确。</p>
+<h3 id="2_2">步骤 2：编写关闭场景测试</h3>
+<p>至少覆盖下面三类：</p>
+<ol>
+<li><strong>消费者空等后关闭</strong>：启动 N 个消费者，队列为空，它们阻塞在 <code>not_empty_</code>；调用 <code>close()</code> 后，所有消费者都应返回 <code>nullopt</code>，<code>join</code> 成功；</li>
+<li><strong>生产者满等后关闭</strong>：把容量设为 1，先放入一个元素，再启动 N 个生产者，它们阻塞在 <code>not_full_</code>；调用 <code>close()</code> 后，所有生产者都应返回 <code>false</code>，<code>join</code> 成功；</li>
+<li><strong>生产者和消费者同时等待</strong>：使用容量 0 的边界配置，生产者因「无法满足 <code>size &lt; 0</code>」而等待，消费者因「队列为空」而等待；调用 <code>close()</code> 后，两边都应返回。容量 0 只用于测试双方同时等待，不是生产环境推荐配置。</li>
+</ol>
+<p>运行方式：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-O2<span class="w"> </span>-Wall<span class="w"> </span>-Wextra<span class="w"> </span>-pthread<span class="w"> </span>bounded_queue.cpp<span class="w"> </span>-o<span class="w"> </span>bounded_queue
+timeout<span class="w"> </span>20s<span class="w"> </span>./bounded_queue
+</code></pre></div>
+
+<p>如果程序卡住，<code>timeout</code> 会返回非零退出码，这比无限等待更容易定位问题。</p>
+<h3 id="3-wait">步骤 3：故意制造裸 wait，观察问题</h3>
+<p>把 <code>pop</code> 中的谓词等待改成裸 <code>wait</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 错误版本，仅用于实验</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>然后构造「先通知、后等待」的测试：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">BoundedQueue</span><span class="w"> </span><span class="nf">queue</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// 模拟生产者先完成</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="nf">producer</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">queue</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="n">producer</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="c1">// 此时通知已经发生过，但消费者还没开始等待</span>
+<span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">consumer</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span><span class="w">   </span><span class="c1">// 裸 wait 可能永久阻塞</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>用 <code>timeout</code> 运行，观察卡死。然后把 <code>pop</code> 改回谓词版本，确认同样场景能立即取到值。</p>
+<p>这个实验的目的不是让你记住「不要裸 wait」这句话，而是亲眼看到：<strong>通知不是持久事件，状态才是</strong>。</p>
+<h3 id="4tsan">步骤 4：TSan 与压力测试</h3>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-pthread<span class="w"> </span>bounded_queue.cpp<span class="w"> </span>-o<span class="w"> </span>bounded_queue_tsan
+timeout<span class="w"> </span>30s<span class="w"> </span>./bounded_queue_tsan
+</code></pre></div>
+
+<p>再写一个压力循环：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">50</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span>timeout<span class="w"> </span>10s<span class="w"> </span>./bounded_queue<span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"run </span><span class="nv">$i</span><span class="s2"> failed"</span><span class="p">;</span>
+<span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="p">;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="k">done</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"stress ok"</span>
+</code></pre></div>
+
+<p>自检清单：</p>
+<ul>
+<li>[ ] 所有 <code>wait</code> 都带谓词，或显式 <code>while</code> 循环；</li>
+<li>[ ] <code>close()</code> 同时通知 <code>not_empty_</code> 和 <code>not_full_</code>；</li>
+<li>[ ] 关闭后 <code>push</code> 不会继续入队；</li>
+<li>[ ] 关闭后消费者会排空已有任务，再返回空；</li>
+<li>[ ] 所有线程在条件变量销毁前 <code>join</code>；</li>
+<li>[ ] TSan 无 data race 报告；</li>
+<li>[ ] 反复运行不出现卡死。</li>
+</ul>
+<h3 id="5_1">步骤 5：超时与返回值实验</h3>
+<p>实现或保留 <code>pop_for</code>，验证：</p>
+<ol>
+<li>空队列 + 短超时：返回空，耗时不少于超时时间；</li>
+<li>有任务时：立即返回任务；</li>
+<li>关闭且空队列：立即返回空；</li>
+<li>关闭但队列仍有任务：先返回任务，排空后返回空。</li>
+</ol>
+<p>注意区分「超时」和「关闭」：本课的简化实现都返回 <code>std::nullopt</code>。生产代码中如果需要区分，可以返回更丰富的结构：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">PopResult</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Status</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Ok</span><span class="p">,</span><span class="w"> </span><span class="n">Timeout</span><span class="p">,</span><span class="w"> </span><span class="n">Closed</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="n">Status</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>这也是一个设计权衡：返回值越精确，调用方分支越多；返回值越简单，调用方越容易误判。</p>
+<h3 id="6sourcestudy">步骤 6：sourceStudy 核对清单</h3>
+<p>对照 https://en.cppreference.com/w/cpp/thread/condition_variable.html 逐项打勾：</p>
+<ol>
+<li>[ ] <code>condition_variable</code> 的定义与头文件；</li>
+<li>[ ] <code>wait</code> 的原子释放/重新获取语义；</li>
+<li>[ ] <code>wait(lock, pred)</code> 与 <code>while (!pred()) wait(lock)</code> 的等价关系；</li>
+<li>[ ] <code>wait_for</code> / <code>wait_until</code> 的参数、<code>cv_status</code> 与 <code>bool</code> 返回值；</li>
+<li>[ ] <code>notify_one</code> / <code>notify_all</code> 的行为与「无等待者时通知丢失」；</li>
+<li>[ ] 对锁对象的要求：<code>std::condition_variable</code> 配合 <code>std::unique_lock&lt;std::mutex&gt;</code>；</li>
+<li>[ ] 虚假唤醒的允许性，以及为什么必须用谓词循环；</li>
+<li>[ ] 异常路径：<code>wait</code> 可能抛出 <code>std::system_error</code>，谓词抛出的异常会向外传播；</li>
+<li>[ ] 销毁条件变量时仍有等待线程属于未定义行为；</li>
+<li>[ ] 记录你的 <code>g++</code> 版本、<code>-std=c++17</code>、libstdc++ 实现，以及你实际验证过的边界条件。</li>
+</ol>
+<p>把「适用版本」写清楚：</p>
+<div class="codehilite"><pre><span></span><code>适用版本:
+- 标准: C++11 起提供 std::condition_variable
+- 本课编译: g++ -std=c++17 -pthread
+- 未使用 C++20 专属接口
+- 所有结论均在上述编译选项与本机 libstdc++ 下验证
+</code></pre></div>
+
+<p>把「边界条件」也写清楚：</p>
+<div class="codehilite"><pre><span></span><code>边界条件:
+- 没有等待者时 notify 丢失
+- 虚假唤醒可能发生，必须重新检查谓词
+- wait_for 可能晚于超时返回
+- 关闭后 push 失败，pop 排空后返回空
+- 销毁前必须 join 所有等待线程
+</code></pre></div>
+
+<h3 id="7_1">步骤 7：验收清单</h3>
+<ul>
+<li>[ ] 有界队列实现完整，<code>push</code> / <code>pop</code> / <code>close</code> 均可用；</li>
+<li>[ ] 所有等待都使用谓词循环；</li>
+<li>[ ] 消费者空等 + 关闭：所有消费者返回并 <code>join</code>；</li>
+<li>[ ] 生产者满等 + 关闭：所有生产者返回失败并 <code>join</code>；</li>
+<li>[ ] 生产者和消费者同时等待的场景有测试；</li>
+<li>[ ] 关闭后所有等待线程最终返回，<code>timeout</code> 不会触发；</li>
+<li>[ ] TSan 运行通过；</li>
+<li>[ ] sourceStudy 笔记包含版本与边界条件；</li>
+<li>[ ] 能用自己的话解释「通知不是持久事件」和「谓词才是事实来源」。</li>
+</ul>
+<hr />
+<h2 id="_8">自测题</h2>
+<h3 id="1-wait-unique_lock">题目 1：为什么 wait 必须使用 unique_lock？</h3>
+<p>请解释：</p>
+<ol>
+<li><code>condition_variable::wait</code> 在等待期间对互斥锁做了什么？</li>
+<li>为什么手写 <code>unlock</code> + <code>sleep</code> 会丢唤醒？</li>
+<li>为什么 <code>lock_guard</code> 不能用于 <code>wait</code>？</li>
+</ol>
+<h3 id="2_3">题目 2：虚假唤醒与谓词循环</h3>
+<p>下面的代码有什么问题？请给出两种正确写法。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">queue</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="n">queue</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+</code></pre></div>
+
+<p>如果 <code>not_empty_.wait(lock)</code> 在没有通知的情况下返回，会发生什么？为什么 <code>wait(lock, pred)</code> 能解决？</p>
+<h3 id="3notify_onenotify_all">题目 3：notify_one、notify_all 与停机</h3>
+<p>某服务有一个有界任务队列，多个 worker 在队列为空时等待。关闭服务时，代码只做了：</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">closed_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">not_empty_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+</code></pre></div>
+
+<p>请回答：</p>
+<ol>
+<li>这段关闭代码可能导致什么问题？</li>
+<li>关闭时生产者和消费者都可能等待，应该怎样通知？</li>
+<li>如果生产者只投递了一个任务，应该用 <code>notify_one</code> 还是 <code>notify_all</code>？为什么？</li>
+<li><code>wait_for</code> 返回后，为什么不能直接把 <code>cv_status::no_timeout</code> 当成条件成立？</li>
+</ol>
+<hr />
+<h2 id="_9">自测题参考答案</h2>
+<h3 id="1_3">答案 1</h3>
+<ol>
+<li><code>wait</code> 会原子地释放 <code>unique_lock</code> 持有的互斥锁，把当前线程挂到条件变量的等待队列上并阻塞；被通知或虚假唤醒后，它会重新获取互斥锁，然后才从 <code>wait</code> 返回。这个「释放 + 阻塞」的原子性消除了「解锁后、睡着前」的丢唤醒窗口。</li>
+<li>手写 <code>unlock</code> + <code>sleep</code> 时，生产者可能正好在「已经解锁、还没睡着」的窗口里修改状态并发出通知。等消费者真正睡着后，通知已经过去，且条件变量不保存通知，消费者只能等下一次通知，可能永久阻塞。而且轮询式睡眠还会带来延迟和 CPU 开销。</li>
+<li><code>lock_guard</code> 只提供构造加锁、析构解锁，不支持在等待期间手动 <code>unlock</code> / <code>lock</code>，也不可移动；<code>wait</code> 需要能够临时解锁并重新加锁的锁对象，所以必须使用 <code>std::unique_lock</code>（或 <code>condition_variable_any</code> 配合其他满足要求的锁类型）。</li>
+</ol>
+<h3 id="2_4">答案 2</h3>
+<p>问题：</p>
+<ul>
+<li><code>wait</code> 可能虚假唤醒，返回时队列仍然为空；</li>
+<li>即使不是虚假唤醒，其他消费者也可能先一步取走任务，导致本线程醒来后队列为空；</li>
+<li>随后 <code>queue.front()</code> 对空队列调用是未定义行为；</li>
+<li>另外，<code>wait</code> 返回后没有重新检查关闭状态。</li>
+</ul>
+<p>正确写法 A：显式循环。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">closed_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+<span class="n">queue</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+</code></pre></div>
+
+<p>正确写法 B：带谓词。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="n">not_empty_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">closed_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span>
+<span class="p">});</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">queue</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+<span class="n">queue_</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+</code></pre></div>
+
+<p><code>wait(lock, pred)</code> 等价于 <code>while (!pred()) wait(lock);</code>。它会在进入等待前检查谓词，在每次被唤醒后重新检查，只有谓词为真才返回，因此能同时处理虚假唤醒、通知丢失和其他线程抢先消费的情况。</p>
+<h3 id="3_2">答案 3</h3>
+<ol>
+<li>只调用 <code>not_empty_.notify_one()</code> 只会唤醒一个消费者。其余 worker 可能永远阻塞在 <code>wait</code> 上，导致 <code>join</code> 卡住、进程无法优雅退出。如果还有生产者等待「队列未满」，它们也完全收不到通知。</li>
+<li>关闭是影响所有等待者的状态变化，应该：
+   - 在锁内设置 <code>closed_ = true</code>；
+   - 锁外调用 <code>not_empty_.notify_all()</code> 和 <code>not_full_.notify_all()</code>；
+   - 所有等待谓词都包含 <code>closed_</code>，保证被唤醒后能看到关闭状态并返回。</li>
+<li>如果只投递一个任务，通常用 <code>notify_one</code>：一次状态变化只够一个消费者处理，<code>notify_one</code> 可以避免所有 worker 同时醒来抢锁（惊群）。但前提是消费者等待的是同一个「非空」谓词；如果同一个条件变量上还混有别的谓词，可能需要拆分条件变量或使用 <code>notify_all</code>。</li>
+<li><code>cv_status::no_timeout</code> 只表示这次等待不是因为超时返回，它可能来自虚假唤醒，也可能来自一次与该线程谓词无关的通知。条件是否成立必须重新检查谓词。带谓词的 <code>wait_for</code> 返回 <code>bool</code>，更不容易误用；无谓词版本应写成循环并在返回后检查状态。</li>
+</ol>
+<hr />
+<h2 id="_10">推荐资源</h2>
+<ul>
+<li><strong>条件变量与状态谓词：参考文档 / 原始资料</strong><br />
+  https://en.cppreference.com/w/cpp/thread/condition_variable.html  </li>
+<li>来源：en.cppreference.com  </li>
+<li>语言：英文 · 类型：文档 · 难度：进阶 · 免费  </li>
+<li>阅读重点：<code>wait</code> 原子释放与重新获取、谓词与虚假唤醒，用于核对本节点实验的语义和边界。  </li>
+<li>建议把页面中 <code>wait</code> / <code>wait_for</code> / <code>wait_until</code> / <code>notify_one</code> / <code>notify_all</code> 的说明与示例抄进 <code>versions.txt</code>，并记录你使用的标准版本与边界条件。</li>
+</ul>
+<hr />
+<h2 id="_11">本课小结</h2>
+<ol>
+<li><strong>条件变量用于等待共享状态变化</strong>，它不保存业务状态；共享状态由互斥锁保护，条件变量只负责睡眠与唤醒。</li>
+<li><strong><code>wait</code> 原子地释放锁、阻塞、被唤醒后重新获取锁</strong>；这个原子性消除了「解锁后、睡着前」的丢唤醒窗口，也是必须使用 <code>std::unique_lock</code> 的原因。</li>
+<li><strong>通知不是持久事件</strong>：没有等待者时 <code>notify</code> 会丢失；不要把条件变量当信号量或消息队列。正确性来自谓词，而不是通知次数。</li>
+<li><strong>谓词必须在锁下反复检查</strong>：使用 <code>while (!pred()) wait(lock)</code> 或 <code>wait(lock, pred)</code>，不要用 <code>if</code>，也不要写裸 <code>wait</code>。</li>
+<li><strong>关闭是广播事件</strong>：<code>closed_</code> 必须进入所有等待谓词；关闭时同时通知「非空」和「未满」两个条件变量，并使用 <code>notify_all</code> 唤醒所有等待者。</li>
+<li><strong><code>notify_one</code> 减少惊群，<code>notify_all</code> 适用于状态变化影响多个等待者</strong>；选择依据是「一次状态变化能服务几个等待者」，而不是盲目追求唤醒数量。</li>
+<li><strong>超时不是条件成立</strong>：<code>wait_for</code> / <code>wait_until</code> 返回后仍要检查谓词；无谓词版本可能因虚假唤醒返回 <code>no_timeout</code>。</li>
+<li><strong>验证条件变量代码不能只靠 TSan</strong>：TSan 查数据竞争，丢唤醒和逻辑死锁要靠谓词审查、关闭/满/空边界测试、压力运行和 <code>timeout</code> 兜底。</li>
+<li>下一课会继续沿着同步原语扩展；本课的「锁保护状态 + 谓词循环 + 通知只是提醒」这套模型，是任务队列、线程池和优雅停机的基础。</li>
+</ol><div class="pn"><span><a href="66.html">← 互斥锁与锁粒度</a></span><span>下一课 待更新</span></div></main></div></body></html>
