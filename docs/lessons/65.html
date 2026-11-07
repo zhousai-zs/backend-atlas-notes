@@ -1,0 +1,1586 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>65. 数据竞争与线程安全契约 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（65/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details open><summary>领域 E（1/16）</summary><div>阶段 2</div><ul><li><a class="cur" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li class="todo">66. 互斥锁与锁粒度 <em>待更新</em></li><li class="todo">67. 条件变量与状态谓词 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">68. 死锁、锁顺序与阻塞传播 <em>待更新</em></li><li class="todo">69. 原子操作与复合不变量 <em>待更新</em></li><li class="todo">71. 缓存一致性与伪共享 <em>待更新</em></li><li class="todo">72. TLS与协程共享边界 <em>待更新</em></li><li class="todo">74. 有界并发队列与背压 <em>待更新</em></li><li class="todo">75. 读写锁、快照与读密集优化 <em>待更新</em></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">70. C++内存序与发布订阅 <em>待更新</em></li><li class="todo">73. 可重入性与协作调度安全 <em>待更新</em></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 65 课 · 领域 E · 阶段 2</p><p class="dl"><a href="../files/65-e-race.md" download>⬇ 本课 Markdown</a></p><h1 id="65208">第 65/208 课：数据竞争与线程安全契约</h1>
+<ul>
+<li><strong>阶段</strong>：第 2 阶段 · 并发与内存模型（同步与正确性）</li>
+<li><strong>前置课程</strong>：c-thread、b-lifetime</li>
+<li><strong>关键词</strong>：数据竞争、线程安全、线程封闭、happens-before、共享可变状态、逻辑原子性、可重入、TSan、mutex、复合操作、volatile误区</li>
+<li><strong>难度</strong>：基础</li>
+<li><strong>所属领域</strong>：E · 并发与内存模型（子类：同步与正确性）</li>
+<li><strong>标签</strong>：Data Races、E、C++</li>
+</ul>
+<hr />
+<h2 id="_1">导读</h2>
+<p>上一课讲的是<strong>海量连接与接入治理</strong>：管住「多少连接进来、每条连接花多少内存、什么时候拒绝、什么时候优雅关闭」。那一课的核心是<strong>资源预算</strong>——fd、内存、内核队列、超时。连接对象再多，至少每个对象在逻辑上是「一条连接、一个归属」。</p>
+<p>本课换一个维度：<strong>同一个进程里，多个工作线程同时碰同一块内存</strong>。这时的敌人不再是「连接太多」，而是「两个线程对同一块内存的访问没有排好队」。</p>
+<p>节点把这件事总结得很精确：</p>
+<blockquote>
+<p>不同线程无同步地冲突访问同一内存且至少一个为写，会构成 C++ 数据竞争并导致未定义行为。</p>
+</blockquote>
+<p>微信公众号后台里，这类内存到处都有：</p>
+<ul>
+<li>阅读数 / 点赞数 / 消息计数：多个工作线程同时 <code>++</code>；</li>
+<li>会话表：线程 A 正在 <code>find</code>，线程 B 正在 <code>erase</code>；</li>
+<li>连接状态：IO 线程写 <code>closed=true</code>，业务线程还在读 <code>buf</code>；</li>
+<li>限流桶：两个线程同时「先查令牌，再扣令牌」；</li>
+<li>配置热更新：一个线程替换 <code>shared_ptr</code>，另一个线程解引用旧对象；</li>
+<li>统计上报：多个线程往同一个 <code>std::map</code> 里插入。</li>
+</ul>
+<p>它们的共同点是：<strong>代码在单线程下完全正确，一上多线程就偶发错数、崩溃、幽灵值</strong>。更麻烦的是，这类 bug 往往：</p>
+<ul>
+<li>压力小时不出现，压测时出现；</li>
+<li>换个编译选项就消失；</li>
+<li>加一行日志就「好了」；</li>
+<li>在开发机复现不了，只在生产环境偶发。</li>
+</ul>
+<p>本课的目标不是让你背「锁的八种用法」，而是把「偶发错误」变成<strong>可检查的共享状态规则</strong>：先问哪些状态被多个线程共享，再问这些访问之间有没有 happens-before，最后才问用什么同步原语。配套工具是 C++ memory model、<code>std::mutex</code>、<code>std::atomic</code> 和 ThreadSanitizer（TSan）。</p>
+<p>本课与 c-thread（线程创建、join、参数传递）和 b-lifetime（对象寿命、RAII、所有权）直接相连：<strong>数据竞争是「访问顺序」问题，而对象寿命是「访问是否还有效」问题，两者经常一起出现</strong>。一个指针上的竞争，可能最终表现为 use-after-free；一个「看起来只是错数」的计数器，背后可能是未定义行为把整个优化假设掀翻。</p>
+<hr />
+<h2 id="_2">学习目标</h2>
+<p>完成本课学习后，你应当能够：</p>
+<ol>
+<li>
+<p><strong>能解释共享与线程封闭</strong>
+   - 能列出进程内哪些状态是跨线程共享的：全局变量、静态变量、堆对象、被多个线程捕获的 lambda 状态、连接对象里的字段、缓存与注册表。
+   - 能说明线程封闭的三种常见做法：栈上局部变量、<code>thread_local</code>、对象只被单一线程拥有（对象封闭）。
+   - 能判断「什么时候必须共享」：会话表、限流桶、指标聚合、连接注册表、配置快照，这些天然要被多个线程看到，不能简单封闭。
+   - 能说出线程封闭的代价：减少同步，但需要消息传递或所有权转移，跨线程交互要设计队列/邮箱。</p>
+</li>
+<li>
+<p><strong>能解释 happens-before</strong>
+   - 能说清「程序顺序」不等于「跨线程可见顺序」：编译器与 CPU 都可以重排，缓存可以不同步。
+   - 能列出建立 happens-before 的常见手段：<code>std::thread</code> 构造与 <code>join</code>、mutex 的 <code>unlock</code> 与后续 <code>lock</code>、原子操作的 release/acquire、条件变量的通知与等待。
+   - 能判断「没有 happens-before 的冲突读写 = 数据竞争」，并解释为什么数据竞争是未定义行为，而不只是「读到旧值」。</p>
+</li>
+<li>
+<p><strong>能解释线程安全、可重入与逻辑原子性</strong>
+   - 能区分「线程安全」与「可重入」：线程安全靠锁也能做到；可重入通常要求不依赖共享可变状态，或在递归/回调路径上不死锁。
+   - 能识别 check-then-act、read-modify-write 这类复合操作，知道 <code>counter++</code>、<code>if (!map.count(k)) map[k] = v</code> 都不是天然原子。
+   - 能说明「逻辑原子性」：业务上必须一起成立的不变量，必须在同一个临界区里维护，而不是把几个原子操作拼起来就当原子。</p>
+</li>
+<li>
+<p><strong>能独立完成实践</strong>
+   - 为计数器复现竞态：多线程自增，观察到丢更新。
+   - 使用 TSan 复现并读懂报告，再用 <code>std::mutex</code> 修复，确认 TSan 干净。
+   - 说明复合操作边界：什么时候一个 <code>std::atomic</code> 就够，什么时候必须用锁保护多个字段/多个步骤。
+   - 修复时同时考虑对象寿命与逻辑不变量，而不是只把一行读写包进锁。</p>
+</li>
+<li>
+<p><strong>满足本课验收标准（acceptance）</strong>
+   - <strong>能识别读写竞争，而不只写写竞争</strong>：看到「一个线程读、另一个线程写」也能判定为数据竞争。
+   - <strong>修复包含对象寿命与逻辑不变量</strong>：不只消除 TSan 报告的那一行，还要保证对象在使用期间活着，业务不变量在临界区内始终成立。</p>
+</li>
+</ol>
+<hr />
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点给的 why 是：</p>
+<blockquote>
+<p>把偶发错误转成可检查的共享状态规则。</p>
+</blockquote>
+<p>这句话听起来抽象，落到公众号后台值班，就是下面几件事。</p>
+<h3 id="1">1. 「偶发错数」通常不是业务逻辑错，而是共享状态没有契约</h3>
+<p>假设消息计数这样写：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Metrics</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">incr</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">++</span><span class="n">count_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">count_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">count_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>单线程压测一切正常。上线后多个 IO 线程同时 <code>incr()</code>，监控里出现：</p>
+<ul>
+<li>总计数比实际少；</li>
+<li>两个线程各自看到的数不一样；</li>
+<li>偶尔出现负数或跳变；</li>
+<li>重启后数据对不上。</li>
+</ul>
+<p>这不是「统计口径」问题，而是 <code>++count_</code> 被拆成 load / add / store 三个步骤，两个线程的步骤交错，更新互相覆盖。这类错误没有异常、没有日志、没有明确崩溃点，只有<strong>结果不对</strong>。</p>
+<h3 id="2">2. 数据竞争是未定义行为，不是「读到旧值」这么温和</h3>
+<p>很多人对竞争的心理模型是：</p>
+<blockquote>
+<p>最坏情况就是读到旧值，业务上能忍。</p>
+</blockquote>
+<p>C++ 标准不是这么规定的。数据竞争导致<strong>未定义行为（undefined behavior）</strong>。这意味着编译器可以假设它不发生，从而做出在单线程看来合理、在竞争下离谱的优化：</p>
+<ul>
+<li>把循环里的重复读取提到循环外（因为「没人会改它」）；</li>
+<li>把 <code>if (flag) ...</code> 优化成只读一次；</li>
+<li>让指针指向已经释放的对象；</li>
+<li>让整个函数的行为不可预测。</li>
+</ul>
+<p>所以竞争的风险不是「数据旧一点」，而是<strong>程序语义整体失效</strong>。这也是为什么「加日志就好了」「换个优化级别就好了」不是修复，而是把未定义行为换了一种表现形式。</p>
+<h3 id="3">3. 线上事故常常是「读写竞争」，不是「写写竞争」</h3>
+<p>写写竞争容易理解：两个线程同时写，肯定有一个被覆盖。</p>
+<p>更难发现的是读写竞争：</p>
+<ul>
+<li>线程 A 在遍历会话表，线程 B 插入一个节点，A 的迭代器失效；</li>
+<li>线程 A 读 <code>connection-&gt;state</code>，线程 B 同时把它置为 <code>CLOSED</code> 并释放缓冲；</li>
+<li>线程 A 读配置指针，线程 B 替换指针并释放旧配置。</li>
+</ul>
+<p>这些场景里，「读」看起来无害，但<strong>只要另一个线程在写同一内存，且两者没有 happens-before，就是数据竞争</strong>。本课验收特别强调「能识别读写竞争而不只写写」，原因就在这里。</p>
+<h3 id="4">4. 修复不只是加锁，还要守住对象寿命和业务不变量</h3>
+<p>一个典型错误修复是：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 错误示范：只锁了写入，读取仍然裸奔</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">setState</span><span class="p">(</span><span class="n">State</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">    </span><span class="n">state_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="n">State</span><span class="w"> </span><span class="nf">state</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">state_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">  </span><span class="c1">// 没有锁</span>
+</code></pre></div>
+
+<p>这样 TSan 可能只报一半，业务上仍然可能读到撕裂状态。更完整的修复要回答：</p>
+<ul>
+<li>这个对象在所有访问路径上是否都活着？（对象寿命）</li>
+<li>多字段之间的一致性由谁保证？（逻辑不变量）</li>
+<li>锁保护的是「一个字段」还是「一组必须一起变化的状态」？</li>
+<li>回调、超时、关闭路径会不会在持锁时重入？</li>
+</ul>
+<h3 id="5">5. 公众号后台里你会真正碰到的场景</h3>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>更像数据竞争</th>
+<th>更像对象寿命</th>
+<th>更像逻辑原子性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计数偶尔少、监控对不上</td>
+<td>多线程 <code>++</code> 无锁</td>
+<td>否</td>
+<td>自增本身不是原子</td>
+</tr>
+<tr>
+<td>压测时偶发 segfault，堆栈在 <code>std::map</code></td>
+<td>遍历与插入并发</td>
+<td>迭代器失效</td>
+<td>否</td>
+</tr>
+<tr>
+<td>关闭连接后偶发访问已释放缓冲</td>
+<td>状态与指针无同步</td>
+<td>旧指针被解引用</td>
+<td>关闭与清理不是一个临界区</td>
+</tr>
+<tr>
+<td>限流偶尔放过超额请求</td>
+<td>查令牌与扣令牌分开</td>
+<td>否</td>
+<td>check-then-act</td>
+</tr>
+<tr>
+<td>热更新配置后偶发崩溃</td>
+<td>指针读写竞争</td>
+<td>旧配置被释放</td>
+<td>替换与引用计数不原子</td>
+</tr>
+</tbody>
+</table>
+<p>不会区分时，最常见的错误动作是：<strong>看到崩溃就加大日志、加 sleep、换成 <code>volatile</code>、或者「重试一下」</strong>。这些都没有建立 happens-before，只是改变时序，让问题更难复现。</p>
+<hr />
+<h2 id="_4">直觉 → 原理</h2>
+<h3 id="0">0. 先建立直觉：共享白板、私人笔记本、传纸条</h3>
+<p>把多线程程序想成一间办公室：</p>
+<div class="codehilite"><pre><span></span><code>        共享白板（全局变量 / 堆对象 / 会话表）
+          ▲            ▲              ▲
+          │            │              │
+       线程 A        线程 B         线程 C
+          │            │              │
+      私人笔记本    私人笔记本      私人笔记本
+      （栈 / thread_local）
+</code></pre></div>
+
+<p>三种交互方式：</p>
+<ol>
+<li><strong>共享白板</strong>：谁都能写。必须约定「什么时候可以写、写完怎么让别人看到」。没有约定，两个人同时擦写，结果不可预测。</li>
+<li><strong>私人笔记本</strong>：只有本人能看。线程封闭，不需要锁，也没有竞争。</li>
+<li><strong>传纸条</strong>：不共享白板，而是把数据装进消息，投递到对方的收件箱。消息传递，所有权转移。</li>
+</ol>
+<p>数据竞争永远发生在第 1 种情况：<strong>共享 + 可变 + 至少一个线程在写 + 没有同步</strong>。四个条件去掉任意一个，就不会有数据竞争：</p>
+<ul>
+<li>不共享 → 线程封闭；</li>
+<li>不可变 → 只读共享；</li>
+<li>没有写 → 全读；</li>
+<li>有同步 → happens-before 建立。</li>
+</ul>
+<p>后端设计的第一反应应该是：<strong>能不能把共享变小、把可变变小、把同步边界画清楚</strong>，而不是一上来就加锁。</p>
+<h3 id="1_1">1. 共享与线程封闭</h3>
+<h4 id="11">1.1 进程里到底哪些东西是共享的</h4>
+<p>C++ 线程共享同一个地址空间。以下状态默认跨线程可见：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>例子</th>
+<th>是否共享</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全局变量 / 静态变量</td>
+<td><code>static std::map&lt;int, Session&gt; g_sessions;</code></td>
+<td>共享</td>
+</tr>
+<tr>
+<td>堆对象</td>
+<td><code>new Connection(...)</code>、<code>std::make_shared&lt;Config&gt;()</code></td>
+<td>只要指针被多个线程拿到就共享</td>
+</tr>
+<tr>
+<td>对象的成员</td>
+<td><code>Connection::state_</code>、<code>Metrics::count_</code></td>
+<td>取决于对象被谁持有</td>
+</tr>
+<tr>
+<td>函数内局部变量</td>
+<td><code>int local = 0;</code></td>
+<td>每个线程独立栈帧，通常不共享</td>
+</tr>
+<tr>
+<td><code>thread_local</code></td>
+<td><code>thread_local int tls_buf;</code></td>
+<td>每线程一份，不共享</td>
+</tr>
+<tr>
+<td>捕获引用/指针的 lambda</td>
+<td><code>[&amp;counter] { ++counter; }</code></td>
+<td>共享被捕获对象</td>
+</tr>
+<tr>
+<td>捕获值的 lambda</td>
+<td><code>[counter] { ... }</code></td>
+<td>捕获副本通常封闭，但副本里的指针仍可能指向共享对象</td>
+</tr>
+</tbody>
+</table>
+<p>注意最后一行：<strong>「按值捕获」不等于安全</strong>。如果捕获的是一个裸指针或 <code>shared_ptr</code> 指向的共享对象，副本只是指针/引用计数，指向的仍是同一块内存。</p>
+<h4 id="12">1.2 线程封闭的三种形态</h4>
+<p><strong>形态一：栈上局部变量</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">handleRequest</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">Response</span><span class="o">&amp;</span><span class="w"> </span><span class="n">resp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">scratch</span><span class="p">;</span><span class="w">          </span><span class="c1">// 本线程栈上，天然封闭</span>
+<span class="w">    </span><span class="n">scratch</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="mi">256</span><span class="p">);</span>
+<span class="w">    </span><span class="n">render</span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">scratch</span><span class="p">);</span>
+<span class="w">    </span><span class="n">resp</span><span class="p">.</span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">scratch</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>只要不把 <code>scratch</code> 的地址传出去，它就不会被其他线程访问。这是最便宜、最可靠的封闭。</p>
+<p><strong>形态二：<code>thread_local</code></strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">thread_local</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">tls_scratch</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">handleRequest</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Request</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">Response</span><span class="o">&amp;</span><span class="w"> </span><span class="n">resp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">tls_scratch</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w">          </span><span class="c1">// 每个线程一份，无竞争</span>
+<span class="w">    </span><span class="n">render</span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">tls_scratch</span><span class="p">);</span>
+<span class="w">    </span><span class="n">resp</span><span class="p">.</span><span class="n">body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tls_scratch</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>适合「每线程一份、生命周期长、避免反复分配」的缓冲。代价是：</p>
+<ul>
+<li>每个线程都占一份内存，线程多时内存放大；</li>
+<li>初始化/析构时机与线程生命周期绑定；</li>
+<li>不要把 <code>thread_local</code> 的地址传给别的线程长期使用。</li>
+</ul>
+<p><strong>形态三：对象封闭（所有权只属于一个线程）</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="c1">// 只在 IO 线程调用</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">onReadable</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">onWritable</span><span class="p">();</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">close</span><span class="p">();</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Buffer</span><span class="w"> </span><span class="n">in_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Buffer</span><span class="w"> </span><span class="n">out_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">State</span><span class="w"> </span><span class="n">state_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">State</span><span class="o">::</span><span class="n">Open</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>约定：<code>Connection</code> 对象从创建到销毁都由同一个 IO 线程处理。其他线程不能直接调用它的方法，只能投递任务：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 业务线程不直接碰 connection，而是把任务投递到它所属的 IO 线程</span>
+<span class="n">ioLoopOf</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="o">-&gt;</span><span class="k">post</span><span class="p">([</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">msg</span><span class="p">)]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">conn</span><span class="o">-&gt;</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span><span class="w">   </span><span class="c1">// 在 IO 线程执行，天然串行</span>
+<span class="p">});</span>
+</code></pre></div>
+
+<p>这就是很多 Reactor / proactor 框架的核心契约：<strong>连接对象线程封闭，跨线程只传任务</strong>。它把大量锁换成了队列，把「共享内存同步」换成了「消息传递」。</p>
+<h4 id="13">1.3 什么时候必须共享</h4>
+<p>有些状态无法封闭：</p>
+<ul>
+<li><strong>会话表</strong>：任意工作线程都可能处理同一用户的下一个请求；</li>
+<li><strong>限流桶</strong>：按用户/接口计数，多个线程要共同扣减；</li>
+<li><strong>连接注册表</strong>：管理线程要遍历所有连接做超时清理；</li>
+<li><strong>全局指标</strong>：所有线程都要上报；</li>
+<li><strong>配置快照</strong>：热更新后所有线程都要看到新版本；</li>
+<li><strong>任务队列</strong>：生产者与消费者跨线程。</li>
+</ul>
+<p>这些状态必须共享，就必须有明确的同步契约。契约要回答四个问题：</p>
+<ol>
+<li>谁可以读？谁可以写？</li>
+<li>读和写各自需要持哪把锁？</li>
+<li>一次操作涉及哪些字段，必须一起变化？</li>
+<li>对象在什么时候销毁，销毁后还有谁会访问？</li>
+</ol>
+<h4 id="14">1.4 线程封闭不是「银弹」，它要求消息传递</h4>
+<p>封闭的代价是：跨线程交互必须显式化。你需要：</p>
+<ul>
+<li>每线程一个任务队列（MPSC / MPMC）；</li>
+<li>任务里携带所有权（<code>std::unique_ptr</code>、<code>std::move</code>）；</li>
+<li>处理队列满、关闭、线程退出时的未完成任务；</li>
+<li>保证投递顺序与业务顺序一致。</li>
+</ul>
+<p>所以节点里的 tradeoff 是准确的：</p>
+<blockquote>
+<p>线程封闭减少同步成本，但可能需要消息传递。</p>
+</blockquote>
+<p>对公众号后台这种「连接状态多、共享表少」的系统，常见组合是：</p>
+<div class="codehilite"><pre><span></span><code>连接对象：线程封闭（IO 线程独占）
+会话表：共享 + 分片锁
+限流桶：共享 + 原子操作 / 分片
+指标：每线程本地累加 + 定期合并
+配置：共享 + shared_ptr 原子替换
+</code></pre></div>
+
+<h3 id="2-happens-before">2. happens-before</h3>
+<h4 id="21">2.1 为什么「我写了，你应该能看到」不成立</h4>
+<p>先看一段单线程看起来毫无问题的代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="c1">// 线程 A</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">producer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">      </span><span class="c1">// (1)</span>
+<span class="w">    </span><span class="n">ready</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span><span class="w">   </span><span class="c1">// (2)</span>
+<span class="p">}</span>
+
+<span class="c1">// 线程 B</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">consumer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ready</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">    </span><span class="c1">// (3)</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w">  </span><span class="c1">// (4)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>很多人会认为：A 先写 <code>data</code> 再写 <code>ready</code>，B 看到 <code>ready == true</code> 就一定能看到 <code>data == 42</code>。</p>
+<p>在 C++ 内存模型里，这个推理<strong>不成立</strong>，原因有三层：</p>
+<ol>
+<li><strong>编译器重排</strong>：编译器和 CPU 可以交换没有依赖的读写顺序；</li>
+<li><strong>缓存/可见性</strong>：不同核心的缓存不保证同步；</li>
+<li><strong>没有 happens-before</strong>：<code>ready</code> 的写和读之间没有建立同步关系。</li>
+</ol>
+<p>更严重的是，<code>ready</code> 和 <code>data</code> 都是非原子变量，线程 A 写、线程 B 读，<strong>这本身就是数据竞争</strong>，直接触发未定义行为。也就是说，这段代码不是「可能读到旧值」，而是「程序没有定义」。</p>
+<h4 id="22-happens-before">2.2 happens-before 的直觉定义</h4>
+<p>C++ 的 happens-before 是一个偏序关系，回答的是：</p>
+<blockquote>
+<p>如果操作 X happens-before 操作 Y，那么 X 的结果对 Y 可见，且 X 在 Y 之前发生。</p>
+</blockquote>
+<p>三个基本来源：</p>
+<p><strong>（a）程序顺序（sequenced-before）</strong></p>
+<p>同一线程内，前面的语句先于后面的语句。但注意：这只是<strong>单线程视角</strong>，不自动跨线程。</p>
+<p><strong>（b）线程生命周期</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">t</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">          </span><span class="c1">// 线程函数内的写</span>
+<span class="p">});</span>
+
+<span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span><span class="w">           </span><span class="c1">// join 返回后</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w">     </span><span class="c1">// 一定可见</span>
+</code></pre></div>
+
+<p>标准规定：</p>
+<ul>
+<li><code>std::thread</code> 构造函数返回时，新线程的启动 happens-after 构造完成；</li>
+<li><code>join()</code> 返回时，线程函数的所有操作 happens-before <code>join()</code> 之后的操作。</li>
+</ul>
+<p>所以 <code>join</code> 之后的读取是安全的。反过来，<code>detach()</code> 没有这个保证，主线程不能假设分离线程已经完成。</p>
+<p><strong>（c）同步原语</strong></p>
+<p>mutex：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// 线程 A</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span><span class="w">   </span><span class="c1">// unlock</span>
+
+<span class="c1">// 线程 B</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w">  </span><span class="c1">// 可见</span>
+<span class="p">}</span><span class="w">   </span><span class="c1">// lock 与之前的 unlock 建立 synchronizes-with</span>
+</code></pre></div>
+
+<p>同一把 mutex 的 <code>unlock</code> <strong>synchronizes-with</strong> 之后对它的 <code>lock</code>，因此 A 在临界区内写的 <code>x</code> 对 B 可见。这是「锁不仅互斥，还负责可见性」的准确含义。</p>
+<p>原子操作：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ready</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// 线程 A</span>
+<span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+<span class="n">ready</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+
+<span class="c1">// 线程 B</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">ready</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="n">assert</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">42</span><span class="p">);</span><span class="w">  </span><span class="c1">// release/acquire 建立 happens-before</span>
+</code></pre></div>
+
+<p><code>release</code> 写与读到该值的 <code>acquire</code> 读建立 synchronizes-with。注意 <code>data</code> 本身仍然是非原子变量，但因为 release/acquire 建立了顺序，A 对 <code>data</code> 的写 happens-before B 对 <code>data</code> 的读，所以不构成数据竞争。</p>
+<p>条件变量：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span><span class="w"> </span><span class="n">cv</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">hasTask</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="c1">// 消费者</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lk</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">hasTask</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="w">    </span><span class="c1">// 被唤醒并重新拿到锁后，生产者在锁内写的状态可见</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>条件变量的 <code>wait</code> 返回前会重新加锁，因此与生产者的 <code>unlock</code> 建立同样的同步关系。关键点是：<strong>共享状态必须在同一把锁下修改，并用谓词重新检查</strong>，否则会出现丢失唤醒或读到不一致状态。</p>
+<h4 id="23">2.3 数据竞争的准确判定</h4>
+<p>把上面的直觉写成检查清单：</p>
+<div class="codehilite"><pre><span></span><code>两个访问是否冲突？
+  ├─ 同一内存位置（同一变量、同一对象字段、同一数组元素）
+  ├─ 至少一个是写
+  └─ 两个访问来自不同线程
+        │
+        ▼
+这两个访问之间是否存在 happens-before？
+  ├─ 是 → 不是数据竞争
+  └─ 否 → 是数据竞争 → 未定义行为
+</code></pre></div>
+
+<p>三个容易踩的边界：</p>
+<ol>
+<li><strong>「同一内存位置」不是「同一变量名」</strong>：结构体两个不同字段通常不冲突；但相邻的位域可能共享同一个内存位置。</li>
+<li><strong>原子操作不参与数据竞争</strong>：<code>std::atomic&lt;int&gt;</code> 的读写是原子的，不会构成数据竞争；但「多个原子操作组成的复合逻辑」仍可能不是原子的。</li>
+<li><strong>happens-before 可以传递</strong>：A → B、B → C，则 A → C。锁与锁之间、线程创建/join、原子操作可以串成链。</li>
+</ol>
+<h4 id="24">2.4 一个反直觉例子：锁保护了，但读到的是旧值？</h4>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="c1">// 线程 A</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">write</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 线程 B</span>
+<span class="kt">int</span><span class="w"> </span><span class="nf">read</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段是安全的：B 要么在 A 之前拿锁看到 0，要么在 A 之后拿锁看到 1。不会有数据竞争。</p>
+<p>但如果 B 不拿锁：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">readUnsafe</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w">   </span><span class="c1">// 与 A 的写冲突，且没有 happens-before</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>即使 <code>x</code> 是 <code>int</code>、即使你「只读一次」、即使 x86 上这个读看起来是单条指令，<strong>它仍然是数据竞争</strong>。这就是「读写竞争」的典型：读的一方经常觉得自己无辜。</p>
+<h4 id="25-tsan">2.5 用编译器和 TSan 建立手感</h4>
+<p>先写一个最小竞争程序：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// race_counter.cc</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">long</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">   </span><span class="c1">// 非原子，共享</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">++</span><span class="n">counter</span><span class="p">;</span><span class="w">   </span><span class="c1">// load + add + store，不是原子操作</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">threads</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">threads</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">worker</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">threads</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"counter = %ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">counter</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>普通编译并运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O2<span class="w"> </span>-pthread<span class="w"> </span>race_counter.cc<span class="w"> </span>-o<span class="w"> </span>race_counter
+./race_counter
+./race_counter
+./race_counter
+</code></pre></div>
+
+<p>你可能会看到 <code>4000000</code>，也可能看到 <code>3999871</code>、<code>3123456</code> 之类的数。<strong>不要用「跑几次都对」来证明没有竞争</strong>，竞争是否命中取决于调度、缓存、优化和机器负载。</p>
+<p>用 TSan 编译：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-pthread<span class="w"> </span>race_counter.cc<span class="w"> </span>-o<span class="w"> </span>race_counter_tsan
+
+<span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="s2">"halt_on_error=0 history_size=7"</span><span class="w"> </span>./race_counter_tsan
+</code></pre></div>
+
+<p>TSan 的报告会包含类似信息（示意，实际行号/地址不同）：</p>
+<div class="codehilite"><pre><span></span><code>WARNING: ThreadSanitizer: data race (pid=12345)
+  Write of size 8 at 0x... by thread T2:
+    #0 worker() race_counter.cc:11 (race_counter_tsan+0x...)
+    #1 void std::__invoke_impl&lt;...&gt;(...) &lt;null&gt; (libstdc++.so.6+0x...)
+  Previous write of size 8 at 0x... by thread T1:
+    #0 worker() race_counter.cc:11 (race_counter_tsan+0x...)
+  Location is global 'counter' of size 8 at 0x... (race_counter_tsan+0x...)
+  Thread T2 (tid=..., running) created by main thread at:
+    #0 pthread_create ...
+    #1 main race_counter.cc:19 (race_counter_tsan+0x...)
+SUMMARY: ThreadSanitizer: data race race_counter.cc:11 in worker()
+</code></pre></div>
+
+<p>读报告时抓住四件事：</p>
+<ol>
+<li><strong>冲突类型</strong>：<code>Write of size 8</code> / <code>Previous write</code>，说明是两个写；如果是 <code>Read of size 4</code> 与 <code>Write of size 4</code>，就是读写竞争。</li>
+<li><strong>两个栈</strong>：两边的调用栈指向同一处代码或同一块数据。</li>
+<li><strong>Location</strong>：全局变量、堆地址还是栈地址；这决定修复策略。</li>
+<li><strong>线程创建栈</strong>：确认是哪两个线程，以及它们由谁创建。</li>
+</ol>
+<p>TSan 的边界要记住：</p>
+<ul>
+<li>它只能发现<strong>本次运行中实际发生</strong>的竞争，没命中的路径不会报；</li>
+<li>对无锁算法、自定义同步，可能需要注解（<code>__tsan_acquire</code> / <code>__tsan_release</code> 或 <code>std::atomic</code> 的原子操作）；</li>
+<li>不能与 AddressSanitizer 同时链接；对象寿命问题要另开 ASan 构建；</li>
+<li>编译器优化级别、内联、<code>-fno-omit-frame-pointer</code> 都影响可读性，建议 <code>-O1 -g</code>。</li>
+</ul>
+<h3 id="3_1">3. 线程安全、可重入与逻辑原子性</h3>
+<h4 id="31">3.1 线程安全的接口契约</h4>
+<p>「这个类线程安全吗？」不是一个是非题，必须先问：<strong>在什么使用方式下线程安全？</strong></p>
+<p>常见契约有四档：</p>
+<table>
+<thead>
+<tr>
+<th>契约</th>
+<th>含义</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不可共享</td>
+<td>对象只能被一个线程使用</td>
+<td><code>Connection</code>、<code>Buffer</code></td>
+</tr>
+<tr>
+<td>可并发读</td>
+<td>多个线程可同时读，写需要独占</td>
+<td>只读配置快照</td>
+</tr>
+<tr>
+<td>线程安全</td>
+<td>多个线程可同时调用公开接口，内部同步</td>
+<td>加锁的 <code>SessionTable</code></td>
+</tr>
+<tr>
+<td>外部同步</td>
+<td>库不管，调用方负责加锁</td>
+<td>裸 <code>std::map</code>、<code>std::vector</code></td>
+</tr>
+</tbody>
+</table>
+<p>写代码时要把契约写进注释或类型名里，而不是让调用方猜：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 线程安全：所有公开方法内部加锁；但返回的迭代器/引用只在锁内有效。</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SessionTable</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="n">UserId</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="n">UserId</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">Session</span><span class="w"> </span><span class="n">s</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">erase</span><span class="p">(</span><span class="n">UserId</span><span class="w"> </span><span class="n">id</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">UserId</span><span class="p">,</span><span class="w"> </span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>注意最后一句：<strong>「线程安全」不等于「返回的引用/指针可以带出锁外使用」</strong>。如果 <code>get</code> 返回 <code>Session&amp;</code>，调用方在锁外继续用，就会与 <code>erase</code> 竞争。正确做法是返回值拷贝、<code>shared_ptr</code> 快照，或提供「在锁内执行回调」的接口。</p>
+<h4 id="32">3.2 可重入与线程安全的区别</h4>
+<ul>
+<li><strong>线程安全</strong>：多个线程同时调用不会破坏内部状态。可以用锁实现。</li>
+<li><strong>可重入</strong>：函数在执行过程中被再次调用（同一线程递归、信号处理、回调）仍然正确。通常要求不依赖共享可变状态，或不持有不可重入的锁。</li>
+</ul>
+<p>一个线程安全但<strong>不可重入</strong>的例子：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Registry</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">forEach</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">fn</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">values_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">fn</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w">   </span><span class="c1">// 回调里如果再次调用 forEach，会死锁</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">values_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>这个类是线程安全的（多线程调用不会数据竞争），但不可重入：回调里递归调用 <code>forEach</code>，同一线程再次锁同一把非递归 mutex，直接死锁。</p>
+<p>修复思路：</p>
+<ul>
+<li>把数据拷贝到锁外再回调（用快照换可重入）；</li>
+<li>用递归锁（<code>std::recursive_mutex</code>，但通常说明设计有问题）；</li>
+<li>明确契约：回调中禁止调用本对象方法，并在文档/断言中体现。</li>
+</ul>
+<p>公众号后台的典型坑：连接关闭回调里又调用 <code>close()</code>，而 <code>close()</code> 持有同一把锁；或者指标回调里再次上报指标。<strong>线程安全只保证并发不炸，不保证重入不炸。</strong></p>
+<h4 id="33-read-modify-write">3.3 逻辑原子性：read-modify-write 不是天然原子</h4>
+<p><code>counter++</code> 的真实步骤：</p>
+<div class="codehilite"><pre><span></span><code>load  counter  -&gt; 寄存器
+add   1
+store 寄存器   -&gt; counter
+</code></pre></div>
+
+<p>两个线程交错：</p>
+<div class="codehilite"><pre><span></span><code>初始 counter = 0
+
+线程 A: load  -&gt; 0
+线程 B: load  -&gt; 0
+线程 A: add   -&gt; 1
+线程 B: add   -&gt; 1
+线程 A: store -&gt; 1
+线程 B: store -&gt; 1
+
+结果：1，而不是 2
+</code></pre></div>
+
+<p>这就是「丢更新」。它可能是写写竞争，也可能是读写竞争（取决于两个线程的操作组合）。<code>counter++</code> 本身既不是原子读，也不是原子写，而是一个复合操作。</p>
+<p>再看向公众号后台更真实的例子——<strong>限流桶的 check-then-act</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TokenBucket</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">tryAcquire</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">        </span><span class="n">refill</span><span class="p">(</span><span class="n">now</span><span class="p">);</span><span class="w">                 </span><span class="c1">// (1) 根据时间补充令牌</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tokens_</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">          </span><span class="c1">// (2) 检查</span>
+<span class="w">            </span><span class="n">tokens_</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">            </span><span class="c1">// (3) 扣减</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">refill</span><span class="p">(</span><span class="n">TimePoint</span><span class="w"> </span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 更新 last_、tokens_，涉及多个字段</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">tokens_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">TimePoint</span><span class="w"> </span><span class="n">last_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>两个线程同时进入：</p>
+<div class="codehilite"><pre><span></span><code>初始 tokens_ = 1
+
+A: refill -&gt; tokens_ = 1
+B: refill -&gt; tokens_ = 1
+A: tokens_ &gt;= 1 -&gt; 真
+B: tokens_ &gt;= 1 -&gt; 真
+A: tokens_ -= 1 -&gt; 0，返回 true
+B: tokens_ -= 1 -&gt; -1，返回 true
+
+结果：一个令牌被发了两次
+</code></pre></div>
+
+<p>这不是「某个变量不是原子」那么简单，而是<strong>检查与扣减必须整体原子</strong>。单独把 <code>tokens_</code> 换成 <code>std::atomic&lt;double&gt;</code> 也不够：<code>refill</code> 涉及 <code>last_</code> 和 <code>tokens_</code> 两个字段，<code>if</code> 和 <code>-=</code> 是两个步骤。</p>
+<p>正确修复：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TokenBucket</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">tryAcquire</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">refillLocked</span><span class="p">(</span><span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">());</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">tokens_</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">tokens_</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">refillLocked</span><span class="p">(</span><span class="n">TimePoint</span><span class="w"> </span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">now</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">last_</span><span class="p">).</span><span class="n">count</span><span class="p">();</span>
+<span class="w">        </span><span class="n">tokens_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">capacity_</span><span class="p">,</span><span class="w"> </span><span class="n">tokens_</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">elapsed</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rate_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">last_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">tokens_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">rate_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">capacity_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">TimePoint</span><span class="w"> </span><span class="n">last_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>锁保护的不是一个字段，而是<strong>「令牌数 + 上次补充时间 + 检查 + 扣减」这一组不变量</strong>。这就是逻辑原子性。</p>
+<h4 id="34">3.4 什么时候原子操作就够，什么时候必须锁</h4>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>够用的手段</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单个计数器自增</td>
+<td><code>std::atomic&lt;long&gt;</code> + <code>fetch_add</code></td>
+<td>单个内存位置、单个复合操作可原子化</td>
+</tr>
+<tr>
+<td>停止标志</td>
+<td><code>std::atomic&lt;bool&gt;</code></td>
+<td>单字布尔读写</td>
+</tr>
+<tr>
+<td>发布只读快照</td>
+<td><code>std::shared_ptr</code> 原子操作 / <code>atomic_load</code></td>
+<td>指针与对象寿命需要配合</td>
+</tr>
+<tr>
+<td>多字段不变量</td>
+<td>mutex</td>
+<td>原子操作不覆盖多个字段</td>
+</tr>
+<tr>
+<td>check-then-act</td>
+<td>mutex（或 CAS 循环）</td>
+<td>检查与动作必须作为一个整体</td>
+</tr>
+<tr>
+<td>遍历 + 修改容器</td>
+<td>mutex / 分片 / 快照</td>
+<td>迭代器与结构修改不能靠单变量原子解决</td>
+</tr>
+</tbody>
+</table>
+<p>一个常见误区是「把所有字段都换成原子变量，就没有竞争了」。这只能消除<strong>单个字段上的数据竞争</strong>，不能保证<strong>业务不变量</strong>。比如账户余额和冻结金额都用原子变量，但「总额守恒」仍然可能在两个原子操作之间被破坏。</p>
+<h4 id="35">3.5 对象寿命：竞争之外的第二种不确定性</h4>
+<p>数据竞争讲的是「访问顺序」，对象寿命讲的是「访问是否还指向活对象」。两者经常同时出现：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Connection</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">onReadable</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 使用 in_ / state_</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">~</span><span class="n">Connection</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 释放缓冲</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_conn</span><span class="p">;</span>
+
+<span class="c1">// IO 线程</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">ioLoop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_conn</span><span class="p">;</span><span class="w">       </span><span class="c1">// 拷贝 shared_ptr，延长寿命</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="w"> </span><span class="n">conn</span><span class="o">-&gt;</span><span class="n">onReadable</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// 管理线程</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">closeConn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">g_conn</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span><span class="w">           </span><span class="c1">// 释放最后一个引用，对象析构</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>如果 <code>g_conn</code> 的读写没有同步，<code>ioLoop</code> 可能读到正在被 <code>reset</code> 的 <code>shared_ptr</code>，这是数据竞争；即使 <code>shared_ptr</code> 的引用计数是原子的，<strong>对 <code>g_conn</code> 这个 shared_ptr 对象本身的读写</strong>仍然需要同步。正确做法：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">g_mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_conn</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span><span class="w"> </span><span class="n">snapshot</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">g_mu</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">g_conn</span><span class="p">;</span><span class="w">            </span><span class="c1">// 在锁内拷贝，引用计数 +1</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">closeConn</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span><span class="w"> </span><span class="n">old</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">g_mu</span><span class="p">);</span>
+<span class="w">        </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">g_conn</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// old 在锁外析构，避免在持锁时执行析构函数</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里有两个要点：</p>
+<ol>
+<li><strong>快照延长寿命</strong>：<code>snapshot()</code> 返回的 <code>shared_ptr</code> 保证调用期间对象活着；</li>
+<li><strong>析构移出锁外</strong>：避免在持锁时调用用户析构函数，防止死锁或长时间持锁。</li>
+</ol>
+<p>如果对象本身还有可变状态，<code>shared_ptr</code> 只解决寿命，不解决状态竞争。你仍然需要对象内部的锁，或者更强的线程封闭契约。</p>
+<h4 id="36">3.6 把三者串起来：一个会话表的正确契约</h4>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Session</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">openid</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">token</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">expireAt</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SessionTable</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="c1">// 返回拷贝，避免把内部引用带出锁外</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">find</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">openid</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">openid</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span><span class="w">          </span><span class="c1">// 拷贝</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 复合操作：存在则更新，不存在则插入</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">upsert</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">openid</span><span class="p">,</span><span class="w"> </span><span class="n">Session</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">map_</span><span class="p">[</span><span class="n">openid</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">s</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 逻辑原子性：检查过期并删除必须一起完成</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">purgeExpired</span><span class="p">(</span><span class="n">TimePoint</span><span class="w"> </span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">size_t</span><span class="w"> </span><span class="n">removed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">end</span><span class="p">();</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">expireAt</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">now</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+<span class="w">                </span><span class="o">++</span><span class="n">removed</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="o">++</span><span class="n">it</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">removed</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">Session</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>这个类的契约：</p>
+<ul>
+<li>所有公开方法内部加锁；</li>
+<li><code>find</code> 返回拷贝，调用方拿不到内部迭代器/引用；</li>
+<li><code>upsert</code> 的「查找 + 插入/覆盖」在一个临界区；</li>
+<li><code>purgeExpired</code> 的「检查 + 删除」在一个临界区，迭代器不会与并发修改冲突；</li>
+<li>锁不跨越回调，避免重入死锁；</li>
+<li>对象寿命由 <code>SessionTable</code> 持有，调用方只拿值。</li>
+</ul>
+<p>如果要提高并发度，可以按 <code>openid</code> 哈希分片，每片一把锁；但分片后跨片的「总数统计」又变成新的复合操作，需要额外设计。<strong>没有免费的原子性。</strong></p>
+<hr />
+<h2 id="_5">常见误区与设计权衡</h2>
+<h3 id="1volatile">误区 1：<code>volatile</code> 能消除数据竞争</h3>
+<p>这是本课明确点名的坑：</p>
+<blockquote>
+<p>volatile不能消除数据竞争。</p>
+</blockquote>
+<p><code>volatile</code> 在 C++ 里的语义是「这个对象的读写有可观察的副作用，不要优化掉/不要合并」，主要用于内存映射 I/O、<code>sig_atomic_t</code> 与信号处理等场景。它<strong>不建立 happens-before</strong>，<strong>不提供原子性</strong>，<strong>不保证跨线程可见性</strong>，也<strong>不阻止 CPU 重排</strong>。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">volatile</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">   </span><span class="c1">// 错误：不能作为线程停止标志</span>
+
+<span class="c1">// 线程 A</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stop</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">// 线程 B</span>
+<span class="n">stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+</code></pre></div>
+
+<p>这段代码仍然是数据竞争（一个读、一个写、无同步），仍然是未定义行为。正确写法：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stop</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+
+<span class="c1">// 线程 A</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stop</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="c1">// 线程 B</span>
+<span class="n">stop</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+</code></pre></div>
+
+<p>如果停止标志还要与其它数据配合，使用 <code>acquire/release</code> 或直接上锁/条件变量。记住：<strong><code>volatile</code> 是给「编译器别动这块内存」用的，不是给「线程之间排队」用的。</strong></p>
+<h3 id="2_1">误区 2：只修「写写竞争」，忽略「读写竞争」</h3>
+<p>很多人看到两个线程都写才警觉；看到「一个读、一个写」会觉得读是安全的。实际上，只要冲突访问没有 happens-before，读的一方也在参与数据竞争。</p>
+<p>典型：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 线程 A</span>
+<span class="n">connection</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">State</span><span class="o">::</span><span class="n">Closed</span><span class="p">;</span>
+
+<span class="c1">// 线程 B</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">state</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">State</span><span class="o">::</span><span class="n">Open</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">connection</span><span class="o">-&gt;</span><span class="n">send</span><span class="p">(...);</span><span class="w">   </span><span class="c1">// 读状态，但与写竞争</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>修复不是「读的时候多读几次」，而是让状态读写进入同一同步域：锁、原子变量、或线程封闭 + 消息传递。</p>
+<h3 id="3counter-stdatomic">误区 3：<code>counter++</code> 换成 <code>std::atomic</code> 就万事大吉</h3>
+<p>单个计数器可以：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">counter</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">counter</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+</code></pre></div>
+
+<p>但如果业务是「先检查上限，再自增」：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">counter</span><span class="p">.</span><span class="n">load</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">counter</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w">   </span><span class="c1">// 检查和自增之间可能被插队</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这仍然是 check-then-act，可能超限。正确做法是 CAS 循环或锁：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">long</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">counter</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">expected</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">counter</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">                                      </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>或者直接用锁，把「检查 + 自增」放进临界区。<strong>原子操作保证单个操作的原子性，不保证一组操作的逻辑原子性。</strong></p>
+<h3 id="4_1">误区 4：锁保护了数据，就等于线程安全</h3>
+<p>锁只能保护「所有访问都走同一把锁」的路径。常见漏洞：</p>
+<ul>
+<li>一个方法加锁，另一个方法忘加；</li>
+<li>返回内部引用/迭代器，调用方在锁外使用；</li>
+<li>锁保护的字段和实际读写的字段不是同一组；</li>
+<li>回调在持锁时执行，导致死锁或重入；</li>
+<li>对象析构时没有等待正在使用它的线程。</li>
+</ul>
+<p>线程安全是<strong>接口级契约</strong>，不是「某一行加了锁」。</p>
+<h3 id="5-sleep">误区 5：用 <code>sleep</code>、日志、重试来「修复」竞争</h3>
+<p>这些手段只改变时序：</p>
+<ul>
+<li><code>sleep</code> 可能让竞争更难命中，也可能让它更容易命中；</li>
+<li>日志会引入额外的函数调用和内存操作，改变优化与调度；</li>
+<li>重试无法修复未定义行为造成的状态破坏。</li>
+</ul>
+<p>正确顺序是：<strong>先用 TSan/ASan 定位，再建立 happens-before，最后用压力测试验证</strong>。</p>
+<h3 id="vs-vs">设计权衡：线程封闭 vs 共享加锁 vs 消息传递</h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>优点</th>
+<th>代价</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线程封闭</td>
+<td>无锁、缓存友好、逻辑简单</td>
+<td>跨线程交互要投递任务；线程退出要处理残留</td>
+<td>连接对象、每线程缓冲、事件循环</td>
+</tr>
+<tr>
+<td>共享 + mutex</td>
+<td>语义直观、容易保证多字段不变量</td>
+<td>竞争、上下文切换、死锁风险、持锁时间</td>
+<td>会话表、配置、需要强一致的复合操作</td>
+</tr>
+<tr>
+<td>共享 + 原子</td>
+<td>无锁、单字段高效</td>
+<td>只能保证单操作；复杂逻辑要 CAS；ABA 问题</td>
+<td>计数器、标志位、无锁队列</td>
+</tr>
+<tr>
+<td>分片锁</td>
+<td>降低单锁竞争</td>
+<td>跨片操作不原子；分片策略要稳定</td>
+<td>大表、按 key 限流</td>
+</tr>
+<tr>
+<td>消息传递</td>
+<td>所有权清晰、易推理</td>
+<td>队列成本、延迟、背压与关闭协议</td>
+<td>跨线程状态变更、actor 风格</td>
+</tr>
+</tbody>
+</table>
+<p>节点给的权衡是：</p>
+<blockquote>
+<p>线程封闭减少同步成本，但可能需要消息传递。</p>
+</blockquote>
+<p>在公众号后台，推荐的心智模型是：</p>
+<div class="codehilite"><pre><span></span><code>默认线程封闭（连接、缓冲、每线程统计）
+  → 必须共享的，明确契约（锁 / 原子 / 分片）
+  → 跨线程变更，优先消息传递而不是直接改对方状态
+  → 所有共享状态都能回答：谁写、谁读、哪把锁、活到什么时候
+</code></pre></div>
+
+<hr />
+<h2 id="_6">动手实践</h2>
+<p>本实践的目标：<strong>为计数器复现竞态，使用 TSan 并用锁修复，说明复合操作边界</strong>。同时覆盖 acceptance 的两条：识别读写竞争、修复包含对象寿命与逻辑不变量。</p>
+<h3 id="_7">环境与版本记录（先做）</h3>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>--version
+clang++<span class="w"> </span>--version<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+ldd<span class="w"> </span>--version<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span>
+uname<span class="w"> </span>-a
+</code></pre></div>
+
+<p>记录：</p>
+<ul>
+<li>编译器版本与标准库版本（libstdc++ / libc++）；</li>
+<li>是否安装 TSan 运行时（<code>libtsan</code>）；</li>
+<li>操作系统与内核版本；</li>
+<li>编译使用的 C++ 标准（建议 <code>-std=c++20</code>，最低 <code>-std=c++17</code>）。</li>
+</ul>
+<p>TSan 的可用性检查：</p>
+<div class="codehilite"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>/tmp/tsan_probe.cc<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<span class="s">#include &lt;thread&gt;</span>
+<span class="s">int main() { std::thread t([]{}); t.join(); }</span>
+<span class="s">EOF</span>
+
+g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-pthread<span class="w"> </span>/tmp/tsan_probe.cc<span class="w"> </span>-o<span class="w"> </span>/tmp/tsan_probe<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>/tmp/tsan_probe<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"TSan OK"</span>
+</code></pre></div>
+
+<p>如果链接失败，先安装对应运行库（例如 Debian/Ubuntu 的 <code>libtsan</code> 包），或改用 <code>clang++ -fsanitize=thread</code>。</p>
+<h3 id="1_2">步骤 1：准备可复现的计数器</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// race_counter.cc</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="kt">long</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">iters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">iters</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">++</span><span class="n">counter</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">iters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pool</span><span class="p">;</span>
+<span class="w">    </span><span class="n">pool</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">threads</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">threads</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="n">iters</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">threads</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">iters</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"counter = %ld, expected = %ld, diff = %ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">counter</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">counter</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O2<span class="w"> </span>-pthread<span class="w"> </span>race_counter.cc<span class="w"> </span>-o<span class="w"> </span>race_counter
+./race_counter<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">1000000</span>
+./race_counter<span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">2000000</span>
+</code></pre></div>
+
+<p>观察 <code>diff</code>。它可能为 0，也可能为正数。<strong>多跑几次</strong>，并尝试不同线程数与迭代数。不要因为一次为 0 就下结论。</p>
+<h3 id="2-tsan">步骤 2：用 TSan 复现并读报告</h3>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-pthread<span class="w"> </span>race_counter.cc<span class="w"> </span>-o<span class="w"> </span>race_counter_tsan
+
+<span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="s2">"halt_on_error=0 history_size=7 report_bugs=1"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>./race_counter_tsan<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">1000000</span>
+</code></pre></div>
+
+<p>建议多跑几轮：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">10</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="s2">"halt_on_error=0"</span><span class="w"> </span>./race_counter_tsan<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">200000</span><span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;&gt;tsan.log<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="k">done</span>
+grep<span class="w"> </span>-c<span class="w"> </span><span class="s2">"WARNING: ThreadSanitizer: data race"</span><span class="w"> </span>tsan.log
+</code></pre></div>
+
+<p>报告解读练习：</p>
+<ol>
+<li>找到 <code>Write of size ...</code> 与 <code>Previous write of size ...</code>，确认冲突的是 <code>counter</code>；</li>
+<li>找到 <code>Location is global 'counter'</code>，确认是全局变量；</li>
+<li>找到两个线程的创建栈，确认它们来自 <code>main</code>；</li>
+<li>把报告里的行号映射回源码，标出 <code>++counter</code> 的 load/add/store 三步。</li>
+</ol>
+<p>再做一个<strong>读写竞争</strong>版本，证明读也会参与数据竞争：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// race_read_write.cc</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+
+<span class="kt">long</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">start</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">writer</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">start</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span><span class="w">                       </span><span class="c1">// 写</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">reader</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">start</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"read = %ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w">  </span><span class="c1">// 读，与写冲突</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
+<span class="w">    </span><span class="n">start</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="n">a</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">b</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>用 TSan 编译运行，报告会显示 <code>Read of size 8</code> 与 <code>Write of size 8</code>。这就是 acceptance 里「识别读写竞争而不只写写」的直接证据。</p>
+<p>注意：这里用 <code>std::atomic&lt;bool&gt;</code> 只是为了让两个线程同时起跑；<code>value</code> 本身仍是非原子共享变量。不要误以为「有一个 atomic 就整体安全」。</p>
+<h3 id="3_2">步骤 3：用锁修复计数器</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// fixed_counter_mutex.cc</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Counter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">incr</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="o">++</span><span class="n">value_</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">value_</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">value_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">Counter</span><span class="w"> </span><span class="n">counter</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">iters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">iters</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">counter</span><span class="p">.</span><span class="n">incr</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">iters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atoi</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pool</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">threads</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pool</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="n">iters</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">threads</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">iters</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"counter = %ld, expected = %ld, diff = %ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">counter</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span><span class="w"> </span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">counter</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>验证：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-fno-omit-frame-pointer<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-pthread<span class="w"> </span>fixed_counter_mutex.cc<span class="w"> </span>-o<span class="w"> </span>fixed_counter_mutex_tsan
+
+<span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="s2">"halt_on_error=1"</span><span class="w"> </span>./fixed_counter_mutex_tsan<span class="w"> </span><span class="m">8</span><span class="w"> </span><span class="m">1000000</span>
+</code></pre></div>
+
+<p>期望：<code>diff = 0</code>，且 TSan 没有任何 <code>data race</code> 报告。再用 <code>-O2</code> 跑普通构建，确认结果稳定为 0。</p>
+<p>对照实验：把 <code>long</code> 换成 <code>std::atomic&lt;long&gt;</code> 并只用 <code>fetch_add</code>，TSan 也应该干净。但要说明边界：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 这个自增是原子的</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">n</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">n</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+
+<span class="c1">// 但下面这个「检查 + 自增」不是逻辑原子的</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">n</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="4_2">步骤 4：复合操作边界实验</h3>
+<p>构造一个「上限计数器」：最多允许 <code>limit</code> 次成功，超过则拒绝。先写错误版本：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// limit_race.cc</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">constexpr</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">kLimit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">admitted</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">rejected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">iters</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">iters</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">admitted</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kLimit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">admitted</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="o">++</span><span class="n">rejected</span><span class="p">;</span><span class="w">   </span><span class="c1">// 这里也有竞争</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pool</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="n">pool</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">pool</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"admitted = %ld (limit %ld), rejected = %ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">admitted</span><span class="p">.</span><span class="n">load</span><span class="p">(),</span><span class="w"> </span><span class="n">kLimit</span><span class="p">,</span><span class="w"> </span><span class="n">rejected</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>运行后观察：</p>
+<ul>
+<li><code>admitted</code> 可能大于 <code>kLimit</code>，因为检查和自增之间被插队；</li>
+<li><code>rejected</code> 本身无锁自增，TSan 会报另一个竞争。</li>
+</ul>
+<p>用锁修复「检查 + 自增 + 拒绝计数」这一组逻辑：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Admission</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">Admission</span><span class="p">(</span><span class="kt">long</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">limit_</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">tryAdmit</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">admitted_</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">limit_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="o">++</span><span class="n">admitted_</span><span class="p">;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="o">++</span><span class="n">rejected_</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">admitted</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">admitted_</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">rejected</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">rejected_</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">limit_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">admitted_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">rejected_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>验证时不变量：</p>
+<div class="codehilite"><pre><span></span><code>admitted &lt;= limit
+admitted + rejected == 总尝试次数（如果每次调用只走一条路径）
+</code></pre></div>
+
+<p>这正是「逻辑原子性」：<strong>多个字段和多个步骤必须一起变化</strong>。你可以把 <code>admitted_</code> 做成原子变量，但 <code>admitted_ &lt; limit_</code> 与 <code>++admitted_</code> 之间的窗口仍会破坏不变量。</p>
+<p>进阶：用 CAS 实现无锁版本，并讨论 ABA、饥饿与可读性代价。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="nf">tryAdmitLockFree</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">admitted_</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">cur</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">limit_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">admitted_</span><span class="p">.</span><span class="n">compare_exchange_weak</span><span class="p">(</span>
+<span class="w">                </span><span class="n">cur</span><span class="p">,</span><span class="w"> </span><span class="n">cur</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">,</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">rejected_</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>结论不是「无锁更好」，而是：<strong>简单计数器可以无锁；一旦涉及多字段不变量、调试成本、可读性，锁往往更合适。</strong></p>
+<h3 id="5_1">步骤 5：对象寿命与逻辑不变量修复</h3>
+<p>写一个「连接注册表 + 快照」实验：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// lifetime_race.cc</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Connection</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">;</span>
+<span class="w">    </span><span class="o">~</span><span class="n">Connection</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"connection %d destroyed</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">fd</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">g_mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">g_conns</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">ioWorker</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">g_mu</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_conns</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">g_conns</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span><span class="w">  </span><span class="c1">// 锁内快照</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 锁外使用；conn 保证对象活着</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"use connection %d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">conn</span><span class="o">-&gt;</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">closer</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">fd</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span><span class="w"> </span><span class="n">old</span><span class="p">;</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">g_mu</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">g_conns</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">g_conns</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">);</span>
+<span class="w">            </span><span class="n">g_conns</span><span class="p">.</span><span class="n">erase</span><span class="p">(</span><span class="n">it</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// old 在锁外析构</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">g_mu</span><span class="p">);</span>
+<span class="w">        </span><span class="n">g_conns</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Connection</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Connection</span><span class="p">{</span><span class="mi">1</span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">ioWorker</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="n">closer</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">a</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="n">b</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>用两种 sanitizer 分别验证：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 数据竞争</span>
+g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-pthread<span class="w"> </span>lifetime_race.cc<span class="w"> </span>-o<span class="w"> </span>lifetime_tsan
+
+<span class="c1"># 对象寿命（与 TSan 不能同时开）</span>
+g++<span class="w"> </span>-std<span class="o">=</span>c++20<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>address<span class="w"> </span>-pthread<span class="w"> </span>lifetime_race.cc<span class="w"> </span>-o<span class="w"> </span>lifetime_asan
+
+<span class="nv">TSAN_OPTIONS</span><span class="o">=</span><span class="s2">"halt_on_error=1"</span><span class="w"> </span>./lifetime_tsan
+<span class="nv">ASAN_OPTIONS</span><span class="o">=</span><span class="s2">"detect_leaks=1"</span><span class="w"> </span>./lifetime_asan
+</code></pre></div>
+
+<p>然后做「错误版本」对照：把 <code>shared_ptr</code> 换成裸指针 <code>Connection*</code>，在 <code>closer</code> 里 <code>delete</code>，<code>ioWorker</code> 仍可能使用它。ASan 会报 heap-use-after-free；TSan 可能报指针读写竞争。<strong>两种工具关注不同问题，不能互相替代。</strong></p>
+<p>修复后的契约要写清楚：</p>
+<ol>
+<li>注册表的读写都在 <code>g_mu</code> 下；</li>
+<li>使用方拿 <code>shared_ptr</code> 快照，保证对象寿命；</li>
+<li>删除方把 <code>shared_ptr</code> 移出锁外析构，避免持锁执行析构；</li>
+<li>业务不变量「表里没有的 fd 不能再被使用」由「锁内查找 + 快照」共同保证；</li>
+<li>如果需要「关闭后不再处理新事件」，还要在 <code>Connection</code> 内部加状态机与同步，不能只靠注册表。</li>
+</ol>
+<h3 id="6sourcestudy">步骤 6：sourceStudy 核对清单</h3>
+<p>沿节点资源 <code>https://en.cppreference.com/w/cpp/language/multithread.html</code> 阅读，并记录：</p>
+<ul>
+<li><strong>定义</strong>：找到 data race / conflicting actions / happens-before / synchronizes-with 的原文定义，抄下关键句并翻译。</li>
+<li><strong>示例</strong>：核对页面中关于 <code>std::thread</code>、mutex、atomic 的示例，确认哪些操作建立 happens-before。</li>
+<li><strong>错误处理路径</strong>：关注 <code>std::mutex::lock</code> 抛异常、<code>try_lock</code> 失败、<code>std::thread</code> 构造失败、<code>join</code> 前对象析构等边界。</li>
+<li><strong>适用版本</strong>：记录 C++11 起的内存模型；<code>std::atomic</code>、<code>std::thread</code>、<code>std::mutex</code> 的最低标准版本；TSan 对编译器/标准库版本的要求。</li>
+<li><strong>边界条件</strong>：<code>volatile</code> 与原子/同步的区别；原子操作与数据竞争的关系；<code>memory_order_relaxed</code> 不建立跨线程顺序；<code>detach</code> 不提供 join 的同步保证。</li>
+<li><strong>与本课实验的对应</strong>：把页面定义映射到 <code>race_counter.cc</code>、<code>limit_race.cc</code>、<code>lifetime_race.cc</code> 的具体行，写明「哪两个访问冲突、缺少哪条 happens-before」。</li>
+</ul>
+<p>记录模板：</p>
+<div class="codehilite"><pre><span></span><code>资源：
+版本/访问日期：
+定义摘录：
+实验对应：
+边界条件：
+仍不确定的问题：
+</code></pre></div>
+
+<h3 id="7">步骤 7：验收清单</h3>
+<p>完成以下检查才算通过：</p>
+<ul>
+<li>[ ] 普通构建能复现 <code>diff != 0</code>（至少一次），并记录线程数、迭代数、机器负载。</li>
+<li>[ ] TSan 能报出 <code>counter</code> 上的 data race，且报告包含两个访问栈。</li>
+<li>[ ] 读写竞争实验能报出 <code>Read of size ...</code> 与 <code>Write of size ...</code>，而不只是 write/write。</li>
+<li>[ ] 加锁修复后 TSan 干净，<code>diff == 0</code>，多次运行稳定。</li>
+<li>[ ] 能解释为什么 <code>std::atomic</code> 修好了计数器，却修不好 <code>check-then-act</code> 上限逻辑。</li>
+<li>[ ] 修复后的代码包含对象寿命处理（<code>shared_ptr</code> 快照 / 所有权转移）与逻辑不变量（<code>admitted &lt;= limit</code>、<code>admitted + rejected == total</code>）。</li>
+<li>[ ] 能说清 <code>volatile</code> 为什么不能替代 <code>std::atomic</code> 或 mutex。</li>
+<li>[ ] 记录了编译器、标准库、TSan 版本，以及资源页面的适用版本与边界条件。</li>
+</ul>
+<hr />
+<h2 id="_8">自测题</h2>
+<h3 id="1counter">题目 1：<code>counter++</code> 是原子操作吗？</h3>
+<p>下面代码用 4 个线程各执行 100 万次 <code>++counter</code>，为什么结果可能小于 400 万？请说明 <code>counter++</code> 的步骤、属于哪种竞争，并给出两种修复方式。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">long</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">++</span><span class="n">counter</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="2volatile-bool-stop">题目 2：<code>volatile bool stop</code> 能作为线程停止标志吗？</h3>
+<p>下面的代码有什么问题？请说明 <code>volatile</code> 的语义，并给出正确写法。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">volatile</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stop</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// do work</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="3_3">题目 3：线程安全和可重入有什么区别？</h3>
+<p>请分别解释「线程安全」和「可重入」，并构造一个「线程安全但不可重入」的例子。再说明在公众号后台的连接关闭回调里，为什么这个区别很重要。</p>
+<hr />
+<h2 id="_9">自测题参考答案</h2>
+<h3 id="1_3">答案 1</h3>
+<p><code>counter++</code> 不是原子操作，它通常被拆成三步：</p>
+<div class="codehilite"><pre><span></span><code>load  counter -&gt; 寄存器
+add   1
+store 寄存器 -&gt; counter
+</code></pre></div>
+
+<p>多个线程的这三步可能交错。例如两个线程都读到 0，都加 1，都写回 1，最终结果为 1 而不是 2。这属于<strong>读-改-写（read-modify-write）复合操作</strong>导致的竞争；从访问组合看，既可能是写写竞争，也可能是读写竞争，本质是缺少同步导致的丢更新。更严格地说，<code>counter</code> 是非原子共享变量，多个线程无 happens-before 地访问且至少一个写，构成 C++ 数据竞争，导致未定义行为。</p>
+<p>两种修复：</p>
+<p><strong>方式一：mutex</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="kt">long</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="o">++</span><span class="n">counter</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>方式二：<code>std::atomic</code></strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">long</span><span class="o">&gt;</span><span class="w"> </span><span class="n">counter</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">worker</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000000</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">counter</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>补充：如果业务是「检查上限再自增」，仅用 <code>fetch_add</code> 不够，因为检查与自增不是一个原子操作，需要 CAS 循环或锁。</p>
+<h3 id="2_2">答案 2</h3>
+<p>不能。<code>volatile</code> 的语义是「这个对象的读写具有可观察副作用，编译器不要优化掉、不要合并」，它主要用于内存映射 I/O、信号处理等场景。它<strong>不建立 happens-before</strong>、<strong>不提供原子性</strong>、<strong>不保证跨线程可见性</strong>、<strong>不阻止 CPU 重排</strong>。</p>
+<p>因此 <code>volatile bool stop</code> 仍然构成数据竞争（一个线程读、另一个线程写，且没有同步），仍然是未定义行为。所谓「加了 volatile 就能停」只是某些平台/编译器下的偶然现象。</p>
+<p>正确写法：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stop</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stop</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// do work</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">stop</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>如果 <code>stop</code> 还要与其它数据配合（例如停止前发布一批结果），应使用 <code>release</code>/<code>acquire</code>，或用 mutex + 条件变量：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span><span class="w"> </span><span class="n">cv</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">cv</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lk</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">stop</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="n">stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">cv</span><span class="p">.</span><span class="n">notify_all</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="3_4">答案 3</h3>
+<ul>
+<li><strong>线程安全</strong>：多个线程同时调用对象的公开接口，不会破坏内部状态，不会产生数据竞争。通常通过内部加锁、原子操作或无共享状态实现。</li>
+<li><strong>可重入</strong>：函数在执行过程中被再次调用（同一线程递归、信号处理、回调）仍然正确。通常要求不依赖共享可变状态，或不持有不可重入的锁。</li>
+</ul>
+<p>「线程安全但不可重入」的例子：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Registry</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">forEach</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">fn</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">values_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">fn</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w">   </span><span class="c1">// 回调里再次调用 forEach -&gt; 同一线程重复锁 mu_ -&gt; 死锁</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">values_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>多线程调用 <code>forEach</code> 不会数据竞争（有锁），所以它是线程安全的；但回调中递归调用 <code>forEach</code> 会死锁，所以它不可重入。</p>
+<p>在公众号后台的连接关闭回调里，这个区别很关键：关闭流程可能持有一把连接锁，然后调用用户回调；如果回调里又触发 <code>close()</code>、<code>send()</code>、指标上报，而它们也需要同一把锁，就会在同一线程上死锁。正确做法是：</p>
+<ul>
+<li>明确契约：回调中禁止调用本对象方法；</li>
+<li>或把回调移到锁外执行（先做快照，再回调）；</li>
+<li>或使用消息传递，把回调变成投递到 IO 线程的任务，避免持锁重入。</li>
+</ul>
+<hr />
+<h2 id="_10">推荐资源</h2>
+<ul>
+<li><strong>数据竞争与线程安全契约：参考文档 / 原始资料</strong></li>
+<li>链接：https://en.cppreference.com/w/cpp/language/multithread.html</li>
+<li>来源：en.cppreference.com</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：进阶</li>
+<li>免费：是</li>
+<li>阅读重点：<strong>共享与线程封闭</strong>、<strong>happens-before</strong>、data race 的定义、<code>std::thread</code> 的同步语义、mutex 与原子操作如何建立同步关系。</li>
+<li>用法：对照本课的 <code>race_counter.cc</code>、<code>limit_race.cc</code>、<code>lifetime_race.cc</code>，把页面里的定义逐条映射到实验中的两个冲突访问；记录适用标准版本（C++11 起的 memory model）与边界条件（<code>volatile</code> 不参与同步、<code>relaxed</code> 不建立跨线程顺序、<code>detach</code> 不提供 join 的同步保证）。</li>
+</ul>
+<p>建议阅读顺序：</p>
+<ol>
+<li>先读 data race / conflicting actions 的定义，写下判定清单；</li>
+<li>再读 happens-before / synchronizes-with，画出「线程创建 → 写 → unlock → lock → 读 → join」的箭头图；</li>
+<li>最后读 <code>std::thread</code>、<code>std::mutex</code>、<code>std::atomic</code> 的同步说明，核对本课示例；</li>
+<li>把仍不确定的边界条件记进 sourceStudy 模板，下一课带着问题验证。</li>
+</ol>
+<hr />
+<h2 id="_11">本课小结</h2>
+<p>本课从「海量连接」转向「并发正确性」，核心只有一句话：</p>
+<blockquote>
+<p>不同线程无同步地冲突访问同一内存且至少一个为写，会构成 C++ 数据竞争并导致未定义行为。</p>
+</blockquote>
+<p>把这句话拆成可执行的规则：</p>
+<ol>
+<li><strong>先分清共享与封闭</strong>：栈变量、<code>thread_local</code>、对象封闭能消除大量竞争；必须共享的状态（会话表、限流桶、注册表、配置、指标）要写清契约。</li>
+<li><strong>再问 happens-before</strong>：线程创建/join、mutex 的 unlock/lock、原子 release/acquire、条件变量，都是建立可见性与顺序的手段；没有 happens-before 的冲突读写就是数据竞争。</li>
+<li><strong>最后看逻辑原子性</strong>：<code>counter++</code>、check-then-act、多字段不变量，都不是「换个原子变量」就能解决的；锁保护的是不变量，不是某一行代码。</li>
+<li><strong>线程安全不等于可重入</strong>：锁能保证并发不炸，但回调重入、持锁调用用户代码仍可能死锁；接口契约要写明。</li>
+<li><strong>对象寿命是第二条战线</strong>：<code>shared_ptr</code> 快照、所有权转移、锁外析构，能避免「竞争 + use-after-free」叠加。</li>
+<li><strong><code>volatile</code> 不是同步原语</strong>：它不建立 happens-before、不提供原子性，不能消除数据竞争。</li>
+<li><strong>工具要配套</strong>：TSan 找数据竞争，ASan 找寿命问题，二者不能同时链接；TSan 只报实际发生的竞争，需要压力与多轮运行。</li>
+<li><strong>修复要可验证</strong>：TSan 干净、<code>diff == 0</code>、不变量成立、多次运行稳定，才算修完；不要用 <code>sleep</code>、日志、重试掩盖问题。</li>
+</ol>
+<p>对公众号后台工程师来说，最重要的转变是：<strong>看到「偶发错数/偶发崩溃」时，不要先怀疑业务逻辑，先画共享状态图</strong>——谁写、谁读、哪把锁、对象活到什么时候、不变量是什么。把「偶发」变成「可检查的规则」，才是本课真正要带走的能力。</p>
+<hr />
+<h2 id="_12">配套练习建议</h2>
+<ol>
+<li><strong>计数器三连</strong>：分别用「无锁」「mutex」「atomic」实现同一个计数器，记录普通构建与 TSan 构建下的结果，写一页对比：性能、可读性、正确性边界。</li>
+<li><strong>读写竞争专项</strong>：构造「一个线程写结构体字段，另一个线程读同一字段」的例子，用 TSan 证明读也参与数据竞争；再分别用 mutex、atomic、线程封闭三种方式修复。</li>
+<li><strong>限流桶改造</strong>：把本课的 <code>TokenBucket</code> 改成「按用户分片 + 每片一把锁」，测量不同分片数下的吞吐；讨论跨片统计总数时如何保持逻辑原子性。</li>
+<li><strong>会话表分片</strong>：实现 <code>SessionTable</code> 的 16 片哈希版本，写压力测试：并发 <code>find</code> / <code>upsert</code> / <code>purgeExpired</code>；验证 <code>size()</code> 的统计口径，并说明它为什么可能只是一个近似值。</li>
+<li><strong>对象寿命实验</strong>：用裸指针、<code>shared_ptr</code>、<code>weak_ptr</code> 三种方式管理连接注册表，分别用 ASan 验证；记录每种方式的析构时机与回调安全性。</li>
+<li><strong>可重入修复</strong>：把 <code>Registry::forEach</code> 改成「锁内拷贝快照、锁外回调」，用递归回调测试不再死锁；再讨论快照带来的内存与一致性代价。</li>
+<li><strong>TSan 报告归档</strong>：收集至少 5 份不同类型的 TSan 报告（write/write、read/write、堆、全局、栈），每份写出「冲突内存、两个访问栈、缺少的 happens-before、修复方案」。</li>
+<li><strong>sourceStudy 对照</strong>：逐条抄写 cppreference 中 data race、happens-before、synchronizes-with 的定义，标注对应的 C++ 标准版本，并与自己的实验行号一一对应。</li>
+<li><strong>代码审查清单</strong>：为团队写一份「共享状态审查清单」：新增共享变量时必答的 6 个问题（谁写、谁读、哪把锁、寿命、不变量、回调重入），在下次 CR 中实际使用。</li>
+<li><strong>压测复现</strong>：在 2 核、4 核、8 核机器上分别跑竞争计数器，记录 <code>diff</code> 分布与 TSan 报告数量，讨论「为什么核数越多越容易暴露」以及「为什么不能靠增加迭代次数保证复现」。</li>
+</ol><div class="pn"><span><a href="64.html">← 海量连接与接入治理</a></span><span>下一课 待更新</span></div></main></div></body></html>
