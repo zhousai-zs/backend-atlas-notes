@@ -1,0 +1,1174 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>75. 读写锁、快照与读密集优化 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（75/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details open><summary>领域 E（11/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="cur" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li class="todo">79. 竞态检测与并发故障复现 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li class="todo">76. 无锁进展保证与CAS结构 <em>待更新</em></li><li class="todo">78. 结构化并发、取消与停机 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">77. ABA与安全内存回收 <em>待更新</em></li><li class="todo">80. 并发模型选择与可证明边界 <em>待更新</em></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 75 课 · 领域 E · 阶段 3</p><p class="dl"><a href="../files/75-e-rwlock.md" download>⬇ 本课 Markdown</a></p><h1 id="75208">第 75/208 课：读写锁、快照与读密集优化</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段</td>
+<td>第 3 阶段 · 并发数据结构（读密集状态与版本发布）</td>
+</tr>
+<tr>
+<td>前置</td>
+<td>e-lock、e-order、b-smart</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>领域</td>
+<td>E</td>
+</tr>
+<tr>
+<td>标签</td>
+<td>Read Mostly Data、E、C++</td>
+</tr>
+<tr>
+<td>子分类</td>
+<td>并发数据结构</td>
+</tr>
+<tr>
+<td>节点 ID</td>
+<td>e-rwlock</td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Read Mostly Data</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>承接说明：前置节点 e-lock（互斥锁与锁粒度）解释了互斥锁会把读者也串行化；前置节点 e-order（C++ 内存序与发布订阅）解释了如何用 release/acquire 发布指针让读者看到完整对象；前置节点 b-smart（智能指针与共享所有权）解释了 <code>shared_ptr</code> 如何让多个读者共同持有同一份不可变对象、最后一个离开时回收。本课把三者接起来：读密集数据既可以靠 <code>shared_mutex</code> 允许多读者并发，也可以靠 copy-on-write + <code>shared_ptr</code> 原子发布，让读者拿到完整快照且写失败不影响旧版本。</p>
+</blockquote>
+<hr />
+<h2 id="_2">导读</h2>
+<p>先给“读密集数据”一个够用的定义：</p>
+<blockquote>
+<p>读密集数据是指<strong>读操作远多于写操作</strong>、并且每个读操作都希望能尽快拿到一份完整、自洽状态的那类共享数据。</p>
+</blockquote>
+<p>配置表、路由表、灰度开关、证书、模板消息开关、限流阈值，都属于这一类。它们的共同点是：每个请求都要读，运营或控制面偶尔才写；读的时候不能看到“改到一半”的状态；写失败的时候线上必须继续用旧状态。</p>
+<p>放到微信公众号后台，这些场景非常具体：</p>
+<ol>
+<li><strong>每个请求都要查 appid / 路由表 / 灰度开关</strong>。接入层收到一条请求，先根据 appid 找到对应的逻辑集群，再查这个集群是否命中了某个灰度开关，最后决定走新逻辑还是旧逻辑。一条请求可能读三到五次配置，写配置可能几分钟才发生一次。读和写的比例可能是几万比一。</li>
+<li><strong>运营热更新模板消息开关或路由配置</strong>。运营在后台点一下“关闭某类模板消息”，控制面会生成一份新的配置。这时正在处理的请求不能看到“一半新、一半旧”的表：不能出现 appid 已经指向新集群、但灰度开关还是旧值的情况，也不能出现 map 正在扩容、读者读到半截桶数组的情况。</li>
+<li><strong>写入构建新配置失败时，线上必须继续用旧的完整配置</strong>。新配置可能来自一次错误的发布、一个格式不合法的 JSON、一次校验不通过的灰度规则。构建失败就是构建失败，不能把旧配置改坏，也不能让读者拿到一个“改了一半”的对象。</li>
+<li><strong>若用一把互斥锁，读请求会互相排队</strong>。读操作本身不修改数据，却因为要拿同一把独占锁而被迫串行。核数越多，这种浪费越明显：读者明明可以并行，却被锁排成一队。</li>
+<li><strong>若用读写锁，写者可能被持续到来的读者饿死</strong>。读者不断进入临界区，写者一直排在队尾；配置热更新“看起来调用了”，但新配置迟迟不生效。更麻烦的是，C++ 标准并不规定读写锁的调度公平性，换一个标准库、换一个平台，行为可能完全不同。</li>
+</ol>
+<p>本课要建立三个核心认识：</p>
+<ol>
+<li><strong><code>shared_mutex</code> 解决的是“读者之间可以并行”</strong>，但它不解决“写者一定能在有限时间内拿到锁”。公平性是实现相关的，不能把业务正确性建立在“写者优先”这种假设上。</li>
+<li><strong>copy-on-write 快照解决的是“读者永远看完整版本”</strong>。写者复制一份、改副本、再整体替换指针；读者拿到的是一个不可变的 <code>shared_ptr&lt;const T&gt;</code>，读路径不需要锁。代价是每次写都要复制整个配置。</li>
+<li><strong>版本发布与回收是快照方案的另一半</strong>。发布必须用正确的原子操作建立 happens-before，让读者看到新指针时一定看到对象里的全部字段；回收靠 <code>shared_ptr</code> 的引用计数，读者持有旧快照期间旧版本不会被释放，历史版本数量必须可控。</li>
+</ol>
+<hr />
+<h2 id="_3">学习目标</h2>
+<h3 id="goals">goals</h3>
+<ul>
+<li>能解释 <code>shared_mutex</code> 与饥饿风险。</li>
+<li>能独立完成：实现路由配置不可变快照，比较共享锁与 <code>shared_ptr</code> 发布的性能。</li>
+</ul>
+<h3 id="acceptance">acceptance</h3>
+<ul>
+<li>读者只能观察完整版本。</li>
+<li>写入失败不影响旧快照。</li>
+</ul>
+<p>把这两条验收翻译成可检查的产物：</p>
+<ul>
+<li><strong>“读者只能观察完整版本”</strong>：在任意一次读取里，读者看到的配置必须来自同一个版本。快速验证可以用一组“必须同时出现”的 key（本课用 <code>canary_a</code> / <code>canary_b</code>），或者给整份配置加一个版本戳，检查读到的所有字段是否属于同一版本。压力测试中，每次 <code>audit()</code> 的结果都不能出现“一个 canary 是旧值、另一个是新值”。</li>
+<li><strong>“写入失败不影响旧快照”</strong>：构造一个会失败的更新（校验失败、复制失败、序列化失败都行），失败后旧配置的版本号、内容、可见性都不变；读者在失败更新前后读到的仍然是同一份完整的旧配置。</li>
+</ul>
+<p>这两条不是“测试通过就行”的口号，而是接口契约：<code>lookup</code> 返回的是哪一份版本、<code>update</code> 失败时旧版本是否保留、读者持有旧快照期间写者发布新版本会发生什么，都应该写进接口注释，并在测试里用可观察的行为钉死。</p>
+<hr />
+<h2 id="_4">为什么后端要懂</h2>
+<p>本节点给出的 why 是：<strong>安全实现配置热更新及路由表读取。</strong> “安全”这两个字至少包含四层含义，每一层在线上都能变成一次真实事故。</p>
+<h3 id="1">1. 读者不能看到“半成品”</h3>
+<p>配置更新通常不是“改一个字段”这么简单，而是“改一组互相依赖的字段”。比如路由表里 appid 到集群的映射、集群的权重、灰度开关三者必须一起生效。如果写者直接原地修改 <code>unordered_map</code>，读者在修改过程中读到的可能是：</p>
+<ul>
+<li>旧 appid 还在，但权重已经改成新值；</li>
+<li>map 正在 rehash，读者读到一部分旧桶、一部分新桶；</li>
+<li>新 key 已经插入，但对应的开关还没写进去。</li>
+</ul>
+<p>这类问题用 <code>shared_mutex</code> 把读写都锁住可以避免；用 copy-on-write 快照也可以避免，而且读路径更轻。关键是你要明确：<strong>读者看到的最小一致单位是什么</strong>。</p>
+<h3 id="2">2. 写失败不能污染线上</h3>
+<p>配置构建经常失败：JSON 解析失败、字段校验失败、引用了不存在的集群、权限检查失败。失败的更新必须“什么都没发生”：</p>
+<ul>
+<li>旧配置的版本号不变；</li>
+<li>旧配置的内容不变；</li>
+<li>正在读旧配置的请求不受影响；</li>
+<li>后续更新仍然可以基于旧配置继续尝试。</li>
+</ul>
+<p>如果实现是“先把旧 map 清空、再往里填新值”，那么中途抛异常就会留下一张残缺的表。正确做法只有两种：<strong>在副本上构建、成功后整体替换</strong>，或者<strong>在锁内修改但保证回滚</strong>。本课实践统一采用前者，因为它同时适用于共享锁方案和快照方案。</p>
+<h3 id="3">3. 读路径的成本会被放大</h3>
+<p>一条请求读三次配置，QPS 十万，就是三十万次读。读路径上多一次锁竞争、多一次拷贝、多一次原子操作，都会被放大成 CPU 和延迟。反过来说，读路径优化也必须建立在正确性之上：</p>
+<ul>
+<li>共享锁方案：读者拿 <code>shared_lock</code>，多个读者可以并行，但锁本身仍有原子操作和竞争成本；</li>
+<li>快照方案：读者只做一次 <code>shared_ptr</code> 的原子 load，然后读写普通内存，读路径几乎就是一次指针读取加引用计数；</li>
+<li>代价转到写路径：快照方案每次写都要复制整份配置，配置很大时写延迟和瞬时内存会上升。</li>
+</ul>
+<h3 id="4">4. 写者的进度必须有保证</h3>
+<p>如果读者源源不断，写者一直拿不到锁，配置就永远不生效。更隐蔽的情况是：写者“调用成功”了，但新配置只对后来的一部分读者可见，或者写者在一个队列里排队很久，运维以为已经发布完成。读写锁的公平性不是标准保证的，<strong>不能把热更新的时效性建立在“实现应该会照顾写者”的假设上</strong>。快照方案把写路径缩短为“复制 + 原子替换”，读者不会阻塞写者，写者的进度更容易预期；但写者仍然要承担复制成本。</p>
+<p>一句话：<strong>懂读密集数据，你才知道什么时候该用共享锁、什么时候该复制快照；不懂它，你可能会用一把大锁把读请求排成队，或者用“原地改 map”把线上配置改成半成品。</strong></p>
+<hr />
+<h2 id="_5">直觉 → 原理</h2>
+<p>先把本课会反复出现的几个词钉住：</p>
+<table>
+<thead>
+<tr>
+<th>术语</th>
+<th>本课口径</th>
+<th>关键问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>共享锁</td>
+<td>多个读者可以同时持有的锁</td>
+<td>读者之间是否真的并行</td>
+</tr>
+<tr>
+<td>独占锁</td>
+<td>同一时刻只能有一个持有者的锁</td>
+<td>写者何时能拿到锁</td>
+</tr>
+<tr>
+<td>饥饿</td>
+<td>某类线程长期拿不到锁</td>
+<td>公平性由谁保证</td>
+</tr>
+<tr>
+<td>copy-on-write</td>
+<td>写时复制：改副本，不改已发布对象</td>
+<td>复制的成本落在谁身上</td>
+</tr>
+<tr>
+<td>快照</td>
+<td>某一时刻完整、不可变的一份状态</td>
+<td>读者如何获得并持有它</td>
+</tr>
+<tr>
+<td>发布</td>
+<td>把新对象的指针以同步方式交给读者</td>
+<td>对象内容何时对读者可见</td>
+</tr>
+<tr>
+<td>回收</td>
+<td>没有任何读者持有时释放旧版本</td>
+<td>旧版本会保留多久</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="1-shared_mutex">1. <code>shared_mutex</code> 与饥饿风险</h3>
+<h4 id="11">1.1 读密集的直觉</h4>
+<p>先看一个非常常见的错误写法：用一把普通 <code>std::mutex</code> 保护路由表。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">routes</span><span class="p">;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">lookup</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">appid</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">routes</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">appid</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">routes</span><span class="p">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"&lt;miss&gt;"</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">appid</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">backend</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">routes</span><span class="p">[</span><span class="n">appid</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backend</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这当然是对的，也没有数据竞争。但它的代价是：<strong>所有读者都被同一把锁串行化</strong>。读操作不修改共享数据，读者之间本来没有冲突，却要排队进入临界区。对于“每个请求查好几次、写几分钟才一次”的读密集场景，这是纯粹的浪费。</p>
+<p><code>std::shared_mutex</code>（C++17，头文件 <code>&lt;shared_mutex&gt;</code>）提供了两级访问：</p>
+<ul>
+<li><strong>共享所有权</strong>：读者用 <code>std::shared_lock&lt;std::shared_mutex&gt;</code>，多个 <code>shared_lock</code> 可以同时持有；</li>
+<li><strong>独占所有权</strong>：写者用 <code>std::unique_lock&lt;std::shared_mutex&gt;</code> 或 <code>std::lock_guard&lt;std::shared_mutex&gt;</code>，它与任何共享锁、独占锁都互斥。</li>
+</ul>
+<p>规则可以概括成一句话：<strong>共享锁与共享锁相容，共享锁与独占锁互斥，独占锁与独占锁互斥。</strong></p>
+<h4 id="12">1.2 一个完整可编译的例子</h4>
+<p>下面这段程序让 4 个读者并发查表，1 个写者偶尔更新：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// shared_mutex_demo.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;shared_mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RouteTable</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">lookup</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">appid</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 多个读者可以同时持有 shared_lock</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">routes_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">appid</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">routes_</span><span class="p">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"&lt;miss&gt;"</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">update</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">appid</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">backend</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 写者独占，和所有读者、其他写者互斥</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="n">routes_</span><span class="p">[</span><span class="n">appid</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">backend</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">routes_</span><span class="p">{</span>
+<span class="w">        </span><span class="p">{</span><span class="s">"wx_app_1"</span><span class="p">,</span><span class="w"> </span><span class="s">"logic-a"</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="s">"wx_app_2"</span><span class="p">,</span><span class="w"> </span><span class="s">"logic-b"</span><span class="p">},</span>
+<span class="w">        </span><span class="p">{</span><span class="s">"wx_app_3"</span><span class="p">,</span><span class="w"> </span><span class="s">"logic-c"</span><span class="p">},</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">RouteTable</span><span class="w"> </span><span class="n">table</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stop</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">readers</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">readers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="o">&amp;</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">long</span><span class="w"> </span><span class="n">hits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stop</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                    </span><span class="s">"wx_app_"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">table</span><span class="p">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">"&lt;miss&gt;"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="o">++</span><span class="n">hits</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"reader %d hits=%ld</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">hits</span><span class="p">);</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">table</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">"wx_app_1"</span><span class="p">,</span><span class="w"> </span><span class="s">"logic-a-"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">stop</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">th</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">readers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">th</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>-o<span class="w"> </span>shared_mutex_demo<span class="w"> </span>shared_mutex_demo.cpp
+./shared_mutex_demo
+</code></pre></div>
+
+<p>注意：<code>lookup</code> 是 <code>const</code> 成员函数，但 <code>mu_</code> 需要被锁住（<code>shared_lock</code> 会修改锁的内部状态），所以 <code>mu_</code> 声明为 <code>mutable</code>。这是并发接口里很常见的写法。</p>
+<h4 id="13">1.3 饥饿：标准没有承诺公平</h4>
+<p><code>shared_mutex</code> 只承诺互斥语义，<strong>不承诺调度公平性</strong>。C++ 标准没有规定它是读者优先、写者优先还是先进先出；<code>pthread_rwlock_t</code> 也一样，具体行为取决于实现、平台、甚至负载。这意味着：</p>
+<ul>
+<li>如果实现偏袒读者，读者不断到来时，写者可能一直排在队尾，拿不到独占锁——这就是<strong>写者饥饿</strong>。配置热更新会表现为“代码调用了 <code>update</code>，但新配置迟迟不生效”。</li>
+<li>如果实现偏袒写者，写者频繁到来时，读者会被堵住，读延迟上升。</li>
+<li>如果实现是某种 FIFO，看起来更公平，但标准同样不保证。</li>
+</ul>
+<p>下面这段程序故意让读者频繁进入、并在共享锁内停留一小段时间（真实代码不应在锁内 sleep / 做 IO），然后用带超时的 <code>try_lock_for</code> 观察写者是否能及时拿到锁：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// rwlock_starvation.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;shared_mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">shared_timed_mutex</span><span class="w"> </span><span class="n">g_mu</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">g_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_stop</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">reader</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">g_stop</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_timed_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">g_mu</span><span class="p">);</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">g_table</span><span class="p">;</span>
+<span class="w">        </span><span class="c1">// 故意放大“读者持续进入”的窗口；真实代码不要在锁内 sleep/IO</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">microseconds</span><span class="p">(</span><span class="mi">200</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">readers</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">readers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">50</span><span class="p">));</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_timed_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">g_mu</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">defer_lock</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">got</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lock</span><span class="p">.</span><span class="n">try_lock_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">500</span><span class="p">));</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">waited_us</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">microseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">).</span><span class="n">count</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">got</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">g_table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">  </span><span class="c1">// 模拟发布新配置</span>
+<span class="w">        </span><span class="n">lock</span><span class="p">.</span><span class="n">unlock</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">g_stop</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">th</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">readers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">th</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"writer got lock within 500ms: %s, waited %lld us</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">got</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"yes"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"no"</span><span class="p">,</span>
+<span class="w">                </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">waited_us</span><span class="p">));</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>-o<span class="w"> </span>rwlock_starvation<span class="w"> </span>rwlock_starvation.cpp
+./rwlock_starvation
+</code></pre></div>
+
+<p>这段程序不承诺输出某个固定结果。在偏袒读者的实现上，写者可能等到超时；在偏袒写者或使用公平策略的实现上，写者可能很快拿到锁。<strong>你应该在自己的平台和标准库上跑，记录结果，而不是把某次运行的耗时当成普遍规律。</strong></p>
+<p>实践中有三个直接结论：</p>
+<ol>
+<li><strong>不要在持有 <code>shared_lock</code> 时做耗时 IO、RPC、日志落盘</strong>。锁的持有时间越长，写者等待越久，饥饿越容易被放大。</li>
+<li><strong>读写锁内部通常比普通 <code>mutex</code> 重</strong>。它要维护读者计数、写者状态和等待队列；如果读临界区只是查一个很小的表、持锁时间极短，<code>shared_mutex</code> 未必比 <code>mutex</code> 快，甚至可能更慢。</li>
+<li><strong>不要把“写者最终会拿到锁”当作业务保证</strong>。如果热更新有时效要求，需要额外的监控、看门狗或改用快照发布。</li>
+</ol>
+<hr />
+<h3 id="2-copy-on-write">2. copy-on-write 快照</h3>
+<h4 id="21">2.1 直觉：写者改副本，读者看旧版</h4>
+<p>共享锁的思路是“让读者和写者互斥，但读者之间并行”。copy-on-write 的思路更进一步：<strong>根本不让读者和写者碰同一份可变对象</strong>。</p>
+<p>具体做法是：</p>
+<ol>
+<li>当前配置用 <code>std::shared_ptr&lt;const RouteConfig&gt;</code> 持有；</li>
+<li>配置对象一旦发布，就<strong>不再修改</strong>（逻辑上不可变）；</li>
+<li>写者先读到当前指针，复制构造一份新配置，在副本上修改；</li>
+<li>修改和校验都成功后，把新指针原子地替换上去；</li>
+<li>任何一步失败，旧指针原封不动，读者继续读旧版本。</li>
+</ol>
+<p>读者拿到的永远是一个完整的 <code>const</code> 对象：它不会看到 map 正在 rehash，也不会看到“一半新一半旧”。写者也不需要在读者的读路径上加锁：读者只需要做一次原子 load。</p>
+<p>这里的关键约定是：<strong>发布之后不再修改对象</strong>。如果你把新配置发布出去以后又去改它，读者就会在无锁读路径上看到数据竞争，甚至看到撕裂状态。</p>
+<h4 id="22">2.2 完整可编译的例子</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1">// cow_snapshot.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdexcept&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">RouteConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">routes</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="c1">// 当前版本。所有读写都通过原子操作访问它。</span>
+<span class="n">ConfigPtr</span><span class="w"> </span><span class="n">g_current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="n">ConfigPtr</span><span class="w"> </span><span class="nf">load</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_load_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">g_current</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">publish</span><span class="p">(</span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_store_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">g_current</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">next</span><span class="p">),</span>
+<span class="w">                               </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">reload</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">make_it_fail</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load</span><span class="p">();</span><span class="w">                           </span><span class="c1">// 1. 读旧快照</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">old</span><span class="p">);</span><span class="w">  </span><span class="c1">// 2. 复制整份配置</span>
+
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">make_it_fail</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="s">"route validation failed"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">next</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="s">"wx_app_1"</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"logic-a-new"</span><span class="p">;</span><span class="w">     </span><span class="c1">// 3. 只改副本</span>
+<span class="w">        </span><span class="n">next</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">publish</span><span class="p">(</span><span class="n">ConfigPtr</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">next</span><span class="p">)));</span><span class="w">          </span><span class="c1">// 4. 整体发布</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 失败：旧指针没有被替换，读者继续看到旧版本</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"reload failed: %s (old snapshot kept)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">what</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">lookup</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">cfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load</span><span class="p">();</span><span class="w">  </span><span class="c1">// 读者钉住一份完整快照</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">"&lt;miss&gt;"</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">init</span><span class="o">-&gt;</span><span class="n">routes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="p">{</span><span class="s">"wx_app_1"</span><span class="p">,</span><span class="w"> </span><span class="s">"logic-a"</span><span class="p">},</span>
+<span class="w">            </span><span class="p">{</span><span class="s">"wx_app_2"</span><span class="p">,</span><span class="w"> </span><span class="s">"logic-b"</span><span class="p">},</span>
+<span class="w">        </span><span class="p">};</span>
+<span class="w">        </span><span class="n">init</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">publish</span><span class="p">(</span><span class="n">ConfigPtr</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">init</span><span class="p">)));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stop</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">reader</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stop</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lookup</span><span class="p">(</span><span class="s">"wx_app_1"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"&lt;miss&gt;"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"reader observed a partial snapshot!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="n">reload</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span><span class="w">  </span><span class="c1">// 成功：发布 version=2</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"after success: %s (version=%llu)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">lookup</span><span class="p">(</span><span class="s">"wx_app_1"</span><span class="p">).</span><span class="n">c_str</span><span class="p">(),</span>
+<span class="w">                </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">load</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">version</span><span class="p">));</span>
+
+<span class="w">    </span><span class="n">reload</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span><span class="w">   </span><span class="c1">// 失败：旧快照保留</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"after failure: %s (version=%llu)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">lookup</span><span class="p">(</span><span class="s">"wx_app_1"</span><span class="p">).</span><span class="n">c_str</span><span class="p">(),</span>
+<span class="w">                </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">load</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">version</span><span class="p">));</span>
+
+<span class="w">    </span><span class="n">stop</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="n">reader</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>-o<span class="w"> </span>cow_snapshot<span class="w"> </span>cow_snapshot.cpp
+./cow_snapshot
+</code></pre></div>
+
+<p>预期行为（逻辑上的，不是性能数字）：成功更新后 <code>wx_app_1</code> 变成 <code>logic-a-new</code>，版本变成 2；失败更新后仍然是 <code>logic-a-new</code>、版本仍然是 2。读者在整个过程中只会看到 <code>&lt;miss&gt;</code> 之外的两个完整版本之一。</p>
+<h4 id="23">2.3 和共享锁方案对比</h4>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th><code>shared_mutex</code> 方案</th>
+<th>copy-on-write 快照方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读者之间</td>
+<td>可以并行，但每次都要拿锁</td>
+<td>完全并行，只做一次原子 load</td>
+</tr>
+<tr>
+<td>读者与写者</td>
+<td>互斥：写者等所有读者退出</td>
+<td>基本不互斥：写者改副本，读者读旧版</td>
+</tr>
+<tr>
+<td>读者看到的中间状态</td>
+<td>不会，因为写者独占</td>
+<td>不会，因为已发布对象不可变</td>
+</tr>
+<tr>
+<td>写失败</td>
+<td>需要回滚或先构建副本再交换</td>
+<td>副本直接丢弃，旧指针不变</td>
+</tr>
+<tr>
+<td>写成本</td>
+<td>只改变化的字段</td>
+<td>每次复制整份配置</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>一份配置</td>
+<td>当前版本 + 仍被读者持有的旧版本</td>
+</tr>
+<tr>
+<td>热更新时效</td>
+<td>取决于锁调度，可能被读者饿死</td>
+<td>写者只受复制和发布成本影响</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>配置较小、更新不频繁、实现公平性可接受</td>
+<td>读极多、写较少、配置可复制、要求读路径极轻</td>
+</tr>
+</tbody>
+</table>
+<p>一句话总结：<strong>共享锁把复杂度放在“锁怎么调度”，快照把复杂度放在“复制和版本回收”。</strong></p>
+<hr />
+<h3 id="3_1">3. 版本发布与回收</h3>
+<h4 id="31">3.1 发布：先写完对象，再发布指针</h4>
+<p>快照方案能成立，前提是读者看到新指针时，一定能看到对象里的全部字段。这正好是 e-order 里讲的发布/订阅模式：</p>
+<ul>
+<li>写者先在副本上完成所有字段的写入；</li>
+<li>然后用 <strong>release</strong> 语义发布新指针；</li>
+<li>读者用 <strong>acquire</strong> 语义读取指针；</li>
+<li>一旦读者读到了新指针，写者在 release 之前的全部写入都对读者可见。</li>
+</ul>
+<p>C++17 里对 <code>shared_ptr</code> 的原子操作有现成的自由函数，声明在 <code>&lt;memory&gt;</code>（配合 <code>&lt;atomic&gt;</code> 使用）：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="w"> </span><span class="n">load</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_load_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">g_current</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="n">publish</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_store_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">g_current</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">next</span><span class="p">),</span>
+<span class="w">                               </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>也可以使用默认的 <code>std::atomic_load</code> / <code>std::atomic_store</code>，它们的默认内存序是 <code>seq_cst</code>，同样能建立所需的可见性，只是约束更强。C++20 起还可以使用 <code>std::atomic&lt;std::shared_ptr&lt;const RouteConfig&gt;&gt;</code>，把原子性直接做进类型里。</p>
+<p>需要特别注意：<strong>不要</strong>把 <code>shared_ptr</code> 当普通变量，一边用普通赋值写、一边用普通读取读。<code>shared_ptr</code> 的引用计数本身是原子的，但指针和引用计数的组合操作不是；普通读写并发是数据竞争，必须用上面的原子函数或 <code>atomic&lt;shared_ptr&gt;</code>。</p>
+<h4 id="32">3.2 回收：最后一个读者离开时释放</h4>
+<p>快照的回收非常自然：</p>
+<ul>
+<li>旧版本不需要手动 <code>delete</code>；</li>
+<li>当前指针被替换后，如果没有读者还持有旧版本，旧对象的引用计数归零，自动析构；</li>
+<li>正在读旧版本的请求持有一个 <code>shared_ptr</code>，它会把旧版本“钉住”，读完释放后旧版本才可能被回收。</li>
+</ul>
+<p>这就是“版本回收”的全部机制。它带来的边界是：<strong>历史版本的数量等于“当前指针 + 仍被读者持有的旧版本”</strong>。如果读者只是短暂地持有快照，旧版本很快回收；如果读者把 <code>shared_ptr</code> 存进缓存、队列、异步任务，长时间不释放，旧版本就会一直占着内存。</p>
+<p>如果业务额外保存了一份版本列表（比如为了回滚保留最近 N 个版本），那必须<strong>设置上限</strong>，否则内存会随着热更新次数线性增长。纯 <code>shared_ptr</code> 发布不需要版本列表，但前提是读者不长期握着指针。</p>
+<p>下面这段程序演示“读者钉住旧版本”：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// version_reclaim.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Config</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">payload</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">Ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">Config</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="n">Ptr</span><span class="w"> </span><span class="n">g_current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Config</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Config</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s">"old"</span><span class="p">});</span>
+<span class="n">std</span><span class="o">::</span><span class="n">weak_ptr</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">Config</span><span class="o">&gt;</span><span class="w"> </span><span class="n">g_old_weak</span><span class="p">;</span>
+
+<span class="n">Ptr</span><span class="w"> </span><span class="nf">load</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_load_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">g_current</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">publish</span><span class="p">(</span><span class="n">Ptr</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_store_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">g_current</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">next</span><span class="p">),</span>
+<span class="w">                               </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Ptr</span><span class="w"> </span><span class="n">pinned</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load</span><span class="p">();</span><span class="w">  </span><span class="c1">// 读者持有一份旧快照</span>
+<span class="w">    </span><span class="n">g_old_weak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pinned</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">publish</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Config</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Config</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="s">"new"</span><span class="p">}));</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"pinned reader still sees version=%d payload=%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">pinned</span><span class="o">-&gt;</span><span class="n">version</span><span class="p">,</span><span class="w"> </span><span class="n">pinned</span><span class="o">-&gt;</span><span class="n">payload</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"old version alive while pinned: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">g_old_weak</span><span class="p">.</span><span class="n">expired</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"no"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"yes"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">pinned</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span><span class="w">  </span><span class="c1">// 读者读完了，释放旧快照</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"old version alive after release: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">g_old_weak</span><span class="p">.</span><span class="n">expired</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"no"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"yes"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Ptr</span><span class="w"> </span><span class="n">now</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"current version=%d payload=%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">                </span><span class="n">now</span><span class="o">-&gt;</span><span class="n">version</span><span class="p">,</span><span class="w"> </span><span class="n">now</span><span class="o">-&gt;</span><span class="n">payload</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>编译运行：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>-o<span class="w"> </span>version_reclaim<span class="w"> </span>version_reclaim.cpp
+./version_reclaim
+</code></pre></div>
+
+<p>这段程序的输出是确定的：钉住期间旧版本不会被回收；<code>pinned.reset()</code> 后旧版本才可能析构；当前版本始终是新的。</p>
+<h4 id="33">3.3 观察内存</h4>
+<p>想验证“旧版本是否被读者长期钉住”，可以观察进程的 RSS。Linux 上可以这样做（把 <code>$PID</code> 换成实际进程号）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 每秒打印一次 RSS（单位 KB）</span>
+watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="s1">'ps -o rss= -p $PID'</span>
+
+<span class="c1"># 或者直接读 /proc</span>
+grep<span class="w"> </span>VmRSS<span class="w"> </span>/proc/<span class="nv">$PID</span>/status
+</code></pre></div>
+
+<p>不要期待某个固定数字：RSS 取决于配置大小、分配器行为、读者持有时间和更新频率。正确的观察方式是<strong>对比</strong>：在稳定的更新频率下，如果 RSS 持续单调上升且不回落，就要怀疑有读者长期持有旧快照，或者存在额外的版本列表没有限制长度。</p>
+<hr />
+<h2 id="_6">常见误区与设计权衡</h2>
+<h3 id="41">4.1 误区：假设读写锁“一定公平”</h3>
+<p>本课节点的 pitfalls 说得很清楚：<strong>读写锁不保证所有实现都公平。</strong> 具体来说：</p>
+<ul>
+<li>不要假设 <code>shared_mutex</code> 一定写者优先、读者优先或 FIFO；</li>
+<li>不要假设 <code>pthread_rwlock_t</code> 一定和 <code>std::shared_mutex</code> 行为相同；</li>
+<li>不要用一次压测的结果去推断另一个平台的行为；</li>
+<li>不要把“热更新应该很快生效”建立在“写者应该能拿到锁”的假设上。</li>
+</ul>
+<p>写者饥饿的线上表现往往不是报错，而是“发布系统显示成功，但配置没有生效”。如果业务对生效时间有要求，应该监控发布到生效的延迟，或者直接改用快照发布，让写者不必和读者争同一把锁。</p>
+<h3 id="42-shared_lock">4.2 误区：持有 <code>shared_lock</code> 时再去拿别的锁</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">shared_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock1</span><span class="p">(</span><span class="n">router_mu</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock2</span><span class="p">(</span><span class="n">audit_mu</span><span class="p">);</span><span class="w">  </span><span class="c1">// 锁顺序不当可能死锁</span>
+</code></pre></div>
+
+<p>两个线程如果以相反顺序获取两把锁，就可能互相等待。规则是：<strong>所有线程用一致的锁顺序</strong>，或者干脆不要在持锁期间再去获取其他锁。快照方案的一个附带好处是读路径不持锁，天然少了一类死锁风险。</p>
+<h3 id="43-shared_ptr">4.3 误区：把 <code>shared_ptr</code> 当普通变量并发读写</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 错误：普通读写并发，数据竞争</span>
+<span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">Config</span><span class="o">&gt;</span><span class="w"> </span><span class="n">current</span><span class="p">;</span>
+<span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Config</span><span class="o">&gt;</span><span class="p">(...);</span><span class="w">  </span><span class="c1">// 写线程</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">cfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="p">;</span><span class="w">                        </span><span class="c1">// 读线程</span>
+</code></pre></div>
+
+<p><code>shared_ptr</code> 的引用计数是原子的，但“读取指针 + 增加引用计数”这一组操作不是原子的。正确做法是 <code>std::atomic_load</code> / <code>std::atomic_store</code>，或者 <code>std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>。</p>
+<h3 id="44">4.4 误区：发布后继续修改对象</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Config</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">old</span><span class="p">);</span>
+<span class="n">publish</span><span class="p">(</span><span class="n">next</span><span class="p">);</span><span class="w">              </span><span class="c1">// 已经发布</span>
+<span class="n">next</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">          </span><span class="c1">// 错误：读者可能正在读</span>
+<span class="n">next</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="s">"k"</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v"</span><span class="p">;</span><span class="w">    </span><span class="c1">// 错误：破坏不可变约定</span>
+</code></pre></div>
+
+<p>快照方案的“不可变”不是建议，而是正确性前提。发布之后只能通过“复制一份新的、改副本、再发布”来更新。</p>
+<h3 id="45">4.5 误区：在锁外做“检查再操作”</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">router</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">limit</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">       </span><span class="c1">// 某一瞬间的快照</span>
+<span class="w">    </span><span class="n">router</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span><span class="w">     </span><span class="c1">// 中间可能已被别人改过</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>size()</code> / <code>empty()</code> 返回的是某一瞬间的状态，检查和操作之间存在竞态。应该把判断放进同一个临界区，或者让 <code>update</code> 自己返回成功/失败。</p>
+<h3 id="46">4.6 误区：以为锁能保护“读完之后继续使用的引用”</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">*</span><span class="w"> </span><span class="n">p</span><span class="p">;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">shared_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">    </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">table</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">key</span><span class="p">);</span><span class="w">   </span><span class="c1">// 指向 map 内部</span>
+<span class="p">}</span>
+<span class="n">use</span><span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">);</span><span class="w">                  </span><span class="c1">// 锁已释放，写者可能已经 rehash/删除</span>
+</code></pre></div>
+
+<p>锁只保护临界区内的访问。锁释放后，指针/引用可能悬空。这正是快照方案要解决的问题：读者持有 <code>shared_ptr</code>，把对象的生命周期绑在自己身上，读多久都不会被写者回收。</p>
+<h3 id="47-vs">4.7 权衡：复制成本 vs 读路径成本</h3>
+<p>本课节点的 tradeoffs 是：<strong>快照读简洁但复制成本高，需限制历史版本保留。</strong></p>
+<ul>
+<li>读路径：快照明显更轻，一次原子 load 加一次引用计数递增；共享锁每次都要锁操作。</li>
+<li>写路径：快照要复制整份配置。配置有几十 MB、每秒更新多次时，复制会拉高写延迟和瞬时内存。</li>
+<li>内存：当前版本 + 读者持有的旧版本；如果额外保留历史版本列表，必须设上限。</li>
+<li>适用性：配置小、更新不频繁、读极多，快照往往合适；配置巨大、更新非常频繁，可能需要分片、增量更新或专门的配置服务。</li>
+</ul>
+<p>没有一种方案是“永远更快”的。共享锁和快照的对比必须带着具体负载去跑，而不是凭直觉下结论。</p>
+<hr />
+<h2 id="_7">动手实践</h2>
+<p>实践目标是：<strong>实现路由配置不可变快照，比较共享锁与 <code>shared_ptr</code> 发布的性能。</strong></p>
+<p>我们写一个程序，包含两个实现、同一套功能测试和同一套性能测试：</p>
+<ul>
+<li><code>SharedLockRouter</code>：<code>std::shared_mutex</code> + <code>unordered_map</code>。<code>lookup</code> 用 <code>shared_lock</code>，<code>update</code> 先在共享锁下复制一份表，在副本上修改，再在 <code>unique_lock</code> 下替换。</li>
+<li><code>SnapshotRouter</code>：<code>std::atomic_load/store</code> 发布 <code>shared_ptr&lt;const RouteConfig&gt;</code>。<code>update</code> 复制、修改副本、成功才发布。</li>
+</ul>
+<p>两个实现都遵守同一套接口约定：</p>
+<ul>
+<li><code>lookup(key, out)</code>：成功返回 <code>true</code> 并写出值；失败返回 <code>false</code>。</li>
+<li><code>update(key, value, simulate_failure)</code>：成功返回 <code>true</code>；失败返回 <code>false</code>，且旧版本不变。</li>
+<li><code>audit()</code>：返回一份完整的 <code>RouteConfig</code> 快照，用于检查“读者只能观察完整版本”。</li>
+</ul>
+<p>一致性检查用一组“必须同时出现”的 key：<code>canary_a</code> 和 <code>canary_b</code>。每次成功更新都会把两个 canary 一起改成新版本号，读者检查两个 canary 是否相等、是否等于配置的版本号。如果实现让读者看到了“一个 canary 新、一个 canary 旧”，测试就会记录一次不一致。</p>
+<h3 id="51">5.1 完整代码</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1">// router_bench.cpp</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;atomic&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;memory&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;shared_mutex&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unordered_map&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;utility&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">Table</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">RouteConfig</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Table</span><span class="w"> </span><span class="n">routes</span><span class="p">;</span><span class="w">              </span><span class="c1">// 发布后不再修改</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="c1">// 整份配置的版本戳</span>
+<span class="p">};</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">kCanaryA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"canary_a"</span><span class="p">;</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">kCanaryB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"canary_b"</span><span class="p">;</span>
+
+<span class="c1">// ---------------------------------------------------------------------------</span>
+<span class="c1">// 方案一：shared_mutex</span>
+<span class="c1">//</span>
+<span class="c1">// lookup 返回当前表里的值，读期间持共享锁。</span>
+<span class="c1">// update 先在共享锁下复制当前表，在副本上修改；校验失败直接返回 false，</span>
+<span class="c1">// 旧表不变。成功后用 unique_lock 替换表，替换是一个整体操作。</span>
+<span class="c1">// 读者持有共享锁期间，写者会等待；写者替换期间，新读者会等待。</span>
+<span class="c1">// ---------------------------------------------------------------------------</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SharedLockRouter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">SharedLockRouter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">table_</span><span class="p">[</span><span class="s">"route:"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v1"</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">table_</span><span class="p">[</span><span class="n">kCanaryA</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v1"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">table_</span><span class="p">[</span><span class="n">kCanaryB</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v1"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">version_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">lookup</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">table_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">table_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">audit</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">shared_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">cfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">table_</span><span class="p">;</span>
+<span class="w">        </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">version_</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">cfg</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">update</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">                </span><span class="kt">bool</span><span class="w"> </span><span class="n">simulate_failure</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Table</span><span class="w"> </span><span class="n">next</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">base_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">shared_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">            </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">table_</span><span class="p">;</span>
+<span class="w">            </span><span class="n">base_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">version_</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="c1">// 复制完成后模拟校验失败：副本丢弃，旧表不变</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">simulate_failure</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">next_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">base_version</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">next</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">canary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">next_version</span><span class="p">);</span>
+<span class="w">        </span><span class="n">next</span><span class="p">[</span><span class="n">kCanaryA</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">canary</span><span class="p">;</span>
+<span class="w">        </span><span class="n">next</span><span class="p">[</span><span class="n">kCanaryB</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">canary</span><span class="p">;</span>
+
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">            </span><span class="c1">// 单写者场景下不会触发；多写者时避免覆盖别人刚发布的版本</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">version_</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">base_version</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">table_</span><span class="p">.</span><span class="n">swap</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="w">            </span><span class="n">version_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next_version</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">shared_mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Table</span><span class="w"> </span><span class="n">table_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">version_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// ---------------------------------------------------------------------------</span>
+<span class="c1">// 方案二：copy-on-write + shared_ptr 原子发布</span>
+<span class="c1">//</span>
+<span class="c1">// lookup 只做一次 atomic_load，拿到一份不可变快照，读路径不持锁。</span>
+<span class="c1">// update 复制旧快照，在副本上修改；失败直接返回 false，旧指针不变。</span>
+<span class="c1">// 成功后 atomic_store 发布新指针。读者持有旧快照期间，旧版本不会被回收；</span>
+<span class="c1">// 写者发布新版本不会阻塞读者，读者也不会阻塞写者。</span>
+<span class="c1">// ---------------------------------------------------------------------------</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SnapshotRouter</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">SnapshotRouter</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">cfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="s">"route:"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v1"</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="n">kCanaryA</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v1"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="n">kCanaryB</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v1"</span><span class="p">;</span>
+<span class="w">        </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_store_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">current_</span><span class="p">,</span><span class="w"> </span><span class="n">ConfigPtr</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">cfg</span><span class="p">)),</span>
+<span class="w">                                   </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">lookup</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">cfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load</span><span class="p">();</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">audit</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">load</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">update</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">,</span>
+<span class="w">                </span><span class="kt">bool</span><span class="w"> </span><span class="n">simulate_failure</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load</span><span class="p">();</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">(</span><span class="o">*</span><span class="n">old</span><span class="p">);</span><span class="w">  </span><span class="c1">// 复制整份配置</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">simulate_failure</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">  </span><span class="c1">// 副本丢弃，旧快照不变</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">next_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">old</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">next</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">canary</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"v"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">next_version</span><span class="p">);</span>
+<span class="w">        </span><span class="n">next</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="n">kCanaryA</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">canary</span><span class="p">;</span>
+<span class="w">        </span><span class="n">next</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="n">kCanaryB</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">canary</span><span class="p">;</span>
+<span class="w">        </span><span class="n">next</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next_version</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_store_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">current_</span><span class="p">,</span><span class="w"> </span><span class="n">ConfigPtr</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">next</span><span class="p">)),</span>
+<span class="w">                                   </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">load</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">atomic_load_explicit</span><span class="p">(</span><span class="o">&amp;</span><span class="n">current_</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">current_</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="c1">// ---------------------------------------------------------------------------</span>
+<span class="c1">// 功能测试：并发读者 + 成功更新 + 失败更新</span>
+<span class="c1">//</span>
+<span class="c1">// 读到的 audit() 是一份完整配置。检查两个 canary 是否相等且等于版本号。</span>
+<span class="c1">// 更新失败后，版本号和 route:0 的值都必须保持不变。</span>
+<span class="c1">// ---------------------------------------------------------------------------</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Router</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">run_functional_test</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Router</span><span class="w"> </span><span class="n">router</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stop</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ready</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">observations</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">inconsistent</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">readers</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">readers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">ready</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">stop</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">cfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">router</span><span class="p">.</span><span class="n">audit</span><span class="p">();</span>
+<span class="w">                </span><span class="n">observations</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+
+<span class="w">                </span><span class="k">auto</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">kCanaryA</span><span class="p">);</span>
+<span class="w">                </span><span class="k">auto</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">kCanaryB</span><span class="p">);</span>
+<span class="w">                </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                    </span><span class="s">"v"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">version</span><span class="p">);</span>
+
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">||</span>
+<span class="w">                    </span><span class="n">a</span><span class="o">-&gt;</span><span class="n">second</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">b</span><span class="o">-&gt;</span><span class="n">second</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">a</span><span class="o">-&gt;</span><span class="n">second</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">expected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="n">inconsistent</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 等 4 个读者都进入循环，避免更新在读者启动前就跑完</span>
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">ready</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">50</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">router</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">"route:0"</span><span class="p">,</span><span class="w"> </span><span class="s">"gen-"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">stop</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">th</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">readers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">th</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">before</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">router</span><span class="p">.</span><span class="n">audit</span><span class="p">();</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">router</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">"route:0"</span><span class="p">,</span><span class="w"> </span><span class="s">"must-not-appear"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">    </span><span class="n">ConfigPtr</span><span class="w"> </span><span class="n">after</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">router</span><span class="p">.</span><span class="n">audit</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">after</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">"route:0"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">old_preserved</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="p">(</span><span class="n">after</span><span class="o">-&gt;</span><span class="n">version</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">before</span><span class="o">-&gt;</span><span class="n">version</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">        </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">after</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="o">&amp;&amp;</span>
+<span class="w">        </span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"gen-49"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span>
+<span class="w">        </span><span class="s">"[%s] observations=%llu inconsistent=%llu version=%llu "</span>
+<span class="w">        </span><span class="s">"failed_update_returned_false=%s old_snapshot_preserved=%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">        </span><span class="n">name</span><span class="p">,</span>
+<span class="w">        </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">observations</span><span class="p">.</span><span class="n">load</span><span class="p">()),</span>
+<span class="w">        </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">inconsistent</span><span class="p">.</span><span class="n">load</span><span class="p">()),</span>
+<span class="w">        </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">after</span><span class="o">-&gt;</span><span class="n">version</span><span class="p">),</span>
+<span class="w">        </span><span class="n">ok</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"no"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"yes"</span><span class="p">,</span>
+<span class="w">        </span><span class="n">old_preserved</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"yes"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"no"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// ---------------------------------------------------------------------------</span>
+<span class="c1">// 性能测试：8 个读者做固定次数 lookup，1 个写者并发更新</span>
+<span class="c1">//</span>
+<span class="c1">// 两个实现跑同一套负载。这里不打印任何预设的性能结论，只打印实际测到的</span>
+<span class="c1">// 耗时和吞吐，供你在自己的机器上对比。</span>
+<span class="c1">// ---------------------------------------------------------------------------</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Router</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">run_benchmark</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Router</span><span class="w"> </span><span class="n">router</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">kReaders</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">kLookupsPerReader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">500'000</span><span class="p">;</span>
+<span class="w">    </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">kUpdates</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">keys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="s">"route:0"</span><span class="p">,</span><span class="w"> </span><span class="s">"route:1"</span><span class="p">,</span><span class="w"> </span><span class="s">"route:2"</span><span class="p">,</span><span class="w"> </span><span class="s">"route:3"</span><span class="p">,</span>
+<span class="w">        </span><span class="s">"route:4"</span><span class="p">,</span><span class="w"> </span><span class="s">"route:5"</span><span class="p">,</span><span class="w"> </span><span class="s">"route:6"</span><span class="p">,</span><span class="w"> </span><span class="s">"route:7"</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">start</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">hits</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">readers</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kReaders</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">readers</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">start</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">local_hits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kLookupsPerReader</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">router</span><span class="p">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">keys</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">keys</span><span class="p">.</span><span class="n">size</span><span class="p">()],</span><span class="w"> </span><span class="n">out</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="o">++</span><span class="n">local_hits</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">hits</span><span class="p">.</span><span class="n">fetch_add</span><span class="p">(</span><span class="n">local_hits</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_relaxed</span><span class="p">);</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="w"> </span><span class="n">writer</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">start</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">yield</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">kUpdates</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">router</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">"route:0"</span><span class="p">,</span><span class="w"> </span><span class="s">"gen-"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">});</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">t0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="n">start</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">th</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">readers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">th</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">t1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">    </span><span class="n">writer</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">elapsed_ms</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">milli</span><span class="o">&gt;</span><span class="p">(</span><span class="n">t1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="p">).</span><span class="n">count</span><span class="p">();</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">total_lookups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kReaders</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">kLookupsPerReader</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">mlookup_per_sec</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">total_lookups</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e6</span><span class="p">)</span><span class="w"> </span><span class="o">/</span>
+<span class="w">        </span><span class="p">(</span><span class="n">elapsed_ms</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1000.0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span>
+<span class="w">        </span><span class="s">"[%s] readers=%d lookups=%llu hits=%llu elapsed=%.2f ms "</span>
+<span class="w">        </span><span class="s">"throughput=%.2f Mlookup/s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span>
+<span class="w">        </span><span class="n">name</span><span class="p">,</span>
+<span class="w">        </span><span class="n">kReaders</span><span class="p">,</span>
+<span class="w">        </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">total_lookups</span><span class="p">),</span>
+<span class="w">        </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="o">&gt;</span><span class="p">(</span><span class="n">hits</span><span class="p">.</span><span class="n">load</span><span class="p">()),</span>
+<span class="w">        </span><span class="n">elapsed_ms</span><span class="p">,</span>
+<span class="w">        </span><span class="n">mlookup_per_sec</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"=== functional test ===</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">run_functional_test</span><span class="o">&lt;</span><span class="n">SharedLockRouter</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"SharedLockRouter"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">run_functional_test</span><span class="o">&lt;</span><span class="n">SnapshotRouter</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"SnapshotRouter"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"=== benchmark ===</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">run_benchmark</span><span class="o">&lt;</span><span class="n">SharedLockRouter</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"SharedLockRouter"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">run_benchmark</span><span class="o">&lt;</span><span class="n">SnapshotRouter</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"SnapshotRouter"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="52">5.2 编译与运行</h3>
+<p>普通编译，性能对比用这一条：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O2<span class="w"> </span>-o<span class="w"> </span>router_bench<span class="w"> </span>router_bench.cpp<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./router_bench
+</code></pre></div>
+
+<p>如果要查数据竞争，用 ThreadSanitizer 单独编译一份：</p>
+<div class="codehilite"><pre><span></span><code>g++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-pthread<span class="w"> </span>-O1<span class="w"> </span>-g<span class="w"> </span>-fsanitize<span class="o">=</span>thread<span class="w"> </span>-o<span class="w"> </span>router_bench_tsan<span class="w"> </span>router_bench.cpp
+./router_bench_tsan
+</code></pre></div>
+
+<p><strong>性能对比不要和 TSAN 混在一起。</strong> ThreadSanitizer 会插桩、改变时序并显著拖慢程序，用它跑出来的耗时没有性能参考价值；它只用来发现数据竞争。正确顺序是：先用普通 <code>-O2</code> 版本看功能和大致吞吐，再用 TSAN 版本验证没有数据竞争。</p>
+<h3 id="53">5.3 测试覆盖说明</h3>
+<p>功能测试对应两条验收：</p>
+<ol>
+<li><strong>“读者只能观察完整版本”</strong>：4 个读者不停调用 <code>audit()</code>，每次拿到一份完整配置，检查 <code>canary_a == canary_b == "v" + version</code>。只要出现一次不一致，<code>inconsistent</code> 就会大于 0。两个实现都应该输出 <code>inconsistent=0</code>。</li>
+<li><strong>“写入失败不影响旧快照”</strong>：先做 50 次成功更新，最后一次 <code>route:0</code> 的值是 <code>gen-49</code>，版本是 51。然后调用一次 <code>simulate_failure=true</code> 的更新，检查：
+   - <code>update</code> 返回 <code>false</code>；
+   - 版本号仍然是 51；
+   - <code>route:0</code> 仍然是 <code>gen-49</code>；
+   - 读者仍然能读到完整的旧配置。</li>
+</ol>
+<p>性能测试只提供同一套负载下的对比，不提供预设结论。你可能会观察到快照方案在读路径上更轻，也可能在配置很小、读者临界区极短时看到共享锁并不慢；实际结果取决于机器、标准库实现、核数、更新频率和配置大小。请记录你的运行环境，再解释差异。</p>
+<h3 id="54">5.4 接口注释里要写清楚的四件事</h3>
+<ol>
+<li><strong><code>lookup</code> 返回的是哪个版本</strong>：共享锁方案返回“持锁期间当前表”的某个值，读者无法跨多次 <code>lookup</code> 保证同一版本；快照方案返回“load 那一瞬间”的完整版本。若业务需要跨多个 key 的一致性，应使用一次 <code>audit()</code>/整表快照，而不是连续多次 <code>lookup</code>。</li>
+<li><strong><code>update</code> 失败时旧版本是否保留</strong>：两个实现都保证保留。共享锁方案失败时副本丢弃，旧表未动；快照方案失败时旧指针未替换。</li>
+<li><strong>读者持有快照期间写者发布新版本会发生什么</strong>：共享锁方案下，读者持锁时写者等待；快照方案下，写者照常发布新版本，读者继续读旧版本，旧版本在读者释放 <code>shared_ptr</code> 后才可能回收。</li>
+<li><strong>写者是否需要串行化</strong>：两个实现都按“单写者”演示。<code>SharedLockRouter</code> 用版本号检查避免多写者互相覆盖，冲突时后到者返回 <code>false</code>；<code>SnapshotRouter</code> 的 <code>load -&gt; 复制 -&gt; store</code> 不是 CAS，多写者并发时后发布的会覆盖先发布的，因此写者必须由上层串行化，或改用比较交换（CAS）循环。接口注释必须写清这个前提。</li>
+</ol>
+<h3 id="55">5.5 自检清单</h3>
+<ul>
+<li>[ ] 两个实现都能通过功能测试，<code>inconsistent=0</code>，<code>old_snapshot_preserved=yes</code></li>
+<li>[ ] 故意把 <code>SnapshotRouter::update</code> 改成“先发布、再修改对象”，功能测试能发现问题</li>
+<li>[ ] 故意把 <code>SharedLockRouter::update</code> 改成“在 <code>unique_lock</code> 下原地逐 key 修改”，说明它为什么仍然可能满足单次 <code>lookup</code> 的完整性，但会拉长写者阻塞时间</li>
+<li>[ ] 用普通 <code>-O2</code> 和 TSAN 两种方式编译，记录 TSAN 无报告</li>
+<li>[ ] 记录编译器、标准库、平台、核数和运行日期，不把一次结果当普遍结论</li>
+</ul>
+<hr />
+<h2 id="sourcestudy">sourceStudy：对照文档核对实现</h2>
+<p>本节点的 sourceStudy 要求：<strong>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</strong></p>
+<p>推荐资源是 cppreference 的 <code>std::shared_mutex</code> 页面。建议按下面的清单逐项读，不要只扫一眼类声明：</p>
+<h3 id="61">6.1 定义与适用版本</h3>
+<ul>
+<li>[ ] 确认 <code>std::shared_mutex</code> 定义在 <code>&lt;shared_mutex&gt;</code>，<strong>C++17 起</strong>可用；C++14 对应的是 <code>std::shared_timed_mutex</code>。</li>
+<li>[ ] 用自己的话写出它的两级所有权：多个线程可以同时持有共享所有权；独占所有权同一时刻只能有一个线程持有。</li>
+<li>[ ] 核对页面上的互斥规则：某线程持有独占锁时，其他线程不能获得共享锁或独占锁；有线程持有共享锁时，其他线程不能获得独占锁。把这些规则和本课第 1 节的例子逐条对上。</li>
+<li>[ ] 记录：本课代码使用了 <code>std::shared_mutex</code>、<code>std::shared_lock</code>、<code>std::unique_lock</code>，它们分别来自哪个头文件。</li>
+</ul>
+<h3 id="62">6.2 成员函数与锁类型</h3>
+<ul>
+<li>[ ] 列出 <code>shared_mutex</code> 的成员函数：<code>lock</code>、<code>try_lock</code>、<code>unlock</code>、<code>lock_shared</code>、<code>try_lock_shared</code>、<code>unlock_shared</code>。</li>
+<li>[ ] 说明 <code>shared_lock</code> 是“共享所有权”的 RAII 包装，<code>unique_lock</code> / <code>lock_guard</code> 是“独占所有权”的 RAII 包装；确认 <code>shared_lock</code> 不能用于独占加锁。</li>
+<li>[ ] 如果页面提到 <code>native_handle</code> / <code>native_handle_type</code>，记录它返回的是底层实现句柄，属于平台相关接口，不应在可移植代码里依赖它的具体类型或语义。</li>
+<li>[ ] 核对 <code>try_lock</code> 与 <code>try_lock_shared</code> 的返回值：成功为 <code>true</code>，失败为 <code>false</code>；失败时没有持有锁，不能调用对应的 <code>unlock</code>。</li>
+<li>[ ] 注意：<code>shared_mutex</code> 不提供带超时的 <code>try_lock_for</code>；本课的饥饿演示用的是 <code>shared_timed_mutex</code>。不要把两者的接口混用。</li>
+</ul>
+<h3 id="63">6.3 公平性与调度</h3>
+<ul>
+<li>[ ] 在页面上查找与调度、优先级、公平性有关的表述。如果页面没有规定读者优先/写者优先/FIFO，就明确记录：<strong>标准未规定读者/写者优先级，行为实现相关。</strong></li>
+<li>[ ] 不要因为某次运行中写者很快拿到锁，就推断标准保证写者优先；也不要把“读者优先”写进接口契约。</li>
+<li>[ ] 记录你实际使用的标准库实现和版本（例如 libstdc++、libc++、MSVC STL），以及运行平台。</li>
+</ul>
+<h3 id="64">6.4 和快照方案的对照</h3>
+<ul>
+<li>[ ] <code>std::atomic_load</code> / <code>std::atomic_store</code> 对 <code>shared_ptr</code> 的重载，适用版本在 <code>&lt;memory&gt;</code> / <code>shared_ptr</code> 的原子操作相关页面，不在 <code>shared_mutex</code> 页面；阅读时注意区分页面。</li>
+<li>[ ] 确认本课使用的是 <code>std::atomic_load_explicit</code> / <code>std::atomic_store_explicit</code>（C++11 起可用）；C++20 起也可以使用 <code>std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>。</li>
+<li>[ ] 核对内存序：发布用 release，读取用 acquire；如果使用默认的 <code>atomic_load</code> / <code>atomic_store</code>，默认是 <code>seq_cst</code>，同样满足可见性要求。</li>
+<li>[ ] 记录边界：<code>shared_ptr</code> 的引用计数是原子的，但普通赋值/读取不是原子的；必须使用原子函数。</li>
+</ul>
+<h3 id="65">6.5 记录模板</h3>
+<p>建议在实验记录里留下这样一段（示例字段，内容按实际填写）：</p>
+<div class="codehilite"><pre><span></span><code>实现：&lt;库名与版本&gt;
+平台：&lt;OS / CPU / 核数&gt;
+编译器：&lt;编译器与版本&gt;
+编译参数：-std=c++17 -pthread -O2 / -fsanitize=thread
+验证日期：&lt;日期&gt;
+shared_mutex 公平性：记录：标准未规定读者/写者优先级，实现相关
+本课代码用到的接口：shared_mutex, shared_lock, unique_lock,
+                     atomic_load_explicit, atomic_store_explicit
+未验证项：&lt;例如某平台上的写者饥饿表现、配置大小对复制成本的影响&gt;
+</code></pre></div>
+
+<p>记录“未验证项”很重要：它把“我读过的”和“我实际验证过的”分开，避免把文档语义和某次实验现象混为一谈。</p>
+<hr />
+<h2 id="_8">自测题</h2>
+<h3 id="1_1">题 1：读写锁的公平性与饥饿</h3>
+<p>某服务用 <code>std::shared_mutex</code> 保护路由表：读者请求非常频繁，写者每隔几分钟更新一次配置。上线后发现运维点了“发布”，但新配置很久没有生效。</p>
+<p>请回答：</p>
+<ol>
+<li>为什么可能出现“写者拿不到锁”？标准对 <code>shared_mutex</code> 的公平性做了什么保证？</li>
+<li>如果换成 <code>pthread_rwlock_t</code>，能否假定一定写者优先？为什么？</li>
+<li>在共享锁方案下，有哪些手段可以降低写者饥饿的风险？</li>
+<li>如果业务要求“配置必须在数秒内生效”，共享锁方案还缺少什么保障？你会怎么改？</li>
+</ol>
+<p><strong>答案：</strong></p>
+<ol>
+<li>读者持续到来并持有共享锁时，写者的独占锁请求可能一直排在后面；标准只规定互斥语义，不规定读者/写者优先级或调度公平性，因此写者饥饿是允许的实现行为。不能把“写者最终会拿到锁”当成标准保证。</li>
+<li>不能。<code>pthread_rwlock_t</code> 的调度策略同样是实现相关的，不同平台、不同版本可能不同；可移植代码不能依赖某种公平性。</li>
+<li>缩短读者临界区（不在共享锁内做 IO/RPC/日志）、降低读者持锁时间、限制同时进入的读者数量、给写者留出窗口（例如读者侧做批量读取）、监控发布到生效的延迟；必要时改用快照发布，让写者不和读者争同一把锁。</li>
+<li>共享锁方案无法保证写者在限定时间内获得锁，因此无法保证生效时限。可以改用 copy-on-write 快照：写者复制、修改、原子发布，读者不阻塞写者；同时监控发布延迟和旧版本回收情况。</li>
+</ol>
+<h3 id="2_1">题 2：完整版本可见性</h3>
+<p>下面是一段“快照”更新代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="w"> </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">RouteConfig</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="p">;</span><span class="w">          </span><span class="c1">// 读当前指针</span>
+<span class="w">    </span><span class="n">next</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">value</span><span class="p">;</span><span class="w">    </span><span class="c1">// 直接改“副本”</span>
+<span class="w">    </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">               </span><span class="c1">// 发布</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">lookup</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">cfg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current</span><span class="p">;</span><span class="w">           </span><span class="c1">// 普通读取</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">cfg</span><span class="o">-&gt;</span><span class="n">routes</span><span class="p">.</span><span class="n">end</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">""</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>请回答：</p>
+<ol>
+<li><code>auto next = current;</code> 之后，<code>next</code> 和 <code>current</code> 指向的是同一份对象吗？直接改 <code>next-&gt;routes</code> 会有什么后果？</li>
+<li><code>current = next;</code> 和 <code>lookup</code> 里的 <code>auto cfg = current;</code> 并发时，有什么问题？</li>
+<li>应该怎么改，才能做到“读者只能观察完整版本”和“写入失败不影响旧快照”？</li>
+<li>如果更新过程中校验失败并抛异常，旧版本会不会被破坏？按你的修改说明。</li>
+</ol>
+<p><strong>答案：</strong></p>
+<ol>
+<li>是同一份对象。<code>shared_ptr</code> 的拷贝只增加引用计数，不复制对象。直接改 <code>next-&gt;routes</code> 改的就是当前读者正在读的对象，违反“发布后不可变”的约定，读者可能看到写到一半的 map。</li>
+<li><code>shared_ptr</code> 的普通赋值/读取不是原子的；“读指针 + 增加引用计数”和“写指针 + 减少引用计数”并发是数据竞争，可能导致引用计数错乱、悬空指针或崩溃。</li>
+<li>正确做法：用 <code>std::atomic_load_explicit</code> / <code>std::atomic_store_explicit</code>（或 <code>std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>）访问当前指针；<code>update</code> 里用 <code>std::make_shared&lt;RouteConfig&gt;(*old)</code> 复制一份新对象，在副本上修改，全部成功后再用 release 语义发布；<code>lookup</code> 用 acquire 语义 load，拿到 <code>shared_ptr&lt;const RouteConfig&gt;</code> 后只读。</li>
+<li>按修改后的实现，校验失败时新副本直接丢弃，旧指针从未被替换，旧版本不会被破坏；正在读旧版本的读者也不受影响。注意：如果先发布再校验，就无法保证这一点。</li>
+</ol>
+<h3 id="3_2">题 3：复制成本与版本回收</h3>
+<p>某服务的路由配置大约有 50 MB，读请求非常多，配置每 10 秒热更新一次。团队决定采用 copy-on-write 快照方案。</p>
+<p>请回答：</p>
+<ol>
+<li>每次更新的直接成本是什么？对写延迟和瞬时内存有什么影响？</li>
+<li>旧版本什么时候被回收？哪些做法会让旧版本长期不被回收？</li>
+<li>如果为了回滚额外保存最近 100 个版本，会有什么问题？应该怎么限制？</li>
+<li>在“配置很大、更新较频繁”的情况下，快照方案还合适吗？可以采取哪些折中？</li>
+</ol>
+<p><strong>答案：</strong></p>
+<ol>
+<li>每次更新都要复制整份配置（本例约 50 MB），然后在副本上修改。复制会拉高写延迟，并在短时间内同时存在旧版本和新版本，瞬时内存至少增加一份配置的大小；如果复制期间还有读者持有更旧的版本，内存会更高。</li>
+<li>旧版本在当前指针被替换后，如果没有读者仍持有它，引用计数归零即析构回收。让旧版本长期不回收的常见做法：读者把 <code>shared_ptr</code> 存进缓存/队列/异步任务长时间不释放；额外保存版本列表且不设上限；循环引用导致引用计数无法归零。</li>
+<li>会保留大量历史快照，内存随更新次数增长；100 个 50 MB 版本就是很大的常驻内存。应设置版本数量上限或保留时间上限，优先保留元数据/差异而不是完整副本，并明确回滚窗口。</li>
+<li>仍然可以，但需要折中：缩小配置、按 appid/租户分片、使用增量更新或专门配置服务、降低更新频率、用双缓冲/对象池减少分配开销。是否合适要用实际配置大小、更新频率和读负载去测量，不能只看“读多写少”就下结论。</li>
+</ol>
+<hr />
+<h2 id="_9">推荐资源</h2>
+<ul>
+<li><strong>读写锁、快照与读密集优化：参考文档 / 原始资料</strong></li>
+<li>链接：https://en.cppreference.com/w/cpp/thread/shared_mutex.html</li>
+<li>来源：en.cppreference.com</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：进阶</li>
+<li>是否免费：是</li>
+<li>推荐理由：重点阅读 shared_mutex 与饥饿风险与 copy-on-write 快照，用于核对本节点实验的语义和边界。阅读时按本课第 6 节的清单核对：<code>shared_mutex</code> 的 C++17 适用版本、<code>lock</code>/<code>lock_shared</code>/<code>try_lock</code>/<code>try_lock_shared</code>/<code>unlock</code>/<code>unlock_shared</code> 的语义、<code>shared_lock</code> 与 <code>unique_lock</code> 的配套用法，以及标准是否规定调度公平性。记录结论时以页面实际表述为准，不把“某次运行中写者很快拿到锁”当成写者优先的证据。<code>shared_ptr</code> 的原子发布接口在 <code>&lt;memory&gt;</code> / <code>shared_ptr</code> 相关页面，不在本页面，读的时候注意区分。</li>
+</ul>
+<hr />
+<h2 id="_10">本课小结</h2>
+<ol>
+<li><strong>读密集数据的关键矛盾是“读者要并行、写者要生效、读者不能看到半成品”。</strong> 普通 <code>mutex</code> 把读者串行化；<code>shared_mutex</code> 让读者并行；copy-on-write 快照让读者与写者几乎不互斥。</li>
+<li><strong><code>shared_mutex</code> 只保证互斥语义，不保证调度公平。</strong> 读者持续到来时写者可能饥饿；实现可能偏袒读者、偏袒写者或采用其他策略。可移植代码不能依赖公平性假设。</li>
+<li><strong>共享锁适合读多写少、临界区短、配置较小的场景。</strong> 读者用 <code>shared_lock</code>，写者用 <code>unique_lock</code>；读者之间并行，但写者仍要等待所有读者退出。不要在持锁期间做耗时 IO。</li>
+<li><strong>快照方案用“不可变对象 + 原子发布指针”消除读路径锁。</strong> 写者复制、改副本、成功后整体发布；失败时旧指针不变。读者拿到 <code>shared_ptr&lt;const T&gt;</code> 后，整段读路径只读这份不可变对象。</li>
+<li><strong>发布必须建立 happens-before。</strong> 写者先写完对象，再以 release 语义发布指针；读者以 acquire 语义读取。C++17 可用 <code>atomic_load</code>/<code>atomic_store</code> 的 <code>shared_ptr</code> 重载；C++20 起可用 <code>std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>。不要用普通赋值/读取并发访问 <code>shared_ptr</code>。</li>
+<li><strong>回收靠引用计数，旧版本的数量等于“当前版本 + 仍被读者持有的旧版本”。</strong> 读者持有旧快照期间旧版本不会释放；把 <code>shared_ptr</code> 长期存进缓存/队列会阻止回收；额外保存版本列表必须设上限。</li>
+<li><strong>两条验收要能测试。</strong> “读者只能观察完整版本”用 canary key 或版本戳验证；“写入失败不影响旧快照”用一次故意失败的更新验证版本号和内容都不变。</li>
+<li><strong>共享锁与快照的对比要带负载跑。</strong> 快照读路径更轻，但每次写复制整份配置；配置很大或更新频繁时，复制会拉高写延迟和瞬时内存。不要编造性能数字，记录环境、负载和实际测量值。</li>
+<li><strong>锁不能保护“读完之后继续使用的引用”。</strong> 锁释放后指针/引用可能悬空；快照的 <code>shared_ptr</code> 把对象生命周期绑在读者身上，这是它相对共享锁方案的重要优势。</li>
+<li><strong>本课的工作台是：先定一致性单位，再选共享锁或快照，然后用“成功更新 + 失败更新 + 并发读者”三类测试钉死契约，最后再谈性能。</strong></li>
+</ol>
+<p>下一课会继续在并发数据结构里处理更细的同步与生命周期问题；本课留下的检查顺序是：<strong>读者看到的最小完整单位是什么 → 写失败要保证什么 → 选择锁方案还是快照方案 → 发布与回收是否闭合 → 用测试和文档把契约固定下来。</strong></p><div class="pn"><span><a href="74.html">← 有界并发队列与背压</a></span><span>下一课 待更新</span></div></main></div></body></html>
