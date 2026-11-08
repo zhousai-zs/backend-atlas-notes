@@ -412,8 +412,8 @@ grep<span class="w"> </span>-rn<span class="w"> </span><span class="s2">"co_yiel
 ======== fixed 版：调用方持有局部缓冲 ========
 [A] 拿到局部 key: key:wx-app-a (0x5562df580600)
 [B] 拿到局部 key: key:wx-app-b (0x5562df5c09f0)
-[A] 恢复后使用 key: key:wx-app-a (0x5562df580600) -&gt; 正确
-[B] 恢复后使用 key: key:wx-app-b (0x5562df5c09f0) -&gt; 正确
+[A] 恢复后使用 key: key:wx-app-a (0x5562df580600) -&gt; 正常
+[B] 恢复后使用 key: key:wx-app-b (0x5562df5c09f0) -&gt; 正常
 </code></pre></div>
 
 <p>三个细节值得读：</p>
@@ -1145,7 +1145,7 @@ grep<span class="w"> </span>-n<span class="w"> </span><span class="s2">"mutex\|l
 <li>类型：文档</li>
 <li>难度：深入</li>
 <li>是否免费：是</li>
-<li>推荐理由：重点阅读隐藏 yield 点与静态缓冲与初始化状态，用于核对本节点实验的语义和边界。<code>attributes(7)</code> 是 POSIX 体系对函数并发属性（<code>MT-Safe</code>/<code>MT-Unsafe</code>、<code>race:</code>、<code>env</code>、<code>init</code>、<code>AS-Safe</code>、<code>AC-Safe</code>）的权威词汇表；先读这份，再拿 <code>man 3 strerror</code> 等具体条目回到本课第 4 节的读取方法上训练。</li>
+<li>推荐理由：重点阅读隐藏 yield 点与静态缓冲与初始化状态，用于核对本节点实验的语义和边界。<code>attributes(7)</code> 是 glibc 手册体系里对函数并发属性（<code>MT-Safe</code>/<code>MT-Unsafe</code>、<code>race:</code>、<code>env</code>、<code>init</code>、<code>AS-Safe</code>、<code>AC-Safe</code>）的权威词汇表；先读这份，再拿 <code>man 3 strerror</code> 等具体条目回到本课第 4 节的读取方法上训练。</li>
 </ul>
 <hr />
 <h2 id="_19">本课小结</h2>

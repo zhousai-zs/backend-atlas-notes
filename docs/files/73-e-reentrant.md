@@ -384,8 +384,8 @@ g++ -std=c++17 -pthread -O2 static_buf.cpp -o static_buf
 ======== fixed 版：调用方持有局部缓冲 ========
 [A] 拿到局部 key: key:wx-app-a (0x5562df580600)
 [B] 拿到局部 key: key:wx-app-b (0x5562df5c09f0)
-[A] 恢复后使用 key: key:wx-app-a (0x5562df580600) -> 正确
-[B] 恢复后使用 key: key:wx-app-b (0x5562df5c09f0) -> 正确
+[A] 恢复后使用 key: key:wx-app-a (0x5562df580600) -> 正常
+[B] 恢复后使用 key: key:wx-app-b (0x5562df5c09f0) -> 正常
 ```
 
 三个细节值得读：
@@ -1096,7 +1096,7 @@ reload_check():
   - 类型：文档
   - 难度：深入
   - 是否免费：是
-  - 推荐理由：重点阅读隐藏 yield 点与静态缓冲与初始化状态，用于核对本节点实验的语义和边界。`attributes(7)` 是 POSIX 体系对函数并发属性（`MT-Safe`/`MT-Unsafe`、`race:`、`env`、`init`、`AS-Safe`、`AC-Safe`）的权威词汇表；先读这份，再拿 `man 3 strerror` 等具体条目回到本课第 4 节的读取方法上训练。
+  - 推荐理由：重点阅读隐藏 yield 点与静态缓冲与初始化状态，用于核对本节点实验的语义和边界。`attributes(7)` 是 glibc 手册体系里对函数并发属性（`MT-Safe`/`MT-Unsafe`、`race:`、`env`、`init`、`AS-Safe`、`AC-Safe`）的权威词汇表；先读这份，再拿 `man 3 strerror` 等具体条目回到本课第 4 节的读取方法上训练。
 
 ---
 
