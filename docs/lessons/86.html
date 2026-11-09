@@ -1,0 +1,1185 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>86. 超时预算与取消传播 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（86/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（6/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="cur" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 86 课 · 领域 F · 阶段 3</p><p class="dl"><a href="../files/86-f-deadline.md" download>⬇ 本课 Markdown</a></p><h1 id="86208">第 86/208 课：超时预算与取消传播</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-deadline</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Deadlines</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>失败与请求语义</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-model</code>、<code>d-timer</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Deadlines</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://grpc.io/docs/guides/deadlines/">超时预算与取消传播：参考文档 / 原始资料</a>（grpc.io）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>deadline 限定整个调用可用时间，跨服务需扣除已消耗预算，并在取消后停止无用工作。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课讨论公开的超时 / deadline 语义（可参考 gRPC 公开文档），不代表任何企业内部实现。默认值、状态码名称、是否自动传播等细节，一律以所用版本文档为准。</p>
+</blockquote>
+<hr />
+<h2 id="_2">导读</h2>
+<p>deadline 限定的是<strong>整个调用</strong>的可用时间，而不是每一跳各自再开一份互不相干的超时。理解这一点，是从"给每个 RPC 填一个看起来差不多的 timeout 数字"走向"设计一条可预测的调用链"的分水岭。</p>
+<h3 id="deadline-timeout">deadline 与 timeout 不是同一个词</h3>
+<p>日常交流里这两个词经常混着用，但工程上最好分清：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>含义</th>
+<th>例子</th>
+<th>传递时的特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deadline</td>
+<td>一个绝对时间点</td>
+<td>请求必须在 12:00:00.800 之前完成</td>
+<td>跨服务传递时不必重新起算</td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>一段相对时长</td>
+<td>最多再等 800ms</td>
+<td>需要结合起始时刻才能变成 deadline</td>
+</tr>
+</tbody>
+</table>
+<p>两者可以互相换算：</p>
+<div class="codehilite"><pre><span></span><code>deadline = 起始时刻 + timeout
+remaining_timeout = deadline - now
+</code></pre></div>
+
+<p>例如客户端在 <code>12:00:00.000</code> 发出请求并给出 800ms 预算，那么 deadline 就是 <code>12:00:00.800</code>。到了 <code>12:00:00.200</code>，剩余预算就是 600ms。本文为表达方便会同时提到 deadline 和 timeout，但概念上要分清：deadline 回答"几点之前必须完成"，timeout 回答"现在还能等多久"。</p>
+<p>还有一个容易忽略的点：deadline 一旦确定，就应该作为"绝对时刻"在链路中传递，而不是每到一层就重新开一个 duration。绝对时刻的好处是语义稳定——不管中间经过多少次转发、排队或重试，大家比较的都是同一个终点。相对时长则依赖每一层各自的"现在"，一旦某一层延迟启动，重新起算就会凭空多出预算。</p>
+<h3 id="_3">一条教学用的内容后台调用链</h3>
+<p>下面是一条<strong>教学假设</strong>的调用链，用来固定讨论对象，不代表任何真实系统：</p>
+<ul>
+<li>入口服务 A：接收"生成一篇图文预览"的请求，负责参数校验、权限检查和结果聚合。</li>
+<li>素材元数据服务 B：根据素材 ID 返回标题、类型、尺寸、状态等元数据。</li>
+<li>对象存储索引服务 C：根据 B 提供的位置信息，返回可访问的地址或索引结果。</li>
+</ul>
+<p>客户端给整条链路的总预算是 <strong>800ms</strong>。注意，这 800ms 是 A、B、C 以及它们之间的网络共同分享的一个池子，不是每一层各自领一份。可以把它想成一次出差报销：总额固定，先花掉的部分不会因为换了城市就重新到账。</p>
+<p>错误做法是每一层都写死 800ms：A 等 B 最多 800ms，B 等 C 最多 800ms，C 自己也可能再等 800ms。这样做的结果是：</p>
+<ul>
+<li>总耗时会被机械叠加。A 已经等了 800ms 返回超时，B 可能还在等 C；C 甚至可能刚开始处理。</li>
+<li>上游已经放弃，下游却还在消耗连接、线程和 CPU，并且可能在调用方已经失败之后才完成写操作。</li>
+<li>每个服务看到的都是"我有 800ms"的错觉，没有任何一层知道真实还剩多少时间。</li>
+<li>重试会进一步放大问题：一次失败后重试，如果仍然按完整预算起算，等于把已经花掉的时间又借了一遍。</li>
+</ul>
+<p>正确做法只有一句话：<strong>跨服务传递剩余预算</strong>。剩余预算等于总预算减去已经消耗的时间，而"已经消耗"不只是业务代码执行时间，还包括排队、建立连接、序列化、本地处理以及已经发生的网络往返。</p>
+<h3 id="_4">错误与正确做法对照</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>错误做法：每层独立超时</th>
+<th>正确做法：共享总预算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>预算来源</td>
+<td>每层各自写死一个数字</td>
+<td>入口确定总预算，向下传剩余值或绝对 deadline</td>
+</tr>
+<tr>
+<td>已耗时处理</td>
+<td>不扣除，重新起算</td>
+<td>从总预算中扣除排队、建连、处理、网络耗时</td>
+</tr>
+<tr>
+<td>上游放弃后</td>
+<td>下游可能继续跑</td>
+<td>取消向下传播，各层尽快停止</td>
+</tr>
+<tr>
+<td>尾延迟</td>
+<td>多层叠加，长尾被放大</td>
+<td>由总预算封顶，行为可预测</td>
+</tr>
+<tr>
+<td>排障信息</td>
+<td>只看单层超时，难以还原全链路</td>
+<td>能回答"哪一跳用掉了多少预算"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_5">一笔预算账本</h3>
+<p>以上面的链路为例，当 C 在 T=200ms 开始处理时，200ms 已经被这样花掉：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>消耗</th>
+<th>累计已消耗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A 完成鉴权与参数校验</td>
+<td>50ms</td>
+<td>50ms</td>
+</tr>
+<tr>
+<td>A→B 网络传输</td>
+<td>20ms</td>
+<td>70ms</td>
+</tr>
+<tr>
+<td>B 排队与建立连接</td>
+<td>80ms</td>
+<td>150ms</td>
+</tr>
+<tr>
+<td>B 本地处理</td>
+<td>40ms</td>
+<td>190ms</td>
+</tr>
+<tr>
+<td>B→C 网络传输</td>
+<td>10ms</td>
+<td>200ms</td>
+</tr>
+</tbody>
+</table>
+<p>所以 C 拿到的剩余预算应当是 800ms - 200ms = <strong>600ms</strong>。如果 C 仍然拿到 800ms，那么整条链路的最大耗时可能变成 1000ms 甚至更多，客户端早就在 800ms 时放弃了。这张账本也是排障时的抓手：与其笼统地说"下游慢"，不如指出预算具体消耗在哪一段。</p>
+<h3 id="_6">一条时间线</h3>
+<table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>事件</th>
+<th>剩余预算</th>
+<th>该做什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T=0ms</td>
+<td>客户端把请求发给 A，总预算 800ms</td>
+<td>800ms</td>
+<td>A 记录绝对 deadline，而不是只记一个 duration</td>
+</tr>
+<tr>
+<td>T=50ms</td>
+<td>A 完成鉴权与参数校验，准备调用 B</td>
+<td>750ms</td>
+<td>把 750ms 的剩余值或对应 deadline 传给 B</td>
+</tr>
+<tr>
+<td>T=200ms</td>
+<td>B 完成排队、建连和本地处理，开始调用 C</td>
+<td>600ms</td>
+<td>C 应看到约 600ms，而不是重新拿到 800ms</td>
+</tr>
+<tr>
+<td>T=500ms</td>
+<td>C 处理完成并返回结果</td>
+<td>300ms</td>
+<td>B 继续做自己的后处理</td>
+</tr>
+<tr>
+<td>T=650ms</td>
+<td>B 返回给 A</td>
+<td>150ms</td>
+<td>A 还有时间做聚合和序列化</td>
+</tr>
+<tr>
+<td>T=750ms</td>
+<td>A 返回最终结果</td>
+<td>50ms</td>
+<td>正常完成，留有余量</td>
+</tr>
+<tr>
+<td>T=800ms</td>
+<td>整条链路到期</td>
+<td>0ms</td>
+<td>若仍未完成，各层应停止并向上返回超时</td>
+</tr>
+</tbody>
+</table>
+<p>这张表想说明两件事：第一，<strong>预算是一路递减的</strong>，不是每层重置；第二，即使总预算相同，不同层的可用时间也完全不同，越往下游越紧。</p>
+<h3 id="_7">两个常见的状态直觉</h3>
+<p>在 gRPC 的公开文档和常见实践中，有两个状态值得先建立直觉：</p>
+<ul>
+<li>客户端等到超过截止时间，通常看到 <code>DEADLINE_EXCEEDED</code>。</li>
+<li>服务端因为截止到期而取消调用，常见到 <code>CANCELLED</code>。</li>
+</ul>
+<p>这里只作为"直觉"给出，不要当成跨语言、跨版本的硬结论。具体状态码名称、默认是否设置 deadline、C++ 是否默认自动传播，一律<strong>以所用版本文档为准</strong>。不同框架、不同拦截器、不同客户端配置都可能改变实际表现，排查时要以版本和配置为准，而不是凭记忆。</p>
+<h3 id="_8">本课的三条主线</h3>
+<ol>
+<li><strong>总预算与单次超时</strong>：预算属于整条调用链，单次超时只是某个局部动作的上限。</li>
+<li><strong>排队、连接和处理时间</strong>：这些环节都在吃同一份预算，不能只盯着业务处理耗时。</li>
+<li><strong>取消检查与截止传播</strong>：取消要能传到下游，业务代码也要在合适的检查点停止。</li>
+</ol>
+<p>最后再强调一次：本课出现的端口、时长、服务名都是<strong>教学值</strong>，用于把语义讲清楚，不是生产默认值。真实系统里的预算来自容量评估、SLO 和压测结果。</p>
+<h2 id="_9">学习目标</h2>
+<p>学完本课，你应当能够做到下面这些可检验的事情：</p>
+<ol>
+<li><strong>解释总预算与单次超时的区别</strong>：能用自己的话说清"整条调用链共享一个截止点"和"某个 RPC 自己最多等多久"不是一回事，并指出为什么每层都填相同 timeout 会出问题。</li>
+<li><strong>说明剩余预算如何计算</strong>：能写出 <code>remaining = total_budget - elapsed</code>，并列出 elapsed 至少应包含排队、建立连接、本地处理和已发生的网络耗时。</li>
+<li><strong>解释时间都花在哪里</strong>：能结合一条 A→B→C 的链路，指出哪些环节会消耗预算，为什么"只看业务处理耗时"会低估真实开销。</li>
+<li><strong>说明取消检查与截止传播在做什么</strong>：能解释为什么上游到期后要向下游传播取消，以及业务代码为什么需要在合理的位置检查取消信号。</li>
+<li><strong>独立完成实验</strong>：实现 A 调用 B、B 调用 C 的链路，注入可控延迟，验证 C 拿到的是扣除已耗时后的剩余预算，而不是重新起算的完整预算。</li>
+<li><strong>对照验收条件一</strong>：构造实验证明总耗时不机械累加每层超时，而是受整条链路的总预算约束。</li>
+<li><strong>对照验收条件二</strong>：验证超时发生后不存在持续、无界的后台任务；该停的工作确实停了。</li>
+<li><strong>知道取消的边界</strong>：能说明客户端取消并不保证服务端业务操作自动回滚，取消信号与业务补偿是两件事。</li>
+</ol>
+<p>建议用一张简单的自查表来检验是否真的掌握，而不是只看"代码能跑"：</p>
+<table>
+<thead>
+<tr>
+<th>自查问题</th>
+<th>能通过的表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>总预算从哪里来？</td>
+<td>能指出入口处唯一的预算来源，而不是每层各写一个常量</td>
+</tr>
+<tr>
+<td>下游拿到多少？</td>
+<td>能算出扣除已耗时后的剩余值，并用日志或断言验证</td>
+</tr>
+<tr>
+<td>到期后谁停？</td>
+<td>能指出取消信号的传播路径和业务检查点</td>
+</tr>
+<tr>
+<td>失败了会回滚吗？</td>
+<td>明确知道取消不等于回滚，能说出需要补偿的场景</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_10">为什么后端要懂</h2>
+<p>节点给出的理由是：<strong>「避免下游链路超时叠加和请求结束后继续消耗资源。」</strong> 这句话看着简单，但它同时指向两个经常被分开讨论、实际却连在一起的问题：延迟和资源。</p>
+<p>先说延迟。内容后台、推送、素材拉取这类接口，天然容易长成扇出或链式结构：一个预览聚合请求可能要先查元数据，再查索引，再拼装结果；一次推送可能要先拉素材、校验状态，再逐批提交。只要其中一层给的是"独立超时"，上游的等待时间就可能接近多层之和。尾延迟会被放大，而且放大倍数随着调用深度增加。用户看到的是"偶尔特别慢"，系统看到的是大量请求在同一时间段内堆积。</p>
+<p>超时叠加通常不是一次发生的，而是这样一步步形成的：</p>
+<ul>
+<li>入口层为了"稳妥"，给下游设了一个比较大的 timeout。</li>
+<li>下游服务内部再调用其他服务时，又按自己的习惯设了一个同样大的 timeout。</li>
+<li>中间任何一层出现排队或重试，时间都记在上一层头上，但上一层并不知道。</li>
+<li>最外层到期返回时，内层还没有到自己的期限，于是继续跑。</li>
+<li>如果调用方失败后自动重试，下一轮又从完整预算开始，压力进一步叠加。</li>
+</ul>
+<p>再说资源。上游已经超时返回之后，如果下游没有收到取消，它仍然可能占着连接、线程和 CPU，继续解析、继续重试、继续访问存储。更麻烦的是状态一致性：调用方已经判定失败，下游却可能在稍后完成一次写操作，于是出现"用户看到失败、系统里却有数据"的情况。这类问题往往比单纯慢几秒更难排查。</p>
+<p>"请求结束后继续消耗资源"具体可能表现为：</p>
+<ul>
+<li>连接没有及时释放，连接池被慢请求长期占用。</li>
+<li>工作线程阻塞在已经无人等待的结果上，吞吐下降。</li>
+<li>后台任务继续扫描、序列化或写存储，CPU 和 I/O 被无效工作占用。</li>
+<li>下游容量被已经放弃的请求吃掉，进一步推高其他请求的延迟。</li>
+<li>写操作在调用方失败之后完成，造成状态与用户认知不一致。</li>
+</ul>
+<p>对准备进入公众号后台类业务的工程师来说，真正需要能说清的是三个问题：</p>
+<ul>
+<li>这条请求的<strong>总预算</strong>是多少，它由什么决定？</li>
+<li>每一跳出发时<strong>还剩多少预算</strong>，有没有把排队、建连、处理和网络耗时算进去？</li>
+<li>取消发生之后，<strong>谁负责停掉后台工作</strong>，哪些操作可以安全终止，哪些需要补偿？</li>
+</ul>
+<p>如果对这三个问题没有答案，只是给每个 RPC 填一个相同的 timeout 数字，那么系统看起来"处处都有超时"，实际上没有任何一层对整条链路的最终耗时负责。超时数字变成了心理安慰，而不是工程约束。</p>
+<p>重试也要放在预算视角下看。一次调用失败后重试，如果每次都用完整的 timeout，那么实际最长耗时可能是"单次超时 × 尝试次数"，而客户端可能只愿意等一个总时长。更合理的做法是让所有尝试共享同一个 deadline：第二次尝试开始前先看还剩多少时间，不够就不要再发。否则重试本意是提高成功率，结果却把尾延迟和下游压力一起放大。</p>
+<p>从排障角度看，独立超时和共享预算留下的信息也完全不同：</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>可能原因</th>
+<th>需要回答的问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>客户端偶发超时，服务端日志显示成功</td>
+<td>上游放弃后下游继续完成</td>
+<td>取消是否传到了下游？</td>
+</tr>
+<tr>
+<td>每层耗时都不高，总耗时却很高</td>
+<td>多次排队、建连、重试累加</td>
+<td>预算在哪几段被消耗？</td>
+</tr>
+<tr>
+<td>超时后负载没有下降</td>
+<td>后台任务未停止或未取消</td>
+<td>谁持有取消信号？</td>
+</tr>
+<tr>
+<td>重试后成功率没升，延迟更高</td>
+<td>每次重试重新起算完整预算</td>
+<td>尝试之间是否共享 deadline？</td>
+</tr>
+</tbody>
+</table>
+<p>设计评审时，可以把下面几个问题当作检查清单：</p>
+<ul>
+<li>入口是否只确定一次总预算，而不是每层各自决定？</li>
+<li>向下游传递的是剩余时间或绝对 deadline，而不是原始 duration？</li>
+<li>日志里是否能看出每一跳开始和结束时的剩余预算？</li>
+<li>取消路径是否覆盖了阻塞等待、批量处理和后台任务？</li>
+<li>是否存在"调用方已失败、写操作稍后完成"的可能，需不需要补偿？</li>
+</ul>
+<p>同时要再次提醒：本课引用的是公开的超时 / deadline 语义和公开文档中的常见现象，不能据此推断任何企业的内部实现。真实系统里的默认值、拦截器行为、状态码映射和传播策略，都要回到所用版本与配置去确认。</p>
+<h3 id="_11">把预算当成接口契约</h3>
+<p>预算不应该只是调用方在客户端随手设置的一个参数，它更像接口契约的一部分。调用方负责给出总预算并向下传播剩余值；被调方负责在预算不足时快速失败，而不是"既然开始了就做完"；双方对预算耗尽时的错误语义要有共识。只有这样，"还剩多少时间"才是链路中各层都能读懂的信号，而不是某一层自己的秘密。</p>
+<p>具体来说，契约至少包含四件事：</p>
+<ul>
+<li><strong>入口定预算</strong>：总预算由最外层根据业务目标确定，不能由中间层临时放大。</li>
+<li><strong>向下传剩余值</strong>：每一跳把扣除已耗时后的剩余时间或绝对 deadline 交给下一跳。</li>
+<li><strong>不足时快速失败</strong>：发现剩余预算已经无法完成有意义的工作时，尽早返回，而不是硬撑。</li>
+<li><strong>可观测</strong>：日志和指标记录每一跳开始、结束时的剩余预算，方便还原预算去向。</li>
+</ul>
+<p>反过来，如果团队只把 timeout 当成客户端的私有参数，服务端就完全不知道请求的紧迫程度。上游可能打算 50ms 后就放弃，下游却按自己的默认策略慢慢排队、慢慢处理。双方都没有错，但组合起来就是浪费。</p>
+<h3 id="_12">一个常见的反例</h3>
+<p>B 对 C 使用固定的 800ms，但 B 在 A 的预算里其实只剩 100ms。C 慢慢地跑了 700ms 并成功返回，可是 A 早在链路到期时已经失败。结果是：C 的工作白做，B 的连接和线程被长时间占用，监控上 B 可能显示"调用成功"，A 却显示"请求失败"，两边口径不一致。把某一个 timeout 调小并不能解决这个问题，因为问题的根源不是单个数字太大，而是各层没有共享同一个截止点。</p>
+<h3 id="_13">预算不足时应该做什么</h3>
+<p>当剩余预算已经不足以完成一个完整阶段时，正确的动作通常是尽快失败，而不是"再试一下看看"。可以遵循几条简单规则：</p>
+<ul>
+<li>不要启动新的阶段：例如预算只够查询元数据，就不要再发起一次耗时的索引拉取。</li>
+<li>不要做不可中断的大批量写：先确认剩余预算，再决定是否拆分或延后。</li>
+<li>不要用重试掩盖预算不足：每次尝试前重新计算剩余时间，不够就不再发。</li>
+<li>记录失败时的剩余预算：这比只记录"超时了"更有助于定位问题。</li>
+<li>区分可重试与不可重试：预算耗尽往往是整体性问题，盲目重试可能加重下游负担。</li>
+</ul>
+<p>这些规则不依赖具体框架，也不要求知道任何内部实现。它们只是把"预算是共享的"这一事实，落实到每一次调用决策里。</p>
+<p>带着这条主线往下看：为什么"给每层都设超时"不等于"控制总耗时"，以及一个已经消耗了部分预算的请求，应该把什么样的时间信息交给下一跳。</p>
+<h2 id="_14">核心概念</h2>
+<h3 id="1">1. 总预算与单次超时</h3>
+<p>先把一次用户请求想成一笔「时间预算」。总预算是你愿意为这次请求付出的全部时间；单次超时是某一跳自己给自己批的额度。问题在于：额度如果每一跳都重新批一次，账单就会叠加。</p>
+<p>假设客户端给整条链路的总预算是 800ms，链路上依次是客户端 → A（预览服务）→ B（素材元数据服务）→ C（存储索引服务）。最直觉但也最危险的写法，是每一层都写死一个 800ms 超时：</p>
+<ul>
+<li>客户端最多等 A 800ms；</li>
+<li>A 最多等 B 800ms；</li>
+<li>B 最多等 C 800ms。</li>
+</ul>
+<p>一旦 A 自己排队加处理花了 300ms，B 又花了 300ms，C 仍然重新获得完整的 800ms，那么仅这三段相加就已经是 1400ms，客户端的 800ms 早已到期，后面两跳却还在为一个没人要的结果继续干活。更糟的是，如果有人为了“让下游来得及”而把上层超时写成各层之和（800ms + 800ms + 800ms），用户可见的最坏耗时就会被机械叠加到约 2400ms。</p>
+<p>正确的做法是让预算沿链路递减：每一跳拿到的不是「再给 800ms」，而是「总预算减去已经花掉的时间」。下面用一组教学值说明（真实数值应按业务压测确定）：</p>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>独立超时做法</th>
+<th>剩余预算做法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>客户端 → A</td>
+<td>再批 800ms</td>
+<td>共享同一个 800ms 截止</td>
+<td>入口只定一次总预算</td>
+</tr>
+<tr>
+<td>A 本地排队与预处理</td>
+<td>不从下游额度里扣</td>
+<td>消耗 120ms，剩 680ms</td>
+<td>本地耗时也算进总预算</td>
+</tr>
+<tr>
+<td>A → B 传输</td>
+<td>不从下游额度里扣</td>
+<td>消耗 80ms，剩 600ms</td>
+<td>网络耗时同样要扣</td>
+</tr>
+<tr>
+<td>B → C 调用</td>
+<td>重新批 800ms</td>
+<td>只给剩余约 600ms</td>
+<td>关键差异：重开 vs 递减</td>
+</tr>
+<tr>
+<td>C 处理</td>
+<td>可以再跑满 800ms</td>
+<td>不超过剩余约 600ms</td>
+<td>独立做法会让下游在上游放弃后继续跑</td>
+</tr>
+<tr>
+<td>端到端最坏</td>
+<td>约 1400ms 资源占用；若上层被加成 800+800+800 则约 2400ms</td>
+<td>由总预算封顶，约 800ms</td>
+<td>正确做法下总耗时不机械累加每层超时</td>
+</tr>
+</tbody>
+</table>
+<p>表里的关键不是具体毫秒，而是「剩余」这个动作。B 出发时应该带着约 600ms，而不是重新开一个 800ms。只要每一跳都做减法，端到端上界就仍然由最初的总预算兜住。</p>
+<p>这里要区分两个词：</p>
+<ul>
+<li><strong>deadline</strong>：一个绝对时间点，过了这个点，调用方就不愿再等结果。</li>
+<li><strong>timeout</strong>：一段持续时间。<code>timeout + 起始时刻 = deadline</code>。</li>
+</ul>
+<p>gRPC 的公开文档主要用 deadline 表述，有的语言 API 暴露的却是 timeout。两者可以互相换算，但在跨机器传播时要注意时钟偏移：A 机器上的绝对时间点，到了时钟慢 200ms 的 B 机器上，含义就变了。因此实现上通常不直接传绝对时间戳，而是把 deadline 换算成「已经扣掉流逝时间的 timeout」再传给下游。具体字段名、API 名称和换算方式，以所用版本文档为准。</p>
+<p>下面三段只是教学示意，用来对照「续传预算」和「每跳重开」的区别，真实 API 以所用版本文档为准。</p>
+<p>C++ 风格：从入站 context 读出截止时间，出站时设置同一个 deadline，而不是重新加一个完整超时。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 教学示例：名称与可用性以所用 gRPC 版本文档为准</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">HandlePreview</span><span class="p">(</span><span class="n">grpc</span><span class="o">::</span><span class="n">ServerContext</span><span class="o">*</span><span class="w"> </span><span class="n">ctx</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">deadline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ctx</span><span class="o">-&gt;</span><span class="n">deadline</span><span class="p">();</span><span class="w">          </span><span class="c1">// 入站调用剩余的时间点</span>
+<span class="w">  </span><span class="n">grpc</span><span class="o">::</span><span class="n">ClientContext</span><span class="w"> </span><span class="n">downstream</span><span class="p">;</span>
+<span class="w">  </span><span class="n">downstream</span><span class="p">.</span><span class="n">set_deadline</span><span class="p">(</span><span class="n">deadline</span><span class="p">);</span><span class="w">        </span><span class="c1">// 继续沿用，而不是 now + 800ms</span>
+
+<span class="w">  </span><span class="c1">// 如果本层已经花掉一些时间，也可以显式计算剩余：</span>
+<span class="w">  </span><span class="c1">// auto remaining = deadline - std::chrono::system_clock::now();</span>
+<span class="w">  </span><span class="c1">// if (remaining &lt;= std::chrono::milliseconds::zero()) return; // 快速失败</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>Python 风格：<code>timeout</code> 是相对时长，传给下游前要减掉本地已经消耗的部分。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 教学示例：字段名与异常类型以所用版本文档为准</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">handle_preview</span><span class="p">(</span><span class="n">inbound_deadline_ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">total_budget_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">):</span>
+    <span class="n">remaining</span> <span class="o">=</span> <span class="n">inbound_deadline_ts</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">"budget exhausted before work started"</span><span class="p">)</span>
+
+    <span class="n">started</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">load_local_metadata</span><span class="p">()</span>          <span class="c1"># 本地预处理</span>
+    <span class="n">remaining</span> <span class="o">=</span> <span class="n">inbound_deadline_ts</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">min_useful</span> <span class="o">=</span> <span class="mf">0.05</span>                          <span class="c1"># 建连 + 一趟 RTT + 最短处理</span>
+    <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;</span> <span class="n">min_useful</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">"not enough budget for downstream call"</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fetch_storage_index</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">remaining</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Go 风格：关键是继续把上游的 <code>ctx</code> 往下传，而不是在每一跳重新 <code>context.WithTimeout(ctx, 800*time.Millisecond)</code>。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 教学示例：具体行为以所用版本文档为准</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">HandlePreview</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ctx 已经带着上游的 deadline；直接传给下游即可</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">fetchStorageIndex</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// 反例：每一跳都重新批 800ms，预算会叠加</span>
+<span class="c1">// child, cancel := context.WithTimeout(context.Background(), 800*time.Millisecond)</span>
+</code></pre></div>
+
+<p>还有两个容易忽略的默认行为：</p>
+<ul>
+<li>gRPC 客户端默认可能不设置 deadline，也就是「一直等」。生产代码应显式设置合理截止，不要依赖默认值。</li>
+<li>服务端超过截止后，客户端常见的失败状态是 <code>DEADLINE_EXCEEDED</code>。具体默认值与状态码含义，以所用版本文档为准。</li>
+</ul>
+<p>放回内容后台的场景：图文预览入口要求 800ms 内必须返回。预览服务需要素材元数据，也需要存储索引。这两个下游调用共享同一个 800ms，而不是各自再要 800ms。元数据花掉 200ms，索引调用就只剩约 600ms；如果索引本身最短也要 400ms，而当前只剩 300ms，就应该直接失败并给入口一个明确的降级结果，而不是发一个注定超时的请求。</p>
+<h3 id="2">2. 排队、连接和处理时间</h3>
+<p>超时时钟不是从「业务函数第一行」才开始走的。对调用方来说，从发起调用（或 deadline 对应的起点）那一刻起，预算就在流失。真正干活之前，至少有以下阶段会吃掉预算：</p>
+<ol>
+<li>调用方线程池 / 协程调度排队；</li>
+<li>建立连接，或从连接池取出可用连接（含握手、TLS 等）；</li>
+<li>请求序列化与写出；</li>
+<li>网络传输与中间代理转发；</li>
+<li>被调方入队等待处理；</li>
+<li>被调方业务处理（还可能继续调用更下游）；</li>
+<li>响应返回与反序列化。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>是否消耗总预算</th>
+<th>典型风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>调用方线程池排队</td>
+<td>是</td>
+<td>高峰期排队 100~200ms，业务还没开始预算已少一截</td>
+</tr>
+<tr>
+<td>建立连接 / 取连接池</td>
+<td>是</td>
+<td>冷启动握手、TLS、连接池耗尽导致额外等待</td>
+</tr>
+<tr>
+<td>序列化与写出</td>
+<td>是</td>
+<td>大 payload、慢磁盘日志、阻塞式写</td>
+</tr>
+<tr>
+<td>网络传输与代理</td>
+<td>是</td>
+<td>跨机房 RTT、代理重试、丢包重传</td>
+</tr>
+<tr>
+<td>被调方入队</td>
+<td>是</td>
+<td>下游线程池满，请求在队列里等到过期</td>
+</tr>
+<tr>
+<td>被调方业务处理</td>
+<td>是</td>
+<td>慢查询、锁竞争、调用更下游</td>
+</tr>
+<tr>
+<td>响应返回</td>
+<td>是</td>
+<td>大响应体、网络抖动</td>
+</tr>
+</tbody>
+</table>
+<p>由此得到几个推论。</p>
+<p>第一，只按「C 的处理要 200ms」来设超时是不够的。排队、建连、传输都不在 C 的业务函数里，却都花的是同一笔预算。配置里写 <code>timeout = 200ms</code>，实际可能连 C 的第一行都没跑到就已经到期。</p>
+<p>第二，当剩余预算已经小于「最小可行开销」时，应该快速失败。最小可行开销可以粗略理解为：建立连接（如果还没有可用连接）+ 一趟网络往返 + 下游最短处理时间。剩余预算低于这个值，再发请求只会制造一个必然的 <code>DEADLINE_EXCEEDED</code>，还会占用下游资源。</p>
+<p>第三，注入延迟实验要放在正确的位置。比如让 B 在调用 C 之前 <code>sleep(200ms)</code>，模拟的是 B 的排队或本地预处理吃掉了预算；此时 C 看到的剩余预算，应该明显小于最初的总预算。如果实验里 C 仍然拿到完整的 800ms，说明预算根本没有被扣减，实验本身就没测到点上。</p>
+<p>下面是一段可对照的 Python 伪代码，把「算剩余 → 判断最小开销 → 再调用」串起来：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 教学示例：仅表达预算计算逻辑，框架 API 以所用版本文档为准</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">MIN_USEFUL_S</span> <span class="o">=</span> <span class="mf">0.05</span>   <span class="c1"># 建连 + 一趟 RTT + 最短处理，教学值</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_downstream</span><span class="p">(</span><span class="n">deadline_ts</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">need_connect</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="n">remaining</span> <span class="o">=</span> <span class="n">deadline_ts</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"DEADLINE_EXCEEDED"</span><span class="p">,</span> <span class="s2">"stage"</span><span class="p">:</span> <span class="s2">"before_call"</span><span class="p">}</span>
+
+    <span class="n">min_useful</span> <span class="o">=</span> <span class="n">MIN_USEFUL_S</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.03</span> <span class="k">if</span> <span class="n">need_connect</span> <span class="k">else</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;</span> <span class="n">min_useful</span><span class="p">:</span>
+        <span class="c1"># 注定超时的请求不发，直接失败，保护下游</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"INSUFFICIENT_BUDGET"</span><span class="p">,</span> <span class="s2">"remaining_ms"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">remaining</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)}</span>
+
+    <span class="n">started</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">do_rpc</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">remaining</span><span class="p">)</span>        <span class="c1"># 只给剩余预算</span>
+    <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"result"</span><span class="p">:</span> <span class="n">result</span><span class="p">,</span> <span class="s2">"elapsed_ms"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">elapsed</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)}</span>
+</code></pre></div>
+
+<p>还有一个常被忽略的预算黑洞：重试。重试不是免费的，每一次尝试都重新消耗预算，而且通常发生在剩余预算已经不多的时候。假设总预算 800ms，第一次调用在 700ms 时失败，只剩 100ms；此时重试一个通常要 100ms 以上的请求，大概率再次超时，还让下游多背一次负载。是否重试、重试几次、退避多久，都要从剩余预算里扣；同时还要考虑操作是否幂等，非幂等的写操作盲目重试可能造成重复提交。这里只点到为止，重试策略本身是另一个话题。</p>
+<p>放回内容后台：高峰期素材服务的线程池排队 150ms，请求才被真正处理，然后还要去拉存储索引。如果总预算是 800ms，这 150ms 排队就是预算的一部分。不能因为在监控里只看到「业务处理耗时 300ms」就认为一切正常，也不能在配置里把排队时间「假装不存在」。预算核算要覆盖从入口到出口的整段时间。</p>
+<h3 id="3">3. 取消检查与截止传播</h3>
+<p>截止传播和取消检查解决的是两个不同的问题：</p>
+<ul>
+<li><strong>截止传播</strong>：下游不要再按旧的完整超时干活，而要按上游剩下的时间干活。</li>
+<li><strong>取消检查</strong>：上游已经不要结果了，下游要停止自己拉起的工作，释放资源。</li>
+</ul>
+<p>只做前者，下游仍可能在到期后继续跑一段；只做后者，下游可能根本不知道上游的截止是什么时候。两者要一起用。</p>
+<h4 id="_15">截止如何传播</h4>
+<p>按 gRPC 公开文档的通用描述（细节以所用版本文档为准）：</p>
+<ul>
+<li>截止本质上是一个时间点。直接把绝对时间戳传到另一台机器，会受时钟偏移影响。</li>
+<li>因此实现上通常把它换算成 timeout，并且已经扣除流逝时间，再传给下游。</li>
+<li>部分语言实现会默认把入站 RPC 的 deadline 传到出站 RPC。公开文档中常被举例的是 Java 与 Go 默认开启；C++ 等语言可能需要显式启用。是否默认传播、如何启用，以所用版本文档为准。</li>
+<li>不要用「每层手动再写一个相同 timeout」来代替传播。那样做只是把 800ms 复制了多次，并没有传递剩余预算。</li>
+</ul>
+<p>一个直观的时间线（教学值，统一用 800ms）：</p>
+<table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>事件</th>
+<th>下游看到的剩余预算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T=0</td>
+<td>客户端发起预览请求，总预算 800ms</td>
+<td>A 约 800ms</td>
+</tr>
+<tr>
+<td>T=120</td>
+<td>A 完成本地排队与预处理</td>
+<td>—</td>
+</tr>
+<tr>
+<td>T=200</td>
+<td>A 把请求发往 B</td>
+<td>B 约 600ms</td>
+</tr>
+<tr>
+<td>T=350</td>
+<td>B 完成元数据查询，准备调 C</td>
+<td>C 约 450ms</td>
+</tr>
+<tr>
+<td>T=800</td>
+<td>客户端停止等待，返回 DEADLINE_EXCEEDED</td>
+<td>各层应停止等待并清理</td>
+</tr>
+<tr>
+<td>T&gt;800</td>
+<td>若仍有后台任务在跑</td>
+<td>违反「超时后无持续无界后台任务」</td>
+</tr>
+</tbody>
+</table>
+<p>对应到内容后台：A 是预览服务，B 是素材元数据服务，C 是存储索引服务。T=0 客户端要求 800ms 内完成；A 花掉一段本地时间后才调 B；B 再花一段时间后调 C；C 拿到的是扣除前两段之后的剩余 timeout，而不是又一个 800ms。到期时客户端不再等待，A、B、C 都应停止等待并释放自己占用的资源。</p>
+<p>这里再强调一次「不要手动复制超时」。下面这种写法看起来像是在传播，实际上每一层都重新批了完整额度：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 反例：每层各自 new 一个 800ms，端到端可能远超 800ms</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">call_b</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">do_rpc</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>   <span class="c1"># 上游只剩 300ms，这里却又批了 800ms</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_c</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">do_rpc</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>   <span class="c1"># 继续叠加</span>
+</code></pre></div>
+
+<p>正确做法只有两条路：要么把上游的 ctx / deadline 原样传下去，让框架负责换算；要么显式用 <code>remaining = deadline - now</code> 计算后传给下游。两条路都要求「减法」，而不是「重置」。</p>
+<h4 id="_16">取消检查要检查什么</h4>
+<p>框架通常会在截止过后把调用标记为取消（公开文档中服务端常见 <code>CANCELLED</code>），但这只是「这次 RPC 的状态」。它不会自动杀掉你自己起的后台线程，也不会回滚已经提交的写操作。服务端应用有责任停止自己拉起的工作，包括：</p>
+<ul>
+<li>循环处理中的批任务；</li>
+<li>线程池里排队的任务；</li>
+<li>对更下游发起的调用；</li>
+<li>异步回写、异步日志、异步刷新等脱离请求生命周期的任务。</li>
+</ul>
+<p>检查方式因语言而异，名称以所用版本文档为准：Go 用 <code>ctx.Done()</code> / <code>ctx.Err()</code>，C++ 可用 context 的取消回调或 <code>IsCancelled</code> 一类接口，Python 可用 context 的取消状态。原则是周期性地检查，而不是只在入口检查一次。</p>
+<p>下面两段短代码，一段演示传播，一段演示检查。</p>
+<p>传播：从入站 context 取出 deadline / remaining，构造出站调用，而不是新开一个完整超时。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 教学示例：API 与默认行为以所用版本文档为准</span>
+<span class="kd">func</span><span class="w"> </span><span class="p">(</span><span class="nx">s</span><span class="w"> </span><span class="o">*</span><span class="nx">PreviewServer</span><span class="p">)</span><span class="w"> </span><span class="nx">GetPreview</span><span class="p">(</span><span class="nx">ctx</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Context</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">*</span><span class="nx">PreviewReq</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="nx">PreviewResp</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// ctx 已携带入站 deadline；直接用于下游调用</span>
+<span class="w">    </span><span class="nx">meta</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">metaClient</span><span class="p">.</span><span class="nx">Get</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="nx">MetaReq</span><span class="p">{</span><span class="nx">Id</span><span class="p">:</span><span class="w"> </span><span class="nx">req</span><span class="p">.</span><span class="nx">Id</span><span class="p">})</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// 如果框架不会自动传播，就显式取出剩余时间再传</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nx">deadline</span><span class="p">,</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">ctx</span><span class="p">.</span><span class="nx">Deadline</span><span class="p">();</span><span class="w"> </span><span class="nx">ok</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">remaining</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">time</span><span class="p">.</span><span class="nx">Until</span><span class="p">(</span><span class="nx">deadline</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">remaining</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="nx">status</span><span class="p">.</span><span class="nx">Error</span><span class="p">(</span><span class="nx">codes</span><span class="p">.</span><span class="nx">DeadlineExceeded</span><span class="p">,</span><span class="w"> </span><span class="s">"budget exhausted"</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="nx">child</span><span class="p">,</span><span class="w"> </span><span class="nx">cancel</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">WithTimeout</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">remaining</span><span class="p">)</span><span class="w"> </span><span class="c1">// 仍挂在父 ctx 上</span>
+<span class="w">        </span><span class="k">defer</span><span class="w"> </span><span class="nx">cancel</span><span class="p">()</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">child</span><span class="p">,</span><span class="w"> </span><span class="nx">meta</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">s</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nx">meta</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意 <code>context.WithTimeout(ctx, remaining)</code> 的第一个参数是父 <code>ctx</code>，不是 <code>context.Background()</code>。父 <code>ctx</code> 被取消时，子 <code>ctx</code> 也会被取消；这正是取消能继续向下游传播的原因。</p>
+<p>检查：在处理循环里每 N 次或每段 I/O 后检查取消，发现取消就停止并释放资源。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 教学示例：取消状态 API 以所用版本文档为准</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rebuild_material_index</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ctx</span><span class="o">.</span><span class="n">is_cancelled</span><span class="p">():</span>          <span class="c1"># 上游可能已超时或主动取消</span>
+            <span class="n">flush_partial</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>        <span class="c1"># 按业务决定是否保留部分结果</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"CANCELLED"</span><span class="p">,</span> <span class="s2">"processed"</span><span class="p">:</span> <span class="n">i</span><span class="p">}</span>
+
+        <span class="n">batch</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transform</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="n">write_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>          <span class="c1"># 每段 I/O 后也应检查</span>
+            <span class="n">batch</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">50</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">ctx</span><span class="o">.</span><span class="n">is_cancelled</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"CANCELLED"</span><span class="p">,</span> <span class="s2">"processed"</span><span class="p">:</span> <span class="n">i</span><span class="p">}</span>
+
+    <span class="n">flush_partial</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"OK"</span><span class="p">,</span> <span class="s2">"processed"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">)}</span>
+</code></pre></div>
+
+<p>注意两个实践细节：</p>
+<ul>
+<li>取消检查要放在「可能长时间阻塞」的位置之前和之后。只在循环开头检查，遇到一次慢 I/O 仍然会卡很久。</li>
+<li>清理逻辑本身也要有边界。收到取消后，不要再启动新的大批量任务，也不要无限重试清理；否则「取消」只是换了个地方继续消耗资源。</li>
+</ul>
+<p>还有一个容易被忽略的边界：已经提交的写操作不会因为取消而回滚。比如素材元数据已经落库，随后上游超时取消，这时能做的是停止后续步骤、记录状态、让补偿或对账去处理，而不是假设「取消了就等于什么都没发生」。取消是停止继续做，不是事务回滚。</p>
+<p>放回内容后台的整体行为可以这样描述：预览入口带着 800ms 预算进来；预览服务把剩余预算传给元数据服务；元数据服务再把更少的剩余传给存储索引；任何一层发现剩余预算低于最小可行开销就快速失败；客户端到期后，各层通过取消信号停止循环、停止下游调用、释放连接和临时资源。这样即使某一次请求失败，也不会在后台留下一个还在拉素材、写索引的无界任务。</p>
+<h4 id="_17">三个常见误区</h4>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>表面现象</th>
+<th>实际后果</th>
+<th>修正</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每跳都设 800ms</td>
+<td>单跳看都「有超时」</td>
+<td>端到端叠加，上游早已放弃</td>
+<td>传剩余预算</td>
+</tr>
+<tr>
+<td>只给业务处理设超时</td>
+<td>单次耗时看起来正常</td>
+<td>排队、建连已吃掉预算</td>
+<td>从调用起点计时</td>
+</tr>
+<tr>
+<td>超时后不管后台任务</td>
+<td>RPC 已返回失败</td>
+<td>后台仍在拉取或写入，资源泄漏</td>
+<td>检查取消并停止</td>
+</tr>
+</tbody>
+</table>
+<p>还要注意：deadline 是「不愿再等」的时刻，不等于「下游一定已经停下」。客户端在 T=800ms 返回 <code>DEADLINE_EXCEEDED</code> 时，服务端可能刚收到取消信号，也可能正在做清理。因此监控上要分别看客户端失败率和服务端取消、清理耗时，不能用一个指标代替另一个。</p>
+<p>在容量规划上，总预算也决定了并发上限的粗略关系：单实例可承载的并发，大致受「可用工作线程数 × 单请求预算内能完成的批次数」约束。预算给得越长，同样线程数下吞吐越低；预算给得太短，又会把正常慢请求误杀。这个权衡要用压测数据说话，而不是拍脑袋。</p>
+<p>一个简单的自检清单：</p>
+<ul>
+<li>每个下游调用拿到的是剩余预算，而不是重新开始的完整超时；</li>
+<li>预算计算覆盖了排队、建连、传输和处理，而不只是业务函数；</li>
+<li>收到取消后，循环、下游调用和后台任务都能在有限步内停下。</li>
+</ul>
+<p>最后把三点收束一下：<strong>总预算</strong>防止每跳重新批额度导致叠加；<strong>拆开排队、连接、处理</strong>才能算准每一跳真正还剩多少；<strong>截止传播加取消检查</strong>才能在到期之后真正停掉无用工作。三者缺一，超时配置就只是写在配置文件里的数字，而不是对资源边界的真实约束。</p>
+<h2 id="_18">常见误区与设计权衡</h2>
+<blockquote>
+<p><strong>pitfalls 原文</strong>：「客户端取消不保证服务端业务操作自动回滚。」</p>
+<p><strong>tradeoffs 原文</strong>：「紧预算保护尾延迟，也可能增加可恢复请求失败率。」</p>
+</blockquote>
+<p>这两句话要放在一起看。前者提醒我们：取消是调用方的动作，不是服务端的数据库事务；后者提醒我们：超时预算不是越短越“安全”。下面先拆开这两句，再列出几个实现时最常见的误判。</p>
+<p><strong>pitfalls：取消只让调用方停止等待，不会自动撤销已经发生的副作用。</strong></p>
+<p>客户端取消、deadline 到期、连接断开，本质上都是“调用方不再等这个结果”。它可能释放调用方的线程、连接和请求上下文，但不会自动通知所有下游“刚才做过的事都不算”。把取消理解成分布式事务回滚，是很多后台系统出现脏状态和重复任务的起点。</p>
+<p>服务端如果已经向数据库提交、向消息队列投递、向对象存储写入，或者已经调用了下一个写接口，这些动作都发生在“取消信号到达”之前或之外。取消本身没有反向操作，除非系统另外实现了补偿、幂等回滚、状态机回收或对账。</p>
+<p>在通用内容后台里，可以做一个教学假设：发布预检查服务收到请求后，先写下一条“处理中”记录，或者已经通知转码任务开始工作。此时上游因为超时取消，调用方看到的是失败，但记录和任务通常不会自己消失。于是出现“调用方认为失败、服务端仍在处理”的分裂状态；后续重试还可能再创建一条记录或再投递一次任务。</p>
+<p>正确方向不是幻想“取消即回滚”，而是提前定义写操作的结果语义：接口尽量幂等；状态用业务状态机推进，例如处理中、成功、失败、待回收；在取消路径上明确选择补偿、标记失败，还是留给对账任务处理。这里给出的是通用工程结论，不代表任何特定公司的内部实现。</p>
+<p><strong>tradeoffs：紧预算保护尾延迟，但会牺牲一部分可恢复请求。</strong></p>
+<p>较短 deadline 的价值在于限制尾延迟。慢请求不会长期占住线程、连接和队列位置，上游也能更早释放资源；对整体吞吐和用户侧等待时间通常更友好。尤其当少数慢查询或网络抖动会拖住大量请求时，紧预算像一道隔离墙。</p>
+<p>代价是容错空间变小。网络抖动、轻微排队、一次本来可以恢复的慢查询，都可能被判定为失败。失败率上升后，如果调用方再统一加一次或两次重试，瞬时请求量可能翻倍，反而把下游压得更紧，形成“超时—重试—更慢—更多超时”的循环。</p>
+<p>松预算的方向相反：单次调用成功率看起来更高，但尾延迟和资源占用都会变差。上游用户、网关或移动网络可能先于服务端放弃，最终仍然是失败，只是失败发生得更晚、占用资源更多。预算选择要对着 SLA、下游 P99、排队模型和重试策略一起看，而不是给所有接口拍一个“全都 3 秒”。</p>
+<table>
+<thead>
+<tr>
+<th>预算倾向</th>
+<th>尾延迟</th>
+<th>可恢复请求失败率</th>
+<th>资源占用</th>
+<th>重试放大风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>紧预算</td>
+<td>通常更低</td>
+<td>通常更高</td>
+<td>更少</td>
+<td>更高，失败更早触发重试</td>
+</tr>
+<tr>
+<td>松预算</td>
+<td>通常更高</td>
+<td>表面更低</td>
+<td>更多</td>
+<td>可能更集中，失败来得更晚</td>
+</tr>
+<tr>
+<td>适中预算</td>
+<td>取决于链路</td>
+<td>取决于抖动窗口</td>
+<td>取决于排队</td>
+<td>需要配合退避与幂等</td>
+</tr>
+</tbody>
+</table>
+<p>实际落地时，可以把预算拆成“入口总预算”和“每跳可用剩余预算”。入口预算由 SLA 和用户可接受等待时间决定；每跳只使用剩余值，并为建连、排队、序列化、代理转发留出余量。重试策略则要单独限流，并且只对幂等操作开放。</p>
+<h3 id="_19">五个高频误区</h3>
+<ol>
+<li><strong>每层设置相同的 timeout。</strong> 错在把“单跳上限”当成“整链上限”。A、B、C 各写 800ms，最坏情况下总耗时会被层层拉长，入口早已超时，内层还在工作。正确做法是传递绝对截止时间或剩余预算，每层都从剩余值里扣。</li>
+<li><strong>只估算业务处理时间。</strong> 排队、建连、TLS 握手、序列化、代理转发、日志落盘都要吃预算。只按“查询大概 50ms”设值，线上很容易在非业务环节超时。预算应覆盖完整调用路径，并保留抖动余量。</li>
+<li><strong>依赖框架自动取消，却不检查自己的循环和线程池任务。</strong> 框架可能只取消等待中的 RPC，不会替你中断一个正在 <code>while</code> 循环、正在批量拉素材、或已经提交到线程池的任务。结果是接口返回了，后台还在持续跑，形成无界工作。</li>
+<li><strong>把超时失败直接当成可安全重试。</strong> 超时只说明“没有按时拿到结果”，不说明“下游没有执行”。对非幂等写操作，盲目重试可能重复发布、重复扣减、重复投递。重试前要确认幂等键、去重记录或状态机是否允许。</li>
+<li><strong>剩余预算不够一次往返时仍然发起下游调用。</strong> 这时调用大概率注定超时，还会占用连接并让下游做无用功。更合理的做法是快速失败、降级或返回可重试错误；是否值得“最后试一下”，要按业务收益和下游成本判断。</li>
+</ol>
+<blockquote>
+<p>这些误区有一个共同点：都在用“单次请求的局部视角”替代“整条链路的预算与状态视角”。下一节用一个小实验把剩余预算和取消检查跑出来。</p>
+</blockquote>
+<h2 id="abc">动手实践：实现A调用B调用C，注入延迟并验证下游获得剩余预算</h2>
+<p>本节用单进程 Python 模拟 RPC，不依赖真实 gRPC 服务；重点不是传输协议，而是 deadline 如何沿 A -&gt; B -&gt; C 传递，以及取消后循环如何停下。</p>
+<h3 id="_20">实验目标</h3>
+<ol>
+<li>正常链路中，C 看到的不是重新写死的 800ms，而是扣除 A 入口和 B 注入延迟后的剩余预算。</li>
+<li>错误链路中，每一跳各自使用 800ms，整链耗时超过入口总预算。</li>
+<li>超时发生后，C 的循环停止，计数器不再增长。</li>
+</ol>
+<h3 id="_21">操作步骤（上）</h3>
+<ol>
+<li>准备工作目录并记录版本：
+   <code>bash
+   mkdir -p /tmp/deadline-lab &amp;&amp; cd /tmp/deadline-lab
+   python3 --version</code></li>
+<li>把下面的代码保存为 <code>deadline_lab.py</code>。这是教学示例，用函数调用模拟 A、B、C 三个服务，不绑定任何框架。</li>
+<li>A 设置总预算 800ms。传播时使用 <code>Deadline</code> 对象，相当于把绝对截止时间放进 context；生产环境也可以放在请求头里，例如自定义头 <code>X-Timeout-Ms</code>，但具体字段和单位要以所用协议与版本文档为准。</li>
+<li>B 收到 deadline 后先注入 200ms 延迟，再调用 C；B 和 C 都不重新创建 800ms。</li>
+<li>正常链路里 C 的入口剩余应约为 600ms，而不是 800ms。</li>
+<li>错误对照里每一跳都新建 800ms，C 再处理 700ms；观察整链是否超过 800ms。若每层还各自重试，累计耗时更容易接近 1.5s。</li>
+</ol>
+<h3 id="_22">完整示例</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># deadline_lab.py：单进程教学示例，用 A -&gt; B -&gt; C 模拟 RPC 调用。</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Deadline</span><span class="p">:</span>
+    <span class="n">expires_at</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">after_ms</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ms</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Deadline"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="n">ms</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">remaining_ms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">expires_at</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">())</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">expired</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining_ms</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">0.0</span>
+
+
+<span class="n">GLOBAL</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"c_ticks"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sleep_with_deadline</span><span class="p">(</span><span class="n">ms</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">deadline</span><span class="p">:</span> <span class="n">Deadline</span><span class="p">,</span> <span class="n">step_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">10.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># 分片 sleep，才能在等待期间检查截止时间。</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="n">ms</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">deadline</span><span class="o">.</span><span class="n">expired</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">"deadline exceeded while sleeping"</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">step_ms</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">left</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_c</span><span class="p">(</span><span class="n">deadline</span><span class="p">:</span> <span class="n">Deadline</span><span class="p">,</span> <span class="n">work_ms</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="c1"># C 只接受调用方传下来的 deadline，不在内部新建预算。</span>
+    <span class="n">seen_ms</span> <span class="o">=</span> <span class="n">deadline</span><span class="o">.</span><span class="n">remaining_ms</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">seen_ms</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">"C: no remaining budget at entry"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[C] entry remaining=</span><span class="si">{</span><span class="n">seen_ms</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">ms"</span><span class="p">)</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="n">work_ms</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">deadline</span><span class="o">.</span><span class="n">expired</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"C: cancelled after </span><span class="si">{</span><span class="n">GLOBAL</span><span class="p">[</span><span class="s1">'c_ticks'</span><span class="p">]</span><span class="si">}</span><span class="s2"> ticks"</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.05</span><span class="p">)</span>
+        <span class="n">GLOBAL</span><span class="p">[</span><span class="s2">"c_ticks"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">"hop"</span><span class="p">:</span> <span class="s2">"C"</span><span class="p">,</span>
+        <span class="s2">"seen_remaining_ms"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">seen_ms</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="s2">"ticks"</span><span class="p">:</span> <span class="n">GLOBAL</span><span class="p">[</span><span class="s2">"c_ticks"</span><span class="p">],</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_b</span><span class="p">(</span><span class="n">deadline</span><span class="p">:</span> <span class="n">Deadline</span><span class="p">,</span> <span class="n">inject_ms</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="c1"># B 在调用 C 前注入 200ms，模拟排队或本地预处理。</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[B] entry remaining=</span><span class="si">{</span><span class="n">deadline</span><span class="o">.</span><span class="n">remaining_ms</span><span class="p">()</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">ms"</span><span class="p">)</span>
+    <span class="n">sleep_with_deadline</span><span class="p">(</span><span class="n">inject_ms</span><span class="p">,</span> <span class="n">deadline</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">call_c</span><span class="p">(</span><span class="n">deadline</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_a</span><span class="p">(</span><span class="n">total_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">800</span><span class="p">,</span> <span class="n">inject_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">40</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="c1"># A 是入口，创建唯一的总预算，并把同一个 deadline 传下去。</span>
+    <span class="n">deadline</span> <span class="o">=</span> <span class="n">Deadline</span><span class="o">.</span><span class="n">after_ms</span><span class="p">(</span><span class="n">total_ms</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">call_b</span><span class="p">(</span><span class="n">deadline</span><span class="p">,</span> <span class="n">inject_ms</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="p">)</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">TimeoutError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)}</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">elapsed_ms</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"ok"</span><span class="p">:</span> <span class="n">ok</span><span class="p">,</span> <span class="s2">"elapsed_ms"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">elapsed_ms</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">"c"</span><span class="p">:</span> <span class="n">result</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">bad_chain</span><span class="p">(</span><span class="n">inject_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">700</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="c1"># 错误示范：每一跳都新建 800ms，忽略上游剩余预算。</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+    <span class="n">a_deadline</span> <span class="o">=</span> <span class="n">Deadline</span><span class="o">.</span><span class="n">after_ms</span><span class="p">(</span><span class="mi">800</span><span class="p">)</span>  <span class="c1"># A 自己的预算，仅用于对照。</span>
+    <span class="n">b_deadline</span> <span class="o">=</span> <span class="n">Deadline</span><span class="o">.</span><span class="n">after_ms</span><span class="p">(</span><span class="mi">800</span><span class="p">)</span>  <span class="c1"># B 没有接收 a_deadline。</span>
+    <span class="n">sleep_with_deadline</span><span class="p">(</span><span class="n">inject_ms</span><span class="p">,</span> <span class="n">b_deadline</span><span class="p">)</span>
+    <span class="n">c_deadline</span> <span class="o">=</span> <span class="n">Deadline</span><span class="o">.</span><span class="n">after_ms</span><span class="p">(</span><span class="mi">800</span><span class="p">)</span>  <span class="c1"># C 也没有接收剩余值。</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">call_c</span><span class="p">(</span><span class="n">c_deadline</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="p">)</span>
+    <span class="n">elapsed_ms</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"ok"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">"elapsed_ms"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">elapsed_ms</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s2">"c"</span><span class="p">:</span> <span class="n">result</span><span class="p">}</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"== 1. 正常链路：C 应看到约 600ms 剩余 =="</span><span class="p">)</span>
+    <span class="n">GLOBAL</span><span class="p">[</span><span class="s2">"c_ticks"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">call_a</span><span class="p">(</span><span class="n">total_ms</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">inject_ms</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="o">=</span><span class="mi">40</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"== 2. 超时取消：C 本可跑 2000ms =="</span><span class="p">)</span>
+    <span class="n">GLOBAL</span><span class="p">[</span><span class="s2">"c_ticks"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">timed_out</span> <span class="o">=</span> <span class="n">call_a</span><span class="p">(</span><span class="n">total_ms</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span> <span class="n">inject_ms</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="o">=</span><span class="mi">2000</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">timed_out</span><span class="p">)</span>
+    <span class="n">ticks_at_return</span> <span class="o">=</span> <span class="n">GLOBAL</span><span class="p">[</span><span class="s2">"c_ticks"</span><span class="p">]</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"[check] ticks_at_return=</span><span class="si">{</span><span class="n">ticks_at_return</span><span class="si">}</span><span class="s2">, "</span>
+        <span class="sa">f</span><span class="s2">"ticks_after_300ms=</span><span class="si">{</span><span class="n">GLOBAL</span><span class="p">[</span><span class="s1">'c_ticks'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"== 3. 错误对照：每一跳各自 800ms =="</span><span class="p">)</span>
+    <span class="n">GLOBAL</span><span class="p">[</span><span class="s2">"c_ticks"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">bad_chain</span><span class="p">(</span><span class="n">inject_ms</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">c_work_ms</span><span class="o">=</span><span class="mi">700</span><span class="p">))</span>
+</code></pre></div>
+
+<h3 id="_23">操作步骤（下）</h3>
+<ol start="7">
+<li>运行脚本，并先看正常链路：
+   <code>bash
+   python3 deadline_lab.py</code>
+   关键日志应类似 <code>[B] entry remaining≈800.0ms</code>、<code>[C] entry remaining≈600.0ms</code>。C 的观测值受调用开销和调度影响，落在约 500-650ms 都算合理；只要明显小于 800ms，就说明它拿到的是剩余预算。</li>
+<li>再对照错误链路。正常实现下，C 工作 2000ms 时会在约 600ms 后被 deadline 中断，整链在约 800ms 返回失败；错误链路中 C 看到约 800ms，并跑完 700ms，整链约 900ms，已经超过入口预算。若每层再叠加一次同预算重试，耗时接近 1.5s 并不意外。</li>
+<li>把每次结果记录到下表，至少保留正常、超时、错误对照三行：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>总预算</th>
+<th>B 注入延迟</th>
+<th>C 观测到的 remaining</th>
+<th>整链总耗时</th>
+<th>是否有残留后台任务</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python 3.x</td>
+<td>800ms</td>
+<td>200ms</td>
+<td>约 600ms</td>
+<td>约 250ms</td>
+<td>否</td>
+<td>正常链路</td>
+</tr>
+<tr>
+<td>Python 3.x</td>
+<td>800ms</td>
+<td>200ms</td>
+<td>约 600ms</td>
+<td>约 800ms</td>
+<td>否</td>
+<td>C 被取消</td>
+</tr>
+<tr>
+<td>Python 3.x</td>
+<td>每层 800ms</td>
+<td>200ms</td>
+<td>约 800ms</td>
+<td>约 900ms</td>
+<td>否</td>
+<td>错误对照</td>
+</tr>
+</tbody>
+</table>
+<ol start="10">
+<li>逐条做验收自检。前两项是本题验收原文，后几项是过程检查：</li>
+</ol>
+<ul>
+<li>[ ] 总耗时不机械累加每层超时</li>
+<li>[ ] 超时后无持续无界后台任务</li>
+<li>[ ] C 看到的是剩余预算，不是重新写死的 800ms</li>
+<li>[ ] 记录了 Python 与所用框架/协议库版本</li>
+<li>[ ] 取消后计数器不再增长，等待 300ms 后数值相同</li>
+<li>[ ] 错误对照的整链耗时确实超过了入口总预算</li>
+</ul>
+<h3 id="_24">排障清单</h3>
+<ul>
+<li><strong>端口占用</strong>：若把示例改成独立 <code>HTTPServer</code>，先处理 <code>Address already in use</code>，或换端口；单进程版本没有这个问题。</li>
+<li><strong>时间误差</strong>：500-650ms 的剩余预算不要按毫秒级精确断言，给调度、日志和启动开销留余量。</li>
+<li><strong>sleep 精度</strong>：<code>time.sleep(0.05)</code> 只保证“至少等这么久”，不是精确定时；循环退出可能略晚于 deadline。</li>
+<li><strong>忘记传递预算</strong>：B 或 C 内部再次 <code>Deadline.after_ms(800)</code>，就会退化成每层独立超时。用日志把每层入口 remaining 打出来最容易发现。</li>
+<li><strong>用错时钟</strong>：计算 deadline 用 <code>time.monotonic()</code>，不要用墙上时钟；系统时间调整会让 <code>time.time()</code> 差值跳变。</li>
+<li><strong>只检查入口</strong>：调用前检查一次不够，长循环、批量处理、线程池任务内部也要周期性检查取消状态。</li>
+</ul>
+<h3 id="grpc">如果改用 gRPC</h3>
+<p>真实环境可以把 <code>Deadline</code> 换成框架的 deadline/context，并把剩余时间随请求传播。可参考 https://grpc.io/docs/guides/deadlines/ ，同时核对你所用语言绑定和版本是否默认传播 deadline；部分绑定可能需要显式启用，最终以所用版本文档为准。无论用 HTTP 还是 gRPC，验收标准不变：整链只消耗一份总预算，取消后没有遗留的无界后台工作。</p>
+<h3 id="_25">结果判读：三个容易被问到的点</h3>
+<ol>
+<li><strong>C 看到约 600ms，为什么整链只花了约 250ms？</strong> 600ms 是 C 入口处的“剩余额度”，不是 C 必须用满的时间。B 注入 200ms、C 实际工作约 50ms，所以正常链路很快结束，但 C 仍能证明预算被正确扣减。</li>
+<li><strong>超时实验整链约 800ms，为什么 C 入口是 600ms？</strong> 总预算从 A 开始计时，B 先消耗 200ms，C 只剩约 600ms；C 在剩余额度内被中断后，A 在接近 800ms 时返回失败。这正是“整链共享一份预算”，而不是每层各有一份。</li>
+<li><strong>错误对照为什么约 900ms，而不是 1.5s？</strong> 因为示例中没有自动重试；B 的 200ms 加上 C 的 700ms 已经超过入口预算。若每层失败后再各自重试，累计耗时才会进一步逼近各层 timeout 的机械相加。</li>
+</ol>
+<p>判断实现是否正确，优先看三个证据：每层日志里的 remaining 是否递减、整链总耗时是否围绕入口预算收敛、取消返回后计数器是否停止增长。三者同时成立，才说明预算传播和取消检查都落到了代码里。</p>
+<blockquote>
+<p>教学提示：示例中的 800ms、200ms、700ms 都是为了放大差异；真实取值应回到 SLA、下游 P99 和重试策略上计算。</p>
+<p>复现时优先保证趋势正确：剩余预算递减、总耗时受入口约束、取消后计数器停止。绝对值允许因机器和 Python 版本而不同。</p>
+</blockquote>
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<p>本节点的原始要求是：「沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。」这三个动作分别对应：读定义确认语义、读示例确认调用方式与错误分支、读版本信息确认适用边界。资源给出的阅读理由也点明了重点——总预算与单次超时，以及排队、连接和处理时间，正好是本课实验要核对的语义。下面是一条可以照着走的路径，全程只用官方文档，不引入二手资料。</p>
+<h3 id="1_1">第 1 步：登记版本与访问日期</h3>
+<p>打开 https://grpc.io/docs/guides/deadlines/ ，先在笔记顶部记三行：</p>
+<ul>
+<li>文档访问日期：写你实际打开的那一天，例如「2026-11-09 访问」。</li>
+<li>你使用的 gRPC 语言与版本：例如 Python 的 <code>pip show grpcio</code>、Go 的 <code>go list -m google.golang.org/grpc</code>、Java 的 Maven/Gradle 依赖坐标、C++ 的 <code>grpc --version</code> 或包管理器版本。</li>
+<li>文档中没有标注的版本细节，一律写成「以所用版本文档为准」，不要自己推断。</li>
+</ul>
+<p>登记版本不是形式主义。同一段「设置 deadline」的代码，在不同语言里可能挂在调用选项上、也可能挂在上下文上，默认是否自动传播也未必一致。只写「我用了 gRPC」几乎没有信息量，写清语言加版本号，别人才能复现你的结论，你自己下次升级时也能快速定位差异。</p>
+<h3 id="2-deadline-timeout">第 2 步：分清 deadline 与 timeout</h3>
+<p>文档的核心定义只有一句话的量级，但要真正用对，必须能自己换算：</p>
+<ul>
+<li><strong>deadline 是一个时间点</strong>（绝对时刻），表示「这个调用最晚必须在什么时候结束」。</li>
+<li><strong>timeout 是一段时长</strong>，表示「还愿意再等多久」。</li>
+</ul>
+<p>可以先用一张小表把两者钉住：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>形态</th>
+<th>例子</th>
+<th>传播时的处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deadline</td>
+<td>绝对时间点</td>
+<td><code>10:00:00.800</code></td>
+<td>框架内部比较，跨进程时换算</td>
+</tr>
+<tr>
+<td>timeout</td>
+<td>相对时长</td>
+<td><code>800ms</code>、<code>680ms</code></td>
+<td>每一跳按剩余时间重新计算</td>
+</tr>
+</tbody>
+</table>
+<p>换算关系是：<code>deadline = 发起时刻 + timeout</code>；反过来，<code>剩余 timeout = deadline - 当前时刻</code>。</p>
+<p>举个内容后台的例子：客户端在 <code>10:00:00.000</code> 发起一次「图文素材聚合查询」，总预算 800ms，那么 deadline 就是 <code>10:00:00.800</code>。下一跳服务在 <code>10:00:00.120</code> 收到请求时，已经花掉 120ms，它还能用的只有 680ms，而不是又一个 800ms。</p>
+<p>文档解释为什么框架内部更愿意用 deadline 而不是 timeout：时间点在整个调用链上是同一个值，便于比较和传播。但跨机器时绝对时钟可能有偏移，所以真正跨进程传播时又会换算成「已扣除流逝时间的 timeout」，这一点在第 5 步展开。</p>
+<h3 id="3_1">第 3 步：核对客户端路径</h3>
+<p>按文档逐条确认以下问题，并把答案写进笔记：</p>
+<ol>
+<li><strong>默认是否设置 deadline？</strong> 多数语言的客户端默认不设置 deadline，调用会一直等到完成或连接层出错。具体默认值以所用版本文档为准。</li>
+<li><strong>未设置 deadline 的后果是什么？</strong> 对内容后台这种同步接口，意味着一个卡住的下游可能长期占住上游的连接、线程或协程；没有上限就没有尾延迟保护。文档把它列为应当避免的情况。</li>
+<li><strong>超时后客户端看到什么状态？</strong> 文档写的是 <code>DEADLINE_EXCEEDED</code>。这和你自己业务代码抛出的超时异常不是一回事：它是 RPC 框架层面的状态码，通常会随错误一起返回，便于统一拦截和打点。</li>
+<li><strong>在哪里设置？</strong> 文档给出的调用示例里，deadline 一般作为调用选项或上下文参数传入，作用范围是「这一次调用」，不是全局配置。核对示例里参数的位置和单位（是时长还是时间点）。</li>
+</ol>
+<p>核对时顺手在客户端这一侧加一条日志：请求开始时打印本跳的 deadline，请求结束时打印实际耗时和返回状态。这样一旦出现「上游报超时、下游说成功」的争议，你能拿出时间线。</p>
+<p>客户端这一侧的边界是：<code>DEADLINE_EXCEEDED</code> 只说明「我等不及了」，<strong>不说明服务端有没有做完</strong>。这个区别直接引出后面的取消与回滚问题。</p>
+<h3 id="4">第 4 步：核对服务端路径</h3>
+<p>服务端不是被动挨打的一方，文档明确给了两条信息：</p>
+<ol>
+<li><strong>截止过后服务端如何取消调用。</strong> 当 deadline 已过，服务端的调用上下文会被取消，服务端侧看到的状态是 <code>CANCELLED</code>。注意这是服务端视角的状态，和客户端看到的 <code>DEADLINE_EXCEEDED</code> 是同一个事件的两端。</li>
+<li><strong>应用有责任停止自己拉起的工作。</strong> 文档写得很清楚：框架只能取消这次 RPC 的上下文，不能替你停掉你自己启动的 goroutine、线程池任务、定时器或消息消费循环。文档的原意是应用需要检查取消信号并主动收尾。</li>
+</ol>
+<p>落到内容后台，常见的「自己拉起的工作」包括：批量刷新素材索引的后台任务、逐条调用下游的补偿循环、写审计日志的异步队列。如果这些工作不看取消信号，超时之后它们还会继续跑，这就是验收里说的「超时后无持续无界后台任务」要盯的点。</p>
+<p>核对方法：在服务端示例里找到「如何判断上下文已取消」的那一行 API，记下它在你的语言版本里的写法，然后回顾自己的代码有没有在循环里检查它。实验时建议给每个后台循环加一个退出条件和一个计数，超时后观察计数是否停止增长——这比只看一次返回码可靠得多。</p>
+<h3 id="5">第 5 步：核对传播与时钟</h3>
+<p>这是文档里最容易被略过、但对多服务后台最关键的一段。</p>
+<ul>
+<li><strong>为什么传播时要换算？</strong> 如果直接把绝对 deadline 原样传给下一跳，而两台机器的时钟有几十毫秒甚至更大的偏移，接收方算出来的剩余时间就会偏大或偏小。文档的做法是：传播时把它转换为「已扣除流逝时间的 timeout」，让下一跳拿到的是一段相对时长，从而规避时钟偏移。</li>
+<li><strong>哪些语言默认自动传播？</strong> 文档举例提到 Java、Go 默认会自动传播 deadline；C++ 需要显式启用。这里必须强调：<strong>不同版本行为可能变化，以所用版本文档为准</strong>，不要凭记忆下结论。</li>
+<li><strong>传播断掉会怎样？</strong> 如果某一跳没有把截止信息继续往下传，下游就失去了整体预算，只能按自己的默认值跑。前面第 2 步的「800ms 三层叠加」往往就是这么来的。</li>
+</ul>
+<p>用一个数字串起来看：入口 T0 定 800ms；A 排队 30ms、建连 20ms 后到 B，B 只剩 750ms；B 处理 200ms 后调 C，C 只剩 550ms。每一跳的剩余量都不同，但 deadline 始终是同一个时间点。这也是为什么日志里应同时打「deadline」和「本跳剩余预算」，只打一个数看不出是谁提前花掉了预算。</p>
+<p>核对动作：在你所用语言的文档示例里，找到「设置并传播 deadline」的代码，确认它是自动的还是需要手动把上下文透传。对自研的 RPC 封装或消息队列，要单独确认有没有透传截止信息——公开文档只描述 gRPC 自身的行为，不能套用到内部框架上。</p>
+<h3 id="6">第 6 步：对照语言示例的错误处理路径</h3>
+<p>文档页面会列出 Java、Go、C++、Python 等语言的示例链接（具体链接以页面当前版本为准，不要在笔记里手抄可能失效的地址）。打开与你所用语言对应的那一个，重点看三件事：</p>
+<ol>
+<li><strong><code>DEADLINE_EXCEEDED</code> 在哪里被捕获或判断。</strong> 客户端示例通常演示如何从返回状态里识别它，而不是靠字符串匹配异常消息。</li>
+<li><strong><code>CANCELLED</code> 在服务端如何体现。</strong> 服务端示例会展示上下文被取消后的状态，以及业务代码应在哪个位置返回。</li>
+<li><strong>应用层如何检查取消。</strong> 不同语言的 API 名字不同，例如 Go 的 <code>ctx.Done()</code>、Java 的 <code>Context.isCancelled()</code>、C++ 的 <code>ServerContext::IsCancelled()</code>、Python 的上下文剩余时间或活跃状态检查。以你所用版本的示例为准，照抄示例里的判断方式，不要自造。</li>
+</ol>
+<p>把这三处对应的代码行号或片段抄进笔记，作为你回项目里自查的对照物。实验里 A-&gt;B-&gt;C 三段调用，最好每段都在这三处打上日志，才能看清是谁先放弃、谁还在跑。</p>
+<h3 id="7">第 7 步：填写阅读笔记模板</h3>
+<p>建议用下面这张表收口，一行一个结论，避免读完就忘：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>你的记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档版本 / 访问日期</td>
+<td>例如：2026-11-09 访问，页面未标版本则以访问日为准</td>
+</tr>
+<tr>
+<td>使用的语言与版本</td>
+<td>例如：grpcio x.y.z / Go module 版本 / Maven 坐标</td>
+</tr>
+<tr>
+<td>是否默认传播 deadline</td>
+<td>自动 / 需显式启用，写明依据的文档段落</td>
+</tr>
+<tr>
+<td>客户端默认 deadline</td>
+<td>有 / 无，若有则写默认值</td>
+</tr>
+<tr>
+<td>超时后谁负责停后台任务</td>
+<td>应用自己，写明你代码里的检查点</td>
+</tr>
+<tr>
+<td>与本课实验不一致的地方</td>
+<td>逐条列出，尤其是默认值和状态码差异</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的价值在于：下次升级依赖时，只要重跑一遍表里的项，就能发现行为变化。填不出某一格不是失败，把它标成待验证，反而能暴露你没读透的地方。</p>
+<h3 id="8">第 8 步：划清边界</h3>
+<p>最后提醒一句：grpc.io 的公开文档描述的是 gRPC 开源实现的行为。它不能用来推断任何企业内部 RPC 框架、网关或消息中间件的截止传播实现。遇到内部组件，正确做法是查它自己的文档、读它的配置项、或者做一次可控实验，而不是把 gRPC 的默认行为当成通用事实。</p>
+<p>同理，本课实验里观察到的状态码和耗时，只对「你登记的那一组版本 + 你搭建的调用链」成立。换语言、换版本、换网络条件，都要重新核对。</p>
+<h2 id="_26">自测题</h2>
+<h3 id="1_2">题 1：总预算与单次超时</h3>
+<p><strong>题干.</strong> 网关 A 对外承诺的预算是 800ms，A 调 B，B 调 C。如果 A、B、C 三层都各自写死 800ms 超时，且取消信号没有及时生效，最坏情况下用户看到的耗时大约是多少？为什么？正确做法是什么？</p>
+<p><strong>作答要求.</strong> 写出最坏耗时、解释叠加原因、给出传递剩余预算的具体做法。</p>
+<p><strong>答案.</strong> 分两层看。如果入口没有按对外承诺的 800ms 截断，且每一层都各自允许下游跑满 800ms，用户可见的最坏耗时会接近各层超时之和，约 2400ms。即便入口在 800ms 返回，只要取消信号没有生效，下游仍可能继续跑完自己新批的 800ms，整条链路的资源占用会被叠加到远超 800ms。正确做法是只在入口定一次 deadline，B、C 只使用剩余预算。</p>
+<p><strong>解析.</strong> deadline 是绝对时间点，timeout 是时长。每层都从自己发起调用的时刻重新计时，上游到期只代表上游放弃等待，不代表下游停止干活。正确做法是 A 在入口处定一个 deadline，B、C 收到请求时用 <code>deadline - 当前时刻</code> 算出还能等多久，把它作为下一跳的超时，而不是各自重置 800ms。这样总耗时由总预算封顶，而不会机械累加每层超时。</p>
+<p><strong>常见错误.</strong> 只把最外层从 800ms 改成 700ms，以为留了余量；实际上 B、C 仍各自重新计时，叠加问题没有解决。</p>
+<h3 id="2_1">题 2：取消与回滚</h3>
+<p><strong>题干.</strong> 内容后台的「发布图文」请求在客户端 500ms 超时并被取消。此时服务端其实已经把状态写成了「已发布」。客户端取消会让这次写自动回滚吗？</p>
+<p><strong>选项.</strong></p>
+<ul>
+<li>A. 会，gRPC 的取消是事务性的，服务端会自动回滚。</li>
+<li>B. 不会，取消只停止等待并取消上下文，已经提交的写不会自动回滚。</li>
+<li>C. 只要服务端收到 <code>CANCELLED</code>，业务数据就一定会恢复原状。</li>
+</ul>
+<p><strong>作答要求.</strong> 选出正确项，并用一句话说明补救手段。</p>
+<p><strong>答案.</strong> B。</p>
+<p><strong>解析.</strong> 这正是本课陷阱的原文含义：客户端取消不保证服务端业务操作自动回滚。取消能打断的是「还在等」的调用，打断不了「已经落库」的事实。要保证一致，需要在业务层做补偿（状态回查后反向操作）或幂等设计（幂等键、状态机只允许一次生效），不能把回滚责任推给 RPC 框架。</p>
+<p><strong>补充判断.</strong> 如果这段写操作还调用了下游，那么下游也可能已经成功。补偿要覆盖整条写路径，而不是只回滚当前服务自己那一张表。</p>
+<h3 id="3_2">题 3：紧预算的权衡与取消检查</h3>
+<p><strong>题干.</strong> 线上把内容接口的统一预算从 2s 收紧到 300ms。请回答两个问题：(1) 尾延迟和失败率会怎样变化？(2) 如果超时后有个后台补偿循环仍在无界重试，违反了哪条验收？</p>
+<p><strong>作答要求.</strong> 分别用一两句话回答，第 (1) 问要同时说收益和代价。</p>
+<p><strong>答案.</strong> (1) 慢请求会更早被掐断，尾延迟（P99）下降；但一些本来能在 2s 内成功、只是偶发抖动的请求会变成失败，可恢复请求的失败率上升。(2) 违反了「超时后无持续无界后台任务」这条验收。</p>
+<p><strong>解析.</strong> 这就是权衡的原文含义：紧预算保护尾延迟，也可能增加可恢复请求失败率。第 (2) 问对应服务端路径：框架只取消上下文，应用必须自己检查取消信号并停掉拉起的循环，否则超时只是让客户端不再等，后台仍在无界消耗资源。</p>
+<p><strong>延伸思考.</strong> 收紧预算前，先区分「慢在排队/连接」还是「慢在处理」。如果是前者，优化连接池或排队策略可能比砍预算更划算。</p>
+<h2 id="_27">推荐资源</h2>
+<ul>
+<li><a href="https://grpc.io/docs/guides/deadlines/">超时预算与取消传播：参考文档 / 原始资料</a></li>
+<li>来源：grpc.io ｜ 类型：文档 ｜ 语言：英文 ｜ 难度：进阶 ｜ 免费</li>
+<li>阅读重点一：总预算与单次超时</li>
+<li>阅读重点二：排队、连接和处理时间（以及截止传播、取消后停止工作）</li>
+<li>建议结合本课 A-&gt;B-&gt;C 实验核对语义和边界。</li>
+</ul>
+<h2 id="_28">本课小结</h2>
+<ul>
+<li>deadline 限定整个调用的可用时间，跨服务要扣除已经消耗的预算，不能每跳重新计时。</li>
+<li>总预算与单次超时是两个层次：预算在入口定，单次超时只是剩余预算的一个视图。</li>
+<li>排队、建立连接、序列化和业务处理都会吃预算，测量时要看端到端耗时而不是只看处理函数。</li>
+<li>取消检查与截止传播要一起做；超时之后必须停掉自己拉起的后台工作，避免无界任务。</li>
+<li>验收标准：总耗时不机械累加每层超时；超时后无持续无界后台任务。</li>
+<li>陷阱：客户端取消不保证服务端业务操作自动回滚，已提交的写要靠补偿或幂等设计兜底。</li>
+<li>权衡与边界：紧预算保护尾延迟，也可能增加可恢复请求失败率；具体行为以所用版本文档为准，不推断企业内部实现。</li>
+</ul><div class="pn"><span><a href="85.html">← brpc通道与服务实现</a></span><span>下一课 待更新</span></div></main></div></body></html>
