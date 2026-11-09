@@ -1,0 +1,1050 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>80. 并发模型选择与可证明边界 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（80/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details open><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="cur" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（0/16）</summary><div>阶段 2</div><ul><li class="todo">81. Protobuf模式与代码生成 <em>待更新</em></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 80 课 · 领域 E · 阶段 5</p><p class="dl"><a href="../files/80-e-design.md" download>⬇ 本课 Markdown</a></p><h1 id="80208">第 80/208 课：并发模型选择与可证明边界</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段</td>
+<td>第 5 阶段 · 任务生命周期与诊断</td>
+</tr>
+<tr>
+<td>前置</td>
+<td>e-cancel、d-threadpool、e-lockfree</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>专家</td>
+</tr>
+<tr>
+<td>领域</td>
+<td>E</td>
+</tr>
+<tr>
+<td>标签</td>
+<td>Concurrency Design、E、C++</td>
+</tr>
+<tr>
+<td>子分类</td>
+<td>任务生命周期与诊断</td>
+</tr>
+<tr>
+<td>节点 ID</td>
+<td>e-design</td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Concurrency Design</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>承接说明：前置节点 e-cancel（取消与任务生命周期，第 78 课）讲了任务从提交、排队、执行到取消、完成的状态如何变化，以及取消信号怎样在不破坏资源生命周期的前提下传递。前置节点 d-threadpool（线程池设计，第 59 课）讲了工作线程、任务队列、提交与关闭的基本结构。前置节点 e-lockfree（无锁编程与内存回收，第 76 课）讲了原子操作、内存序和无锁结构的代价。本课不再讨论某一种同步原语的实现细节，而是往前走一步：当你手上已经有一堆可用的原语和线程池，怎样为同一个 KV 负载选择一整套并发模型，并把“为什么这样选、在什么条件下会失效”写成可检查的设计文档。本节点 summary 是：并发模型应围绕状态归属、任务生命周期与过载策略选择，而非只比较锁或协程的单次开销。</p>
+</blockquote>
+<hr />
+<h2 id="_2">导读</h2>
+<p>先看本节点的 summary，后面所有内容都围绕它展开：</p>
+<blockquote>
+<p>并发模型应围绕状态归属、任务生命周期与过载策略选择，而非只比较锁或协程的单次开销。</p>
+</blockquote>
+<p>这句话把“选并发模型”从性能微比拉回到了架构判断。它至少包含三层意思。</p>
+<p>第一层是<strong>状态归属</strong>：哪块可变状态归谁所有、由谁修改、通过什么方式访问。是多个线程靠锁轮流修改同一张表，还是每个分片只有一个执行者，其他代码只能发消息？状态归属决定了你需不需要锁、锁的粒度有多粗、以及一次跨分片操作要付多少协调成本。</p>
+<p>第二层是<strong>任务生命周期</strong>：一个请求从进入系统、排队、被执行、被取消，到最后完成或超时，中间经过哪些阶段；每个阶段由谁负责推进；关闭服务时，已经在队列里的任务、正在执行的任务、已经发出但还没确认的任务分别怎么处理。生命周期不清，模型再快也会在停机时丢数据。</p>
+<p>第三层是<strong>过载策略</strong>：当到达速率超过处理能力时，系统是让队列无限增长、把延迟推高，还是有界队列加拒绝，还是降级、丢弃低优先级请求，还是把压力反压给上游。过载策略不是“性能优化”，而是模型的一部分，因为它决定了尾延迟和故障时的行为。</p>
+<p>这三层都稳定之后，才轮到“锁和协程单次谁更便宜”这种局部问题。单次开销当然要看，但它解释不了为什么一个吞吐更高的方案在 p99 上更差，也解释不了一个基准里更快的方案在停机时更难写对。本节点的 pitfalls 正是这句话的反面：<strong>吞吐最高不必然是延迟或运维成本最优。</strong></p>
+<p>本课沿着三个节点要点推进：</p>
+<ul>
+<li><strong>Actor 与线程封闭</strong>：把状态关进一个执行者里，用“只有它能碰”代替“大家加锁轮流碰”；线程封闭则是这条思路在对象层面的约束。</li>
+<li><strong>共享状态与消息传递</strong>：两种协调风格各自的代价。消息传递减少了共享可变状态，但引入了排队、跨分片操作和复制成本。</li>
+<li><strong>工作窃取、公平性和隔离</strong>：任务怎样分配到执行者，怎样避免某个分片或某个租户把别人饿死，以及隔离边界画在哪里。</li>
+</ul>
+<p>三个要点最终服务于同一个目标，也就是本节点的 why：<strong>为复杂服务选择可维护、可观测的执行架构。</strong></p>
+<hr />
+<h2 id="_3">学习目标</h2>
+<h3 id="goals">goals</h3>
+<ul>
+<li>能解释 Actor 与线程封闭。</li>
+<li>能独立完成：对同一 KV 负载比较分片锁、每分片事件循环与任务队列，写 ADR。</li>
+</ul>
+<h3 id="acceptance">acceptance</h3>
+<ul>
+<li>报告包含正确性、尾延迟和停机行为。</li>
+<li>说明选择在何种负载下失效。</li>
+</ul>
+<h3 id="_4">把验收翻译成可检查产物</h3>
+<p>“能解释”和“能独立完成”都太容易被“我看懂了”糊弄过去。把两条 acceptance 翻译成看得见、摸得着的东西：</p>
+<ul>
+<li><strong>“报告包含正确性、尾延迟和停机行为”</strong>：你的报告不能只有一张吞吐柱状图。正确性部分要写清楚每个模型保证什么、不保证什么，例如“单 key 读改写线性化”“多 key 操作不原子”“重复提交需要幂等键”；并用至少一个并发正确性测试去验证它，而不是只靠肉眼读代码。尾延迟部分要给出 p50、p99、p999，最好把排队时间和执行时间分开，并说明测试是开环还是闭环、键分布是均匀还是倾斜。停机行为部分要写清楚收到停止信号后：是否停止接收新请求、队列里剩多少、正在执行的任务如何收尾、是否取消、最长排水时间、有没有已确认的写丢失、进程退出码是什么。三块缺一不可。</li>
+<li><strong>“说明选择在何种负载下失效”</strong>：你的 ADR 必须有一段“失效模式与重访条件”。不是泛泛写“高负载可能有问题”，而是写出可观测的触发条件，例如“当单分片 QPS 超过某个量级、或 p99 排队时间超过预算、或热 key 占比超过某个比例时，每分片事件循环会出现队头阻塞，此时应改为……”。这一段是 acceptance 第二条，也是把“选择”从个人偏好变成工程决策的关键。</li>
+</ul>
+<h3 id="_5">先修自检</h3>
+<ul>
+<li>e-cancel：能说清一个任务在提交、排队、执行、取消、完成之间有哪些状态；能解释为什么取消不是“把线程杀掉”，而是协作式的状态检查；能说出关闭时为什么必须先停止接收、再排水、最后 join。</li>
+<li>d-threadpool：能写出一个固定线程池的基本结构——任务队列、工作线程循环、提交接口、停止标志；能解释队列有界和无界在过载时的行为差异；能说出为什么关闭时要把队列里的任务处理完或明确丢弃。</li>
+<li>e-lockfree：能解释原子读改写与内存序的基本作用；能说出无锁不等于无等待，也不等于更快；能理解为什么无锁结构仍然需要仔细设计对象回收和生命周期。</li>
+</ul>
+<p>如果这三条里有任何一条说不清，先回去补。本课不会重新讲线程池怎么起线程，也不会重新讲原子操作怎么写；它假设你已经知道这些零件，重点是把零件装成一套能论证边界的架构。</p>
+<hr />
+<h2 id="_6">为什么后端要懂</h2>
+<p>本节点 why 的原话是：<strong>为复杂服务选择可维护、可观测的执行架构。</strong> 在真实后端里，这句话对应的不是“哪种并发库更酷”，而是几类会直接影响 SLO 和故障处理的决策。</p>
+<h3 id="kv">场景一：KV 缓存的三种写法，三种深夜告警</h3>
+<p>假设你负责一个进程内 KV 缓存，键是业务对象 ID，值是序列化后的记录或指针。团队里同时存在三种写法：</p>
+<ul>
+<li>一张全局 <code>unordered_map</code>，外面一把大锁；</li>
+<li>按 key 哈希成 64 个分片，每个分片一把锁；</li>
+<li>每个分片一个事件循环，分片内的所有读写都在该分片的执行线程上完成。</li>
+</ul>
+<p>这三种写法在“单次 get 要多少纳秒”上可能差不多，甚至在低并发基准里全局大锁还更快，因为代码简单、缓存局部性好。但线上出问题时，它们表现完全不同：全局大锁在热点 key 上会把所有线程排成一队，p99 直接抬升；分片锁在跨分片批量读时可能死锁，或者因为加锁顺序不一致而卡住；每分片事件循环遇到一个慢 handler，整个分片的请求都排在它后面，形成队头阻塞。选型时只比较单次开销，等于只看了最容易看的那一项。</p>
+<h3 id="_7">场景二：任务队列把过载藏起来</h3>
+<p>另一个常见场景是：前端把每个请求包装成任务，提交到一个共享队列，后端用固定大小的线程池消费。低负载时一切正常，压测数字也漂亮。但队列是无界的，过载时任务不会消失，只会堆积；延迟从几十毫秒涨到几秒，内存也跟着涨，最后触发 OOM 或者被上游超时重试放大。</p>
+<p>从“吞吐”看，这个模型在过载前可能最高；从“尾延迟”和“运维成本”看，它可能最差。这正是节点 pitfalls 说的事情：吞吐最高不必然是延迟或运维成本最优。模型选择必须把过载策略一起选进去，而不是事后补一个“队列太长就告警”。</p>
+<h3 id="_8">场景三：停机时才发现生命周期没设计</h3>
+<p>还有一个更隐蔽的场景：服务收到 SIGTERM，线程池开始关闭。有的任务已经写入了下游，有的任务还在队列里，有的任务正卡在等待跨分片响应。如果没有明确的生命周期和停机协议，常见结果是：已确认的写丢了、同一个任务被执行两次、关闭时间超过编排系统给的 grace period，最后被 SIGKILL。</p>
+<p>这类问题在功能测试里几乎发现不了，因为功能测试不会在持续写入的同时发停止信号。它属于 acceptance 里的“停机行为”，必须在选型阶段就写进模型，而不是上线后补。</p>
+<h3 id="_9">场景四：消息传递看起来优雅，跨分片却很贵</h3>
+<p>Actor 风格很吸引人：每个对象只被一个执行者拥有，大家发消息，不共享内存。但真实 KV 负载里经常有“批量读多个 key”“按前缀扫描”“事务性更新两个 key”这类操作。如果每个 key 归一个 actor，跨 key 操作就变成跨 actor 协调：要么做两阶段提交，要么接受最终一致，要么把相关 key 放到同一个分片里。消息传递简化了共享状态，但排队、跨分片操作和复制成本会增加，这是节点 tradeoffs 的原话。选型时必须把这些成本算进去。</p>
+<p>这些场景的共同点是：它们都不是“锁快还是协程快”能回答的。它们问的是状态归谁、任务活多久、过载怎么办、停机怎么收尾。这就是本课要建立的判断框架。</p>
+<hr />
+<h2 id="_10">从直觉到原理</h2>
+<p>下面三个要点不是并列的知识点，而是一条设计流水线：先把状态收进一个所有者（要点一），再决定所有者之间怎么通信、共享状态还剩下多少（要点二），最后决定任务如何在多个所有者之间分配、怎样保证公平和隔离（要点三）。走完这三步，你才有资格写“可证明边界”。</p>
+<h3 id="actor">要点一：Actor 与线程封闭</h3>
+<h4 id="_11">直觉：与其让所有人小心地共享，不如让一个人独占</h4>
+<p>先问一个朴素的问题：为什么共享内存并发这么难写？</p>
+<p>因为共享可变状态把两件事耦合在了一起：<strong>数据放在哪里</strong>和<strong>谁有权修改它</strong>。只要一块内存可以被多个线程直接读写，你就必须为每一种访问路径证明同步正确：读的人有没有持锁、写的人有没有持锁、锁是不是同一把、临界区有没有遗漏、对象生命周期有没有跨越解锁。访问路径越多，证明义务越多。</p>
+<p>Actor 模型换了一个思路：把“谁有权修改”收窄到一个执行者。每个 actor 拥有自己的状态，状态不对外暴露可变引用；外部想读或改，只能发消息。actor 内部通常单线程地处理消息，因此对自身状态的所有访问天然是串行的，不需要为每个字段再加锁。这里的“单线程”不一定是绑定某个 OS 线程，而是“同一时刻只有一个消息在处理”。</p>
+<p>线程封闭（thread confinement）是同一思想在对象层面的说法：某个对象只允许被一个线程访问。它可以靠约定、靠封装、靠运行时断言来维持。典型形式包括：</p>
+<ul>
+<li>把对象放在某个分片结构里，分片的执行线程是唯一访问者；</li>
+<li>用 <code>thread_local</code> 保存只属于当前线程的缓存或缓冲区；</li>
+<li>用队列把对象的所有权转移给下一个执行者，转移后原线程不再触碰；</li>
+<li>用类型或接口把“可变访问”限制在所有者内部，外部只能拿到快照或消息句柄。</li>
+</ul>
+<p>一句话概括：<strong>Actor 是“状态 + 邮箱 + 单线程处理”的组合；线程封闭是“这个对象只归这个执行者碰”的约束。</strong></p>
+<h4 id="actor_1">Actor 的四个组成部分</h4>
+<p>把 Actor 拆开看，通常会看到四样东西：</p>
+<ol>
+<li><strong>私有状态</strong>：只有 actor 自己的处理逻辑能直接读写。它可以是几个字段，也可以是一整张 map。</li>
+<li><strong>邮箱 / 消息队列</strong>：外部把消息放进来，actor 按某种顺序取出处理。邮箱可以是无界的，也可以是有界的；可以 FIFO，也可以带优先级。</li>
+<li><strong>处理循环</strong>：从邮箱取消息、执行、产生新消息或副作用、回到取消息。这个循环在任一时刻只处理一条消息，因此对私有状态是串行的。</li>
+<li><strong>地址 / 句柄</strong>：外部通过它发送消息，而不是通过它拿到状态指针。地址可以是对象 ID、分片 ID、队列句柄，或者是 Asio 里的 strand 加 executor。</li>
+</ol>
+<p>用伪代码表示，一个极简 actor 长这样：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">CounterActor</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">send</span><span class="p">(</span><span class="n">Increment</span><span class="w"> </span><span class="n">msg</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">            </span><span class="n">mailbox_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">cv_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Increment</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">                </span><span class="n">cv_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lk</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">stop_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">mailbox_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stop_</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">mailbox_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">                </span><span class="n">msg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mailbox_</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+<span class="w">                </span><span class="n">mailbox_</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">value_</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">msg</span><span class="p">.</span><span class="n">delta</span><span class="p">;</span><span class="w">   </span><span class="c1">// 只有本循环访问 value_</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span><span class="w"> </span><span class="n">cv_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="n">Increment</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mailbox_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">stop_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">value_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">      </span><span class="c1">// 私有状态</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>注意这个例子里仍然有一把锁，但它保护的是<strong>邮箱</strong>，不是业务状态。业务状态 <code>value_</code> 只被 <code>run()</code> 所在线程访问，所以不需要锁。这是 Actor 风格最容易被误解的地方：Actor 不是“完全没有同步”，而是把同步集中到消息边界，把业务状态的并发访问消掉。</p>
+<h4 id="_12">线程封闭的边界在哪里</h4>
+<p>线程封闭听起来很安全，但它有一个前提：<strong>不能有逃逸</strong>。只要有人拿到了 actor 私有状态的可变引用，或者把对象的所有权转移出去却继续使用，封闭就破了。</p>
+<p>常见的逃逸路径有这些：</p>
+<ul>
+<li><strong>回调捕获了 <code>this</code> 或成员引用</strong>：actor 把 <code>&amp;value_</code> 传给一个异步回调，回调在另一个线程执行，封闭失效。</li>
+<li><strong>返回内部容器的引用</strong>：<code>const std::unordered_map&amp;</code> 看起来是只读，但如果调用方把它转成非 const，或者容器本身在别处被修改，仍然会出问题。</li>
+<li><strong>共享 <code>shared_ptr</code></strong>：两个 actor 都持有同一个可变对象的 <code>shared_ptr</code>，就等于共享状态又回来了。</li>
+<li><strong>全局缓存 / 单例</strong>：actor 内部顺手访问了一个全局 map，这个 map 不受 actor 的串行保护。</li>
+<li><strong>析构发生在错误的线程</strong>：对象在 actor A 的线程创建，却在 actor B 的线程销毁；如果析构访问了线程局部资源或依赖所有者线程，就会出问题。</li>
+<li><strong>跨分片直接调用</strong>：为了“省一次消息”，在分片 A 的 handler 里直接调用分片 B 的对象方法。</li>
+</ul>
+<p>所以线程封闭不是一个可以声明一次就永久成立的属性，而是一条需要<strong>持续维护的约束</strong>。工程上常见的加固手段是：</p>
+<ul>
+<li>在对象里记录 <code>owner_thread_id</code>，在每个公开方法入口断言当前线程等于所有者；调试构建开启，生产构建可采样。</li>
+<li>把可变状态放在私有实现里，公开接口只暴露值语义的查询和消息发送。</li>
+<li>用所有权转移代替共享：消息里放 <code>std::unique_ptr</code> 或值，而不是共享引用。</li>
+<li>用静态检查或代码审查规则禁止跨分片直接调用；所有跨分片路径必须经过消息层。</li>
+<li>用 TSan/ASan 跑并发回归，至少能抓到一部分逃逸导致的竞争和生命周期错误。</li>
+</ul>
+<h4 id="_13">“串行执行”不等于“绑定线程”</h4>
+<p>Actor 和每分片事件循环经常被描述成“单线程”，但更准确的说法是<strong>串行执行</strong>。这两者的区别很重要：</p>
+<ul>
+<li><strong>绑定线程</strong>：对象只能在一个固定的 OS 线程上访问。线程封闭最严格的形式。</li>
+<li><strong>串行执行</strong>：同一时刻只有一个执行上下文在处理该对象，但不同的消息可能在不同线程上执行。只要前一条处理完、后一条才开始，并且中间有正确的同步，状态仍然是安全的。</li>
+</ul>
+<p>Boost.Asio 的 strand 就是后者的典型：handlers 关联到同一个 strand 后，不会并发执行；但它们可能由线程池里的不同线程执行。strand 不保证“永远是同一个线程”，它保证的是“不会同时有两个 handler 在跑”。这也意味着：如果你在 handler 里把 <code>this</code> 泄漏给外部线程，或者从外部线程直接调用对象方法而不经过 strand，串行保证就被绕过了。sourceStudy 要你读的正是这层约束。</p>
+<h4 id="_14">为什么这个要点能服务“可证明边界”</h4>
+<p>一旦状态被收进一个所有者，很多证明义务会变得清晰：</p>
+<ul>
+<li><strong>数据竞争</strong>：只要没有逃逸，所有者内部的状态不存在跨线程并发访问，数据竞争的可能性被结构性消除。</li>
+<li><strong>顺序</strong>：同一 actor 的消息按邮箱顺序处理，单 key 的读改写天然串行；跨 actor 的顺序则需要额外协议。</li>
+<li><strong>生命周期</strong>：actor 的创建、运行、停止可以写成一个状态机；消息的所有权转移也让对象的销毁时机更容易界定。</li>
+<li><strong>可观测性</strong>：每个 actor / 分片可以独立统计邮箱深度、处理耗时、拒绝数，故障定位的粒度更细。</li>
+</ul>
+<p>代价是：所有跨 actor 的交互都变成消息，消息要排队、要序列化、要处理跨分片语义。这就是下一个要点要展开的内容。</p>
+<h3 id="_15">要点二：共享状态与消息传递</h3>
+<h4 id="_16">两种协调风格，不是两个阵营</h4>
+<p>共享状态和消息传递经常被讲成对立的两派：一派说锁是万恶之源，一派说消息传递只是把锁藏起来。更准确的说法是：它们解决的是同一个问题的两种成本分布。</p>
+<ul>
+<li><strong>共享状态</strong>：多个执行者直接访问同一块内存，用锁、原子操作、读写锁等建立同步。优点是读写路径短、没有消息复制、跨线程可见性直接；缺点是把正确性责任分散到每一个访问点，需要证明每一处都同步正确，锁竞争还会直接影响尾延迟。</li>
+<li><strong>消息传递</strong>：执行者不直接共享可变内存，而是把值或所有权传给另一个执行者，由对方在自己的串行上下文里处理。优点是状态归属清晰、单所有者内部不需要锁、消息边界天然是可观测点；缺点是排队、复制/序列化、跨分片协调，以及“消息发出去之后什么时候算完成”的语义更复杂。</li>
+</ul>
+<p>节点 tradeoffs 说得很准确：<strong>消息传递简化共享状态，但排队、跨分片操作和复制成本增加。</strong> 这句话不是否定消息传递，而是提醒你：简化不会凭空发生，它把复杂度从“锁的正确性”转移到了“排队和协调”。</p>
+<h4 id="_17">消息传递的四种成本</h4>
+<h5 id="_18">成本一：排队</h5>
+<p>消息不会凭空被处理，它要进邮箱或队列。队列一旦形成，就有三个问题：</p>
+<ol>
+<li><strong>延迟</strong>：消息在队列里等待的时间会计入端到端延迟。低负载时队列接近空，这项成本看不出来；高负载时它会迅速主导 p99。</li>
+<li><strong>内存</strong>：无界队列在过载时会把内存吃光；有界队列则会拒绝或阻塞，拒绝策略又会影响上游。</li>
+<li><strong>顺序</strong>：同一发送者到同一接收者的消息通常保持顺序，但不同发送者之间、跨多个接收者之间，不保证全局顺序。如果你的业务依赖“先写后读”，必须把这两条消息路由到同一个 actor / 分片，或者携带版本号。</li>
+</ol>
+<p>一个常见的错误是：看到 actor 模型“无锁”，就默认它低延迟。实际上，如果邮箱是无界 FIFO，过载时它的尾延迟可能比一把分片锁更差，因为请求在前面排了很长的队，而分片锁至少会让部分线程继续推进。</p>
+<h5 id="_19">成本二：跨分片操作</h5>
+<p>单 key 操作很容易映射到一个 actor；但真实负载里常有：</p>
+<ul>
+<li>批量读：<code>MGET k1 k2 ... kn</code>，这些 key 可能落在不同分片。</li>
+<li>条件更新：读 key A，根据结果写 key B。</li>
+<li>事务：要么两个 key 都更新，要么都不更新。</li>
+<li>扫描：按前缀或范围遍历，天然跨分片。</li>
+</ul>
+<p>跨分片操作需要协调，常见方案各有代价：</p>
+<ul>
+<li><strong>串行扇出</strong>：向多个 actor 发请求，等所有回复。延迟由最慢的分片决定，任何一个分片过载都会拖慢整体。</li>
+<li><strong>两阶段提交</strong>：先准备、再提交，需要额外的日志、超时和恢复逻辑；参与者故障时可能阻塞。</li>
+<li><strong>Saga / 补偿</strong>：每个分片本地提交，失败后补偿。实现简单一些，但中间状态对外可见，业务要能接受。</li>
+<li><strong>共分片</strong>：把需要一起操作的 key 设计成落在同一个分片。这能恢复本地性，但会限制数据模型，还可能制造热点。</li>
+</ul>
+<p>所以“每个 key 一个 actor”在单 key 场景很优雅，在跨 key 场景可能非常贵。选型时要把负载里的跨分片比例作为一个一阶参数，而不是事后才发现。</p>
+<h5 id="_20">成本三：复制</h5>
+<p>如果 actor 的状态需要复制到多个节点或线程以提高可用性，就会引入复制成本：写要传播、读可能读到旧值、故障切换要选主、网络分区要处理一致性。复制不是 Actor 模型独有的，但 Actor 的“状态私有”会让复制边界更清晰：你复制的是 actor 的状态快照或消息日志，而不是随意共享的内存。清晰不等于便宜，共识、日志、快照传输都是实打实的开销。</p>
+<h5 id="_21">成本四：语义与生命周期</h5>
+<p>消息传递把“调用”变成了“发送 + 等待回复”或“发送后不管”。这会带来新的语义问题：</p>
+<ul>
+<li>消息丢了怎么办？需要超时、重试、幂等键。</li>
+<li>回复晚了，调用方已经取消，结果还要不要应用？需要取消协议和版本检查。</li>
+<li>接收者崩溃，邮箱里的消息怎么办？需要持久化或明确丢弃。</li>
+<li>关闭时邮箱里还有消息，算已接受还是未接受？需要停机协议。</li>
+</ul>
+<p>这些都不是“加个队列”能自动解决的，它们属于任务生命周期设计。</p>
+<h4 id="_22">共享状态并没有消失</h4>
+<p>即使采用消息传递，共享状态通常也没有完全消失，只是被压缩到了几个地方：</p>
+<ul>
+<li><strong>队列本身</strong>：多个生产者往同一个邮箱投递，邮箱的内部结构仍然是共享的，需要同步。</li>
+<li><strong>路由表</strong>：key 到分片的映射是共享只读的，但扩容、迁移时会变。</li>
+<li><strong>全局资源</strong>：内存分配器、日志、指标、连接池仍然是进程级共享。</li>
+<li><strong>跨分片索引</strong>：二级索引、聚合统计往往需要跨 actor 共享或汇总。</li>
+</ul>
+<p>所以正确的说法不是“消息传递消灭了共享状态”，而是“消息传递把共享状态收敛到少数边界，并让业务状态的所有权变得明确”。这些边界仍然需要并发正确性证明，只是数量少了、位置集中了。</p>
+<h4 id="kv_1">三种候选模型：同一 KV 负载的三条路</h4>
+<p>节点 practice 要求对同一 KV 负载比较三种模型。为了避免抽象讨论，先把三条路摆清楚。</p>
+<h5 id="a">模型 A：分片锁</h5>
+<p>把 key 哈希到 N 个分片，每个分片一张 map 加一把锁。工作线程直接调用 KV 接口，进入分片时加锁，离开时解锁。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Shard</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">mutable</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShardedKV</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">ShardedKV</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">shards_</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Shard</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shard_for</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">map</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">map</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">put</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Shard</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shard_for</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">mu</span><span class="p">);</span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">map</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">value</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Shard</span><span class="o">&amp;</span><span class="w"> </span><span class="n">shard_for</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">shards_</span><span class="p">[</span><span class="n">std</span><span class="o">::</span><span class="n">hash</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">{}(</span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">shards_</span><span class="p">.</span><span class="n">size</span><span class="p">()];</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Shard</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shards_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<ul>
+<li><strong>状态归属</strong>：状态仍然共享，访问权由锁临时授予。</li>
+<li><strong>生命周期</strong>：请求就是一次函数调用，栈上完成；停机时停止接收、等待在途调用返回、销毁 map。</li>
+<li><strong>过载</strong>：没有队列，压力直接表现为线程阻塞和锁竞争；上游超时或线程池队列会承接溢出。</li>
+<li><strong>优点</strong>：实现简单、单 key 延迟低、没有消息复制、调试直观。</li>
+<li><strong>缺点</strong>：热点 key 会让单个分片的锁成为串行点；跨分片操作要同时持多把锁，容易死锁；锁竞争会直接抬高尾延迟。</li>
+</ul>
+<h5 id="b">模型 B：每分片事件循环</h5>
+<p>每个分片绑定一个执行者（一个线程或一个串行 executor），分片内的所有操作都提交到该执行者，由它串行处理。分片状态只被这个执行者访问，因此不需要锁。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Op</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Kind</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">Get</span><span class="p">,</span><span class="w"> </span><span class="n">Put</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">kind</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">key</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">promise</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">done</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ShardLoop</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">submit</span><span class="p">(</span><span class="n">Op</span><span class="w"> </span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">            </span><span class="n">queue_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">op</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">cv_</span><span class="p">.</span><span class="n">notify_one</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">run</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Op</span><span class="w"> </span><span class="n">op</span><span class="p">;</span>
+<span class="w">            </span><span class="p">{</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">unique_lock</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lk</span><span class="p">(</span><span class="n">mu_</span><span class="p">);</span>
+<span class="w">                </span><span class="n">cv_</span><span class="p">.</span><span class="n">wait</span><span class="p">(</span><span class="n">lk</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">stop_</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stop_</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">                </span><span class="n">op</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">queue_</span><span class="p">.</span><span class="n">front</span><span class="p">());</span>
+<span class="w">                </span><span class="n">queue_</span><span class="p">.</span><span class="n">pop_front</span><span class="p">();</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">execute</span><span class="p">(</span><span class="n">op</span><span class="p">);</span><span class="w">   </span><span class="c1">// 只在本线程访问 map_</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">execute</span><span class="p">(</span><span class="n">Op</span><span class="o">&amp;</span><span class="w"> </span><span class="n">op</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">op</span><span class="p">.</span><span class="n">kind</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Op</span><span class="o">::</span><span class="n">Kind</span><span class="o">::</span><span class="n">Get</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">op</span><span class="p">.</span><span class="n">key</span><span class="p">);</span>
+<span class="w">            </span><span class="n">op</span><span class="p">.</span><span class="n">done</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">map_</span><span class="p">.</span><span class="n">end</span><span class="p">()</span>
+<span class="w">                </span><span class="o">?</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span>
+<span class="w">                </span><span class="o">:</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">(</span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">));</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">map_</span><span class="p">[</span><span class="n">op</span><span class="p">.</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">op</span><span class="p">.</span><span class="n">value</span><span class="p">);</span>
+<span class="w">            </span><span class="n">op</span><span class="p">.</span><span class="n">done</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mu_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">condition_variable</span><span class="w"> </span><span class="n">cv_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">deque</span><span class="o">&lt;</span><span class="n">Op</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queue_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">stop_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">map_</span><span class="p">;</span><span class="w">  </span><span class="c1">// 只被 run() 线程访问</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<ul>
+<li><strong>状态归属</strong>：分片状态归该分片的执行者独占，外部只能通过 <code>submit</code> 发消息。</li>
+<li><strong>生命周期</strong>：操作作为消息进入队列；停机时先停止接收，再让执行者把队列处理完或按策略丢弃。</li>
+<li><strong>过载</strong>：每个分片有自己的队列；队列长度就是该分片的压力信号。慢操作会阻塞整个分片。</li>
+<li><strong>优点</strong>：分片内无锁、单 key 顺序天然成立、每分片指标清晰、状态归属最容易证明。</li>
+<li><strong>缺点</strong>：队头阻塞；热点分片会成为瓶颈；跨分片操作需要扇出和等待；执行者一旦阻塞（例如同步 I/O），整片停摆。</li>
+</ul>
+<h5 id="c">模型 C：任务队列</h5>
+<p>前端把每个请求包装成任务，提交到一个共享的有界队列，固定数量的工作线程从队列取任务执行。KV 状态的正确性由任务内部的同步策略保证，例如按 key 分片的锁，或者按 key 路由到固定工作线程。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">TaskQueueKV</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">TaskQueueKV</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">workers</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">capacity</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">queue_</span><span class="p">(</span><span class="n">capacity</span><span class="p">),</span><span class="w"> </span><span class="n">kv_</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">workers</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">threads_</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="k">this</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">worker_loop</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">submit</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">task</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">queue_</span><span class="p">.</span><span class="n">try_push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">task</span><span class="p">));</span><span class="w">   </span><span class="c1">// 有界：满了就拒绝</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">worker_loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">queue_</span><span class="p">.</span><span class="n">pop</span><span class="p">(</span><span class="n">task</span><span class="p">))</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w">          </span><span class="c1">// 关闭且队列空</span>
+<span class="w">            </span><span class="n">task</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">BoundedQueue</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">()</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">queue_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ShardedKV</span><span class="w"> </span><span class="n">kv_</span><span class="p">;</span><span class="w">                                   </span><span class="c1">// 任务内部再处理同步</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">threads_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<ul>
+<li><strong>状态归属</strong>：任务本身不拥有 KV 状态；状态仍由 <code>ShardedKV</code> 的锁保护。任务队列负责调度，锁负责正确性。</li>
+<li><strong>生命周期</strong>：任务从提交到执行之间有一段排队期；关闭时要区分“已入队未执行”“执行中”“已完成”。</li>
+<li><strong>过载</strong>：有界队列 + 拒绝是显式策略；无界队列则会把过载变成延迟和内存问题。</li>
+<li><strong>优点</strong>：任务粒度灵活、容易做优先级和限流、工作线程利用率高、可以接工作窃取。</li>
+<li><strong>缺点</strong>：队列本身是竞争点；任务粒度过细会增加调度开销；如果没有按 key 串行化，读改写仍可能丢失更新；关闭和取消语义更复杂。</li>
+</ul>
+<p>三种模型不是互斥的：模型 C 可以用模型 A 做状态保护，模型 B 可以看成“每个分片一个单线程任务队列”。把它们并列，是为了逼你回答：状态归谁、任务活多久、过载怎么处理。</p>
+<h4 id="_23">选择的第一原则：先写契约，再选模型</h4>
+<p>在比较性能之前，先写下这个 KV 服务的契约：</p>
+<ul>
+<li>单 key 的 <code>get</code> 和 <code>put</code> 是否要求线性化？读改写是否要求原子？</li>
+<li>跨 key 的批量操作是否要求原子？如果不要求，允许看到什么中间状态？</li>
+<li>同一个 key 的多次写是否要求按提交顺序生效？</li>
+<li>重复提交同一个请求是否要求幂等？幂等键是什么？</li>
+<li>过载时允许拒绝吗？拒绝后客户端看到什么错误？</li>
+<li>停机时已确认的写是否必须保留？未确认的写允许丢吗？</li>
+<li>尾延迟预算是什么？p99 还是 p999？预算是端到端还是服务端？</li>
+</ul>
+<p>这些问题的答案会直接排除一些模型。例如：如果要求跨 key 原子，模型 B 的每 key 一个 actor 就很难做；如果要求严格单 key 顺序，模型 C 必须加按 key 串行化；如果停机零丢失，三种模型都需要持久化和确认协议，而不只是内存队列。</p>
+<h4 id="_24">可证明边界的第一层：把“保证”写成命题</h4>
+<p>“可证明边界”不是要求你写形式化证明，而是要求你把保证写成可以被检验的命题。例如：</p>
+<ul>
+<li><strong>命题 1（单 key 线性化）</strong>：对任意 key，所有成功的 <code>put</code> 和 <code>get</code> 可以排成一个全序，且每个 <code>get</code> 返回它之前最近一次 <code>put</code> 的值。</li>
+<li><strong>命题 2（跨 key 非原子）</strong>：<code>MGET</code> 不保证快照一致性，可能观察到部分新值、部分旧值。</li>
+<li><strong>命题 3（停机有界）</strong>：收到停止信号后，最多 T 毫秒内停止接收新请求；已确认的写不丢失；未执行的排队任务返回明确错误。</li>
+<li><strong>命题 4（过载有界）</strong>：队列长度不超过 C；超过时拒绝新请求；拒绝不会导致已接受请求被丢弃。</li>
+</ul>
+<p>只有命题清楚，你才能设计测试去验证，也才能在 ADR 里写“这个选择在什么条件下失效”。如果契约本身是模糊的，任何模型都可以声称自己正确。</p>
+<h4 id="_25">可证明边界的第二层：为每个命题找到证据</h4>
+<p>证据可以分层：</p>
+<ul>
+<li><strong>代码结构</strong>：状态私有、接口不暴露可变引用、跨分片调用必须经过消息层。这是“按构造正确”的部分。</li>
+<li><strong>并发测试</strong>：多线程对同一 key 做读改写，检查最终计数；用 barrier 放大交错；用 TSan 检查数据竞争。</li>
+<li><strong>模型检查 / 线性化检查</strong>：记录操作历史，用离线检查器判断是否可线性化；适合核心数据结构，不一定适合整个服务。</li>
+<li><strong>故障注入</strong>：在负载中发停止信号、注入超时、让某个分片变慢，观察是否满足停机与过载命题。</li>
+<li><strong>观测数据</strong>：队列深度、拒绝数、p99、排水时间。它们不能证明正确性，但能证明边界在何时被逼近。</li>
+</ul>
+<p>这就是为什么 acceptance 要求报告同时包含正确性、尾延迟和停机行为：三者分别对应“逻辑对不对”“边界有多近”“退出干不干净”。</p>
+<hr />
+<h3 id="_26">要点三：工作窃取、公平性和隔离</h3>
+<h4 id="_27">任务分配不是细节，它会改变模型的性质</h4>
+<p>一旦有多个执行者，就必须回答：任务怎么分配到执行者？常见策略有：</p>
+<ul>
+<li><strong>静态分片</strong>：按 key 哈希固定到某个执行者。模型 B 就是这种。</li>
+<li><strong>共享队列</strong>：所有工作线程从同一个队列取。模型 C 的简单形式。</li>
+<li><strong>每工作线程队列 + 工作窃取</strong>：每个线程有自己的队列，空闲时从别的线程“偷”任务。</li>
+<li><strong>路由到 key 的所属执行者</strong>：为了保证单 key 顺序，任务必须回到该 key 的分片。</li>
+</ul>
+<p>策略不同，正确性、尾延迟和隔离性都不同。节点把“工作窃取、公平性和隔离”放在同一个要点里，是因为它们经常一起出现：窃取提高利用率，但可能破坏局部性和公平性；隔离限制干扰，但可能降低利用率。</p>
+<h4 id="_28">工作窃取：用局部性换利用率</h4>
+<p>工作窃取的基本结构是：</p>
+<ul>
+<li>每个工作线程有一个双端队列（deque）。</li>
+<li>线程自己产生的任务压入自己的队列，通常从一端取（LIFO），这样最近的任务还在缓存里，局部性好。</li>
+<li>空闲线程从其他线程的另一端“偷”任务（FIFO），这样偷到的是较老的任务，减少与所有者的冲突。</li>
+<li>窃取需要原子操作或锁来协调 deque 的两端，成本比本地取任务高得多。</li>
+</ul>
+<p>它解决的问题是<strong>负载不均</strong>：静态分配时，有的线程早早干完，有的线程还在排队；工作窃取让空闲线程去帮忙，从而提高 CPU 利用率、降低平均延迟。</p>
+<p>但它带来几个新问题：</p>
+<ul>
+<li><strong>局部性丢失</strong>：被偷走的任务可能在另一个 CPU 上执行，缓存和 NUMA 局部性变差。</li>
+<li><strong>顺序破坏</strong>：如果同一个 key 的任务被偷到不同线程，单 key 的串行保证就没了；所以工作窃取通常用于“任务之间无顺序依赖”的场景，或者窃取后仍然路由回 key 的所有者。</li>
+<li><strong>窃取开销</strong>：高竞争时，窃取本身会成为开销；deque 的实现要非常小心。</li>
+<li><strong>尾延迟不一定改善</strong>：如果任务粒度太粗，一个长任务仍然会卡住；如果粒度太细，调度开销又会上升。</li>
+</ul>
+<p>所以“用了工作窃取”不等于“尾延迟就好了”。它主要改善的是<strong>平均利用率和负载不均</strong>，对单点长任务、锁竞争、下游阻塞无能为力。</p>
+<h4 id="_29">公平性：谁在排队，谁会被饿死</h4>
+<p>公平性问的是：在所有等待的任务中，调度器是否会给每个任务合理的执行机会，还是某些任务会被无限期推迟。</p>
+<p>在 KV 服务里，不公平的常见来源有：</p>
+<ul>
+<li><strong>热点 key</strong>：同一个 key 的请求都排到同一个分片，其他 key 的请求被堵在后面。</li>
+<li><strong>大请求</strong>：一个批量扫描占用分片很久，小请求只能等。</li>
+<li><strong>租户 / 优先级</strong>：高优先级请求持续到达，低优先级请求永远排不上。</li>
+<li><strong>工作窃取偏向</strong>：某些队列总被优先偷，另一些队列长期得不到帮助。</li>
+<li><strong>锁的不公平</strong>：某些 mutex 不保证先来先得，等待线程可能被反复插队。</li>
+</ul>
+<p>公平性不是“绝对平均”，而是与业务契约匹配。你可以选择：</p>
+<ul>
+<li><strong>FIFO</strong>：简单、可预测，但大请求会阻塞小请求。</li>
+<li><strong>优先级队列</strong>：保护关键请求，但低优先级可能饿死，需要老化机制。</li>
+<li><strong>每个租户独立队列 / 配额</strong>：隔离干扰，但会降低全局利用率。</li>
+<li><strong>轮转 / 加权公平队列</strong>：在吞吐和公平之间折中，实现更复杂。</li>
+</ul>
+<p>关键是把公平性写成可观测的指标：每个分片的队列深度、每个租户的等待时间、拒绝率、p99 按租户拆分。没有这些指标，“公平”只是口号。</p>
+<h4 id="_30">隔离：把故障和压力关在笼子里</h4>
+<p>隔离（bulkhead）的思路是：不要让一个故障或一个热点影响整个系统。常见隔离维度包括：</p>
+<ul>
+<li><strong>分片隔离</strong>：每个分片独立队列、独立执行者。一个分片过载，不影响其他分片。</li>
+<li><strong>租户隔离</strong>：每个租户独立配额或独立线程池，防止一个租户打满全局。</li>
+<li><strong>资源隔离</strong>：CPU 亲和性、cgroup、独立内存池，防止一个组件拖垮整机。</li>
+<li><strong>故障隔离</strong>：一个 actor / 分片崩溃或卡住，不传播到其他分片；但同进程内仍然共享地址空间，隔离是有限的。</li>
+<li><strong>部署隔离</strong>：把不同负载类型的服务拆成不同进程或不同机器。</li>
+</ul>
+<p>隔离的代价是资源利用率下降：每个隔离单元都要预留容量，空闲时不能完全共享。所以隔离不是越多越好，而是按故障域和 SLO 来画边界。</p>
+<p>在三种模型里的体现：</p>
+<ul>
+<li><strong>模型 A（分片锁）</strong>：锁本身不提供隔离。一个热点分片会把线程池里的线程都吸过去，其他分片的请求可能没有线程可用；除非你给分片独立的线程池或限流。</li>
+<li><strong>模型 B（每分片事件循环）</strong>：天然按分片隔离，一个分片慢只影响自己；但分片之间不共享线程，CPU 利用率可能不均衡。</li>
+<li><strong>模型 C（任务队列）</strong>：队列是全局共享的，一个慢任务会占住工作线程；需要靠优先级、租户队列、独立线程池来做隔离。工作窃取可以缓解空闲，但也可能把热点传播到更多线程。</li>
+</ul>
+<h4 id="_31">隔离与可观测性是一体两面</h4>
+<p>你无法隔离你看不见的东西。每个隔离单元至少要有：</p>
+<ul>
+<li>队列深度 / 邮箱长度；</li>
+<li>当前正在处理的任务数和耗时；</li>
+<li>拒绝数、超时数、取消数；</li>
+<li>p50 / p99 / p999 延迟；</li>
+<li>错误率和重试率；</li>
+<li>停机时的剩余任务数和排水时间。</li>
+</ul>
+<p>如果所有分片共用一个全局指标，热点分片会被平均值掩盖。模型 B 的一个实际优势就是指标天然按分片拆分；模型 A 和 C 需要额外按分片 / 租户打标签，否则观测不到隔离边界。</p>
+<h4 id="_32">可证明边界的第三层：把失效条件写成可触发的事件</h4>
+<p>到这里，可以把“可证明边界”收束成一个工程写法。对每个模型，回答四个问题：</p>
+<ol>
+<li><strong>状态归属命题</strong>：哪些状态是单所有者？哪些仍然是共享的？共享的那些由什么保护？</li>
+<li><strong>顺序命题</strong>：哪些操作有顺序保证？是单 key、单分片，还是全局？跨分片看到什么中间状态？</li>
+<li><strong>资源命题</strong>：队列 / 邮箱的容量是多少？满了以后发生什么？内存上限是多少？</li>
+<li><strong>生命周期命题</strong>：取消、超时、停机分别怎么处理？哪些状态是终态？排水时间上界是多少？</li>
+</ol>
+<p>然后为每个命题写出<strong>失效条件</strong>。例如：</p>
+<ul>
+<li>模型 A：当单分片 QPS 超过锁能承载的上限，或临界区内出现慢操作时，锁竞争会让 p99 超标；跨分片操作在加锁顺序不一致时会死锁。</li>
+<li>模型 B：当某个分片的队列持续增长，或单个 handler 执行时间超过尾延迟预算时，队头阻塞会让该分片所有请求超时；当 key 分布倾斜时，热点分片先饱和。</li>
+<li>模型 C：当到达速率持续超过消费速率且队列无界时，排队延迟和内存会同时失控；当任务缺少按 key 串行化时，读改写会丢失更新；当关闭时没有排水协议时，已确认的写可能丢。</li>
+</ul>
+<p>这些句子就是 acceptance 第二条要的内容：不是“高负载可能有问题”，而是“在什么负载特征下、哪个指标先坏、为什么”。</p>
+<hr />
+<h2 id="_33">常见误区与设计权衡</h2>
+<p>前面的原理部分给出了三条设计轴。这一节把实际选型时最容易犯的错误集中列出来，并逐条对应到节点的 pitfalls 与 tradeoffs。</p>
+<h3 id="_34">误区一：只拿单次操作开销做决定</h3>
+<p><strong>错误做法</strong>：写一个单线程微基准，测 <code>lock/unlock</code> 和“发一条消息”的纳秒数，然后得出“消息传递更慢”或“锁更慢”的结论。</p>
+<p><strong>为什么不对</strong>：单次操作开销只是模型成本的一小项。真正的差异在竞争、排队、缓存局部性、尾延迟和停机复杂度上。一个在无竞争时 20ns 的锁，在热点分片上可能让 p99 从 1ms 涨到 50ms；一个单次 200ns 的消息投递，在队列空时看起来慢，但它可能让你完全省掉跨分片的锁和死锁风险。节点 pitfalls 说“吞吐最高不必然是延迟或运维成本最优”，就是提醒你不要用单一维度的微基准替代架构判断。</p>
+<p><strong>正确做法</strong>：先写契约和失效条件，再做端到端负载测试，至少同时看正确性、p50/p99/p999、吞吐、内存、拒绝率、停机排水时间。单次开销可以作为解释现象的辅助数据，不能作为决策的唯一依据。</p>
+<h3 id="_35">误区二：把“无锁”当成“无等待”或“更快”</h3>
+<p><strong>错误做法</strong>：看到某个模型内部没有 mutex，就认为它一定延迟低、不会阻塞。</p>
+<p><strong>为什么不对</strong>：无锁（lock-free）通常只保证系统整体有进展，不保证每个线程有进展；无等待（wait-free）才是每个操作都有界步数。更重要的是，Actor 的“业务状态无锁”往往伴随“邮箱有锁”或“队列有原子操作”；锁只是被移到了消息边界，并没有消失。高竞争下，邮箱的入队/出队、条件变量唤醒、缓存行 bouncing 都可能成为瓶颈。</p>
+<p><strong>正确做法</strong>：问清楚“哪把锁被消掉了、哪把锁被移到了哪里、竞争点转移到了谁身上”。如果竞争点从业务 map 转移到了单个邮箱，热点 key 的尾延迟可能并没有改善。</p>
+<h3 id="_36">误区三：忽略排队，只测执行时间</h3>
+<p><strong>错误做法</strong>：压测时只统计 handler 内部耗时，看到 p99 很低，就认为模型没问题。</p>
+<p><strong>为什么不对</strong>：端到端延迟 = 排队时间 + 执行时间 + 传输/序列化时间。模型 B 和 C 都有显式队列，过载时排队时间会主导 p99。如果你只测执行时间，等于把模型最昂贵的部分排除在观测之外。更隐蔽的是“协调遗漏”（coordinated omission）：闭环压测中，客户端因为服务变慢而降低发送速率，导致你测不到真实用户会经历的等待。</p>
+<p><strong>正确做法</strong>：用开环负载或至少记录“请求进入系统的时间”，把排队时间和执行时间分开统计；在过载区间多取几个点，而不是只测容量以内的漂亮数字。队列深度、拒绝数、超时数要一起看。</p>
+<h3 id="_37">误区四：把“消息传递”当成“没有共享状态”</h3>
+<p><strong>错误做法</strong>：采用 Actor 后，认为再也不会出现数据竞争，于是跨 actor 传递 <code>shared_ptr</code>、在 handler 里直接调用别的 actor、或者共享一个全局缓存。</p>
+<p><strong>为什么不对</strong>：消息传递只保证“通过消息边界传递的值/所有权”不共享；一旦你把可变引用、共享指针或全局对象带进来，共享状态就回来了，而且更隐蔽——因为它披着“我们在用 Actor”的外衣。Asio strand 也是同理：它只序列化通过该 strand 调度的 handler，不保护你从别处直接调用的对象。</p>
+<p><strong>正确做法</strong>：把“禁止逃逸”写成代码规则：消息只传值或 <code>unique_ptr</code>；公开接口不返回可变引用；跨分片只能发消息；全局缓存要么改成每分片，要么明确加锁并记录在案；在调试构建里断言所有者线程。</p>
+<h3 id="_38">误区五：没有过载策略，只靠“队列应该不会满”</h3>
+<p><strong>错误做法</strong>：使用无界队列，认为“正常流量不会堆积”；或者使用有界队列但不定义满了以后的行为。</p>
+<p><strong>为什么不对</strong>：过载不是异常，是分布式系统的常态：上游重试、热点事件、依赖变慢都会让到达速率超过处理能力。无界队列会把过载转化为延迟和内存增长，最终 OOM；有界队列如果不定义拒绝语义，调用方可能收到模糊错误、无限重试，反而放大压力。</p>
+<p><strong>正确做法</strong>：在 ADR 里明确：队列容量、拒绝条件、拒绝错误码、是否重试、是否降级、是否反压、是否丢低优先级。模型 B 要定义每分片邮箱容量；模型 C 要定义全局队列容量和任务优先级；模型 A 要定义线程池队列和上游超时。没有过载策略的模型不算完成。</p>
+<h3 id="_39">误区六：把公平性留给“操作系统应该会处理”</h3>
+<p><strong>错误做法</strong>：不设计优先级和配额，认为线程调度器会“公平地”分配 CPU。</p>
+<p><strong>为什么不对</strong>：OS 调度器保证的是线程之间的 CPU 时间公平，不是你的业务请求之间的公平。一个热点分片可能占满所有工作线程；一个批量任务可能长时间占住执行者；一个租户可能用大量小请求挤掉另一个租户。这些都不是 OS 能替你解决的。</p>
+<p><strong>正确做法</strong>：按业务契约选择公平性策略：FIFO、优先级、租户配额、轮转。把公平性指标（按分片/租户的等待时间、拒绝率）纳入监控。模型 B 的分片隔离是天然优势，但分片内部仍然需要防止单个大请求阻塞小请求；模型 C 需要额外的调度策略。</p>
+<h3 id="_40">误区七：忽略停机，把“进程退出”当成“任务结束”</h3>
+<p><strong>错误做法</strong>：关闭时直接 <code>std::terminate</code>、<code>detach</code> 线程，或者只设置一个 <code>stop</code> 标志就退出，不等待队列和正在执行的任务。</p>
+<p><strong>为什么不对</strong>：停机会暴露所有生命周期设计的漏洞：已确认的写可能还没落盘、任务可能执行到一半、回调可能引用已销毁的对象、队列里的任务可能永远不执行。<code>detach</code> 尤其危险：线程还在访问对象，对象已经析构。节点 acceptance 明确要求报告包含停机行为，就是因为这是模型正确性的一部分。</p>
+<p><strong>正确做法</strong>：设计明确的状态机：<code>Running → Draining → Stopped</code>。停止接收新任务；对已入队任务选择“处理完”或“明确拒绝/取消”；给排水设上限；等待工作线程 join；释放资源；记录排水时间、剩余任务数、丢失/重复数。用故障注入在负载中发停止信号，验证这些数字。</p>
+<h3 id="_41">误区八：把隔离当成免费的</h3>
+<p><strong>错误做法</strong>：为每个租户、每个分片、每种请求都开独立线程池，认为隔离越多越安全。</p>
+<p><strong>为什么不对</strong>：隔离需要预留资源，会降低利用率；线程/队列越多，调度和内存开销越大；隔离边界过多还会让全局观测和容量规划变难。隔离应该按故障域和 SLO 来画，而不是按组织结构或代码模块来画。</p>
+<p><strong>正确做法</strong>：先识别真正的故障域：热点 key、慢依赖、大租户、批处理。为这些画边界；其他部分共享资源以提高利用率。每个隔离单元要有独立指标和容量上限，否则只是把问题藏起来。</p>
+<h3 id="_42">权衡总表</h3>
+<p>把节点 tradeoffs 展开成一张对照表，方便在 ADR 里引用：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>共享状态（锁）</th>
+<th>消息传递（Actor / 队列）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>状态归属</td>
+<td>共享，靠锁临时授权</td>
+<td>单所有者，边界清晰</td>
+</tr>
+<tr>
+<td>单次延迟</td>
+<td>无竞争时短</td>
+<td>多一次入队/出队和调度</td>
+</tr>
+<tr>
+<td>竞争点</td>
+<td>每个共享对象/分片</td>
+<td>邮箱、队列、路由</td>
+</tr>
+<tr>
+<td>跨分片操作</td>
+<td>多锁、需顺序、可能死锁</td>
+<td>扇出/事务/Saga，延迟由最慢者决定</td>
+</tr>
+<tr>
+<td>顺序保证</td>
+<td>由锁和临界区决定</td>
+<td>单 actor 内自然串行，跨 actor 需协议</td>
+</tr>
+<tr>
+<td>过载表现</td>
+<td>线程阻塞、锁竞争、上游超时</td>
+<td>队列增长、延迟上升、拒绝</td>
+</tr>
+<tr>
+<td>停机</td>
+<td>等待在途调用、销毁状态</td>
+<td>停止接收、排水、处理未完成消息</td>
+</tr>
+<tr>
+<td>可观测性</td>
+<td>需按分片打点</td>
+<td>邮箱/队列天然是观测点</td>
+</tr>
+<tr>
+<td>运维复杂度</td>
+<td>较低，但死锁和锁粒度难调</td>
+<td>较高，需管理队列、路由、重试、幂等</td>
+</tr>
+</tbody>
+</table>
+<p>这张表不是让你选一边站，而是让你在 ADR 里逐项写清楚：我选了什么、为什么、代价是什么、在什么条件下代价会变成故障。</p>
+<hr />
+<h2 id="kv-adr">动手实践：对同一 KV 负载比较三种模型，写 ADR</h2>
+<p>本节点的 practice 是：<strong>对同一 KV 负载比较分片锁、每分片事件循环与任务队列，写 ADR。</strong> 这一节给出一套可执行的做法。重点不是写出三个“能跑”的 demo，而是让三者面对同一份负载、同一套指标、同一组故障注入，最后产出一份能支撑决策的 ADR。</p>
+<h3 id="_43">第一步：固定负载与契约</h3>
+<p>先写一份 <code>workload.md</code>，把变量固定下来，避免“每个模型测的其实不是同一件事”。</p>
+<p><strong>负载参数</strong>：</p>
+<ul>
+<li>key 空间：例如 100 万个 key；</li>
+<li>分布：先测均匀分布，再测 Zipf / 热点分布（例如 1% 的 key 承担 50% 的请求）；</li>
+<li>读写比：例如 95% get、5% put；</li>
+<li>值大小：例如 256B 和 4KB 两档；</li>
+<li>并发客户端：例如 64 或 256；</li>
+<li>是否包含跨分片操作：例如 1% 的 <code>MGET</code>，每次 8 个 key；</li>
+<li>是否包含慢操作：例如 0.1% 的请求执行 10ms 的模拟 I/O；</li>
+<li>过载测试：把到达速率逐步提高到超过容量，观察 p99、队列、拒绝；</li>
+<li>测试时长：每档至少几分钟，避免只测到预热阶段；</li>
+<li>重复次数：至少 5 次，报告中位数和尾部，不只报最好的一次。</li>
+</ul>
+<p><strong>契约参数</strong>：</p>
+<ul>
+<li>单 key 读写要求线性化；</li>
+<li>跨 key <code>MGET</code> 不要求快照一致，但要说明可能看到部分新值；</li>
+<li>同一 key 的写按提交顺序生效；</li>
+<li>重复提交使用幂等键，服务端去重窗口为 10 分钟；</li>
+<li>过载时允许拒绝，返回明确的可重试错误；</li>
+<li>停机时已确认的写不能丢，未确认的写可以失败；</li>
+<li>尾延迟预算：p99 ≤ 20ms，p999 ≤ 100ms（示例，按实际 SLO 替换）。</li>
+</ul>
+<p>把这些写下来，后面每个模型的正确性测试和 ADR 都引用它。没有契约，就没有“正确性”可谈，也没有“在何种负载下失效”可写。</p>
+<h3 id="_44">第二步：实现三个模型的统一接口</h3>
+<p>为了让比较公平，三个模型实现同一个接口：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">KV</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">KV</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">get</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&gt;</span>
+<span class="w">        </span><span class="n">mget</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">keys</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 停止接收新请求；返回前完成或取消已接受的任务。</span>
+<span class="w">    </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">shutdown</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="w"> </span><span class="n">drain_limit</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>接口里有两个容易忽略但很关键的点：</p>
+<ol>
+<li><strong><code>put</code> 返回 <code>bool</code></strong>：过载时可能被拒绝；调用方必须能区分“成功”“失败”“可重试”。</li>
+<li><strong><code>shutdown</code> 带排水上限</strong>：停机不是无限等待；超过上限要有明确行为，并记录剩余任务。</li>
+</ol>
+<p>三个模型分别实现：</p>
+<ul>
+<li><code>ShardedLockKV</code>：分片 mutex + map；<code>mget</code> 按分片分组，必要时按固定顺序加锁，或者干脆逐 key 读取并接受非原子。</li>
+<li><code>ShardLoopKV</code>：每分片一个执行者 + 邮箱；<code>get/put</code> 封装成消息并等待 future；<code>mget</code> 向多个分片发请求后汇总。</li>
+<li><code>TaskQueueKV</code>：有界任务队列 + 工作线程；任务内部调用 <code>ShardedLockKV</code> 或按 key 路由；<code>shutdown</code> 先关闭队列再 join。</li>
+</ul>
+<p>注意：模型 C 如果内部直接用 <code>ShardedLockKV</code>，它和模型 A 的差异就主要在“排队与调度”上，这是合理的对比——它回答的是“加一层任务队列是否改善尾延迟/隔离/停机”。在 ADR 里要明确这一点，避免读者误以为两者状态保护完全不同。</p>
+<h3 id="_45">第三步：正确性测试</h3>
+<p>正确性测试要比“跑一遍没崩”强。至少做四类：</p>
+<h5 id="key">测试一：单 key 读改写</h5>
+<p>多个线程对同一个 key 执行“读 → 加一 → 写”，每个线程做固定次数，最终值必须等于总次数。这能抓到丢失更新。</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">test_read_modify_write</span><span class="p">(</span><span class="n">KV</span><span class="o">&amp;</span><span class="w"> </span><span class="n">kv</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">threads</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">per_thread</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">kv</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"counter"</span><span class="p">,</span><span class="w"> </span><span class="s">"0"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ts</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">start</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">threads</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">ts</span><span class="p">.</span><span class="n">emplace_back</span><span class="p">([</span><span class="o">&amp;</span><span class="p">]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">start</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_acquire</span><span class="p">))</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">per_thread</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="k">auto</span><span class="w"> </span><span class="n">old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kv</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"counter"</span><span class="p">);</span>
+<span class="w">                    </span><span class="kt">long</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">stol</span><span class="p">(</span><span class="o">*</span><span class="n">old</span><span class="p">);</span>
+<span class="w">                    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">kv</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"counter"</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)))</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">start</span><span class="p">.</span><span class="n">store</span><span class="p">(</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">memory_order_release</span><span class="p">);</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">ts</span><span class="p">)</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">join</span><span class="p">();</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">final</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kv</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"counter"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">stol</span><span class="p">(</span><span class="o">*</span><span class="k">final</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mf">1L</span><span class="n">L</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">threads</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">per_thread</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这个测试对模型 A 和 C 有意义，因为它们的 <code>get</code> 和 <code>put</code> 是两次独立调用，中间可能被别的线程插入。模型 B 如果提供原子的“读改写消息”，则应该直接测那个消息，而不是用两次调用模拟。这个差异本身就要写进 ADR：<strong>模型的接口语义不同，测试要按契约调整，不能用一个测试假装三者等价。</strong></p>
+<h5 id="key_1">测试二：单 key 顺序</h5>
+<p>一个线程依次 <code>put(k, "1")</code>、<code>put(k, "2")</code>、<code>put(k, "3")</code>，另一个线程在每次 <code>put</code> 返回后立即 <code>get(k)</code>，必须能看到刚写入的值（read-your-writes）。这能抓到消息乱序、异步写回、以及“put 返回了但实际还没生效”的问题。</p>
+<h5 id="_46">测试三：跨分片非原子性</h5>
+<p>对多个 key 并发写，同时执行 <code>mget</code>，记录是否观察到部分新值、部分旧值。如果契约允许，测试应该断言“不会崩溃、不会返回不存在于任何版本的值”；如果契约要求快照一致，则这个测试应该失败，说明模型不满足契约。重点是让中间状态<strong>可见</strong>，而不是假装它不存在。</p>
+<h5 id="tsan">测试四：并发回归与 TSan</h5>
+<p>用 TSan 构建跑上述测试；用 ASan 跑停机测试，检查 use-after-free。对模型 B，重点检查对象是否逃逸出分片线程；对模型 C，重点检查任务捕获的引用是否比任务活得短；对模型 A，重点检查跨分片加锁顺序。</p>
+<h3 id="_47">第四步：尾延迟测试</h3>
+<p>尾延迟测试的关键是“开环”和“分段统计”。</p>
+<p>一个简化的开环压测骨架：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Sample</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">enqueued</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">started</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">finished</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">rejected</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Sample</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queue_ms</span><span class="p">,</span><span class="w"> </span><span class="n">service_ms</span><span class="p">,</span><span class="w"> </span><span class="n">total_ms</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">rejected</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">samples</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">rejected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">++</span><span class="n">rejected</span><span class="p">;</span><span class="w"> </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">        </span><span class="n">queue_ms</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ms</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">started</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">enqueued</span><span class="p">));</span>
+<span class="w">        </span><span class="n">service_ms</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ms</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">finished</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">started</span><span class="p">));</span>
+<span class="w">        </span><span class="n">total_ms</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ms</span><span class="p">(</span><span class="n">s</span><span class="p">.</span><span class="n">finished</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">enqueued</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// 对 queue_ms / service_ms / total_ms 分别排序，输出 p50/p99/p999</span>
+<span class="w">    </span><span class="c1">// 同时输出 rejected / samples.size()</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>报告里至少要有：</p>
+<ul>
+<li>吞吐（成功请求/秒）与拒绝率；</li>
+<li>排队时间 p50/p99/p999；</li>
+<li>执行时间 p50/p99/p999；</li>
+<li>端到端时间 p50/p99/p999；</li>
+<li>每个分片的队列深度最大值和平均值；</li>
+<li>CPU 利用率、RSS、上下文切换次数（可用 <code>pidstat</code> / <code>perf</code>）；</li>
+<li>过载区间的曲线，而不是单点。</li>
+</ul>
+<p>跑三组负载：</p>
+<ol>
+<li><strong>容量以内</strong>：到达速率约为实测容量的 70%，看基线延迟和公平性。</li>
+<li><strong>临界点</strong>：逐步提高速率，找到 p99 开始非线性上升的拐点。</li>
+<li><strong>过载</strong>：超过容量 1.5 倍，观察队列、拒绝、内存和恢复行为。</li>
+</ol>
+<p>每组的结论要写成“模型 X 在 Y 负载下 p99 为 Z，拐点在 W”，而不是“模型 X 更快”。</p>
+<h3 id="_48">第五步：停机测试</h3>
+<p>停机测试必须在<strong>有负载</strong>的时候做，否则测不到问题。步骤：</p>
+<ol>
+<li>启动压测，稳定运行一段时间；</li>
+<li>发送停止信号（或调用 <code>shutdown</code>）；</li>
+<li>记录停止信号时间、停止接收时间、最后一个任务完成时间、进程退出时间；</li>
+<li>统计：已确认的写有多少、停机后读不到的有多少、重复执行的有多少、队列剩余多少、拒绝多少；</li>
+<li>检查退出码、是否有崩溃、是否有 TSan/ASan 报告；</li>
+<li>对每个模型重复，至少覆盖“空闲停机”“轻载停机”“过载停机”三种状态。</li>
+</ol>
+<p>停机报告至少要回答：</p>
+<ul>
+<li>停止接收是否立即生效？有没有新请求在停止后仍被接受？</li>
+<li>已入队但未执行的任务：是处理完、取消，还是丢弃？调用方看到什么？</li>
+<li>正在执行的任务：是否给它完成窗口？超时后怎么处理？</li>
+<li>已确认的写：是否全部可见？如果用了异步写回，是否 flush？</li>
+<li>排水时间是否在上限内？超过上限时进程如何退出？</li>
+<li>资源是否释放？线程是否 join？有没有 detached 线程？</li>
+</ul>
+<p>这一节直接对应 acceptance 第一条的“停机行为”。</p>
+<hr />
+<h3 id="adr">第六步：把实验结果写成 ADR</h3>
+<p>ADR（Architecture Decision Record）不是会议纪要，也不是 benchmark 报告。它要回答的是：在什么背景下、做了哪个决定、考虑过哪些选项、付出了什么代价、什么条件下需要重新考虑。</p>
+<p>一个适合本 practice 的 ADR 模板如下：</p>
+<div class="codehilite"><pre><span></span><code><span class="gh"># ADR-0007：KV 服务并发模型选择</span>
+
+<span class="gu">## 状态</span>
+Proposed / Accepted / Superseded
+
+<span class="gu">## 背景与约束</span>
+<span class="k">-</span><span class="w"> </span>业务负载：读写比、key 分布、值大小、跨分片比例、峰值倍率
+<span class="k">-</span><span class="w"> </span>SLO：p99、p999、可用性、停机排水上限
+<span class="k">-</span><span class="w"> </span>团队与运维约束：语言、现成组件、排障能力、发布方式
+<span class="k">-</span><span class="w"> </span>明确不做什么：例如暂不支持跨 key 事务
+
+<span class="gu">## 决策</span>
+选择模型 X，因为……
+
+<span class="gu">## 备选方案</span>
+<span class="k">-</span><span class="w"> </span>模型 A：分片锁
+<span class="k">-</span><span class="w"> </span>模型 B：每分片事件循环
+<span class="k">-</span><span class="w"> </span>模型 C：任务队列
+每个方案给出：状态归属、顺序保证、过载策略、停机方式、实测数据
+
+<span class="gu">## 正确性论证</span>
+<span class="k">-</span><span class="w"> </span>命题与证据：单 key 线性化、跨 key 非原子、幂等、停机
+<span class="k">-</span><span class="w"> </span>测试结果：读改写、顺序、跨分片、TSan/ASan
+
+<span class="gu">## 尾延迟与容量</span>
+<span class="k">-</span><span class="w"> </span>三组负载下的 p50/p99/p999、排队时间、拒绝率
+<span class="k">-</span><span class="w"> </span>拐点与容量余量
+
+<span class="gu">## 停机行为</span>
+<span class="k">-</span><span class="w"> </span>状态机、排水上限、已确认写的处理、实测排水时间
+
+<span class="gu">## 后果</span>
+<span class="k">-</span><span class="w"> </span>正面：……
+<span class="k">-</span><span class="w"> </span>负面：……
+<span class="k">-</span><span class="w"> </span>运维成本：……
+
+<span class="gu">## 失效模式与重访条件</span>
+<span class="k">-</span><span class="w"> </span>在什么负载特征下会失效
+<span class="k">-</span><span class="w"> </span>触发重访的指标阈值
+<span class="k">-</span><span class="w"> </span>届时候选方案
+</code></pre></div>
+
+<p>一份填好的核心段落可以长这样（数字是示例，必须用你自己的实验替换）：</p>
+<div class="codehilite"><pre><span></span><code><span class="gu">## 决策</span>
+选择“每分片事件循环 + 有界邮箱”，分片数 64，每分片一个执行线程。
+单 key 读写在该分片内串行执行；跨分片 MGET 采用扇出 + 超时，不保证快照一致。
+过载时每分片邮箱上限 4096，满则拒绝并返回 RETRY_LATER。
+停机采用 Draining：停止接收 → 处理已入队消息 → 最多等待 5s → join。
+
+<span class="gu">## 正确性论证</span>
+<span class="k">-</span><span class="w"> </span>单 key 读改写：模型 B 将读改写实现为单条消息，10 万次并发递增结果正确。
+<span class="k">-</span><span class="w"> </span>单 key 顺序：put 返回前已完成内存更新，read-your-writes 测试通过。
+<span class="k">-</span><span class="w"> </span>跨分片：MGET 允许部分新值；测试确认不会返回撕裂值。
+<span class="k">-</span><span class="w"> </span>TSan/ASan：并发回归与停机注入均无报告。
+
+<span class="gu">## 尾延迟</span>
+<span class="k">-</span><span class="w"> </span>均匀分布、70% 容量：p99 8ms，p999 20ms，排队时间占比 &lt; 5%。
+<span class="k">-</span><span class="w"> </span>Zipf 热点、90% 容量：热点分片 p99 45ms，超过预算；拐点出现在单分片 QPS 约 12k。
+<span class="k">-</span><span class="w"> </span>过载 1.5x：拒绝率 18%，未拒绝请求 p99 120ms，热点分片队列达到上限。
+
+<span class="gu">## 停机</span>
+<span class="k">-</span><span class="w"> </span>空闲：排水 &lt; 50ms。
+<span class="k">-</span><span class="w"> </span>轻载：排水 300ms，已确认写 0 丢失。
+<span class="k">-</span><span class="w"> </span>过载：排水 5s 触顶，剩余 1200 条未执行消息被拒绝，调用方收到明确错误；无重复执行。
+
+<span class="gu">## 失效模式与重访条件</span>
+<span class="k">-</span><span class="w"> </span>当热点 key 使单分片 QPS 持续超过 12k，或热点分片 p99 超过 30ms 时，队头阻塞会扩散到该分片所有请求。
+<span class="k">-</span><span class="w"> </span>当跨分片 MGET 比例超过 20%，扇出延迟会主导端到端 p99。
+<span class="k">-</span><span class="w"> </span>触发重访的条件：连续一周热点分片 p99 &gt; 30ms，或跨分片流量占比 &gt; 20%，或分片间负载比 &gt; 4:1。
+<span class="k">-</span><span class="w"> </span>届时候选：热点 key 拆分 + 请求合并；或改为模型 C 的任务队列 + 按 key 路由，以便对热点 key 做单独限流。
+</code></pre></div>
+
+<p>这份 ADR 满足 acceptance 的两个要求：正确性、尾延迟、停机行为都有具体内容；失效条件是可观测、可触发重访的，而不是“高负载可能有问题”。</p>
+<h3 id="_49">第七步：横向比较，给出“为什么不选另外两个”</h3>
+<p>ADR 最容易写薄弱的地方，是只论证自己选的模型，不认真对待被否掉的模型。评审时最常问的问题是：“如果另一个模型在你的负载下更好，你怎么知道？”</p>
+<p>所以比较表至少要包含：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>模型 A 分片锁</th>
+<th>模型 B 每分片事件循环</th>
+<th>模型 C 任务队列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单 key 顺序</td>
+<td>锁保护，但读改写需额外协议</td>
+<td>分片内天然串行</td>
+<td>取决于任务路由</td>
+</tr>
+<tr>
+<td>热点 key</td>
+<td>单分片锁竞争</td>
+<td>单分片队头阻塞</td>
+<td>全局队列/线程被占</td>
+</tr>
+<tr>
+<td>跨分片</td>
+<td>多锁，需固定顺序</td>
+<td>扇出，延迟取最慢</td>
+<td>任务内协调，易阻塞线程</td>
+</tr>
+<tr>
+<td>过载</td>
+<td>线程阻塞、上游超时</td>
+<td>每分片邮箱满则拒绝</td>
+<td>有界队列满则拒绝</td>
+</tr>
+<tr>
+<td>隔离</td>
+<td>弱，需额外限流</td>
+<td>强，按分片天然隔离</td>
+<td>中，需租户/优先级</td>
+</tr>
+<tr>
+<td>停机</td>
+<td>等在途调用</td>
+<td>停止接收 + 排水</td>
+<td>关闭队列 + join</td>
+</tr>
+<tr>
+<td>实现复杂度</td>
+<td>低</td>
+<td>中</td>
+<td>中到高</td>
+</tr>
+<tr>
+<td>可观测性</td>
+<td>需按分片打点</td>
+<td>每分片天然可观测</td>
+<td>队列指标集中，分片需额外打点</td>
+</tr>
+</tbody>
+</table>
+<p>然后对每个未选方案写一句“在什么条件下它会反过来胜出”。例如：</p>
+<ul>
+<li>如果负载以单 key 为主、跨分片很少、团队希望最少代码，模型 A 可能更合适；它的单次延迟最低，停机也最简单。</li>
+<li>如果任务种类多、需要优先级和弹性伸缩，模型 C 可能更合适；它把调度和状态保护解耦，便于做限流和批处理。</li>
+<li>如果热点均匀、每分片负载稳定、追求可观测和隔离，模型 B 更合适；它把状态归属和指标边界都画得很清楚。</li>
+</ul>
+<p>这不是“和稀泥”，而是把决策的适用条件写清楚。未来负载变化时，团队能根据这些条件判断是否需要重访，而不是凭感觉推翻。</p>
+<h3 id="_50">第八步：把结论变成可执行的检查</h3>
+<p>最后，把 ADR 里的关键命题变成 CI 或发布检查项：</p>
+<ul>
+<li>正确性回归：单 key 读改写、顺序、跨分片中间状态、幂等去重。</li>
+<li>并发检查：TSan 构建跑核心路径；ASan 跑停机测试。</li>
+<li>尾延迟门禁：在固定负载下 p99 不超过预算；超过则阻断发布或要求说明。</li>
+<li>停机演练：定期在预发环境做“负载中停机”，检查排水时间、丢失/重复、退出码。</li>
+<li>过载演练：定期把到达速率推到容量以上，检查拒绝语义和恢复时间。</li>
+<li>指标看板：每分片队列深度、p99、拒绝数、排水时间；设置与失效条件对应的告警阈值。</li>
+</ul>
+<p>这样，ADR 不是一份写完就归档的文档，而是和测试、监控、发布流程连在一起的决策记录。</p>
+<hr />
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<p>本节点的 sourceStudy 是：<strong>阅读 Boost.Asio strands 的串行执行保证，识别对象访问与 handler 调度之间的约束。</strong></p>
+<p>推荐资源里的链接是 Boost.Asio 官方文档的 strands 概览页。阅读时不要只记住“strand 可以避免锁”这一句，而要抓住下面几层约束。</p>
+<h3 id="strand">第一层：strand 保证的是什么</h3>
+<p>Asio 的 strand 提供的是<strong>handler 调用的串行化</strong>：关联到同一个 strand 的 handlers 不会并发执行。它不保证这些 handler 永远在同一个 OS 线程上运行，也不保证你从 strand 外部直接调用的代码会被串行化。文档里的关键词是 “strictly sequential invocation”，不是 “thread affinity”。</p>
+<p>这正好对应本课的区分：串行执行不等于绑定线程。你可以把 strand 看成“逻辑上的单线程执行者”，它可能在线程池的多个线程之间迁移。对象的状态只要只通过该 strand 上的 handlers 访问，就不需要为每次访问加锁；但一旦有外部线程直接访问，串行保证就被绕过。</p>
+<h3 id="handler">第二层：对象访问必须和 handler 调度对齐</h3>
+<p>读文档时重点看它如何把 handler 与 executor / strand 绑定。常见的绑定方式包括：</p>
+<ul>
+<li>构造 <code>boost::asio::strand&lt;Executor&gt;</code>，或在较新接口里用 <code>boost::asio::make_strand(io_context)</code>；</li>
+<li>用 <code>boost::asio::bind_executor(strand, handler)</code> 把 handler 关联到 strand；</li>
+<li>在异步操作的完成 handler 上绑定同一个 strand；</li>
+<li>对 composed operation 的每一个中间 handler 都保持相同的 strand 关联。</li>
+</ul>
+<p>这里的约束是：<strong>对象的每一次访问，都必须发生在与该对象所有者相同的 strand 上。</strong> 只在“入口 handler”上绑定 strand，而后面的回调忘了绑定，就会出现两个 handler 并发访问同一对象的情况。文档里对 composed operations 的说明尤其值得读：一个组合操作由多个中间 handler 组成，如果其中任何一个跑到了 strand 外，串行性就断了。</p>
+<h3 id="postdispatchdefer">第三层：post、dispatch、defer 的语义差异</h3>
+<p>Asio 提供几种把 handler 交给 executor 的方式，它们的执行时机不同。阅读时要区分：</p>
+<ul>
+<li><strong>post</strong>：把 handler 排入队列，不会在当前调用栈内立即执行；</li>
+<li><strong>dispatch</strong>：如果当前上下文已经在目标 executor / strand 上，可能立即执行；否则排队；</li>
+<li><strong>defer</strong>：类似延迟提交，具体语义以文档为准。</li>
+</ul>
+<p>对设计的含义是：</p>
+<ul>
+<li><code>dispatch</code> 可能导致<strong>重入</strong>：你以为只是“提交一个任务”，结果它在当前栈上直接跑了，对象的中间状态可能被自己再次进入。对持有锁或处于半更新状态的对象，这很危险。</li>
+<li><code>post</code> 更接近“消息传递”，它保证不在当前栈上执行，但会增加一次排队。</li>
+<li>无论哪种方式，<strong>handler 捕获的对象生命周期</strong>都必须覆盖执行时刻。如果对象在 handler 执行前被销毁，strand 不会救你。</li>
+</ul>
+<h3 id="strand_1">第四层：strand 不保护生命周期和取消</h3>
+<p>strand 只解决“不会并发调用”，不解决：</p>
+<ul>
+<li>handler 捕获的 <code>this</code> 是否还有效；</li>
+<li>异步操作取消后，完成 handler 是否仍会被调用；</li>
+<li>对象在哪个线程析构；</li>
+<li>多个 strand 之间的顺序和死锁。</li>
+</ul>
+<p>这些要结合 e-cancel 的生命周期设计和对象所有权设计。一个常见模式是：用 <code>enable_shared_from_this</code> 让 handler 持有对象的 shared_ptr，确保执行期间对象存活；同时用取消令牌/停止标志让 handler 在被取消后快速返回。strand 保证串行，shared_ptr 保证存活，取消协议保证不会做无用功，三者缺一不可。</p>
+<h3 id="_51">第五层：把文档结论映射回本课模型</h3>
+<p>读完 strands 文档后，你应该能把模型 B 的约束写得更精确：</p>
+<ul>
+<li>每个分片对应一个 strand（或一个单线程 executor）；</li>
+<li>分片状态只能在该 strand 的 handler 中访问；</li>
+<li>所有跨分片调用都通过 <code>post</code> 到目标 strand，而不是直接调用；</li>
+<li>组合操作的所有中间 handler 都绑定同一 strand；</li>
+<li>外部线程不能直接调用分片对象的方法；</li>
+<li>停机时先停止提交，再让 strand 处理完队列，最后销毁对象；</li>
+<li>对 <code>dispatch</code> 的重入风险做专门检查。</li>
+</ul>
+<p>如果你能把这几条写进 ADR 的“正确性论证”和“失效模式”，sourceStudy 的目的就达到了：不是记住 API，而是识别“串行执行保证”与“对象访问、handler 调度、生命周期”之间的约束。</p>
+<hr />
+<h2 id="_52">自测题</h2>
+<p>先别看答案。能对着三个要点和 practice 讲清楚，再对照答案检查。</p>
+<h3 id="1actor-strand">题 1：Actor、线程封闭与 strand</h3>
+<p><strong>问题</strong>：你的同事说：“我们用 Actor 模型，每个 key 一个 actor，所以完全不需要锁，也不会有数据竞争。”请回答：</p>
+<ol>
+<li>这句话哪里对、哪里不完整？</li>
+<li>Actor 的私有状态在什么情况下会“逃逸”，逃逸后会发生什么？</li>
+<li>“串行执行”和“绑定线程”有什么区别？Boost.Asio 的 strand 属于哪一种？</li>
+<li>如果所有访问都通过 strand，是否就自动保证了对象生命周期安全？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li>“每个 key 一个 actor，actor 内部状态只被一个执行者访问”这部分是对的：如果状态确实没有逃逸，单 actor 内部不需要为业务状态加锁，数据竞争的可能性被结构性消除。不完整的地方在于：邮箱/队列本身仍然是共享的，入队出队需要同步；跨 actor 操作需要消息和协调；全局资源（分配器、日志、指标、连接池）仍然共享；而且“不会数据竞争”依赖于“没有逃逸”这个前提，不是自动成立的。</li>
+<li>逃逸的常见路径：把成员的可变引用或 <code>this</code> 交给异步回调；返回内部容器的非 const 引用；跨 actor 共享可变对象的 <code>shared_ptr</code>；访问不受 actor 保护的全局缓存；把对象所有权转移后又继续使用；在错误的线程析构对象；为了省一次消息而直接调用别的 actor。逃逸后，两个执行者可能同时读写同一块状态，数据竞争和生命周期错误就回来了，而且因为“我们在用 Actor”而更隐蔽。</li>
+<li>绑定线程是对象只能在一个固定 OS 线程上访问；串行执行是同一时刻只有一个执行上下文处理该对象，但不同消息可能在不同线程上执行。strand 属于后者：它保证关联的 handlers 不并发执行，但不保证线程亲和。因此对象访问必须始终通过同一个 strand，不能从外部线程直接调用。</li>
+<li>不保证。strand 只序列化调用，不延长对象寿命。如果 handler 捕获的 <code>this</code> 在 handler 执行前被销毁，strand 不会阻止 use-after-free。需要额外的所有权设计（例如 <code>shared_from_this</code> 让 handler 持有对象）和取消协议，确保对象在执行期间存活，并在取消后安全退出。</li>
+</ol>
+<h3 id="2">题 2：三种模型与失效条件</h3>
+<p><strong>问题</strong>：一个 KV 服务，95% get / 5% put，单 key 读改写要求线性化，1% 的请求是 8 个 key 的 <code>MGET</code>（不要求快照一致），存在明显热点 key。团队在分片锁、每分片事件循环、任务队列之间选择。请回答：</p>
+<ol>
+<li>三个模型分别怎样保证单 key 读改写的正确性？</li>
+<li>热点 key 分别会对三个模型造成什么影响？</li>
+<li>如果选择每分片事件循环，ADR 里应写哪些失效条件？</li>
+<li>任务队列模型为什么可能“吞吐最高但尾延迟最差”？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li>分片锁：读改写需要在同一临界区内完成，或者用版本号/CAS 重试；如果 <code>get</code> 和 <code>put</code> 各自加锁，中间会被插入，必须靠外层协议保证原子。每分片事件循环：把“读改写”实现成一条消息，在分片执行者内一次处理完，天然串行。任务队列：需要按 key 路由到固定执行者，或者任务内部使用分片锁 + 版本检查；如果只是把 <code>get</code> 和 <code>put</code> 各包一个任务，仍然会丢失更新。</li>
+<li>分片锁：热点 key 落在单个分片，该分片的 mutex 成为串行点，竞争导致 p99 上升，严重时线程都堵在这把锁上。每分片事件循环：热点分片的消息队列持续增长，单个慢请求会造成队头阻塞，该分片所有 key 的延迟一起上升。任务队列：热点任务会占满工作线程，全局队列可能被热点请求填满，导致其他 key 的请求也排在后面；如果有按 key 路由，则退化为该 key 的串行瓶颈。</li>
+<li>至少写：当热点分片 QPS 超过某个实测拐点，或该分片 p99 超过预算时，队头阻塞会让该分片所有请求超时；当分片间负载比超过某个比例（例如 4:1）时，静态分片的容量利用率下降；当跨分片 <code>MGET</code> 比例上升时，扇出延迟由最慢分片决定，可能主导端到端 p99；当单个 handler 执行时间超过尾延迟预算时，整片停摆。还要写触发重访的指标阈值和届时候选方案（热点 key 拆分、请求合并、改任务队列 + 按 key 限流等）。</li>
+<li>因为吞吐和尾延迟不是一回事。无界队列在过载前可以维持很高的吞吐，但请求在队列里排队的时间会迅速增长；闭环压测还可能因为客户端变慢而低估真实等待（协调遗漏）。当到达速率超过消费速率时，队列把过载转成延迟和内存，p99/p999 先坏，随后可能 OOM 或触发上游重试放大。节点 pitfalls 说的“吞吐最高不必然是延迟或运维成本最优”就是这个意思。</li>
+</ol>
+<h3 id="3adr">题 3：ADR、验收与权衡</h3>
+<p><strong>问题</strong>：你要为上面的 KV 服务写 ADR。请回答：</p>
+<ol>
+<li>acceptance 要求报告包含哪三块？每块至少给出两个具体内容。</li>
+<li>怎样证明“这个选择在何种负载下失效”，而不是写一句“高负载可能有问题”？</li>
+<li>消息传递简化了共享状态，但节点指出它增加了哪些成本？请各举一个 KV 场景。</li>
+<li>为什么说“可证明边界”不等于“形式化证明”？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li>三块是正确性、尾延迟、停机行为。正确性至少写：单 key 线性化的命题与测试、跨 key 非原子的语义、幂等/重复提交处理、TSan/ASan 结果。尾延迟至少写：p50/p99/p999、排队时间与执行时间分开、开环还是闭环、键分布（均匀/倾斜）、过载区间的拐点。停机行为至少写：停止接收是否立即生效、已入队/执行中任务的处理、排水时间上限与实测值、已确认写是否丢失、重复执行数、退出码。</li>
+<li>把失效条件写成“负载特征 + 指标阈值 + 后果 + 重访动作”。例如：“当热点分片 QPS 持续超过 12k，或分片间负载比超过 4:1，导致该分片 p99 超过 30ms 时，队头阻塞会扩散到该分片所有 key；连续一周触发则重访，候选方案是热点 key 拆分或任务队列 + 按 key 限流。”这比“高负载可能有问题”可检查得多，也能直接映射到监控告警。</li>
+<li>节点 tradeoffs 指出的三项成本是排队、跨分片操作和复制。排队：每个 key 一个 actor，热点 key 的邮箱会堆积，消息等待时间计入 p99。跨分片：<code>MGET</code> 8 个 key 落在不同 actor，需要扇出并等待最慢者，或做事务/ Saga，延迟和复杂度都上升。复制：actor 状态要跨节点复制以提高可用性时，需要传播写、处理读旧值、故障切换和一致性，成本和单机共享内存完全不是一个量级。</li>
+<li>因为“可证明”在这里指的是：把保证写成明确命题，并用代码结构、并发测试、线性化检查、故障注入和观测数据去支撑，让你知道边界在哪里、何时会被突破。它不要求像形式化方法那样对全部状态空间做机器证明（那当然更严格，但成本很高，通常只用于核心算法）。ADR 里的“正确性论证 + 失效条件”就是工程意义上的可证明边界：不是“我觉得没问题”，而是“我证明了这些、没证明那些、这些条件下会坏”。</li>
+</ol>
+<hr />
+<h2 id="_53">推荐资源</h2>
+<ul>
+<li><strong>并发模型选择与可证明边界：参考文档 / 原始资料</strong></li>
+<li>链接：https://www.boost.org/doc/libs/latest/doc/html/boost_asio/overview/core/strands.html</li>
+<li>来源：www.boost.org</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：专家</li>
+<li>是否免费：是</li>
+<li>推荐理由：按节点建议，重点阅读 Actor 与线程封闭以及共享状态与消息传递，用于核对本节点实验的语义和边界。阅读时抓住：strand 的串行执行保证到底保证什么、不保证什么；handler 如何与 executor / strand 绑定；composed operation 的每个中间 handler 是否都需要保持同一 strand；<code>post</code>、<code>dispatch</code>、<code>defer</code> 的调度差异与重入风险；以及 strand 不负责对象生命周期和取消这一事实。把文档里的约束映射回“每分片事件循环”模型：状态只能由所属 strand 访问，跨分片只能发消息，停机要先停止提交再排水。页面没有展开的 KV 负载比较、ADR 写法与停机指标，以本课讲解与实践为准。</li>
+</ul>
+<hr />
+<h2 id="_54">本课小结</h2>
+<ol>
+<li><strong>选模型先看三件事：状态归属、任务生命周期、过载策略。</strong> 这是本节点 summary，也是全课的总纲。锁或协程的单次开销只是局部数据，解释不了尾延迟、停机和运维复杂度。</li>
+<li><strong>Actor = 私有状态 + 邮箱 + 串行处理 + 地址。</strong> 它把同步集中到消息边界，让业务状态不再被多线程直接访问；但邮箱仍然需要同步，跨 actor 交互仍然需要协议。</li>
+<li><strong>线程封闭靠“不逃逸”维持。</strong> 回调捕获 <code>this</code>、返回内部可变引用、共享 <code>shared_ptr</code>、全局缓存、跨分片直接调用、错误线程析构，都会破坏封闭。要用封装、所有者断言、所有权转移和并发检测持续加固。</li>
+<li><strong>串行执行不等于绑定线程。</strong> strand 保证关联 handlers 不并发执行，但可能在不同线程上运行；对象访问必须始终经过同一个 strand，否则保证失效。</li>
+<li><strong>消息传递简化共享状态，但增加三类成本。</strong> 排队（延迟、内存、顺序）、跨分片操作（扇出、事务、Saga、共分片）、复制（一致性、故障切换、日志/快照）。这是节点 tradeoffs。</li>
+<li><strong>工作窃取改善负载不均和利用率，但不自动改善尾延迟。</strong> 它可能破坏局部性和单 key 顺序；长任务、锁竞争、下游阻塞仍然会拖尾。任务要路由回 key 的所有者，才能同时保住顺序和弹性。</li>
+<li><strong>公平性和隔离要按业务契约设计。</strong> FIFO、优先级、租户配额、轮转各有代价；隔离按故障域画，不是越多越好；每个隔离单元都要有独立指标，否则热点会被平均值掩盖。</li>
+<li><strong>可证明边界 = 明确命题 + 证据 + 失效条件。</strong> 命题覆盖状态归属、顺序、资源上限、生命周期；证据来自代码结构、并发测试、TSan/ASan、线性化检查、故障注入和观测数据；失效条件要写成可触发的指标阈值。</li>
+<li><strong>三种模型各有适用面。</strong> 分片锁简单、单次延迟低，但热点和跨分片是难点；每分片事件循环隔离好、状态归属清晰，但队头阻塞和分片倾斜是难点；任务队列调度灵活、易做过载策略，但队列竞争、按 key 顺序和停机语义更复杂。</li>
+<li><strong>吞吐最高不必然是延迟或运维成本最优。</strong> 这是节点 pitfalls。无界队列、热点分片、闭环压测都可能制造“吞吐漂亮、尾延迟很差”的假象；必须同时看正确性、p99/p999、拒绝率、内存和停机。</li>
+<li><strong>停机是模型的一部分，不是收尾工作。</strong> 停止接收、排水、取消、join、释放资源要有状态机和上限；已确认的写不能丢，未执行的任务要有明确结果，重复执行要能识别。acceptance 要求报告包含停机行为，原因就在这里。</li>
+<li><strong>ADR 要写“为什么不选另外两个”。</strong> 对每个备选方案写清适用条件和反向胜出条件；把结论变成测试门禁、停机演练、过载演练和监控阈值，决策才可执行、可重访。</li>
+<li><strong>为什么后端要懂：为复杂服务选择可维护、可观测的执行架构。</strong> 真实故障往往不是“锁慢了 20ns”，而是热点分片把 p99 拖垮、无界队列把过载藏成延迟、停机时丢了已确认的写、跨分片操作在高峰期卡住。把这些边界提前写进模型和 ADR，才能在负载变化时有依据地重访，而不是靠猜。</li>
+</ol>
+<p>本课的主线可以压缩成一句话：<strong>先把状态收进明确的所有者，再把任务生命周期和过载策略写成命题，最后用同一份 KV 负载和同一组指标去比较分片锁、每分片事件循环与任务队列，把“为什么选、何时失效”写进 ADR。</strong> 下一步可以继续沿着这个方向深入：如何为热点 key 设计拆分与请求合并，如何在多分片之间做可观测的追踪，以及如何把停机演练和过载演练纳入常态化的发布流程。</p><div class="pn"><span><a href="79.html">← 竞态检测与并发故障复现</a></span><span>下一课 待更新</span></div></main></div></body></html>
