@@ -1,0 +1,1494 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>83. RPC调用模型与失败语义 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（83/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（3/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="cur" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 83 课 · 领域 F · 阶段 2</p><p class="dl"><a href="../files/83-f-model.md" download>⬇ 本课 Markdown</a></p><h1 id="83208-rpc">第 83/208 课：RPC调用模型与失败语义</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段</td>
+<td>第 2 阶段 · 协议与框架</td>
+</tr>
+<tr>
+<td>前置</td>
+<td>d-pool、f-protobuf</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>基础</td>
+</tr>
+<tr>
+<td>领域</td>
+<td>F</td>
+</tr>
+<tr>
+<td>标签</td>
+<td>RPC Semantics、F、C++</td>
+</tr>
+<tr>
+<td>子分类</td>
+<td>协议与框架</td>
+</tr>
+<tr>
+<td>节点 ID</td>
+<td>f-model</td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>RPC Semantics</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>承接说明：前置节点 d-pool 讨论连接这类稀缺资源的复用与生命周期管理，提醒我们一次远程调用背后往往复用了连接、线程和缓冲，调用失败并不等于底层资源一定健康。前置节点 f-protobuf 讨论 Protobuf 的模式、字段编号与代码生成，解决了“消息长什么样、字段身份怎样固定”的问题。本课把这两条线接到调用语义上：请求发出去以后，客户端到底能知道什么、不能知道什么；成功、失败和“结果未知”为什么是三种状态；流式调用为什么不能当成一次普通函数返回；截止时间为什么只是本地的预算，而不是服务端没执行的证明。本节点 summary 是：RPC 把远端调用包装为接口，但网络使成功、失败和结果未知成为不同状态，远端调用不等同本地函数。</p>
+</blockquote>
+<hr />
+<h2 id="_2">导读</h2>
+<p>先看本节点的 summary，后面所有内容都围绕它展开：</p>
+<blockquote>
+<p>RPC 把远端调用包装为接口，但网络使成功、失败和结果未知成为不同状态，远端调用不等同本地函数。</p>
+</blockquote>
+<p>这句话至少包含三层意思。</p>
+<p>第一层是<strong>接口看起来像本地函数，但它只是一个包装</strong>。生成代码把参数序列化、把请求发到某个地址、等待响应、把响应反序列化，最后返回一个对象或抛出一个错误。调用点的写法可能和本地函数几乎一样，但底层经历了编解码、连接复用、排队、网络传输、服务端调度、业务执行和响应回传。包装降低了使用成本，也容易让人误以为“调用返回了，事情就一定有确定结论”。节点 tradeoffs 说得很直接：透明封装提高使用便利，但必须暴露失败与时间预算。</p>
+<p>第二层是<strong>远端调用有三种结果状态，而不是两种</strong>。本地函数通常只有“正常返回”和“抛出异常”两种出口；远程调用还多出一种“结果未知”：请求可能已经到达服务端，服务端可能已经提交，但响应在回程丢失，或者客户端在等待时超时。此时客户端既不能断言成功，也不能断言失败。节点 summary 把“成功、失败和结果未知”并列，就是要打破“非成即败”的二元直觉。</p>
+<p>第三层是<strong>失败要分层，时间要预算</strong>。网络错误、框架错误和业务错误不是同一层的东西；把“连接被重置”和“余额不足”压成同一个布尔值，会让重试策略和排障都失去依据。同时，任何一次调用都必须带时间预算：客户端等多久、服务端还剩多少时间、重试要不要重新计时、流式调用空闲多久算超时。节点 points 把“传输错误与业务错误”和“结果未知和截止时间”单独列出，正是因为它们决定了接口能否被安全地重试、能否被观测、能否在故障时给出确定行为。</p>
+<p>本课沿着三个节点要点推进：</p>
+<ul>
+<li><strong>请求响应和流式调用</strong>：调用模型决定了消息有几个、完成信号在哪里、错误在什么时候出现，以及“已经收到的部分数据”算不算结果。</li>
+<li><strong>传输错误与业务错误</strong>：错误必须分层表达，传输层回答“这次调用有没有完成”，业务层回答“这个操作决定怎么做”。</li>
+<li><strong>结果未知和截止时间</strong>：超时只是客户端停止等待，不代表服务端没有执行；要解决未知，只能靠幂等、去重、查询或对账，而不是靠猜。</li>
+</ul>
+<p>三个要点最终服务于本节点的 why：<strong>设计能处理部分故障的服务 API。</strong></p>
+<hr />
+<h2 id="_3">学习目标</h2>
+<h3 id="goals">goals</h3>
+<ul>
+<li>能解释请求响应和流式调用。</li>
+<li>能独立完成：画出服务器提交后响应丢失的时序，给接口定义可观察结果。</li>
+</ul>
+<h3 id="acceptance">acceptance</h3>
+<ul>
+<li>能解释超时不代表服务端未执行。</li>
+<li>业务错误与网络状态分层。</li>
+</ul>
+<h3 id="_4">把验收翻译成可检查产物</h3>
+<p>“能解释”和“能独立完成”都太容易被“我看懂了”糊弄过去。把两条 acceptance 翻译成看得见、摸得着的东西：</p>
+<ul>
+<li><strong>“能解释超时不代表服务端未执行”</strong>：你要能画出一张时序图，把一次调用拆成至少这些时刻：客户端发出请求、请求到达服务端、服务端开始处理、服务端完成提交、服务端发出响应、响应丢失或迟到、客户端截止时间到达。图上要标出哪些时刻客户端能观察到，哪些只能由服务端知道。还要配一张状态表，分别写“客户端认为的状态”和“服务端实际的状态”，并列出在超时发生后，客户端有哪些合法动作：直接失败、带幂等键重试、按请求 ID 查询、进入人工对账。只背一句“超时可能已经执行”不算完成，能把时刻和动作写清楚才算。</li>
+<li><strong>“业务错误与网络状态分层”</strong>：你要给出一个错误分类表，至少区分传输/框架层和业务层，并说明每一类错误的可观察信号、是否可重试、重试是否需要幂等保护、应该记录什么日志。接口定义中，业务错误不能只返回一个布尔值或一句字符串，而要有稳定的错误码、可读消息和必要的上下文；传输错误也不能伪装成业务失败。验收时要能拿着这张表，对任意一个错误判断它属于哪一层、该不该重试、重试会不会产生重复副作用。</li>
+</ul>
+<h3 id="_5">先修自检</h3>
+<ul>
+<li>d-pool：能说清连接复用的基本动机，知道连接有建立、空闲、使用中、失效等状态；知道连接池借出和归还的不是“调用”，而是底层连接资源；能解释连接断开为什么会让正在进行的调用失败，但不会自动撤销服务端已经完成的操作。</li>
+<li>f-protobuf：能说清消息模式、字段编号和序列化的关系；知道请求和响应都是先变成字节再上线；知道模式演进要遵守字段编号兼容规则；知道反序列化失败和业务处理失败是两件不同的事。</li>
+<li>C++ 基础：能写结构体、枚举、<code>std::optional</code>、<code>std::variant</code> 或简单的结果类型；知道怎样用 <code>std::chrono</code> 表示时间点和时长；能读懂回调、<code>future</code>/<code>promise</code> 或同步等待的基本写法。</li>
+<li>网络常识：知道客户端和服务端是两个独立进程；知道请求可能丢失、响应可能丢失、连接可能中途断开；知道“发出去了”不等于“对方收到了”，更不等于“对方处理完了”。</li>
+</ul>
+<p>如果前两条里有任何一条说不清，先回去补。本课不会再展开连接池的实现细节，也不会重新讲 Protobuf 的线格式；它假设你已经知道“调用要经过序列化和网络”，重点放在“调用结果到底意味着什么”。</p>
+<hr />
+<h2 id="_6">为什么后端要懂</h2>
+<p>本节点 why 的原话是：<strong>设计能处理部分故障的服务 API。</strong> 在真实后端里，这句话对应的不是抽象的分布式理论，而是几类会直接造成资金损失、数据重复和排障困难的工程问题。</p>
+<h3 id="_7">场景一：下单接口超时后自动重试</h3>
+<p>客户端调用下单接口，等待 2 秒没有响应，于是判定失败并自动重试一次。第一次请求其实已经到达服务端，订单已经写入数据库，只是响应在回程丢失。第二次请求又创建了一笔订单。用户看到两个订单，库存被扣了两次。节点 pitfalls 说的正是这件事：<strong>重试一次远程写可能产生重复副作用。</strong> 如果接口没有幂等键和去重机制，客户端根本无法安全地区分“第一次真的失败了”和“第一次成功了但响应丢了”。</p>
+<h3 id="_8">场景二：流式订阅中途断开</h3>
+<p>一个日志订阅接口用服务端流式调用持续推送日志。客户端已经收到了 1000 条，连接在第 1001 条时断开。客户端能说“这次订阅成功了 1000 条”吗？不能。流可能只是被中断，服务端可能还会继续产生数据；客户端也不知道最后一条是否完整、服务端是否已经把游标推进。流式调用把“完成”从“收到第一条数据”推迟到了“收到终止状态”，而中途失败会留下部分结果。接口必须定义：部分结果是否可观察、断线后从哪里续传、重复数据是否允许。</p>
+<h3 id="_9">场景三：网关把错误压成一个布尔值</h3>
+<p>网关把下游的 gRPC 调用结果转成 HTTP 响应。为了省事，只要调用没有拿到正常响应，就返回 500 和一句“系统错误”。于是“参数非法”“订单不存在”“库存不足”“连接被拒绝”“截止时间已到”全都被压成同一种错误。客户端看到 500 不知道该不该重试；监控也分不清是业务拒绝多还是网络故障多。节点 acceptance 要求“业务错误与网络状态分层”，就是因为这种压缩会让重试策略、告警和用户体验一起失真。</p>
+<h3 id="_10">场景四：截止时间预算被重试吃光</h3>
+<p>一个请求的端到端预算是 500 毫秒。客户端第一次尝试用了 400 毫秒后超时，然后立刻重试，又给了自己 500 毫秒。结果整个请求耗时 900 毫秒，早就超过了上游给它定的预算。更糟的是，服务端可能仍在处理第一次请求，第二次请求又叠加进来，形成重试放大。截止时间必须是端到端预算，重试要消耗剩余预算，而不是每次尝试都重新获得一份完整预算。</p>
+<h3 id="qps">场景五：容量规划只看成功 QPS</h3>
+<p>监控面板上只统计“成功请求数”和“平均延迟”。当大量请求超时、结果未知时，这些请求没有出现在成功计数里，但服务端可能已经执行了业务逻辑，数据库写入和下游调用都真实发生了。只看成功 QPS，会低估服务端的实际负载，也会漏掉重复副作用。结果未知的请求必须单独计数，重试次数、去重命中数和超时后查询次数也要有指标。</p>
+<hr />
+<h2 id="_11">核心概念：从调用点到结果</h2>
+<h3 id="21">2.1 本地调用与远程调用的状态差</h3>
+<p>先看本地函数调用。它有几个默认前提：</p>
+<ul>
+<li>调用者和被调用者在同一个地址空间里；</li>
+<li>参数传递不经过序列化，通常只是一次寄存器或栈上的复制；</li>
+<li>调用要么正常返回一个值，要么抛出异常；</li>
+<li>如果进程没有崩溃，返回就意味着函数体已经执行完；</li>
+<li>调用没有“在途中”的状态，调用栈本身就是执行状态的记录；</li>
+<li>重试一次本地函数，通常只是再执行一遍，副作用是否重复由函数自己决定，至少没有网络这一层不确定性。</li>
+</ul>
+<p>远程调用把这些前提逐个打破。一次 RPC 至少经过下面这些阶段：</p>
+<div class="codehilite"><pre><span></span><code>客户端业务代码
+    │  构造请求对象
+    ▼
+序列化 / 编码
+    │
+    ▼
+连接复用与发送队列
+    │
+    ▼
+内核网络栈  ──────────────►  服务端内核网络栈
+                                  │
+                                  ▼
+                             反序列化 / 分发
+                                  │
+                                  ▼
+                             业务处理
+                                  │
+                                  ▼
+                             提交（写库、扣款、发消息）
+                                  │
+                                  ▼
+                             序列化响应
+                                  │
+                                  ▼
+客户端内核  ◄──────────────  服务端发送
+    │
+    ▼
+反序列化响应
+    │
+    ▼
+返回业务代码
+</code></pre></div>
+
+<p>客户端能直接观察到的，只是这条链路两端的几个点：</p>
+<ul>
+<li>本地调用是否成功发出；</li>
+<li>是否在截止时间之前收到一个完整的响应；</li>
+<li>收到的响应里，传输状态是什么；</li>
+<li>响应中的业务结果是什么。</li>
+</ul>
+<p>客户端观察不到中间发生了什么。请求可能还在发送队列里，可能已经到达服务端但还没开始处理，可能业务已经提交但响应还没发出，也可能响应已经发出但在回程丢失。节点 summary 说“远端调用不等同本地函数”，核心就在这里：<strong>本地调用能看到执行，远程调用只能看到消息。</strong></p>
+<p>一个常见的错误写法是把远程调用包成“返回值或抛异常”：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Order</span><span class="w"> </span><span class="nf">CreateOrder</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">CreateOrderRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 看起来像本地函数：成功返回订单，失败抛异常</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">resp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="p">.</span><span class="n">CreateOrder</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">resp</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">runtime_error</span><span class="p">(</span><span class="n">resp</span><span class="p">.</span><span class="n">error_message</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">order</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段代码把“传输失败”“业务拒绝”“结果未知”全都塞进异常里。调用者捕获异常后，无法判断该不该重试，也无法知道订单是否已经创建。正确做法是先定义清楚结果类型，再决定每一层怎样映射到异常或错误码。</p>
+<h3 id="22">2.2 请求响应调用</h3>
+<p>请求响应（很多文档里叫 unary RPC）是最常见的调用模型：</p>
+<ul>
+<li>客户端发送一个请求消息；</li>
+<li>服务端处理这个请求；</li>
+<li>服务端返回一个响应消息；</li>
+<li>一次调用在收到响应或收到终止状态时结束。</li>
+</ul>
+<p>它的完成点很明确：<strong>客户端收到完整的终止状态。</strong> 在 gRPC 里，这个终止状态由 status code、status message 和 trailing metadata 组成；响应消息本身只是结果的一部分，不是全部。很多实现把“响应”和“状态”分开传输，就是为了让服务端在返回数据之后还能报告业务结果或错误。</p>
+<p>一个请求响应调用可以用下面的时序表示：</p>
+<div class="codehilite"><pre><span></span><code>客户端                                        服务端
+  │                                             │
+  │  ── 请求（可能带 deadline）──────────────►  │
+  │                                             │  反序列化
+  │                                             │  业务处理
+  │                                             │  提交
+  │  ◄──────────── 响应 + 终止状态 ───────────  │
+  │                                             │
+  │  反序列化，检查状态                          │
+  ▼                                             ▼
+</code></pre></div>
+
+<p>请求响应模型有三个容易忽略的细节。</p>
+<p>第一，<strong>响应消息和终止状态可能不是同一个东西。</strong> 有的框架允许服务端先返回响应，再在 trailers 里报告错误；也有的框架把错误放在响应体里。接口定义必须明确：调用者应该先看什么、后看什么，业务错误放在哪里。</p>
+<p>第二，<strong>响应完整到达之前，调用没有完成。</strong> 如果响应传到一半连接断了，客户端可能已经解析出部分字段，但不能把它当成完整结果。反序列化应该等消息完整后再交给业务层，或者明确标记“部分结果不可用”。</p>
+<p>第三，<strong>请求响应不等于强同步。</strong> 客户端在等待响应，服务端可能在异步处理；客户端的线程被阻塞，不代表服务端的执行也在同一个时间线上。超时只影响客户端等待，不会自动停止服务端。</p>
+<p>一个更接近真实语义的 C++ 结果类型可以这样定义：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TransportStatus</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">kOk</span><span class="p">,</span><span class="w">              </span><span class="c1">// 收到了完整的终止状态</span>
+<span class="w">    </span><span class="n">kUnavailable</span><span class="p">,</span><span class="w">     </span><span class="c1">// 连接失败、服务不可达</span>
+<span class="w">    </span><span class="n">kDeadlineExceeded</span><span class="p">,</span><span class="c1">// 本地等待超时</span>
+<span class="w">    </span><span class="n">kCancelled</span><span class="p">,</span><span class="w">       </span><span class="c1">// 调用被取消</span>
+<span class="w">    </span><span class="n">kInternal</span><span class="p">,</span><span class="w">        </span><span class="c1">// 框架或对端内部错误</span>
+<span class="w">    </span><span class="n">kUnknown</span><span class="w">          </span><span class="c1">// 无法归类的传输层失败</span>
+<span class="p">};</span>
+
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">BusinessCode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">kOk</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kInvalidArgument</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kNotFound</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kAlreadyExists</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kFailedPrecondition</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kPermissionDenied</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">CallResult</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TransportStatus</span><span class="w"> </span><span class="n">transport</span><span class="p">;</span>
+<span class="w">    </span><span class="n">BusinessCode</span><span class="w"> </span><span class="n">business</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span><span class="w"> </span><span class="n">order</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>这里故意把 <code>transport</code> 和 <code>business</code> 分成两个字段。它们回答的是不同问题：</p>
+<ul>
+<li><code>transport</code>：这次调用有没有完成？请求有没有得到对端的明确答复？</li>
+<li><code>business</code>：如果完成了，业务操作决定怎么做？</li>
+</ul>
+<p>把两者合成一个 <code>bool ok</code>，就会丢掉“结果未知”和“错误属于哪一层”这两类关键信息。</p>
+<h3 id="23">2.3 流式调用</h3>
+<p>流式调用把“一次请求、一次响应”扩展成“多次消息”。常见有四类：</p>
+<ul>
+<li><strong>服务端流式</strong>：客户端发一个请求，服务端返回多条响应消息，最后给一个终止状态；</li>
+<li><strong>客户端流式</strong>：客户端发送多条请求消息，服务端最后返回一个响应；</li>
+<li><strong>双向流式</strong>：两个方向都可以独立发送多条消息；</li>
+<li><strong>半双工式的批量流</strong>：客户端发完再半关闭，服务端再陆续返回，语义上仍属于双向流的一种用法。</li>
+</ul>
+<p>流式调用的关键不在于“消息多”，而在于<strong>完成点被推迟了</strong>。在请求响应模型里，收到响应基本就接近完成；在流式模型里，收到第一条消息只说明流建立成功，收到最后一条消息也不一定说明业务成功，必须等终止状态。</p>
+<h4 id="_12">服务端流式</h4>
+<p>服务端流式最常见，例如日志订阅、变更推送、大结果集分页。</p>
+<div class="codehilite"><pre><span></span><code>客户端                                        服务端
+  │  ── 请求 ───────────────────────────────►  │
+  │  ◄──────────── 消息 1 ───────────────────  │
+  │  ◄──────────── 消息 2 ───────────────────  │
+  │  ◄──────────── 消息 3 ───────────────────  │
+  │  ◄──────────── 终止状态（OK / 错误）─────  │
+  ▼                                             ▼
+</code></pre></div>
+
+<p>它有三个语义要点：</p>
+<ol>
+<li><strong>部分结果是可观察的。</strong> 客户端可能在收到 3 条消息后遇到错误。这 3 条消息是否有效、能否提交给业务，必须由接口定义。不要假设“流失败 = 所有消息都无效”，也不要假设“已经收到的消息一定完整”。</li>
+<li><strong>终止状态才是最终结论。</strong> 一条消息的到达只代表这条消息被传输了，不代表整个操作成功。服务端可能在发完若干条后才发现数据库错误，然后用非 OK 状态终止流。</li>
+<li><strong>流不是原子的。</strong> 不能把服务端流式调用当成“返回一个数组”的普通调用。中途失败会留下部分结果，消费方需要有游标、检查点或幂等处理。</li>
+</ol>
+<h4 id="_13">客户端流式</h4>
+<p>客户端流式适合上传、批量写入、聚合计算。客户端可以连续发送多条消息，最后半关闭发送方向，等待服务端返回一个汇总响应。</p>
+<p>它的风险点在于<strong>提交时机</strong>。服务端可能在收完最后一条消息后才提交，也可能边收边写。如果客户端在发送过程中超时或断线，服务端是否已经写入了一部分？答案取决于实现和接口约定，不能靠猜。</p>
+<p>节点 practice 要求“画出服务器提交后响应丢失的时序”，这个场景在客户端流式里同样成立，而且更复杂：服务端可能已经提交了前几批数据，最后一条响应却丢了。接口必须能通过请求 ID、批次号或幂等键查询已提交的范围。</p>
+<h4 id="_14">双向流式</h4>
+<p>双向流式两个方向独立，常见于实时协作、双向同步、长连接会话。</p>
+<p>它的语义要点是：</p>
+<ul>
+<li>两个方向的消息顺序分别在各自的流内保持，但跨方向没有全局顺序；</li>
+<li>一方可以半关闭发送方向，仍然继续接收；</li>
+<li>任何一方都可以用终止状态结束整个流；</li>
+<li>连接中断时，两个方向都可能留下部分已发送、部分已处理的状态；</li>
+<li>流量控制是双向的，接收慢会反压发送方。</li>
+</ul>
+<p>双向流最容易被误用成“一个永不结束的通道”。设计时必须定义：空闲多久算超时、断线后是否重连、重连后从哪里续传、重复消息如何识别、终止状态如何区分正常结束和故障。</p>
+<h4 id="_15">流式调用的状态机</h4>
+<p>可以把自己的流式客户端简化成下面几个状态：</p>
+<div class="codehilite"><pre><span></span><code>INIT
+  │ 发送请求 / 建立流
+  ▼
+ACTIVE ──收到消息──► ACTIVE（继续接收）
+  │                     │
+  │ 收到终止状态         │ 发生传输错误
+  ▼                     ▼
+TERMINATED_OK       BROKEN（部分结果，状态未知）
+  │                     │
+  │                     │ 决定是否重连/续传
+  ▼                     ▼
+结束                  RECONNECTING
+</code></pre></div>
+
+<p>注意 <code>BROKEN</code> 不等于 <code>TERMINATED_ERROR</code>。前者表示“流没有正常走完”，后者表示“对端明确告诉你失败了”。两者的处理方式不同：前者可能需要查询或续传，后者至少知道对端的结论。</p>
+<h3 id="24">2.4 传输错误与业务错误</h3>
+<p>节点 points 的第二条是“传输错误与业务错误”。这不是命名问题，而是分层问题。</p>
+<p>可以把一次调用的错误分成三层：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>典型例子</th>
+<th>回答的问题</th>
+<th>常见信号</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传输/连接层</td>
+<td>连接被拒绝、连接重置、DNS 失败、TLS 握手失败、网络超时</td>
+<td>请求有没有到达对端？连接是否可用？</td>
+<td><code>Unavailable</code>、socket 错误、连接池借出失败</td>
+</tr>
+<tr>
+<td>框架/协议层</td>
+<td>消息格式错误、压缩算法不支持、流量超限、截止时间已到、调用被取消</td>
+<td>这次调用有没有完整完成？框架是否拒绝或中止了它？</td>
+<td><code>DeadlineExceeded</code>、<code>Cancelled</code>、<code>ResourceExhausted</code>、<code>Internal</code></td>
+</tr>
+<tr>
+<td>业务层</td>
+<td>参数非法、资源不存在、余额不足、状态冲突、权限不足</td>
+<td>业务操作决定怎么做？结果是拒绝、冲突还是成功？</td>
+<td><code>InvalidArgument</code>、<code>NotFound</code>、<code>FailedPrecondition</code>、<code>PermissionDenied</code></td>
+</tr>
+</tbody>
+</table>
+<p>在 gRPC 里，这些信息通常通过 status code、status message 和 trailing metadata 表达。Google 的规范把 status code 大致分成几组：</p>
+<ul>
+<li><strong>成功</strong>：<code>OK</code>；</li>
+<li><strong>调用方错误</strong>：<code>InvalidArgument</code>、<code>NotFound</code>、<code>AlreadyExists</code>、<code>PermissionDenied</code>、<code>Unauthenticated</code>、<code>FailedPrecondition</code>、<code>OutOfRange</code>、<code>Aborted</code>；</li>
+<li><strong>服务端错误</strong>：<code>Internal</code>、<code>Unavailable</code>、<code>DataLoss</code>、<code>Unknown</code>；</li>
+<li><strong>控制类</strong>：<code>DeadlineExceeded</code>、<code>Cancelled</code>、<code>ResourceExhausted</code>、<code>Unimplemented</code>。</li>
+</ul>
+<p>这里不要求你背全表，而要求你建立判断顺序：</p>
+<ol>
+<li>先判断这是不是传输/框架层错误。如果是，业务代码通常不应该把它当成“业务拒绝”。</li>
+<li>如果是业务层错误，判断它是否可重试。<code>InvalidArgument</code> 通常不该重试；<code>Aborted</code> 可能表示并发冲突，重试前要重新读取状态；<code>AlreadyExists</code> 在幂等创建场景下甚至可以被当成成功。</li>
+<li>如果错误发生在“请求已发出、响应未收到”的窗口，先把它标成结果未知，再决定查询、重试还是人工处理。</li>
+</ol>
+<p>业务错误和传输错误混在一起，会带来两个直接后果：</p>
+<ul>
+<li><strong>重试策略失真</strong>：把“余额不足”当成网络错误重试，只会重复失败；把“连接重置”当成业务拒绝，则会漏掉本可恢复的调用。</li>
+<li><strong>可观测性失真</strong>：监控无法区分“服务端拒绝了很多请求”和“网络出了故障”，告警会指向错误的方向。</li>
+</ul>
+<p>一个分层的错误模型可以写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Layer</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">kTransport</span><span class="p">,</span><span class="w"> </span><span class="n">kProtocol</span><span class="p">,</span><span class="w"> </span><span class="n">kBusiness</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">layer</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">code</span><span class="p">;</span><span class="w">                 </span><span class="c1">// 传输码或业务码</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">;</span><span class="w">      </span><span class="c1">// 给人看的描述</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">retryable</span><span class="p">;</span><span class="w">           </span><span class="c1">// 是否允许在满足幂等条件下重试</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">retry_after</span><span class="p">;</span><span class="w"> </span><span class="c1">// 建议退避时间</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="n">request_id</span><span class="p">;</span><span class="w">  </span><span class="c1">// 用于查询和对账</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>注意 <code>retryable</code> 不是由错误码单独决定的。即使 <code>Unavailable</code> 通常可重试，如果这次调用是一个非幂等的写操作，也不能直接重试；必须带上幂等键或先查询。这一点会在 2.5 和 2.6 展开。</p>
+<h4 id="_16">业务错误放在哪里</h4>
+<p>业务错误有两种常见表达方式：</p>
+<ul>
+<li><strong>带内（in-band）</strong>：放在正常响应的字段里，例如响应体中的 <code>error_code</code>；</li>
+<li><strong>带外（out-of-band）</strong>：放在 RPC 的终止状态或 HTTP 状态码里，例如 gRPC 的 status、HTTP 的 4xx/5xx。</li>
+</ul>
+<p>两种方式各有代价：</p>
+<ul>
+<li>带内错误让传输层始终保持 <code>OK</code>，客户端必须先解析响应才能知道业务失败；但如果业务错误很多，监控会看到“调用全部成功”，掩盖问题。</li>
+<li>带外错误让框架层直接表达失败，便于统一重试和告警；但业务错误和传输错误共用一套状态码时，容易混淆层次。</li>
+</ul>
+<p>无论选哪种，接口文档都要明确：</p>
+<ul>
+<li>哪些状态码代表业务拒绝；</li>
+<li>哪些状态码代表传输/框架故障；</li>
+<li>业务错误的详细信息放在哪里；</li>
+<li>客户端遇到每一类错误时，允许做什么、不允许做什么。</li>
+</ul>
+<p>只写“失败返回错误”是不够的。错误语义必须和调用模型一起设计，否则接口在故障时没有确定行为。</p>
+<h3 id="25">2.5 结果未知</h3>
+<p>结果未知是 RPC 语义里最容易被低估的状态。它不是“失败”，也不是“成功”，而是：</p>
+<blockquote>
+<p>客户端不知道服务端是否执行了这次操作，也不知道执行到了哪一步。</p>
+</blockquote>
+<p>产生结果未知的常见窗口有：</p>
+<ul>
+<li><strong>请求发出后、响应到达前超时</strong>：客户端不再等待，但请求可能已经在服务端执行；</li>
+<li><strong>连接在请求发出后断开</strong>：客户端只看到连接错误，无法确认对端是否收到；</li>
+<li><strong>服务端处理完成后，响应在回程丢失</strong>：服务端已经提交，客户端什么都没收到；</li>
+<li><strong>客户端进程崩溃或重启</strong>：内存里的等待状态消失，但服务端的操作可能已经生效；</li>
+<li><strong>取消信号与提交发生竞争</strong>：客户端发出取消，服务端可能已经越过不可回滚的提交点；</li>
+<li><strong>流式调用中途断开</strong>：已经传输了一部分消息，后续状态未知。</li>
+</ul>
+<p>可以把一次调用的时间线切成几段，看看客户端在每个时刻知道什么：</p>
+<table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>客户端观察</th>
+<th>服务端实际</th>
+<th>客户端能否确定结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>刚构造请求</td>
+<td>还没发送</td>
+<td>什么都不知道</td>
+<td>能确定：未执行</td>
+</tr>
+<tr>
+<td>已写入发送缓冲</td>
+<td>不知道是否到达</td>
+<td>可能还没收到</td>
+<td>不能确定</td>
+</tr>
+<tr>
+<td>请求已到达服务端</td>
+<td>通常不知道</td>
+<td>可能开始处理</td>
+<td>不能确定</td>
+</tr>
+<tr>
+<td>服务端提交完成</td>
+<td>通常不知道</td>
+<td>已产生副作用</td>
+<td>不能确定</td>
+</tr>
+<tr>
+<td>响应已发出</td>
+<td>还没收到</td>
+<td>已提交并回包</td>
+<td>不能确定</td>
+</tr>
+<tr>
+<td>响应丢失</td>
+<td>只看到超时/连接错误</td>
+<td>已提交</td>
+<td>不能确定</td>
+</tr>
+<tr>
+<td>收到完整响应</td>
+<td>能看到状态和结果</td>
+<td>已提交</td>
+<td>能确定</td>
+</tr>
+</tbody>
+</table>
+<p>关键结论是：<strong>“没收到响应”跨越了多个完全不同的服务端状态。</strong> 客户端把超时当成“没执行”，是一种没有依据的推断。</p>
+<h4 id="_17">三种投递语义</h4>
+<p>围绕结果未知，系统设计里常见三种语义：</p>
+<ul>
+<li><strong>至多一次（at-most-once）</strong>：不重试，最多执行一次。可能失败，但不会因为重试产生重复副作用。适合非幂等写操作在没有幂等保护时的保守选择。</li>
+<li><strong>至少一次（at-least-once）</strong>：允许重试，保证请求最终至少被处理一次，但可能重复。适合可重复执行的操作，或者消费端有去重的场景。</li>
+<li><strong>有效一次（effectively-once）</strong>：通过幂等键、去重表或事务性消息，让重复请求产生与一次执行相同的可观察结果。注意这不是“网络上只传了一次”，而是“重复对结果没有额外影响”。</li>
+</ul>
+<p>严格意义上的“端到端恰好一次”很难靠单次 RPC 实现，因为网络本身就会丢包、重传和超时。工程上更现实的目标是：<strong>允许重复传输，但通过幂等和去重让副作用只发生一次。</strong></p>
+<h4 id="_18">解决未知的四种手段</h4>
+<p>当客户端处于结果未知状态时，不能靠猜，只能靠外部信息收敛：</p>
+<ol>
+<li><strong>按请求 ID 查询</strong>：接口提供查询能力，客户端用调用时生成的唯一请求 ID 查询操作状态。</li>
+<li><strong>幂等重试</strong>：带上同一个幂等键重试，服务端通过去重表识别重复请求，返回第一次的结果。</li>
+<li><strong>对账</strong>：定期比对业务单据和下游记录，发现重复或缺失后修正。适合无法在线查询的场景。</li>
+<li><strong>人工介入</strong>：高风险操作在未知状态下转人工审核，不自动重试。</li>
+</ol>
+<p>这四种手段都需要接口提前支持。如果接口既没有请求 ID，也没有幂等键，也没有查询能力，那么一旦响应丢失，客户端就永远无法可靠地判断结果。</p>
+<h3 id="26">2.6 截止时间</h3>
+<p>截止时间（deadline）是调用方愿意等待的最长时间预算。它通常以绝对时间点或剩余时长表示，并随请求传播到服务端。</p>
+<p>需要区分两个概念：</p>
+<ul>
+<li><strong>超时（timeout）</strong>：一个相对的时长，例如“等 2 秒”；</li>
+<li><strong>截止时间（deadline）</strong>：一个绝对的时间点，例如“必须在 12:00:03.500 之前完成”。</li>
+</ul>
+<p>在分布式调用里，截止时间更适合传播，因为每一跳都可以用同一个绝对时间点计算自己还剩多少预算。gRPC 的 deadline 就是这种语义：客户端设置一个时间点，框架把它编码进请求，服务端可以读取剩余时间。</p>
+<p>截止时间有三个关键性质。</p>
+<h4 id="_19">性质一：截止时间是客户端的等待上限，不是服务端的停止保证</h4>
+<p>客户端在截止时间到达后停止等待，并可能发送取消信号。但截止时间到达的那一刻，服务端可能：</p>
+<ul>
+<li>还没收到请求；</li>
+<li>正在处理；</li>
+<li>刚刚完成提交；</li>
+<li>已经提交但响应还在路上；</li>
+<li>已经收到取消信号，但取消发生在提交之后。</li>
+</ul>
+<p>因此，<strong>超时不代表服务端未执行</strong>。这是本节点 acceptance 的第一条。</p>
+<h4 id="_20">性质二：取消与提交存在竞争</h4>
+<p>取消信号是尽力而为的。服务端可能在收到取消之前就已经完成提交，也可能在提交过程中收到取消。接口设计不能假设“客户端取消 = 服务端回滚”。</p>
+<p>如果业务需要“取消后一定不生效”，那就要在服务端设置明确的提交点和取消检查点，并使用事务或补偿机制。仅仅依赖 RPC 的取消语义是不够的。</p>
+<h4 id="_21">性质三：截止时间要覆盖整条调用链和重试</h4>
+<p>一个请求的预算不是每次尝试都重新获得的。正确做法是：</p>
+<div class="codehilite"><pre><span></span><code>总预算 500ms
+  ├─ 第一次尝试：最多用 300ms
+  ├─ 退避等待：20ms
+  ├─ 第二次尝试：最多用剩余 180ms
+  └─ 到达总截止时间：停止，返回结果未知或明确失败
+</code></pre></div>
+
+<p>如果每次重试都重新设置 500ms，端到端时间会被放大，还可能给服务端制造额外负载。重试次数、退避时间和单次超时都必须从同一个总预算里扣。</p>
+<p>一个简单的预算检查可以写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">using</span><span class="w"> </span><span class="n">Clock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Deadline</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">expires_at</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">expired</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">expires_at</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="w"> </span><span class="nf">remaining</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">left</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">expires_at</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">left</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">Clock</span><span class="o">::</span><span class="n">duration</span><span class="o">::</span><span class="n">zero</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">left</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>调用前检查 <code>expired()</code>，调用时把 <code>remaining()</code> 传给框架；收到错误后先看剩余预算，再决定能不能重试。不要在重试循环里重新创建一个“完整预算”的 Deadline。</p>
+<h4 id="_22">截止时间设多长</h4>
+<p>截止时间太短，正常请求也会被误判为超时，结果未知的比例上升；太长，故障时客户端会被长时间挂住，资源无法及时释放。合理的截止时间通常来自：</p>
+<ul>
+<li>上游给本服务的端到端预算；</li>
+<li>本服务各下游调用的预算之和，加上自身处理时间；</li>
+<li>真实延迟分布的高分位数，而不是平均值；</li>
+<li>故障时的降级策略。</li>
+</ul>
+<p>截止时间不是拍脑袋的数字，而是接口契约的一部分。接口文档应该说明：调用方应该设置多长的截止时间，服务端在剩余时间不足时会怎样处理。</p>
+<h3 id="27">2.7 重试与幂等</h3>
+<p>节点 pitfalls 说：<strong>重试一次远程写可能产生重复副作用。</strong> 这句话值得单独展开。</p>
+<p>重试本身不是坏事。对只读调用、幂等写调用和可去重的消息消费，重试能显著提高成功率。问题在于，很多团队把重试当成默认策略，却没有检查操作是否幂等。</p>
+<p>一个非幂等的写操作，重试可能造成：</p>
+<ul>
+<li>重复下单、重复扣款、重复发消息；</li>
+<li>重复创建资源，返回两个不同的 ID；</li>
+<li>计数器被多加一次；</li>
+<li>审计日志出现两条相同记录；</li>
+<li>下游收到两次通知，产生两次副作用。</li>
+</ul>
+<p>安全的写重试通常需要下面三者之一：</p>
+<ol>
+<li><strong>操作本身幂等</strong>：例如“把状态设置为已支付”比“给余额加 100”更容易做成幂等。</li>
+<li><strong>幂等键 + 去重表</strong>：客户端为每次逻辑操作生成唯一键，服务端记录键和第一次的结果；重复请求直接返回第一次的结果。</li>
+<li><strong>可查询的操作状态</strong>：客户端在未知时先查询，确认未执行后再重试。</li>
+</ol>
+<p>幂等键的设计要点：</p>
+<ul>
+<li>键应该由客户端生成，并在重试时保持不变；</li>
+<li>键要能唯一标识一次逻辑操作，而不是一次网络尝试；</li>
+<li>服务端要在提交业务数据的同一个事务里写入去重记录，避免“业务成功、去重记录失败”；</li>
+<li>去重记录要设置合理的保留时间，太短会漏掉迟到的重试，太长会占用空间；</li>
+<li>同一个键的重复请求，如果参数不同，应该返回冲突错误，而不是默默接受。</li>
+</ul>
+<p>一个简化的服务端去重逻辑：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">DedupRecord</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">idempotency_key</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">request_hash</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Order</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">completed</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span><span class="w"> </span><span class="n">FindCompleted</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">key</span><span class="p">);</span>
+
+<span class="n">Order</span><span class="w"> </span><span class="nf">CreateOrder</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">CreateOrderRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">existing</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FindCompleted</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">idempotency_key</span><span class="p">());</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">existing</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">Hash</span><span class="p">(</span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">existing</span><span class="o">-&gt;</span><span class="n">request_hash</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">throw</span><span class="w"> </span><span class="n">BusinessError</span><span class="o">::</span><span class="n">Conflict</span><span class="p">(</span><span class="s">"same key, different payload"</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="o">*</span><span class="n">existing</span><span class="p">;</span><span class="w">  </span><span class="c1">// 返回第一次的结果</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CommitOrder</span><span class="p">(</span><span class="n">req</span><span class="p">);</span><span class="w">  </span><span class="c1">// 与去重记录同一事务</span>
+<span class="w">    </span><span class="n">SaveDedupRecord</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">idempotency_key</span><span class="p">(),</span><span class="w"> </span><span class="n">Hash</span><span class="p">(</span><span class="n">req</span><span class="p">),</span><span class="w"> </span><span class="n">order</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">order</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意：真正的实现要把“提交订单”和“写去重记录”放在同一个原子操作里，或者使用事务消息/outbox 保证一致性。上面代码只是展示语义，不是可直接上线的实现。</p>
+<p>重试还需要退避和抖动：</p>
+<ul>
+<li>固定间隔重试会让大量客户端同时冲击故障服务；</li>
+<li>指数退避能降低持续压力，但要有上限；</li>
+<li>抖动可以打散重试时间；</li>
+<li>重试次数和总预算要有限制，避免重试风暴；</li>
+<li>服务端返回 <code>Retry-After</code> 或类似提示时，应该尊重它。</li>
+</ul>
+<h3 id="28">2.8 把可观察结果写进接口</h3>
+<p>节点 practice 要求：<strong>画出服务器提交后响应丢失的时序，给接口定义可观察结果。</strong></p>
+<p>“可观察结果”的意思是：客户端在拿不到原始响应时，仍然有办法通过接口确认操作状态。常见设计有三种。</p>
+<h4 id="_23">方案一：创建操作资源</h4>
+<p>写操作不直接返回最终对象，而是返回一个操作 ID：</p>
+<div class="codehilite"><pre><span></span><code>POST /orders
+  request_id = 客户端生成的唯一 ID
+  -&gt; 202 Accepted
+     operation_id = ...
+</code></pre></div>
+
+<p>客户端随后用 <code>operation_id</code> 查询：</p>
+<div class="codehilite"><pre><span></span><code>GET /operations/{operation_id}
+  -&gt; PENDING / SUCCEEDED / FAILED
+     result = ...
+</code></pre></div>
+
+<p>这样即使创建响应丢失，客户端也能用 <code>request_id</code> 或 <code>operation_id</code> 查询最终状态。关键是 <code>request_id</code> 必须由客户端生成并在重试时复用。</p>
+<h4 id="_24">方案二：按业务键查询</h4>
+<p>如果业务本身有唯一键，例如订单号、支付单号、消息 ID，可以让客户端用这个键查询：</p>
+<div class="codehilite"><pre><span></span><code>CreateOrder(request_id, ...) -&gt; Order
+GetOrderByRequestId(request_id) -&gt; Order | NotFound
+</code></pre></div>
+
+<p>当客户端超时后，先调用 <code>GetOrderByRequestId</code>：</p>
+<ul>
+<li>查到，说明第一次已经成功；</li>
+<li>查不到，并且确认查询本身可靠，才可以考虑重试；</li>
+<li>查询也失败，保持未知，进入对账。</li>
+</ul>
+<p>要注意“查不到”并不总是等于“没执行”。如果查询走了只读副本，可能有复制延迟；如果查询本身超时，仍然未知。接口文档要说明查询的一致性级别。</p>
+<h4 id="_25">方案三：幂等重试</h4>
+<p>客户端直接用同一个幂等键重试，服务端保证重复请求不产生新的副作用。这是最简单的使用方式，但要求服务端实现去重，并且去重记录与业务提交保持一致。</p>
+<p>无论哪种方案，接口都应该明确列出可观察状态：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+<th>客户端动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UNKNOWN</code></td>
+<td>客户端没有拿到明确结论</td>
+<td>查询、幂等重试或对账</td>
+</tr>
+<tr>
+<td><code>PENDING</code></td>
+<td>服务端已接受，尚未完成</td>
+<td>轮询或等待通知</td>
+</tr>
+<tr>
+<td><code>SUCCEEDED</code></td>
+<td>操作已提交，结果可用</td>
+<td>使用结果</td>
+</tr>
+<tr>
+<td><code>FAILED</code></td>
+<td>操作明确失败，未提交</td>
+<td>按错误码处理</td>
+</tr>
+<tr>
+<td><code>DUPLICATE</code></td>
+<td>检测到重复请求，返回已有结果</td>
+<td>使用第一次的结果</td>
+</tr>
+</tbody>
+</table>
+<p>这张表比一句“成功/失败”更能指导调用方写代码。</p>
+<h3 id="29">2.9 流式调用里的失败处理</h3>
+<p>流式调用的失败处理要额外考虑“部分结果”。</p>
+<h4 id="_26">服务端流式</h4>
+<ul>
+<li>客户端收到部分消息后流中断：已收到的消息可能有效，也可能不完整；</li>
+<li>需要为消息设计序号或游标，便于判断缺口和续传；</li>
+<li>终止状态要区分“正常结束”和“异常中断”；</li>
+<li>如果业务要求原子性，流式本身不提供，需要在消费端做缓冲和提交点。</li>
+</ul>
+<h4 id="_27">客户端流式</h4>
+<ul>
+<li>客户端可能在发送到一半时断线，服务端已收到的部分数据可能已被处理；</li>
+<li>需要批次号、序号或幂等键，避免重连后重复提交；</li>
+<li>服务端要定义“收到多少才算一批”“什么时候提交”；</li>
+<li>最终响应要能告诉客户端哪些数据已接受、哪些需要重发。</li>
+</ul>
+<h4 id="_28">双向流</h4>
+<ul>
+<li>两个方向独立，任一方向出错都可能导致整个流终止；</li>
+<li>要定义半关闭语义：一方说“我不再发了”，另一方是否还能继续发；</li>
+<li>要定义空闲超时、心跳和重连策略；</li>
+<li>重连后要能续传，而不是从头再来；</li>
+<li>重复消息要有去重机制。</li>
+</ul>
+<p>一个流式消费的伪代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Stream</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stub</span><span class="p">.</span><span class="n">Subscribe</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+<span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">cursor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load_checkpoint</span><span class="p">();</span>
+
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">stream</span><span class="p">.</span><span class="n">Receive</span><span class="p">(</span><span class="o">&amp;</span><span class="n">msg</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">cursor_sequence</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w">  </span><span class="c1">// 重复消息，跳过</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">cursor_sequence</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 发现缺口，不能假装连续</span>
+<span class="w">        </span><span class="n">request_resume</span><span class="p">(</span><span class="n">cursor_sequence</span><span class="p">);</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">process</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+<span class="w">    </span><span class="n">cursor_sequence</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msg</span><span class="p">.</span><span class="n">sequence</span><span class="p">();</span>
+<span class="w">    </span><span class="n">save_checkpoint</span><span class="p">(</span><span class="n">cursor_sequence</span><span class="p">);</span><span class="w">  </span><span class="c1">// 提交点</span>
+<span class="p">}</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="n">Finish</span><span class="p">();</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 部分结果已处理，但流未正常结束</span>
+<span class="w">    </span><span class="n">mark_unknown_and_resume</span><span class="p">(</span><span class="n">cursor_sequence</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段代码的重点不是 API 细节，而是三个原则：<strong>有序号、有检查点、终止状态单独判断。</strong></p>
+<hr />
+<h2 id="_29">常见误区与设计权衡</h2>
+<h3 id="_30">误区一：把远程调用当成有返回值的本地函数</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">order</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">CreateOrder</span><span class="p">(</span><span class="n">req</span><span class="p">);</span><span class="w">  </span><span class="c1">// 看起来像本地调用</span>
+</code></pre></div>
+
+<p>这行代码隐藏了序列化、网络、超时、重试和未知状态。调用者很容易写出“返回了就是成功，抛异常就是失败”的逻辑。</p>
+<p>更准确的写法是把调用结果建模成显式的状态：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="n">CreateOrder</span><span class="p">(</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">deadline</span><span class="p">);</span>
+<span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">transport</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">TransportStatus</span><span class="o">::</span><span class="no">kOk</span><span class="p">:</span>
+<span class="w">        </span><span class="c1">// 已拿到明确终止状态，再看业务码</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">TransportStatus</span><span class="o">::</span><span class="no">kDeadlineExceeded</span><span class="p">:</span>
+<span class="w">        </span><span class="c1">// 结果未知：不能断言失败，也不能断言成功</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">case</span><span class="w"> </span><span class="no">TransportStatus</span><span class="o">::</span><span class="no">kUnavailable</span><span class="p">:</span>
+<span class="w">        </span><span class="c1">// 可能没到达，也可能到达了但回包失败；写操作要谨慎</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="k">default</span><span class="o">:</span>
+<span class="w">        </span><span class="k">break</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>透明封装本身没有错，错的是封装之后不暴露失败和时间预算。节点 tradeoffs 说“透明封装提高使用便利，但必须暴露失败与时间预算”，就是要求接口在便利和可判断之间取得平衡。</p>
+<h3 id="_31">误区二：超时等于服务端没有执行</h3>
+<p>这是本课最重要的一条。超时只说明客户端等不下去了。服务端可能：</p>
+<ul>
+<li>还没开始处理；</li>
+<li>正在处理；</li>
+<li>已经提交；</li>
+<li>已经提交并发出响应，只是响应丢了。</li>
+</ul>
+<p>如果业务代码在超时后直接重试非幂等写操作，就可能产生重复副作用。正确做法是先进入“结果未知”状态，再按接口提供的能力查询、幂等重试或对账。</p>
+<h3 id="_32">误区三：收到响应就等于业务成功</h3>
+<p>响应消息只是传输层交付的内容。它可能包含业务错误字段，也可能服务端先返回数据、再用终止状态报告失败。调用者必须同时检查：</p>
+<ul>
+<li>传输是否完整；</li>
+<li>终止状态是否 OK；</li>
+<li>业务码是否表示成功；</li>
+<li>响应内容是否满足业务不变量。</li>
+</ul>
+<p>只看“有响应”或只看 HTTP 200，都不够。</p>
+<h3 id="_33">误区四：重试是提高可用性的万能药</h3>
+<p>重试对瞬时故障有效，但对下面这些情况没有帮助，甚至有害：</p>
+<ul>
+<li>参数非法、权限不足等确定性业务错误；</li>
+<li>服务端已经过载，重试会加剧拥塞；</li>
+<li>非幂等写操作，重试会产生重复副作用；</li>
+<li>截止时间已经耗尽，重试只会拖长整体延迟。</li>
+</ul>
+<p>重试前要同时满足：错误可重试、操作幂等或有幂等键、剩余预算足够、重试次数未超限。</p>
+<h3 id="_34">误区五：流式调用失败时，已收到的数据都可以直接用</h3>
+<p>流式调用不是原子的。已经收到的消息可能：</p>
+<ul>
+<li>是完整的，可以安全处理；</li>
+<li>只传输了一部分，反序列化后字段不完整；</li>
+<li>属于一个最终失败的操作，业务上不应提交；</li>
+<li>在断线重连后重复出现。</li>
+</ul>
+<p>接口必须定义部分结果的处理规则。消费端要有检查点、序号和去重，不要假设“收到多少算多少”。</p>
+<h3 id="_35">误区六：把业务错误和网络错误压成同一个状态</h3>
+<p>把“库存不足”和“连接超时”都返回 500，会让调用方无法决定是否重试。库存不足重试一万次也不会成功；连接超时则可能换个实例就能成功。</p>
+<p>错误分层不是为了好看，而是为了让调用方做出正确动作。至少要把下面几类分开：</p>
+<ul>
+<li>调用方参数错误；</li>
+<li>业务状态冲突；</li>
+<li>权限/认证问题；</li>
+<li>对端暂时不可用；</li>
+<li>截止时间耗尽；</li>
+<li>结果未知。</li>
+</ul>
+<h3 id="_36">权衡一：透明封装与显式失败</h3>
+<p>透明的客户端让业务代码写起来像本地调用，降低学习和接入成本。但过度透明会隐藏失败语义，让调用者误以为只有成功和失败两种结果。</p>
+<p>更好的平衡是：</p>
+<ul>
+<li>API 保持简单；</li>
+<li>结果类型显式区分传输状态和业务状态；</li>
+<li>截止时间作为显式参数；</li>
+<li>文档明确未知状态和重试规则；</li>
+<li>提供查询/幂等能力，而不是只提供一个裸调用。</li>
+</ul>
+<h3 id="_37">权衡二：带内错误与带外错误</h3>
+<p>带内错误让传输层总是成功，响应结构统一，但监控和重试需要解析业务体；带外错误让框架直接表达失败，便于统一处理，但业务错误和传输错误容易混在同一套状态码里。</p>
+<p>选择时要考虑：</p>
+<ul>
+<li>调用方是否统一由框架处理错误；</li>
+<li>业务错误是否需要携带复杂结构化详情；</li>
+<li>监控是否需要按错误层聚合；</li>
+<li>是否需要跨语言、跨协议映射。</li>
+</ul>
+<p>没有绝对正确的选择，但必须保持一致，并在接口文档里写清楚。</p>
+<h3 id="_38">权衡三：重试提高成功率与放大负载</h3>
+<p>重试能掩盖瞬时故障，提高成功率；但在故障期间，重试会放大流量，可能把“局部故障”变成“雪崩”。</p>
+<p>控制手段包括：</p>
+<ul>
+<li>只对可重试错误重试；</li>
+<li>指数退避加抖动；</li>
+<li>限制重试次数和总预算；</li>
+<li>服务端提供重试提示；</li>
+<li>使用重试预算，而不是无限重试；</li>
+<li>对非幂等操作禁用自动重试。</li>
+</ul>
+<h3 id="_39">权衡四：短截止时间与长截止时间</h3>
+<p>短截止时间能快速释放资源、降低尾延迟，但会增加误超时和结果未知；长截止时间能容忍慢请求，但故障时资源占用更久，用户体验更差。</p>
+<p>截止时间应该由端到端预算决定，而不是每个服务各自拍脑袋。上游给下游的预算要逐跳扣减，重试也要从同一预算里扣。</p>
+<h3 id="_40">权衡五：流式的实时性与可恢复性</h3>
+<p>流式调用能实时推送，但断线后恢复复杂。要支持续传，就需要：</p>
+<ul>
+<li>消息序号或游标；</li>
+<li>服务端保留一段时间的历史；</li>
+<li>客户端保存检查点；</li>
+<li>重复消息去重；</li>
+<li>过期游标的处理策略。</li>
+</ul>
+<p>这些都会增加服务端存储和接口复杂度。如果业务可以接受“断线后从头再来”，设计会简单很多；如果不能，就必须为可恢复性付出成本。</p>
+<hr />
+<h2 id="_41">动手实践：画出服务器提交后响应丢失的时序，给接口定义可观察结果</h2>
+<p>本节点的 practice 是：<strong>画出服务器提交后响应丢失的时序，给接口定义可观察结果。</strong></p>
+<p>这个实践不要求你搭一个完整的生产级 RPC 框架，但要求你把语义想清楚，并用可运行的小实验验证。最终产物应该包括：</p>
+<ul>
+<li>一张带时间戳的时序图；</li>
+<li>一张客户端/服务端状态对照表；</li>
+<li>一份接口定义，明确请求 ID、幂等键和查询能力；</li>
+<li>一段可运行的模拟代码，能复现“提交后响应丢失”；</li>
+<li>一组测试，证明有幂等保护时不会产生重复副作用；</li>
+<li>一张错误分层与重试决策表。</li>
+</ul>
+<p>下面按步骤完成。</p>
+<h3 id="_42">第一步：建立目录</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/rpc-semantics
+<span class="nb">cd</span><span class="w"> </span>/tmp/rpc-semantics
+</code></pre></div>
+
+<p>本实验用 C++17 写一个单进程模拟器，不需要真实网络。模拟器把“发送请求”“服务端提交”“响应丢失”“客户端超时”这些事件显式建模，便于观察状态变化。真实 gRPC 的 API 更复杂，但语义是一样的：请求发出后，客户端只知道本地观察到的结果。</p>
+<p>建议的文件结构：</p>
+<div class="codehilite"><pre><span></span><code>/tmp/rpc-semantics/
+├── main.cpp          # 场景驱动
+├── model.hpp         # 请求、响应、状态、服务端模拟
+├── transport.hpp     # 模拟丢包和延迟
+└── README.md         # 记录时序图、状态表和结论
+</code></pre></div>
+
+<p>如果不想拆文件，也可以全部写在一个 <code>main.cpp</code> 里。重点是让每个事件都有时间戳和日志。</p>
+<h3 id="_43">第二步：画提交后响应丢失的时序</h3>
+<p>假设客户端在 <code>t0</code> 发起 <code>CreateOrder</code>，服务端在 <code>t4</code> 完成数据库提交，在 <code>t5</code> 发出响应，响应在回程丢失，客户端在 <code>t7</code> 到达截止时间。</p>
+<div class="codehilite"><pre><span></span><code>时间轴       客户端                         网络                          服务端
+  t0   构造请求，生成 request_id
+  t1   序列化并发送  ──────────────►
+  t2                                     请求到达
+  t3                                                     反序列化，开始处理
+  t4                                                     提交订单（不可回滚点）
+  t5                                     响应发出  ◄────── 序列化响应
+  t6          ✗ 响应丢失（回程）
+  t7   截止时间到达，停止等待
+       客户端观察：DeadlineExceeded
+       服务端实际：订单已提交
+       客户端是否知道结果：不知道
+</code></pre></div>
+
+<p>图上要标出三个关键点：</p>
+<ol>
+<li><strong>提交点 <code>t4</code></strong>：从这一刻起，服务端的副作用已经生效，即使客户端取消也不能自动撤销。</li>
+<li><strong>响应丢失点 <code>t6</code></strong>：客户端没有收到任何业务数据，连接可能表现为超时或重置。</li>
+<li><strong>截止时间 <code>t7</code></strong>：客户端放弃等待，但这只是客户端的动作，不是服务端的状态。</li>
+</ol>
+<p>如果使用 gRPC，可以在图旁边标注：客户端最终拿到的是 <code>DEADLINE_EXCEEDED</code>，而服务端数据库里已经有一条订单。这正是“超时不代表服务端未执行”的具体形态。</p>
+<h3 id="_44">第三步：写状态对照表</h3>
+<p>把每个时刻的“客户端认为”和“服务端实际”写下来：</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>客户端认为</th>
+<th>服务端实际</th>
+<th>结果是否确定</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>t0</td>
+<td>尚未发送</td>
+<td>无</td>
+<td>确定未执行</td>
+</tr>
+<tr>
+<td>t1</td>
+<td>已发送，等待</td>
+<td>可能未收到</td>
+<td>不确定</td>
+</tr>
+<tr>
+<td>t3</td>
+<td>等待响应</td>
+<td>正在处理</td>
+<td>不确定</td>
+</tr>
+<tr>
+<td>t4</td>
+<td>等待响应</td>
+<td>已提交</td>
+<td>不确定</td>
+</tr>
+<tr>
+<td>t6</td>
+<td>等待响应或已超时</td>
+<td>已提交，响应丢失</td>
+<td>不确定</td>
+</tr>
+<tr>
+<td>t7</td>
+<td>调用失败</td>
+<td>已提交</td>
+<td>客户端仍不知道</td>
+</tr>
+</tbody>
+</table>
+<p>这张表是后面接口设计的依据：只要客户端处于“不确定”区间，接口就必须提供收敛未知状态的手段。</p>
+<h3 id="_45">第四步：定义接口和可观察结果</h3>
+<p>一个只返回 <code>Order</code> 的接口是不够的。建议定义三个能力：</p>
+<div class="codehilite"><pre><span></span><code>service OrderService {
+  // 创建订单。request_id 和 idempotency_key 由客户端生成。
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
+
+  // 按客户端请求 ID 查询，用于超时后确认第一次是否成功。
+  rpc GetOrderByRequestId(GetOrderByRequestIdRequest)
+      returns (GetOrderByRequestIdResponse);
+}
+
+message CreateOrderRequest {
+  string request_id = 1;        // 逻辑请求唯一 ID，重试时不变
+  string idempotency_key = 2;   // 幂等键，重试时不变
+  string user_id = 3;
+  string sku = 4;
+  int32 quantity = 5;
+}
+
+message CreateOrderResponse {
+  string order_id = 1;
+  string request_id = 2;
+  OrderState state = 3;
+}
+
+message GetOrderByRequestIdRequest {
+  string request_id = 1;
+}
+
+message GetOrderByRequestIdResponse {
+  bool found = 1;
+  string order_id = 2;
+  OrderState state = 3;
+}
+
+enum OrderState {
+  ORDER_UNKNOWN = 0;
+  ORDER_PENDING = 1;
+  ORDER_COMMITTED = 2;
+  ORDER_FAILED = 3;
+}
+</code></pre></div>
+
+<p>接口语义要写清楚：</p>
+<ul>
+<li><code>CreateOrder</code> 成功返回，表示订单已提交，<code>order_id</code> 可用；</li>
+<li>如果客户端收到 <code>DEADLINE_EXCEEDED</code>，不能推断订单未创建，应调用 <code>GetOrderByRequestId</code>；</li>
+<li>如果查询返回 <code>found = true</code>，说明第一次请求已经产生订单，客户端应使用该结果；</li>
+<li>如果查询返回 <code>found = false</code>，并且查询本身是成功的，才可以在幂等键保护下重试；</li>
+<li>如果查询也失败，保持 <code>UNKNOWN</code>，进入对账或告警；</li>
+<li>重复的 <code>idempotency_key</code> 必须返回第一次的结果，而不是创建新订单；</li>
+<li>同一个幂等键但参数不同，返回冲突错误。</li>
+</ul>
+<p>这里的“可观察结果”不是一句口号，而是 <code>GetOrderByRequestId</code> 这个具体能力。没有它，客户端在响应丢失后只能盲目重试。</p>
+<h3 id="_46">第五步：实现最小模拟器</h3>
+<p>下面是一个不依赖 gRPC 的模拟器骨架。它把服务端提交和响应丢失显式建模：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;map&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;optional&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">Clock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">steady_clock</span><span class="p">;</span>
+
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">TransportStatus</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">kOk</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kUnavailable</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kDeadlineExceeded</span><span class="p">,</span>
+<span class="w">    </span><span class="n">kCancelled</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Order</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">order_id</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">request_id</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">sku</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">CreateOrderRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">request_id</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">idempotency_key</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">sku</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">CreateOrderResponse</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">TransportStatus</span><span class="w"> </span><span class="n">transport</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">order_id</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">message</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">OrderServer</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="k">explicit</span><span class="w"> </span><span class="n">OrderServer</span><span class="p">(</span><span class="kt">bool</span><span class="w"> </span><span class="n">dedup_enabled</span><span class="p">)</span>
+<span class="w">        </span><span class="o">:</span><span class="w"> </span><span class="n">dedup_enabled_</span><span class="p">(</span><span class="n">dedup_enabled</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">    </span><span class="n">CreateOrderResponse</span><span class="w"> </span><span class="n">CreateOrder</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">CreateOrderRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dedup_enabled_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">by_key_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">idempotency_key</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">by_key_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="o">++</span><span class="n">dedup_hits_</span><span class="p">;</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">TransportStatus</span><span class="o">::</span><span class="n">kOk</span><span class="p">,</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="s">"duplicate"</span><span class="p">};</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">Order</span><span class="w"> </span><span class="n">order</span><span class="p">;</span>
+<span class="w">        </span><span class="n">order</span><span class="p">.</span><span class="n">order_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"order-"</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">to_string</span><span class="p">(</span><span class="n">next_id_</span><span class="o">++</span><span class="p">);</span>
+<span class="w">        </span><span class="n">order</span><span class="p">.</span><span class="n">request_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">request_id</span><span class="p">;</span>
+<span class="w">        </span><span class="n">order</span><span class="p">.</span><span class="n">sku</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">sku</span><span class="p">;</span>
+
+<span class="w">        </span><span class="n">orders_</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">order</span><span class="p">);</span><span class="w">          </span><span class="c1">// 模拟提交</span>
+<span class="w">        </span><span class="n">by_request_</span><span class="p">[</span><span class="n">req</span><span class="p">.</span><span class="n">request_id</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">order</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dedup_enabled_</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">by_key_</span><span class="p">[</span><span class="n">req</span><span class="p">.</span><span class="n">idempotency_key</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">order</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">TransportStatus</span><span class="o">::</span><span class="n">kOk</span><span class="p">,</span><span class="w"> </span><span class="n">order</span><span class="p">.</span><span class="n">order_id</span><span class="p">,</span><span class="w"> </span><span class="s">"created"</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">optional</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span><span class="w"> </span><span class="n">GetByRequestId</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">request_id</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">by_request_</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="n">request_id</span><span class="p">);</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">it</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">by_request_</span><span class="p">.</span><span class="n">end</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">nullopt</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">it</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">order_count</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">orders_</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">dedup_hits</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">dedup_hits_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">dedup_enabled_</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">next_id_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">dedup_hits_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span><span class="w"> </span><span class="n">orders_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">Order</span><span class="o">&gt;</span><span class="w"> </span><span class="n">by_request_</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">Order</span><span class="o">&gt;</span><span class="w"> </span><span class="n">by_key_</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p>客户端模拟：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">CreateOrderResponse</span><span class="w"> </span><span class="nf">CallWithResponseLoss</span><span class="p">(</span><span class="n">OrderServer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">server</span><span class="p">,</span>
+<span class="w">                                         </span><span class="k">const</span><span class="w"> </span><span class="n">CreateOrderRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">,</span>
+<span class="w">                                         </span><span class="kt">bool</span><span class="w"> </span><span class="n">drop_response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">server_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">CreateOrder</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">drop_response</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 服务端已经提交，但响应在回程丢失</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">TransportStatus</span><span class="o">::</span><span class="n">kDeadlineExceeded</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="s">"response lost"</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">server_result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这里的 <code>CallWithResponseLoss</code> 故意模拟“服务端执行成功、客户端只看到超时”。真实网络里，这个超时可能来自丢包、延迟、连接重置或框架等待超时，但对客户端的语义是一样的：结果未知。</p>
+<h3 id="_47">第六步：复现重复副作用</h3>
+<p>先关闭去重，模拟客户端超时后自动重试一次：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">request_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"req-1001"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">OrderServer</span><span class="w"> </span><span class="n">server</span><span class="p">(</span><span class="cm">/*dedup_enabled=*/</span><span class="nb">false</span><span class="p">);</span>
+<span class="w">        </span><span class="n">CreateOrderRequest</span><span class="w"> </span><span class="n">req</span><span class="p">{</span><span class="n">request_id</span><span class="p">,</span><span class="w"> </span><span class="s">"key-1001"</span><span class="p">,</span><span class="w"> </span><span class="s">"sku-A"</span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CallWithResponseLoss</span><span class="p">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="cm">/*drop_response=*/</span><span class="nb">true</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"first transport="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">first</span><span class="p">.</span><span class="n">transport</span><span class="p">)</span>
+<span class="w">                  </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" orders="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">order_count</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">        </span><span class="c1">// 客户端不知道第一次是否成功，直接重试</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CallWithResponseLoss</span><span class="p">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="cm">/*drop_response=*/</span><span class="nb">false</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"second transport="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">second</span><span class="p">.</span><span class="n">transport</span><span class="p">)</span>
+<span class="w">                  </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" order_id="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">second</span><span class="p">.</span><span class="n">order_id</span>
+<span class="w">                  </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" orders="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">order_count</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">OrderServer</span><span class="w"> </span><span class="n">server</span><span class="p">(</span><span class="cm">/*dedup_enabled=*/</span><span class="nb">true</span><span class="p">);</span>
+<span class="w">        </span><span class="n">CreateOrderRequest</span><span class="w"> </span><span class="n">req</span><span class="p">{</span><span class="n">request_id</span><span class="p">,</span><span class="w"> </span><span class="s">"key-1001"</span><span class="p">,</span><span class="w"> </span><span class="s">"sku-A"</span><span class="p">};</span>
+
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CallWithResponseLoss</span><span class="p">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="cm">/*drop_response=*/</span><span class="nb">true</span><span class="p">);</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">GetByRequestId</span><span class="p">(</span><span class="n">request_id</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"after loss found="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">found</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">"yes"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">"no"</span><span class="p">)</span>
+<span class="w">                  </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" orders="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">order_count</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CallWithResponseLoss</span><span class="p">(</span><span class="n">server</span><span class="p">,</span><span class="w"> </span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="cm">/*drop_response=*/</span><span class="nb">false</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"retry order_id="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">second</span><span class="p">.</span><span class="n">order_id</span>
+<span class="w">                  </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" orders="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">order_count</span><span class="p">()</span>
+<span class="w">                  </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" dedup_hits="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">dedup_hits</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>预期输出类似：</p>
+<div class="codehilite"><pre><span></span><code>first transport=2 orders=1
+second transport=0 order_id=order-2 orders=2
+after loss found=yes orders=1
+retry order_id=order-1 orders=1 dedup_hits=1
+</code></pre></div>
+
+<p>第一组说明：客户端重试一次，服务端产生了两个订单，这就是节点 pitfalls 说的重复副作用。</p>
+<p>第二组说明：带幂等键时，第一次虽然响应丢失，但订单已经存在；重试命中去重，返回同一个 <code>order-1</code>，订单数量仍然是 1。</p>
+<p>注意第二组里客户端先用了 <code>GetByRequestId</code> 查询。实际系统可以查询后再决定，也可以直接用幂等键重试；两种方式都要求服务端有对应的能力。</p>
+<h3 id="_48">第七步：加入截止时间和取消</h3>
+<p>现在模拟“服务端在截止时间之后才完成提交”：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">struct</span><span class="w"> </span><span class="nc">Deadline</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Clock</span><span class="o">::</span><span class="n">time_point</span><span class="w"> </span><span class="n">expires_at</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">expired</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Clock</span><span class="o">::</span><span class="n">now</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">expires_at</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="n">CreateOrderResponse</span><span class="w"> </span><span class="nf">CallWithDeadline</span><span class="p">(</span><span class="n">OrderServer</span><span class="o">&amp;</span><span class="w"> </span><span class="n">server</span><span class="p">,</span>
+<span class="w">                                     </span><span class="k">const</span><span class="w"> </span><span class="n">CreateOrderRequest</span><span class="o">&amp;</span><span class="w"> </span><span class="n">req</span><span class="p">,</span>
+<span class="w">                                     </span><span class="n">Deadline</span><span class="w"> </span><span class="n">deadline</span><span class="p">,</span>
+<span class="w">                                     </span><span class="kt">bool</span><span class="w"> </span><span class="n">server_commits_after_deadline</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">deadline</span><span class="p">.</span><span class="n">expired</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">TransportStatus</span><span class="o">::</span><span class="n">kDeadlineExceeded</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="s">"expired before send"</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">server_commits_after_deadline</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// 模拟客户端已经超时，服务端仍然完成了提交</span>
+<span class="w">        </span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">CreateOrder</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="n">TransportStatus</span><span class="o">::</span><span class="n">kDeadlineExceeded</span><span class="p">,</span><span class="w"> </span><span class="s">""</span><span class="p">,</span><span class="w"> </span><span class="s">"committed after deadline"</span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">server</span><span class="p">.</span><span class="n">CreateOrder</span><span class="p">(</span><span class="n">req</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>测试时记录三件事：</p>
+<ol>
+<li>客户端拿到的传输状态；</li>
+<li>服务端实际订单数量；</li>
+<li>用 <code>request_id</code> 查询是否能找到订单。</li>
+</ol>
+<p>一个典型的结论表：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>客户端状态</th>
+<th>服务端订单数</th>
+<th>查询结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正常完成</td>
+<td>OK</td>
+<td>1</td>
+<td>找到</td>
+</tr>
+<tr>
+<td>截止时间前未提交</td>
+<td>DeadlineExceeded</td>
+<td>0</td>
+<td>未找到</td>
+</tr>
+<tr>
+<td>截止时间后提交</td>
+<td>DeadlineExceeded</td>
+<td>1</td>
+<td>找到</td>
+</tr>
+<tr>
+<td>提交后响应丢失</td>
+<td>DeadlineExceeded</td>
+<td>1</td>
+<td>找到</td>
+</tr>
+</tbody>
+</table>
+<p>第三行和第四行是 acceptance 的核心证据：客户端看到的是超时，但服务端确实执行了。只有查询或幂等重试才能收敛状态。</p>
+<h3 id="_49">第八步：模拟流式部分结果</h3>
+<p>用一个简单的服务端流式场景验证“部分结果 + 终止状态”：</p>
+<p>验证要点：</p>
+<ul>
+<li>断在中间时，<code>terminated_ok</code> 为 false，<code>broken</code> 为 true；</li>
+<li>已处理的消息不能因为重连而重复处理；</li>
+<li>重连后从检查点继续，而不是从头开始；</li>
+<li>只有收到正常终止状态，才能把整个流标记为完成。</li>
+</ul>
+<h3 id="_50">第九步：建立错误分层与重试决策表</h3>
+<p>把实验中遇到的错误按层归类，并写出处理动作：</p>
+<table>
+<thead>
+<tr>
+<th>错误</th>
+<th>层次</th>
+<th>是否可重试</th>
+<th>重试前提</th>
+<th>客户端动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连接被拒绝</td>
+<td>传输</td>
+<td>是</td>
+<td>有剩余预算，操作幂等</td>
+<td>退避后换实例重试</td>
+</tr>
+<tr>
+<td>连接中途重置</td>
+<td>传输</td>
+<td>视情况</td>
+<td>写操作必须有幂等键</td>
+<td>查询或幂等重试</td>
+</tr>
+<tr>
+<td>截止时间已到</td>
+<td>框架/控制</td>
+<td>视预算</td>
+<td>总预算未耗尽</td>
+<td>查询状态，不盲目重试</td>
+</tr>
+<tr>
+<td>参数非法</td>
+<td>业务</td>
+<td>否</td>
+<td>无</td>
+<td>修正参数</td>
+</tr>
+<tr>
+<td>资源不存在</td>
+<td>业务</td>
+<td>否</td>
+<td>无</td>
+<td>返回用户</td>
+</tr>
+<tr>
+<td>状态冲突</td>
+<td>业务</td>
+<td>可能</td>
+<td>重新读取状态</td>
+<td>重新判断后决定</td>
+</tr>
+<tr>
+<td>已存在</td>
+<td>业务</td>
+<td>视语义</td>
+<td>幂等创建可视为成功</td>
+<td>查询已有资源</td>
+</tr>
+<tr>
+<td>权限不足</td>
+<td>业务</td>
+<td>否</td>
+<td>无</td>
+<td>提示或刷新凭证</td>
+</tr>
+<tr>
+<td>服务端内部错误</td>
+<td>框架/服务端</td>
+<td>可能</td>
+<td>有幂等保护且预算足够</td>
+<td>有限重试并告警</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_51">第十步：写结论并对照验收</h3>
+<p>在 <code>README.md</code> 里写清楚：</p>
+<ul>
+<li>时序图：提交点、响应丢失点、截止时间点分别在哪里；</li>
+<li>状态表：客户端在哪些时刻处于未知；</li>
+<li>接口：请求 ID、幂等键、查询接口的语义；</li>
+<li>实验：无幂等时重复订单数、有幂等时订单数和去重命中数；</li>
+<li>截止时间实验：超时后服务端订单仍然存在的证据；</li>
+<li>流式实验：部分结果和终止状态的处理方式；</li>
+<li>错误表：哪些错误可重试，哪些不可重试。</li>
+</ul>
+<p>验收对照：</p>
+<table>
+<thead>
+<tr>
+<th>验收项</th>
+<th>对应产物</th>
+<th>检查方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>能解释超时不代表服务端未执行</td>
+<td>时序图 + 第四步状态表</td>
+<td>能指出提交点和超时点的先后关系</td>
+</tr>
+<tr>
+<td>业务错误与网络状态分层</td>
+<td>第九步错误表 + 接口定义</td>
+<td>任意给一个错误，能判断层次和动作</td>
+</tr>
+<tr>
+<td>画出提交后响应丢失的时序</td>
+<td>第二步 ASCII 时序图</td>
+<td>图上有提交、丢包、超时三个关键点</td>
+</tr>
+<tr>
+<td>给接口定义可观察结果</td>
+<td>第四步接口定义 + 查询实验</td>
+<td>响应丢失后能用 request_id 查到订单</td>
+</tr>
+<tr>
+<td>重试不产生重复副作用</td>
+<td>第六步对比实验</td>
+<td>有幂等时订单数保持为 1</td>
+</tr>
+</tbody>
+</table>
+<p>如果这五条都能拿出对应产物，本课的实践就完成了。</p>
+<hr />
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<p>本节点 sourceStudy 的要求是：<strong>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</strong></p>
+<h3 id="_52">动作一：定位请求响应和流式调用的定义</h3>
+<p>在 gRPC 的核心概念页面里，先找到 unary、server streaming、client streaming、bidirectional streaming 四类调用的定义和示例，重点核对：</p>
+<ul>
+<li>每一类调用发送几条消息、接收几条消息；</li>
+<li>客户端在什么时刻知道调用完成；</li>
+<li>流式调用中，终止状态和消息本身是什么关系；</li>
+<li>服务端流式调用中途失败时，已经发出的消息是否仍然算数；</li>
+<li>双向流的两个方向是否共享完成状态。</li>
+</ul>
+<p>每读完一类，回到本课 2.2 和 2.3 复述，并画一张只有两个方框的时序图。不要只记名字，要能说出“完成点在哪里”。</p>
+<h3 id="_53">动作二：核对传输错误与业务错误的表达</h3>
+<p>资源页面会介绍 status code、metadata 和 deadline。读的时候分开记录：</p>
+<ul>
+<li>哪些状态码表示连接/可用性问题；</li>
+<li>哪些状态码表示调用方参数或业务状态问题；</li>
+<li>状态消息和 trailing metadata 分别承载什么；</li>
+<li>业务错误是放在响应体里，还是放在终止状态里；</li>
+<li>deadline 怎样从客户端传播到服务端，服务端怎样读取剩余时间。</li>
+</ul>
+<p>不要假设文档列举的状态码就是全部。以你手头使用的 gRPC 版本、语言运行时和实际测试为准，把文档没写清的行为记下来。</p>
+<h3 id="_54">动作三：走错误处理路径</h3>
+<p>至少核对下面这些路径：</p>
+<ul>
+<li>客户端设置 deadline，服务端在 deadline 之后才完成；</li>
+<li>客户端取消，服务端已经提交；</li>
+<li>连接被拒绝或中途重置；</li>
+<li>服务端流式调用发出部分消息后返回错误；</li>
+<li>客户端在客户端流式调用发送途中断开；</li>
+<li>同一个幂等键重复请求；</li>
+<li>查询接口在复制延迟下返回“未找到”。</li>
+</ul>
+<p>把“资源怎么说”“运行时实际怎么做”“应用层应该怎么防”分成三列记录。特别是最后一条：文档通常不会替你设计幂等和查询，只会定义传输语义。</p>
+<h3 id="_55">动作四：记录版本和边界</h3>
+<p>建议维护一张小表：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>gRPC 运行时版本</td>
+<td>实际使用的库和语言版本</td>
+</tr>
+<tr>
+<td>协议/传输</td>
+<td>HTTP/2、TLS、压缩配置等</td>
+</tr>
+<tr>
+<td>deadline 行为</td>
+<td>是否传播、服务端如何读取、超时后是否取消</td>
+</tr>
+<tr>
+<td>状态码映射</td>
+<td>传输错误与业务错误如何映射到 status</td>
+</tr>
+<tr>
+<td>流式终止</td>
+<td>正常结束、错误结束、连接中断分别表现为什么</td>
+</tr>
+<tr>
+<td>重试行为</td>
+<td>框架是否自动重试、哪些状态码会触发</td>
+</tr>
+<tr>
+<td>幂等与去重</td>
+<td>应用层是否实现、键如何生成、记录保留多久</td>
+</tr>
+<tr>
+<td>实验日期</td>
+<td>便于复现和升级后对比</td>
+</tr>
+</tbody>
+</table>
+<p>这份记录能防止把“当前版本的默认行为”误当成“RPC 的普遍语义”。</p>
+<hr />
+<h2 id="_56">自测题</h2>
+<p>先别看答案。能对着三个要点、practice 和 acceptance 讲清楚，再对照答案检查。</p>
+<h3 id="1">题 1：流式调用的部分结果</h3>
+<p><strong>问题</strong>：客户端调用一个服务端流式接口，收到 10 条消息后连接断开。请回答：</p>
+<ol>
+<li>客户端能否断言这次调用成功？为什么？</li>
+<li>已收到的 10 条消息是否一定可以提交给业务？</li>
+<li>接口应该提供哪些信息，才能支持断线续传？</li>
+<li>如果业务要求“要么全部生效、要么全部不生效”，流式调用本身能提供这个保证吗？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li>不能。收到消息只说明这些消息被传输了，调用还没有收到正常终止状态；连接断开意味着流没有正常走完，结果可能是部分成功或未知。</li>
+<li>不一定。消息可能完整，也可能只是部分传输；即使完整，它们也可能属于一个最终失败的操作。接口必须定义部分结果是否有效。</li>
+<li>至少要有消息序号或游标、服务端保留历史的能力、客户端检查点、重复消息去重规则，以及过期游标的处理方式。</li>
+<li>不能。流式调用不是原子的，中途失败会留下部分结果。业务原子性要靠消费端缓冲、事务提交点或补偿机制实现，不能指望流本身。</li>
+</ol>
+<h3 id="2">题 2：超时与服务端提交</h3>
+<p><strong>问题</strong>：客户端在 t1 发出 <code>CreateOrder</code>，服务端在 t4 提交，响应在 t5 丢失，客户端在 t7 超时。请回答：</p>
+<ol>
+<li>客户端在 t7 能得出什么结论？</li>
+<li>服务端在 t7 的实际状态是什么？</li>
+<li>客户端直接重试一次，可能发生什么？</li>
+<li>接口应该提供什么能力，才能让客户端安全处理这个局面？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li>只能得出“没有在截止时间前收到明确响应”。不能断言成功，也不能断言失败，应标记为结果未知。</li>
+<li>订单已经提交。超时只是客户端的等待上限，不是服务端回滚。取消信号即使发出，也可能发生在提交之后。</li>
+<li>如果是非幂等写操作，可能创建第二笔订单，产生重复副作用；如果服务端已经过载，还会放大负载。</li>
+<li>提供客户端生成的请求 ID 和幂等键、按请求 ID 查询操作状态的能力，以及明确的重复请求处理规则。客户端应查询或幂等重试，而不是盲目重试。</li>
+</ol>
+<h3 id="3">题 3：业务错误与网络状态分层</h3>
+<p><strong>问题</strong>：网关收到下游的四种结果：<code>Unavailable</code>、<code>InvalidArgument</code>、<code>DeadlineExceeded</code>、<code>AlreadyExists</code>。请回答：</p>
+<ol>
+<li>它们分别属于哪一层？</li>
+<li>哪些通常可以重试，哪些通常不应重试？</li>
+<li><code>AlreadyExists</code> 在什么情况下可以被当成成功？</li>
+<li>如果网关把它们全部映射成 HTTP 500，会有什么问题？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li><code>Unavailable</code> 属于传输/可用性层；<code>InvalidArgument</code> 属于业务层（调用方错误）；<code>DeadlineExceeded</code> 属于框架/控制层，且通常意味着结果未知；<code>AlreadyExists</code> 属于业务层。</li>
+<li><code>Unavailable</code> 通常可重试，但写操作要有幂等保护；<code>DeadlineExceeded</code> 只能在剩余预算足够且操作幂等时重试，优先查询状态；<code>InvalidArgument</code> 不应重试；<code>AlreadyExists</code> 一般不应盲目重试，除非接口把它定义为幂等创建的成功结果。</li>
+<li>在幂等创建场景下，如果客户端用同一个幂等键重试，而第一次已经创建成功，那么返回 <code>AlreadyExists</code> 或直接返回第一次的结果都可以被视为成功语义；但接口必须明确规定，不能让调用方猜。</li>
+<li>调用方无法区分该不该重试，监控无法区分业务拒绝和网络故障，告警和容量规划都会失真；还可能把可恢复的瞬时故障误报成服务端崩溃。</li>
+</ol>
+<h3 id="4">题 4：重试、幂等与截止时间</h3>
+<p><strong>问题</strong>：一个写接口的端到端预算是 500 毫秒。客户端第一次尝试 300 毫秒后超时，自动重试，又给了自己 500 毫秒。请回答：</p>
+<ol>
+<li>这样设置截止时间有什么问题？</li>
+<li>重试前应该检查什么？</li>
+<li>幂等键应该由谁生成，重试时是否变化？</li>
+<li>服务端去重记录和业务提交不一致，会有什么后果？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li>重试重新获得了完整预算，端到端时间可能变成 800 毫秒以上，超过上游预算；还会在服务端可能仍在处理第一次请求时叠加第二次请求。</li>
+<li>检查错误是否可重试、操作是否幂等或有幂等键、总预算还剩多少、重试次数是否超限，以及第一次是否可能已经提交。</li>
+<li>幂等键应由客户端生成，用来标识一次逻辑操作；重试时必须保持不变。每次网络尝试可以有不同 attempt ID，但逻辑请求 ID 和幂等键不变。</li>
+<li>可能出现“业务已提交、去重记录没写”或“去重记录写了、业务没提交”的不一致：前者导致重试重复执行，后者导致重试拿到一个并不存在的结果。两者都应在同一事务或可靠 outbox 中处理。</li>
+</ol>
+<hr />
+<h2 id="_57">推荐资源</h2>
+<ul>
+<li><strong>RPC调用模型与失败语义：参考文档 / 原始资料</strong></li>
+<li>链接：https://grpc.io/docs/what-is-grpc/core-concepts/</li>
+<li>来源：grpc.io</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：进阶</li>
+<li>是否免费：是</li>
+<li>推荐理由：按节点建议，重点阅读请求响应和流式调用与传输错误与业务错误，用于核对本节点实验的语义和边界。阅读时抓住：unary 与三类流式调用的消息流和完成点、status code 与 metadata 的表达、deadline 的传播方式，以及流式调用中途失败时的部分结果语义。文档没有展开的幂等键、去重表、查询接口和重试预算，以本课实践为准；同时结合手头运行时版本核对默认重试和错误映射。</li>
+</ul>
+<hr />
+<h2 id="_58">本课小结</h2>
+<ol>
+<li><strong>RPC 是包装，不是本地函数。</strong> 它经过序列化、连接复用、网络、服务端调度和响应回传；调用点看起来简单，底层状态并不简单。这是本节点 summary 的核心。</li>
+<li><strong>远端调用有三种结果状态。</strong> 成功、失败之外还有结果未知；把“没收到响应”直接当成失败，是没有依据的推断。</li>
+<li><strong>请求响应的完成点是终止状态。</strong> 响应消息不等于全部结果，必须同时检查传输完整性、终止状态和业务码。</li>
+<li><strong>流式调用把完成点推迟到流结束。</strong> 部分结果可能有效，也可能属于最终失败的操作；接口必须定义部分结果、检查点、续传和去重。</li>
+<li><strong>传输错误与业务错误要分层。</strong> 传输层回答“调用有没有完成”，业务层回答“操作决定怎么做”；混成同一个布尔值会让重试和监控失真。</li>
+<li><strong>超时不代表服务端未执行。</strong> 提交可能发生在截止时间之前，取消也可能发生在提交之后。这是 acceptance 的第一条。</li>
+<li><strong>结果未知只能靠外部信息收敛。</strong> 请求 ID 查询、幂等重试、对账和人工介入，都需要接口提前支持。</li>
+<li><strong>重试远程写可能产生重复副作用。</strong> 这是节点 pitfalls。重试前必须确认操作幂等或有幂等键，并且剩余预算足够。</li>
+<li><strong>截止时间是端到端预算。</strong> 重试要从同一预算里扣，不能每次尝试都重新获得完整时间；截止时间还要传播到服务端。</li>
+<li><strong>可观察结果要写进接口。</strong> practice 要求给接口定义可观察结果：请求 ID、幂等键、查询接口和明确的状态语义，缺一不可。</li>
+<li><strong>透明封装必须暴露失败和时间预算。</strong> 这是节点 tradeoffs。便利性不能以丢失失败语义为代价。</li>
+<li><strong>流式调用要按流设计。</strong> 序号、游标、检查点、终止状态和重复消息处理，是流式可靠性的基本要素。</li>
+<li><strong>观测要能区分层次和未知。</strong> 按状态码、重试、去重命中、超时后查询和流中断位置分别统计，才能定位问题。</li>
+<li><strong>本课服务于“设计能处理部分故障的服务 API”。</strong> 先承认远端调用有三种状态，再把错误分层、时间预算、幂等和查询写进接口，最后用模拟器验证响应丢失和重试的真实行为。</li>
+</ol>
+<p>本课的主线可以压缩成一句话：<strong>请求响应和流式调用决定完成点，传输错误与业务错误决定分层，结果未知和截止时间决定重试与查询；接口只有把这三件事都写清楚，才能在部分故障下保持可判断。</strong></p><div class="pn"><span><a href="82.html">← 序列化成本与缓冲管理</a></span><span>下一课 待更新</span></div></main></div></body></html>
