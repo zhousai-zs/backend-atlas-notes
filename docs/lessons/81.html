@@ -1,0 +1,1429 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>81. Protobuf模式与代码生成 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（81/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（1/16）</summary><div>阶段 2</div><ul><li><a class="cur" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li class="todo">83. RPC调用模型与失败语义 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">82. 序列化成本与缓冲管理 <em>待更新</em></li><li class="todo">84. gRPC C++同步与异步接口 <em>待更新</em></li><li class="todo">85. brpc通道与服务实现 <em>待更新</em></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 81 课 · 领域 F · 阶段 2</p><p class="dl"><a href="../files/81-f-protobuf.md" download>⬇ 本课 Markdown</a></p><h1 id="81208-protobuf">第 81/208 课：Protobuf模式与代码生成</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阶段</td>
+<td>第 2 阶段 · 协议与框架</td>
+</tr>
+<tr>
+<td>前置</td>
+<td>d-framing、b-stl</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>基础</td>
+</tr>
+<tr>
+<td>领域</td>
+<td>F</td>
+</tr>
+<tr>
+<td>标签</td>
+<td>Protocol Buffers、F、C++</td>
+</tr>
+<tr>
+<td>子分类</td>
+<td>协议与框架</td>
+</tr>
+<tr>
+<td>节点 ID</td>
+<td>f-protobuf</td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Protocol Buffers</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>承接说明：前置节点 d-framing（字节流分帧与协议解析，第 56 课）讲了字节流没有天然消息边界，需要长度前缀、分隔符或固定长度来切分，也讲了半包、粘包、增量解析和最大长度这些工程问题。前置节点 b-stl（STL 容器与迭代器，第 23 课）讲了 <code>std::string</code>、<code>std::vector</code>、<code>std::map</code> 等容器的基本用法与迭代器语义。本课往前走一步：当你已经能把一段字节可靠地切成一条消息，接下来要决定这段字节里每个字段怎么表示、字段的身份如何固定、以后怎样在不破坏旧客户端的前提下增删字段。Protobuf 用模式（schema）来回答这些问题，再由代码生成器把模式翻译成各语言的类型和编解码代码。本节点 summary 是：Protobuf 用模式定义跨语言消息，生成代码完成编码解码；字段编号与兼容规则比字段顺序重要。</p>
+</blockquote>
+<hr />
+<h2 id="_2">导读</h2>
+<p>先看本节点的 summary，后面所有内容都围绕它展开：</p>
+<blockquote>
+<p>Protobuf 用模式定义跨语言消息，生成代码完成编码解码；字段编号与兼容规则比字段顺序重要。</p>
+</blockquote>
+<p>这句话至少包含三层意思。</p>
+<p>第一层是<strong>模式即契约</strong>。你写的 <code>.proto</code> 文件不是某个语言的结构体声明，而是一份跨语言的数据契约。C++ 服务、Python 脚本、Go 网关、Java 后台都可以从同一份模式生成各自的类型。线上真正传输的不是字段名，而是模式约定好的编号和编码方式。只要大家拿的是兼容的模式，就能互相读懂。</p>
+<p>第二层是<strong>字段编号才是身份</strong>。在 JSON 里，字段名直接写在字节里，读的人靠名字找值；在 Protobuf 的二进制线格式里，字段名根本不出现，出现的是字段编号和 wire type。字段叫什么、在文件里排第几行，都不影响解码；字段编号是多少，才决定这段字节被解释成哪个字段。这也解释了为什么“字段顺序”不重要，而“编号不复用”极其重要。</p>
+<p>第三层是<strong>兼容是设计出来的，不是碰运气</strong>。新增字段、删除字段、修改类型、调整 <code>repeated</code> 与 <code>optional</code>，每一种变更都有明确的兼容边界。模式演进不是“改完重新生成就行”，而是要先判断旧数据、旧客户端、旧服务会不会误读。节点 pitfalls 说的“不能复用已删除字段编号，也不应把序列化字节作为稳定规范化哈希”，正是这条线的两个典型反面。</p>
+<p>本课沿着三个节点要点推进：</p>
+<ul>
+<li><strong>字段编号和 wire type</strong>：线格式到底长什么样，一个字段怎样被编码成 tag、长度和值。</li>
+<li><strong>presence、repeated 和 oneof</strong>：默认值、字段是否存在、重复字段和互斥字段在语义上有什么区别。</li>
+<li><strong>保留编号和代码生成版本</strong>：删除字段时怎样留下“墓碑”，生成代码与运行时库的版本怎样配合。</li>
+</ul>
+<p>三个要点最终服务于同一个目标，也就是本节点的 why：<strong>为服务接口建立可演进的数据契约。</strong></p>
+<hr />
+<h2 id="_3">学习目标</h2>
+<h3 id="goals">goals</h3>
+<ul>
+<li>能解释字段编号和 wire type。</li>
+<li>能独立完成：定义 KV 请求响应，生成 C++ 代码并测试旧新版本互读。</li>
+</ul>
+<h3 id="acceptance">acceptance</h3>
+<ul>
+<li>删除字段后保留编号。</li>
+<li>能解释默认值与字段存在性区别。</li>
+</ul>
+<h3 id="_4">把验收翻译成可检查产物</h3>
+<p>“能解释”和“能独立完成”都太容易被“我看懂了”糊弄过去。把两条 acceptance 翻译成看得见、摸得着的东西：</p>
+<ul>
+<li><strong>“删除字段后保留编号”</strong>：你的仓库里要能看到一份真实的模式演进记录——旧版本有某个字段，新版本删掉了它，但在新版本里用 <code>reserved</code> 同时保留了它的编号和名字。你还要能演示：旧版本写出的、包含该字段的字节，被新版本读入时不会崩溃、不会把它误读成别的字段；并且新版本以后新增字段时不会再用这个编号。最好再加一条检查：如果有人试图把被保留的编号写回模式，<code>protoc</code> 会报错。</li>
+<li><strong>“能解释默认值与字段存在性区别”</strong>：你不能只说“默认值是 0 或空字符串”。你要能说清：一个字段“没有出现在字节里”和“出现在字节里但值等于默认值”是两件事；proto3 的普通标量字段默认不区分这两者，<code>optional</code> 字段可以区分；消息字段、<code>oneof</code> 成员在存在性上又各有规则。并且用一个测试证明你的理解，例如写入一个显式设为 0 的 <code>optional int32</code>，读端 <code>has_xxx()</code> 返回真；而完全不设置时返回假。</li>
+</ul>
+<h3 id="_5">先修自检</h3>
+<ul>
+<li>d-framing：能说清为什么 TCP 字节流需要长度前缀或分隔符才能切出消息；能解释半包、粘包和“一次 read 不保证读到完整消息”；知道解析要按“先读长度、再读负载、设最大长度上限”的顺序做。</li>
+<li>b-stl：能熟练使用 <code>std::string</code> 保存二进制字节，知道 <code>std::string</code> 可以包含 <code>\0</code>，长度要用 <code>size()</code> 而不是 <code>strlen()</code>；能用 <code>std::vector</code> 管理重复字段；能读懂迭代器和范围 <code>for</code>。</li>
+<li>工具链：知道怎样运行 <code>protoc</code>，知道 C++ 项目要链接 Protobuf 运行时库；如果还没有装过，实践一节会给出从零开始的命令和最小 CMake 配置。</li>
+</ul>
+<p>如果前两条里有任何一条说不清，先回去补。本课不会重新讲 TCP 为什么粘包，也不会重新讲 STL 容器怎么遍历；它假设你已经能把一条完整消息拿在手里，重点是把“消息里面长什么样、以后怎么改”讲清楚。</p>
+<hr />
+<h2 id="_6">为什么后端要懂</h2>
+<p>本节点 why 的原话是：<strong>为服务接口建立可演进的数据契约。</strong> 在真实后端里，这句话对应的不是“要不要用 protobuf”，而是几类会直接影响上线安全和排障效率的决策。</p>
+<h3 id="_7">场景一：滚动升级时，新旧版本同时在线</h3>
+<p>假设一个 KV 服务有 200 个实例，你要发布新版本。发布不是原子的：一部分实例跑新代码，一部分还跑旧代码，负载均衡把请求随机打到两边。新版本想在请求里增加一个 <code>optional int32 ttl_ms</code> 字段，旧版本根本不认识这个字段。如果协议设计得对，旧版本会跳过不认识的字段，请求照常处理；如果设计得不对，比如新版本复用了旧版本删掉的某个编号，旧版本就会把 <code>ttl_ms</code> 当成另一个字段来解释，可能把“过期时间”读成了“用户 ID”。</p>
+<p>Protobuf 的兼容规则就是为这种场景准备的。但规则只在“你遵守它”时才有效。字段编号一旦被复用，编译器不会知道你曾经用过它，线格式也不会自带“这是第几版”的标记，错误只会在旧数据或旧客户端那里悄悄发生。</p>
+<h3 id="_8">场景二：跨语言链路</h3>
+<p>一个请求可能从 Go 网关进入，经过 C++ 存储服务，再落到 Python 离线任务。如果每个环节都手写 JSON 解析，字段名拼错、类型不一致、空值处理不同，都会变成联调时的反复确认。Protobuf 把类型和字段编号写进模式，各语言生成代码后，至少“字段叫什么、是什么类型、编号是多少”是同一份事实。代码生成不是魔法，它的价值在于把契约从口头约定变成编译期可见的类型。</p>
+<h3 id="_9">场景三：把消息存进磁盘或消息队列</h3>
+<p>很多人只把 Protobuf 当成 RPC 的序列化格式，其实它同样适合做持久化格式和队列消息格式。问题在于：一旦字节写进磁盘，它就会活很久。你今天删掉的字段，半年后还可能出现在历史文件里；你今天觉得可以复用的编号，可能已经被几 TB 的旧数据占用。删除字段时留下 <code>reserved</code>，本质上是在为未来的自己保留解释权。</p>
+<h3 id="_10">场景四：排障时看不懂二进制</h3>
+<p>节点 tradeoffs 说得很直接：二进制紧凑且跨语言，但人读与手工排障不如文本直观。线上抓到一段 Protobuf 字节，直接看是一串十六进制；要知道里面是什么，需要模式、需要 <code>protoc --decode</code>，或者需要能按模式解析的工具。这不是缺陷，而是取舍：你换来了更小的体积和更强的类型约束，代价是排障多一步。理解这一点，才不会在事故现场一边翻模式一边后悔。</p>
+<h3 id="_11">场景五：把序列化字节当哈希</h3>
+<p>有些系统想给请求算一个“内容指纹”，用来去重、做缓存键或做幂等判断。如果直接对 Protobuf 序列化后的字节做哈希，会遇到一个隐蔽的问题：同样的逻辑消息，不保证每次序列化出的字节完全一样。字段顺序、<code>map</code> 的遍历顺序、未知字段、打包方式、甚至不同版本的运行时，都可能让字节不同。节点 pitfalls 明确说“不应把序列化字节作为稳定规范化哈希”，原因就在这里。需要稳定指纹时，应先按明确的规范化规则构造内容，再对内容做哈希，而不是对“某个实现碰巧生成的字节”做哈希。</p>
+<hr />
+<h2 id="_12">从直觉到原理</h2>
+<p>下面三个要点不是并列的语法点，而是一条理解线：先看字节层面字段怎样被标识（要点一），再看字段在语义层面怎样表达“有没有值”（要点二），最后看当模式发生变化时，怎样保护旧的编号和生成代码的版本边界（要点三）。走完这三步，你才能安全地修改一份正在被使用的模式。</p>
+<h3 id="wire-type">要点一：字段编号和 wire type</h3>
+<h4 id="_13">直觉：线格式里没有字段名</h4>
+<p>先做一个对比。假设有一条逻辑消息：</p>
+<div class="codehilite"><pre><span></span><code>key = "user:42"
+value = "alice"
+</code></pre></div>
+
+<p>如果写成 JSON，字节里会出现 <code>"key"</code>、<code>"value"</code> 这些名字：</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="nt">"key"</span><span class="p">:</span><span class="s2">"user:42"</span><span class="p">,</span><span class="nt">"value"</span><span class="p">:</span><span class="s2">"alice"</span><span class="p">}</span>
+</code></pre></div>
+
+<p>读的人即使没有模式，也能大致猜出每个值的含义。Protobuf 不这样做。它对每个字段只发送三样东西：</p>
+<ol>
+<li>一个 tag，里面同时包含<strong>字段编号</strong>和 <strong>wire type</strong>；</li>
+<li>如果 wire type 是长度分隔类型，再发送一个<strong>长度</strong>；</li>
+<li>字段的<strong>值</strong>（按 wire type 决定的编码）。</li>
+</ol>
+<p>字段名不出现，字段在 <code>.proto</code> 文件里的行号也不出现。接收方拿到 tag 后，先取出编号，查自己手上的模式：“编号 1 对应哪个字段？类型是什么？”然后用对应的 wire type 去解码值。编号对不上，就跳过；编号被复用，就会解错。</p>
+<p>所以第一句要记住的话是：<strong>字段编号是线格式上的身份，字段名只是源码里的别名。</strong></p>
+<h4 id="tag">tag 的位布局</h4>
+<p>Protobuf 的 tag 是一个 varint，它的低 3 位是 wire type，高位是字段编号：</p>
+<div class="codehilite"><pre><span></span><code>tag = (field_number &lt;&lt; 3) | wire_type
+</code></pre></div>
+
+<p>举几个例子：</p>
+<table>
+<thead>
+<tr>
+<th>字段编号</th>
+<th>wire type</th>
+<th>tag 十进制</th>
+<th>tag 十六进制</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>8</td>
+<td><code>0x08</code></td>
+<td>编号 1，varint</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+<td>18</td>
+<td><code>0x12</code></td>
+<td>编号 2，长度分隔</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>24</td>
+<td><code>0x18</code></td>
+<td>编号 3，varint</td>
+</tr>
+<tr>
+<td>16</td>
+<td>0</td>
+<td>128</td>
+<td><code>0x80 0x01</code></td>
+<td>编号 16，varint，两字节</td>
+</tr>
+<tr>
+<td>100</td>
+<td>2</td>
+<td>802</td>
+<td><code>0xA2 0x06</code></td>
+<td>编号 100，长度分隔</td>
+</tr>
+</tbody>
+</table>
+<p>注意最后两行：编号 1 到 15 的 tag 可以只用一个字节表示；编号 16 开始，tag 本身要用两个字节。这不是编码器的随意选择，而是 varint 的自然结果。字段编号选得小，tag 就短；编号选得大，每个字段的 tag 就多占字节。这也是为什么“1 到 15 留给最常用的字段”会成为一条经验规则。</p>
+<h4 id="wire-type_1">wire type 的五种形态</h4>
+<p>wire type 决定“值怎么读”。常见的有：</p>
+<table>
+<thead>
+<tr>
+<th>wire type</th>
+<th>名称</th>
+<th>典型类型</th>
+<th>值的形态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>Varint</td>
+<td><code>int32</code>、<code>int64</code>、<code>uint32</code>、<code>uint64</code>、<code>bool</code>、<code>enum</code>、<code>sint32</code>、<code>sint64</code></td>
+<td>一个可变长整数</td>
+</tr>
+<tr>
+<td>1</td>
+<td>64-bit</td>
+<td><code>fixed64</code>、<code>sfixed64</code>、<code>double</code></td>
+<td>固定 8 字节，小端</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Length-delimited</td>
+<td><code>string</code>、<code>bytes</code>、嵌入消息、打包的 <code>repeated</code> 标量</td>
+<td>长度 varint + 若干字节</td>
+</tr>
+<tr>
+<td>5</td>
+<td>32-bit</td>
+<td><code>fixed32</code>、<code>sfixed32</code>、<code>float</code></td>
+<td>固定 4 字节，小端</td>
+</tr>
+</tbody>
+</table>
+<p>wire type 3 和 4 是早期的 group 编码，已经废弃，新代码不应使用。你在解析未知字段时如果遇到它们，应当按照规范跳过或报错，而不是猜。</p>
+<p>关键点是：<strong>wire type 是线格式层面的分类，不是完整的语言类型</strong>。<code>int32</code> 和 <code>bool</code> 都用 wire type 0，<code>string</code> 和“嵌入的另一个消息”都用 wire type 2。接收方只有结合模式里的字段声明，才知道该把这段 varint 解释成有符号数还是布尔值，该把这段长度分隔的字节解释成 UTF-8 字符串还是另一个消息。</p>
+<h4 id="varint">varint 到底怎么编</h4>
+<p>varint 的规则很简单：每个字节低 7 位放数据，最高位表示“后面还有没有字节”。如果最高位是 1，就继续读下一个字节；如果是 0，当前值结束。数据按小端顺序拼接，也就是先出现的 7 位是低位。</p>
+<p>以十进制的 300 为例：</p>
+<div class="codehilite"><pre><span></span><code>300 = 0b1_0010_1100
+拆成 7 位一组（从低到高）：
+  低 7 位：010_1100 = 0x2C
+  高位：  0000_0010 = 0x02
+第一字节：0x2C | 0x80 = 0xAC   （还有后续）
+第二字节：0x02                  （结束）
+编码结果：AC 02
+</code></pre></div>
+
+<p>再以字段 1、值 300 为例，tag 是 <code>0x08</code>，后面紧跟 <code>AC 02</code>：</p>
+<div class="codehilite"><pre><span></span><code>08 AC 02
+</code></pre></div>
+
+<p>如果字段 1 的值是 1，就是：</p>
+<div class="codehilite"><pre><span></span><code>08 01
+</code></pre></div>
+
+<p>如果是字段 2 的字符串 <code>"alice"</code>，长度是 5，那么：</p>
+<div class="codehilite"><pre><span></span><code>12 05 61 6C 69 63 65
+12          tag：字段 2，wire type 2（(2&lt;&lt;3)|2 = 0x12）
+05          长度：5 字节
+61..65      "alice" 的 UTF-8 字节（a l i c e）
+</code></pre></div>
+
+<p>这就是 Protobuf 线格式最核心的样子：<strong>tag + 可选长度 + 值</strong>。不需要字段名，不需要分隔符，不需要括号。解析器按 tag 循环读，直到字节用完。</p>
+<h4 id="_14">一个最小解码器</h4>
+<p>下面这段 C++ 代码不依赖 Protobuf 库，只按线格式手工解析一个“只有一个 string 字段”的消息。它的目的不是让你以后都手写解析，而是让你亲眼看到 tag、长度和值怎样在字节流里排列。</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">Buffer</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">eof</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="nf">read_varint</span><span class="p">(</span><span class="kt">uint64_t</span><span class="o">&amp;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">shift</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">pos</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">pos</span><span class="o">++</span><span class="p">];</span>
+<span class="w">            </span><span class="n">out</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x7F</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">shift</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">((</span><span class="n">b</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x80</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">            </span><span class="n">shift</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">shift</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span><span class="w">   </span><span class="c1">// 防止畸形输入无限循环</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 手工构造：字段 2（string），值 "alice"</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">bytes</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mh">0x12</span><span class="p">,</span><span class="w"> </span><span class="mh">0x05</span><span class="p">,</span><span class="w"> </span><span class="sc">'a'</span><span class="p">,</span><span class="w"> </span><span class="sc">'l'</span><span class="p">,</span><span class="w"> </span><span class="sc">'i'</span><span class="p">,</span><span class="w"> </span><span class="sc">'c'</span><span class="p">,</span><span class="w"> </span><span class="sc">'e'</span><span class="p">};</span>
+<span class="w">    </span><span class="n">Buffer</span><span class="w"> </span><span class="n">buf</span><span class="p">{</span><span class="n">bytes</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">bytes</span><span class="p">)};</span>
+
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buf</span><span class="p">.</span><span class="n">eof</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buf</span><span class="p">.</span><span class="n">read_varint</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">puts</span><span class="p">(</span><span class="s">"bad tag"</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">field</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tag</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">wire</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">tag</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mh">0x07</span><span class="p">);</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">wire</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">buf</span><span class="p">.</span><span class="n">read_varint</span><span class="p">(</span><span class="n">len</span><span class="p">)</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">len</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">buf</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">buf</span><span class="p">.</span><span class="n">pos</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">std</span><span class="o">::</span><span class="n">puts</span><span class="p">(</span><span class="s">"truncated"</span><span class="p">);</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">value</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">buf</span><span class="p">.</span><span class="n">data</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">buf</span><span class="p">.</span><span class="n">pos</span><span class="p">),</span>
+<span class="w">                              </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">len</span><span class="p">));</span>
+<span class="w">            </span><span class="n">buf</span><span class="p">.</span><span class="n">pos</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">len</span><span class="p">);</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"field=%u wire=2 value=%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">// 本示例只处理 wire type 2；其他类型必须先按规范跳过。</span>
+<span class="w">            </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"skip field=%u wire=%u</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">field</span><span class="p">,</span><span class="w"> </span><span class="n">wire</span><span class="p">);</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>输出是：</p>
+<div class="codehilite"><pre><span></span><code>field=2 wire=2 value=alice
+</code></pre></div>
+
+<p>请特别注意两个防御点：</p>
+<ul>
+<li><code>len &gt; buf.size - buf.pos</code> 必须先检查。长度是对方给的，不能直接拿来做指针偏移，否则一个恶意长度就能让你越界读。</li>
+<li><code>shift &gt;= 64</code> 必须判断。畸形 varint 可以一直设置最高位，如果不设上限，解析器会一直读下去。</li>
+</ul>
+<p>这两点都属于“线格式解析的边界条件”，也是 sourceStudy 里要求你核对错误处理路径的原因。Protobuf 库替你做了这些检查，但你得知道它在防什么。</p>
+<h4 id="_15">为什么字段顺序不影响解码</h4>
+<p>因为解析器的循环是“读 tag、看编号、读值、继续”，而不是“按模式声明顺序依次读”。字段 5 的字节可以出现在字段 2 前面，解析器照样能把它们放到正确的字段里。发送端通常按编号顺序写，但这只是常见实现的习惯，不是协议要求。</p>
+<p>这条性质带来两个推论：</p>
+<ol>
+<li><strong>重排 <code>.proto</code> 里的字段声明不会改变线格式</strong>。字段 1 写在字段 2 后面，生成的代码仍然用各自的编号编码。</li>
+<li><strong>不能靠“顺序”做兼容性判断</strong>。你把字段从第 3 行挪到第 8 行，旧客户端完全不受影响；但你把字段编号从 3 改成 8，旧客户端就会把它当成未知字段跳过，新客户端写出的值旧客户端读不到。真正要检查的是编号，不是行号。</li>
+</ol>
+<h4 id="_16">编号的可用范围</h4>
+<p>字段编号不是任意整数。按 Protobuf 规范：</p>
+<ul>
+<li>合法范围是 1 到 2^29 - 1（536870911）；</li>
+<li>其中 19000 到 19999 预留给 Protobuf 实现内部使用，用户不能使用；</li>
+<li>编号 1 到 15 编码后 tag 只占一个字节，适合最常用、最小的字段；</li>
+<li>编号越大，tag 的 varint 越长，但值本身的编码不受编号影响。</li>
+</ul>
+<p>选择编号时的实用建议：</p>
+<ul>
+<li>从 1 开始，按“最常用优先”分配；</li>
+<li>给未来可能高频新增的字段留出低位编号，但不要为了“预留”把编号挖得七零八落；</li>
+<li>删除字段时不要释放编号，见要点三；</li>
+<li>不要用编号表达业务含义，例如“编号 100 表示用户 ID”。编号只是身份，业务含义应写在字段名和注释里。</li>
+</ul>
+<h4 id="_17">一张图记住要点一</h4>
+<div class="codehilite"><pre><span></span><code>一条消息的字节流：
++--------+--------+--------+--------+--------+
+|  tag   | value  |  tag   |  len   | value  | ...
++--------+--------+--------+--------+--------+
+   |                  |
+   |                  +-- wire type 2 才有长度
+   +-- (field_number &lt;&lt; 3) | wire_type
+
+解码循环：
+读 tag -&gt; 取编号 -&gt; 查模式 -&gt; 按 wire type 读值 -&gt; 读下一个 tag
+字段名不参与线格式；字段编号才是身份。
+</code></pre></div>
+
+<hr />
+<h3 id="presencerepeated-oneof">要点二：presence、repeated 和 oneof</h3>
+<h4 id="_18">直觉：三种“没有值”不是同一件事</h4>
+<p>在业务代码里，下面三种情况经常被混为一谈：</p>
+<ul>
+<li>用户没有提交 <code>age</code> 字段；</li>
+<li>用户提交了 <code>age</code>，值是 0；</li>
+<li>用户提交了 <code>age</code>，值是空字符串或空列表。</li>
+</ul>
+<p>在 JSON 里，前两种可以靠“键是否存在”区分。在 Protobuf 里，能不能区分取决于字段的<strong>存在性（presence）</strong>语义。如果分不清，做 PATCH 更新时就会出事：客户端只想改 <code>name</code>，没有传 <code>age</code>，服务端却把 <code>age</code> 当成 0 写回去，把用户的年龄清掉了。</p>
+<p>所以第二句要记住的话是：<strong>“值等于默认值”和“字段不存在”是两件事；Protobuf 不同字段形式对这两件事的区分能力不同。</strong></p>
+<h4 id="proto3">proto3 的默认值</h4>
+<p>Protobuf 的标量字段在没有显式设置时，读取会得到该类型的默认值：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>整数类型（<code>int32</code>、<code>int64</code>、<code>uint32</code>、<code>uint64</code>、<code>sint32</code>、<code>sint64</code>、<code>fixed32</code>、<code>fixed64</code>、<code>sfixed32</code>、<code>sfixed64</code>）</td>
+<td>0</td>
+</tr>
+<tr>
+<td>浮点类型（<code>float</code>、<code>double</code>）</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td><code>bool</code></td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td>空字符串</td>
+</tr>
+<tr>
+<td><code>bytes</code></td>
+<td>空字节串</td>
+</tr>
+<tr>
+<td><code>enum</code></td>
+<td>第一个枚举值，编号必须为 0</td>
+</tr>
+<tr>
+<td><code>repeated</code> 字段</td>
+<td>空列表</td>
+</tr>
+<tr>
+<td><code>map</code> 字段</td>
+<td>空 map</td>
+</tr>
+<tr>
+<td>消息字段</td>
+<td>未设置（C++ 里表现为没有 <code>has_</code> 或指针为空/默认实例）</td>
+</tr>
+</tbody>
+</table>
+<p>默认值本身不是“字段被设置了默认值”，而是“没有值时读出来的结果”。这个区别是理解 presence 的起点。</p>
+<h4 id="_19">隐式存在性与显式存在性</h4>
+<p>proto3 早期版本里，普通标量字段是<strong>隐式存在性（implicit presence）</strong>：</p>
+<ul>
+<li>字段没有出现在字节里，读出来是默认值；</li>
+<li>字段出现在字节里，值等于默认值，读出来也是默认值；</li>
+<li>生成的 C++ 接口通常没有 <code>has_age()</code>，只有 <code>age()</code> 和 <code>set_age()</code>。</li>
+</ul>
+<p>也就是说，<strong>你无法区分“没设置”和“设置成 0”</strong>。这对很多场景没问题：一个计数器为 0、一个开关为 false、一个字符串为空，语义上确实可以合并。但对“部分更新”“字段掩码”“需要知道调用方到底传没传”的场景，就会丢信息。</p>
+<p>从 proto3 的较新版本开始，标量字段可以加 <code>optional</code> 关键字，获得<strong>显式存在性（explicit presence）</strong>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">optional</span><span class="w"> </span><span class="kt">int32</span><span class="w"> </span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">optional</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="na">nickname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>生成 C++ 代码后，会有：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">bool</span><span class="w"> </span><span class="nf">has_age</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="kt">int32_t</span><span class="w"> </span><span class="nf">age</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">set_age</span><span class="p">(</span><span class="kt">int32_t</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">clear_age</span><span class="p">();</span>
+</code></pre></div>
+
+<p><code>has_age()</code> 为真，表示“字段在字节里出现过”；为假，表示“没出现过”。<strong>注意：显式设置为 0 会让 <code>has_age()</code> 为真，而值仍然是 0。</strong> 这就是 acceptance 要求你能解释的区别。</p>
+<p>消息字段（message 类型）在 proto3 中天然具有显式存在性：你可以判断一个子消息是否被设置。<code>repeated</code> 字段和 <code>map</code> 字段没有 presence 概念，空列表和“没设置”不可区分。<code>oneof</code> 成员则通过“当前是哪个 case”表达存在性。</p>
+<h4 id="_20">一个对比表</h4>
+<table>
+<thead>
+<tr>
+<th>字段形式</th>
+<th>能否区分“未设置”和“设置为默认值”</th>
+<th>C++ 典型接口</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>proto3 普通标量 <code>int32 age = 1;</code></td>
+<td>不能</td>
+<td><code>age()</code>、<code>set_age()</code></td>
+<td>值本身有默认语义，0 和未设置等价</td>
+</tr>
+<tr>
+<td>proto3 <code>optional int32 age = 1;</code></td>
+<td>能</td>
+<td><code>has_age()</code>、<code>age()</code>、<code>clear_age()</code></td>
+<td>部分更新、字段掩码、需要审计“是否传了”</td>
+</tr>
+<tr>
+<td>消息字段 <code>User user = 1;</code></td>
+<td>能（消息整体是否设置）</td>
+<td><code>has_user()</code>、<code>user()</code>、<code>mutable_user()</code></td>
+<td>嵌套结构、可选子对象</td>
+</tr>
+<tr>
+<td><code>repeated string tags = 1;</code></td>
+<td>不能区分空列表与未设置</td>
+<td><code>tags_size()</code>、<code>add_tags()</code>、<code>tags()</code></td>
+<td>多值字段，空即无</td>
+</tr>
+<tr>
+<td><code>oneof</code> 成员</td>
+<td>能（通过 case）</td>
+<td><code>payload_case()</code>、<code>has_x()</code></td>
+<td>互斥字段，一次只能有一个</td>
+</tr>
+<tr>
+<td><code>map&lt;string,string&gt; labels = 1;</code></td>
+<td>不能区分空 map 与未设置</td>
+<td><code>labels_size()</code>、<code>labels()</code></td>
+<td>键值标签，空即无</td>
+</tr>
+</tbody>
+</table>
+<p>这张表要能默写。很多兼容性事故不是因为 wire type 记错，而是因为把“隐式存在性”当成了“显式存在性”。</p>
+<h4 id="repeated"><code>repeated</code> 的编码与语义</h4>
+<p><code>repeated</code> 表示同一字段可以出现多次。对数值类型（varint、fixed32、fixed64、float、double、bool、enum），proto3 默认使用<strong>打包编码（packed）</strong>：所有元素放在一个 wire type 2 的字段里，前面一个总长度，后面连续排列各个值，而不是每个元素都带一个 tag。</p>
+<p>例如：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Sample</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="kt">int32</span><span class="w"> </span><span class="na">nums</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>写入 <code>nums = [1, 2, 3]</code>，打包后的字节大致是：</p>
+<div class="codehilite"><pre><span></span><code>0A 03 01 02 03
+^  ^  ^^^^^^^
+|  |  三个 varint 值
+|  +-- 总长度 3
++----- tag：字段 1，wire type 2
+</code></pre></div>
+
+<p>如果是非打包（每个元素一个 tag），则是：</p>
+<div class="codehilite"><pre><span></span><code>08 01 08 02 08 03
+</code></pre></div>
+
+<p>解析器对两种形式都要能接受：规范要求 repeated 标量字段的解析器同时支持 packed 和 unpacked。这一点对兼容性很重要——你改了 <code>packed</code> 选项，通常不影响能否读，但会影响字节长度和某些极端场景下的实现行为。</p>
+<p><code>repeated</code> 的语义要点：</p>
+<ul>
+<li><strong>顺序保留</strong>：元素按写入顺序读回，不会自动排序；</li>
+<li><strong>空列表等于没设置</strong>：无法区分“传了空数组”和“没传这个字段”；</li>
+<li><strong>不是集合</strong>：允许重复值，去重是业务逻辑的事；</li>
+<li><strong>不要用 <code>repeated</code> 模拟 <code>optional</code></strong>：一个元素的列表和“字段不存在”仍然是两回事，但接口会变得别扭，且无法表达“显式空列表”。</li>
+</ul>
+<p>如果业务确实需要区分“空列表”和“未设置”，通常要再加一个 <code>bool</code> 标志、使用 <code>optional</code> 包装消息，或者在设计上接受两者等价。不要指望 <code>repeated</code> 本身提供 presence。</p>
+<h4 id="oneof"><code>oneof</code>：互斥字段与“当前哪个”</h4>
+<p><code>oneof</code> 把一组字段声明为互斥：同一时刻最多只有一个成员被设置。设置其中一个会自动清掉其他成员。</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Payload</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">oneof</span><span class="w"> </span><span class="n">body</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="na">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bytes</span><span class="w"> </span><span class="na">blob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int64</span><span class="w"> </span><span class="na">number</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>生成 C++ 代码后，通常会有：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">enum</span><span class="w"> </span><span class="nc">BodyCase</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">kText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="n">kBlob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">  </span><span class="n">kNumber</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="n">BODY_NOT_SET</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="p">};</span>
+
+<span class="n">BodyCase</span><span class="w"> </span><span class="nf">body_case</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="nf">has_text</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="nf">text</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="p">;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">set_text</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">clear_body</span><span class="p">();</span>
+</code></pre></div>
+
+<p><code>body_case()</code> 告诉你当前是哪个成员。它的价值不只是省空间，更重要的是表达“这些字段在语义上互斥”。如果你用三个独立字段加注释“只能填一个”，编译器不会帮你检查，调用方也可能同时设置两个，最后哪一个是有效的取决于读取顺序。</p>
+<p><code>oneof</code> 的兼容性规则和普通字段类似：新增一个成员是安全的，旧客户端会把它当作未知字段；删除成员要保留编号；把一个已有字段移进 <code>oneof</code> 或移出 <code>oneof</code> 属于不兼容变更，因为存在性语义和生成代码的接口都变了。</p>
+<p>一个常见误区是：<strong><code>oneof</code> 成员设置为默认值也算“设置了”。</strong> 例如 <code>set_text("")</code> 之后，<code>body_case()</code> 是 <code>kText</code>，而不是 <code>BODY_NOT_SET</code>。这和 <code>optional</code> 的显式存在性是一致的：只要调用了 setter，就留下了“这个成员被选中”的事实。</p>
+<h4 id="presence-kv">presence 在 KV 请求里的意义</h4>
+<p>把上面的概念放进本课的实践场景。假设 KV 服务有一个更新请求：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">PutRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 0 表示不设置过期时间；但如果调用方想显式把 TTL 设为 0（永不过期），</span>
+<span class="w">  </span><span class="c1">// 普通标量无法表达“我确实传了 0”。</span>
+<span class="w">  </span><span class="k">optional</span><span class="w"> </span><span class="kt">int64</span><span class="w"> </span><span class="na">ttl_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 标签：整体替换语义，空列表表示清空所有标签。</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="na">tags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 负载只允许一种形态。</span>
+<span class="w">  </span><span class="k">oneof</span><span class="w"> </span><span class="n">payload</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">bytes</span><span class="w"> </span><span class="na">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="na">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段模式里每个字段的 presence 语义都不同：</p>
+<ul>
+<li><code>key</code>、<code>value</code> 是普通标量，空字符串就是默认值，无法区分“没传”和“传了空串”。对必填字段来说，这通常可接受，但服务端要用业务校验拒绝空 key。</li>
+<li><code>ttl_ms</code> 用 <code>optional</code>，可以区分“没传”（沿用旧 TTL）和“传了 0”（永不过期）。这是部分更新的典型需求。</li>
+<li><code>tags</code> 是 <code>repeated</code>，空列表和没传无法区分；如果更新语义是“整体替换”，那么空列表就表示清空，这需要在文档里写清楚。如果更新语义是“增量追加”，则无法用空列表表达“清空”，需要额外的操作类型。</li>
+<li><code>payload</code> 是 <code>oneof</code>，保证 <code>raw</code> 和 <code>text</code> 不会同时存在；服务端可以按 <code>payload_case()</code> 分支处理，而不是猜“两个都填了该用哪个”。</li>
+</ul>
+<p>这就是“模式即契约”的具体样子：字段形式的选择本身就在表达业务语义。选错了形式，后面写多少注释都补不回来。</p>
+<hr />
+<h3 id="_21">要点三：保留编号和代码生成版本</h3>
+<h4 id="_22">直觉：删除字段不是“把那一行删掉”</h4>
+<p>初学者删除字段时最容易做的事，是把 <code>.proto</code> 里的那一行直接删掉，然后重新生成代码。编辑器不会报错，编译器也不会报错，服务照常启动。问题会晚几个月出现：某个旧客户端仍然发送那个编号，新服务把它当成另一个字段；或者历史数据里还带着那个编号，新服务按新语义解析，得到看似合法但完全错误的值。</p>
+<p>Protobuf 的线格式里没有字段名，也没有“这个编号属于哪个字段”的元数据。接收方只能拿自己的模式去对照。你删掉字段，等于告诉新代码“这个编号我不认识”，这本身没问题：未知字段会被跳过或保留。真正危险的是<strong>你把编号分配给了新字段</strong>。这时旧字节里的编号会被新代码当成新字段来解释，而且因为 wire type 可能碰巧兼容，错误不会以“解析失败”的形式暴露，而是变成静默的数据污染。</p>
+<p>所以删除字段的正确动作是两步：</p>
+<ol>
+<li>从消息里删掉字段声明；</li>
+<li>用 <code>reserved</code> 把这个编号和字段名标记为“永远不要再用”。</li>
+</ol>
+<h4 id="reserved"><code>reserved</code> 的写法</h4>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">User</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span>
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="s">"old_nickname"</span><span class="p">,</span><span class="w"> </span><span class="s">"legacy_id"</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>reserved</code> 可以保留编号、编号区间和字段名。建议编号和名字都保留：</p>
+<ul>
+<li>保留编号，防止未来有人复用线格式上的身份；</li>
+<li>保留名字，防止有人用同一个名字重新引入字段，导致代码、日志和文档产生歧义；</li>
+<li>区间写法 <code>11 to 13</code> 适合批量删除的连续编号；</li>
+<li>不要用 <code>reserved</code> 来“预占”一堆没用过的编号。它是墓碑，不是规划工具。真正需要预留时，应在设计文档里说明，而不是把编号锁死。</li>
+</ul>
+<p><code>protoc</code> 会检查冲突：如果新模式里既有 <code>reserved 5</code>，又有 <code>int32 x = 5;</code>，编译会失败。这正是我们想要的——把错误从运行期提前到生成期。</p>
+<h4 id="_23">一个复用编号的事故模型</h4>
+<p>假设 v1 有：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Record</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">   </span><span class="c1">// 编号 2，wire type 2</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>v2 删除了 <code>user_id</code>，但没有保留编号，并且新增了：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">Record</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">ttl_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w">     </span><span class="c1">// 复用了编号 2，wire type 0</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>现在 v1 写出的字节是：</p>
+<div class="codehilite"><pre><span></span><code>0A 07 75 73 65 72 3A 34 32    // key = "user:42"
+12 05 61 6C 69 63 65          // 编号 2，wire type 2，长度 5，"alice"
+</code></pre></div>
+
+<p>v2 读到第二个字段时，看到编号 2，按自己的模式期望 wire type 0 的 <code>int32</code>。但字节里是 wire type 2。规范的解析器会把 wire type 不匹配视为未知字段或解析错误，具体行为取决于实现和版本；如果 wire type 恰好也兼容（例如旧字段是 <code>int32</code>，新字段是 <code>bool</code>，都用 wire type 0），那么 <code>alice</code> 这段字节根本不会被当成字符串，而是被读成一个整数，结果是一个看似合法但毫无意义的值。更糟的情况是旧字段是 <code>string</code>，新字段是 <code>bytes</code>，两者都是 wire type 2，解析器会原样接受这段字节，业务层拿到一堆“看起来像用户 ID 的二进制”。</p>
+<p>这类事故的可怕之处在于：<strong>没有崩溃，没有异常，只有错的数据。</strong> 而 <code>reserved</code> 能把这种错误挡在编译期。</p>
+<h4 id="_24">模式演进的安全等级</h4>
+<p>把常见变更按兼容性分成三档。这里的“兼容”主要指线格式兼容，也就是旧代码能否读新数据、新代码能否读旧数据；API 兼容是另一回事，字段改名会让源码编译失败，但通常不影响线格式。</p>
+<table>
+<thead>
+<tr>
+<th>变更</th>
+<th>线格式兼容性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新增字段并使用新编号</td>
+<td>安全</td>
+<td>旧代码把它当未知字段跳过或保留；新代码读旧数据时得到默认值/未设置</td>
+</tr>
+<tr>
+<td>删除字段并 <code>reserved</code> 编号与名字</td>
+<td>安全</td>
+<td>旧数据里的该字段成为未知字段；新代码不会误读</td>
+</tr>
+<tr>
+<td>删除字段但不保留编号</td>
+<td>危险</td>
+<td>未来可能被复用，造成静默误读</td>
+</tr>
+<tr>
+<td>字段改名</td>
+<td>线格式安全，API 不兼容</td>
+<td>编号不变则字节不变；源码里的 getter/setter 名字会变</td>
+</tr>
+<tr>
+<td>字段重排</td>
+<td>线格式安全</td>
+<td>线格式按编号，不按声明顺序</td>
+</tr>
+<tr>
+<td>修改字段编号</td>
+<td>不兼容</td>
+<td>等于删掉旧字段再加一个新字段，旧数据读不到</td>
+</tr>
+<tr>
+<td><code>int32</code> 与 <code>int64</code> 互换</td>
+<td>通常线格式兼容</td>
+<td>都用 varint；但截断/符号扩展要小心，负数编码行为不同</td>
+</tr>
+<tr>
+<td><code>int32</code> 与 <code>sint32</code> 互换</td>
+<td>不兼容</td>
+<td>负数编码方式不同（zigzag 与补码）</td>
+</tr>
+<tr>
+<td><code>string</code> 与 <code>bytes</code> 互换</td>
+<td>线格式通常兼容</td>
+<td>都是长度分隔；但 <code>string</code> 要求 UTF-8，非法 UTF-8 可能被拒绝</td>
+</tr>
+<tr>
+<td><code>fixed32</code> 与 <code>sfixed32</code> 互换</td>
+<td>线格式兼容</td>
+<td>都是 4 字节；符号解释不同</td>
+</tr>
+<tr>
+<td><code>fixed32</code> 与 <code>int32</code> 互换</td>
+<td>不兼容</td>
+<td>wire type 不同（5 与 0）</td>
+</tr>
+<tr>
+<td>在 <code>oneof</code> 中新增成员</td>
+<td>安全</td>
+<td>旧代码视为未知字段；新代码能识别新 case</td>
+</tr>
+<tr>
+<td>把普通字段移入/移出 <code>oneof</code></td>
+<td>不兼容</td>
+<td>存在性语义和生成接口改变</td>
+</tr>
+<tr>
+<td><code>repeated</code> 标量在 packed 与 unpacked 间切换</td>
+<td>通常兼容</td>
+<td>规范要求解析器同时接受两种形式；但字节布局变化</td>
+</tr>
+<tr>
+<td>修改枚举值编号</td>
+<td>危险</td>
+<td>旧代码可能把新编号当未知枚举值；删除枚举值也要 <code>reserved</code></td>
+</tr>
+</tbody>
+</table>
+<p>这张表不是让你背下来应付考试，而是让你在改模式时先问三个问题：</p>
+<ol>
+<li>旧代码读到新字节，会不会把未知字段误当成已知字段？</li>
+<li>新代码读到旧字节，会不会把缺失字段误当成“显式设置为默认值”？</li>
+<li>有没有任何编号或枚举值被回收再利用？</li>
+</ol>
+<p>只要第三问的答案是“有”，就停下来，改成 <code>reserved</code>。</p>
+<h4 id="_25">枚举的保留</h4>
+<p>枚举也有编号复用问题：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">enum</span><span class="w"> </span><span class="n">Status</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">STATUS_UNSPECIFIED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="na">STATUS_ACTIVE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="na">STATUS_DELETED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="s">"STATUS_LEGACY"</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>枚举的第一个值必须是 0，这是 proto3 的要求，目的是让默认值与“未设置”有一个明确的哨兵值。删除枚举值时同样要保留编号，否则以后新增的值可能和旧数据里的编号冲突。枚举的未知值在 proto3 中会被保留为原始数字（具体行为取决于语言和实现），业务代码要有兜底分支，不能假设只有声明过的值。</p>
+<h4 id="protoc">代码生成：<code>protoc</code> 做了什么</h4>
+<p><code>.proto</code> 文件本身不能直接参与 C++ 编译。你需要用 <code>protoc</code> 把它翻译成 <code>.pb.h</code> 和 <code>.pb.cc</code>：</p>
+<div class="codehilite"><pre><span></span><code>protoc<span class="w"> </span>--proto_path<span class="o">=</span>proto<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--cpp_out<span class="o">=</span>generated<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>proto/kv.proto
+</code></pre></div>
+
+<p>这条命令会生成：</p>
+<div class="codehilite"><pre><span></span><code>generated/kv.pb.h
+generated/kv.pb.cc
+</code></pre></div>
+
+<p>生成的头文件里通常包含：</p>
+<ul>
+<li>每个 message 对应的 C++ 类；</li>
+<li>字段的 getter/setter、<code>has_</code>、<code>clear_</code>、<code>mutable_</code>；</li>
+<li><code>repeated</code> 字段的 <code>add_</code>、<code>_size()</code>、下标访问；</li>
+<li><code>oneof</code> 的 case 枚举和 <code>_case()</code>；</li>
+<li>序列化接口 <code>SerializeToString</code>、<code>SerializeToArray</code>；</li>
+<li>解析接口 <code>ParseFromString</code>、<code>ParseFromArray</code>；</li>
+<li>描述符（descriptor）相关代码，供反射和调试使用。</li>
+</ul>
+<p>生成代码不是“可选依赖”。你的程序必须链接 Protobuf 运行时库（常见的是 <code>libprotobuf</code>），因为生成类里的大量逻辑——varint 编解码、未知字段处理、消息反射——都在运行时库里。</p>
+<h4 id="_26">版本：生成器、运行时、语言绑定</h4>
+<p>Protobuf 的版本问题经常被低估。一次构建至少涉及三个东西：</p>
+<ol>
+<li><strong><code>protoc</code> 生成器版本</strong>：把 <code>.proto</code> 翻译成 C++ 的编译器；</li>
+<li><strong>Protobuf 运行时库版本</strong>：你的程序链接的 <code>libprotobuf</code>；</li>
+<li><strong>语言绑定/构建集成版本</strong>：CMake 的 <code>find_package(Protobuf)</code>、包管理器里的 <code>protobuf</code> 包、或其他构建插件。</li>
+</ol>
+<p>三者不一致时，可能出现：</p>
+<ul>
+<li>生成代码使用了运行时库里不存在的新 API，链接失败；</li>
+<li>生成代码和运行时对某个 wire type 或未知字段的处理假设不同；</li>
+<li>不同机器上生成的 <code>.pb.cc</code> 不一致，导致构建缓存失效或行为差异；</li>
+<li>重新生成后接口变了，但旧的目标文件没有重新编译，出现难以解释的符号错误。</li>
+</ul>
+<p>实用做法：</p>
+<ul>
+<li><strong>固定 <code>protoc</code> 版本</strong>。在 CI、开发机和发布镜像里用同一个版本；把版本号写进构建脚本或工具链文件。</li>
+<li><strong>固定运行时版本</strong>。用包管理器锁定版本，或者把 Protobuf 作为子模块/第三方依赖固定 commit。</li>
+<li><strong>让生成步骤成为构建的一部分</strong>，而不是“某个人手动跑一下然后把生成文件提交上去”。如果必须提交生成文件，要在 CI 里校验“重新生成后没有差异”。</li>
+<li><strong>在生成文件头里记录版本</strong>。<code>protoc</code> 生成的代码通常带有版本宏和注释，排障时先看这个。</li>
+<li><strong>升级时一起升级</strong>。不要只升级 <code>protoc</code> 不升级运行时，也不要反过来；升级后跑一遍兼容性测试和旧数据读取测试。</li>
+</ul>
+<p>一个最小但可复现的生成命令，应该把输入、输出和版本都写清楚：</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env bash</span>
+<span class="nb">set</span><span class="w"> </span>-euo<span class="w"> </span>pipefail
+
+<span class="nv">PROTOC_VERSION</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>protoc<span class="w"> </span>--version<span class="k">)</span><span class="s2">"</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"using </span><span class="si">${</span><span class="nv">PROTOC_VERSION</span><span class="si">}</span><span class="s2">"</span>
+
+rm<span class="w"> </span>-rf<span class="w"> </span>generated
+mkdir<span class="w"> </span>-p<span class="w"> </span>generated
+
+protoc<span class="w"> </span>--proto_path<span class="o">=</span>proto<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>--cpp_out<span class="o">=</span>generated<span class="w"> </span><span class="se">\</span>
+<span class="w">       </span>proto/kv.proto
+
+<span class="c1"># 记录版本，供构建审计和排障使用</span>
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'%s\n'</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">PROTOC_VERSION</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>generated/PROTOC_VERSION
+</code></pre></div>
+
+<h4 id="_27">生成代码与手写代码的边界</h4>
+<p>生成代码应该被视为“构建产物”，而不是“可以随手改的源码”。理由很实际：</p>
+<ul>
+<li>下次生成会覆盖你的修改；</li>
+<li>生成代码的结构和命名不是稳定 API，升级 <code>protoc</code> 可能变化；</li>
+<li>把业务逻辑塞进生成文件，会让模式变更和业务变更耦合在一起。</li>
+</ul>
+<p>正确做法是：生成代码只负责数据承载和编解码；业务逻辑写在你自己的类、函数或适配层里。需要给生成类型加行为时，用自由函数、包装类型或转换函数，而不是改 <code>.pb.h</code>。</p>
+<h4 id="_28">包名与命名空间</h4>
+<p><code>.proto</code> 里的 <code>package</code> 会影响生成 C++ 的命名空间：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">syntax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"proto3"</span><span class="p">;</span>
+
+<span class="kn">package</span><span class="w"> </span><span class="nn">atlas.kv.v1</span><span class="p">;</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">GetRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>生成的 C++ 类型通常是 <code>atlas::kv::v1::GetRequest</code>。包名建议带版本（<code>v1</code>），这样未来做不兼容的大改时，可以让 <code>v1</code> 和 <code>v2</code> 的消息并存，而不是在同一个包里做危险的原地修改。版本化包名不是万能的，但它给了你一条清晰的迁移路径。</p>
+<hr />
+<h2 id="_29">常见误区与设计权衡</h2>
+<h3 id="_30">误区一：删除字段就是把行删掉</h3>
+<p>这是本课最想纠正的误区。删除字段必须配合 <code>reserved</code>，并且要同时保留编号和名字。只删行不保留，等于把编号放回可分配池，未来任何人（包括三个月后的你）都可能踩中。</p>
+<h3 id="_31">误区二：把序列化字节当稳定哈希</h3>
+<p>节点 pitfalls 明确说：<strong>不应把序列化字节作为稳定规范化哈希。</strong></p>
+<p>原因可以列成一串：</p>
+<ul>
+<li>字段的写入顺序不保证固定，不同实现或不同版本可能不同；</li>
+<li><code>map</code> 的遍历顺序不保证固定，同样的逻辑 map 可能序列化成不同字节；</li>
+<li>未知字段的存在会影响字节；</li>
+<li><code>repeated</code> 标量的 packed 与 unpacked 表示可能不同；</li>
+<li>不同版本的运行时可能改变某些边界情况的编码；</li>
+<li>浮点数的 NaN 表示、负零等也可能带来差异。</li>
+</ul>
+<p>如果你需要“内容指纹”，正确方向是：定义一套明确的规范化规则（哪些字段参与、按什么顺序、如何编码），然后对规范化后的内容做哈希。不要对“某个实现这次生成的字节”做哈希，更不要把这种哈希写进跨版本的持久化键。</p>
+<h3 id="_32">误区三：默认值就是“字段存在且等于默认值”</h3>
+<p>默认值是“没有值时读出来的结果”，不是“字段被显式设置”。普通标量字段无法区分这两者；<code>optional</code>、消息字段和 <code>oneof</code> 可以表达存在性。做部分更新、字段掩码、审计“调用方到底传没传”时，必须选对字段形式。</p>
+<h3 id="_33">误区四：字段顺序和字段名会影响线格式</h3>
+<p>不会。线格式只看编号和 wire type。字段名只影响源码 API 和可读性；字段顺序只影响 <code>.proto</code> 文件的阅读体验。重命名和重排通常是线格式安全的（但重命名会破坏源码兼容）。真正危险的是改编号和复用编号。</p>
+<h3 id="protobuf">误区五：Protobuf 是加密的，或者自带压缩</h3>
+<p>不是。Protobuf 只做结构化编码，不提供机密性和完整性保护，也不做通用压缩。它通过 varint、省略字段名、紧凑的 tag 获得较小的体积，但这不等于压缩。需要保密就上 TLS 或应用层加密；需要压缩就单独做压缩，并注意压缩层和消息边界的配合。</p>
+<h3 id="_34">误区六：未知字段一定会被安全保留</h3>
+<p>不同版本、不同语言、不同解析路径对未知字段的处理不完全一样。较新的 proto3 实现通常会保留未知字段并在重新序列化时写回，但这不是你可以随意依赖的业务保证。跨版本传输时，最稳妥的做法是：不要指望未知字段“自动无损”，而是在契约里明确哪些字段会被保留、哪些会被丢弃，并为关键字段设计显式的前向兼容方案。</p>
+<h3 id="repeated_1">误区七：<code>repeated</code> 能表达“空列表”和“未设置”的区别</h3>
+<p>不能。<code>repeated</code> 字段的空列表和未设置在读端通常无法区分。需要区分时，要么加一个显式的布尔字段，要么把列表包进一个消息并用 <code>optional</code> 表达“这个消息是否出现”，要么在业务上接受两者等价。不要用“列表长度是否为 0”来推断调用方意图。</p>
+<h3 id="proto">误区八：改完 <code>.proto</code> 重新生成就万事大吉</h3>
+<p>代码生成只保证“新代码和模式一致”，不保证“新代码和旧数据、旧客户端一致”。每次改模式都要做兼容性判断，并且用旧版本写出的真实字节做回归测试。生成成功不等于兼容。</p>
+<h3 id="_35">权衡：二进制紧凑跨语言，但人读与排障不如文本</h3>
+<p>节点 tradeoffs 的原话是：<strong>二进制紧凑且跨语言，但人读与手工排障不如文本直观。</strong></p>
+<p>这条权衡要在设计时正面接受，而不是假装不存在：</p>
+<ul>
+<li><strong>紧凑</strong>：字段名不传输，varint 压缩小整数，常用字段 tag 只占一字节；在带宽和存储敏感的场景很有价值。</li>
+<li><strong>跨语言</strong>：一份模式生成多语言类型，减少“字段名拼错、类型不一致”的联调成本。</li>
+<li><strong>人读差</strong>：抓包看到的是十六进制；没有模式就无法解释；字段编号和类型要靠 <code>.proto</code> 对照。</li>
+<li><strong>手工排障成本</strong>：需要 <code>protoc --decode</code>、需要描述符、需要能把字节和模式对应起来的工具。</li>
+</ul>
+<p>缓解手段：</p>
+<ul>
+<li>在日志里同时打印结构化字段和必要的原始长度，而不是只打印原始字节；</li>
+<li>为关键消息保留 <code>protoc --decode</code> 的排障命令；</li>
+<li>用 <code>protoc --decode_raw</code> 做“没有模式时的粗略查看”，但要明白它只能猜结构，不能保证语义；</li>
+<li>对持久化数据，保存模式版本或描述符，避免“数据还在、模式丢了”；</li>
+<li>对文本友好的场景（配置、调试接口），不要强行用二进制，JSON/YAML 可能更合适。</li>
+</ul>
+<hr />
+<h2 id="kv-c">动手实践：定义 KV 请求响应，生成 C++ 代码并测试旧新版本互读</h2>
+<p>本节点的 practice 是：<strong>定义 KV 请求响应，生成 C++ 代码并测试旧新版本互读。</strong> 下面给出从零可跑的一套最小工程。重点有三个：</p>
+<ol>
+<li>模式里同时包含 v1 和 v2 的演进痕迹（新增字段、删除字段、<code>reserved</code>）；</li>
+<li>用 v1 写出的字节让 v2 读，用 v2 写出的字节让 v1 读；</li>
+<li>用测试证明“默认值不等于存在性”，并证明“删除字段后编号被保留”。</li>
+</ol>
+<h3 id="_36">第一步：建立目录</h3>
+<div class="codehilite"><pre><span></span><code>kv_proto/
+├── CMakeLists.txt
+├── proto/
+│   └── kv.proto
+├── v1/
+│   └── main.cc
+├── v2/
+│   └── main.cc
+└── generated/          # protoc 输出，构建时生成
+</code></pre></div>
+
+<p>为了演示“旧新版本互读”，我们把 v1 和 v2 的模式分别保存成两份文件。真实项目里通常是同一份模式配 Git 历史，这里拆开只是为了让你能在同一台机器上同时编译两个版本。</p>
+<h3 id="v1">第二步：定义 v1 模式</h3>
+<p><code>proto/kv_v1.proto</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">syntax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"proto3"</span><span class="p">;</span>
+
+<span class="kn">package</span><span class="w"> </span><span class="nn">atlas.kv.v1</span><span class="p">;</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">PutRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// v1 的旧字段，v2 会删除它，用来演示 reserved。</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">legacy_session</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">PutResponse</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">GetRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">GetResponse</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="v2">第三步：定义 v2 模式</h3>
+<p><code>proto/kv_v2.proto</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">syntax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"proto3"</span><span class="p">;</span>
+
+<span class="kn">package</span><span class="w"> </span><span class="nn">atlas.kv.v1</span><span class="p">;</span><span class="w">   </span><span class="c1">// 包名保持 v1，表示仍在线格式兼容范围内演进</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">PutRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 删除 legacy_session 后，编号和名字都必须保留。</span>
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="s">"legacy_session"</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 显式存在性：区分“没传 TTL”和“显式传了 0”。</span>
+<span class="w">  </span><span class="k">optional</span><span class="w"> </span><span class="kt">int64</span><span class="w"> </span><span class="na">ttl_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 标签：空列表与未设置在 repeated 上不可区分。</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="na">tags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// 负载互斥：raw 和 text 只能有一个。</span>
+<span class="w">  </span><span class="k">oneof</span><span class="w"> </span><span class="n">payload</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">bytes</span><span class="w"> </span><span class="na">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">string</span><span class="w"> </span><span class="na">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">PutResponse</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">GetRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">GetResponse</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>注意这里故意让两个文件使用同一个 <code>package atlas.kv.v1</code>，但文件名不同。真实项目里不要把同一包的两份不同定义同时链接进一个二进制，否则会出现类型重复定义或描述符冲突。本实践是分开编译两个可执行文件，各自只包含自己那份模式。</p>
+<h3 id="c">第四步：生成 C++ 代码</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 版本固定与记录</span>
+protoc<span class="w"> </span>--version
+
+protoc<span class="w"> </span>--proto_path<span class="o">=</span>proto<span class="w"> </span>--cpp_out<span class="o">=</span>generated<span class="w"> </span>proto/kv_v1.proto
+protoc<span class="w"> </span>--proto_path<span class="o">=</span>proto<span class="w"> </span>--cpp_out<span class="o">=</span>generated<span class="w"> </span>proto/kv_v2.proto
+
+ls<span class="w"> </span>-l<span class="w"> </span>generated
+</code></pre></div>
+
+<p>生成结果：</p>
+<div class="codehilite"><pre><span></span><code>kv_v1.pb.h
+kv_v1.pb.cc
+kv_v2.pb.h
+kv_v2.pb.cc
+</code></pre></div>
+
+<h3 id="v1_1">第五步：v1 程序——写旧格式</h3>
+<p><code>v1/main.cc</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"kv_v1.pb.h"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fstream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"usage: kv_v1 &lt;output.bin&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">atlas</span><span class="o">::</span><span class="n">kv</span><span class="o">::</span><span class="n">v1</span><span class="o">::</span><span class="n">PutRequest</span><span class="w"> </span><span class="n">req</span><span class="p">;</span>
+<span class="w">    </span><span class="n">req</span><span class="p">.</span><span class="n">set_key</span><span class="p">(</span><span class="s">"user:42"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">req</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="s">"alice"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">req</span><span class="p">.</span><span class="n">set_legacy_session</span><span class="p">(</span><span class="s">"session-from-v1"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">bytes</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">req</span><span class="p">.</span><span class="n">SerializeToString</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bytes</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"serialize failed</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="w"> </span><span class="n">out</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+<span class="w">    </span><span class="n">out</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">bytes</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">streamsize</span><span class="o">&gt;</span><span class="p">(</span><span class="n">bytes</span><span class="p">.</span><span class="n">size</span><span class="p">()));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"write failed</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"v1 wrote "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">bytes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" bytes</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// 顺手打印十六进制，方便和线格式对照。</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">bytes</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"%02X "</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="v2_1">第六步：v2 程序——读旧格式、写新格式</h3>
+<p><code>v2/main.cc</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"kv_v2.pb.h"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fstream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iterator&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="nf">read_file</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="w"> </span><span class="n">in</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istreambuf_iterator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">in</span><span class="p">),</span>
+<span class="w">                       </span><span class="n">std</span><span class="o">::</span><span class="n">istreambuf_iterator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"usage: kv_v2 &lt;input.bin&gt; &lt;output.bin&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// ---- 场景 A：v2 读 v1 写出的字节 ----</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">old_bytes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">read_file</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="w">    </span><span class="n">atlas</span><span class="o">::</span><span class="n">kv</span><span class="o">::</span><span class="n">v1</span><span class="o">::</span><span class="n">PutRequest</span><span class="w"> </span><span class="n">from_v1</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">from_v1</span><span class="p">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">old_bytes</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"v2 failed to parse v1 bytes</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">from_v1</span><span class="p">.</span><span class="n">key</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"user:42"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">from_v1</span><span class="p">.</span><span class="n">value</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"alice"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// v1 的 legacy_session 在 v2 里已删除并 reserved。</span>
+<span class="w">    </span><span class="c1">// v2 的模式里没有这个字段，所以它只能作为未知字段存在，业务代码读不到。</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">from_v1</span><span class="p">.</span><span class="n">has_ttl_ms</span><span class="p">());</span><span class="w">   </span><span class="c1">// 旧数据里没有 ttl_ms</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">from_v1</span><span class="p">.</span><span class="n">tags_size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">from_v1</span><span class="p">.</span><span class="n">payload_case</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">atlas</span><span class="o">::</span><span class="n">kv</span><span class="o">::</span><span class="n">v1</span><span class="o">::</span><span class="n">PutRequest</span><span class="o">::</span><span class="n">PAYLOAD_NOT_SET</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"v2 read v1: key="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">from_v1</span><span class="p">.</span><span class="n">key</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" value="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">from_v1</span><span class="p">.</span><span class="n">value</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" has_ttl="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">from_v1</span><span class="p">.</span><span class="n">has_ttl_ms</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" tags="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">from_v1</span><span class="p">.</span><span class="n">tags_size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// ---- 场景 B：v2 写新字节，包含显式 0 的 optional ----</span>
+<span class="w">    </span><span class="n">atlas</span><span class="o">::</span><span class="n">kv</span><span class="o">::</span><span class="n">v1</span><span class="o">::</span><span class="n">PutRequest</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">    </span><span class="n">out</span><span class="p">.</span><span class="n">set_key</span><span class="p">(</span><span class="s">"user:42"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">out</span><span class="p">.</span><span class="n">set_value</span><span class="p">(</span><span class="s">"alice"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">out</span><span class="p">.</span><span class="n">set_ttl_ms</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">               </span><span class="c1">// 显式设置为 0</span>
+<span class="w">    </span><span class="n">out</span><span class="p">.</span><span class="n">add_tags</span><span class="p">(</span><span class="s">"beta"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">out</span><span class="p">.</span><span class="n">add_tags</span><span class="p">(</span><span class="s">"canary"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">out</span><span class="p">.</span><span class="n">set_text</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">has_ttl_ms</span><span class="p">());</span><span class="w">        </span><span class="c1">// 关键：设置过就是 true</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">ttl_ms</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">out</span><span class="p">.</span><span class="n">payload_case</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">atlas</span><span class="o">::</span><span class="n">kv</span><span class="o">::</span><span class="n">v1</span><span class="o">::</span><span class="n">PutRequest</span><span class="o">::</span><span class="n">kText</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">new_bytes</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">out</span><span class="p">.</span><span class="n">SerializeToString</span><span class="p">(</span><span class="o">&amp;</span><span class="n">new_bytes</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"v2 serialize failed</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">ofstream</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+<span class="w">    </span><span class="n">f</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_bytes</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">streamsize</span><span class="o">&gt;</span><span class="p">(</span><span class="n">new_bytes</span><span class="p">.</span><span class="n">size</span><span class="p">()));</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"v2 write failed</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"v2 wrote "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">new_bytes</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" bytes</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这段代码里用 <code>atlas::kv::v1::PutRequest</code> 同时承载 v1 和 v2 的字节，是因为两个文件用了同一个包名和消息名。编译时每个可执行文件只包含自己那份生成的 <code>.pb.cc</code>，所以类型名一致但定义不冲突。真实项目里不要让两份定义进入同一个链接单元。</p>
+<h3 id="v1-v2">第七步：v1 读 v2 字节的程序</h3>
+<p>再写一个 <code>v1/read_new.cc</code>，用 v1 的类型去解析 v2 写出的字节：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"kv_v1.pb.h"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;fstream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iterator&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"usage: v1_read_new &lt;input.bin&gt;</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">ifstream</span><span class="w"> </span><span class="n">in</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">ios</span><span class="o">::</span><span class="n">binary</span><span class="p">);</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">bytes</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istreambuf_iterator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">(</span><span class="n">in</span><span class="p">),</span>
+<span class="w">                      </span><span class="n">std</span><span class="o">::</span><span class="n">istreambuf_iterator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">());</span>
+
+<span class="w">    </span><span class="n">atlas</span><span class="o">::</span><span class="n">kv</span><span class="o">::</span><span class="n">v1</span><span class="o">::</span><span class="n">PutRequest</span><span class="w"> </span><span class="n">req</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">req</span><span class="p">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">bytes</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"v1 failed to parse v2 bytes</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// v1 认识的字段仍然正确。</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">key</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"user:42"</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">value</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">"alice"</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// v1 不认识的字段（ttl_ms、tags、payload）被当作未知字段跳过。</span>
+<span class="w">    </span><span class="c1">// v1 的 legacy_session 没有被 v2 写入，所以是空字符串。</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">legacy_session</span><span class="p">().</span><span class="n">empty</span><span class="p">());</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"v1 read v2: key="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">key</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" value="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">value</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" legacy_session='"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">req</span><span class="p">.</span><span class="n">legacy_session</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"'</span><span class="se">\n</span><span class="s">"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="cmake">第八步：CMake 构建</h3>
+<p><code>CMakeLists.txt</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span><span class="w"> </span><span class="s">3.16</span><span class="p">)</span>
+<span class="nb">project</span><span class="p">(</span><span class="s">kv_proto_demo</span><span class="w"> </span><span class="s">LANGUAGES</span><span class="w"> </span><span class="s">CXX</span><span class="p">)</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD</span><span class="w"> </span><span class="s">17</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_CXX_STANDARD_REQUIRED</span><span class="w"> </span><span class="s">ON</span><span class="p">)</span>
+
+<span class="nb">find_package</span><span class="p">(</span><span class="s">Protobuf</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+
+<span class="c"># 生成 v1</span>
+<span class="nb">protobuf_generate_cpp</span><span class="p">(</span><span class="s">V1_SRCS</span><span class="w"> </span><span class="s">V1_HDRS</span><span class="w"> </span><span class="s">proto/kv_v1.proto</span><span class="p">)</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">kv_v1</span><span class="w"> </span><span class="s">v1/main.cc</span><span class="w"> </span><span class="o">${</span><span class="nv">V1_SRCS</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">V1_HDRS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">kv_v1</span><span class="w"> </span><span class="s">PRIVATE</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">Protobuf_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">kv_v1</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">Protobuf_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+
+<span class="c"># 生成 v2</span>
+<span class="nb">protobuf_generate_cpp</span><span class="p">(</span><span class="s">V2_SRCS</span><span class="w"> </span><span class="s">V2_HDRS</span><span class="w"> </span><span class="s">proto/kv_v2.proto</span><span class="p">)</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">kv_v2</span><span class="w"> </span><span class="s">v2/main.cc</span><span class="w"> </span><span class="o">${</span><span class="nv">V2_SRCS</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">V2_HDRS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">kv_v2</span><span class="w"> </span><span class="s">PRIVATE</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">Protobuf_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">kv_v2</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">Protobuf_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+
+<span class="c"># v1 读新字节</span>
+<span class="nb">add_executable</span><span class="p">(</span><span class="s">v1_read_new</span><span class="w"> </span><span class="s">v1/read_new.cc</span><span class="w"> </span><span class="o">${</span><span class="nv">V1_SRCS</span><span class="o">}</span><span class="w"> </span><span class="o">${</span><span class="nv">V1_HDRS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="s">v1_read_new</span><span class="w"> </span><span class="s">PRIVATE</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">CMAKE_CURRENT_BINARY_DIR</span><span class="o">}</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">Protobuf_INCLUDE_DIRS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">v1_read_new</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">Protobuf_LIBRARIES</span><span class="o">}</span><span class="p">)</span>
+</code></pre></div>
+
+<p>构建与运行：</p>
+<div class="codehilite"><pre><span></span><code>cmake<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-B<span class="w"> </span>build
+cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>-j
+
+./build/kv_v1<span class="w"> </span>v1.bin
+./build/kv_v2<span class="w"> </span>v1.bin<span class="w"> </span>v2.bin
+./build/v1_read_new<span class="w"> </span>v2.bin
+</code></pre></div>
+
+<p>预期输出类似：</p>
+<div class="codehilite"><pre><span></span><code>v1 wrote 41 bytes
+...
+v2 read v1: key=user:42 value=alice has_ttl=0 tags=0
+v2 wrote 39 bytes
+v1 read v2: key=user:42 value=alice legacy_session=''
+</code></pre></div>
+
+<p>具体字节数会随字段和实现略有差异。<strong>不要断言字节总数或十六进制完全等于某个固定值</strong>，因为序列化顺序、未知字段和运行时版本都可能影响结果。要断言的是语义：字段值、<code>has_</code>、<code>_case()</code>、数量。</p>
+<h3 id="_37">第九步：测试“默认值不等于存在性”</h3>
+<p>单独写一个测试，覆盖三种情况：</p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">"kv_v2.pb.h"</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cassert&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">atlas</span><span class="o">::</span><span class="n">kv</span><span class="o">::</span><span class="n">v1</span><span class="o">::</span><span class="n">PutRequest</span><span class="p">;</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PutRequest</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">r</span><span class="p">.</span><span class="n">has_ttl_ms</span><span class="p">());</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">ttl_ms</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">        </span><span class="c1">// 读出来是默认值</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PutRequest</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">set_ttl_ms</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w">                </span><span class="c1">// 显式设置为默认值</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">has_ttl_ms</span><span class="p">());</span><span class="w">         </span><span class="c1">// 存在性为真</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">ttl_ms</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PutRequest</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">set_ttl_ms</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">clear_ttl_ms</span><span class="p">();</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">r</span><span class="p">.</span><span class="n">has_ttl_ms</span><span class="p">());</span><span class="w">        </span><span class="c1">// clear 后存在性为假</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">ttl_ms</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PutRequest</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">bytes</span><span class="p">;</span>
+<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">SerializeToString</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bytes</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">PutRequest</span><span class="w"> </span><span class="n">parsed</span><span class="p">;</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">parsed</span><span class="p">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">bytes</span><span class="p">));</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">parsed</span><span class="p">.</span><span class="n">has_ttl_ms</span><span class="p">());</span><span class="w">   </span><span class="c1">// 没设置就不会出现在字节里</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PutRequest</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">set_ttl_ms</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">bytes</span><span class="p">;</span>
+<span class="w">        </span><span class="n">r</span><span class="p">.</span><span class="n">SerializeToString</span><span class="p">(</span><span class="o">&amp;</span><span class="n">bytes</span><span class="p">);</span>
+
+<span class="w">        </span><span class="n">PutRequest</span><span class="w"> </span><span class="n">parsed</span><span class="p">;</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">parsed</span><span class="p">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">bytes</span><span class="p">));</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">parsed</span><span class="p">.</span><span class="n">has_ttl_ms</span><span class="p">());</span><span class="w">    </span><span class="c1">// 显式 0 会保留存在性</span>
+<span class="w">        </span><span class="n">assert</span><span class="p">(</span><span class="n">parsed</span><span class="p">.</span><span class="n">ttl_ms</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>这个测试就是 acceptance 第二条的证据。它明确区分了四个状态：</p>
+<ol>
+<li>未设置：<code>has=false</code>，读取为 0；</li>
+<li>显式设置为 0：<code>has=true</code>，读取为 0；</li>
+<li>设置后清除：<code>has=false</code>，读取为 0；</li>
+<li>序列化后解析：显式 0 的存在性仍然保留。</li>
+</ol>
+<h3 id="_38">第十步：测试“删除字段后保留编号”</h3>
+<p>先验证正常情况：v1 写出的 <code>legacy_session</code> 不会让 v2 解析失败，v2 读到的 <code>key</code> 和 <code>value</code> 正确。再把下面这段故意写错的内容加进 <code>kv_v2.proto</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">PutRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="s">"legacy_session"</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">reused</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">   </span><span class="c1">// 故意与 reserved 冲突</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>然后运行：</p>
+<div class="codehilite"><pre><span></span><code>protoc<span class="w"> </span>--proto_path<span class="o">=</span>proto<span class="w"> </span>--cpp_out<span class="o">=</span>generated<span class="w"> </span>proto/kv_v2.proto
+</code></pre></div>
+
+<p>预期 <code>protoc</code> 报错，类似：</p>
+<div class="codehilite"><pre><span></span><code>kv_v2.proto: Field "reused" uses reserved number 3.
+</code></pre></div>
+
+<p>不同版本的报错文案可能略有差异，但一定不会生成成功。这个失败就是证据：<code>reserved</code> 把“复用编号”从运行期事故变成了生成期错误。验证完记得把错误字段删掉。</p>
+<p>再做一个“没有 reserved 就会出事”的对照实验：在临时副本里去掉 <code>reserved</code>，把 <code>legacy_session</code> 的编号 3 分配给 <code>int32 reused = 3;</code>，用 v1 写出一条包含 <code>legacy_session</code> 的字节，再用这个错误的 v2 去解析。你会看到两种可能：</p>
+<ul>
+<li>wire type 不匹配（string 是 2，int32 是 0），解析器把它当未知字段或报错；</li>
+<li>如果换成一个同样使用 wire type 2 的 <code>bytes reused = 3;</code>，解析器会安静地接受这段字节，业务层拿到一个错误的“reused”值。</li>
+</ul>
+<p>这个对照实验比任何说教都更能说明为什么不能复用编号。</p>
+<h3 id="_39">第十一步：验收清单</h3>
+<p>做完上面的步骤，逐条打勾：</p>
+<ul>
+<li>[ ] <code>.proto</code> 里有 v1 和 v2 两个版本，v2 明确删除了一个字段。</li>
+<li>[ ] 删除的字段在 v2 里同时用 <code>reserved</code> 保留了编号和名字。</li>
+<li>[ ] 故意复用编号时，<code>protoc</code> 报错。</li>
+<li>[ ] v1 写出的字节能被 v2 成功解析，<code>key</code>、<code>value</code> 正确。</li>
+<li>[ ] v2 写出的字节能被 v1 成功解析，v1 认识的字段正确，不认识的字段被跳过。</li>
+<li>[ ] 有测试证明“未设置”和“显式设置为 0”在 <code>optional</code> 字段上可区分。</li>
+<li>[ ] 有测试证明 <code>repeated</code> 空列表和未设置不可区分（或明确记录这一限制）。</li>
+<li>[ ] 有测试证明 <code>oneof</code> 的 <code>_case()</code> 能正确反映当前成员，设置为默认值也算选中。</li>
+<li>[ ] 构建脚本固定并记录了 <code>protoc</code> 版本。</li>
+<li>[ ] 没有把序列化字节的长度或内容当作稳定哈希或固定断言。</li>
+</ul>
+<h3 id="_40">第十二步：把实验变成回归</h3>
+<p>真实项目要把上面的手工实验变成 CI：保存旧版本真实写出的字节作为黄金样本，每次改模式后用新代码解析并断言关键字段，再用旧解析器读新字节；同时检查所有已删除字段都被 <code>reserved</code> 覆盖、生成器与运行时版本在允许范围内。不要把“当前代码重新生成”的字节当样本，那只能证明新代码自洽，不能证明旧数据可读。</p>
+<hr />
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<p>本节点 sourceStudy 的要求是：<strong>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</strong></p>
+<p>这条要求可以落实为三件事：</p>
+<h3 id="_41">动作一：定位定义并对照示例</h3>
+<p>打开资源页面后，先找到三组定义，不要从第一段顺读到尾：</p>
+<ol>
+<li><strong>字段编号与 wire type</strong>：tag 的位布局、varint 规则、wire type 的取值；</li>
+<li><strong>presence</strong>：隐式/显式存在性、<code>optional</code>、消息字段、<code>oneof</code> 怎样表达“有没有值”；</li>
+<li><strong><code>repeated</code> 与 <code>oneof</code></strong>：打包编码、顺序、空列表、互斥成员的设置与清除。</li>
+</ol>
+<p>每读到一条定义，回到本课对应段落复述并举一个反例；然后对照示例确认：编号为什么这样分配、tag/长度/值怎样排列、<code>optional</code> 在未设置与显式默认值时接口返回什么、<code>oneof</code> 设置一个成员后另一个怎样被清除。若示例与手头 <code>protoc</code> 行为不一致，以实际版本为准并记录差异。</p>
+<h3 id="_42">动作二：走错误处理路径并记录版本</h3>
+<p>不要只看“正确输入会怎样”，还要看“错误输入会怎样”：截断的 varint、长度前缀超过剩余字节、长度超过实现上限、未知 wire type、非法 UTF-8、未知枚举值，以及解析失败时消息对象处于什么状态、部分字段是否已被修改。这些答案不同语言和版本可能不同，把“资源怎么说”和“运行时实际怎么做”分开记录。</p>
+<p>记录版本与边界时，建议维护一张小表：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>protoc --version</code></td>
+<td>实际生成器版本</td>
+</tr>
+<tr>
+<td>Protobuf 运行时版本</td>
+<td><code>libprotobuf</code> 或包管理器版本</td>
+</tr>
+<tr>
+<td>语言与标准/验证日期</td>
+<td>例如 C++17，以及实际测试日期</td>
+</tr>
+<tr>
+<td>已确认行为</td>
+<td>tag 布局、varint、presence、packed、未知字段</td>
+</tr>
+<tr>
+<td>未确认/存疑</td>
+<td>资源没写清、或与实现不一致的点</td>
+</tr>
+<tr>
+<td>边界条件</td>
+<td>最大长度、递归深度、非法 UTF-8、未知枚举</td>
+</tr>
+</tbody>
+</table>
+<p>这份记录不是形式主义。Protobuf 的行为在版本之间有过变化，尤其是 proto3 的 presence 和未知字段处理。把版本和边界写下来，下次升级或排障时就不用重新猜。</p>
+<hr />
+<h2 id="_43">自测题</h2>
+<p>先别看答案。能对着三个要点和 practice 讲清楚，再对照答案检查。</p>
+<h3 id="1wire-type-tag">题 1：wire type 与 tag</h3>
+<p><strong>问题</strong>：一条消息里有一个字段编号 3、类型 <code>int32</code>，值为 1；还有一个字段编号 2、类型 <code>string</code>，值为 <code>"hi"</code>。请回答：</p>
+<ol>
+<li>这两个字段的 wire type 分别是什么？</li>
+<li>它们的 tag 分别是多少（十进制和十六进制）？</li>
+<li>按“先字段 3、后字段 2”的顺序，写出完整字节。</li>
+<li>如果把字段声明顺序改成“先 string 后 int32”，字节会变吗？为什么？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li><code>int32</code> 是 varint，wire type 0；<code>string</code> 是长度分隔，wire type 2。</li>
+<li>字段 3 的 tag = <code>(3 &lt;&lt; 3) | 0 = 24 = 0x18</code>；字段 2 的 tag = <code>(2 &lt;&lt; 3) | 2 = 18 = 0x12</code>。</li>
+<li>字段 3 的值为 1，编码为 <code>18 01</code>；字段 2 的值为 <code>"hi"</code>，长度 2，编码为 <code>12 02 68 69</code>。完整字节：<code>18 01 12 02 68 69</code>。</li>
+<li>不会。线格式按字段编号编码，不按声明顺序。解析器读到 tag 后按编号查找字段，所以声明顺序改变不影响字节；但如果把字段编号从 3 改成别的值，字节就会变，旧代码也会把它当未知字段。</li>
+</ol>
+<h3 id="2">题 2：默认值与存在性</h3>
+<p><strong>问题</strong>：一个 proto3 消息里有三个字段：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">message</span><span class="w"> </span><span class="nc">M</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int32</span><span class="w"> </span><span class="na">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">optional</span><span class="w"> </span><span class="kt">int32</span><span class="w"> </span><span class="na">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="kt">int32</span><span class="w"> </span><span class="na">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>请回答：</p>
+<ol>
+<li>完全不设置任何字段时，<code>a()</code>、<code>has_b()</code>、<code>b()</code>、<code>c_size()</code> 分别是什么？</li>
+<li>设置 <code>a = 0</code>、<code>b = 0</code> 后，能否区分“设置过 0”和“没设置”？分别说明。</li>
+<li>序列化后解析，<code>b</code> 的存在性是否保留？为什么？</li>
+<li>如果业务需要区分“调用方传了空列表”和“调用方没传 <code>c</code>”，应该怎样设计？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li><code>a()</code> 返回 0；<code>has_b()</code> 返回 false；<code>b()</code> 返回 0；<code>c_size()</code> 返回 0。</li>
+<li><code>a</code> 不能区分：普通标量是隐式存在性，设置为 0 和未设置在读端都表现为 0，生成接口也没有 <code>has_a()</code>。<code>b</code> 能区分：<code>optional</code> 提供显式存在性，设置 <code>b = 0</code> 后 <code>has_b()</code> 为 true，未设置时为 false。</li>
+<li>保留。只要显式设置了 <code>b</code>，即使值是 0，序列化时也会记录该字段（或至少记录其存在性），解析后 <code>has_b()</code> 仍为 true。具体字节表示取决于实现，但语义上存在性被保留。</li>
+<li><code>repeated</code> 本身无法区分空列表和未设置。可以增加一个 <code>bool has_c = 4;</code> 作为显式标志，或者把列表包进一个消息并用 <code>optional</code> 表达“这个消息是否出现”，或者在契约中明确“空列表等于清空/等于未设置”，让两者在业务上等价。不要用 <code>c_size() == 0</code> 去猜调用方意图。</li>
+</ol>
+<h3 id="3">题 3：演进、保留编号与哈希</h3>
+<p><strong>问题</strong>：你的团队维护一份已经上线两年的模式。现在要删除字段 <code>string legacy_session = 3;</code>，并新增 <code>int64 ttl_ms = 4;</code>。请回答：</p>
+<ol>
+<li>删除 <code>legacy_session</code> 时，<code>.proto</code> 里必须做什么？为什么不能只删掉那一行？</li>
+<li>如果把编号 3 直接分配给 <code>int64 ttl_ms = 3;</code>，可能出现什么后果？请分“wire type 兼容”和“wire type 不兼容”两种情况说明。</li>
+<li>有同事建议用 <code>SerializeToString()</code> 得到的字节做 SHA-256，作为请求去重键。这个方案有什么问题？应该怎样改？</li>
+<li>升级 <code>protoc</code> 时要注意什么？为什么“生成成功”不等于“兼容”？</li>
+</ol>
+<p><strong>答案</strong>：</p>
+<ol>
+<li>必须用 <code>reserved 3;</code> 和 <code>reserved "legacy_session";</code> 同时保留编号和名字。只删行会把编号放回可分配池，未来任何人新增字段时都可能复用编号，导致旧数据或旧客户端被静默误读。</li>
+<li>如果新字段与旧字段 wire type 兼容（例如把 <code>string</code> 换成 <code>bytes</code>，都用 wire type 2），旧字节会被新代码当作合法的新字段接受，业务层拿到错误的值，且不会报错。如果 wire type 不兼容（例如 <code>string</code> 是 2，<code>int64</code> 是 0），解析器可能把该字段当未知字段跳过或报解析错误，具体取决于实现；无论哪种，旧客户端发来的数据都无法被正确解释，行为不可依赖。</li>
+<li>问题在于同样逻辑内容不保证序列化成相同字节：字段顺序、<code>map</code> 遍历顺序、未知字段、packed 表示、运行时版本都可能造成差异。应该先定义明确的规范化规则（参与字段、顺序、编码方式），对规范化后的内容做哈希；或者使用业务键加版本号，而不是对序列化字节直接做哈希。</li>
+<li>要同时固定 <code>protoc</code>、运行时库和语言绑定的版本，升级后跑旧数据读取、新旧互读和黄金样本回归。生成成功只证明“新代码和模式一致”，不证明“新代码和旧数据、旧客户端一致”；兼容性要靠模式演进规则和回归测试保证。</li>
+</ol>
+<hr />
+<h2 id="_44">推荐资源</h2>
+<ul>
+<li><strong>Protobuf模式与代码生成：参考文档 / 原始资料</strong></li>
+<li>链接：https://protobuf.dev/programming-guides/proto3/</li>
+<li>来源：protobuf.dev</li>
+<li>语言：英文</li>
+<li>类型：文档</li>
+<li>难度：进阶</li>
+<li>是否免费：是</li>
+<li>推荐理由：按节点建议，重点阅读字段编号和 wire type 与 presence、<code>repeated</code> 和 <code>oneof</code>，用于核对本节点实验的语义和边界。阅读时抓住：tag 的位布局和 varint 编码；proto3 的隐式存在性与 <code>optional</code> 的显式存在性有什么区别；<code>repeated</code> 的打包编码和空列表语义；<code>oneof</code> 的设置、清除和 <code>case</code> 判断；删除字段时 <code>reserved</code> 的写法；以及默认值、未知字段和错误处理在不同版本下的边界。把文档里的约束映射回本课的 KV 模式：哪些字段该用普通标量，哪些该用 <code>optional</code>，哪些该用 <code>oneof</code>，删除字段时编号和名字是否都保留。页面没有展开的 C++ 生成接口、构建集成和新旧版本互读实验，以本课讲解与实践为准。</li>
+</ul>
+<hr />
+<h2 id="_45">本课小结</h2>
+<ol>
+<li><strong>模式即契约。</strong> <code>.proto</code> 不是某个语言的结构体，而是跨语言的数据约定；生成代码把约定变成类型和编解码逻辑。这是本节点 summary 的第一层。</li>
+<li><strong>字段编号是线格式上的身份。</strong> 字段名不传输，声明顺序不影响解码；tag = <code>(field_number &lt;&lt; 3) | wire_type</code>。编号选得小，tag 更短；编号 1 到 15 适合常用字段。</li>
+<li><strong>wire type 决定值怎么读。</strong> 0 是 varint，1 是 64 位，2 是长度分隔，5 是 32 位；<code>int32</code> 和 <code>bool</code> 共用 wire type 0，<code>string</code> 和嵌入消息共用 wire type 2，必须结合模式才能确定语义。</li>
+<li><strong>varint 是可变长整数。</strong> 每字节低 7 位是数据，最高位表示是否继续；解析时必须检查截断和长度上限，不能信任对方给的长度。</li>
+<li><strong>默认值不等于存在性。</strong> proto3 普通标量是隐式存在性，无法区分“没设置”和“设置为默认值”；<code>optional</code> 提供显式存在性；消息字段、<code>oneof</code> 也能表达存在性。</li>
+<li><strong><code>repeated</code> 不提供 presence。</strong> 空列表和未设置通常不可区分，元素顺序保留，数值类型默认 packed；需要区分时用显式标志或包装消息。</li>
+<li><strong><code>oneof</code> 表达互斥。</strong> 设置一个成员会清除其他成员，<code>_case()</code> 反映当前选择；设置为默认值也算选中。不要把互斥字段写成多个独立字段加注释。</li>
+<li><strong>删除字段必须留墓碑。</strong> 用 <code>reserved</code> 同时保留编号和名字，防止未来复用造成静默误读。复用编号可能不报错，只产生错数据，这是最危险的兼容性事故。</li>
+<li><strong>演进要看双向。</strong> 旧代码读新字节、新代码读旧字节都要检查；新增字段通常安全，改编号不兼容，<code>int32</code>/<code>sint32</code> 互换不兼容，普通字段与 <code>oneof</code> 成员互转不兼容。</li>
+<li><strong>代码生成有版本边界。</strong> <code>protoc</code>、运行时库和构建集成要一起固定、一起升级；生成代码是构建产物，不要手改；构建脚本要记录版本。</li>
+<li><strong>不要把序列化字节当稳定哈希。</strong> 字段顺序、<code>map</code> 顺序、未知字段、packed 表示和运行时版本都可能让同样内容产生不同字节。这是节点 pitfalls。</li>
+<li><strong>二进制紧凑跨语言，但人读和排障不如文本。</strong> 这是节点 tradeoffs。用 <code>protoc --decode</code>、日志、描述符和模式版本来缓解，不要假装这个代价不存在。</li>
+<li><strong>本课实践的主线</strong>：定义 KV 请求响应，生成 C++ 代码，用 v1 写、v2 读，再用 v2 写、v1 读；用测试证明删除字段后编号被保留，用测试证明默认值与存在性不是一回事。</li>
+<li><strong>为什么后端要懂：为服务接口建立可演进的数据契约。</strong> 滚动升级、跨语言链路、持久化数据和排障都依赖这份契约。把编号当身份、把存在性写清楚、把删除字段的编号保留下来，契约才能随时间安全演进。</li>
+</ol>
+<p>本课的主线可以压缩成一句话：<strong>用模式固定字段的身份，用编号和 wire type 理解线格式，用 presence 表达“有没有值”，用 <code>reserved</code> 和版本固定保护未来的兼容性；最后用同一份 KV 模式做一次新旧版本互读，把理解变成可执行的测试。</strong> 下一步可以继续沿着这个方向深入：怎样为大规模模式做兼容性检查和 CI 门禁，怎样用描述符做通用的消息检查工具，以及怎样在持久化场景里管理模式版本与历史数据的长期兼容。</p><div class="pn"><span><a href="80.html">← 并发模型选择与可证明边界</a></span><span>下一课 待更新</span></div></main></div></body></html>
