@@ -1,0 +1,1127 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>85. brpc通道与服务实现 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（85/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（5/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="cur" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li class="todo">86. 超时预算与取消传播 <em>待更新</em></li><li class="todo">87. 重试、退避与重试风暴 <em>待更新</em></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 85 课 · 领域 F · 阶段 3</p><p class="dl"><a href="../files/85-f-brpc.md" download>⬇ 本课 Markdown</a></p><h1 id="85208-brpc">第 85/208 课：brpc通道与服务实现</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-brpc</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>brpc</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>协议与框架</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-grpc</code>、<code>d-coroutine</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>brpc</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://brpc.apache.org/docs/client/basics/">brpc 客户端基础</a>（brpc.apache.org）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>brpc 提供多协议服务端与客户端通道；具体能力以公开文档和所用版本为准，不代表任何企业内部体系。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>边界说明：本课只讨论公开 brpc 的用法、配置与可观察行为。文中不会把公开实现推断成任何企业的内部 RPC 体系；遇到默认值、协议名、连接复用和调度细节时，请以所用版本文档与源码为准。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<p>brpc 是 C++ 生态中常见的 RPC 框架。它同时提供两端能力：</p>
+<ul>
+<li>服务端：把 <code>Service</code> 实现注册到 <code>Server</code>，由框架完成网络收发、协议解析和回调调度。</li>
+<li>客户端：通过 <code>Channel</code> 连接目标服务，通过 <code>Controller</code> 控制单次调用，通过生成的 <code>Stub</code> 发起请求。</li>
+</ul>
+<p>如果你已经学过 gRPC，可以把 brpc 先理解成“同样在解决 RPC 基本问题，但把连接、协议、负载均衡和线程模型做成了自己的组合”。如果你学过协程，本课的 <code>bthread</code> 会是一个自然的延伸：它关注的是大量 RPC 并发下的执行单元与阻塞边界。</p>
+<p>本课的主线只有三个对象：</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>所在侧</th>
+<th>作用</th>
+<th>生命周期直觉</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Channel</code></td>
+<td>客户端</td>
+<td>指向一个服务集群的通信通道</td>
+<td>长生命周期，初始化后复用</td>
+</tr>
+<tr>
+<td><code>Controller</code></td>
+<td>客户端/服务端</td>
+<td>单次 RPC 的上下文</td>
+<td>一次调用一个，不能跨请求复用</td>
+</tr>
+<tr>
+<td><code>Service</code></td>
+<td>服务端</td>
+<td>业务接口实现</td>
+<td>随服务进程存在，注册后由框架调用</td>
+</tr>
+</tbody>
+</table>
+<p>围绕这三个对象，我们再看连接类型、负载策略和 bthread 回调边界。课程示例使用一个最小的 Echo 服务：客户端发送一段字符串，服务端原样返回。示例只用于说明公开 API 的组织方式。</p>
+<p>一个典型 RPC 调用在概念上会经过这些阶段：</p>
+<ol>
+<li>客户端业务代码准备请求对象和 <code>Controller</code>。</li>
+<li><code>Channel</code> 根据目标、协议、连接类型和负载策略选择一条可用路径。</li>
+<li>请求被序列化并通过连接发送。</li>
+<li>服务端框架解析请求，找到注册的 <code>Service</code> 方法，在合适的执行单元中调用业务实现。</li>
+<li>业务实现填写响应，并触发完成回调。</li>
+<li>客户端收到响应，业务代码检查 <code>Controller</code> 上的错误与延迟信息。</li>
+</ol>
+<p>真正排障时，最怕的不是“不知道框架有多少功能”，而是不知道一次调用中哪个配置在起作用。因此本课不追求罗列所有选项，而是围绕一条最小调用链，把每个配置放回它影响的位置。</p>
+<h2 id="_3">学习目标</h2>
+<p>学完本课后，你应当能够：</p>
+<ol>
+<li>用自己的话解释 <code>Channel</code>、<code>Controller</code>、<code>Service</code> 各自负责什么，以及它们的生命周期差异。</li>
+<li>说明一个 proto 定义的 service 如何落到服务端实现类，再如何被客户端 <code>Stub</code> 调用。</li>
+<li>独立构建官方 Echo 风格的示例：服务端注册服务并启动，客户端初始化通道并完成同步调用。</li>
+<li>在客户端正确设置超时、观察失败状态、读取错误文本和调用延迟。</li>
+<li>比较 <code>single</code>、<code>pooled</code>、<code>short</code> 等连接模式的适用场景，并记录自己的配置。</li>
+<li>说明 <code>max_retry</code> 与超时、幂等性之间的关系，不把重试当成无条件安全的能力。</li>
+<li>理解 <code>done</code> 回调与 <code>ClosureGuard</code> 的作用，知道异步实现时回调边界在哪里。</li>
+<li>建立“公开 brpc 实现”与“企业内部 RPC 体系”之间的边界意识。</li>
+</ol>
+<h2 id="_4">为什么后端要懂</h2>
+<p>后端服务很少孤立存在。以一个通用的内容后台场景为例：消息分发服务要调用用户资料服务，素材服务要调用存储服务，运营后台要聚合多个内部接口。每一次跨服务调用都可能遇到超时、连接不足、重试放大、线程阻塞和错误定位问题。</p>
+<p>brpc 这类框架把这些问题的通用部分收进了 <code>Channel</code> 和 <code>Server</code>：</p>
+<ul>
+<li>连接怎么建、建几条、是否复用；</li>
+<li>请求发不出去时是否重试；</li>
+<li>多个实例之间如何选择；</li>
+<li>单次调用如何设置截止时间；</li>
+<li>服务端在哪个执行单元里跑业务代码；</li>
+<li>出错时从哪里拿到错误文本与延迟数据。</li>
+</ul>
+<p>但“框架自带”不等于“业务不用理解”。默认值往往决定了故障时的行为：连接池大小不合适，会把延迟推高；超时设置过长，会拖住上游；对非幂等请求盲目重试，会制造重复写入；在回调里做阻塞操作，会占住执行单元。框架降低的是重复建设成本，不是理解成本。</p>
+<p>对准备进入公众号后台类业务的后端工程师来说，这种理解尤其重要：后台链路通常调用多、流量有峰谷、故障需要快速定位。你需要能说清楚“我这条调用用的是哪种连接模式、超时多少、失败后会不会重试、延迟从哪里看”，而不是只会复制一段初始化代码。</p>
+<p>同时要守住一条边界：公开 brpc 的 <code>Channel</code>、<code>Controller</code>、<code>Socket</code> 等实现，可以帮助你理解通用 RPC 框架的设计；但它不等同于任何企业的内部 RPC 体系。工程上引用公开资料时，结论要限定在公开版本和公开行为内。</p>
+<p>本课不要求你背下所有选项，而是要求你能围绕一条调用链做三件事：写出来、跑起来、讲清楚配置为什么这样选。示例中的端口、超时和重试次数都只是演示值，实际项目要结合下游容量、网络质量和业务语义重新确定。</p>
+<h2 id="_5">核心概念</h2>
+<h3 id="1-channelcontroller-service">1. Channel、Controller 和 Service</h3>
+<h4 id="_6">从直觉开始</h4>
+<p>把一次 RPC 想成寄快递：</p>
+<ul>
+<li><code>Channel</code> 像你常走的那条物流线路。它知道目的地在哪、走哪种运输协议、有几条通道可用。你不会每寄一件包裹就重新修一条线路。</li>
+<li><code>Controller</code> 像这一件包裹的运单。它记录这次寄送的超时、是否失败、失败原因、花了多久。每件包裹一张运单，不能把上一件的运单贴到下一件上。</li>
+<li><code>Service</code> 像目的地仓库里的收件流程。它定义了“收到什么请求、由谁处理、返回什么响应”。仓库注册好流程后，包裹到达就按流程处理。</li>
+</ul>
+<p>这个类比能帮你先记住生命周期：<code>Channel</code> 长、<code>Controller</code> 短、<code>Service</code> 跟服务进程走。下面把它落到公开 API 上。</p>
+<h4 id="channel">Channel：客户端的长生命周期对象</h4>
+<p><code>brpc::Channel</code> 是客户端侧的核心对象。它通过 <code>Init</code> 绑定目标地址或命名服务，并接收一组 <code>ChannelOptions</code>。初始化完成后，同一个 <code>Channel</code> 通常可以被多个线程共享，用来发起对同一目标服务的调用。</p>
+<p>关键直觉：</p>
+<ul>
+<li><code>Channel</code> 通常按“目标服务”创建，而不是按“单次请求”创建。</li>
+<li>把 <code>Channel</code> 放在请求处理函数里反复构造，会反复做初始化、连接和策略准备，通常不是好做法。</li>
+<li><code>Channel</code> 的线程安全性、可共享范围以及具体选项语义，以所用版本文档为准。</li>
+</ul>
+<p><code>ChannelOptions</code> 里常见的配置方向包括：</p>
+<table>
+<thead>
+<tr>
+<th>配置方向</th>
+<th>作用直觉</th>
+<th>注意点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协议</td>
+<td>决定客户端如何编码和解析请求</td>
+<td>必须与服务端匹配</td>
+</tr>
+<tr>
+<td>连接类型</td>
+<td>决定连接复用方式</td>
+<td>影响并发能力与连接数</td>
+</tr>
+<tr>
+<td>超时</td>
+<td>单次调用的时间上限</td>
+<td>还可在 <code>Controller</code> 上覆盖</td>
+</tr>
+<tr>
+<td>重试</td>
+<td>失败后是否再次尝试</td>
+<td>必须考虑幂等性</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>多实例时如何选择目标</td>
+<td>与命名服务、集群视图有关</td>
+</tr>
+</tbody>
+</table>
+<p>具体字段名、默认值和可用取值请以所用版本文档为准。不要把示例里的值当成框架默认值。</p>
+<h4 id="controller-rpc">Controller：单次 RPC 的上下文</h4>
+<p><code>brpc::Controller</code> 承载一次调用的上下文。客户端侧常见用途包括：</p>
+<ul>
+<li><code>set_timeout_ms(...)</code>：为这次调用设置超时；</li>
+<li><code>Failed()</code>：判断调用是否失败；</li>
+<li><code>ErrorText()</code>：读取错误描述；</li>
+<li><code>latency_us()</code>：读取调用延迟（微秒）；</li>
+<li><code>request_attachment()</code> / <code>response_attachment()</code>：读写附件数据；</li>
+<li><code>log_id</code>：用于日志串联的标识。</li>
+</ul>
+<p>服务端侧也能拿到 <code>Controller</code>，从中读取远端地址、日志标识等信息。不同版本的字段和方法可能不同，使用前请核对所用版本文档。</p>
+<p>最重要的规则是：<code>Controller</code> 不是线程安全的，也不应该跨 RPC 复用。一次调用一个实例，调用期间保持存活。</p>
+<h4 id="service">Service：服务端的接口实现</h4>
+<p>服务端先由 proto 定义 <code>service</code>，生成 C++ 基类；业务代码继承该基类并实现方法；最后把实现对象注册到 <code>brpc::Server</code>。</p>
+<p>服务端方法的典型签名包含四个部分：</p>
+<div class="codehilite"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">Method</span><span class="p">(</span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">RpcController</span><span class="o">*</span><span class="w"> </span><span class="n">cntl_base</span><span class="p">,</span>
+<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="n">Request</span><span class="o">*</span><span class="w"> </span><span class="n">request</span><span class="p">,</span>
+<span class="w">            </span><span class="n">Response</span><span class="o">*</span><span class="w"> </span><span class="n">response</span><span class="p">,</span>
+<span class="w">            </span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Closure</span><span class="o">*</span><span class="w"> </span><span class="n">done</span><span class="p">);</span>
+</code></pre></div>
+
+<p>其中 <code>done</code> 是完成回调。同步实现时，业务代码填完 <code>response</code> 后需要让 <code>done-&gt;Run()</code> 被调用；<code>brpc::ClosureGuard</code> 用 RAII 的方式保证离开作用域时自动执行，避免忘记回调导致请求悬挂。</p>
+<p><code>AddService</code> 注册时通常会指定所有权语义。例如 <code>SERVER_DOESNT_OWN_SERVICE</code> 表示服务器不负责删除该实现对象，调用方要保证其生命周期覆盖服务器运行期。反过来，如果使用由服务器拥有的选项，则要注意对象分配方式。具体枚举与语义以所用版本文档为准。</p>
+<h4 id="proto">最小示例：proto、服务端与客户端</h4>
+<p>下面给出一个公开 brpc 风格的最小 Echo 示例。它的目的不是覆盖所有功能，而是让你把 <code>Service</code>、<code>Server</code>、<code>Channel</code>、<code>Controller</code> 和 <code>Stub</code> 串起来。构建方式、依赖库和生成命令请参考所用版本的官方示例与文档。</p>
+<p><strong>第一步：定义 proto</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">syntax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"proto3"</span><span class="p">;</span>
+
+<span class="kn">package</span><span class="w"> </span><span class="nn">demo</span><span class="p">;</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">EchoRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">EchoResponse</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">service</span><span class="w"> </span><span class="n">EchoService</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">rpc</span><span class="w"> </span><span class="n">Echo</span><span class="p">(</span><span class="n">EchoRequest</span><span class="p">)</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="p">(</span><span class="n">EchoResponse</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>第二步：实现服务端</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;brpc/server.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;glog/logging.h&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"echo.pb.h"</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EchoServiceImpl</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">demo</span><span class="o">::</span><span class="n">EchoService</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">Echo</span><span class="p">(</span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">RpcController</span><span class="o">*</span><span class="w"> </span><span class="n">cntl_base</span><span class="p">,</span>
+<span class="w">            </span><span class="k">const</span><span class="w"> </span><span class="n">demo</span><span class="o">::</span><span class="n">EchoRequest</span><span class="o">*</span><span class="w"> </span><span class="n">request</span><span class="p">,</span>
+<span class="w">            </span><span class="n">demo</span><span class="o">::</span><span class="n">EchoResponse</span><span class="o">*</span><span class="w"> </span><span class="n">response</span><span class="p">,</span>
+<span class="w">            </span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Closure</span><span class="o">*</span><span class="w"> </span><span class="n">done</span><span class="p">)</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">brpc</span><span class="o">::</span><span class="n">ClosureGuard</span><span class="w"> </span><span class="nf">done_guard</span><span class="p">(</span><span class="n">done</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="o">*</span><span class="w"> </span><span class="n">cntl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">brpc</span><span class="o">::</span><span class="n">Controller</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">cntl_base</span><span class="p">);</span>
+<span class="w">    </span><span class="n">response</span><span class="o">-&gt;</span><span class="n">set_message</span><span class="p">(</span><span class="n">request</span><span class="o">-&gt;</span><span class="n">message</span><span class="p">());</span>
+
+<span class="w">    </span><span class="n">LOG</span><span class="p">(</span><span class="n">INFO</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"remote="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cntl</span><span class="o">-&gt;</span><span class="n">remote_side</span><span class="p">()</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" log_id="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cntl</span><span class="o">-&gt;</span><span class="n">log_id</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">brpc</span><span class="o">::</span><span class="n">Server</span><span class="w"> </span><span class="n">server</span><span class="p">;</span>
+<span class="w">  </span><span class="n">EchoServiceImpl</span><span class="w"> </span><span class="n">impl</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">AddService</span><span class="p">(</span><span class="o">&amp;</span><span class="n">impl</span><span class="p">,</span><span class="w"> </span><span class="n">brpc</span><span class="o">::</span><span class="n">SERVER_DOESNT_OWN_SERVICE</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"AddService failed"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">brpc</span><span class="o">::</span><span class="n">ServerOptions</span><span class="w"> </span><span class="n">options</span><span class="p">;</span>
+<span class="w">  </span><span class="n">options</span><span class="p">.</span><span class="n">idle_timeout_sec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">server</span><span class="p">.</span><span class="n">Start</span><span class="p">(</span><span class="mi">8000</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">options</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Start server failed"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">server</span><span class="p">.</span><span class="n">RunUntilAskedToQuit</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><strong>第三步：客户端同步调用</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;brpc/channel.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;glog/logging.h&gt;</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">"echo.pb.h"</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">brpc</span><span class="o">::</span><span class="n">Channel</span><span class="w"> </span><span class="n">channel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">brpc</span><span class="o">::</span><span class="n">ChannelOptions</span><span class="w"> </span><span class="n">options</span><span class="p">;</span>
+<span class="w">  </span><span class="n">options</span><span class="p">.</span><span class="n">protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"baidu_std"</span><span class="p">;</span>
+<span class="w">  </span><span class="n">options</span><span class="p">.</span><span class="n">connection_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"single"</span><span class="p">;</span><span class="w">  </span><span class="c1">// baidu_std 的默认值，写出来只为看清配置</span>
+<span class="w">  </span><span class="n">options</span><span class="p">.</span><span class="n">timeout_ms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span>
+<span class="w">  </span><span class="n">options</span><span class="p">.</span><span class="n">max_retry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">channel</span><span class="p">.</span><span class="n">Init</span><span class="p">(</span><span class="s">"127.0.0.1:8000"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">options</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Channel init failed"</span><span class="p">;</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">demo</span><span class="o">::</span><span class="n">EchoService_Stub</span><span class="w"> </span><span class="n">stub</span><span class="p">(</span><span class="o">&amp;</span><span class="n">channel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">demo</span><span class="o">::</span><span class="n">EchoRequest</span><span class="w"> </span><span class="n">request</span><span class="p">;</span>
+<span class="w">  </span><span class="n">request</span><span class="p">.</span><span class="n">set_message</span><span class="p">(</span><span class="s">"hello brpc"</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">demo</span><span class="o">::</span><span class="n">EchoResponse</span><span class="w"> </span><span class="n">response</span><span class="p">;</span>
+<span class="w">  </span><span class="n">brpc</span><span class="o">::</span><span class="n">Controller</span><span class="w"> </span><span class="n">cntl</span><span class="p">;</span>
+<span class="w">  </span><span class="n">cntl</span><span class="p">.</span><span class="n">set_timeout_ms</span><span class="p">(</span><span class="mi">300</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">stub</span><span class="p">.</span><span class="n">Echo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cntl</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">request</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">response</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cntl</span><span class="p">.</span><span class="n">Failed</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"rpc failed: "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cntl</span><span class="p">.</span><span class="n">ErrorText</span><span class="p">();</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">LOG</span><span class="p">(</span><span class="n">INFO</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"response="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">response</span><span class="p">.</span><span class="n">message</span><span class="p">()</span>
+<span class="w">            </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" latency_us="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cntl</span><span class="p">.</span><span class="n">latency_us</span><span class="p">();</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h4 id="_7">从示例看配置落点</h4>
+<p>把示例拆开看，每个配置都能对应到一个具体问题：</p>
+<ul>
+<li><code>options.protocol = "baidu_std"</code>：客户端按该协议编码，服务端必须能解析同一协议。协议名、默认协议以及服务端协议配置方式，以所用版本文档为准。</li>
+<li><code>options.connection_type = "single"</code>：baidu_std 默认就是单连接多路复用，一条连接同时承载多个在途请求。它决定下游看到的连接数，下一节详细比较。</li>
+<li><code>options.timeout_ms = 1000</code>：通道级超时。它表达“这次调用最多等多久”的默认上限。</li>
+<li><code>cntl.set_timeout_ms(300)</code>：单次调用级超时。它通常用于对某个关键请求收紧或放宽时间预算；两者的优先级和覆盖关系以所用版本文档为准。</li>
+<li><code>options.max_retry = 2</code>：允许框架在满足条件时重试。重试次数、触发条件、是否重新计时、是否受总截止时间约束，都以所用版本文档为准。</li>
+<li><code>cntl.Failed()</code>：判断本次调用是否成功。业务代码不能假设“没有抛异常就成功”。</li>
+<li><code>cntl.ErrorText()</code>：失败时提供错误文本。日志里应同时带上目标服务、方法、<code>log_id</code> 和错误文本，方便串联。</li>
+<li><code>cntl.latency_us()</code>：读取调用延迟，单位是微秒。它是观察框架层耗时最直接的指标之一。</li>
+<li><code>server.AddService(...)</code>：把实现注册到服务器。所有权语义要与实现对象的生命周期匹配。</li>
+<li><code>server.Start(...)</code>：开始监听并处理请求。端口、协议和服务器选项要一起核对。</li>
+<li><code>server.RunUntilAskedToQuit()</code>：让服务端持续运行，直到收到退出信号。生产环境还要考虑优雅退出。</li>
+<li><code>brpc::ClosureGuard done_guard(done)</code>：保证 <code>done-&gt;Run()</code> 在离开作用域时执行。同步实现依赖它避免请求悬挂。</li>
+</ul>
+<p>重试需要单独强调：只有当请求语义允许重复执行时，重试才可能是安全的。查询类请求通常比写入类请求更容易满足幂等性；但这仍然取决于具体业务，而不是由框架自动保证。对于扣减、发券、消息投递等有副作用的操作，必须由业务层设计幂等键或去重机制。</p>
+<h4 id="_8">生命周期与线程边界速记</h4>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>建议生命周期</th>
+<th>并发注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Channel</code></td>
+<td>进程级或服务级复用</td>
+<td>通常可被多线程共享，具体以版本文档为准</td>
+</tr>
+<tr>
+<td><code>ChannelOptions</code></td>
+<td>初始化 <code>Channel</code> 时使用</td>
+<td>初始化后修改是否生效，以版本文档为准</td>
+</tr>
+<tr>
+<td><code>Controller</code></td>
+<td>一次 RPC 一个</td>
+<td>不是线程安全的，不要跨请求复用</td>
+</tr>
+<tr>
+<td><code>Request</code> / <code>Response</code></td>
+<td>一次 RPC 一组</td>
+<td>同步调用期间保持有效</td>
+</tr>
+<tr>
+<td><code>Service</code> 实现</td>
+<td>覆盖 <code>Server</code> 运行期</td>
+<td>可能被并发调用，共享状态要自行保护</td>
+</tr>
+<tr>
+<td><code>done</code></td>
+<td>每次请求一个</td>
+<td>必须且只能触发一次完成语义</td>
+</tr>
+</tbody>
+</table>
+<p><code>done</code> 回调不是“业务收尾随便做点事”的地方。它可能运行在框架的执行单元中；如果在里面做无界阻塞、长时间等待或再次发起同步 RPC，就可能占住执行资源。需要异步处理时，先把请求数据复制到安全的位置，再把任务交给自己的队列或执行单元，最后确保 <code>done-&gt;Run()</code> 只被调用一次。<code>bthread</code> 的具体调度行为和阻塞语义，以所用版本文档与实现为准。</p>
+<p>读到这里，你应该能回答三个问题：</p>
+<ol>
+<li>这段客户端代码里，哪个对象活了很久，哪个对象只活一次调用？</li>
+<li>如果调用失败，应该先看哪个对象的哪个状态？</li>
+<li>如果要把超时从 300ms 改成 1s，应该改 <code>ChannelOptions</code> 还是 <code>Controller</code>，为什么？</li>
+</ol>
+<p>把这三个问题讲清楚，比记住一堆选项更有价值。先把 <code>Channel</code>、<code>Controller</code>、<code>Service</code> 这条最小调用链走通，下面再看连接类型、负载策略和更细的回调边界。</p>
+<h3 id="2">2. 连接类型和负载策略</h3>
+<p>第 1 节用最朴素的 <code>Channel::Init("127.0.0.1:8000", &amp;options)</code> 连上了一台 Echo 服务器。本节回答
+更贴近线上后台的问题：<strong>一条 Channel 到底维护哪些连接、请求如何在服务器间分摊、超时、重试与
+backup request 如何叠加</strong>。本节所有细节以公开文档与你所用版本为准；文中"公众号消息回调后台"
+只是教学场景，不代表任何企业内部体系。</p>
+<p>先说动机：在消息回调这类后台服务里（教学场景），一次回调往往要串行或并发调用多个下游，
+客户端连接模型直接决定了：</p>
+<ul>
+<li>尾延迟：连接排队、握手开销都会计入每次调用；</li>
+<li>容量上限：端口、文件描述符、内存随连接数变化；</li>
+<li>故障表现：连接级故障的重试与对冲策略是否安全，取决于下游操作是否幂等。</li>
+</ul>
+<h4 id="21-single-pooled-short">2.1 连接类型：single / pooled / short</h4>
+<p><code>ChannelOptions::connection_type</code> 决定 Channel 与每台下游服务器之间的连接管理方式，
+它是纯客户端行为：不需要改 proto。下面的语义来自 brpc 官方 Client Basics 文档（以所用版本为准）。</p>
+<p><strong>single：单连接、多路复用</strong></p>
+<ul>
+<li>一个进程内的所有 Channel 到同一台服务器<strong>至多一条</strong>连接；</li>
+<li>一条连接上可以<strong>同时承载多个在途请求</strong>，回包顺序不必与发送顺序一致（靠请求 ID 对应）；</li>
+<li>多个请求的写入可以合并，系统调用少，客户端 CPU 最低；</li>
+<li>baidu_std、hulu_pbrpc、sofa_pbrpc 等协议<strong>默认就用 single</strong>。</li>
+</ul>
+<p>直觉：它不是"一次只能跑一个请求的窄管道"，而是一条可以并行跑很多辆车的多车道高速。</p>
+<p><strong>pooled：连接池，一条连接同一时刻只跑一个请求</strong></p>
+<ul>
+<li>每次 RPC 前从池里取一条空闲连接，完成后归还；池空就新建；</li>
+<li>一条连接<strong>同一时刻最多承载一个请求</strong>，所以服务端看到的连接数约为 <code>qps × latency</code>（Little 定律）；</li>
+<li>池子上限由 gflag <code>-max_connection_pool_size</code> 控制；它小于实际并发时，多出来的连接会频繁建立又关闭，表现得像短连接；</li>
+<li>http/1.1 和使用 nshead 的协议<strong>默认用 pooled</strong>，因为这类协议本身不支持在一条连接上多路复用。</li>
+</ul>
+<p><strong>short：短连接</strong></p>
+<ul>
+<li>每次 RPC 前建连、完成后关闭；</li>
+<li>每次多付约 1.5 个 RTT 的建连开销，CPU 也最高，峰值 QPS 还受本地端口数量限制；</li>
+<li>没有协议默认用它，只适合偶尔发起的调用，或排查"连接状态被污染"时做对照。</li>
+</ul>
+<p>两个易混点：</p>
+<ol>
+<li>文档的原话是：brpc 默认会为协议挑选最合适的连接类型，<strong>一般不需要改</strong>。改之前先说清楚理由；</li>
+<li>"single 并发上不去"是常见的误解，它恰恰是为高并发复用设计的；pooled 主要服务于不能多路复用的协议。</li>
+</ol>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 连接类型在 ChannelOptions 中指定；也可以写成字符串 "single" / "pooled" / "short"</span>
+<span class="n">brpc</span><span class="o">::</span><span class="n">Channel</span><span class="w"> </span><span class="n">channel</span><span class="p">;</span>
+<span class="n">brpc</span><span class="o">::</span><span class="n">ChannelOptions</span><span class="w"> </span><span class="n">opt</span><span class="p">;</span>
+<span class="n">opt</span><span class="p">.</span><span class="n">protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"baidu_std"</span><span class="p">;</span><span class="w">                          </span><span class="c1">// 该协议默认 single</span>
+<span class="n">opt</span><span class="p">.</span><span class="n">connection_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">brpc</span><span class="o">::</span><span class="n">CONNECTION_TYPE_POOLED</span><span class="p">;</span><span class="w">  </span><span class="c1">// 仅作对比实验</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">channel</span><span class="p">.</span><span class="n">Init</span><span class="p">(</span><span class="s">"127.0.0.1:8000"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">opt</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Fail to init channel"</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>观察连接行为的命令（压测时反复执行）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 客户端到下游 8000 端口的连接条数：</span>
+<span class="c1"># single 恒为 1 条；pooled 约等于并发量；short 不断新建并留下大量 TIME_WAIT</span>
+ss<span class="w"> </span>-tn<span class="w"> </span>state<span class="w"> </span>established<span class="w"> </span><span class="s1">'( dport = :8000 )'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span>+2<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+ss<span class="w"> </span>-tan<span class="w"> </span>state<span class="w"> </span>time-wait<span class="w"> </span><span class="s1">'( dport = :8000 )'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-n<span class="w"> </span>+2<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<h4 id="22">2.2 三种连接类型对比（整理自官方文档）</h4>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>short</th>
+<th>pooled</th>
+<th>single</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否长连接</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>服务端看到的连接数（来自一个客户端）</td>
+<td>qps × latency</td>
+<td>qps × latency</td>
+<td>1</td>
+</tr>
+<tr>
+<td>峰值 QPS</td>
+<td>差，受端口数限制</td>
+<td>中</td>
+<td>高</td>
+</tr>
+<tr>
+<td>延迟</td>
+<td>1.5RTT（建连）+ 1RTT + 处理时间</td>
+<td>1RTT + 处理时间</td>
+<td>1RTT + 处理时间</td>
+</tr>
+<tr>
+<td>客户端 CPU</td>
+<td>高，每次都要建连</td>
+<td>中，每个请求一次 write</td>
+<td>低，写入可以合并</td>
+</tr>
+<tr>
+<td>默认用于</td>
+<td>无</td>
+<td>http/1.1、nshead 系协议</td>
+<td>baidu_std 等</td>
+</tr>
+</tbody>
+</table>
+<p>选择思路：先用协议的默认值；协议不支持多路复用时用 pooled，并把 <code>-max_connection_pool_size</code> 配到能覆盖并发；
+short 只留给低频调用和排查实验。</p>
+<h4 id="23">2.3 命名服务与负载均衡</h4>
+<p>Channel 还有另一种初始化方式：不给单点地址，而是给<strong>命名服务名 + 负载均衡名</strong>两个字符串，
+由 Channel 在每次请求时挑选一台服务器。这个组合让"服务发现"与"流量分流"解耦：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">brpc</span><span class="o">::</span><span class="n">Channel</span><span class="w"> </span><span class="n">channel</span><span class="p">;</span>
+<span class="n">brpc</span><span class="o">::</span><span class="n">ChannelOptions</span><span class="w"> </span><span class="n">opt</span><span class="p">;</span>
+
+<span class="c1">// 静态列表：把若干 ip:port 直接写进名字串</span>
+<span class="c1">// 分隔符与字段格式以所用版本文档为准</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">channel</span><span class="p">.</span><span class="n">Init</span><span class="p">(</span><span class="s">"list://10.0.0.11:8000,10.0.0.12:8000"</span><span class="p">,</span><span class="w"> </span><span class="s">"rr"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">opt</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">LOG</span><span class="p">(</span><span class="n">ERROR</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Fail to init channel"</span><span class="p">;</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 文件命名服务：文件中每行一个地址，修改文件即可变更节点</span>
+<span class="c1">// 是否支持空行、注释等细节以所用版本文档为准</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">channel</span><span class="p">.</span><span class="n">Init</span><span class="p">(</span><span class="s">"file://conf/echo_servers.txt"</span><span class="p">,</span><span class="w"> </span><span class="s">"rr"</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">opt</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code># conf/echo_servers.txt（教学示例）
+10.0.0.11:8000
+10.0.0.12:8000
+</code></pre></div>
+
+<p>实践定位（教学参考）：</p>
+<ul>
+<li>list:// 适合写死少量稳定地址，例如本地联调、双人验证环境；</li>
+<li>file:// 适合"配置系统定时改文件"的简单发布链路；</li>
+<li>更完整的注册中心接入方式因版本与编译选项而异，以所用版本文档为准。</li>
+</ul>
+<p>常用负载均衡名（语义描述以所用版本文档为准）：</p>
+<table>
+<thead>
+<tr>
+<th>名字</th>
+<th>语义</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rr</td>
+<td>轮询 round-robin</td>
+<td>后端同质、容量相近时首选</td>
+</tr>
+<tr>
+<td>random</td>
+<td>随机挑选</td>
+<td>打散请求，避免轮询的同步倾斜</td>
+</tr>
+<tr>
+<td>la</td>
+<td>优先发给历史平均时延小的节点</td>
+<td>后端异构、局部抖动时自动避让</td>
+</tr>
+<tr>
+<td>c_murmurhash</td>
+<td>一致性哈希（哈希键规则以文档为准）</td>
+<td>同类请求落同一台，吃满缓存</td>
+</tr>
+<tr>
+<td>c_md5</td>
+<td>一致性哈希（算法不同）</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<p>一致性哈希的代价：用均匀性换"同 key 同机"，节点上下线时请求会迁移，业务必须能容忍
+短暂的路由漂移。教学场景：内容后台的素材查询类请求可用 c_murmurhash 提升对端缓存
+命中率；写请求仍走 rr 或 la，避免写压力集中在单台。</p>
+<h4 id="24-backup-request">2.4 超时、重试与 backup request 的关系</h4>
+<p>三个旋钮独立起作用，但要放在一起理解：</p>
+<table>
+<thead>
+<tr>
+<th>旋钮</th>
+<th>触发条件</th>
+<th>语义</th>
+<th>对下游幂等的要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timeout</td>
+<td>始终生效</td>
+<td>整次 RPC 的硬上限</td>
+<td>无</td>
+</tr>
+<tr>
+<td>max_retry</td>
+<td>连接断开且未超时</td>
+<td>换一台服务器补发（ChannelOptions 默认 3 次，以文档为准）</td>
+<td>有</td>
+</tr>
+<tr>
+<td>backup_request_ms</td>
+<td>未超时但偏慢</td>
+<td>并发第二份请求，谁先回用谁</td>
+<td>有（更强）</td>
+</tr>
+</tbody>
+</table>
+<p>要点展开：</p>
+<ul>
+<li><strong>timeout</strong>：<code>cntl-&gt;set_timeout_ms(200)</code>。重试与 backup request 都逃不出这个 deadline，
+  所以"重试 3 次 x 每次超时"不会把一次调用拖成三倍时长；</li>
+<li><strong>max_retry</strong>：<code>cntl-&gt;set_max_retry(2)</code>。文档说明重试需要同时满足：连接断开、
+  还没到超时、还有重试额度；服务器没回包但连接正常时不会重试，那是 backup request 的职责；
+  <code>ChannelOptions.max_retry</code> 默认 3，设 0 关闭（以所用版本文档为准）；非幂等写接口慎开；</li>
+<li><strong>backup_request_ms</strong>：<code>cntl-&gt;set_backup_request_ms(50)</code>。它不是"失败后再试"，
+  而是<strong>并发的第二份请求</strong>：50ms 内没等到首份响应，就向另一台再发一份相同请求，
+  谁先回用谁的，未胜出的那份随后作废（细节以所用版本文档为准）。对端可能重复执行，
+  必须幂等。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="n">brpc</span><span class="o">::</span><span class="n">Controller</span><span class="w"> </span><span class="n">cntl</span><span class="p">;</span>
+<span class="n">cntl</span><span class="p">.</span><span class="n">set_timeout_ms</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span><span class="w">         </span><span class="c1">// 整次 RPC 上限</span>
+<span class="n">cntl</span><span class="p">.</span><span class="n">set_max_retry</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span><span class="w">            </span><span class="c1">// 连接级失败时最多补试 2 次</span>
+<span class="n">cntl</span><span class="p">.</span><span class="n">set_backup_request_ms</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span><span class="w">   </span><span class="c1">// 50ms 未响应则对冲第二发（需幂等）</span>
+
+<span class="n">stub</span><span class="p">.</span><span class="n">Echo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cntl</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">resp</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+<span class="n">LOG</span><span class="p">(</span><span class="n">INFO</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"latency_us="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cntl</span><span class="p">.</span><span class="n">latency_us</span><span class="p">();</span>
+</code></pre></div>
+
+<p>时间轴（教学示意）：</p>
+<div class="codehilite"><pre><span></span><code>t=0      发出请求 A
+t=50ms   A 未响应，向另一台发出 backup 请求 B
+t=70ms   A 先返回，采用 A 的结果
+t=200ms  若 A、B 均未返回，整次 RPC 按超时失败
+</code></pre></div>
+
+<p>消息回调链路（教学示例）对长尾敏感：读路径统一设小超时并开 backup request，把 P99
+拉回来；计数、落库这类写操作关掉自动重试与对冲，宁可失败也不重复写。</p>
+<p>下一节进入执行模型：请求到底跑在哪个线程上，回调又在哪个线程发生。</p>
+<h3 id="3-bthread">3. bthread 及回调边界</h3>
+<p>第 2 节所有的"等待"都发生在线程模型之上。brpc 的线程模型核心是 bthread，
+理解它，才能安全地写服务端处理函数与客户端回调。</p>
+<h4 id="31-bthread-pthread-mn">3.1 bthread 与 pthread 的 M:N 关系</h4>
+<ul>
+<li>pthread 是内核线程，1:1 映射：一个调用阻塞，就有一个内核线程被占住；</li>
+<li>bthread 是用户态有栈协程，M 个 bthread 被调度到 N 个 pthread worker 上（M:N），
+  worker 数由启动 flag 控制（flag 名与默认值以所用版本文档为准），通常接近 CPU 核数；</li>
+<li>切换发生在用户态、发生在明确的调度点：等待 RPC 响应、等待 bthread 锁、
+  bthread_usleep 等；用户态切换的开销远小于内核线程切换；</li>
+<li>一个 worker 上同一时刻只运行一个 bthread，切换不依赖时钟中断，
+  而是"运行到调度点才让出"。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="c1"># worker 线程数与核数对照（线程数量与命名以所用版本实现为准）</span>
+nproc
+ps<span class="w"> </span>-T<span class="w"> </span>-p<span class="w"> </span>&lt;pid&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>wc<span class="w"> </span>-l
+</code></pre></div>
+
+<h4 id="32-bthread-worker">3.2 同步调用阻塞的是 bthread，不是 worker</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 最后一个参数 done 传 NULL，即同步调用</span>
+<span class="n">stub</span><span class="p">.</span><span class="n">Echo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cntl</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">resp</span><span class="p">,</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+</code></pre></div>
+
+<p>语义要点：</p>
+<ul>
+<li>"卡在这里"的是当前 bthread：它被挂起在框架内部的同步原语上，
+  调度器随即去运行同一 worker 上的其他 bthread；</li>
+<li>底层 pthread worker 既不空转，也不为这个 RPC 阻塞；</li>
+<li>因此在 brpc 服务的处理函数里同步调用多个下游是可接受的常态（仍受 3.4 约束）。</li>
+</ul>
+<p>教学场景：回调服务收到一条用户消息后，依次同步调用"审核服务""配置服务"，
+两次 RPC 各自只挂起当前 bthread，worker 继续处理其他消息，吞吐不受影响。</p>
+<h4 id="33-done">3.3 异步调用：done 闭包与生命周期</h4>
+<p>异步 = 给 CallMethod 传一个非空的 done，调用立即返回：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">EchoDone</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">google</span><span class="o">::</span><span class="n">protobuf</span><span class="o">::</span><span class="n">Closure</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">Run</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">EchoDone</span><span class="o">&gt;</span><span class="w"> </span><span class="n">self_guard</span><span class="p">(</span><span class="k">this</span><span class="p">);</span><span class="w">  </span><span class="c1">// 惯例：done 自删</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">cntl</span><span class="p">.</span><span class="n">Failed</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">LOG</span><span class="p">(</span><span class="n">INFO</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"resp="</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">resp</span><span class="p">.</span><span class="n">message</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">LOG</span><span class="p">(</span><span class="n">WARNING</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cntl</span><span class="p">.</span><span class="n">ErrorText</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">echo</span><span class="o">::</span><span class="n">EchoResponse</span><span class="w"> </span><span class="n">resp</span><span class="p">;</span>
+<span class="w">  </span><span class="n">brpc</span><span class="o">::</span><span class="n">Controller</span><span class="w"> </span><span class="n">cntl</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">EchoDone</span><span class="o">*</span><span class="w"> </span><span class="n">done</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">EchoDone</span><span class="p">;</span>
+<span class="n">stub</span><span class="p">.</span><span class="n">Echo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">done</span><span class="o">-&gt;</span><span class="n">cntl</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">done</span><span class="o">-&gt;</span><span class="n">resp</span><span class="p">,</span><span class="w"> </span><span class="n">done</span><span class="p">);</span><span class="w">  </span><span class="c1">// 立即返回</span>
+</code></pre></div>
+
+<p>生命周期铁律：</p>
+<ol>
+<li>response 与 controller 必须活得比 RPC 久：异步返回后当前栈帧已退出，
+   所以把它们内嵌在堆上的 done 里，随 done 一起管理；</li>
+<li>done-&gt;Run() 由框架在 RPC 终止（成功、失败、超时）时<strong>恰好调用一次</strong>，
+   之后 done 的释放责任回到你手里（在 Run 里自删是常见惯例）；</li>
+<li>request 在 CallMethod 返回后即可复用或析构（序列化发生在调用点；
+   以所用版本文档为准）；</li>
+<li>Run 里不要做重活：回调在框架的工作线程上执行，重活应抛回业务线程池，
+   或再发起后续 RPC 形成异步链；</li>
+<li>也可用 brpc::NewCallback 或 protobuf 的 NewCallback 生成 Closure
+   （签名与参数规则以所用版本文档为准）。</li>
+</ol>
+<p>半同步：发起后记录 call_id，随后在当前 bthread 上等待，方便做受控的 fan-out：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">brpc</span><span class="o">::</span><span class="n">CallId</span><span class="w"> </span><span class="n">cid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cntl</span><span class="o">-&gt;</span><span class="n">call_id</span><span class="p">();</span><span class="w">  </span><span class="c1">// 发起前记录</span>
+<span class="n">stub</span><span class="p">.</span><span class="n">Echo</span><span class="p">(</span><span class="n">cntl</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">req</span><span class="p">,</span><span class="w"> </span><span class="n">resp</span><span class="p">,</span><span class="w"> </span><span class="n">done</span><span class="p">);</span>
+<span class="n">brpc</span><span class="o">::</span><span class="n">Join</span><span class="p">(</span><span class="n">cid</span><span class="p">);</span><span class="w">                     </span><span class="c1">// 等待该次调用结束（以所用版本文档为准）</span>
+</code></pre></div>
+
+<h4 id="34-bthread-worker">3.4 不要在 bthread 中长期阻塞 worker</h4>
+<p>bthread 的廉价来自"只在调度点让出"。以下操作<strong>不会让出</strong>，会把承载它的
+pthread worker 整个卡住，同 worker 上的所有 bthread 一起挨饿：</p>
+<ul>
+<li>pthread 级锁：pthread_mutex_lock 等；协程内应改用 bthread_mutex_t，
+  等锁时让出 worker 给其他 bthread；</li>
+<li>阻塞系统调用：同步磁盘 IO、阻塞式网络收发、::sleep 等；</li>
+<li>长纯 CPU 计算：不会阻塞 worker，但会占满时间片，同 worker 的其他
+  bthread 难以及时被调度。</li>
+</ul>
+<p>框架对长时间阻塞的 syscall 可能打印告警（阈值与行为以所用版本文档为准）。</p>
+<p>实践建议：</p>
+<ol>
+<li>真正的阻塞操作交给独立线程池，或改造为异步接口；</li>
+<li>协程内的互斥优先使用 bthread 系列原语；</li>
+<li>吞吐上不去时，第一怀疑对象是"worker 被卡"：查有没有人在 bthread 里
+   睡了觉、读了盘、拿了内核锁。</li>
+</ol>
+<h4 id="35-bthread_usleep-sleep">3.5 bthread_usleep 与 sleep</h4>
+<div class="codehilite"><pre><span></span><code><span class="o">::</span><span class="n">usleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span><span class="w">        </span><span class="c1">// 阻塞 pthread worker：同 worker 的其他 bthread 全部停摆</span>
+<span class="n">bthread_usleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span><span class="w">  </span><span class="c1">// 只挂起当前 bthread，worker 继续跑别的 bthread</span>
+</code></pre></div>
+
+<p>对比实验（与第 2 节的连接类型实验同机进行）：</p>
+<ol>
+<li>在 Echo 服务处理函数里分别放入 ::usleep(10 * 1000) 与 bthread_usleep(10 * 1000)；</li>
+<li>同等并发压测，记录吞吐与 worker 线程的 CPU 占用；</li>
+<li>预期现象：阻塞版 worker 被卡死、并发上不去；bthread 版 worker 持续可调度。</li>
+</ol>
+<h4 id="36">3.6 本节实验记录模板</h4>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>brpc 版本与编译方式</td>
+<td>以你本机为准</td>
+</tr>
+<tr>
+<td>协议 / payload</td>
+<td>baidu_std / 1KB</td>
+</tr>
+<tr>
+<td>连接类型</td>
+<td>single、pooled、short 各测一次</td>
+</tr>
+<tr>
+<td>并发 / QPS</td>
+<td>以实测为准</td>
+</tr>
+<tr>
+<td>客户端 CPU 占用</td>
+<td>以实测为准</td>
+</tr>
+</tbody>
+</table>
+<p>把 single、pooled、short 三种配置各填一行，连同版本、payload 与客户端 CPU
+一起写入实验报告，就是本节实验的最终产出。</p>
+<h2 id="_9">常见误区与设计权衡</h2>
+<p>在进入实验之前，先把两个容易被忽视的前提摆在最前面。</p>
+<blockquote>
+<p>不能把公开brpc实现推断成微信内部RPC实现。</p>
+</blockquote>
+<p>这句话不是免责声明，而是方法论。brpc 是 Apache 开源的 RPC 框架，我们能读到它的 Channel、Controller、连接池、bthread、负载均衡等实现；但“公开实现”只能证明“brpc 在某个版本里是这样做的”，不能证明“某个超大规模后台系统内部也这样做”。在方案评审或面试中，正确表述是“根据 brpc 某版本文档/源码，X 行为如此”，而不是“大厂肯定都这么干”。凡涉及默认值、内部调度、灰度策略，都应补一句：以所用版本文档为准。</p>
+<blockquote>
+<p>框架自带治理能力可减少自研，但业务需理解其默认值。</p>
+</blockquote>
+<p>brpc 把超时、重试、负载均衡、连接池、健康检查、backup request 等能力做进了框架，这确实省掉大量基础设施代码。代价是：默认值通常是面向“通用场景”的折中，不是你的业务 SLA。</p>
+<p>以读多写少、突发热点明显的内容类后台为例（教学假设，不代表任何企业内部情况），下面这些治理项都值得逐项确认：</p>
+<table>
+<thead>
+<tr>
+<th>治理项</th>
+<th>常见默认倾向</th>
+<th>需要确认的点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>超时</td>
+<td>框架级默认值可能偏宽松</td>
+<td>单次 RPC 的 deadline 是否满足接口 SLA，是否会拖垮上游线程</td>
+</tr>
+<tr>
+<td>重试</td>
+<td>文档写明 ChannelOptions.max_retry 默认 3</td>
+<td>非幂等写接口重试会不会造成重复扣减、重复发消息</td>
+</tr>
+<tr>
+<td>连接</td>
+<td>长连接/连接池策略有默认</td>
+<td>并发模型与连接数是否匹配，是否需要 pooled</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>默认策略面向通用</td>
+<td>下游实例权重、同机房/跨机房路由是否符合预期</td>
+</tr>
+<tr>
+<td>线程模型</td>
+<td>bthread + IO 线程</td>
+<td>回调里做阻塞操作会抢占关键线程</td>
+</tr>
+</tbody>
+</table>
+<p>结论：框架替你解决了“能做”，业务团队必须回答“该不该、值多少”。上线前把关键参数写进配置基线，并在 <code>/status</code>、<code>/vars</code> 上持续观察。具体字段名与默认值以所用版本文档为准。</p>
+<h3 id="_10">权衡的三个维度</h3>
+<ol>
+<li>吞吐 vs 尾延迟：连接池化和批量能抬高吞吐，但排队会放大 P99。</li>
+<li>通用 vs 专用：直接改框架默认值影响全局，优先在 Channel/方法级覆盖。</li>
+<li>自研 vs 复用：治理能力复用框架，业务语义与幂等兜底必须自研。</li>
+</ol>
+<h3 id="_11">四个高频误区</h3>
+<p><strong>误区一：忽略默认超时与重试。</strong>
+brpc 允许在 Controller 上设置超时，但“没设置”不等于“没有超时”，框架与下游都可能有各自的默认值；具体默认值以所用版本文档为准。风险在于：上游线程被长时间挂住，重试再叠加重试，雪崩时把下游打得更死。写接口尤其危险——重试一个“发消息/扣额度”的请求，可能产生重复副作用。</p>
+<p>实践建议：Controller 上显式设 deadline；非幂等接口关闭自动重试或配合幂等键；启用 backup request 前先评估重复执行的代价。公众号后台的推送、配额扣减、订单状态流转，都应先问一句“重复执行一次会怎样”。</p>
+<p><strong>误区二：混淆连接类型。</strong>
+single、pooled、short 不是简单的“性能档位”，而是不同的连接生命周期与并发模型：</p>
+<ul>
+<li>single：进程到每台服务器一条连接，连接上多路复用多个在途请求，baidu_std 等协议默认用它，CPU 最低。</li>
+<li>pooled：一条连接同一时刻只跑一个请求，连接数约等于 qps × latency，http/1.1 等不支持多路复用的协议默认用它。</li>
+<li>short：每次请求建连，开销大，只用于极低频调用或排查。</li>
+</ul>
+<p>最常见的误解是"single 只有一条连接，高并发肯定不行"，于是把 baidu_std 改成 pooled，结果连接数暴涨、客户端 CPU 升高。另一个坑是用 pooled 却没把 <code>-max_connection_pool_size</code> 配到覆盖并发，多出来的连接频繁建立又关闭，效果接近短连接。官方文档的建议是默认值一般不用改。具体可用取值与 flag 名以示例源码和 <code>--help</code> 为准。</p>
+<p><strong>误区三：在 done 回调里做重活。</strong>
+异步调用的 done 回调运行在框架的 bthread/IO 相关线程上，在里面做磁盘 IO、同步 RPC、抢大锁、复杂 JSON 解析，会阻塞关键执行路径，表现为整体延迟抖动甚至超时。正确做法：回调里只做轻量状态转移（置标志、投递结果），重活交给业务线程池或有界队列，并做好背压与拒绝策略。</p>
+<p>判断标准很简单：如果这段代码在压力下可能等待，就不要放在回调里。</p>
+<p><strong>误区四：复用 Controller。</strong>
+Controller 承载一次调用的超时、重试、错误码、response 等状态，生命周期应绑定单次调用。跨请求复用会串状态：上一个请求的错误码、超时设置污染下一个请求，排查极其困难，且往往只在并发时暴露。反过来，Channel 通常设计为线程安全、可长期复用，不要每次调用都 new 一个 Channel，否则连接池和负载均衡都失去意义。Controller 与 Channel 的线程安全边界以所用版本文档为准。</p>
+<p>上述四点的共同点：把“框架能做什么”误当成“我已经配好了”。上线前的配置基线、压测和监控，缺一不可。</p>
+<h2 id="echosinglepooled">动手实践：构建官方Echo示例，比较single、pooled等适用连接模式并记录配置</h2>
+<p>本节目标：从零构建 brpc 官方 C++ Echo 示例，实际切换不同连接模式，测出客户端 CPU 与吞吐差异，并形成可复现的配置记录。所有命令以 Linux + 官方文档为准，具体 flag 名以示例源码和 <code>--help</code> 输出为准。</p>
+<h3 id="1">步骤 1：克隆源码并记录版本</h3>
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/apache/brpc
+<span class="nb">cd</span><span class="w"> </span>brpc
+git<span class="w"> </span>describe<span class="w"> </span>--tags<span class="w"> </span>--always
+git<span class="w"> </span>rev-parse<span class="w"> </span>HEAD
+</code></pre></div>
+
+<p>把 <code>git describe</code> 与 commit 一并记入实验报告。不同版本示例的参数可能不同，版本号是复现实验的前提。</p>
+<h3 id="2_1">步骤 2：按官方文档安装依赖</h3>
+<p>依赖清单以仓库内 <code>README.md</code> / <code>docs/</code> 的安装说明为准（常见有 gflags、protobuf、leveldb、gperftools 等）。Ubuntu 上通常可用 <code>apt-get</code>，也可用官方提供的 <code>config_brpc.sh</code> 探测环境。不要照抄网上过时博客；装完后根据编译输出确认 protobuf 等版本兼容。</p>
+<h3 id="3-echo">步骤 3：构建 echo 示例</h3>
+<p>官方示例位于 <code>example/echo_c++</code>。典型流程：</p>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+cmake<span class="w"> </span>..<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+make<span class="w"> </span>-j<span class="s2">"</span><span class="k">$(</span>nproc<span class="k">)</span><span class="s2">"</span><span class="w"> </span>echo_server<span class="w"> </span>echo_client
+</code></pre></div>
+
+<p>若目标名不同，先 <code>ls</code> 一下示例目录，以实际产物为准。构建失败多半是 gflags/protobuf 路径或版本问题，回到官方文档核对。</p>
+<h3 id="4">步骤 4：启动服务端与客户端</h3>
+<div class="codehilite"><pre><span></span><code>./echo_server<span class="w"> </span>--port<span class="o">=</span><span class="m">8000</span>
+<span class="c1"># 另开一个终端</span>
+./echo_client<span class="w"> </span>--server<span class="o">=</span><span class="m">127</span>.0.0.1:8000
+</code></pre></div>
+
+<p>先确认 <code>echo_client</code> 能收到正确回显，再开始改参数；否则后面的对比没有意义。建议服务端与客户端分机或至少分别绑核，避免相互干扰。</p>
+<h3 id="5">步骤 5：确认并切换连接模式</h3>
+<div class="codehilite"><pre><span></span><code>./echo_client<span class="w"> </span>--help<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>connection
+</code></pre></div>
+
+<p>以 <code>--help</code> 实际输出为准，找到连接类型相关 flag（示例中可能是 <code>-connection_type</code>，取值如 single、pooled、short 等；名称与取值以示例源码为准）。然后用 gflags 显式指定：</p>
+<div class="codehilite"><pre><span></span><code>./echo_client<span class="w"> </span>--server<span class="o">=</span><span class="m">127</span>.0.0.1:8000<span class="w"> </span>--connection_type<span class="o">=</span>pooled
+</code></pre></div>
+
+<p>每切换一次，记录：连接模式、并发线程数、payload 大小。一次只改一个变量。</p>
+<h3 id="6-payload">步骤 6：调整 payload 与并发参数</h3>
+<p>payload 大小通常在示例源码里定义（常量或 flag）。先 grep 源码确认：</p>
+<div class="codehilite"><pre><span></span><code>grep<span class="w"> </span>-n<span class="w"> </span>-i<span class="w"> </span><span class="s2">"payload\|request_size\|attachment"</span><span class="w"> </span>example/echo_c++/*.cpp
+</code></pre></div>
+
+<p>然后修改并重新编译，或使用已有的 size flag。压测节奏建议：先固定线程数与连接模式，只变 payload；再固定 payload，只变连接模式。这样每次差异都能归因。</p>
+<h3 id="7-cpu">步骤 7：记录客户端 CPU</h3>
+<p>压测时用 <code>top</code> 找到 echo_client 进程，或用 <code>pidstat</code> 采样：</p>
+<div class="codehilite"><pre><span></span><code>pidstat<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>pgrep<span class="w"> </span>-f<span class="w"> </span>echo_client<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span><span class="s2">"</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">30</span>
+top<span class="w"> </span>-b<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="k">$(</span>pgrep<span class="w"> </span>-f<span class="w"> </span>echo_client<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="k">)</span><span class="s2">"</span>
+</code></pre></div>
+
+<p>关注：用户态 CPU%、上下文切换次数、RSS。同样 QPS 下客户端 CPU 越低越好；若 CPU 不高但延迟高，多半在等连接或排队，而不是算力不足。</p>
+<h3 id="8">步骤 8：观察内置监控页</h3>
+<p>brpc 服务端通常提供内置页面（端口与开关以所用版本文档为准）：</p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>http://127.0.0.1:8000/status
+curl<span class="w"> </span>http://127.0.0.1:8000/vars
+</code></pre></div>
+
+<p>也可用浏览器打开同样地址，查看连接数、QPS、延迟分位、bthread 数量等。把关键指标截图或抄进报告，作为连接模式差异的旁证。</p>
+<h3 id="_12">结果记录表模板</h3>
+<table>
+<thead>
+<tr>
+<th>实验编号</th>
+<th>版本(git describe)</th>
+<th>连接模式</th>
+<th>客户端线程</th>
+<th>payload(B)</th>
+<th>QPS</th>
+<th>平均延迟</th>
+<th>P99</th>
+<th>客户端CPU%</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>vX.Y.Z-N-gHASH</td>
+<td>single</td>
+<td>1</td>
+<td>64</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>同上</td>
+<td>pooled</td>
+<td>8</td>
+<td>64</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>同上</td>
+<td>pooled</td>
+<td>8</td>
+<td>4096</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>同上</td>
+<td>short</td>
+<td>8</td>
+<td>64</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>每组重复 3 次取中位数，并记录机器核数、是否同机部署、brpc 版本。数据缺失比数据难看更糟。</p>
+<h3 id="_13">对照验收自检</h3>
+<ul>
+<li>[ ] 能清楚解释每个连接配置：single 多路复用、pooled 一连接一请求、short 每次建连；能说出各自的连接数、延迟和 CPU 代价，而不只是背名字。</li>
+<li>[ ] 能说明连接池大小、空闲回收与客户端线程数的关系（以所用版本文档为准）。</li>
+<li>[ ] 报告写明了 brpc 版本（git describe 输出）、payload 大小、客户端 CPU 的采样方法与数值。</li>
+<li>[ ] 结论能落到后台场景：比如能解释为什么 baidu_std 下保持默认 single 通常就够，什么情况下才需要 pooled。</li>
+<li>[ ] 所有参数名都来自 <code>--help</code> 或示例源码，而不是凭记忆。</li>
+</ul>
+<h3 id="_14">小结</h3>
+<p>先建立基线，再逐项改一个变量，最后用 <code>/status</code>、<code>/vars</code> 与 CPU 数据把结论钉死。把版本、payload、连接模式、客户端 CPU 四件事写清楚，这个实验就具备了可复现性；至于更细的默认值，始终以所用版本文档为准。</p>
+<h3 id="_15">附：连接模式选择速查</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>建议起点</th>
+<th>主要代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协议支持多路复用（如 baidu_std）</td>
+<td>single（默认）</td>
+<td>单连接异常时影响该服务器上所有在途请求</td>
+</tr>
+<tr>
+<td>协议不支持多路复用（如 http/1.1）</td>
+<td>pooled（默认）</td>
+<td>连接池上限需要覆盖并发</td>
+</tr>
+<tr>
+<td>极低频、临时性任务</td>
+<td>short</td>
+<td>每次建连的握手与开销</td>
+</tr>
+<tr>
+<td>长耗时流式/大 payload</td>
+<td>视示例与文档而定</td>
+<td>连接占用与内存放大</td>
+</tr>
+</tbody>
+</table>
+<p>上表只是起点，最终以压测数据为准；具体可选值与默认行为以所用版本文档为准。</p>
+<h3 id="_16">附：配置记录片段</h3>
+<p>把每次实验的配置固化成文本，便于复现：</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">experiment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo-connection-compare</span>
+<span class="nt">brpc_version</span><span class="p">:</span><span class="w"> </span><span class="s">"&lt;git</span><span class="nv"> </span><span class="s">describe</span><span class="nv"> </span><span class="s">输出&gt;"</span>
+<span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="s">"&lt;git</span><span class="nv"> </span><span class="s">rev-parse</span><span class="nv"> </span><span class="s">HEAD&gt;"</span>
+<span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Release</span>
+<span class="nt">server</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">addr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1:8000</span>
+<span class="nt">client</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pooled</span>
+<span class="w">  </span><span class="nt">threads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8</span>
+<span class="w">  </span><span class="nt">payload_bytes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">64</span>
+<span class="w">  </span><span class="nt">timeout_ms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
+<span class="nt">measure</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">tool</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pidstat</span>
+<span class="w">  </span><span class="nt">interval_s</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="w">  </span><span class="nt">duration_s</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30</span>
+<span class="nt">result</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">qps</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">  </span><span class="nt">avg_latency_ms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">  </span><span class="nt">p99_latency_ms</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="w">  </span><span class="nt">client_cpu_percent</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">null</span>
+<span class="nt">notes</span><span class="p">:</span><span class="w"> </span><span class="s">"客户端与服务端同机，结果仅用于横向对比"</span>
+</code></pre></div>
+
+<h3 id="_17">附：实验排障清单</h3>
+<ul>
+<li>编译报 protobuf/gflags 找不到：检查安装路径与 <code>CMAKE_PREFIX_PATH</code>，回到官方文档核对版本。</li>
+<li>客户端连不上：确认服务端监听地址、防火墙、端口是否被占用。</li>
+<li><code>--help</code> 里找不到连接 flag：说明该版本示例未暴露，直接看示例源码，别硬猜。</li>
+<li>QPS 很低但 CPU 不高：多半卡在连接或排队，检查连接模式与线程数。</li>
+<li>延迟抖动大：先看是否同机互相干扰，再看回调里有没有阻塞操作。</li>
+<li><code>/status</code>、<code>/vars</code> 打不开：确认端口与内置服务开关，以所用版本文档为准。</li>
+<li>数据无法复现：回看版本、payload、线程数、机器负载四要素是否一致。</li>
+</ul>
+<h3 id="_18">附：延伸思考</h3>
+<ul>
+<li>把 baidu_std 从默认 single 改成 pooled 后，连接数、客户端 CPU 和 P99 各变了多少？</li>
+<li>当 payload 从 64B 增到 4KB，瓶颈从框架开销转向哪里？</li>
+<li>同样的实验放到读接口与写接口上，结论会不会不同？写接口还要额外考虑幂等与重试。</li>
+<li>你能否只用一页纸，向同事解释每个连接配置的适用边界与代价？</li>
+</ul>
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<h3 id="_19">追踪目标与边界</h3>
+<ul>
+<li>目标：只用<strong>公开</strong>的 Apache brpc 源码，把一次 Echo 调用从客户端发出、到服务端处理、再到收到回包执行回调的完整链路走读一遍，建立关于「连接、超时、调度」的心智模型。</li>
+<li>边界：brpc 是 Apache 开源项目，本节一切结论仅基于公开仓库与其文档；<strong>不得</strong>把公开实现直接推断成任何企业（例如微信公众号后台）的内部 RPC 体系。企业内部的协议选型、服务治理与部署形态另有约束，不在本课讨论范围。</li>
+<li>源码中的类名、函数签名与文件路径在不同版本间会变动，下面给出的搜索位置均为示例，<strong>以所用版本文档为准</strong>。</li>
+</ul>
+<h3 id="_20">准备</h3>
+<div class="codehilite"><pre><span></span><code>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/apache/brpc.git
+<span class="nb">cd</span><span class="w"> </span>brpc<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>git<span class="w"> </span>tag<span class="w">                 </span><span class="c1"># 找到与你编译产物匹配的 release tag</span>
+git<span class="w"> </span>checkout<span class="w"> </span>&lt;your-tag&gt;
+<span class="c1"># 先把官方 Echo 示例（example 下的 c++ 示例，目录名以所用版本为准）编译跑起来，边跑边对照读源码</span>
+</code></pre></div>
+
+<h3 id="_21">建议的阅读顺序（一次调用的六步）</h3>
+<ol>
+<li><strong>入口</strong>：从客户端的 <code>Channel::CallMethod</code> 开始。stub 生成的代理代码最终会调到这里：<code>Controller</code> 上的超时、重试次数、log_id 等设置在这里被带上，请求进入框架发送路径。
+   - 搜索建议：在源码中全词搜索 <code>CallMethod</code>，先读头文件中的注释，再看实现。</li>
+<li><strong>Controller</strong>：通读 Controller 携带的一次调用状态：超时、重试、backup request 等字段（具体字段名与默认值以所用版本文档为准），并明确「一次调用对应一个 Controller」的使用约定。
+   - 搜索建议：搜索 <code>set_timeout_ms</code>、<code>set_max_retry</code>、<code>backup_request</code>，观察哪些阶段会读取这些值。</li>
+<li><strong>选服务器</strong>：沿调用栈进入负载均衡层，结合文档理解 rr、random、locality_aware 等策略如何从 NamingService 给出的候选列表中挑出本次目标（完整策略列表以其文档为准）。
+   - 搜索建议：搜索 <code>LoadBalancer</code>、<code>SelectServer</code> 一类符号（命名按版本可能不同），留意策略与「失败节点隔离/降权」逻辑的位置。</li>
+<li><strong>连接写出</strong>：进入 <code>Socket</code> 相关代码，对照 single / pooled / short 三种连接类型的实现差异，理解几种代价的来源：single 在一条连接上多路复用、按请求 ID 对应回包，pooled 每个请求独占一条连接，short 每次都要承受建连开销。
+   - 搜索建议：在头文件中按 <code>single|pooled|short</code> 组合正则搜索 <code>ConnectionType</code>；再搜索写出接口（<code>Write</code> 等）与写缓冲、<code>EPOLLOUT</code> 相关处理，理解「写不下去时调用挂在哪」。</li>
+<li><strong>收包解析</strong>：以 baidu_std 协议的解析器为例，走读「按读缓冲切包 → 反序列化 → 找回本次调用对应的 Controller」的过程，重点看请求 ID 与回包如何关联、未知/残缺包如何被拒收。
+   - 搜索建议：搜索 <code>baidu_std</code>、<code>ParseRpcMessage</code> 类符号（名称按版本可能不同），以及 <code>on_message</code> 相关注册点。</li>
+<li><strong>回调边界</strong>：最后抵达「唤醒」处：同步调用挂起的执行流如何在回包到达后被唤醒、异步调用的 <code>done</code> 回调在哪个执行域里被运行，即本次调用实际上<strong>在哪个线程、哪个 bthread 里结束</strong>。
+   - 搜索建议：搜索 <code>bthread_start_background</code>、<code>bthread_start_urgent</code>，以及响应处理入口处对同步/异步分支的分叉。</li>
+</ol>
+<h3 id="_22">一次调用走读笔记（示例叙事，供你对照源码修订）</h3>
+<ul>
+<li>发送侧大约经过：<code>CallMethod</code> 装填状态 → 负载均衡选目标 → 依据连接类型取得或建立连接 → 序列化与打包 → 经 <code>Socket</code> 写出（写不下则入队，等待可写事件）。</li>
+<li>等待侧：同步调用把当前执行流挂起（框架等待原语，具体机制以所用版本为准），worker 线程被让出去跑别的 bthread；异步调用则把“继续干活”的接力棒交给用户 <code>done</code>。</li>
+<li>接收侧：epoll 线程收到字节 → 协议解析器切包并反序列化 → 按请求 ID 找到对应 Controller → 经压缩/计时统计后触发唤醒：同步路径回到挂起点继续执行，异步路径执行 <code>done-&gt;Run()</code>。</li>
+<li>超时与重试的判定点分散在选择目标、建立/复用连接、写出、等待回包等多个阶段；走读时留意「什么时刻判定超时、重试是否重新选服务器、重试对幂等性的要求」。</li>
+</ul>
+<h3 id="rg">常用的 rg 搜索命令（正则与路径请按你的仓库版本调整）</h3>
+<div class="codehilite"><pre><span></span><code>rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"void Channel::CallMethod"</span><span class="w"> </span>src/brpc/
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"set_timeout_ms|set_max_retry|backup_request"</span><span class="w"> </span>src/brpc/controller.h<span class="w"> </span>src/brpc/controller.cpp<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-40
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"single|pooled|short"</span><span class="w"> </span>src/brpc/<span class="w"> </span><span class="p">|</span><span class="w"> </span>rg<span class="w"> </span>-i<span class="w"> </span><span class="s2">"connection"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-40
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"class .*LoadBalancer|LoadBalancingPolicy"</span><span class="w"> </span>src/brpc/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"Write|writable"</span><span class="w"> </span>src/brpc/socket.h<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-40
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"bthread_start_background|bthread_start_urgent"</span><span class="w"> </span>src/brpc/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"baidu_std|ParseRpcMessage"</span><span class="w"> </span>src/brpc/<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+rg<span class="w"> </span>-n<span class="w"> </span><span class="s2">"bthread_"</span><span class="w"> </span>src/brpc/<span class="w"> </span><span class="p">|</span><span class="w"> </span>rg<span class="w"> </span>-v<span class="w"> </span><span class="s2">"test"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-60
+</code></pre></div>
+
+<h3 id="_23">实验记录模板（对照本课验收）</h3>
+<ul>
+<li>环境：brpc 版本与 git tag、编译选项、机器内核/网路环境（单机回环还是真实网络）。</li>
+<li>变量：连接类型 single / pooled / short，请求 payload（如 1 字节哨兵、100B、1KB、10KB），客户端并发与调用频次。</li>
+<li>观测：客户端 CPU、p50/p99 延迟、连接数（<code>ss</code> 或进程内统计）、错误率；同一组参数只改一个变量，结论才可信。</li>
+</ul>
+<h3 id="_24">与后台场景的结合</h3>
+<ul>
+<li>假设你在做消息处理这类后台链路（教学假设）：入口服务在高峰期要向下行实例集群高频发起调用。当目标实例有限而调用频次极高时，支持多路复用的协议用默认 single 就能以最少的连接承载高并发；协议不支持多路复用才需要 pooled，并评估连接数是否会涨到 qps × latency 的量级。</li>
+<li>若链路中存在时间敏感的上游（如到期必须给用户侧返回的超时预算），把「整体 deadline 减去已耗时」设置为下游调用的超时上限是通用做法——这是通用工程结论，与具体企业内部实现无关。</li>
+<li>这些推论只来自 brpc 公开文档与公开实现，与你将来实际接触的任何内部 RPC 框架之间的关系，需要入职后用同样的实验方法去校准，而不是外推。</li>
+</ul>
+<h2 id="_25">自测题</h2>
+<h3 id="1-controller">1. Controller 的生命周期</h3>
+<p><strong>题</strong>：你写了一个异步的 Echo 客户端调用，回调里要读取响应与错误码。下列哪种做法正确，为什么？
+A. 每次调用前创建一个 Controller 与 Closure，在 <code>done</code> 回调末尾清理；
+B. 在栈上创建 Controller，客户端函数返回后立即销毁；
+C. 多个并发调用复用同一个全局 Controller。
+<strong>答案</strong>：A 是常见且可靠的做法；若要复用 Controller，必须使用框架明确支持的复用方式，并保证上一次调用完全结束后再重置使用，具体语义以所用版本文档为准。
+<strong>解析</strong>：异步调用在 <code>done</code> 执行前，框架随时可能读写 Controller 上的回包、错误码与计时信息，所以其生命周期必须覆盖「从发出到 done 运行完毕」这段窗口。B 是同步调用里可行的「即用即毁」，照搬到异步会造成悬空引用；C 会让多个并发调用互相踩踏状态，是隐蔽的并发 bug 来源。同步与异步调用对 Controller 生命周期的要求不同，是很容易踩的坑。</p>
+<h3 id="2_2">2. 连接类型怎么选</h3>
+<p><strong>题</strong>：服务 A 以每秒数万次的高频调用下游 B，而 B 只有几个实例、单次请求耗时很短。single / pooled / short 三种连接类型你会怎么选？反过来，如果目标实例数以千计、对每个实例的调用都很稀疏呢？
+<strong>答案</strong>：如果用 baidu_std 这类支持多路复用的协议，前一种情况保持默认 single 就好：每台下游一条连接，同时跑很多在途请求，写入合并后客户端 CPU 最低；换成 pooled 反而让连接数涨到约 qps × latency。协议不支持多路复用（如 http/1.1）时才用 pooled，并把 <code>-max_connection_pool_size</code> 配到覆盖并发。后一种情况（实例上千、每台调用稀疏），single 也只是每台一条长连接；short 只在调用真的很偶尔时才划算，因为每次要多付建连的 RTT 和 CPU。
+<strong>解析</strong>：三种类型的本质差异是一条连接能同时承载几个请求：single 承载多个，pooled 只承载一个，short 用完就关。官方文档的建议是默认值一般不需要改。选型看实测：p99 延迟、句柄数、失败率；不要照搬任何环境下的结论，尤其当你所处的后台有特殊中间层时，同一配置表现可能完全不同。</p>
+<h3 id="3-bthread_1">3. bthread 中阻塞的后果</h3>
+<p><strong>题</strong>：你在某段跑在 bthread 里的代码中（例如异步 <code>done</code> 回调、服务端请求处理函数）直接调用了一个会阻塞几十毫秒的函数。这对进程有什么影响？正确做法是什么？
+<strong>答案</strong>：该 bthread 所在的 worker 线程会被硬撑住几十毫秒，期间排在它后面等待的其他任务全部顺延，吞吐与延迟长尾同时恶化，阻塞比例越高恶化越快，极端情况下 worker 队列堆积会出现雪崩。
+<strong>解析</strong>：bthread 的收益来自 n:m 调度——大量执行流共用少量 worker 线程。同步 RPC 之所以「安全」，是因为框架用挂起机制让出 worker 线程（具体等待原语以所用版本文档为准）；而手写的阻塞调用不经过这套机制，只能占死线程。正确做法：优先使用框架可挂起的接口（如同步 RPC 自身的等待机制），重活放入独立的业务线程池；<code>done</code> 回调内更要保持轻量，具体约束以所用版本文档为准。</p>
+<h2 id="_26">推荐资源</h2>
+<ul>
+<li><a href="https://brpc.apache.org/docs/client/basics/">brpc通道与服务实现：参考文档 / 原始资料</a></li>
+<li>来源：brpc.apache.org ｜ 类型：文档 ｜ 语言：英文 ｜ 难度：进阶 ｜ 免费</li>
+<li>阅读重点一：<strong>Channel、Controller 和 Service</strong> 三者的分工与协作——Channel 持有连接与协议配置、Controller 携带单次调用的状态、Service 承载业务方法，以及对象各自的生命周期约定。</li>
+<li>阅读重点二：<strong>连接类型与负载策略</strong>——single / pooled / short 的语义与适用场景、负载均衡策略如何从候选服务器中做选择、超时与重试参数的含义与默认值。</li>
+<li>建议先读文档再做 sourceStudy 的源码走读，把「文档语义」与「代码现实」对齐，遇到分歧时以文档与所用版本的实现为准。</li>
+</ul>
+<h2 id="_27">本课小结</h2>
+<ul>
+<li><strong>三个核心对象</strong>：Channel 是客户端「一条 RPC 通道」，配置协议与连接策略；Controller 代表一次调用的全部状态（超时、重试、回包、错误码）；Service 承载服务端业务方法。三者生命周期不同步，混用或悬空引用是常见 bug 来源。</li>
+<li><strong>一次调用的骨架</strong>：CallMethod → Controller 装填状态与超时 → 负载均衡选目标 → 按连接类型取得连接并写出 → 收包切包反序列化 → 唤醒同步等待或执行 <code>done</code>。把这条骨架背下来，读源码和排查线上问题都有抓手。</li>
+<li><strong>连接类型</strong>：single / pooled / short 的本质差异是一条连接能同时承载几个请求；默认值通常就是协议的最佳选择，要改得有实测理由，用 p99 与句柄数实测说话，并如实记录版本、payload 与客户端 CPU。</li>
+<li><strong>bthread 边界</strong>：同步 RPC 的等待由框架挂起、worker 线程可复用；手写阻塞调用会卡死 worker 线程、放大长尾。「交给可挂起的接口，还是独立线程池」应当成为写每个回调前的本能检查。</li>
+<li><strong>边界意识</strong>：本节一切结论都来自 Apache brpc 公开仓库与文档；它是一份值得通读的高性能 C++ RPC 参考实现，但任何企业内部后台体系（包括你将来服务的平台）都不能由公开代码直接推断，需用同样的实验方法独立验证。</li>
+</ul><div class="pn"><span><a href="84.html">← gRPC C++同步与异步接口</a></span><span>下一课 待更新</span></div></main></div></body></html>
