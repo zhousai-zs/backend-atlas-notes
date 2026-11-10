@@ -1,0 +1,1198 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>87. 重试、退避与重试风暴 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（87/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（7/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="cur" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li class="todo">88. 幂等键与重复请求处理 <em>待更新</em></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 87 课 · 领域 F · 阶段 3</p><p class="dl"><a href="../files/87-f-retry.md" download>⬇ 本课 Markdown</a><a href="../files/practice87.tar.gz" download>⬇ 练习包 practice87.tar.gz</a></p><h1 id="87208">第 87/208 课：重试、退避与重试风暴</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-retry</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Retries</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>失败与请求语义</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-deadline</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Retries</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://grpc.io/docs/guides/retry/">重试、退避与重试风暴：参考文档 / 原始资料</a>（grpc.io）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>重试恢复部分瞬态故障，也会放大下游流量；重试资格、次数、预算和抖动应作为一个策略。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong></p>
+<p>本课讨论的是通用的重试工程方法。文中涉及的内容后台、推送、素材拉取、图文发布、阅读计数等场景均为<strong>教学假设</strong>，用于帮助理解通用后台问题，不代表任何具体公司的真实架构或实现细节。</p>
+<p>关于 gRPC 重试的具体字段名、默认值、上限和状态码判定，请以你所使用版本的官方文档和对应语言实现为准；本课只引用公开文档中的稳定要点，不猜测未公开行为，也不编造节点字段或验收标准。</p>
+<p>本课不涉及具体框架的私有配置，也不提供可直接照抄的生产参数。所有数字都是为了说明放大效应而设定的教学示例。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉例子：电话占线</h3>
+<p>你给客服打电话，听到“您拨打的电话正忙”。</p>
+<ul>
+<li><strong>立刻狂拨</strong>：挂断、重拨、挂断、重拨……每秒钟拨十次。对方线路并没有因此更快空出来，反而可能因为你和其他人一起猛拨而更忙。</li>
+<li><strong>隔一会儿再拨</strong>：等几秒，再试一次；如果还忙，就等更久一点。线路恢复后，你大概率能接通。</li>
+<li><strong>一群人同时重拨</strong>：如果一万个人都采用“立刻狂拨”，交换机承受的呼叫量会在故障瞬间暴涨，本来只是短暂占线，可能演变成大面积打不通。</li>
+</ul>
+<p>重试的直觉就在这里：<strong>失败后什么时候再试、试多少次、谁有资格试</strong>，比“要不要重试”更重要。没有节奏的重试，是把一次失败变成一场风暴。</p>
+<h3 id="_4">一条教学调用链</h3>
+<p>假设一个通用内容后台的读路径：</p>
+<div class="codehilite"><pre><span></span><code>客户端
+  └─&gt; API 网关
+        └─&gt; 图文服务
+              └─&gt; 阅读计数存储
+</code></pre></div>
+
+<p>某个时刻，计数存储出现约 2 秒的抖动，请求开始超时。如果链路上每一层都“失败就重试 3 次”，那么一次客户端请求在最坏情况下会变成：</p>
+<div class="codehilite"><pre><span></span><code>1 次客户端请求
+  × 3（网关重试）
+  × 3（图文服务重试）
+  × 3（计数存储客户端重试）
+  = 27 次对计数存储的尝试
+</code></pre></div>
+
+<p>这还只是一个客户端。若入口有 10000 QPS，且大家都在同一时间重试，下游看到的瞬时尝试量可能是原来的数倍到数十倍。<strong>重试没有创造新的容量，只是把未来的请求提前堆到同一时刻。</strong></p>
+<h3 id="_5">错误做法与正确做法对照</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>错误做法</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>下游超时</td>
+<td>立即原地重试，间隔为零</td>
+<td>先判断错误是否可重试，再用退避加抖动拉开时间</td>
+</tr>
+<tr>
+<td>写操作失败</td>
+<td>不区分幂等性，直接重发</td>
+<td>非幂等写默认不盲目重试，或先做去重 / 幂等键</td>
+</tr>
+<tr>
+<td>多层调用</td>
+<td>每一层都独立重试 3 次</td>
+<td>明确重试归属层，限制总尝试次数和总时限</td>
+</tr>
+<tr>
+<td>故障持续</td>
+<td>无限重试直到成功</td>
+<td>受整体 deadline 约束，预算耗尽就快速失败</td>
+</tr>
+<tr>
+<td>大面积抖动</td>
+<td>所有客户端同步重试</td>
+<td>加入随机抖动，打散重试峰值</td>
+</tr>
+<tr>
+<td>可观测性</td>
+<td>只记录最终失败</td>
+<td>记录尝试次数、退避时长、失败分类和重试预算</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>可重试错误分类</strong>：哪些失败值得再试，哪些重试只会放大问题。</li>
+<li><strong>指数退避和抖动</strong>：如何让重试在时间上散开，而不是整齐地冲击下游。</li>
+<li><strong>重试预算与多层放大</strong>：如何给重试设总闸门，避免每层都重试造成乘法级放大。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<p>完成本课后，你应当能够：</p>
+<ol>
+<li>能解释可重试错误分类，区分瞬态故障、永久错误和结果未知的写操作。</li>
+<li>能独立完成：模拟下游短暂故障，对比立即重试与退避加抖动的请求峰值。</li>
+<li>说明指数退避中“第 n 次重试前等待多久”的基本计算方式，并解释为什么必须加入随机抖动。</li>
+<li>识别多层调用链中重试被乘法放大的路径，估算最坏情况下的尝试次数。</li>
+<li>为一个具体接口写出重试策略：重试资格、最大尝试次数、退避上限、总时限和预算。</li>
+<li>解释重试与 deadline 的关系，判断“剩余时间还够不够再试一次”。</li>
+<li>说明为什么非幂等写不能盲目重试，以及可以用什么方式降低重复副作用。</li>
+<li>设计重试相关的观测指标，能在故障复盘时说清放大来自哪一层。</li>
+</ol>
+<blockquote>
+<p>提示：目标 1 和目标 2 是本节点的核心验收方向；其余目标用于把策略落到工程细节。</p>
+</blockquote>
+<h2 id="_8">为什么后端要懂</h2>
+<blockquote>
+<p>防止故障时多层重试压垮服务。</p>
+</blockquote>
+<p>这句话说的不是“重试不好”，而是：<strong>重试在正常情况下几乎不可见，在故障时却会决定系统是缓慢恢复还是彻底雪崩。</strong></p>
+<h3 id="_9">故障时流量为什么会反而上升</h3>
+<p>在没有重试的系统里，下游变慢，入口流量大致不变，压力是“平的”。</p>
+<p>一旦加入重试，链路就多了一个正反馈：</p>
+<div class="codehilite"><pre><span></span><code>下游变慢 / 超时
+  -&gt; 客户端认为失败，发起重试
+  -&gt; 下游收到更多请求，排队更长、超时更多
+  -&gt; 更多客户端认为失败，发起更多重试
+  -&gt; 负载继续上升
+</code></pre></div>
+
+<p>这就是重试风暴的典型形态。它不需要代码有 bug，只需要“失败就重试”这个看似合理的默认行为，再叠加一个已经过载的下游。</p>
+<p>更麻烦的是<strong>亚稳态</strong>：系统可能在一个高负载、高重试、高错误率的区间里维持很久。即使最初的抖动只有 2 秒，重试带来的额外请求也可能让下游一直缓不过来；等抖动结束，积压和重试还在继续，恢复时间被显著拉长。</p>
+<h3 id="_10">放大来自“乘法”，不是“加法”</h3>
+<p>单层重试的放大是线性的：最多尝试 <code>maxAttempts</code> 次。</p>
+<p>多层重试的放大是乘法的：</p>
+<div class="codehilite"><pre><span></span><code>入口尝试数 ≈ 客户端尝试 × 网关尝试 × 服务内尝试 × ...
+</code></pre></div>
+
+<p>教学假设：客户端、网关、图文服务、计数存储客户端各重试 3 次，那么一次入口请求在最坏情况下对应 <code>3 × 3 × 3 × 3 = 81</code> 次下游尝试（如果四层都独立重试）。即使只有三层，也是 27 次。</p>
+<p>所以工程上必须回答一个问题：<strong>这个请求应该由哪一层负责重试？</strong> 通常应尽量在靠近失败点、且掌握幂等语义的一层做有限重试，而不是每层都“顺手加一个重试”。</p>
+<h3 id="deadline">与上一课 deadline 的关系：重试花的是剩余预算</h3>
+<p>上一课讲 deadline：一个请求有整体截止时间，超过就必须放弃。</p>
+<p>重试不是免费的，它消耗的正是这份剩余预算：</p>
+<div class="codehilite"><pre><span></span><code>剩余时间 = deadline - 已经过去的时间
+一次重试的成本 ≈ 退避等待 + 本次尝试的最长耗时
+</code></pre></div>
+
+<p>如果剩余时间不够“退避 + 一次有意义的尝试”，那么重试只会做两件坏事：</p>
+<ol>
+<li>占用连接、线程或协程资源，挤占本可以成功的请求；</li>
+<li>在客户端已经不再等待结果时，仍然向下游发送流量。</li>
+</ol>
+<p>公开的 gRPC 文档也明确：重试受整体 deadline 约束。换句话说，<strong>deadline 是重试的上位规则</strong>，不是并列选项。设计重试策略时，先问“还剩多少时间”，再问“还值不值得试”。</p>
+<h3 id="2">一个教学时间线：2 秒抖动如何变成峰值翻倍</h3>
+<p>设定（全部为教学假设）：</p>
+<ul>
+<li>入口稳定在 <code>10000 QPS</code>；</li>
+<li>下游计数存储出现 <code>2 秒</code> 抖动，期间请求超时；</li>
+<li>客户端采用“失败立即重试一次”的策略，不考虑退避。</li>
+</ul>
+<p>正常 2 秒内，入口本来会发出：</p>
+<div class="codehilite"><pre><span></span><code>10000 QPS × 2 s = 20000 次请求
+</code></pre></div>
+
+<p>抖动发生后，这 20000 次请求失败并立即重试，于是下游在相近的时间窗口内看到：</p>
+<div class="codehilite"><pre><span></span><code>原始 20000 次 + 重试 20000 次 = 40000 次尝试
+</code></pre></div>
+
+<p>瞬时尝试速率从约 <code>10000 QPS</code> 抬到约 <code>20000 QPS</code>，<strong>峰值翻倍</strong>。如果客户端重试 3 次，最坏情况下尝试量还会继续上升；如果网关和服务内也重试，放大会按层数相乘。</p>
+<p>而如果采用“指数退避 + 抖动”，同样这批请求会被打散到更长的时间窗口里：</p>
+<ul>
+<li>第一次重试等待一个较小的随机区间；</li>
+<li>后续重试等待逐步变长，但有上限；</li>
+<li>不同客户端抽到不同的随机值，不会在同一毫秒一起冲进去。</li>
+</ul>
+<p>结果不是“重试次数变少”，而是<strong>重试的瞬时密度变低</strong>，给下游留出恢复空间。这正是退避和抖动存在的意义。</p>
+<h3 id="for">重试是一项策略，不是一行 for 循环</h3>
+<p>很多事故的起点，是把重试写成这样一句直觉代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">call</span><span class="p">())</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">ok</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">return</span><span class="w"> </span><span class="n">failed</span><span class="p">;</span>
+</code></pre></div>
+
+<p>这段代码只回答了“试几次”，却没有回答真正重要的问题：</p>
+<ul>
+<li><strong>谁可以重试</strong>：这个错误是瞬态的，还是参数错误、权限错误这类重试也不会好的永久错误？</li>
+<li><strong>写操作能不能重试</strong>：这次调用是否幂等？重复执行会不会多扣一次、多发一条、多记一次阅读？</li>
+<li><strong>等多久</strong>：退避从多少开始，增长多快，上限多少？</li>
+<li><strong>如何打散</strong>：有没有随机抖动，避免所有实例同步重试？</li>
+<li><strong>总共试几次</strong>：最大尝试次数是否包含首次？多层之间如何避免乘法放大？</li>
+<li><strong>什么时候必须停</strong>：整体 deadline 还剩多少？重试预算是否已经耗尽？</li>
+<li><strong>失败后怎么观测</strong>：能否区分“首次失败”“重试成功”“重试耗尽”，并在复盘时定位放大层？</li>
+</ul>
+<p>所以本课把重试视为一个<strong>策略对象</strong>：它至少包含重试资格、次数上限、退避与抖动、总时限、预算和可观测性。缺了任何一项，重试都可能在某个故障时刻从“救命”变成“加速器”。</p>
+<blockquote>
+<p>下一节开始进入核心概念：我们先建立错误分类，再看退避与抖动的计算，最后讨论预算和多层放大如何一起约束。</p>
+<p>把这些问题写清楚，比多写一个 <code>for</code> 循环更重要；它们也构成了本课后续实验的观察维度。</p>
+</blockquote>
+<h2 id="_11">核心概念</h2>
+<p>重试不是“失败就再来一次”的默认动作，而是一套三问策略：这次失败值不值得重试？应该等多久再试？最多允许多少请求被放大？它们分别对应错误分类、退避抖动和重试预算。</p>
+<blockquote>
+<p>教学假设：下文的公众号后台、推送、素材拉取、图文发布和阅读计数，都是通用后台场景的举例，不代表任何真实系统实现。gRPC 参数与行为以所用版本文档为准。</p>
+</blockquote>
+<h3 id="1">1. 可重试错误分类</h3>
+<p>重试只对“再试一次可能成功，且再试不会造成重复副作用”的失败有意义。要同时看两个维度：</p>
+<ul>
+<li>错误是否瞬态：网络抖动、短暂过载可能恢复；参数错误、权限错误通常不会。</li>
+<li>操作是否幂等：同一请求执行多次与执行一次的效果相同，才可以安全地重复发送。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>错误/场景</th>
+<th>是否可重试</th>
+<th>理由</th>
+<th>注意</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连接拒绝、建连超时</td>
+<td>是，谨慎</td>
+<td>请求通常还没到达服务端应用逻辑，重试有机会成功</td>
+<td>服务整体不可用时重试会加剧拥塞，必须有退避和预算</td>
+</tr>
+<tr>
+<td><code>UNAVAILABLE</code></td>
+<td>是，前提是操作安全</td>
+<td>常见于连接抖动、实例切换等瞬态问题</td>
+<td>也可能是过载信号；非幂等写先确认是否已提交</td>
+</tr>
+<tr>
+<td><code>RESOURCE_EXHAUSTED</code> / HTTP 429 限流</td>
+<td>有条件</td>
+<td>服务端明确表示容量不足</td>
+<td>优先遵守服务端 <code>Retry-After</code> 或 gRPC pushback；没有提示的立即重试会放大限流</td>
+</tr>
+<tr>
+<td><code>DEADLINE_EXCEEDED</code></td>
+<td>有条件</td>
+<td>若总 deadline 还有余量且操作幂等，仍可能成功</td>
+<td>若总预算已耗尽，重试没有意义；若请求已发出且结果未知，非幂等写危险</td>
+</tr>
+<tr>
+<td><code>INVALID_ARGUMENT</code> / HTTP 400</td>
+<td>否</td>
+<td>请求本身不合法，重试不会改变结果</td>
+<td>应修正参数或调用方式，属于契约或客户端问题</td>
+</tr>
+<tr>
+<td><code>NOT_FOUND</code></td>
+<td>一般否</td>
+<td>资源不存在通常是确定性结果</td>
+<td>如果读的是最终一致副本，是否短暂等待应由业务明确决定，不能默认重试</td>
+</tr>
+<tr>
+<td><code>PERMISSION_DENIED</code></td>
+<td>否</td>
+<td>权限或凭证问题不会因重试消失</td>
+<td>检查授权链路，避免把鉴权失败变成额外流量</td>
+</tr>
+<tr>
+<td><code>INTERNAL</code> / HTTP 500</td>
+<td>有条件</td>
+<td>可能是瞬时内部错误，也可能已经产生副作用</td>
+<td>只对幂等操作重试，并保留错误上下文和 trace</td>
+</tr>
+<tr>
+<td>请求已发出但响应丢失</td>
+<td>未知</td>
+<td>服务端可能已经执行，只是响应没有回来</td>
+<td>非幂等写不能盲目重试，必须用幂等键或查询确认结果</td>
+</tr>
+</tbody>
+</table>
+<p>一个关键分界是“请求有没有到达服务端应用逻辑”。请求尚未离开客户端，或明确未到达服务端应用时，重试通常几乎总是安全的；请求已经发出但结果未知时，风险取决于操作是否幂等。gRPC 的透明重试就属于前一种情况：请求还没有离开客户端，或没有到达服务端应用逻辑，因此可以安全地再发。相反，一旦客户端收到响应头，这次调用在语义上就被视为已提交（committed），不应再重试；具体行为以所用版本文档为准。</p>
+<p><code>DEADLINE_EXCEEDED</code> 要特别小心。它可能表示单次尝试超时，也可能表示整个调用预算已经耗尽。只有“整个 deadline 还有足够余量”时，重试才有意义；如果剩余时间连一次最小尝试都放不下，应该直接失败。重试始终受整体 deadline 约束。</p>
+<h4 id="_12">幂等性决定了“能不能重发”</h4>
+<p>读请求、按主键覆盖的 PUT、带幂等键的写，通常可以重试。教学假设中的“素材列表查询”是读，“把素材标题覆盖为某个值”是幂等写，都可以在预算内重试。</p>
+<p>但“阅读数 +1”“发送一条推送”“扣费”这类操作不是天然幂等的：同一个请求执行两次，副作用就发生两次。正确做法不是“绝不重试”，而是让它可以安全重试：</p>
+<ul>
+<li>客户端为一次业务操作生成稳定的幂等键，重试时复用同一个键。</li>
+<li>服务端用唯一索引、条件写或事务保存“键 → 已执行结果”，同一个键再次到来时返回第一次的结果。</li>
+<li>幂等键要和业务操作绑定，不能每次重试换一个新键。</li>
+</ul>
+<p>下面是一个保守的分类示意。真实系统还要结合错误详情、操作语义和服务端能力调整。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Op</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">READ</span> <span class="o">=</span> <span class="s2">"read"</span>
+    <span class="n">IDEMPOTENT_WRITE</span> <span class="o">=</span> <span class="s2">"idempotent_write"</span>
+    <span class="n">NON_IDEMPOTENT_WRITE</span> <span class="o">=</span> <span class="s2">"non_idempotent_write"</span>
+
+<span class="n">FINAL_CODES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"INVALID_ARGUMENT"</span><span class="p">,</span> <span class="s2">"NOT_FOUND"</span><span class="p">,</span> <span class="s2">"PERMISSION_DENIED"</span><span class="p">}</span>
+<span class="n">SAFE_CONNECT_CODES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"CONNECT_REFUSED"</span><span class="p">,</span> <span class="s2">"CONNECT_TIMEOUT"</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_retryable</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">deadline_left_s</span><span class="p">,</span> <span class="n">min_try_s</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">deadline_left_s</span> <span class="o">&lt;=</span> <span class="n">min_try_s</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="s2">"code"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="n">sent</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="s2">"request_sent"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">op</span> <span class="ow">is</span> <span class="n">Op</span><span class="o">.</span><span class="n">NON_IDEMPOTENT_WRITE</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sent</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">SAFE_CONNECT_CODES</span>
+    <span class="k">if</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">FINAL_CODES</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="s2">"RESOURCE_EXHAUSTED"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="s2">"retry_after_s"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">code</span> <span class="ow">in</span> <span class="n">SAFE_CONNECT_CODES</span> <span class="o">|</span> <span class="p">{</span>
+        <span class="s2">"UNAVAILABLE"</span><span class="p">,</span> <span class="s2">"DEADLINE_EXCEEDED"</span><span class="p">,</span> <span class="s2">"INTERNAL"</span>
+    <span class="p">}</span>
+</code></pre></div>
+
+<p>服务端去重的教学示意如下。生产实现必须保证“检查 + 写入结果”的原子性，通常依赖唯一索引、事务或条件更新，不能只用普通字典。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DedupStore</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">execute_once</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idem_key</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">idem_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">[</span><span class="n">idem_key</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">fn</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_results</span><span class="p">[</span><span class="n">idem_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+
+<p>gRPC 的 <code>retryableStatusCodes</code> 是一个显式白名单：只有配置中列出的状态码才允许重试。它不是“所有错误都自动重试”。<code>maxAttempts</code> 包括首次尝试，公开文档中该值上限被限制为 5；<code>initialBackoff</code>、<code>maxBackoff</code>、<code>backoffMultiplier</code> 和 <code>retryableStatusCodes</code> 要一起配置。再次强调，具体字段与上限以所用版本文档为准。</p>
+<h3 id="2_1">2. 指数退避和抖动</h3>
+<p>如果一次失败后立刻重试，所有同一时刻失败的客户端会在下一个瞬间再次同时打向下游。下游本来只是因为短暂过载而失败，却会被“整齐划一”的重试波峰再打一次。指数退避解决“越失败等越久”，抖动解决“大家不要在同一毫秒一起醒”。</p>
+<p>把第 n 次重试的基准等待时间记为：</p>
+<div class="codehilite"><pre><span></span><code>backoff_n = min(base × multiplier^(n-1), cap)
+</code></pre></div>
+
+<p>若把 n 从 0 开始编号，也可以写成 <code>backoff_n = min(base × multiplier^n, cap)</code>。两者只差一个下标。以 base=100ms、multiplier=2、cap=2s 为例：</p>
+<table>
+<thead>
+<tr>
+<th>第 n 次重试</th>
+<th>计算</th>
+<th>基准等待（不含抖动）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>100ms × 2^0</td>
+<td>100ms</td>
+</tr>
+<tr>
+<td>2</td>
+<td>100ms × 2^1</td>
+<td>200ms</td>
+</tr>
+<tr>
+<td>3</td>
+<td>100ms × 2^2</td>
+<td>400ms</td>
+</tr>
+<tr>
+<td>4</td>
+<td>100ms × 2^3</td>
+<td>800ms</td>
+</tr>
+<tr>
+<td>5</td>
+<td>100ms × 2^4</td>
+<td>1600ms</td>
+</tr>
+<tr>
+<td>6</td>
+<td>min(3200ms, 2000ms)</td>
+<td>2000ms</td>
+</tr>
+<tr>
+<td>7</td>
+<td>min(6400ms, 2000ms)</td>
+<td>2000ms</td>
+</tr>
+</tbody>
+</table>
+<p>没有抖动时，同一批失败会共享同一条时间表。假设 1000 个客户端同时因为一次 200ms 的下游抖动失败，它们会在 100ms、200ms、400ms 等时刻形成整齐的请求波峰，波峰高度甚至可能接近原始流量。抖动把每个客户端的等待随机化，让重试流量摊平。</p>
+<p>常见抖动方式：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>等待公式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无抖动</td>
+<td><code>backoff_n</code></td>
+<td>简单，但同步失败时容易形成重试波峰</td>
+</tr>
+<tr>
+<td>Full jitter（全抖动）</td>
+<td><code>random(0, backoff_n)</code></td>
+<td>分布最分散，平均等待更短；gRPC 文档中的重试等待采用这种形式</td>
+</tr>
+<tr>
+<td>Equal jitter（等量抖动）</td>
+<td><code>backoff_n/2 + random(0, backoff_n/2)</code></td>
+<td>保留至少一半的退避时间，分散程度较小</td>
+</tr>
+<tr>
+<td>Decorrelated jitter（去相关抖动）</td>
+<td><code>min(cap, random(base, prev × 3))</code></td>
+<td>带状态、相邻等待去相关，适合波动较大的场景；不是 gRPC 文档的默认形式</td>
+</tr>
+</tbody>
+</table>
+<p>选择抖动方式时，不要只看“平均延迟”。更重要的是峰值流量、尾延迟和预算消耗。教学上可以先用 full jitter 做基线，再用压测数据比较 equal jitter 或 decorrelated jitter 是否更合适。随机数生成器应各自独立，避免所有实例使用同一个固定种子。</p>
+<p>一个重要的细节是：抖动是在基准退避之上做随机化，不应把总时限也随机掉。等待时间必须和剩余 deadline 比较；如果剩余预算不足以“等待 + 再尝试一次最小请求”，应当直接放弃，而不是先睡完再发现已经超时。</p>
+<p>下面是带“总尝试次数上限 + 总时限上限 + 服务端提示”的重试循环示意。<code>fn(left)</code> 应使用传入的剩余时间设置本次调用的 deadline；<code>server_hint(err)</code> 把服务端 pushback 或 <code>Retry-After</code> 统一换算成秒，负值表示服务端要求不要重试。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RetryPolicy</span><span class="p">:</span>
+    <span class="n">max_attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">base_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>
+    <span class="n">multiplier</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span>
+    <span class="n">cap_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.0</span>
+    <span class="n">min_try_s</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">backoff</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">retry_no</span><span class="p">):</span>
+    <span class="n">nominal</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+        <span class="n">policy</span><span class="o">.</span><span class="n">base_s</span> <span class="o">*</span> <span class="n">policy</span><span class="o">.</span><span class="n">multiplier</span> <span class="o">**</span> <span class="p">(</span><span class="n">retry_no</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">policy</span><span class="o">.</span><span class="n">cap_s</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nominal</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">call_with_retry</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">policy</span><span class="p">,</span> <span class="n">deadline_s</span><span class="p">,</span> <span class="n">should_retry</span><span class="p">,</span> <span class="n">server_hint</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">started</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+    <span class="n">attempts</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">deadline_s</span> <span class="o">-</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">policy</span><span class="o">.</span><span class="n">min_try_s</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">"deadline budget exhausted"</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="n">deadline_s</span> <span class="o">-</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="n">started</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">attempts</span> <span class="o">&gt;=</span> <span class="n">policy</span><span class="o">.</span><span class="n">max_attempts</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">should_retry</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">left</span><span class="p">):</span>
+                <span class="k">raise</span>
+            <span class="n">wait_s</span> <span class="o">=</span> <span class="n">backoff</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="n">attempts</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">server_hint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">hint_s</span> <span class="o">=</span> <span class="n">server_hint</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">hint_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">hint_s</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">raise</span>
+                    <span class="n">wait_s</span> <span class="o">=</span> <span class="n">hint_s</span>
+            <span class="k">if</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">wait_s</span> <span class="o">+</span> <span class="n">policy</span><span class="o">.</span><span class="n">min_try_s</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">wait_s</span><span class="p">)</span>
+</code></pre></div>
+
+<p>这里的 <code>attempts</code> 包括首次尝试，因此 <code>max_attempts=4</code> 表示最多 1 次首发 + 3 次重试。<code>deadline_s</code> 是整次业务调用的总预算，不是单次尝试的超时。真实客户端还应把剩余 deadline 传给下游，避免在本地已经超时后，下游还在继续执行。</p>
+<p>尊重服务端反馈能显著降低无效重试：HTTP 429 可带 <code>Retry-After</code>；gRPC 服务端可通过 <code>grpc-retry-pushback-ms</code> 告诉客户端延后重试，或表示不要再重试。客户端应把这类提示纳入等待计算，而不是机械执行自己的退避表。解析细节和边界行为以所用版本文档为准。
+gRPC service config 中可以配置 <code>retryPolicy</code>。下面只是字段示意，字段名、默认值和上限以所用版本文档为准：</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"methodConfig"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span>
+<span class="w">    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">"service"</span><span class="p">:</span><span class="w"> </span><span class="s2">"content.PushService"</span><span class="p">,</span><span class="w"> </span><span class="nt">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Send"</span><span class="p">}],</span>
+<span class="w">    </span><span class="nt">"retryPolicy"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"maxAttempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"initialBackoff"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.1s"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"maxBackoff"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2s"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"backoffMultiplier"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"retryableStatusCodes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"UNAVAILABLE"</span><span class="p">,</span><span class="w"> </span><span class="s2">"RESOURCE_EXHAUSTED"</span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}]</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>配置里有三点值得注意：<code>maxAttempts</code> 包括首次尝试；公开文档把该值上限限制为 5；<code>retryableStatusCodes</code> 是白名单，只列出真正希望重试的状态码。不要把非幂等写配置成可重试，也不要把所有 5xx 都无条件列入。整体 deadline 仍然是最终约束，重试不能突破它。</p>
+<p>另有对冲（hedging）策略：它会在未收到响应时额外发出请求，用更多容量换尾延迟。它通常只适合幂等读，而且必须受整体预算约束；非幂等写不应使用。具体配置与行为以所用版本文档为准。</p>
+<h3 id="3">3. 重试预算与多层放大</h3>
+<p>教学假设：一个请求从网关进入内容服务，再调用素材服务，最后访问存储。如果这四层各自配置“最多尝试 3 次”，最坏放大如下：</p>
+<table>
+<thead>
+<tr>
+<th>串联层数 n</th>
+<th>最坏尝试次数 3^n</th>
+<th>直观含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>每个请求最多被本层放大 3 倍</td>
+</tr>
+<tr>
+<td>2</td>
+<td>9</td>
+<td>上游一次请求可能变成 9 次下游尝试</td>
+</tr>
+<tr>
+<td>3</td>
+<td>27</td>
+<td>放大继续按乘法增长</td>
+</tr>
+<tr>
+<td>4</td>
+<td>81</td>
+<td>一次入口请求可能压出 81 次底层尝试</td>
+</tr>
+</tbody>
+</table>
+<p>这是最坏上界，实际次数取决于失败发生在哪一层、哪些尝试被短路。但只要每层独立重试，放大就是乘法关系，而不是加法关系：每层都“只重试几次”，合起来就可能形成重试风暴。</p>
+<p>处理原则是只在一层重试，并默认放在最外层，也就是直接面向业务语义的那一层。理由是最外层最了解操作是否幂等、用户可见的总 deadline 和业务降级策略；它可以统一施加最大尝试次数、总时限和重试预算，避免内层再次放大。若团队选择靠近故障的层重试，则必须关闭其他层的重试，并让该层拿到完整预算；不要“每层都稍微重试一下”。</p>
+<p>其他层应快速失败，并把“不可重试”或“预算耗尽”的信号透传给上层。信号可以通过错误分类、错误详情或内部上下文约定表达，具体载体由团队协议决定；关键是不要让内层在不知情的情况下继续重试。</p>
+<p>重试预算限制重试请求占总请求的比例。教学值：不超过 10%。它不是每个请求自己算，而是按下游服务或方法共享一个预算；否则每个请求都以为自己只占 10%，总体仍会放大。</p>
+<p>一个简单的令牌桶实现是：正常成功请求补充 <code>ratio</code> 个令牌，<code>ratio=0.1</code> 表示 10 次成功供 1 次重试；每次重试消耗 1 个令牌；容量限制突发。预算不足时直接失败，不要换一层继续尝试。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RetryBudget</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="mf">100.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">=</span> <span class="n">capacity</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">allow_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">&gt;=</span> <span class="mf">1.0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span>
+</code></pre></div>
+
+<p>初始容量带来一定的突发能力，生产上还可以叠加时间衰减或滑动窗口。这个教学实现只表达“成功补充、重试消耗、容量封顶”的核心思想，不代表任何特定框架的内置算法。
+gRPC 还提供服务级重试限流 <code>retryThrottling</code>：<code>maxTokens</code> 是令牌上限，<code>tokenRatio</code> 是成功时补充的令牌数。公开文档语义是每次失败令牌减 1，每次成功加 <code>tokenRatio</code>，令牌数不高于 <code>maxTokens/2</code> 时停止重试；具体边界以所用版本文档为准。</p>
+<p>设 <code>maxTokens=10</code>、<code>tokenRatio=0.1</code>，初始有 10 个令牌：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>计算</th>
+<th>令牌数</th>
+<th>是否允许重试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>初始</td>
+<td>-</td>
+<td>10</td>
+<td>是</td>
+</tr>
+<tr>
+<td>连续 5 次失败</td>
+<td>10 - 5</td>
+<td>5</td>
+<td>否，达到一半阈值</td>
+</tr>
+</tbody>
+</table>
+<p>另一段同样从 10 个令牌开始：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>计算</th>
+<th>令牌数</th>
+<th>是否允许重试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>先 4 次失败</td>
+<td>10 - 4</td>
+<td>6</td>
+<td>是</td>
+</tr>
+<tr>
+<td>再 10 次成功</td>
+<td>6 + 10 × 0.1</td>
+<td>7</td>
+<td>是</td>
+</tr>
+<tr>
+<td>再 3 次失败</td>
+<td>7 - 3</td>
+<td>4</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>这组数字说明：失败会让重试预算快速收缩，成功只会缓慢恢复。它和客户端的指数退避、抖动、单层重试是互补关系，而不是替代关系。预算耗尽时直接快速失败，比“再试一下”更符合整体利益。</p>
+<p>重试前还应看下游健康度。熔断器在错误率或延迟超过阈值时进入 open，直接快速失败；冷却期后进入 half-open，只放少量探测流量。配合负载感知，下游返回 429 时主动降速，而不是继续加码。指标至少观察重试率、重试成功率、预算拒绝率和重试耗尽率；如果重试率很高但重试成功率很低，通常说明策略正在放大故障。</p>
+<p>三点收束：错误分类回答“能不能重试”，退避与抖动回答“何时重试”，预算与单层约束回答“最多放大多少”。可重试不等于应该重试；非幂等写不盲目重试；总尝试次数和总时限都要有上限；只在选定的一层重试，并让预算随下游健康度收缩。做到这些，重试才是恢复手段，而不是故障放大器。</p>
+<h4 id="practice87">峰值对比：practice87 的实测数字</h4>
+<p>用配套练习 practice87 的离散时间模拟就能直观看到抖动的作用（教学模型，详见「动手实践」）：1000 个在途请求在同一瞬间（5ms 内）失败，下游在 [0, 0.8s) 故障、之后每 10ms 最多成功处理 200 个，每个请求最多 5 次尝试、总时限 4s：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>重试峰值（每 10ms）</th>
+<th>恢复后峰值</th>
+<th>成功率</th>
+<th>放弃数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>立即重试（间隔 10ms）</td>
+<td>1000</td>
+<td>0（早已放弃）</td>
+<td>0.000</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>指数退避无抖动（200ms 起，×2，上限 2s）</td>
+<td>1000</td>
+<td>1000</td>
+<td>0.400</td>
+<td>600</td>
+</tr>
+<tr>
+<td>指数退避 + full jitter</td>
+<td>86</td>
+<td>28</td>
+<td>0.907</td>
+<td>93</td>
+</tr>
+</tbody>
+</table>
+<p>三点读法：立即重试在 50ms 内把 5 次尝试全部打完，故障还没结束就全部放弃，纯粹放大流量；无抖动退避虽然等待了，但 1000 个请求共享同一张时间表，每一波仍是 1000 个同时到达，恢复后那一波超过容量又失败 800 个；full jitter 把同样的重试摊开，峰值降到约 1/12，成功率反而最高。数字来自固定随机种子的教学模型，用来对比趋势，不是生产预测。</p>
+<p>还可以把预算和放大放在同一张表里推演。假设入口 QPS 为 1000，每层最多 3 次尝试：</p>
+<table>
+<thead>
+<tr>
+<th>重试层数</th>
+<th>最坏额外尝试</th>
+<th>下游需要承受的峰值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2000</td>
+<td>3000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>8000</td>
+<td>9000</td>
+</tr>
+<tr>
+<td>3</td>
+<td>26000</td>
+<td>27000</td>
+</tr>
+</tbody>
+</table>
+<p>可见“每层 3 次”在多层串联下很快失去可控性。重试预算把这类放大限制在可观测范围内，抖动则把同一时刻的波峰摊开。两者一起使用，才能既提高瞬态故障的恢复率，又避免把下游推入更深的过载。</p>
+<p>回到主线：先把错误分类做对，再用退避加抖动安排时间，最后用单层重试和预算封住总量；任何一步缺失，重试都可能从恢复手段变成故障放大器。</p>
+<h2 id="_13">常见误区与设计权衡</h2>
+<blockquote>
+<p>所有层都重试会形成乘法级请求放大。</p>
+<p>积极重试提高短暂故障成功率，也增加成本和恢复压力。</p>
+</blockquote>
+<h3 id="_14">乘法级放大与恢复期亚稳态</h3>
+<p>重试不是“免费的成功率”。只要请求链路上有多个环节各自重试，尝试次数就会相乘，而不是相加。以教学假设的通用内容后台为例：接入层、业务服务、下游依赖各重试 3 次，那么一个用户请求在最坏情况下会变成 3 × 3 × 3 = 27 次下游尝试。故障越靠近底层，放大越明显；如果每层还把“重试次数”理解为“额外重试 3 次”，实际倍数还会更大。</p>
+<p>更危险的是恢复阶段。下游刚从短暂故障中恢复时，容量往往还没有完全回到正常水平，而此时积压请求、超时请求和层层重试会同时涌入。第一波重试把刚恢复的下游再次打满，请求继续失败并继续重试，形成“恢复—过载—再失败”的亚稳态。系统看起来一直在恢复，实际却长时间回不到稳定状态。</p>
+<p>因此，重试策略必须把“谁可以重试、重试几次、总共允许多少时间、失败如何记账”放在一起考虑，而不是在每个调用点各自写一个 for 循环。多层共享预算、限制总尝试次数，并给重试加上退避与抖动，才能避免把局部故障升级为全局过载。</p>
+<h3 id="_15">积极重试与保守重试的权衡</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>积极重试</th>
+<th>保守重试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>短暂故障成功率</td>
+<td>较高，能覆盖更多瞬时抖动</td>
+<td>较低，部分本可恢复的请求会失败</td>
+</tr>
+<tr>
+<td>尾延迟</td>
+<td>可能更高，失败请求占用更久</td>
+<td>更可控，快速失败或有限等待</td>
+</tr>
+<tr>
+<td>下游压力</td>
+<td>更大，故障时放大明显</td>
+<td>更小，给下游留出恢复空间</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>更高，CPU、连接、日志和下游配额都被消耗</td>
+<td>更低，但可能增加业务失败成本</td>
+</tr>
+<tr>
+<td>恢复时间</td>
+<td>故障初期看似更快，严重时可能延长整体恢复</td>
+<td>单请求更慢，但整体恢复更稳</td>
+</tr>
+</tbody>
+</table>
+<p>选择哪一侧，取决于接口是否幂等、业务是否能接受失败、下游容量和整体 deadline。读请求通常可以更积极；非幂等写、计数类操作和已经接近 deadline 的请求应更保守。积极与保守不是道德判断，而是对“成功率、尾延迟、下游压力、成本、恢复时间”的显式取舍。</p>
+<h3 id="_16">高频误区（对错对照）</h3>
+<p><strong>误区一：失败后在 for 循环里立即重试，不等待。</strong>
+错。立即重试会在下游仍然故障时瞬间制造数倍流量，把一次短暂抖动变成持续过载。
+对。至少加入有上限的指数退避，并用抖动打散重试时刻；重试之间要检查整体 deadline。</p>
+<p><strong>误区二：只要退避了，就不需要抖动。</strong>
+错。所有客户端使用同样的 base 和倍数，会在同一时刻一起重试，形成周期性的“重试脉冲”。
+对。使用 full jitter 或等效随机化，让重试到达时间分散开；抖动范围要可解释、可测试。</p>
+<p><strong>误区三：所有失败都可以重试，包括非幂等写。</strong>
+错。教学假设中的“重复推送”“阅读数 +1”这类操作，如果响应丢失后盲目重试，可能造成重复推送或重复计数。
+对。先判断操作是否幂等；非幂等写需要幂等键、去重表或业务侧唯一约束，无法保证时不要自动重试。</p>
+<p><strong>误区四：只限制重试次数，不限制总时限，超过 deadline 还在重试。</strong>
+错。次数上限不能防止单次调用耗时过长；已经超过整体 deadline 的重试只会浪费资源，并让调用方更晚拿到失败。
+对。同时设置 max attempts 和总 deadline，每次重试前检查剩余时间，剩余预算不足时直接放弃。</p>
+<p><strong>误区五：每一层都重试，而且各层不共享预算。</strong>
+错。接入层、业务层、依赖层各自重试会形成乘法放大，故障时总尝试次数可能远超预期。
+对。约定只在一层重试（本课默认放在掌握业务语义与总 deadline 的最外层），其余层快速失败并透传「不要重试」；或让各层共享重试预算/令牌。</p>
+<p><strong>误区六：把 4xx 参数错误也当成可重试错误。</strong>
+错。参数错误、鉴权失败、资源不存在等通常不会因为重试而改变，重试只会放大无效请求。
+对。只对明确的瞬态错误重试，例如 UNAVAILABLE、超时等；具体状态码分类以协议和所用框架文档为准。</p>
+<h2 id="_17">动手实践：模拟下游短暂故障，对比立即重试与退避加抖动的请求峰值</h2>
+<p>本节使用配套练习 practice87（随课附 <code>practice87.tar.gz</code>）：单机 Python 3 标准库、离散时间模拟、无需网络、一秒内跑完。目标不是实现生产级重试库，而是把「策略差异」变成可重复观察的数字：在同样的短暂故障下，立即重试、无抖动退避、退避加抖动分别会把多少请求同时推到下游。</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sim.py</code></td>
+<td>三种重试策略的离散时间模拟 + 多层放大计算</td>
+</tr>
+<tr>
+<td><code>idem.py</code></td>
+<td>「阅读数 +1」响应丢失场景：盲重试 / 分类拒绝 / 幂等键</td>
+</tr>
+<tr>
+<td><code>budget.py</code></td>
+<td>gRPC 文档式 retryThrottling 令牌规则的教学模拟</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>跑全部脚本并自动断言，通过时输出 <code>ALL_CHECKS_PASSED</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_18">实验模型</h3>
+<ul>
+<li>N = 1000 个在途请求在 t ∈ [0, 5ms) 内同时失败——模拟「下游实例突然挂掉，一批请求同时报 UNAVAILABLE」（教学假设：比如一次推送后大量用户同时打开文章，请求同一个计数服务）。</li>
+<li>下游在 [0, 0.8s) 故障，返回 UNAVAILABLE；0.8s 之后恢复。</li>
+<li>恢复后下游容量为每 10ms 桶 200 个请求；超出容量的请求同样失败（过载）。</li>
+<li>按 10ms 时间桶统计到达下游的请求数：<code>retry_peak_per_10ms</code> 只统计重试请求的峰值，<code>after_recovery_peak</code> 统计恢复后最拥挤的一个桶。</li>
+<li>三种策略都设置 <code>max_attempts = 5</code>（包含首次尝试）和总时限 <code>deadline = 4s</code>：下一次重试的时刻若会超过总时限，直接放弃。</li>
+</ul>
+<h3 id="1_1">步骤 1：准备目录与解释器</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/practice87<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xzf<span class="w"> </span>practice87.tar.gz<span class="w"> </span>-C<span class="w"> </span>~/practice87<span class="w"> </span>--strip-components<span class="o">=</span><span class="m">1</span>
+<span class="nb">cd</span><span class="w"> </span>~/practice87
+python3<span class="w"> </span>--version<span class="w">        </span><span class="c1"># 3.8+ 即可，只用标准库</span>
+ls<span class="w">                       </span><span class="c1"># budget.py  idem.py  sim.py  test.sh</span>
+</code></pre></div>
+
+<h3 id="2_2">步骤 2：读懂三种策略</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">next_delay</span><span class="p">(</span><span class="n">strategy</span><span class="p">,</span> <span class="n">attempt</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">mult</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">cap</span><span class="o">=</span><span class="mf">2.0</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""attempt: 已经失败的次数(1 起)。返回下一次重试前的等待秒数。"""</span>
+    <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">"immediate"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.010</span>                          <span class="c1"># 失败后 10ms 立刻再打</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">base</span> <span class="o">*</span> <span class="n">mult</span> <span class="o">**</span> <span class="p">(</span><span class="n">attempt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">cap</span><span class="p">)</span>  <span class="c1"># 200ms, 400ms, 800ms, 1.6s, 2s...</span>
+    <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">"backoff"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">b</span>                              <span class="c1"># 无抖动：所有人同一张时间表</span>
+    <span class="k">if</span> <span class="n">strategy</span> <span class="o">==</span> <span class="s2">"backoff_jitter"</span><span class="p">:</span>          <span class="c1"># full jitter: random(0, b)</span>
+        <span class="k">return</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">strategy</span><span class="p">)</span>
+</code></pre></div>
+
+<p>模拟主循环用一个最小堆按时间顺序处理每一次尝试：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">while</span> <span class="n">events</span><span class="p">:</span>
+    <span class="n">t</span><span class="p">,</span> <span class="n">cid</span><span class="p">,</span> <span class="n">att</span> <span class="o">=</span> <span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>       <span class="c1"># (时间, 客户端, 第几次尝试)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t</span> <span class="o">/</span> <span class="n">BUCKET</span><span class="p">);</span> <span class="n">buckets</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">buckets</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">success</span> <span class="o">=</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">outage_end</span> <span class="ow">and</span> <span class="n">buckets</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">CAPACITY</span>
+    <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+        <span class="n">ok</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span> <span class="k">continue</span>
+    <span class="k">if</span> <span class="n">att</span> <span class="o">&gt;=</span> <span class="n">max_attempts</span><span class="p">:</span>                   <span class="c1"># 上限 1：总尝试次数</span>
+        <span class="n">give_up</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span> <span class="k">continue</span>
+    <span class="n">nt</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">next_delay</span><span class="p">(</span><span class="n">strategy</span><span class="p">,</span> <span class="n">att</span><span class="p">,</span> <span class="n">rng</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">nt</span> <span class="o">&gt;=</span> <span class="n">deadline</span><span class="p">:</span>                        <span class="c1"># 上限 2：总时限</span>
+        <span class="n">give_up</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span> <span class="k">continue</span>
+    <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="p">(</span><span class="n">nt</span><span class="p">,</span> <span class="n">cid</span><span class="p">,</span> <span class="n">att</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+</code></pre></div>
+
+<p>注意两道闸：<code>att &gt;= max_attempts</code> 和 <code>nt &gt;= deadline</code>，分别对应验收「总尝试次数与总时限有上限」。</p>
+<h3 id="3_1">步骤 3：运行并读取指标</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>sim.py<span class="w">                      </span><span class="c1"># 三种策略一起跑</span>
+python3<span class="w"> </span>sim.py<span class="w"> </span>--strategy<span class="w"> </span>backoff_jitter<span class="w"> </span>--json
+</code></pre></div>
+
+<p>实测输出（固定种子 42，你的机器上应完全一致）：</p>
+<div class="codehilite"><pre><span></span><code>immediate       retry_peak_per_10ms= 1000 @  10ms after_recovery_peak=   0 total= 5000 amp=5.00 success=0.000 give_up=1000 max_att=5 max_t=0.045s
+backoff         retry_peak_per_10ms= 1000 @ 200ms after_recovery_peak=1000 total= 4800 amp=4.80 success=0.400 give_up= 600 max_att=5 max_t=3.005s
+backoff_jitter  retry_peak_per_10ms=   86 @ 150ms after_recovery_peak=  28 total= 4619 amp=4.62 success=0.907 give_up=  93 max_att=5 max_t=2.372s
+</code></pre></div>
+
+<p>怎么读：</p>
+<ol>
+<li><strong>immediate</strong>：5 次尝试在 45ms 内全部用完，每 10ms 桶都是 1000 个请求——下游故障期间流量放大 5 倍，而故障要 800ms 才结束，所以成功率为 0。立即重试既没救回请求，又把下游打得更狠。</li>
+<li><strong>backoff（无抖动）</strong>：等待拉长了，但 1000 个请求在 200ms、600ms、1.4s、3.0s 整齐地成波到达，每波 1000 个。1.4s 那波下游已恢复，但容量只有 200/10ms，于是 800 个因过载再次失败——这就是「恢复时被重试波峰打回去」。</li>
+<li><strong>backoff_jitter</strong>：同样的退避上限，只是每个客户端在 [0, b) 里随机取等待，重试峰值从 1000 降到 86，恢复后最拥挤的桶只有 28，成功率 0.907。</li>
+<li><code>amp</code>（总尝试 / 请求数）三者接近：抖动不是靠「少试」，而是靠「错开」。</li>
+</ol>
+<h3 id="4">步骤 4：观察多层放大</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>sim.py<span class="w"> </span>--layers<span class="w"> </span><span class="m">3</span>
+python3<span class="w"> </span>sim.py<span class="w"> </span>--layers<span class="w"> </span><span class="m">4</span>
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>layers=3 attempts_per_layer=3 every_layer_retry=27x only_one_layer=3x
+layers=4 attempts_per_layer=3 every_layer_retry=81x only_one_layer=3x
+</code></pre></div>
+
+<p>下游完全故障时，每层都尝试 3 次会让最底层收到 3^n 倍请求；只让一层重试，放大始终是 3 倍。</p>
+<h3 id="5">步骤 5：幂等实验</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>idem.py
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>blind_retry      result=OK               attempts=2 server_calls=2 count=2
+classify_no_key  result=FAILED_NO_RETRY  attempts=1 server_calls=1 count=1
+idempotency_key  result=OK(dup)          attempts=2 server_calls=2 count=1
+classify: {'UNAVAILABLE': False, 'INVALID_ARGUMENT': False, 'DEADLINE_EXCEEDED': False} unsent: True
+</code></pre></div>
+
+<p>服务端第一次已经 <code>count += 1</code>，但响应丢了（RESPONSE_LOST）：</p>
+<ul>
+<li><code>blind_retry</code>：盲目重试，阅读数被加了两次（count=2）——这就是要避免的事故。</li>
+<li><code>classify_no_key</code>：<code>is_retryable</code> 判定「已发出、结果未知、非幂等」→ 不重试，直接把失败交给上层（count=1）。</li>
+<li><code>idempotency_key</code>：同一业务操作复用同一个幂等键，服务端识别重复并返回 <code>OK(dup)</code>，可以安全重试（count=1）。</li>
+<li>最后一行：对非幂等写，已发出的 UNAVAILABLE / DEADLINE_EXCEEDED 都不重试；只有「请求从未发出」才安全。</li>
+</ul>
+<h3 id="6">步骤 6：重试限流（令牌）实验</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>budget.py
+</code></pre></div>
+
+<div class="codehilite"><pre><span></span><code>outage: requests=100 retries=4 tokens=0.0 (without throttle, 3 attempts each =&gt; retries=200)
+recovery: successes_needed_to_reenable_retry=51 tokens=5.1
+</code></pre></div>
+
+<p><code>maxTokens=10, tokenRatio=0.1</code>：故障期 100 个请求全部失败，令牌很快跌到一半以下，总共只放出 4 次重试（不限流、每个请求 3 次尝试时是 200 次）。恢复后要累计 51 次成功令牌才回到 5 以上，重试才重新开放——「失败收缩快、成功恢复慢」。本脚本令牌最低截到 0，这是教学简化，实际行为以所用版本文档为准。</p>
+<h3 id="7">步骤 7：自动断言</h3>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>断言包括：jitter 重试峰值 &lt; immediate 的一半，也 &lt; 无抖动退避的一半；成功率 jitter &gt; backoff &gt; immediate；所有策略最大尝试次数 ≤ 5、最后一次尝试时刻 ≤ 4s；3/4 层放大为 27/81 倍、一层为 3 倍；盲重试会重复计数、分类后非幂等写只尝试 1 次、幂等键去重后计数为 1；令牌限流后重试次数 ≤ 5。全部通过时最后一行输出 <code>ALL_CHECKS_PASSED</code>。</p>
+<h3 id="8">步骤 8：改参数再跑（自己动手）</h3>
+<p>在 <code>sim.py</code> 里改下面几处，记录到结果表：</p>
+<ul>
+<li><code>OUTAGE_END</code> 改成 0.3 和 2.0：故障越长，有限次数的重试越救不回来，放弃数上升——说明「重试只救瞬态故障」。</li>
+<li><code>CAPACITY</code> 改成 1000：无抖动退避的恢复波峰不再过载，成功率会上升——同步波峰的危害依赖于下游容量余量。</li>
+<li><code>simulate(..., max_attempts=3)</code> 或 <code>deadline=1.0</code>：观察两道闸如何截断重试。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>策略/参数</th>
+<th>retry_peak</th>
+<th>after_recovery_peak</th>
+<th>total</th>
+<th>success_rate</th>
+<th>give_up</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>immediate</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>backoff</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>backoff_jitter</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>layers=3 / 4</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>对比只一层重试</td>
+</tr>
+</tbody>
+</table>
+<h3 id="9">步骤 9：验收清单</h3>
+<ul>
+<li>[ ] 不可幂等写不盲目重试</li>
+<li>[ ] 总尝试次数与总时限有上限</li>
+</ul>
+<p>过程自检：</p>
+<ul>
+<li>[ ] 三种策略使用相同的 max_attempts 与 deadline，比较的只是等待与随机化</li>
+<li>[ ] 能解释为什么无抖动退避在恢复后仍失败 600 个</li>
+<li>[ ] 幂等实验覆盖了「响应丢失后重试」，并看到幂等键让 count 保持 1</li>
+<li>[ ] 多层实验对比了每层重试与只一层重试</li>
+<li>[ ] <code>bash test.sh</code> 输出 <code>ALL_CHECKS_PASSED</code></li>
+</ul>
+<h3 id="10-grpc">步骤 10：排障清单与迁移到 gRPC</h3>
+<ul>
+<li>所有策略 give_up 都很高：检查 deadline 是否小于故障窗口加必要退避，或 max_attempts 是否过小。</li>
+<li>jitter 峰值没有明显低于 immediate：检查是否真用了 <code>rng.uniform</code>、统计桶是否过大、初始请求是否被打散了（本模型故意让它们同时失败）。</li>
+<li>结果与上面不一致：确认没改随机种子（<code>seed=42</code>）和参数。</li>
+<li>非幂等实验仍出现重复计数：检查幂等键是否在首次请求前生成、是否随重试复用。</li>
+</ul>
+<p>迁移到 gRPC 时，用 service config 的 <code>retryPolicy</code>（maxAttempts、initialBackoff、maxBackoff、backoffMultiplier、retryableStatusCodes）表达本实验的 backoff_jitter，用 <code>retryThrottling</code>（maxTokens、tokenRatio）表达 budget.py 的令牌；只把幂等方法配置为可重试；所有重试仍受整体 deadline 约束。字段、默认值和可用性以所用版本文档为准。</p>
+<h3 id="_19">把结论带回设计</h3>
+<ul>
+<li>先判断接口是否幂等，再决定是否允许自动重试；非幂等写优先补幂等键，而不是用重试掩盖语义问题。</li>
+<li>再确定只在哪一层重试，避免每层各自重试。</li>
+<li>然后设置 max attempts 与总 deadline，二者缺一不可。</li>
+<li>最后选择退避参数与抖动方式，并用峰值、恢复后峰值、成功率和放弃数验证。</li>
+</ul>
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<blockquote>
+<p>来源要求（原文）：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>本节把这条要求落成一条可执行的阅读路径：先固定版本与日期，再逐项核对语义，最后把结论写成可复查的笔记。重试看起来只是一个布尔开关，真正决定后果的是“对什么错、重几次、等多久、总共能等多久、谁来兜底”这一组参数。</p>
+<h3 id="_20">阅读路径</h3>
+<ol>
+<li>打开 https://grpc.io/docs/guides/retry/ ，在笔记顶部记录：访问日期（本文写作时为 2026-11-10）、所用语言与 gRPC 版本、运行时/框架版本。</li>
+<li>先通读“何时重试”的部分，区分状态码层面的可重试集合与业务层面的可重试条件。</li>
+<li>打开 <code>retryPolicy</code> 字段表，逐个抄下字段名与含义，再回头对照示例配置。</li>
+<li>单独核对 <code>maxAttempts</code> 的计数口径与文档给出的上限。</li>
+<li>找到退避公式与随机区间的描述，确认“第 n 次重试”的下标从 1 还是从 0 开始。</li>
+<li>查找 committed（已提交）与透明重试（transparent retry）的说明，理解它们如何改变“能不能重试”。</li>
+<li>查找服务端 pushback 的响应元数据，确认延后与停止两种语义。</li>
+<li>查找 <code>retryThrottling</code> 的令牌规则，写出失败、成功与停止重试三个分支。</li>
+<li>查找 <code>hedgingPolicy</code>，核对它与 <code>retryPolicy</code> 能否同时出现，以所用版本文档为准。</li>
+<li>回到 deadline/timeout 章节，确认重试与总时限的约束关系。</li>
+<li>用本文“自测题”第 1、3 题检验自己是否真的读懂了放大与预算。</li>
+</ol>
+<h3 id="_21">逐项核对清单</h3>
+<ul>
+<li><code>maxAttempts</code>：包括首次尝试在内的总尝试次数上限；公开文档中该值被限制为 5。写配置时不要把它理解成“额外重试 4 次”。</li>
+<li><code>initialBackoff</code>、<code>maxBackoff</code>、<code>backoffMultiplier</code>：共同决定每次重试前的等待区间。</li>
+<li><code>retryableStatusCodes</code>：只对这些状态码重试；不在列表里的失败直接返回。</li>
+<li>退避公式：第 n 次重试前随机等待 <code>random(0, min(initialBackoff * backoffMultiplier^(n-1), maxBackoff))</code>，上限由 <code>maxBackoff</code> 截断。</li>
+<li>已提交（committed）：收到响应头后，这次调用视为已提交，不再重试。也就是说“请求可能已经被处理”之后不该再赌一次。</li>
+<li>透明重试：当请求尚未离开客户端，或尚未到达服务端应用逻辑时，gRPC 可以做透明重试；它与 <code>maxAttempts</code>、限流令牌如何计数，以所用版本文档为准。</li>
+<li>pushback：服务端可用 <code>grpc-retry-pushback-ms</code> 告知客户端延后多久再重试，或不再重试。</li>
+<li><code>retryThrottling</code>：<code>maxTokens</code> 与 <code>tokenRatio</code>；每次失败令牌减 1，每次成功加 <code>tokenRatio</code>；令牌数不高于 <code>maxTokens/2</code> 时停止重试。</li>
+<li><code>hedgingPolicy</code>：对冲请求是另一套并发策略，与 <code>retryPolicy</code> 的关系以所用版本文档为准，不要凭记忆混用。</li>
+<li>deadline：重试受整体 deadline 约束，退避等待也在这条时间线内消耗预算。</li>
+</ul>
+<h3 id="_22">读文档时带着的四个问题</h3>
+<ul>
+<li>这个错误是否保证请求尚未被处理？如果无法保证，重试就可能造成重复副作用。</li>
+<li>这次重试会不会被客户端库、框架拦截层或网关中的另一层再次放大？</li>
+<li>退避等待是否计入同一个 deadline？用户还能等多久？</li>
+<li>故障持续时由谁负责停止：令牌不足、预算耗尽，还是人工开关？</li>
+</ul>
+<h3 id="_23">阅读笔记模板</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>记录内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>访问日期</td>
+<td>例如 2026-11-10</td>
+</tr>
+<tr>
+<td>语言/版本</td>
+<td>语言、gRPC 版本、框架版本</td>
+</tr>
+<tr>
+<td>maxAttempts 口径</td>
+<td>是否含首次、文档上限</td>
+</tr>
+<tr>
+<td>退避公式</td>
+<td>原文公式与随机区间</td>
+</tr>
+<tr>
+<td>committed 条件</td>
+<td>何时视为已提交</td>
+</tr>
+<tr>
+<td>pushback 行为</td>
+<td>延后/停止的字段与单位</td>
+</tr>
+<tr>
+<td>限流规则</td>
+<td>失败、成功、停止阈值</td>
+</tr>
+<tr>
+<td>hedging 关系</td>
+<td>能否与 retry 同时配置</td>
+</tr>
+<tr>
+<td>deadline 关系</td>
+<td>重试是否共享总时限</td>
+</tr>
+<tr>
+<td>未决问题</td>
+<td>需要回代码或实验确认的点</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_24">映射到通用内容后台（教学假设）</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>能否直接重试</th>
+<th>主要风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>拉取素材元数据</td>
+<td>读请求，通常可重试</td>
+<td>重试放大与缓存击穿</td>
+</tr>
+<tr>
+<td>拉取素材二进制</td>
+<td>读请求，通常可重试</td>
+<td>大对象重复传输占带宽</td>
+</tr>
+<tr>
+<td>图文发布</td>
+<td>不可盲目重试</td>
+<td>重复发布、重复扣配额</td>
+</tr>
+<tr>
+<td>阅读数 +1</td>
+<td>不可盲目重试</td>
+<td>重复计数</td>
+</tr>
+<tr>
+<td>站内推送</td>
+<td>不可盲目重试</td>
+<td>重复触达用户</td>
+</tr>
+</tbody>
+</table>
+<p>上表只是教学假设，用来练习“先分类再决定是否重试”；真实系统还要结合业务幂等键、去重存储和预算策略。</p>
+<h3 id="_25">常见误读</h3>
+<ul>
+<li>把“超时”当成“失败”：超时是结果未知，写操作尤甚。</li>
+<li>把“重试次数”当成“总耗时上限”：两者必须分别设。</li>
+<li>只在一处配置重试，却忘了框架、网关、客户端可能各自也在重试。</li>
+<li>认为抖动会降低成功率：它主要改变重试的时间分布，避免同步尖峰。</li>
+</ul>
+<h3 id="_26">边界与教学假设</h3>
+<ul>
+<li>公开文档描述的是 gRPC 的重试语义，不能据此推断任何企业内部 RPC 的实现细节，包括具体的重试层数、预算参数或幂等方案。</li>
+<li>本文举例的素材拉取、图文发布、阅读计数等均为通用内容后台的教学假设，用于说明取舍，不代表任何真实系统的内部设计。</li>
+<li>具体字段名、默认值、状态码集合和框架注入行为，以所用版本文档为准；不确定时先写实验再写结论。</li>
+</ul>
+<h2 id="_27">自测题</h2>
+<h3 id="1_2">题 1：四层调用链的乘法放大</h3>
+<p><strong>题干</strong>：一条调用链有 4 层，每层对下游最多尝试 3 次。下游完全故障时，假设每层都独立重试且不共享预算，最底层大约会收到多少次请求？应如何修改？</p>
+<p><strong>答案</strong>：3^4 = 81 次。修改方向是只保留一层重试，其余层把错误透传；同时叠加重试预算与总时限。</p>
+<p><strong>解析</strong>：第一层 3 次尝试，每次都会触发第二层的 3 次，再乘第三、第四层，得到 3×3×3×3=81。这就是 pitfalls 所说的“所有层都重试会形成乘法级请求放大”。更糟的是，下游越慢，放大持续越久，恢复期还要承受这批积压请求。可行做法：</p>
+<ul>
+<li>只在最外层或最靠近用户的一层重试，内层一律不重试；</li>
+<li>重试只针对可重试错误分类，且次数、退避、总时限都有上限；</li>
+<li>用重试预算或令牌桶限制故障期间的额外流量；</li>
+<li>通过请求头携带“已重试”标记，避免下游再次放大。</li>
+</ul>
+<p>对应验收：总尝试次数与总时限有上限。</p>
+<h3 id="2-1">题 2：阅读数 +1 能否自动重试</h3>
+<p><strong>题干</strong>：给“文章阅读数 +1”的接口在超时后自动重试是否安全？如果不安全，怎么改？</p>
+<p><strong>答案</strong>：不安全。超时只说明客户端没等到响应，不说明服务端没执行；自动重试可能重复计数。应使用幂等键/去重表，或改为可重放的计数事件。</p>
+<p><strong>解析</strong>：超时是典型的“结果未知”状态。首次请求可能已经写入成功，只是响应丢了；此时重试会再加 1。可选的工程手段：</p>
+<ul>
+<li>客户端生成幂等键（如 请求 ID + 文章 ID），服务端按键去重，重复请求返回首次结果；</li>
+<li>计数改为“事件 + 聚合”，用唯一事件 ID 保证同一阅读事件只计一次；</li>
+<li>对确实需要强一致的场景，先查询再写入并不可靠，仍要靠服务端去重；</li>
+<li>明确不可幂等写不盲目重试，只对可安全重放的读请求或幂等写重试。</li>
+</ul>
+<p>对应验收：不可幂等写不盲目重试。</p>
+<h3 id="3_2">题 3：抖动与总时限</h3>
+<p><strong>题干</strong>：为什么退避要加抖动？full jitter 的公式是什么？只设尝试次数、不设总时限会有什么问题？</p>
+<p><strong>答案</strong>：抖动把同时失败的大量客户端错开，避免同一时刻再次冲击下游。full jitter 可写为 <code>sleep = random(0, min(initialBackoff * backoffMultiplier^(n-1), maxBackoff))</code>。只设次数不设总时限，会让重试在用户早已超时后继续占用资源，并拖长故障恢复。</p>
+<p><strong>解析</strong>：</p>
+<ul>
+<li>没有抖动时，同一批请求会在相同退避点同时重试，形成新的尖峰，即“重试风暴”。</li>
+<li>抖动让等待时间落在区间内随机分布，把尖峰摊平；gRPC 公开文档给出的正是从 0 到当前退避上限的随机等待。</li>
+<li>次数上限只约束“每次调用最多试几次”，不约束一次调用在墙上时钟里待多久；若下游持续超时，退避会累积，请求可能远超用户可接受时延。</li>
+<li>因此需要同时设置单次调用 deadline、总尝试次数上限和可选的预算，并让重试等待计入 deadline。</li>
+</ul>
+<p>对应验收：总尝试次数与总时限有上限。</p>
+<h3 id="_28">自测记录表</h3>
+<table>
+<thead>
+<tr>
+<th>题目</th>
+<th>我的结论</th>
+<th>对应验收</th>
+<th>需要实验确认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>题 1</td>
+<td>81 次，只让一层重试</td>
+<td>总尝试次数与总时限有上限</td>
+<td>实测各层峰值</td>
+</tr>
+<tr>
+<td>题 2</td>
+<td>不安全，需幂等键</td>
+<td>不可幂等写不盲目重试</td>
+<td>去重键选取</td>
+</tr>
+<tr>
+<td>题 3</td>
+<td>需要抖动与总时限</td>
+<td>总尝试次数与总时限有上限</td>
+<td>峰值对比曲线</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_29">推荐资源</h2>
+<ul>
+<li><a href="https://grpc.io/docs/guides/retry/">重试、退避与重试风暴：参考文档 / 原始资料</a>，来源 grpc.io｜文档｜英文｜进阶｜免费，阅读重点：可重试错误分类与指数退避和抖动，用于核对本节点实验的语义和边界。建议结合 practice87（模拟下游短暂故障，对比立即重试与退避加抖动的请求峰值）逐项核对。</li>
+</ul>
+<p>阅读时先记录版本与访问日期，再把每个字段的结论写进上面的笔记模板，避免把记忆当成文档。</p>
+<h2 id="_30">本课小结</h2>
+<ul>
+<li>重试能恢复部分瞬态故障，但每次重试都是额外的下游流量，收益与风险必须一起看。</li>
+<li>可重试错误分类是第一步：只对明确的瞬态失败重试，不可幂等写不盲目重试。</li>
+<li>指数退避要有上限和抖动；第 n 次重试前等待 <code>random(0, min(initialBackoff * backoffMultiplier^(n-1), maxBackoff))</code>。</li>
+<li>重试预算与多层放大是同一个问题的两面：层数越多，乘法放大越危险，通常只让一层重试。</li>
+<li>已提交（committed）之后不再重试；服务端可用 pushback 让客户端延后或停止重试。</li>
+<li><code>retryThrottling</code> 用令牌控制故障期间的额外流量：失败减 1，成功加 <code>tokenRatio</code>，令牌不高于 <code>maxTokens/2</code> 时停止重试。</li>
+<li>重试受整体 deadline 约束，总尝试次数与总时限都要有上限，这正是本课验收的核心。</li>
+<li>公开文档只描述协议与库的语义，不能据此推断任何企业内部 RPC 实现；字段与默认值以所用版本文档为准。</li>
+</ul><div class="pn"><span><a href="86.html">← 超时预算与取消传播</a></span><span>下一课 待更新</span></div></main></div></body></html>
