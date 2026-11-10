@@ -1,0 +1,1182 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>93. RPC身份、TLS与授权 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（93/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（13/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="cur" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 93 课 · 领域 F · 阶段 4</p><p class="dl"><a href="../files/93-f-security.md" download>⬇ 本课 Markdown</a><a href="../files/practice93.tar.gz" download>⬇ 练习包 practice93.tar.gz</a></p><h1 id="93208-rpctls">第 93/208 课：RPC身份、TLS与授权</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-security</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>RPC Security</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>上下文与接口边界</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-grpc</code>、<code>f-context</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>RPC Security</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://grpc.io/docs/guides/auth/">RPC身份、TLS与授权：参考文档 / 原始资料</a>（grpc.io）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>传输加密、对端认证与操作授权分别解决不同问题，服务端还需限制输入规模与资源使用。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课出现的后台系统、服务划分与时间线均为教学假设，用于讲解通用后端工程概念，
+不代表任何企业的内部实现或真实架构。涉及 gRPC 各语言凭证 API 名称、TLS 版本与密码套件细节、
+服务网格的具体行为时，请以你所阅读的文档版本为准。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉例子：写字楼</h3>
+<p>把一次 RPC 调用想成一次跨楼送件：A 楼的人要把一个箱子送到 B 楼，箱子里装的是业务数据，收件方要确认来的人靠不靠谱。现实里的写字楼通常同时用了几道不同的措施，每一道只解决一个问题。</p>
+<ul>
+<li><strong>密封封条</strong>：包裹从 A 楼送到 B 楼，路上可能被人拆开看内容，甚至被调包。封条不能阻止别人碰包裹，但能让你在收件时发现"被动过"。这对应传输加密与完整性：链路上的内容被窃听或篡改，接收方能够发现。</li>
+<li><strong>门禁刷工牌</strong>：闸机确认"你是登记过的人"，而不是随便一个自称访客的人。工牌也可能被伪造，所以闸机要能识别真伪。这对应<strong>对端认证</strong>：客户端要验证服务端是不是真的那台服务；在 mTLS 下，服务端也要验证客户端证书，从而确认调用方是谁。</li>
+<li><strong>工牌能进哪几层</strong>：即使你是公司员工，也未必能进机房。身份是真的，不代表权限无限。这对应<strong>授权</strong>：服务端拿到可信身份后，把它映射成角色/权限，再判断这个身份能不能调用某个具体方法。</li>
+<li><strong>前台与监控</strong>：前台会限制一次搬入的箱子尺寸和同时进入的人数；机房门口有监控，记录谁在什么时候进了机房。这对应<strong>消息大小、并发/速率限制与审计日志</strong>：防止单个请求或某个调用方把资源耗尽，并留下可追溯的操作记录。</li>
+</ul>
+<p>对照回 RPC：封条约等于 TLS，工牌约等于认证，楼层权限约等于授权，箱子尺寸/人数/监控约等于资源限制与审计。四者解决的是不同问题，不能互相替代——封条再结实，也管不了你拿工牌能进哪一层。</p>
+<h3 id="_4">接上前置知识</h3>
+<p>前面已经学过 gRPC 的调用模型，以及请求上下文如何在调用链中传递。上下文里经常携带 user-id、tenant、trace-id、角色等字段，下游服务往往直接读这些字段做判断。</p>
+<p>这里的关键区别是：<strong>上下文只是一个容器，不是证据</strong>。任何能构造请求的人，都可以往元数据里塞一个 <code>role: admin</code>。如果服务端直接把上下文里的角色当真，等于让调用方自己给自己发权限。因此本课关心的不是"上下文里有没有身份字段"，而是"这个身份是不是由可信来源建立、验证之后才被使用"。TLS/mTLS 负责把身份可信地建立起来，授权负责把这个身份翻译成"能做什么"。</p>
+<h3 id="_5">一条教学时间线</h3>
+<p>假设（教学假设）某内容后台有一个内部 KV 配置服务，早期为了省事，明文跑在内网，只靠 IP 白名单做访问控制。调用方包括图文发布服务、内部运营工具和一些批处理脚本。</p>
+<ol>
+<li><strong>早期</strong>：大家觉得"内网就是可信的"，没有 TLS，也没有调用方身份，只要来源 IP 在白名单里就放行。</li>
+<li><strong>事故</strong>：一个运营脚本在批量清理测试 key 时，误调用了 Delete 接口。因为脚本所在机器在网段白名单里，请求被直接接受，清空了一批线上配置。</li>
+<li><strong>排查</strong>：服务日志为了"方便调试"，把调用方请求头里的完整令牌原样打印了出来；令牌又随着日志被转发到多个系统，排查过程本身变成了二次泄漏。</li>
+<li><strong>反思</strong>：传输、认证、授权、审计被混成了一件事——"能连上"被误当成"身份可信"，又被误当成"有权做任何操作"。</li>
+</ol>
+<h3 id="_6">错误做法与正确做法</h3>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>错误做法</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传输</td>
+<td>内网明文，认为"内网天然可信"</td>
+<td>至少启用 TLS 加密链路，客户端验证服务端证书</td>
+</tr>
+<tr>
+<td>对端</td>
+<td>只靠 IP 白名单识别调用方</td>
+<td>使用 mTLS 或可信令牌，由服务端验证调用方身份</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>只要能连上就能调用所有方法</td>
+<td>身份映射角色/权限，对每个方法单独判断</td>
+</tr>
+<tr>
+<td>资源</td>
+<td>不限制消息大小、并发与速率</td>
+<td>设置最大消息大小、并发上限与速率限制</td>
+</tr>
+<tr>
+<td>审计</td>
+<td>日志打印完整令牌、私钥等凭证</td>
+<td>记录操作者、动作、对象、结果，并对凭证脱敏</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_7">本课三条主线</h3>
+<ol>
+<li><strong>TLS 与 mTLS</strong>：先解决"链路是否加密、对端是否可信"。TLS 提供传输加密与完整性，并通过证书让客户端验证服务端身份；mTLS 下服务端也要求并验证客户端证书，从而认证调用方身份。</li>
+<li><strong>身份和权限映射</strong>：身份可信之后，还要把它映射成角色/权限，在服务端按方法做授权判断。认证回答"你是谁"，授权回答"你能做什么"。</li>
+<li><strong>消息大小、速率与审计</strong>：服务端要限制输入规模与资源使用，并对敏感操作记录审计日志，同时保证日志里不出现令牌、私钥等凭证。</li>
+</ol>
+<h2 id="_8">学习目标</h2>
+<p>学完本课，你应该能够：</p>
+<ul>
+<li>能解释TLS与mTLS。</li>
+<li>能独立完成：为KV服务加入TLS和只读角色，验证无证书与越权写入被拒绝。</li>
+<li>能区分传输加密、对端认证、操作授权三者各自解决的问题，以及只做其中一项会留下什么漏洞。</li>
+<li>能说明 TLS 握手中客户端如何验证服务端证书，以及 mTLS 下服务端如何验证客户端证书（具体凭证 API 与配置方式以所读文档版本为准）。</li>
+<li>能把调用方身份映射为角色，并在服务端按方法/资源做授权判断，而不是只凭"能连上"放行。</li>
+<li>能为服务端设置最大消息大小、并发与速率上限，并对超限请求返回明确错误。</li>
+<li>能设计不泄露令牌、私钥等凭证的审计日志，覆盖敏感操作的操作者、动作、对象与结果。</li>
+<li>能把"加密链路可用"与"业务授权生效"拆成两组独立测试来验证，而不是用一次成功调用代替全部结论。</li>
+</ul>
+<h2 id="_9">为什么后端要懂</h2>
+<blockquote>
+<p>为内部工具和Agent提供可控服务边界。</p>
+</blockquote>
+<p>即将入职腾讯微信公众号后台开发的后端工程师，会同时面对通用内容后台、图文发布服务、内部运营工具、配置/KV 服务，以及网关到多级 RPC 的调用链（教学假设）。这些系统看起来"都在内网"，但调用方非常杂：网页后台、批处理脚本、定时任务、其他微服务，以及会自主发起调用的 Agent。任何一个调用方配置错误、凭证泄漏或被误用，都可能越过你本来以为存在的服务边界。服务边界不是靠"它在内网"自动成立的，而是靠传输、身份、授权和资源限制一层层落实的。</p>
+<h3 id="_10">三件事分别解决什么问题</h3>
+<p>摘要说"传输加密、对端认证与操作授权分别解决不同问题"，值得逐句拆开：它们不是同一个安全措施的三种叫法，也不是做了前一个就不需要后一个。</p>
+<table>
+<thead>
+<tr>
+<th>机制</th>
+<th>主要防什么</th>
+<th>只做它会留下什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传输加密（TLS）</td>
+<td>链路被窃听、篡改；客户端可通过证书验证服务端身份</td>
+<td>只加密不认证调用方：任何能连上端口的人和程序都能发起调用，服务端不知道对面是谁</td>
+</tr>
+<tr>
+<td>对端认证（mTLS，服务端验证客户端证书）</td>
+<td>冒充调用方、未授权客户端接入</td>
+<td>只认证不授权：任何持证服务都能调用所有方法，包括写入和删除</td>
+</tr>
+<tr>
+<td>操作授权（身份→角色→方法级判断）</td>
+<td>越权读写、横向移动、误操作影响扩大</td>
+<td>只授权不加密：凭证与业务数据在链路上明文暴露，身份信息也可能被中间人截获</td>
+</tr>
+</tbody>
+</table>
+<p>用一个具体场景说明：KV 服务只做 TLS，客户端能确认"我连的是真的 KV 服务"，但 KV 服务并不知道调用方是谁；此时任何能访问该端口的程序都可以尝试调用 Delete。反过来，如果只做 mTLS 不做授权，所有持证服务都被一视同仁，一个只该读配置的运营工具仍然可以执行写入甚至删除。再退一步，如果只在业务层判断角色却不加密链路，令牌在网络上是明文的，攻击者拿到令牌后可以冒充合法调用方，授权判断再严格也只是在验证一个被偷来的身份。</p>
+<p>所以正确的组合是：TLS 保证链路可信，mTLS 或可信令牌让服务端确认调用方身份，授权把身份映射为权限并逐方法判断，最后由资源限制与审计兜住误用和事故。内网只是网络位置，不是身份，也不等于授权——处于内网不等于可以跳过身份与授权检查。</p>
+<h3 id="_11">限制输入规模与资源使用</h3>
+<p>摘要的最后一句是"服务端还需限制输入规模与资源使用"。这句话容易被忽略，因为加密和授权听起来更像"安全"，而大小与限流听起来像"性能"。但在真实后台里，一个不限制输入的服务，往往先被正常但失控的调用方拖垮，而不是先被攻击者攻破。</p>
+<p>算一笔账（教学假设）：假设某个 RPC 方法没有设置最大消息大小，一个客户端发送 100MB 的请求体，服务端同时处理 50 个这样的请求。如果每个请求体在反序列化前后都需要驻留内存，仅请求体本身就约 <code>100MB × 50 = 5GB</code>。再叠加反序列化后的对象、缓冲区拷贝和框架自身开销，实际占用会更高，单进程很容易 OOM，并连带影响同机部署的其他服务。这还没有计算请求排队、线程或协程堆积，以及向下游服务放大请求带来的连锁压力。</p>
+<p>因此服务端至少要做四类约束：</p>
+<ul>
+<li><strong>最大消息大小</strong>：为请求和响应设置合理上限，超过上限直接拒绝，避免单个请求撑爆内存。</li>
+<li><strong>并发上限</strong>：限制同时在处理的请求数量，超出后排队或快速失败，防止雪崩。</li>
+<li><strong>速率限制</strong>：按调用方或身份限制单位时间内的请求量，避免脚本失控或重试风暴。</li>
+<li><strong>明确错误</strong>：超限时返回可识别的错误码与说明，让调用方能够退避，而不是静默丢弃。</li>
+</ul>
+<p>在这些约束之上，敏感操作（例如删除配置、修改权限、批量发布）还应该记录审计日志。审计日志要回答"谁、在什么时候、对什么对象、做了什么、结果如何"，但<strong>不得写入令牌、私钥等凭证</strong>；日志往往会被采集、转发和长期保存，一旦写入凭证，泄漏面会比原始请求大得多。日志中的调用方标识应该是身份或主体 ID，而不是原始密钥材料。</p>
+<p>回到本课的定位：加密链路、对端认证、操作授权、资源限制与审计，共同构成"可控的服务边界"。只做其中一两项，边界就是漏的；全部做了但测试只测"能调通"，也无法证明越权会被拒绝。后面的练习会围绕一个 KV 服务，把 TLS、只读角色和越权写入的验证拆开来做。</p>
+<h3 id="rpc">在多级 RPC 中，身份如何一路可信</h3>
+<p>再把视角拉远一点。通用内容后台的一次请求，往往不是"客户端直连一个服务"，而是"网关 → 业务服务 → 配置/KV 服务"这样的多级调用（教学假设）。每一跳都需要回答两个不同的问题：这一跳的对方是谁？它代表谁在操作？</p>
+<ul>
+<li><strong>网关到内部服务</strong>：网关先完成用户侧认证，得到经过验证的用户主体；网关与内部服务之间再用 mTLS 确认"调用方确实是这个网关/这个服务"，而不是某个能连上端口的程序。</li>
+<li><strong>服务到服务</strong>：下游服务通过 mTLS 验证上游服务身份；上游把已经验证过的用户主体、租户、请求 ID 放进上下文继续传递，而不是把用户原始令牌原样透传。</li>
+<li><strong>下游的信任边界</strong>：下游只能信任"来自已认证对端、且由可信环节写入"的身份字段。随便一个 header 里写的 <code>user-id</code> 不能直接当真，否则任何一个能发请求的进程都能冒充别人。</li>
+<li><strong>令牌的作用范围</strong>：如果使用令牌作为调用凭证，应关注它的受众、有效期与权限范围；具体令牌格式、传播协议和各语言实现，以所读文档版本为准。</li>
+</ul>
+<p>这条链上最容易出现的问题，是把"网关注入的身份"和"任意调用方可写的元数据"混为一谈。前者有认证作为前提，后者没有；下游如果不区分来源，前面做的 mTLS 就白做了。</p>
+<h3 id="_12">授权判断应该落在哪里</h3>
+<p>认证与授权是两件事：认证回答"你是谁"，授权回答"你能做什么"。即使 mTLS 已经证明对方是一个合法服务，也不代表它可以调用所有方法。</p>
+<p>一个常见的落地方式是"主体 → 角色 → 权限 → 方法"：</p>
+<ol>
+<li>从可信身份中得到主体（服务身份或用户主体）。</li>
+<li>把主体映射到角色，例如只读、读写、管理员；KV 服务可以有一个只读角色。</li>
+<li>为角色定义权限集合，例如只读角色允许 <code>Get</code>/<code>List</code>，不允许 <code>Put</code>/<code>Delete</code>。</li>
+<li>在服务端对每个方法做判断，默认拒绝；新增方法时必须显式授权，而不是因为"忘了加检查"而默认放行。</li>
+<li>必要时再细化到资源级，例如按租户或命名空间判断，避免 A 租户的只读身份读到 B 租户的数据。</li>
+</ol>
+<p>授权必须发生在服务端。客户端的按钮置灰、脚本里的参数校验都只是体验或防误操作，不能作为安全边界。验证时也要把两件事分开：无证书的调用应该在握手/连接阶段失败；持只读证书执行写入应该在业务授权阶段被拒绝。两者失败的位置和日志含义不同，混在一起测就无法判断究竟哪一层生效。</p>
+<h3 id="tls">排障时如何区分 TLS 失败与授权失败</h3>
+<p>mTLS 加强身份管理，也增加证书签发、轮换和排障成本。排障时先分清失败发生在哪一层，能少走很多弯路：</p>
+<ul>
+<li><strong>握手/连接阶段失败</strong>：常见原因包括证书过期、信任链不匹配、主机名或 SAN 不匹配、客户端未提供证书等；具体校验规则与错误信息以所读文档版本和实现为准。</li>
+<li><strong>请求已到达业务层但被拒绝</strong>：说明对端认证可能已经通过，问题在令牌校验、角色映射或方法级授权；典型表现是明确的权限错误，而不是连接建立失败。</li>
+<li><strong>不要用关闭 TLS 的方式排障</strong>：临时降级容易变成永久降级，也会掩盖证书配置问题；更稳妥的做法是查看握手日志、证书有效期和主体映射，并确保日志中不出现私钥、令牌等敏感材料。</li>
+<li><strong>把审计与排障日志分开看</strong>：审计关注"谁做了什么、结果如何"，排障日志关注链路与错误原因；两者都不应记录凭证原文。</li>
+</ul>
+<p>把这几层合起来看，"可控服务边界"不是某一个开关，而是一组互相配合的约束：链路可信、对端可认证、身份可映射、操作可授权、资源可限制、行为可追溯。任何一层缺失，其他层都无法单独兜底。</p>
+<p>还有两个常见的疑问值得展开：既然服务都在内网，为什么还要这么麻烦？mTLS 的成本是否值得？</p>
+<h3 id="_13">"内网可信"忽略了什么</h3>
+<ul>
+<li><strong>内网不是单一信任域</strong>：办公网、测试网、生产网、第三方接入和临时机器可能互相可达；一台被入侵的跳板机，往往就处在"白名单"里面。</li>
+<li><strong>IP 白名单认证的是位置，不是身份</strong>：NAT、代理和共享出口会让多个调用方共用一个 IP，IP 本身也会变化；它无法回答"你是谁"。</li>
+<li><strong>横向移动</strong>：攻击者拿到一台内网机器后，可以继续扫描并调用白名单内的其他服务；没有 mTLS 和授权，每个服务都可能成为下一个入口。</li>
+<li><strong>误操作不分内外</strong>：运营脚本、定时任务、Agent 都可能是合法调用方，但权限过大时同样会造成事故，内网身份并不能降低这种风险。</li>
+<li><strong>审计与追责</strong>：出事后要回答"是谁做的"，仅靠 IP 往往定位不到具体主体，也无法判断是一次误操作还是越权行为。</li>
+</ul>
+<p>所以"内网"应该被当作一层网络位置和隔离手段，而不是身份或授权。它可以作为额外防线，但不能替代 TLS、认证和授权。</p>
+<h3 id="_14">成本与取舍</h3>
+<p>mTLS 不是免费的：证书签发、分发、轮换、吊销，以及握手失败时的排障，都需要流程和工具支持。对调用方少、风险低的内部只读服务，也可以先用 TLS 加可信令牌完成认证，再配合服务端授权；当服务身份本身需要强认证，或调用链跨越多个信任域时，mTLS 的价值会更明显。具体选择没有唯一答案，取决于调用方数量、数据敏感度、运维能力和合规要求。无论选哪种组合，授权与资源限制都不能省。</p>
+<h3 id="_15">四个概念的最小对照</h3>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>回答的问题</th>
+<th>典型失败表现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>传输加密</td>
+<td>链路上的内容会不会被看见或篡改</td>
+<td>明文可被抓包、内容可被修改</td>
+</tr>
+<tr>
+<td>对端认证</td>
+<td>对面是不是它声称的那个服务/客户端</td>
+<td>任意客户端可连接、无法确认调用方</td>
+</tr>
+<tr>
+<td>操作授权</td>
+<td>这个身份能不能做这个操作</td>
+<td>只读身份能写入、普通服务能删除</td>
+</tr>
+<tr>
+<td>审计与限制</td>
+<td>出了事能否追溯、资源会不会被耗尽</td>
+<td>日志无主体、单个请求打爆内存</td>
+</tr>
+</tbody>
+</table>
+<p>这四行也可以当作排查时的提问顺序：先看链路，再看对端，再看权限，最后看资源与记录。把顺序固定下来，就不容易用"能调通"掩盖某一层的缺失。</p>
+<h3 id="_16">一个权限映射的例子（教学假设）</h3>
+<p>仍以 KV 配置服务为例，角色可以先粗分为三档：</p>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>允许的方法</th>
+<th>不允许的方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只读（reader）</td>
+<td><code>Get</code>、<code>List</code></td>
+<td><code>Put</code>、<code>Delete</code></td>
+</tr>
+<tr>
+<td>读写（writer）</td>
+<td><code>Get</code>、<code>List</code>、<code>Put</code></td>
+<td><code>Delete</code></td>
+</tr>
+<tr>
+<td>管理（admin）</td>
+<td><code>Get</code>、<code>List</code>、<code>Put</code>、<code>Delete</code></td>
+<td>无（但仍需审计）</td>
+</tr>
+</tbody>
+</table>
+<p>几个容易忽略的点：</p>
+<ul>
+<li>角色应该由可信身份映射得到，而不是按调用方自报的名字硬编码；同一个服务在不同环境下也可能拥有不同角色。</li>
+<li>只读角色的价值在于把"日常查询"和"修改配置"分开。报表、巡检、运营看板大多只需要读，不应顺手拿到写权限。</li>
+<li>如果有多租户，还要在方法级权限之上加资源级判断，避免只读身份跨租户读取。</li>
+<li>没有证书、没有可信令牌的调用不应被映射到任何角色，默认拒绝；新增方法时也要显式决定它属于哪个权限集合。</li>
+<li>写入和删除最好分开授权，因为删除的破坏半径通常更大；权限变更本身也应进入审计范围。</li>
+</ul>
+<h3 id="_17">把检查点放进请求生命周期</h3>
+<p>把上面的概念按一次请求的顺序串起来，会更容易记住每一层的位置：</p>
+<ol>
+<li><strong>建立连接</strong>：TLS 握手，客户端验证服务端证书；mTLS 下服务端验证客户端证书，确认对端身份。</li>
+<li><strong>接收请求</strong>：检查消息大小等输入约束，超限直接拒绝，避免把压力带到后续阶段。</li>
+<li><strong>提取身份</strong>：只使用来自已认证对端或可信凭证的身份信息，不信任任意调用方可写的元数据。</li>
+<li><strong>执行授权</strong>：把身份映射为角色/权限，按方法和资源判断；不通过则返回明确的权限错误。</li>
+<li><strong>处理业务</strong>：在并发和速率限制下执行，避免单个调用方耗尽资源。</li>
+<li><strong>记录审计</strong>：记录主体、动作、对象和结果，但对令牌、私钥等凭证做脱敏或不记录。</li>
+</ol>
+<p>这个顺序也解释了为什么"只测一次成功调用"不够：成功调用只能证明某一层没有挡住你，不能证明其他层会在该拒绝的时候拒绝。</p>
+<h2 id="_18">核心知识点</h2>
+<p>这一节把 RPC 安全拆成三个相互独立、又必须组合使用的问题：链路是否加密、对端是谁、这个身份能做什么。以下场景均为教学假设：一个内部配置/KV 服务，前面是网关，后面可能还有多级 RPC；它同时被运营工具和自动化任务调用。</p>
+<h3 id="1-tlsmtls">1. TLS与mTLS</h3>
+<p><strong>直觉。</strong> TLS 先解决“说的内容别人看不到、改不了”，再通过证书解决“我连上的确实是那个服务”。握手时可以粗略理解为：</p>
+<ol>
+<li>客户端发出支持的协议版本、密码套件和随机数。</li>
+<li>服务端返回自己的证书链，并给出协商结果。</li>
+<li>客户端用本地信任的 CA 校验证书链、有效期和主机名（SAN/CN），确认对端身份。</li>
+<li>双方完成密钥交换，之后用会话密钥加密应用数据。</li>
+</ol>
+<p>mTLS 在此基础上多一步：服务端在握手时发出 <code>CertificateRequest</code>，要求客户端也出示证书；客户端提交后，服务端用自己信任的 CA 校验。这样服务端不仅“被客户端认证”，也能认证“调用方是谁”。</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>客户端验证服务端</th>
+<th>服务端验证客户端</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>明文 TCP</td>
+<td>否</td>
+<td>否</td>
+<td>仅本地调试，不应承载敏感数据</td>
+</tr>
+<tr>
+<td>TLS</td>
+<td>是</td>
+<td>否</td>
+<td>浏览器/外部客户端访问服务</td>
+</tr>
+<tr>
+<td>mTLS</td>
+<td>是</td>
+<td>是</td>
+<td>服务间调用、内部工具访问敏感接口</td>
+</tr>
+</tbody>
+</table>
+<p><strong>用 openssl 造一套实验证书。</strong> 下面命令只用于实验，证书和私钥不要提交到仓库。</p>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/rpc-tls<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/rpc-tls
+
+<span class="c1"># 1) 自签 CA</span>
+openssl<span class="w"> </span>req<span class="w"> </span>-x509<span class="w"> </span>-newkey<span class="w"> </span>rsa:2048<span class="w"> </span>-nodes<span class="w"> </span>-days<span class="w"> </span><span class="m">365</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-keyout<span class="w"> </span>ca.key<span class="w"> </span>-out<span class="w"> </span>ca.crt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-subj<span class="w"> </span><span class="s2">"/CN=Atlas Lesson CA"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-addext<span class="w"> </span><span class="s2">"basicConstraints=critical,CA:TRUE"</span><span class="w"> </span>-addext<span class="w"> </span><span class="s2">"keyUsage=critical,keyCertSign,cRLSign"</span>
+<span class="c1"># 注：较新的 Python（如 3.13）默认开启严格证书校验，CA 缺少 keyUsage 会报</span>
+<span class="c1"># "CA cert does not include key usage extension"；叶子证书最好也带 authorityKeyIdentifier，见 practice93/test.sh</span>
+
+<span class="c1"># 2) 服务端证书：SAN 必须包含客户端实际连接使用的主机名</span>
+openssl<span class="w"> </span>req<span class="w"> </span>-newkey<span class="w"> </span>rsa:2048<span class="w"> </span>-nodes<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-keyout<span class="w"> </span>server.key<span class="w"> </span>-out<span class="w"> </span>server.csr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-subj<span class="w"> </span><span class="s2">"/CN=kv.internal.atlas.test"</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>server.ext<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<span class="s">subjectAltName=DNS:kv.internal.atlas.test,IP:127.0.0.1</span>
+<span class="s">extendedKeyUsage=serverAuth</span>
+<span class="s">EOF</span>
+openssl<span class="w"> </span>x509<span class="w"> </span>-req<span class="w"> </span>-in<span class="w"> </span>server.csr<span class="w"> </span>-CA<span class="w"> </span>ca.crt<span class="w"> </span>-CAkey<span class="w"> </span>ca.key<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-CAcreateserial<span class="w"> </span>-days<span class="w"> </span><span class="m">365</span><span class="w"> </span>-out<span class="w"> </span>server.crt<span class="w"> </span>-extfile<span class="w"> </span>server.ext
+
+<span class="c1"># 3) 客户端证书：CN 用作实验中的调用方身份</span>
+openssl<span class="w"> </span>req<span class="w"> </span>-newkey<span class="w"> </span>rsa:2048<span class="w"> </span>-nodes<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-keyout<span class="w"> </span>client.key<span class="w"> </span>-out<span class="w"> </span>client.csr<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-subj<span class="w"> </span><span class="s2">"/CN=ops-reader"</span>
+cat<span class="w"> </span>&gt;<span class="w"> </span>client.ext<span class="w"> </span><span class="s">&lt;&lt;'EOF'</span>
+<span class="s">extendedKeyUsage=clientAuth</span>
+<span class="s">EOF</span>
+openssl<span class="w"> </span>x509<span class="w"> </span>-req<span class="w"> </span>-in<span class="w"> </span>client.csr<span class="w"> </span>-CA<span class="w"> </span>ca.crt<span class="w"> </span>-CAkey<span class="w"> </span>ca.key<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-CAserial<span class="w"> </span>ca.srl<span class="w"> </span>-days<span class="w"> </span><span class="m">365</span><span class="w"> </span>-out<span class="w"> </span>client.crt<span class="w"> </span>-extfile<span class="w"> </span>client.ext
+</code></pre></div>
+
+<p>检查证书内容和链：</p>
+<div class="codehilite"><pre><span></span><code>openssl<span class="w"> </span>verify<span class="w"> </span>-CAfile<span class="w"> </span>ca.crt<span class="w"> </span>server.crt<span class="w"> </span>client.crt
+openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>server.crt<span class="w"> </span>-noout<span class="w"> </span>-subject<span class="w"> </span>-issuer<span class="w"> </span>-enddate
+openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>server.crt<span class="w"> </span>-noout<span class="w"> </span>-ext<span class="w"> </span>subjectAltName
+</code></pre></div>
+
+<p><strong>连接验证。</strong> 先用普通 TLS 连接，确认客户端能验证服务端；再用 <code>-cert/-key</code> 发起 mTLS 连接，观察服务端是否要求客户端证书：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 只验证服务端</span>
+openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span><span class="m">127</span>.0.0.1:8443<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-servername<span class="w"> </span>kv.internal.atlas.test<span class="w"> </span>-CAfile<span class="w"> </span>ca.crt
+
+<span class="c1"># 携带客户端证书，用于 mTLS</span>
+openssl<span class="w"> </span>s_client<span class="w"> </span>-connect<span class="w"> </span><span class="m">127</span>.0.0.1:8443<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-servername<span class="w"> </span>kv.internal.atlas.test<span class="w"> </span>-CAfile<span class="w"> </span>ca.crt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-cert<span class="w"> </span>client.crt<span class="w"> </span>-key<span class="w"> </span>client.key
+</code></pre></div>
+
+<p>生产环境还应检查协议版本、密码套件和证书轮换策略；具体默认值与推荐配置以所读 OpenSSL/运行环境文档版本为准。</p>
+<p><strong>Python 服务端开启 mTLS。</strong> 关键是加载服务端证书、加载信任的客户端 CA，并把 <code>verify_mode</code> 设为 <code>CERT_REQUIRED</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ssl</span>
+
+<span class="n">ctx</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">create_default_context</span><span class="p">(</span><span class="n">ssl</span><span class="o">.</span><span class="n">Purpose</span><span class="o">.</span><span class="n">CLIENT_AUTH</span><span class="p">)</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">load_cert_chain</span><span class="p">(</span><span class="s2">"server.crt"</span><span class="p">,</span> <span class="s2">"server.key"</span><span class="p">)</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">load_verify_locations</span><span class="p">(</span><span class="s2">"ca.crt"</span><span class="p">)</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">verify_mode</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">CERT_REQUIRED</span>  <span class="c1"># 没有客户端证书则握手失败</span>
+
+<span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span> <span class="k">as</span> <span class="n">s</span><span class="p">:</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SO_REUSEADDR</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">8443</span><span class="p">))</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"listening on 127.0.0.1:8443"</span><span class="p">)</span>
+    <span class="n">conn</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+    <span class="k">with</span> <span class="n">ctx</span><span class="o">.</span><span class="n">wrap_socket</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">server_side</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">tls</span><span class="p">:</span>
+        <span class="n">peer</span> <span class="o">=</span> <span class="n">tls</span><span class="o">.</span><span class="n">getpeercert</span><span class="p">()</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">peer</span><span class="p">[</span><span class="s2">"subject"</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"client CN ="</span><span class="p">,</span> <span class="n">subject</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"commonName"</span><span class="p">))</span>
+        <span class="n">tls</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="sa">b</span><span class="s2">"OK</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+
+<p>客户端不提供证书时，服务端会在握手阶段失败；这正是“无证书被拒绝”的第一层。真正的业务授权还要在握手之后按身份判断，不能把“握手成功”当成“可以写数据”。</p>
+<p><strong>常见失败对照。</strong></p>
+<table>
+<thead>
+<tr>
+<th>现象/报错关键词</th>
+<th>常见原因</th>
+<th>排查动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>certificate has expired</code></td>
+<td>证书过期</td>
+<td>用 <code>openssl x509 -enddate</code> 查看有效期并轮换</td>
+</tr>
+<tr>
+<td><code>hostname mismatch</code> / <code>IP address mismatch</code></td>
+<td>SAN 不含实际访问的主机名或 IP</td>
+<td>用 <code>-servername</code> 对齐，重签带正确 SAN 的证书</td>
+</tr>
+<tr>
+<td><code>unable to get local issuer certificate</code></td>
+<td>客户端不信任签发 CA，或链不完整</td>
+<td>检查 <code>-CAfile</code>、服务端是否发送中间证书</td>
+</tr>
+<tr>
+<td><code>certificate required</code> / 握手直接断开</td>
+<td>服务端要求 mTLS，客户端未带 <code>-cert/-key</code></td>
+<td>补客户端证书，并确认其 EKU 适合客户端认证</td>
+</tr>
+<tr>
+<td><code>tlsv1 alert unknown ca</code></td>
+<td>服务端不信任客户端证书的签发者</td>
+<td>把客户端 CA 加入服务端信任库</td>
+</tr>
+</tbody>
+</table>
+<p>gRPC 中对应的通常是“通道凭证”：服务端配置证书与私钥，客户端配置信任的 CA；需要 mTLS 时再要求并校验客户端证书。各语言的具体凭证 API 名称与参数以所读 gRPC 文档版本为准。</p>
+<h3 id="2">2. 身份和权限映射</h3>
+<p><strong>认证不等于授权。</strong> 认证回答“你是谁”，授权回答“你能做什么”。mTLS 握手成功只说明客户端持有某张受信任证书；它不自动说明这个身份可以写配置。反过来，只有令牌校验、没有方法级权限表，也会让一个只读工具意外获得删除能力。</p>
+<p>身份来源可以是：</p>
+<ul>
+<li>mTLS 客户端证书的 subject（常见取 CN，或取 SAN 中的 URI/DNS 标识；选用哪个字段要团队统一，并防止同名冲突）。</li>
+<li>网关/服务端校验过的令牌所对应的主体。</li>
+<li>服务自身签发的短期身份。</li>
+</ul>
+<p>无论来源是什么，服务端都应在入口处完成验证，把结果写入请求上下文，再供下游使用。接上 <code>f-context</code> 的原则：只信任本进程验证过的身份，不信任外部传入的 <code>X-User</code>、<code>X-Role</code> 等请求头；如果网关已经验证并转发身份，服务边界仍需确认“这些头只能来自可信网关”，否则调用方可自行伪造。</p>
+<table>
+<thead>
+<tr>
+<th>身份/角色</th>
+<th>Get</th>
+<th>List</th>
+<th>Put</th>
+<th>Delete</th>
+<th>说明（教学假设）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ops-reader</code></td>
+<td>允许</td>
+<td>允许</td>
+<td>拒绝</td>
+<td>拒绝</td>
+<td>运营只读工具</td>
+</tr>
+<tr>
+<td><code>config-writer</code></td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+<td>拒绝</td>
+<td>配置发布服务</td>
+</tr>
+<tr>
+<td><code>admin</code></td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+<td>受控的人工运维入口</td>
+</tr>
+<tr>
+<td>未认证</td>
+<td>拒绝</td>
+<td>拒绝</td>
+<td>拒绝</td>
+<td>拒绝</td>
+<td>默认拒绝</td>
+</tr>
+</tbody>
+</table>
+<p><strong>默认拒绝。</strong> 权限表应是白名单：没有明确允许的组合一律拒绝。这样新增方法时不会因为“忘了配置”而默认放开。角色到权限的映射可以集中配置，但判断必须在服务端每个 RPC 方法入口执行，不能只靠客户端隐藏按钮。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ROLE_PERMISSIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"ops-reader"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Get"</span><span class="p">,</span> <span class="s2">"List"</span><span class="p">},</span>
+    <span class="s2">"config-writer"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Get"</span><span class="p">,</span> <span class="s2">"List"</span><span class="p">,</span> <span class="s2">"Put"</span><span class="p">},</span>
+    <span class="s2">"admin"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"Get"</span><span class="p">,</span> <span class="s2">"List"</span><span class="p">,</span> <span class="s2">"Put"</span><span class="p">,</span> <span class="s2">"Delete"</span><span class="p">},</span>
+<span class="p">}</span>
+
+<span class="n">IDENTITY_ROLES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"ops-reader"</span><span class="p">:</span> <span class="s2">"ops-reader"</span><span class="p">,</span>
+    <span class="s2">"config-writer"</span><span class="p">:</span> <span class="s2">"config-writer"</span><span class="p">,</span>
+    <span class="s2">"oncall-admin"</span><span class="p">:</span> <span class="s2">"admin"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PermissionDenied</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">authorize</span><span class="p">(</span><span class="n">identity</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">identity</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">PermissionDenied</span><span class="p">(</span><span class="s2">"unauthenticated"</span><span class="p">)</span>
+    <span class="n">role</span> <span class="o">=</span> <span class="n">IDENTITY_ROLES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">identity</span><span class="p">)</span>
+    <span class="n">allowed</span> <span class="o">=</span> <span class="n">ROLE_PERMISSIONS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">role</span><span class="p">,</span> <span class="nb">set</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">PermissionDenied</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">identity</span><span class="si">}</span><span class="s2"> cannot call </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="c1"># 演示：只读身份调用写方法</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">authorize</span><span class="p">(</span><span class="s2">"ops-reader"</span><span class="p">,</span> <span class="s2">"Put"</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PermissionDenied</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"denied:"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>   <span class="c1"># denied: ops-reader cannot call Put</span>
+</code></pre></div>
+
+<p>真实实现中，<code>identity</code> 必须来自刚完成的证书/令牌校验结果，而不是请求体或可伪造的头部。授权判断应尽量靠近方法实现，并在进入业务逻辑、访问存储之前完成。</p>
+<p><strong>错误码要区分。</strong> 未认证表示“没有可信身份或凭证无效”，无权限表示“身份有效但该操作不允许”。两者混用会让客户端错误重试，也会让审计失真。gRPC 中常见的映射是 <code>UNAUTHENTICATED</code> 与 <code>PERMISSION_DENIED</code>，具体状态码语义与各语言写法以所读文档版本为准。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>建议返回</th>
+<th>客户端动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>没有客户端证书，或证书不受信任</td>
+<td><code>UNAUTHENTICATED</code></td>
+<td>修复凭证，不要盲目重试</td>
+</tr>
+<tr>
+<td>令牌过期/签名无效</td>
+<td><code>UNAUTHENTICATED</code></td>
+<td>重新获取令牌</td>
+</tr>
+<tr>
+<td>身份有效但角色不允许该方法</td>
+<td><code>PERMISSION_DENIED</code></td>
+<td>不要重试，提示申请权限</td>
+</tr>
+<tr>
+<td>目标 key 不存在</td>
+<td><code>NOT_FOUND</code></td>
+<td>按业务处理</td>
+</tr>
+<tr>
+<td>请求超过大小/速率限制</td>
+<td><code>RESOURCE_EXHAUSTED</code>（以文档为准）</td>
+<td>降低批量或退避重试</td>
+</tr>
+</tbody>
+</table>
+<p>授权通过后，才进入存储访问。对于“读某个 key”这类操作，还要注意对象级权限：角色允许 <code>Get</code> 不等于允许读取所有命名空间。教学假设中可以把 key 前缀映射到租户或环境，再在授权层检查，而不是只检查方法名。</p>
+<h3 id="3">3. 消息大小、速率与审计</h3>
+<p><strong>为什么认证过的调用方也要限制。</strong> 可信身份不代表行为可控：有 bug 的脚本可能一次发送巨大 payload，失控的自动化任务可能在循环里重试，网关抖动会造成重试风暴。服务端如果不设边界，单个调用方就能耗尽内存、连接数和下游容量。</p>
+<table>
+<thead>
+<tr>
+<th>控制点</th>
+<th>目的</th>
+<th>常见做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最大消息大小</td>
+<td>防止超大请求拖垮内存</td>
+<td>先读长度头，超过上限立即拒绝，不继续读包体</td>
+</tr>
+<tr>
+<td>每身份速率</td>
+<td>限制突发与持续调用量</td>
+<td>令牌桶/漏桶，按身份或身份+方法分桶</td>
+</tr>
+<tr>
+<td>并发上限</td>
+<td>防止连接和线程/协程被占满</td>
+<td>信号量、工作池、队列上限</td>
+</tr>
+<tr>
+<td>超时与截止时间</td>
+<td>防止慢请求长期占用资源</td>
+<td>入口设置 deadline，逐跳传递并留余量</td>
+</tr>
+<tr>
+<td>审计</td>
+<td>事后追责与排障</td>
+<td>记录身份、方法、key、结果、trace_id</td>
+</tr>
+</tbody>
+</table>
+<p>大小限制要在解析层做，而不是等整个消息读进内存后再判断。教学假设的 KV 请求有长度前缀时，可以先读头部：超过 <code>MAX_MESSAGE_BYTES</code> 就直接返回错误并关闭该请求；对于流式 RPC，还要限制累计字节数，不能只限制单帧。</p>
+<p>下面是一个可直接运行的单进程令牌桶示例，按身份限速：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">TokenBucket</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rate_per_sec</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">burst</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">rate_per_sec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">burst</span> <span class="o">=</span> <span class="n">burst</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">burst</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">allow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">burst</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">+</span> <span class="p">(</span><span class="n">now</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">updated</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">updated</span> <span class="o">=</span> <span class="n">now</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">&gt;=</span> <span class="n">cost</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">-=</span> <span class="n">cost</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="n">buckets</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TokenBucket</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">allow_request</span><span class="p">(</span><span class="n">identity</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">bucket</span> <span class="o">=</span> <span class="n">buckets</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">TokenBucket</span><span class="p">(</span><span class="n">rate_per_sec</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">burst</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">bucket</span><span class="o">.</span><span class="n">allow</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">allow_request</span><span class="p">(</span><span class="s2">"ops-reader"</span><span class="p">))</span>
+</code></pre></div>
+
+<p>单机令牌桶只解决单进程问题；多副本部署时，通常要结合网关限流、集中式配额或一致性要求较低的分片限流。具体实现取决于所读框架/网关文档版本。并发上限同样重要：认证通过、限速通过，但下游已经过载时，应快速失败或排队，而不是无限创建连接。</p>
+<p><strong>审计日志。</strong> 审计的目标是回答“谁在什么时候对什么做了什么，结果如何”。建议至少记录时间、经过验证的身份、方法、目标 key/资源、结果、trace_id；不要记录令牌、私钥、密码，也不要记录完整请求体中的敏感内容。</p>
+<table>
+<thead>
+<tr>
+<th>应记录</th>
+<th>不应记录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>时间、身份、方法、key、结果、trace_id</td>
+<td>令牌、私钥、密码、证书私钥内容</td>
+</tr>
+<tr>
+<td>拒绝原因（如 <code>PERMISSION_DENIED</code>）</td>
+<td>完整的敏感请求体或响应体</td>
+</tr>
+<tr>
+<td>目标命名空间/环境等必要维度</td>
+<td>可被用来重放的认证材料</td>
+</tr>
+</tbody>
+</table>
+<p>错误示例（把凭证写进日志）：</p>
+<div class="codehilite"><pre><span></span><code>2026-11-10T10:00:00Z INFO auth token=Bearer eyJhbGciOi... method=Put key=prod/db/password result=ok
+</code></pre></div>
+
+<p>正确示例（只记录身份与结果）：</p>
+<div class="codehilite"><pre><span></span><code>2026-11-10T10:00:00Z INFO audit identity=config-writer method=Put key=prod/db/timeout result=OK trace_id=7f3c...
+2026-11-10T10:00:01Z WARN audit identity=ops-reader method=Put key=prod/db/timeout result=PERMISSION_DENIED trace_id=8a1d...
+</code></pre></div>
+
+<p>一个简单的脱敏函数可以在写日志前兜底：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="n">SENSITIVE_KEYS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"token"</span><span class="p">,</span> <span class="s2">"authorization"</span><span class="p">,</span> <span class="s2">"password"</span><span class="p">,</span> <span class="s2">"secret"</span><span class="p">,</span> <span class="s2">"private_key"</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">redact</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">:</span> <span class="p">(</span><span class="s2">"***"</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">SENSITIVE_KEYS</span> <span class="k">else</span> <span class="n">redact</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">redact</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">"(Bearer|Basic)\s+[A-Za-z0-9._~+/=-]+"</span><span class="p">,</span> <span class="sa">r</span><span class="s2">"\1 ***"</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">redact</span><span class="p">({</span><span class="s2">"method"</span><span class="p">:</span> <span class="s2">"Put"</span><span class="p">,</span> <span class="s2">"token"</span><span class="p">:</span> <span class="s2">"abc"</span><span class="p">,</span> <span class="s2">"note"</span><span class="p">:</span> <span class="s2">"Bearer xyz.123"</span><span class="p">}))</span>
+</code></pre></div>
+
+<p>脱敏是最后一道防线，不是第一道：日志字段应采用白名单式构造，避免把整个请求对象直接序列化。</p>
+<p>收束一下：TLS 保护链路并让客户端验证服务端，mTLS 进一步让服务端认证调用方；认证得到的身份要在请求上下文中传递，再通过服务端权限表做默认拒绝的授权；即使身份可信，也要用大小、速率、并发和审计约束资源使用。三者分别测试：先验证无证书/错误证书被拒绝，再验证只读身份越权写入被拒绝，最后检查日志中没有凭证。</p>
+<h2 id="_19">常见误区</h2>
+<p>这一节把实现中最容易出问题的判断集中列出。先回到节点给出的前提，再逐条看误区。以下场景均为教学假设，用于说明通用后台问题，不代表任何公司内部实现。</p>
+<h3 id="_20">前提：内网不是信任边界</h3>
+<p>节点已经写明：</p>
+<blockquote>
+<p>处于内网不等于可以跳过身份与授权检查。</p>
+</blockquote>
+<p>很多团队的真实假设是「能连上就是自己人」：服务部署在同一 VPC，调用方来源 IP 固定，于是认证和授权都被省掉。这个假设在三种情况下会直接失效。</p>
+<ul>
+<li><strong>内网横向移动</strong>：任何一台被攻破的机器、任何一个被拿到的运营工具凭据，都可以沿内网可达性直接调用 KV 写入、配置变更、图文发布等接口。攻击者不需要突破边界，只需要找到一个跳板。</li>
+<li><strong>误操作脚本</strong>：内部定时任务、批量修复脚本、运营后台的一次性工具，只要参数写错或环境选错，在没有身份与授权约束时就能覆盖配置、批量改文章状态。这类事故往往不是恶意攻击，但破坏力相同。</li>
+<li><strong>共享网段</strong>：办公网、测试环境、容器网络常常路由互通，仅凭来源 IP 段无法区分调用方是谁、以什么身份调用、该不该允许。IP 只能说明「从哪里来」，不能说明「谁在调用」。</li>
+</ul>
+<p>所以，内网可以降低一部分网络暴露面，但不能替代身份认证和授权决策。下面的误区大多源于把这几件事混为一谈。</p>
+<h3 id="_21">误区一：只校验证书，不做授权</h3>
+<p><strong>误区</strong>：TLS 握手成功、客户端证书校验通过，就认为调用方「可信」，于是放开所有方法。</p>
+<p><strong>后果</strong>：证书只回答「你是谁」，不回答「你能做什么」。任何持有合法证书的服务，或配置错误的客户端，都能写 KV、改配置、发布文章。在 mTLS 下这个问题更隐蔽：调用方身份是明确的，但权限没有收口。</p>
+<p><strong>正确做法</strong>：把认证和授权分成两层。认证层确认调用方身份（证书主体、令牌对应的服务账号等），授权层在服务端按身份映射角色/权限，并对每个方法单独判断，例如 KV 的读、写、删除命名空间分别对应不同权限。授权决策必须在服务端完成，不能因为链路已加密就跳过。</p>
+<h3 id="_22">误区二：在客户端做权限判断</h3>
+<p><strong>误区</strong>：运营工具在前端隐藏「删除」「发布」按钮，或由客户端根据角色决定要不要发起某个 RPC，就认为权限已经控制住了。</p>
+<p><strong>后果</strong>：客户端可以被替换、被脚本直接调用，隐藏按钮不等于服务端拒绝。只要 RPC 端点可达，构造一个请求就能绕过所有 UI 判断。</p>
+<p><strong>正确做法</strong>：客户端判断只作为体验优化，服务端才是唯一的授权决策点。每个方法入口都要检查调用方身份与所需权限，越权请求返回明确的拒绝结果，并记录审计日志。</p>
+<h3 id="_23">误区三：把令牌、证书私钥打进日志或错误信息</h3>
+<p><strong>误区</strong>：为了排障打印完整请求头、把令牌拼进日志、在异常信息里回显证书私钥或完整 PEM 内容。</p>
+<p><strong>后果</strong>：凭证会扩散到日志平台、告警群、工单系统和本地终端，等同于泄露。即使后来删掉日志，副本往往已经流转出去。</p>
+<p><strong>正确做法</strong>：日志只记录调用方身份标识、方法名、结果码、耗时和必要的资源标识；令牌、私钥、完整证书内容一律不记录，确需关联时使用不可逆的摘要或内部 ID。错误信息只说明失败原因，不回显凭证。（对应 acceptance「日志不暴露凭证」。）</p>
+<h3 id="_24">误区四：关闭证书校验图省事</h3>
+<p><strong>误区</strong>：联调时为了快点跑通，使用 <code>verify=False</code>、<code>InsecureSkipVerify</code> 之类的开关，或对自签证书直接跳过校验，并把它带进了测试甚至生产配置。</p>
+<p><strong>后果</strong>：中间人可以冒充服务端，TLS 只剩下「看起来加密」，完整性校验也失去意义。更麻烦的是这类开关常常藏在配置里，很难被 code review 发现。</p>
+<p><strong>正确做法</strong>：正确配置 CA 和证书链；测试环境使用独立 CA，并把测试 CA 纳入测试客户端的信任库；确需临时绕过时必须限定环境、有明确到期时间并纳入检查清单。具体配置项名称、TLS 版本与套件选择以所读文档版本为准。</p>
+<h3 id="_25">误区五：证书过期无监控，导致全站故障</h3>
+<p><strong>误区</strong>：证书只在首次上线时签发，没有到期告警，也没有轮换流程。</p>
+<p><strong>后果</strong>：到期瞬间所有 RPC 握手失败，网关到多级 RPC 的整条链路一起不可用；mTLS 下客户端证书过期还会让服务端拒绝调用方，故障面更大。</p>
+<p><strong>正确做法</strong>：为所有证书配置到期告警（提前数周），定期做轮换演练，把签发和轮换纳入发布流程；mTLS 要同时覆盖服务端证书和客户端证书，并确保轮换期间新旧证书有重叠窗口。</p>
+<h3 id="_26">误区六：把加密和授权放进同一个测试</h3>
+<p><strong>误区</strong>：一个用例同时验证「能连上」和「能写入」，失败了再看是哪一步。</p>
+<p><strong>后果</strong>：失败时无法区分是 TLS 配置、证书链、证书过期，还是授权规则写错，回归定位慢，也容易在修一个问题时掩盖另一个问题。</p>
+<p><strong>正确做法</strong>：分层测试。第一层只测加密链路：无证书、错误证书被拒绝，正确证书可以建立连接；第二层在已认证的前提下，用一个「有身份但无权限」的调用方验证越权写入被拒。两层分别有独立断言，出错时能直接定位。（对应 acceptance「加密链路与业务授权分别测试」。）</p>
+<h2 id="_27">设计权衡</h2>
+<p>节点对 mTLS 的成本有一句准确的概括：</p>
+<blockquote>
+<p>mTLS加强身份管理，也增加证书签发轮换和排障成本。</p>
+</blockquote>
+<p>这句话的重点不是「不要用 mTLS」，而是「身份强度和运维成本要一起算」。提升安全性的方案很多，差别通常不在能不能做，而在团队是否愿意长期承担它的运维复杂度。</p>
+<h3 id="_28">几种常见组合的对比</h3>
+<p>下表是一般经验，不是绝对结论；具体行为以所读文档版本和实际部署为准。</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>身份强度</th>
+<th>运维成本</th>
+<th>排障难度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mTLS</td>
+<td>强：双向证书，调用方身份明确</td>
+<td>高：CA、签发、轮换、吊销都要管</td>
+<td>高：握手失败原因多，证书链问题不直观</td>
+<td>服务间强身份、合规要求高的内部 RPC</td>
+</tr>
+<tr>
+<td>服务端 TLS + 令牌</td>
+<td>中：强度取决于令牌签发与保管</td>
+<td>中：令牌签发、过期、撤销</td>
+<td>中：认证失败与授权失败需分开看</td>
+<td>大多数内部服务，已有统一令牌体系时更顺</td>
+</tr>
+<tr>
+<td>网关统一鉴权</td>
+<td>取决于网关到后端是否透传身份</td>
+<td>中低：入口集中管理</td>
+<td>中：问题可能在网关或后端</td>
+<td>边界入口统一收口；后端仍需方法级授权</td>
+</tr>
+<tr>
+<td>服务网格 sidecar</td>
+<td>强：平台可自动做 mTLS</td>
+<td>中高：依赖平台能力</td>
+<td>高：链路长，可观测性依赖平台</td>
+<td>平台化程度高、愿意统一托管证书的团队</td>
+</tr>
+</tbody>
+</table>
+<p>一个一般经验是：网关做第一道认证，服务间按敏感度选择 mTLS 或令牌，业务服务保留方法级授权。不要把「入口认证」当成「全部授权」。</p>
+<h3 id="_29">证书有效期：短与长的取舍</h3>
+<p>短有效期缩小私钥泄露后的可用窗口，但轮换频率更高，对自动化和监控的要求也更高；长有效期省运维，但泄露和吊销的风险更大，出问题时影响时间也更长。一般经验是先把自动轮换和到期告警做扎实，再逐步缩短有效期，而不是一上来就追求很短的有效期。</p>
+<h3 id="_30">授权粒度：服务级、方法级、资源级</h3>
+<ul>
+<li><strong>服务级</strong>：一个服务一个权限，最省事，但服务内所有方法同权，适合早期或低敏感服务。</li>
+<li><strong>方法级</strong>：按读、写、管理等操作区分，是内部 RPC 常见做法，KV 服务的读配置、写配置、删除命名空间可以分别授权。</li>
+<li><strong>资源级</strong>：还要判断「对哪个资源」，例如只能改自己负责的命名空间或某类配置。粒度最细，但需要业务数据参与判断，成本和出错面都更高。</li>
+</ul>
+<p>一般经验是从方法级起步，对高风险资源再加资源级判断，避免一开始就设计过细的权限模型。</p>
+<h3 id="_31">限流放在网关还是服务内</h3>
+<p>网关适合做粗粒度、统一入口的限流，挡住洪峰、保护后端整体；服务内适合按方法、租户或资源做更细的控制，并能保护单个实例。两者并不冲突：网关挡外部压力，服务内保自身稳定。只做其中一层，通常会在另一层留下缺口。</p>
+<h3 id="_32">审计日志的量与存储成本</h3>
+<p>审计日志要能回答「谁在什么时间对哪个资源做了什么、结果如何」，但不要记录令牌、私钥等凭证。高 QPS 下全量记录成本很高，一般经验是按敏感操作分级：写配置、删除、发布等敏感操作完整记录，普通读可以采样或只记聚合指标；同时设定保留期和冷热分层存储，避免审计日志本身成为成本和隐私负担。</p>
+<h3 id="kv">一个组合示例：KV 服务与图文发布链路（教学假设）</h3>
+<p>假设有一条链路：运营工具 → 网关 → 图文发布服务 → KV 服务。可以按敏感度分层：</p>
+<ul>
+<li>运营工具到网关：服务端 TLS + 登录令牌，网关完成第一道认证，并把身份（操作者或服务账号）写入受控的调用上下文。</li>
+<li>网关到图文发布服务：服务端 TLS + 调用令牌，网关只放行已认证的入口流量；图文发布服务对「创建草稿」「发布」「下线」分别做方法级授权。</li>
+<li>图文发布服务到 KV 服务：根据 KV 中存放的是普通配置还是敏感开关，选择 mTLS 或服务端 TLS + 令牌；写配置和删除命名空间单独授权。</li>
+<li>所有写操作记录审计日志：调用方身份、资源标识、操作类型、结果；日志中不出现令牌和私钥。</li>
+</ul>
+<p>这个示例的重点不是照抄，而是每跳都回答两个问题：调用方是谁，它能做什么。加密只解决链路问题，不替代这两个回答。</p>
+<h3 id="_33">权衡检查清单</h3>
+<p>在选方案前，可以先回答下面几个问题：</p>
+<ol>
+<li>威胁模型是什么？是防外部攻击、防内网横向移动，还是满足合规审计？不同目标对身份强度的要求不同。</li>
+<li>团队能否长期维护 CA、签发、轮换和吊销？如果答案是否定的，mTLS 的隐性成本会很高。</li>
+<li>身份能否透传到后端？如果网关终止了认证但后端拿不到身份，方法级授权就无从谈起。</li>
+<li>证书和令牌的到期告警、轮换演练是否已经自动化？没有监控的 mTLS 比不做 mTLS 更危险。</li>
+<li>授权粒度是否与业务风险匹配？低敏感读接口不必过度设计资源级权限。</li>
+<li>审计日志的保留期、存储成本和访问权限是否明确？审计数据本身也需要保护。</li>
+</ol>
+<h3 id="_34">取舍的底线</h3>
+<p>无论选择哪种组合，有几条底线不变：</p>
+<ul>
+<li>服务端必须做授权决策，客户端判断不能作为安全边界。</li>
+<li>凭证不进日志、不进错误信息、不进工单。</li>
+<li>加密链路测试与授权测试分开，失败时能定位到具体层。</li>
+<li>内网流量同样经过身份与授权检查，不能因为「都在内网」而放行。</li>
+</ul>
+<h3 id="_35">误区与权衡的对应关系</h3>
+<ul>
+<li>「只校验证书不做授权」对应权限映射的粒度选择：认证强不等于授权细。</li>
+<li>「客户端做权限判断」对应授权决策点：放在服务端才能统一。</li>
+<li>「关闭证书校验」对应 TLS/mTLS 的运维能力：做不好校验，不如先把 CA 和轮换流程建好。</li>
+<li>「证书过期无监控」对应有效期取舍：自动化不到位时，长有效期只是延迟故障，不是消除故障。</li>
+<li>「加密与授权一起测」对应排障成本：分层测试是控制 mTLS 复杂度的必要手段。</li>
+</ul>
+<h3 id="_36">本节小结</h3>
+<ul>
+<li>内网不是信任边界，认证与授权必须在服务端做。</li>
+<li>加密链路与业务授权分层测试，日志不出现凭证。</li>
+<li>mTLS 的身份强度更高，但要连证书签发、轮换和排障成本一起评估。</li>
+</ul>
+<p>评估方案时，把身份强度、运维成本和排障难度放在一起看，而不是只比较加密强度。</p>
+<h2 id="kv-tls">动手实践：为 KV 服务加入 TLS 和只读角色</h2>
+<blockquote>
+<p>节点 practice 原文：「为KV服务加入TLS和只读角色，验证无证书与越权写入被拒绝。」
+验收标准（acceptance 原文）：「加密链路与业务授权分别测试」「日志不暴露凭证」。</p>
+</blockquote>
+<p>本课附带的 <code>practice93/</code> 是一份可直接运行的教学实现（Python 标准库 <code>ssl</code> + <code>openssl</code> 命令，不依赖 gRPC 包），结构与 gRPC 的「通道凭证 + 服务端按身份授权」思路对应，但协议是自定义的「4 字节长度头 + JSON」，只用于教学。</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kvserver.py</code></td>
+<td>mTLS 服务端：<code>CERT_REQUIRED</code> 校验客户端证书；从证书 CN 取身份，映射角色 <code>reader</code>/<code>writer</code>，默认拒绝；最大消息 64KB；每身份令牌桶（5/s，突发 10）；JSON 审计日志并把 <code>token/password/authorization</code> 脱敏为 <code>***</code></td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>客户端：校验服务端证书链与主机名，可选携带客户端证书、伪造令牌、超大包体、明文连接、连发 N 次</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>一键生成 CA/证书，按 A 加密链路层、B 业务授权层、C 输入规模与速率、D 审计与凭证 四组分别验证</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1testsh">步骤 1：签发证书（test.sh 自动完成，建议手动跑一遍理解）</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 自签 CA（Python 3.13 默认的严格校验要求 CA 带 basicConstraints 和 keyUsage）</span>
+openssl<span class="w"> </span>req<span class="w"> </span>-x509<span class="w"> </span>-newkey<span class="w"> </span>rsa:2048<span class="w"> </span>-nodes<span class="w"> </span>-days<span class="w"> </span><span class="m">30</span><span class="w"> </span>-subj<span class="w"> </span><span class="s2">"/CN=ca"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-keyout<span class="w"> </span>certs/ca.key<span class="w"> </span>-out<span class="w"> </span>certs/ca.crt<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-addext<span class="w"> </span><span class="s2">"basicConstraints=critical,CA:TRUE"</span><span class="w"> </span>-addext<span class="w"> </span><span class="s2">"keyUsage=critical,keyCertSign,cRLSign"</span>
+<span class="c1"># 服务端证书：SAN 必须包含客户端连接用的主机名</span>
+openssl<span class="w"> </span>req<span class="w"> </span>-newkey<span class="w"> </span>rsa:2048<span class="w"> </span>-nodes<span class="w"> </span>-subj<span class="w"> </span><span class="s2">"/CN=kv-server"</span><span class="w"> </span>-keyout<span class="w"> </span>certs/server.key<span class="w"> </span>-out<span class="w"> </span>certs/server.csr
+openssl<span class="w"> </span>x509<span class="w"> </span>-req<span class="w"> </span>-in<span class="w"> </span>certs/server.csr<span class="w"> </span>-CA<span class="w"> </span>certs/ca.crt<span class="w"> </span>-CAkey<span class="w"> </span>certs/ca.key<span class="w"> </span>-CAcreateserial<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-days<span class="w"> </span><span class="m">30</span><span class="w"> </span>-extfile<span class="w"> </span>certs/server.ext<span class="w"> </span>-out<span class="w"> </span>certs/server.crt<span class="w">   </span><span class="c1"># server.ext 含 subjectAltName=DNS:localhost,IP:127.0.0.1</span>
+<span class="c1"># 客户端证书：CN 就是身份，reader-cli / writer-cli；另用 rogue-ca 签一张 CN=writer-cli 的冒名证书</span>
+openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>certs/reader-cli.crt<span class="w"> </span>-noout<span class="w"> </span>-subject<span class="w"> </span>-issuer<span class="w"> </span>-enddate
+</code></pre></div>
+
+<p>身份与权限映射写在服务端，而不是让客户端自报角色：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ROLE_OF</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"reader-cli"</span><span class="p">:</span> <span class="s2">"reader"</span><span class="p">,</span> <span class="s2">"writer-cli"</span><span class="p">:</span> <span class="s2">"writer"</span><span class="p">}</span>      <span class="c1"># 身份 -&gt; 角色</span>
+<span class="n">PERMS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"reader"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"GET"</span><span class="p">},</span> <span class="s2">"writer"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"GET"</span><span class="p">,</span> <span class="s2">"PUT"</span><span class="p">,</span> <span class="s2">"DELETE"</span><span class="p">}}</span>  <span class="c1"># 角色 -&gt; 方法；没列的一律拒绝</span>
+</code></pre></div>
+
+<h3 id="2_1">步骤 2：运行</h3>
+<div class="codehilite"><pre><span></span><code>tar<span class="w"> </span>xzf<span class="w"> </span>practice93.tar.gz<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>practice93<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./test.sh
+</code></pre></div>
+
+<h3 id="3-linux">步骤 3：对照实测输出（本课在 Linux 上实际运行的结果）</h3>
+<p><strong>A. 加密链路层</strong>——这一组都只看握手，与业务权限无关：</p>
+<table>
+<thead>
+<tr>
+<th>用例</th>
+<th>实测结果</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1 明文客户端连 TLS 端口</td>
+<td><code>ConnectionResetError</code></td>
+<td>服务端握手失败直接断开</td>
+</tr>
+<tr>
+<td>A2 不带客户端证书</td>
+<td><code>ConnectionResetError</code>，服务端记 <code>HANDSHAKE_REJECTED</code></td>
+<td>TLS 1.3 下客户端往往只看到连接被重置，原因要看服务端日志</td>
+</tr>
+<tr>
+<td>A3 非受信 CA 签发、CN 冒充 <code>writer-cli</code></td>
+<td><code>TLSV1_ALERT_UNKNOWN_CA</code></td>
+<td>证书里写什么 CN 都没用，签发者不受信</td>
+</tr>
+<tr>
+<td>A4 用 <code>evil.example</code> 作主机名</td>
+<td><code>Hostname mismatch, certificate is not valid for 'evil.example'</code></td>
+<td>客户端侧对服务端的认证</td>
+</tr>
+<tr>
+<td>A5 正常 mTLS</td>
+<td><code>TLS TLSv1.3 {"code": "OK", "value": "hello"}</code></td>
+<td><code>openssl s_client</code> 复核：<code>Protocol: TLSv1.3</code>，<code>Verify return code: 0 (ok)</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>B. 业务授权层</strong>——双方都持合法证书，只测权限：</p>
+<div class="codehilite"><pre><span></span><code>reader PUT: {"code": "PERMISSION_DENIED", "msg": "reader-cli (reader) cannot PUT"}
+PASS B1 只读角色越权写入被拒绝
+PASS B2 只读角色删除被拒绝
+越权后值: {"code": "OK", "value": "hello"}      # B3 值没有被改动
+PASS B4 writer 写入成功 / PASS B5 reader 读到新值
+</code></pre></div>
+
+<p><strong>C. 输入规模与速率</strong>：</p>
+<div class="codehilite"><pre><span></span><code>200KB 请求: {"code": "RESOURCE_EXHAUSTED", "msg": "message 200040 &gt; 65536"}   # 只读了 4 字节长度头就拒绝
+reader 连发 30 次: CODES OK=10 RESOURCE_EXHAUSTED=20                         # 突发 10 个后被限速
+PASS C3 其他身份不受影响                                                       # 令牌桶按身份隔离
+</code></pre></div>
+
+<p><strong>D. 审计与凭证</strong>——请求里故意带了令牌 <code>tok-SECRET-9f3a</code>：</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span><span class="nt">"identity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"reader-cli"</span><span class="p">,</span><span class="w"> </span><span class="nt">"op"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PUT"</span><span class="p">,</span><span class="w"> </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cfg/banner"</span><span class="p">,</span><span class="w"> </span><span class="nt">"result"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PERMISSION_DENIED"</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"req"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="nt">"op"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PUT"</span><span class="p">,</span><span class="w"> </span><span class="nt">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cfg/banner"</span><span class="p">,</span><span class="w"> </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"***"</span><span class="p">}}</span>
+</code></pre></div>
+
+<p><code>grep</code> 确认 <code>audit.log</code> 和服务端输出里都没有令牌原文和 <code>PRIVATE KEY</code>，最后打印 <code>ALL_CHECKS_PASSED</code>。</p>
+<h3 id="4">步骤 4：自己动手改，观察变化</h3>
+<ol>
+<li>把 <code>kvserver.py</code> 里 <code>verify_mode = ssl.CERT_REQUIRED</code> 改成 <code>CERT_NONE</code>：A2、A3 会变成能连上，而且 <code>getpeercert()</code> 拿不到身份，所有请求都会因 <code>role is None</code> 被拒绝——这正说明「加密」和「认证」是两层。</li>
+<li>在 <code>PERMS</code> 里给 <code>reader</code> 加上 <code>"PUT"</code>：A 组全部照常通过，只有 B1 失败——分层测试让你一眼看出是授权层出了问题。</li>
+<li>把 <code>redact()</code> 换成直接 <code>json.dumps(req)</code>：D2 立刻失败，令牌原文进了日志。</li>
+<li>把 <code>-days 30</code> 改成很短的有效期并等它过期（或用 <code>faketime</code> 之类工具），观察握手报错，体会 tradeoffs 里说的「证书签发轮换和排障成本」。</li>
+</ol>
+<h3 id="_37">后台场景迁移（教学假设）</h3>
+<p>一个内部配置 KV 服务给多个运营工具和自动化脚本用：给只读看板发 reader 身份的证书，给发布系统发 writer 身份；每个身份单独限速，Delete 只留给少数身份并且必记审计。真实的 gRPC 项目里，这些分别对应通道 TLS 凭证、服务端拦截器里的鉴权、最大接收消息大小配置和审计日志，具体 API 以所读 gRPC 语言版本文档为准。</p>
+<h2 id="_38">源码与文档阅读</h2>
+<p>本节按 <code>sourceStudy</code> 的要求展开：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。阅读对象为 gRPC 官方认证指南：https://grpc.io/docs/guides/auth/ 。访问日期请填写你实际打开页面的日期；所读页面为英文文档。页面所列的语言/框架版本、示例完整度与 API 名称以实际打开时为准，笔记中统一注明"以所读文档版本为准"。</p>
+<h3 id="_39">阅读路线</h3>
+<ol>
+<li>
+<p><strong>先读认证机制总览。</strong> 核对文档列出的认证方式及适用场景，重点区分传输层安全（TLS/SSL）、基于令牌的调用凭证，以及各语言或平台可能提供的其他机制。不要凭记忆补全机制清单，以页面当前列出的条目为准。</p>
+</li>
+<li>
+<p><strong>区分通道凭证与调用凭证。</strong> 通道凭证（channel credentials）绑定在连接/通道上，典型作用是建立 TLS 加密链路并验证服务端证书；调用凭证（call credentials）绑定在每次调用上，典型作用是携带令牌等调用方身份材料。文档会说明二者可以组合使用；具体类名、组合方法和优先级在不同语言中不同，以所读语言页面为准。</p>
+</li>
+<li>
+<p><strong>读示例代码。</strong> 按自己使用的语言找到对应示例，记录：如何加载证书、如何创建通道凭证、如何附加调用凭证、客户端与服务端各自需要哪些材料。示例中的文件路径、主机名和证书用途仅为演示，不能直接照搬到生产。</p>
+</li>
+<li>
+<p><strong>读错误处理路径。</strong> 核对握手失败、证书校验失败、调用凭证缺失或失效时，文档与示例如何表现。注意区分传输层失败和业务层拒绝：前者通常表现为连接建立失败，后者通常表现为 RPC 状态码。具体状态码语义以所读版本文档和语言运行时为准。</p>
+</li>
+<li>
+<p><strong>记录版本与边界。</strong> 在笔记中写明访问日期、页面语言、示例所用语言及版本；对文档没有展开的内容（例如企业内部的角色模型、服务网格策略）标注"本课扩展"，不作事实断言。</p>
+</li>
+<li>
+<p><strong>核对语言差异。</strong> 同一机制在不同语言中的凭证 API 名称、证书加载方式和示例完整度可能不同；先确认自己所用语言的页面，再记录与总览页的差异，不要跨语言拼接示例。</p>
+</li>
+</ol>
+<h3 id="_40">阅读笔记模板</h3>
+<table>
+<thead>
+<tr>
+<th>记录项</th>
+<th>填写内容</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文档 URL</td>
+<td>https://grpc.io/docs/guides/auth/</td>
+<td>只记录实际访问的页面</td>
+</tr>
+<tr>
+<td>访问日期</td>
+<td>（填写实际访问日期）</td>
+<td>便于后续复核版本</td>
+</tr>
+<tr>
+<td>页面语言</td>
+<td>英文</td>
+<td>语言子页面可能滞后</td>
+</tr>
+<tr>
+<td>文档/示例版本</td>
+<td>以页面当前版本为准</td>
+<td>记录示例语言与版本</td>
+</tr>
+<tr>
+<td>支持的认证机制</td>
+<td>按页面所列逐条记录</td>
+<td>不凭记忆补全</td>
+</tr>
+<tr>
+<td>通道凭证</td>
+<td>作用、创建方式、服务端证书校验方式</td>
+<td>语言 API 名以文档为准</td>
+</tr>
+<tr>
+<td>调用凭证</td>
+<td>作用、附加方式、与通道凭证的组合方式</td>
+<td>令牌来源不写入笔记</td>
+</tr>
+<tr>
+<td>二者组合</td>
+<td>文档给出的组合方式与限制</td>
+<td>不推断未写的优先级</td>
+</tr>
+<tr>
+<td>示例代码路径</td>
+<td>所读语言示例的位置</td>
+<td>记录语言与版本</td>
+</tr>
+<tr>
+<td>客户端材料</td>
+<td>需要的证书、密钥或令牌类别</td>
+<td>不记录真实材料内容</td>
+</tr>
+<tr>
+<td>服务端材料</td>
+<td>需要的证书、密钥与校验配置</td>
+<td>不记录真实材料内容</td>
+</tr>
+<tr>
+<td>错误处理</td>
+<td>握手失败、证书失败、凭证失败的表现</td>
+<td>区分传输层与业务层</td>
+</tr>
+<tr>
+<td>授权相关内容</td>
+<td>文档涉及的范围</td>
+<td>不足部分标注"本课扩展"</td>
+</tr>
+<tr>
+<td>边界与未覆盖项</td>
+<td>企业内部实现、网格行为等</td>
+<td>公开文档不能推断</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_41">核对清单</h3>
+<ul>
+<li>
+<p>是否能用自己的话说明"加密链路"和"确认调用方身份"不是同一件事。</p>
+</li>
+<li>
+<p>是否能指出示例中通道凭证与调用凭证分别放在哪里、为什么可以叠加。</p>
+</li>
+<li>
+<p>是否记录了认证失败时的表现，而不是只记录成功路径。</p>
+</li>
+<li>
+<p>是否记录了文档版本、语言与访问日期，方便下次复核。</p>
+</li>
+<li>
+<p>是否把文档未覆盖的授权模型明确标为扩展，而不是当作文档结论。</p>
+</li>
+</ul>
+<h3 id="_42">读后记录示例</h3>
+<p>笔记末尾可以用一小段话收束，避免只摘抄示例代码：</p>
+<ul>
+<li>
+<p>机制：文档列出的认证方式中，哪些用于链路保护，哪些用于标识调用方。</p>
+</li>
+<li>
+<p>凭证：通道凭证与调用凭证各自解决什么，示例中如何创建和附加。</p>
+</li>
+<li>
+<p>失败路径：握手、证书校验、调用凭证失效分别如何表现，哪些属于业务层拒绝。</p>
+</li>
+<li>
+<p>授权：文档涉及多少，角色/权限映射由业务侧补充的部分有哪些。</p>
+</li>
+<li>
+<p>边界：哪些结论只适用于所读版本或特定运行环境，哪些不能由公开文档推断。</p>
+</li>
+</ul>
+<h3 id="_43">版本记录写法</h3>
+<ul>
+<li>
+<p>推荐写成"访问日期 + 页面语言 + 示例语言/版本"，例如"&lt;访问日期&gt;，英文页面，示例以页面当前版本为准"。</p>
+</li>
+<li>
+<p>对 API 名称、默认值和状态码语义，写明"以所读文档版本为准"，不要用记忆中的旧版本覆盖当前文档。</p>
+</li>
+<li>
+<p>对运行环境相关行为（TLS 版本、证书链、服务网格自动 mTLS 等），写明"以实际运行环境为准"。</p>
+</li>
+</ul>
+<h3 id="_44">边界说明</h3>
+<ul>
+<li>
+<p>公开文档只能说明 gRPC 的通用机制与示例，<strong>不能据此推断任何企业内部的实现细节</strong>；本课出现的通用内容后台、图文发布服务、内部运营工具、配置/KV 服务、网关到多级 RPC 等场景均为教学假设。</p>
+</li>
+<li>
+<p>认证（你是谁）与授权（你能做什么）是两件事。gRPC 文档重点在传输安全与调用凭证，角色/权限映射通常需要业务侧自行设计，文档可能只是部分涉及，本课将其标注为<strong>扩展内容</strong>。</p>
+</li>
+<li>
+<p>TLS 版本、密码套件、证书链校验细节、服务网格中的自动 mTLS 行为等，受运行环境与版本影响较大，统一写"以所读文档版本和实际运行环境为准"。</p>
+</li>
+<li>
+<p>示例中的证书、令牌、密钥仅用于演示，不得提交到仓库，也不得写入日志。</p>
+</li>
+</ul>
+<h2 id="_45">自测题</h2>
+<h3 id="1-tls-put">题 1：已开启 TLS，为什么仍能被任意进程调用 Put？</h3>
+<p><strong>题干：</strong> 某配置/KV 服务已开启 TLS，客户端需要信任服务端证书才能连接。但测试发现，任何能连上服务端口的进程都可以调用 <code>Put</code> 写入数据。缺了什么？应如何补？</p>
+<p><strong>答案：</strong> 缺的是<strong>调用方身份认证</strong>和<strong>服务端授权</strong>。单向 TLS 只解决传输加密、完整性以及"客户端验证服务端身份"，并不证明调用方是谁。需要补充：用 mTLS 让服务端要求并验证客户端证书，或用调用凭证（例如令牌）标识调用方；然后在服务端把身份映射到角色/权限，并在每个方法（例如 <code>Put</code>）执行前做授权判断。网络位置（例如"处于内网"）不能替代这两步。</p>
+<p><strong>解析：</strong> TLS 与 mTLS 解决不同问题：TLS 主要保护链路并让客户端确认服务端；mTLS 增加服务端对客户端证书的要求与验证，从而认证调用方。认证之后还要授权。两者应分别测试：先验证"无证书或无令牌被拒绝"，再验证"有身份但越权被拒绝"。不要把"能建立加密连接"误认为"已授权"，也不要把网关已经终止 TLS 当作下游服务可以跳过身份检查的理由。</p>
+<h3 id="2-delete">题 2：只读脚本调用 Delete，服务端应如何拒绝与记录？</h3>
+<p><strong>题干：</strong> 一个持有合法客户端证书的只读运营脚本调用了 <code>Delete</code>。服务端应返回什么？在哪一层判断？审计日志应如何记录？给出一行不含凭证的示例日志。</p>
+<p><strong>答案：</strong> 服务端应在<strong>业务授权层</strong>（例如拦截器、中间件或方法入口的权限检查）判断，而不是在 TLS 握手层判断；TLS 只负责确认对端身份。授权失败应返回表示"已认证但无权限"的 RPC 错误，常见为 <code>PERMISSION_DENIED</code>，具体状态码与语言 API 以所读版本文档为准，并拒绝执行删除。审计日志记录时间、主体标识、角色、方法、资源、结果与原因，但<strong>不得记录令牌、私钥、证书私钥或完整凭证</strong>。</p>
+<p>示例（单行，字段可按团队规范调整）：</p>
+<p><code>2026-11-10T12:00:00Z outcome=denied reason=rbac principal=svc-ops-readonly role=viewer method=/kv.KV/Delete resource=kv:config/app</code></p>
+<p><strong>解析：</strong> 授权判断的位置决定了错误语义：证书校验失败通常发生在连接建立阶段；身份合法但权限不足属于业务层拒绝。日志中的主体标识应是经过映射的服务身份或角色标签，而不是原始证书内容或令牌。若日志系统需要关联请求，可使用请求 ID，但同样不得写入凭证。审计日志应能回答"谁、在何时、对什么、做了什么、结果如何"，并能在不暴露敏感材料的前提下支持追查。</p>
+<h3 id="350-100mb">题 3：不限制消息大小时，50 个并发 100MB 请求会怎样？</h3>
+<p><strong>题干：</strong> 服务端未限制最大消息大小。50 个并发客户端各发送 100MB 请求，可能出现什么问题？至少给出两种服务端限制手段，并说明取舍。</p>
+<p><strong>答案：</strong> 50 × 100MB 的请求体在服务端会产生约 5GB 的原始负载，叠加反序列化、缓冲区复制、框架内部队列和并发处理，内存占用会进一步放大，可能导致 OOM、频繁 GC、CPU 饱和、请求延迟上升，甚至进程崩溃，影响同实例上的其他调用方。至少两种限制手段：</p>
+<ol>
+<li>
+<p><strong>限制最大接收消息大小</strong>（服务端与客户端分别配置合理上限），超限直接拒绝。取舍：上限过小会误伤合法的大批量请求，需要按业务峰值和真实报文分布评估。</p>
+</li>
+<li>
+<p><strong>限制并发与速率</strong>（最大并发调用/流、QPS 限流、准入控制），并配合请求超时与截止时间。取舍：限流过紧会降低吞吐并可能触发客户端重试，超时设置不当会造成重试风暴；阈值需要压测和线上观测后调整。</p>
+</li>
+</ol>
+<p>还可以结合应用层校验（例如业务字段大小、批量条数上限）以及分页/分片设计。具体配置项名称、默认值与行为以所读文档版本和框架版本为准。</p>
+<p><strong>解析：</strong> 这与本课 <code>summary</code> 一致：传输加密、对端认证与操作授权分别解决不同问题，服务端还需要限制输入规模与资源使用。限制消息大小、并发和速率属于服务边界的一部分；审计日志用于事后追查敏感操作，但日志本身不能成为新的泄漏点。取舍上，mTLS 加强身份管理的同时会增加证书签发、轮换和排障成本；资源限制提高稳定性，但需要持续调参并观察误杀与重试情况。</p>
+<h2 id="_46">推荐资源</h2>
+<ul>
+<li><a href="https://grpc.io/docs/guides/auth/">RPC身份、TLS与授权：参考文档 / 原始资料</a>，来源 grpc.io｜文档｜英文｜深入｜免费，阅读重点：重点阅读TLS与mTLS与身份和权限映射，用于核对本节点实验的语义和边界。建议结合 practice93 核对。</li>
+</ul>
+<h2 id="_47">本课小结</h2>
+<ul>
+<li>
+<p>TLS 提供传输加密与完整性，并让客户端验证服务端身份；它本身不等于"调用方已认证"。</p>
+</li>
+<li>
+<p>mTLS 下服务端要求并验证客户端证书，从而认证调用方；mTLS 加强身份管理，也增加证书签发、轮换与排障成本。</p>
+</li>
+<li>
+<p>认证回答"你是谁"，授权回答"你能做什么"；授权通常在服务端按身份映射角色/权限，再逐方法判断每个调用是否允许。</p>
+</li>
+<li>
+<p>通道凭证绑定连接、调用凭证绑定每次调用，二者可以组合；具体 API 名称、组合方式与错误表现以所读文档版本为准。</p>
+</li>
+<li>
+<p>服务端应限制最大消息大小、并发与速率，避免大请求和高并发耗尽内存与 CPU；阈值需要结合业务、压测和线上观测调整。</p>
+</li>
+<li>
+<p>敏感操作要记审计日志，日志中不得写入令牌、私钥等凭证；日志应能回答谁在何时对什么做了什么、结果如何。</p>
+</li>
+<li>
+<p>处于内网不等于可以跳过身份与授权检查；加密链路与业务授权应分别测试：无证书或无令牌被拒绝，有身份但越权也被拒绝。</p>
+</li>
+<li>
+<p>公开文档只能支撑通用机制的理解，不能推断任何企业内部实现；角色映射等文档未充分展开的部分属于本课扩展。</p>
+</li>
+</ul><div class="pn"><span><a href="92.html">← 请求上下文与链路传播</a></span><span>下一课 待更新</span></div></main></div></body></html>
