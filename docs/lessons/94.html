@@ -1,0 +1,1255 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>94. 异步RPC与生命周期协调 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（94/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（14/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="cur" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 94 课 · 领域 F · 阶段 4</p><p class="dl"><a href="../files/94-f-async.md" download>⬇ 本课 Markdown</a><a href="../files/practice94.tar.gz" download>⬇ 练习包 practice94.tar.gz</a></p><h1 id="94208-rpc">第 94/208 课：异步RPC与生命周期协调</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-async</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Async RPC</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>失败与请求语义</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-grpc</code>、<code>e-cancel</code>、<code>b-smart</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Async RPC</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://grpc.io/docs/languages/cpp/callback/">异步RPC与生命周期协调：参考文档 / 原始资料</a>（grpc.io）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>异步调用允许重叠等待，但必须协调完成、取消、超时和回调可能到达的顺序。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课出现的后台系统、服务划分、延迟数字与事故时间线均为教学假设，用于讲解通用后端工程概念，
+不代表任何企业的内部实现或真实架构。涉及 gRPC C++ callback / 完成队列 API 的具体类名、方法签名与版本差异时，
+请以你所阅读的文档版本为准。课内 Python 实验只模拟语义，不等于 C++ API。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉例子：餐厅点菜</h3>
+<p>一桌客人点了主菜、饮料、甜品和一份小吃。</p>
+<ul>
+<li><strong>排队等 vs 同时下单</strong>：笨服务员先去厨房等主菜做好，再去饮品台等饮料……总等待是四段之和。聪明的服务员把四张单子同时递出去，然后去忙别的——这就是<strong>异步调用允许重叠等待</strong>。</li>
+<li><strong>小票编号 = tag，出餐窗口 = 完成队列</strong>：每张小票上写着"3 号桌·饮料"。哪道菜好了，后厨把它连同小票放到出餐窗口；服务员只盯着窗口，看小票就知道该送到哪桌、这桌还差几道——这就是<strong>完成队列与每请求状态机</strong>。</li>
+<li><strong>客人等不及走了 = 超时 / 取消</strong>：客人说"20 分钟上不齐我就走"。到点他走了，但厨房里那道菜可能还在锅里，过两分钟照样被端到出餐窗口——这就是<strong>晚到回调</strong>。取消只是"请厨房别做了"，厨房可能已经做完了，所以取消是合作式的。</li>
+<li><strong>桌子已经收拾给下一桌 = 已销毁的上下文</strong>：晚到的菜不能端到桌上去，因为那张桌子已经换了客人。如果服务员只记得"端到 3 号桌"而不确认 3 号桌还是不是原来那桌，就会把菜放到陌生人面前——这就是<strong>悬垂回调 / use-after-free</strong>。</li>
+<li><strong>一张订单只能结账一次 = 一次性完成</strong>：客人走时前台按"超时未上齐"打折结账；同一时刻最后一道菜上来，另一个服务员按"全部上齐"又结了一次——这就是<strong>双重完成</strong>。两人都看了一眼"这单结了吗？没结"，然后各自去结，问题出在"看一眼"和"结账"之间的那一小段空隙。</li>
+</ul>
+<h3 id="_4">接上前置课</h3>
+<ul>
+<li><strong>f-grpc</strong>（gRPC C++ 同步与异步接口）：我们见过同步、完成队列异步、callback 三种 API 形态，知道"选择时需理解回调、完成队列和对象生命周期"。本课就是把那句话展开。</li>
+<li><strong>e-cancel</strong>（结构化并发、取消与停机）：任务的拥有者管理其启动、取消、等待和资源释放；取消通常是合作式请求而非强制终止。本课里"拥有者"就是那个每请求状态机，它要负责把取消传播给所有在途下游，并等它们真正结束。</li>
+<li><strong>b-smart</strong>（智能指针与共享所有权）：<code>unique_ptr</code> 唯一拥有、<code>shared_ptr</code> 共享拥有、<code>weak_ptr</code> 不延长寿命地观察。本课用它们回答"晚到的回调手里拿的是什么"。</li>
+</ul>
+<h3 id="_5">教学时间线（教学假设）</h3>
+<p>某内容后台的"图文详情聚合服务"每次请求要拿四样东西：文章正文（article）、阅读数（stats）、评论（comment）、关注关系（relation）。</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>事件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 周</td>
+<td>原实现串行调用四个下游，p99 约 180ms，产品要求压到 100ms 以内</td>
+</tr>
+<tr>
+<td>第 2 周</td>
+<td>改为并行 fan-out + 整体 150ms 超时，p99 降到约 70ms，上线</td>
+</tr>
+<tr>
+<td>第 3 周</td>
+<td>每天出现几次 core dump，栈都在评论服务的回调里；同时日志里偶发 "duplicate reply for request"</td>
+</tr>
+<tr>
+<td>排查</td>
+<td>超时分支先回包并 <code>delete</code> 了请求对象；200ms 后评论服务的回调才到，按捕获的裸指针写入已释放内存。另一类问题：超时定时器与最后一个下游回调几乎同时到达，两边都检查了 <code>if (!done_)</code>，都回了包</td>
+</tr>
+<tr>
+<td>修复</td>
+<td>一次性完成改为原子抢占；回调持 <code>weak_ptr</code>（或由引用计数 + 统一释放点管理寿命）；超时/取消后主动取消在途下游；加"在途操作数""存活上下文数"监控</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>错误做法</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>防重复完成</td>
+<td>普通 <code>bool done</code> 先查后设</td>
+<td>锁内检查并设置 / <code>compare_exchange</code> / <code>call_once</code></td>
+</tr>
+<tr>
+<td>回调捕获</td>
+<td>裸指针或引用 <code>[this]</code></td>
+<td><code>weak_ptr</code> 先 <code>lock()</code>，或 <code>shared_ptr</code> 延长到最后一个回调</td>
+</tr>
+<tr>
+<td>释放时机</td>
+<td>回包即 <code>delete</code></td>
+<td>所有在途操作结束（或框架的最后回调，如 <code>OnDone</code>）后才释放</td>
+</tr>
+<tr>
+<td>超时/取消</td>
+<td>只给上游回包，下游继续干</td>
+<td>回包 + 取消所有在途下游，并等待它们结束</td>
+</tr>
+<tr>
+<td>部分失败</td>
+<td>任一下游失败就整体失败，或静默吞掉</td>
+<td>区分关键/非关键下游，明确降级语义</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>完成队列与状态机</strong>：异步把"执行到哪一步"从栈帧挪到显式状态机里，事件通过 tag 找回状态机。</li>
+<li><strong>一次性完成和取消竞态</strong>：完成、超时、取消三路可能并发，必须有唯一的原子裁决点。</li>
+<li><strong>响应对象及控制器寿命</strong>："回包"和"释放"是两个时刻，晚到回调必须不能碰到已销毁的对象。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<p>学完本课，你应当能够：</p>
+<ol>
+<li><strong>能解释完成队列与状态机</strong>。</li>
+<li><strong>能独立完成：实现异步fan-out聚合，注入超时与部分失败，确保每请求只完成一次。</strong></li>
+<li>画出一次 fan-out 请求在"全部成功 / 部分失败 / 超时先到 / 客户端取消 / 超时与最后响应同时到达"五种时序下，谁回包、谁取消下游、谁释放对象。</li>
+<li>说明为什么"普通布尔标记"不能防止双重完成，并给出锁、原子 CAS、<code>call_once</code> 三种修法。</li>
+<li>用 <code>shared_ptr</code> / <code>weak_ptr</code> / 引用计数 + 统一释放点三种思路之一，保证回调晚到不会访问已销毁上下文。</li>
+<li>设计可观测指标（在途操作数、存活上下文数、重复完成计数、晚到丢弃计数），用测试证明"取消后所有引用最终释放"。</li>
+<li>估算 fan-out 对下游瞬时并发的放大，并知道何时该限制并发度或分阶段调用。</li>
+<li>读 gRPC C++ callback 文档时，能找出 <code>OnDone</code>、<code>OnCancel</code>、对象销毁时序相关的约束并核对版本。</li>
+</ol>
+<h2 id="_8">为什么后端要懂</h2>
+<blockquote>
+<p><strong>why 原文</strong>：避免高并发调用中的双重完成与悬垂回调。</p>
+</blockquote>
+<p>这两个问题有一个共同点：<strong>低并发、正常路径下几乎不出现，高并发、异常路径下才出现</strong>。所以它们很少在功能测试里暴露，而是在压测、大促、下游抖动时变成线上事故。</p>
+<ul>
+<li><strong>双重完成</strong>：一个请求被回了两次包。轻则客户端收到两条响应、日志报警；重则副作用执行两次——例如"完成时扣一次配额 / 写一次计数 / 发一条通知"，被执行了两遍。在 RPC 框架里，对同一个调用 <code>Finish</code> 两次本身也可能是未定义行为或直接断言失败（以所用框架文档为准）。</li>
+<li><strong>悬垂回调</strong>：回调在它依赖的对象被释放之后才执行。C++ 里这就是 use-after-free：可能立刻 crash，也可能悄悄写坏另一块刚被复用的内存，几小时后在毫不相关的地方崩溃。core dump 的栈常常指向"无辜"的代码，极难复现。</li>
+</ul>
+<h3 id="summary">逐句读 summary</h3>
+<p><strong>"异步调用允许重叠等待"</strong>——算一笔账（教学假设的延迟）：</p>
+<table>
+<thead>
+<tr>
+<th>下游</th>
+<th>延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>article</td>
+<td>40ms</td>
+</tr>
+<tr>
+<td>stats</td>
+<td>50ms</td>
+</tr>
+<tr>
+<td>comment</td>
+<td>60ms</td>
+</tr>
+<tr>
+<td>relation</td>
+<td>45ms</td>
+</tr>
+<tr>
+<td>串行总耗时</td>
+<td>40+50+60+45 = <strong>195ms</strong></td>
+</tr>
+<tr>
+<td>并行总耗时</td>
+<td>max(40,50,60,45) ≈ <strong>60ms</strong>（再加少量调度开销）</td>
+</tr>
+</tbody>
+</table>
+<p>等待时间重叠了，关键路径从"求和"变成"取最大"。本课实验里，40 个突发请求下串行 p50≈250ms、并行 p50≈124ms（含排队）。</p>
+<p><strong>"但必须协调完成、取消、超时和回调可能到达的顺序"</strong>——一旦并行，一个请求就同时挂着多件"未来会发生的事"，它们的到达顺序不受你控制：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>事件到达顺序</th>
+<th>谁负责回包</th>
+<th>谁负责取消下游</th>
+<th>何时可以释放请求对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全部成功</td>
+<td>4 个响应依次到达 → 定时器未触发</td>
+<td>最后一个响应的回调</td>
+<td>无需取消，撤销定时器</td>
+<td>最后一个回调返回后</td>
+</tr>
+<tr>
+<td>非关键下游失败</td>
+<td>relation 报错，其余成功</td>
+<td>最后一个回调（降级回 PARTIAL）</td>
+<td>无</td>
+<td>最后一个回调返回后</td>
+</tr>
+<tr>
+<td>超时先到</td>
+<td>3 个响应 → 定时器触发 → comment 晚到</td>
+<td>定时器回调</td>
+<td>定时器回调取消 comment</td>
+<td>comment 的回调（或其取消完成通知）结束后</td>
+</tr>
+<tr>
+<td>客户端取消</td>
+<td>2 个响应 → 取消到达 → 其余晚到/被中止</td>
+<td>取消处理路径（回 CANCELLED）</td>
+<td>取消处理路径</td>
+<td>所有在途操作都结束后</td>
+</tr>
+<tr>
+<td>超时与最后响应同时到达</td>
+<td>定时器与第 4 个响应<strong>几乎同时</strong></td>
+<td><strong>只能有一个</strong>：谁先原子抢到完成权</td>
+<td>抢到者负责</td>
+<td>两条路径都退出后</td>
+</tr>
+</tbody>
+</table>
+<p>最后一行是本课的核心难点：两条线程同时到达，"先检查再设置"会让两边都认为自己是赢家。下一章从完成队列和状态机讲起，逐步把这张表变成代码。</p>
+<h2 id="_9">核心知识点</h2>
+<p>异步 RPC 的难点通常不在「发起调用」，而在「收尾」：同一个请求可能先后或同时被下游成功、下游失败、超时、上游取消命中，而回调还可能在任意时刻晚到。下面用通用的「图文详情页聚合」作为教学假设——一个详情页并行调用文章正文、阅读数、评论、用户关系四个下游，再拼装结果返回。真实系统各有差异，这里只讨论通用的协调语义。</p>
+<h3 id="1">1. 完成队列与状态机</h3>
+<h4 id="11">1.1 同步、线程池与完成队列</h4>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>谁在等</th>
+<th>并发模型</th>
+<th>优点</th>
+<th>代价与风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同步阻塞调用</td>
+<td>调用线程</td>
+<td>一请求一线程</td>
+<td>代码直白、易调试</td>
+<td>fan-out 时线程数随下游数放大，尾延迟被最慢下游拖住</td>
+</tr>
+<tr>
+<td>线程池 + 同步调用</td>
+<td>池内工作线程</td>
+<td>有界并发</td>
+<td>复用线程、实现简单</td>
+<td>下游慢时线程被占满，队头阻塞，取消难传播</td>
+</tr>
+<tr>
+<td>完成队列 / 事件循环</td>
+<td>少量驱动线程</td>
+<td>海量在途、事件驱动</td>
+<td>一个线程可推进很多调用，重叠等待成本低</td>
+<td>状态机与生命周期复杂，回调顺序需自行保证</td>
+</tr>
+</tbody>
+</table>
+<p>同步写法下，四路 fan-out 要么串行等待、总耗时相加，要么为每路开线程；线程池缓解了创建成本，但慢下游会把线程占满。完成队列把「等待」从线程里拿出来：发起操作时不阻塞，操作完成时把事件投进队列，由少量驱动线程统一取出并推进各自的调用。代价是原来由栈帧隐式保存的「执行到哪一步」，现在必须显式写成状态机。</p>
+<h4 id="12-tag-tag-ok">1.2 完成队列的直觉：tag 与 (tag, ok)</h4>
+<p>直觉只有两条：<strong>发起时给操作贴一个标识 tag，完成时从队列里取出 (tag, ok)</strong>。tag 用来找回「这是哪个请求的哪一路」，ok 表示这次操作是成功完成还是失败完成。下面的 Python 用 <code>queue.Queue</code> + 线程模拟完成队列：几个「下游」线程各自延迟后 <code>put</code>，主循环 <code>get</code> 后按 tag 找到状态机推进。它是教学模型，不是 gRPC API。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">queue</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="n">cq</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>   <span class="c1"># 模拟完成队列</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">downstream</span><span class="p">(</span><span class="n">event_tag</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">ok</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+    <span class="n">cq</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="n">event_tag</span><span class="p">,</span> <span class="n">ok</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"body-of-</span><span class="si">{</span><span class="n">event_tag</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PageCall</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""一个详情页请求的状态机：记录还差几路，收敛到 DONE。"""</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pending</span> <span class="o">=</span> <span class="n">total</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">"PENDING"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_tag</span><span class="p">,</span> <span class="n">ok</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">"DONE"</span><span class="p">:</span>          <span class="c1"># DONE 之后任何事件都丢弃</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">ok</span><span class="p">:</span>                        <span class="c1"># 任一路失败，本请求直接收敛</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">"DONE"</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="n">event_tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pending</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pending</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">"DONE"</span>
+
+<span class="n">call</span> <span class="o">=</span> <span class="n">PageCall</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">deps</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"article"</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">),</span> <span class="p">(</span><span class="s2">"read_count"</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">),</span> <span class="p">(</span><span class="s2">"comments"</span><span class="p">,</span> <span class="mf">0.12</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">event_tag</span><span class="p">,</span> <span class="n">delay</span> <span class="ow">in</span> <span class="n">deps</span><span class="p">:</span>
+    <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">downstream</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">event_tag</span><span class="p">,</span> <span class="n">delay</span><span class="p">),</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">deps</span><span class="p">)):</span>
+    <span class="n">event_tag</span><span class="p">,</span> <span class="n">ok</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">cq</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>       <span class="c1"># 阻塞取出一个完成事件</span>
+    <span class="n">call</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="n">event_tag</span><span class="p">,</span> <span class="n">ok</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">call</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">call</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div>
+
+<p>三点值得记住：主循环不关心下游的调用顺序，只关心事件；<code>on_event</code> 是唯一的推进入口，所有状态变化都发生在它里面；<code>DONE</code> 是吸收态，之后的事件一律丢弃——这正是后文「一次性完成」的雏形。</p>
+<h4 id="13-pending-done">1.3 每请求状态机：PENDING → DONE</h4>
+<table>
+<thead>
+<tr>
+<th>当前状态</th>
+<th>事件</th>
+<th>动作</th>
+<th>下一状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PENDING</td>
+<td>某一路成功返回且仍有未完成</td>
+<td>记录结果，<code>pending -= 1</code></td>
+<td>PENDING</td>
+</tr>
+<tr>
+<td>PENDING</td>
+<td>最后一路成功返回</td>
+<td>记录结果，<code>pending == 0</code>，回包</td>
+<td>DONE</td>
+</tr>
+<tr>
+<td>PENDING</td>
+<td>某一路失败</td>
+<td>标记失败，取消其余在途下游</td>
+<td>DONE</td>
+</tr>
+<tr>
+<td>PENDING</td>
+<td>整体超时到点</td>
+<td>标记超时，取消其余在途下游</td>
+<td>DONE</td>
+</tr>
+<tr>
+<td>PENDING</td>
+<td>上游取消</td>
+<td>传播取消到所有在途下游</td>
+<td>DONE</td>
+</tr>
+<tr>
+<td>DONE</td>
+<td>任何事件</td>
+<td>丢弃，不触碰已释放资源</td>
+<td>DONE</td>
+</tr>
+</tbody>
+</table>
+<p>关键约束：<strong>DONE 只能被进入一次</strong>。上表每次进入 DONE 的动作里都包含「回包给上游」，如果两条路径同时认为自己该回包，上游就会收到两个响应，或者后一条路径访问了已释放的上下文。下一节专门处理这个竞态。</p>
+<h4 id="14-grpc-c-calldata">1.4 gRPC C++ 完成队列模式中的 CallData</h4>
+<p>gRPC C++ 的完成队列（CompletionQueue）模式下，每个异步操作在发起时绑定一个 tag，驱动线程调用 <code>Next()</code> 取出完成事件，再根据 tag 找回对应的调用对象。常见写法是「每个调用一个状态机对象」，用小状态枚举推进。下面的伪代码只表达形状，具体类名与方法签名以所读文档版本为准。</p>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 伪代码：具体类名、签名与语义以所读 gRPC 文档版本为准</span>
+<span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">State</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">CREATE</span><span class="p">,</span><span class="w"> </span><span class="n">PROCESS</span><span class="p">,</span><span class="w"> </span><span class="n">FINISH</span><span class="w"> </span><span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CallData</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">Proceed</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">state_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">CREATE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">state_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">PROCESS</span><span class="p">;</span>
+<span class="w">            </span><span class="n">service_</span><span class="o">-&gt;</span><span class="n">RequestRpc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ctx_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">req_</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">responder_</span><span class="p">,</span><span class="w"> </span><span class="n">cq_</span><span class="p">,</span><span class="w"> </span><span class="n">cq_</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span><span class="w"> </span><span class="c1">// this 作为 tag</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">state_</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">PROCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">state_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FINISH</span><span class="p">;</span>
+<span class="w">            </span><span class="n">responder_</span><span class="p">.</span><span class="n">Finish</span><span class="p">(</span><span class="n">reply_</span><span class="p">,</span><span class="w"> </span><span class="n">Status</span><span class="o">::</span><span class="n">OK</span><span class="p">,</span><span class="w"> </span><span class="k">this</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">delete</span><span class="w"> </span><span class="k">this</span><span class="p">;</span><span class="w">   </span><span class="c1">// 最后一个完成事件已取出，才释放</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">State</span><span class="w"> </span><span class="n">state_</span><span class="p">{</span><span class="n">State</span><span class="o">::</span><span class="n">CREATE</span><span class="p">};</span>
+<span class="p">};</span>
+
+<span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">tag</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">;</span>
+<span class="kt">bool</span><span class="w"> </span><span class="n">ok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">cq</span><span class="p">.</span><span class="n">Next</span><span class="p">(</span><span class="o">&amp;</span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ok</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">CallData</span><span class="o">*&gt;</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Proceed</span><span class="p">();</span><span class="w">   </span><span class="c1">// tag 还原对象，再推进状态机</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>要点：tag 通常就是对象自身的地址；<code>Next()</code> 返回的 <code>ok</code> 要结合状态解释（连接断开等情况可能以 false 完成）；<strong>最后一个完成事件处理完之后，才能 <code>delete this</code></strong>，否则框架可能还会用这个 tag 回调。异步流的读写、取消通知会带来更多状态，形状相同，状态更多。</p>
+<h3 id="2">2. 一次性完成和取消竞态</h3>
+<h4 id="21-if-not-done-done-true-reply">2.1 为什么「if not done: done = True; reply()」不安全</h4>
+<p>这行代码由「检查」和「设置」两步组成，中间存在窗口。两个线程可以同时看到 <code>done == False</code>，于是都通过检查、都把 <code>done</code> 置为 True、都调用 <code>reply()</code>。超时线程和正常完成线程并发时最容易踩中：超时刚检查完还没置位，下游的完成回调就进来了。</p>
+<p>有人会拿 GIL 来安慰自己，但 <code>if not done</code> 与 <code>done = True</code> 是两条字节码，线程仍可能在两者之间被切换；GIL 保证的是同一时刻只有一条字节码在跑，不等于「检查并设置」是原子的。</p>
+<h4 id="22-python">2.2 用 Python 复现并修复</h4>
+<p>下面的演示让两个线程分别扮演「下游完成」和「超时」，用 <code>threading.Barrier</code> 保证两者都通过检查后再往下走，从而稳定复现重复回包。真实竞态出现频率低，但后果一样。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BadCall</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replies</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">barrier</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Barrier</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>   <span class="c1"># 只为稳定复现竞态</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span>             <span class="c1"># 检查</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">barrier</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>       <span class="c1"># 两线程都通过检查后再继续</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>          <span class="c1"># 设置</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">replies</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">who</span><span class="si">}</span><span class="s2"> 回包, replies=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replies</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">call</span> <span class="o">=</span> <span class="n">BadCall</span><span class="p">()</span>
+<span class="n">threads</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">call</span><span class="o">.</span><span class="n">reply</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">"downstream"</span><span class="p">,)),</span>
+    <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">call</span><span class="o">.</span><span class="n">reply</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s2">"timeout"</span><span class="p">,)),</span>
+<span class="p">]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">threads</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"重复完成次数:"</span><span class="p">,</span> <span class="n">call</span><span class="o">.</span><span class="n">replies</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1"># 期望 0，这里会得到 1</span>
+</code></pre></div>
+
+<p>把检查与设置收进同一把锁，或者用一个原子的「抢占」操作，就能保证只有一个赢家：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GoodCall</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replies</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">try_claim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>             <span class="c1"># 检查与设置在同一临界区</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_done</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_done</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">who</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">try_claim</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">replies</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">who</span><span class="si">}</span><span class="s2"> 回包"</span><span class="p">)</span>
+
+<span class="n">good</span> <span class="o">=</span> <span class="n">GoodCall</span><span class="p">()</span>
+<span class="n">ts</span> <span class="o">=</span> <span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">good</span><span class="o">.</span><span class="n">reply</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">w</span><span class="p">,))</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"downstream"</span><span class="p">,</span> <span class="s2">"timeout"</span><span class="p">)]</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ts</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">ts</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"重复完成次数:"</span><span class="p">,</span> <span class="n">good</span><span class="o">.</span><span class="n">replies</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>   <span class="c1"># 恒为 0</span>
+</code></pre></div>
+
+<p><code>try_claim()</code> 的语义就是「抢占完成权」：返回 True 的线程负责回包，返回 False 的线程必须安静退出。C++ 中等价物是 <code>std::atomic&lt;bool&gt;::compare_exchange_strong</code> 或 <code>std::call_once</code>，原理相同——把「检查 + 设置」做成一个不可分割的操作。</p>
+<p>在 asyncio 里，事件循环是单线程的，没有真正的并行，<code>if not done</code> 到 <code>done = True</code> 之间只要没有 <code>await</code>，就不会被其他任务插入，所以这类竞态天然少很多。但一旦在检查与设置之间 <code>await</code>（例如 <code>await 下游.取消()</code>），窗口又会打开；跨线程回调（<code>loop.call_soon_threadsafe</code>）也不能假设原子。结论不是「asyncio 不用管」，而是「不让 <code>await</code> 或线程边界穿过临界区」。</p>
+<h4 id="23">2.3 超时、完成、取消的三方竞争</h4>
+<div class="codehilite"><pre><span></span><code>时间轴（→ 表示时间前进）：
+下游完成   ──●──────────────────────────────►  完成事件入队
+超时定时   ──────────●──────────────────────►  超时到点，想抢占完成权
+上游取消   ────────────────●─────────────────►  TryCancel 发出
+框架取出   ──────────────────────●───────────►  完成事件被取出，on_event 执行
+
+谁先 try_claim 成功，谁负责回包；其余路径只做清理。
+</code></pre></div>
+
+<p>三种事件都可能先后到达，甚至并发。「超时一定晚于完成」「取消后就不会再有完成事件」这两个假设都不成立。唯一的裁决点是原子的完成权抢占；时间轴只帮助理解，不能当作顺序保证。</p>
+<h4 id="24">2.4 取消是合作式的</h4>
+<p>发出取消（客户端 <code>ClientContext::TryCancel</code>，或服务端主动终止）只是「请求对方停止」的信号，不是「对方已经停止」的证明。下游可能已经算完、回包在途，或者根本不响应取消。所以取消路径也要 <code>try_claim</code>：抢到才回包（通常是 CANCELLED 状态），抢不到说明别处已完成，直接退出。</p>
+<p>取消还必须传播到<strong>所有在途下游</strong>：详情页聚合里四路调用，只取消其中一路，另外三路仍占着连接和线程。接 e-cancel 一课的做法，用一个 per-request 的取消集合或 context 统一广播，并在每个下游回调里先检查是否已取消，再决定是否处理结果。</p>
+<h3 id="3">3. 响应对象及控制器寿命</h3>
+<h4 id="31">3.1 谁拥有请求上下文、响应对象和控制器</h4>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>谁创建</th>
+<th>生命周期归属</th>
+<th>常见错误</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>请求上下文（如 <code>ClientContext</code> / <code>ServerContext</code>）</td>
+<td>调用方或框架</td>
+<td>必须活到该 RPC 的所有回调结束</td>
+<td>栈上对象先析构，晚到回调读到野指针</td>
+</tr>
+<tr>
+<td>响应对象 / 消息体</td>
+<td>调用方持有</td>
+<td>至少活到写出完成</td>
+<td>回包未发完就复用缓冲区</td>
+</tr>
+<tr>
+<td>reactor / 调用状态机</td>
+<td>调用方 <code>new</code> 出</td>
+<td>由完成回调统一释放</td>
+<td>超时路径先删，<code>OnDone</code> 再访问</td>
+</tr>
+</tbody>
+</table>
+<p>这三类对象默认都<strong>不是</strong>线程安全的，谁先被释放由你的代码决定。异步容易出悬垂回调，是因为「发起调用」和「回调到达」之间隔了很久，栈帧早已消失，所有上下文只能靠堆对象和引用计数续命。</p>
+<h4 id="32">3.2 悬垂回调长什么样</h4>
+<div class="codehilite"><pre><span></span><code><span class="c1">// 反例（C++ 形状，仅示意）</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">Start</span><span class="p">(</span><span class="n">Call</span><span class="o">*</span><span class="w"> </span><span class="n">call</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">call</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">([</span><span class="n">call</span><span class="p">](</span><span class="n">Result</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">call</span><span class="o">-&gt;</span><span class="n">OnDone</span><span class="p">(</span><span class="n">r</span><span class="p">);</span><span class="w"> </span><span class="p">});</span><span class="w">   </span><span class="c1">// 裸指针进回调</span>
+<span class="p">}</span>
+<span class="c1">// 超时路径 delete call; 之后完成回调仍会执行 -&gt; 悬垂</span>
+</code></pre></div>
+
+<p>把 <code>call</code> 换成 Python 里跨线程传递的裸对象引用，问题等价：对象已经被超时路径释放，晚到的完成回调再进去就是未定义行为。</p>
+<h4 id="33">3.3 三种寿命方案</h4>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>做法</th>
+<th>优点</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>shared_ptr</code> 持有</td>
+<td>每个在途回调捕获一份 <code>shared_ptr</code>，最后一个释放才销毁</td>
+<td>不需要精确知道最后一个回调是谁</td>
+<td>引用环需警惕，释放时机分散</td>
+</tr>
+<tr>
+<td><code>weak_ptr</code> 探活</td>
+<td>回调持 <code>weak_ptr</code>，<code>lock()</code> 失败即丢弃</td>
+<td>绝不解引用已销毁对象</td>
+<td>需要共享控制块，回调可能白跑</td>
+</tr>
+<tr>
+<td>引用计数 + OnDone 统一释放</td>
+<td>计数在途操作，<code>OnDone</code> 里减到 0 才释放</td>
+<td>释放点集中、可观测</td>
+<td>计数必须无竞态，漏减会泄漏</td>
+</tr>
+</tbody>
+</table>
+<h4 id="34-weakref">3.4 weakref 与在途计数</h4>
+<p>Python 的 <code>weakref</code> 对应 <code>weak_ptr</code> 的「先探活再使用」：回调只持弱引用，对象被释放后 <code>ref()</code> 返回 <code>None</code>，晚到回调安全丢弃。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">weakref</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">PageContext</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="n">ctx</span> <span class="o">=</span> <span class="n">PageContext</span><span class="p">()</span>
+<span class="n">ref</span> <span class="o">=</span> <span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">late_callback</span><span class="p">(</span><span class="n">ref</span><span class="o">=</span><span class="n">ref</span><span class="p">):</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">ref</span><span class="p">()</span>                 <span class="c1"># 尝试提升为强引用</span>
+    <span class="k">if</span> <span class="n">obj</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>             <span class="c1"># 对象已释放，安全丢弃</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"晚到回调：上下文已释放，丢弃"</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">result</span><span class="p">[</span><span class="s2">"article"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"..."</span>
+
+<span class="n">late_callback</span><span class="p">()</span>                 <span class="c1"># 对象还在，正常处理</span>
+<span class="k">del</span> <span class="n">ctx</span>                         <span class="c1"># 超时路径释放上下文</span>
+<span class="n">late_callback</span><span class="p">()</span>                 <span class="c1"># 晚到，ref() 返回 None，安全</span>
+</code></pre></div>
+
+<p>反过来，「计数 + OnDone 统一释放」用计数器把「在途操作」显式化，取消后逐个 <code>release</code>，最终归零才释放上下文：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Inflight</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">acquire</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span>
+</code></pre></div>
+
+<p>把 <code>count()</code> 暴露为监控指标，就能在测试里断言「取消后最终归零」这个不变量，而不是靠肉眼看日志。</p>
+<h4 id="35-ondone">3.5 OnDone 是最后一个回调，完成不等于释放</h4>
+<p>gRPC C++ callback（reactor）API 中，<code>OnDone</code> 是该 RPC 的最后一个回调，之后框架不再访问该 reactor，因此通常在 <code>OnDone</code> 中释放对象；<code>OnCancel</code> 可能与其他回调并发或在其之后到达，必须线程安全地处理；客户端可用 <code>ClientContext::TryCancel</code> 发起取消（具体行为以所读文档版本为准）。把这些约束翻译成一句话：<strong>「回包给上游」（完成）和「所有在途操作结束、可以释放」（释放）是两个不同时刻</strong>，中间可能还夹着取消通知和晚到回调。</p>
+<h3 id="_10">小结</h3>
+<p>完成队列把等待从线程里搬进状态机，tag 负责把事件找回到调用，<code>DONE</code> 必须是吸收态；一次性完成靠原子抢占而不是布尔检查，超时、完成、取消三路谁抢到谁回包，取消还要广播到全部在途下游；寿命问题则用 <code>shared_ptr</code>、<code>weak_ptr</code> 或「计数 + <code>OnDone</code> 统一释放」把「完成」与「释放」解耦。三件事串起来，异步 fan-out 才能在重叠等待的同时，不出现双重完成与悬垂回调。</p>
+<h2 id="_11">常见误区</h2>
+<blockquote>
+<p><strong>pitfalls 原文</strong>：超时处理与正常完成可能并发发生，不能只靠普通布尔标记。</p>
+</blockquote>
+<p>为什么普通布尔不够，有三层原因：</p>
+<ol>
+<li><strong>检查与设置不是一个操作</strong>。<code>if (!done_) { done_ = true; Reply(); }</code> 是"读 → 比较 → 写"三步，定时器线程和下游回调线程可以同时读到 <code>false</code>，于是两边都进入分支。本课实验 C 中，超时与最后一个响应同时到达时，naive 模式 200 个请求里有 184 个被回了两次包。</li>
+<li><strong>多线程回调是常态</strong>。gRPC callback API 的回调可能在框架线程池的不同线程上执行（官方 bidi 示例的注释也提醒"reactor 很可能让我们跳线程"）；定时器又通常在另一条线程。不能假设"它们一定串行"。</li>
+<li><strong>可见性</strong>。C++ 里非原子 <code>bool</code> 的并发读写本身就是数据竞争（未定义行为），编译器和 CPU 都可能重排；即使没撞上同一时刻，一个线程写入也不保证另一个线程及时看到。正确做法是 <code>std::atomic&lt;bool&gt;::compare_exchange_strong</code>、<code>std::call_once</code>、或把检查和设置放进同一把锁。</li>
+</ol>
+<p>下面是另外几个高频误区。</p>
+<h3 id="1_1">误区 1：回调捕获裸指针 / 引用，超时路径直接释放</h3>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>误区</td>
+<td><code>client-&gt;async()-&gt;Get(&amp;ctx_, &amp;req_, &amp;resp_, [this](Status s){ OnPart(s); });</code>，超时分支 <code>Reply(); delete this;</code></td>
+</tr>
+<tr>
+<td>后果</td>
+<td>晚到的回调通过悬垂的 <code>this</code> 访问 <code>ctx_</code>、<code>resp_</code>：crash、写坏别的对象、偶发难复现。实验 A 中 naive 模式 10 个超时请求的晚到回调全部访问了已销毁上下文</td>
+</tr>
+<tr>
+<td>正确做法</td>
+<td>对应 acceptance「<strong>回调晚到不会访问已销毁上下文</strong>」：回调持 <code>weak_ptr</code> 并先 <code>lock()</code>；或回调持 <code>shared_ptr</code>，对象寿命延长到最后一个回调；或用引用计数把释放集中到"最后一个在途操作结束"那一刻。另外注意：每个下游调用的 <code>ClientContext</code> 和响应对象本身也必须活到<strong>该调用的</strong>回调执行完</td>
+</tr>
+</tbody>
+</table>
+<p>注意官方 callback 教程里的一元客户端示例把 <code>ClientContext</code> 放在栈上、lambda 按引用捕获局部变量——它之所以安全，是因为函数用条件变量<strong>等到回调执行完</strong>才返回。一旦你去掉等待改成"发出去就返回"，同样的写法立刻变成悬垂引用。</p>
+<h3 id="2-shared_ptr">误区 2：以为"取消了"就等于"释放了"，或者 shared_ptr 环导致永不释放</h3>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>误区 A</td>
+<td>调了 <code>TryCancel()</code> 就认为下游调用结束、上下文可以销毁</td>
+</tr>
+<tr>
+<td>误区 B</td>
+<td>请求对象持有回调（<code>std::function</code>），回调又捕获了请求对象的 <code>shared_ptr</code>，形成环</td>
+</tr>
+<tr>
+<td>后果</td>
+<td>A：取消是合作式的，回调仍会到达（通常带 CANCELLED 状态），此时对象已不在；B：引用计数永远不归零，内存泄漏，"存活请求数"监控只升不降</td>
+</tr>
+<tr>
+<td>正确做法</td>
+<td>对应 acceptance「<strong>取消后所有引用最终释放</strong>」：取消后仍等待每个在途操作的完成通知；用计数器（在途操作数）和存活对象数做监控，测试里断言二者最终归零；打破环：回调里用 <code>weak_ptr</code>，或在完成时显式清空持有的回调/定时器</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3_1">误区 3：超时只给上游回包，不取消下游</h3>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>误区</td>
+<td>定时器触发后返回"超时"给调用方，就算处理完了</td>
+</tr>
+<tr>
+<td>后果</td>
+<td>下游继续占用连接、线程和 CPU 做一份没人要的工作；在下游已经慢的时候，这恰好是放大故障的方式。实验 D 中 naive 模式取消后 150ms 仍有 30 个在途下游调用，下游一个都没放弃</td>
+</tr>
+<tr>
+<td>正确做法</td>
+<td>抢到完成权的一方负责取消<strong>所有</strong>在途下游（客户端 <code>ClientContext::TryCancel()</code>，或像实验中关闭连接），并把剩余 deadline 传给下游让它自己尽早放弃（接 f-deadline）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4">误区 4：部分失败的语义没想清楚</h3>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>误区</td>
+<td>要么"任何一个下游失败就整体失败"，要么"失败了就当空值静默返回"</td>
+</tr>
+<tr>
+<td>后果</td>
+<td>前者让一个非关键下游（如阅读数）拖垮整个详情页；后者让调用方无法区分"真的没有评论"和"评论服务挂了"，缓存了错误结果</td>
+</tr>
+<tr>
+<td>正确做法</td>
+<td>事先区分关键与非关键下游：关键下游（正文）失败 → ERROR；非关键下游失败 → PARTIAL，并在响应里标出缺了哪些字段。实验中 relation 失败的 6 个请求返回 PARTIAL，<code>errors</code> 字段里写明 <code>relation</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5">误区 5：在回调里做阻塞操作</h3>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>误区</td>
+<td>在 <code>OnReadDone</code> / <code>OnDone</code> / 完成队列处理函数里同步调用另一个 RPC、等锁很久、读磁盘</td>
+</tr>
+<tr>
+<td>后果</td>
+<td>回调线程或完成队列驱动线程被占住，其他成百上千个调用的事件都排队等它，整体延迟飙升甚至死锁</td>
+</tr>
+<tr>
+<td>正确做法</td>
+<td>官方 callback 教程明确提醒：回调方法应快速返回，不要在其中做阻塞工作（如等待事件）。需要后续工作时再发起一个异步操作，或投递到独立的工作线程池</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-ondone-reactor">误区 6：在 OnDone 之前释放 reactor</h3>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>误区</td>
+<td>服务端在调用 <code>Finish()</code> 之后立刻 <code>delete this</code>，或在 <code>OnCancel()</code> 里释放对象</td>
+</tr>
+<tr>
+<td>后果</td>
+<td><code>Finish()</code> 只是发起"结束"操作，框架之后仍会回调该 reactor（<code>OnDone</code>，可能还有 <code>OnCancel</code>）；提前释放就是悬垂</td>
+</tr>
+<tr>
+<td>正确做法</td>
+<td>官方示例的统一模式是在 <code>OnDone()</code> 中做最终清理并 <code>delete this</code>——它是该 RPC 的最后一个回调。<code>OnCancel()</code> 只做通知/标记（且要线程安全）。客户端流式调用中如果写操作由外部定时器间接发起，示例使用 <code>AddHold()</code> / <code>RemoveHold()</code> 防止 RPC 过早结束（具体约束以所读版本为准）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_12">设计权衡</h2>
+<blockquote>
+<p><strong>tradeoffs 原文</strong>：并行调用降低关键路径时间，也放大下游瞬时并发。</p>
+</blockquote>
+<h3 id="_13">先算账：放大有多大</h3>
+<p>教学假设：详情聚合服务入口 2000 QPS，每次 fan-out 4 路，每路平均 50ms。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>串行</th>
+<th>全并行</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每个下游的平均 QPS</td>
+<td>2000</td>
+<td>2000（不变）</td>
+</tr>
+<tr>
+<td>单请求关键路径</td>
+<td>≈ 四路之和（≈195ms）</td>
+<td>≈ 最慢一路（≈60ms）</td>
+</tr>
+<tr>
+<td>一次突发 N 个入口请求时，<strong>同一瞬间</strong>压向下游的调用数</td>
+<td>N（每个请求同一时刻只在一个下游）</td>
+<td>4N（四个下游同时挨打）</td>
+</tr>
+<tr>
+<td>加上对冲/重试（如每路 1 次重试）</td>
+<td>每路最多 ×2</td>
+<td>同一瞬间最多 8N</td>
+</tr>
+</tbody>
+</table>
+<p>平均流量按利特尔定律其实差不多，差别在<strong>瞬时峰值</strong>：并行把每个请求的工作挤到同一个时间窗口。实验 B 的真实数字：40 个突发请求，串行时聚合层同时在途的下游调用峰值 40，并行时 148（上限 160），p50 从约 250ms 降到约 124ms。</p>
+<h3 id="fan-out">几种 fan-out 策略对比（一般经验，非绝对）</h3>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>延迟</th>
+<th>下游瞬时压力</th>
+<th>实现复杂度</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>串行</td>
+<td>最高（求和）</td>
+<td>最低</td>
+<td>最低</td>
+<td>下游之间有数据依赖，或总延迟预算宽松</td>
+</tr>
+<tr>
+<td>全并行</td>
+<td>最低（取最大）</td>
+<td>最高（×fan-out）</td>
+<td>中（要处理一次性完成、晚到回调）</td>
+<td>下游独立、容量充足、延迟敏感</td>
+</tr>
+<tr>
+<td>限并发度的并行（信号量/许可）</td>
+<td>介于两者，接近并行</td>
+<td>有上限、可控</td>
+<td>中高</td>
+<td>入口流量会突发、下游容量有限（接 f-backpressure）</td>
+</tr>
+<tr>
+<td>分阶段（先拿关键数据，再并行拿其余）</td>
+<td>关键数据失败时最快失败</td>
+<td>关键数据失败就不再打其余下游</td>
+<td>中</td>
+<td>正文不存在时其余数据都没意义的场景</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vs">部分失败：降级返回 vs 整体失败</h3>
+<ul>
+<li><strong>降级返回</strong>：可用性高，用户至少看到正文；代价是响应语义变复杂（哪些字段缺了），调用方和缓存层都必须理解 PARTIAL。</li>
+<li><strong>整体失败</strong>：语义简单；代价是可用性被"最弱"的那个下游决定——4 个各 99.9% 可用的下游，全部成功的概率约 99.6%。</li>
+<li>一般经验：关键依赖失败整体失败，非关键依赖失败降级，并对降级打点监控，避免"长期静默降级"没人发现。</li>
+</ul>
+<h3 id="fan-out_1">超时预算如何在 fan-out 里分配</h3>
+<ul>
+<li>并行时每路可以拿到"整体剩余预算减去本地处理余量"，而不是"整体预算 / 4"。</li>
+<li>分阶段时，第一阶段用掉的时间要从第二阶段的预算里扣掉；把<strong>剩余</strong> deadline 传给每个下游（接 f-deadline），下游超时后自行放弃，避免"上游已经超时、下游还在干"。</li>
+<li>给每路单独设超时比只设整体超时更细，但更多定时器 = 更多可能与完成竞争的事件源，一次性完成机制要覆盖所有这些来源。</li>
+</ul>
+<h3 id="vs-vs">编程模型：回调 vs 完成队列 vs 协程</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>优点</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完成队列 + 手写状态机</td>
+<td>线程模型完全自己掌控，性能可预测</td>
+<td>状态机冗长、tag/对象寿命全靠自己管理，最容易出悬垂</td>
+</tr>
+<tr>
+<td>callback / reactor</td>
+<td>框架管理线程和事件分发，<code>OnDone</code> 给出明确的最后回调</td>
+<td>回调分散在多个方法里，跨回调的共享状态要自己加锁</td>
+</tr>
+<tr>
+<td>协程（如 C++20 协程封装、Python asyncio）</td>
+<td>代码像同步一样线性，取消可以结构化地传播</td>
+<td>需要库/框架支持；<code>await</code> 点之间仍可能交错，寿命问题变成"协程帧何时销毁"</td>
+</tr>
+</tbody>
+</table>
+<p>无论选哪种模型，"完成只发生一次""晚到事件不碰已销毁对象""取消后所有引用最终释放"这三条不变量都要你自己守住，框架只是让它们更好写或更难写。</p>
+<h2 id="fan-out_2">动手实践：异步 fan-out 聚合，注入超时与部分失败，确保每请求只完成一次</h2>
+<blockquote>
+<p>对应 practice 原文：<strong>实现异步fan-out聚合，注入超时与部分失败，确保每请求只完成一次。</strong>
+代码在 <code>practice94/</code>（Python 3 标准库，无第三方依赖），打包为 <code>practice94.tar.gz</code>。场景是教学假设的「图文详情聚合」：一次请求并行调用 article（正文，关键）、stats（阅读数）、comment（评论）、relation（关注关系）四个下游。Python 线程 + 回调只用来<strong>模拟</strong> gRPC C++ 异步 API 的生命周期语义，不等于 C++ API 本身。</p>
+</blockquote>
+<h3 id="0">0. 文件一览</h3>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>backend.py</code></td>
+<td>下游模拟：一行请求 <code>&lt;rid&gt;</code>，按配置延迟后回 <code>OK ...</code> / <code>ERR ...</code>；支持 <code>--slow-every N --slow-ms M</code>（每 N 个请求变慢）、<code>--fail-every N</code>（每 N 个失败）；等待期间如果上游 <code>shutdown</code> 连接（取消），会感知到 EOF 并放弃工作，计入 <code>aborted</code></td>
+</tr>
+<tr>
+<td><code>agg.py</code></td>
+<td>聚合服务，<code>naive</code> / <code>safe</code> 两种模式；前端协议 <code>REQ &lt;rid&gt; &lt;timeout_ms&gt; [serial]</code>、<code>CANCEL &lt;rid&gt;</code>、<code>STATS</code>、<code>GC</code>、<code>RESET</code></td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>在一条连接上并发发 N 个请求，统计每个 rid 收到几次响应（<code>dup_rids</code>）、p50/p99、状态分布，最后拉取服务端统计</td>
+</tr>
+<tr>
+<td><code>bstat.py</code></td>
+<td>查询/重置下游统计（被取消放弃的次数 <code>aborted</code> 等）</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>一键跑 A–D 四组验收，最后输出 <code>ALL_CHECKS_PASSED</code></td>
+</tr>
+</tbody>
+</table>
+<p>两种模式的唯一区别就是本课三条主线：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th><code>naive</code>（反面教材）</th>
+<th><code>safe</code>（正确做法）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一次性完成</td>
+<td>普通布尔：<code>if not done: ...; done = True</code></td>
+<td>锁内检查并设置（等价 C++ <code>compare_exchange_strong</code>）</td>
+</tr>
+<tr>
+<td>回调持有什么</td>
+<td>上下文的<strong>强引用</strong>（相当于裸指针 <code>this</code>）</td>
+<td><code>weakref.ref</code>（相当于 <code>weak_ptr</code>，用前先 <code>lock()</code>）</td>
+</tr>
+<tr>
+<td>完成时</td>
+<td>立即 <code>ctx.destroy()</code>（相当于 <code>delete this</code>）</td>
+<td>从注册表移除、丢掉唯一强引用；<strong>取消所有在途下游</strong>（<code>shutdown</code>）</td>
+</tr>
+<tr>
+<td>超时/取消后下游</td>
+<td>继续干活，结果晚到</td>
+<td>收到 EOF 放弃工作</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1_2">1. 关键代码</h3>
+<p>一次性完成（<code>agg.py</code>）。注意 <code>RACE_WINDOW = 0.002</code>：<strong>人为</strong>在检查与设置之间插入 2ms，把真实系统里纳秒级的窗口放大到能在几秒内稳定复现——真实系统里窗口很小，但 QPS 足够高时一样会撞上。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">try_complete_naive</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span>            <span class="c1"># 检查</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">RACE_WINDOW</span><span class="p">)</span>  <span class="c1"># 窗口：另一条线程也可能通过检查</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>         <span class="c1"># 设置</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">try_complete_safe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>              <span class="c1"># 检查与设置原子化（等价 compare_exchange）</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">RACE_WINDOW</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div>
+
+<p>完成者有三类，分别来自不同线程：最后一个下游回调（<code>on_part</code> 中 <code>pending</code> 减到 0）、超时定时器（<code>threading.Timer</code>）、客户端 <code>CANCEL</code>。它们都调用同一个 <code>finish(status)</code>，谁先抢到完成权谁回包。</p>
+<p>晚到回调（<code>on_part</code>），safe 模式先 "lock" 弱引用：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">MODE</span> <span class="o">==</span> <span class="s2">"safe"</span><span class="p">:</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">ctx_ref_or_ctx</span><span class="p">()</span>            <span class="c1"># weak_ptr::lock()</span>
+    <span class="n">call</span> <span class="o">=</span> <span class="n">call_ref_or_call</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">call</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inc</span><span class="p">(</span><span class="s2">"late_dropped"</span><span class="p">);</span> <span class="k">return</span>   <span class="c1"># 请求已结束，安全丢弃</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ctx</span><span class="p">,</span> <span class="n">call</span> <span class="o">=</span> <span class="n">ctx_ref_or_ctx</span><span class="p">,</span> <span class="n">call_ref_or_call</span>
+    <span class="k">if</span> <span class="n">ctx</span><span class="o">.</span><span class="n">destroyed</span><span class="p">:</span>                 <span class="c1"># 真实 C++ 里这里就是悬垂指针写入</span>
+        <span class="n">inc</span><span class="p">(</span><span class="s2">"use_after_destroy"</span><span class="p">);</span> <span class="k">return</span>
+</code></pre></div>
+
+<p>Python 不会真的 use-after-free，所以 <code>Ctx.destroy()</code> 把字段置 <code>None</code> 并打上 <code>destroyed</code> 标记，<strong>任何</strong>在销毁后读写它的路径都计入 <code>use_after_destroy</code>——这个计数就是 C++ 里会 crash 或静默写坏内存的次数。</p>
+<p>取消传播（safe 的 <code>finish</code>）：拿到完成权后，在锁内取走已登记的下游连接，逐个 <code>shutdown(SHUT_RDWR)</code>；<code>register()</code> 也在同一把锁内检查 <code>done</code>，请求结束后才建立的下游连接会被立即关闭，避免"取消之后又漏发一个"。</p>
+<div class="codehilite"><pre><span></span><code><span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">lock</span><span class="p">:</span>
+    <span class="n">socks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">socks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">socks</span><span class="p">,</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">sk</span> <span class="ow">in</span> <span class="n">socks</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span> <span class="n">sk</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span> <span class="k">pass</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">ctx</span> <span class="o">=</span> <span class="kc">None</span>                 <span class="c1"># 释放唯一强引用；回调只持弱引用</span>
+</code></pre></div>
+
+<p>"引用最终释放"的观测点：<code>Ctx.__init__</code> 里 <code>weakref.finalize(self, inc, "alive_ctx", -1)</code>，对象真正被回收时 <code>alive_ctx</code> 才减 1；每个下游操作线程进出时增减 <code>inflight_ops</code>；注册表大小 <code>registry</code>。</p>
+<h3 id="2_1">2. 操作步骤</h3>
+<div class="codehilite"><pre><span></span><code>tar<span class="w"> </span>xzf<span class="w"> </span>practice94.tar.gz<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>practice94
+./test.sh<span class="w">            </span><span class="c1"># 约 15 秒，端口 19401-19404（下游）、19411（naive）、19412（safe）</span>
+</code></pre></div>
+
+<p>想手动玩，可以分别起服务：</p>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>backend.py<span class="w"> </span>article<span class="w"> </span><span class="m">19401</span><span class="w"> </span><span class="m">40</span><span class="w"> </span><span class="p">&amp;</span>
+python3<span class="w"> </span>backend.py<span class="w"> </span>stats<span class="w">   </span><span class="m">19402</span><span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="p">&amp;</span>
+python3<span class="w"> </span>backend.py<span class="w"> </span>comment<span class="w"> </span><span class="m">19403</span><span class="w"> </span><span class="m">60</span><span class="w"> </span>--slow-every<span class="w"> </span><span class="m">4</span><span class="w"> </span>--slow-ms<span class="w"> </span><span class="m">400</span><span class="w"> </span><span class="p">&amp;</span>
+python3<span class="w"> </span>backend.py<span class="w"> </span>relation<span class="w"> </span><span class="m">19404</span><span class="w"> </span><span class="m">45</span><span class="w"> </span>--fail-every<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="nv">B</span><span class="o">=</span><span class="s1">'{"article":19401,"stats":19402,"comment":19403,"relation":19404}'</span>
+python3<span class="w"> </span>agg.py<span class="w"> </span><span class="m">19412</span><span class="w"> </span>safe<span class="w"> </span><span class="s2">"</span><span class="nv">$B</span><span class="s2">"</span><span class="w"> </span><span class="p">&amp;</span>
+python3<span class="w"> </span>client.py<span class="w"> </span><span class="m">19412</span><span class="w"> </span><span class="m">40</span><span class="w"> </span><span class="m">150</span><span class="w">                       </span><span class="c1"># 40 个请求，超时 150ms</span>
+python3<span class="w"> </span>client.py<span class="w"> </span><span class="m">19412</span><span class="w"> </span><span class="m">30</span><span class="w"> </span><span class="m">2000</span><span class="w"> </span>--cancel-after<span class="w"> </span><span class="m">100</span><span class="w"> </span>--wait<span class="w"> </span><span class="m">0</span>.15<span class="w">   </span><span class="c1"># 100ms 后全部取消</span>
+<span class="nb">printf</span><span class="w"> </span><span class="s1">'REQ 7 150\n'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-q1<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span><span class="m">19412</span><span class="w">        </span><span class="c1"># 看一条原始响应（需要 nc）</span>
+</code></pre></div>
+
+<h3 id="3-testsh">3. 真实运行结果（本机一次 <code>./test.sh</code>，数字每次略有波动）</h3>
+<p><strong>A. 正常 fan-out + 部分失败 + 超时</strong>（comment 每 4 个请求慢到 400ms；relation 每 5 个失败；timeout=150ms；40 个请求）</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>回包</th>
+<th>重复完成</th>
+<th>状态分布</th>
+<th>晚到回调</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>safe</td>
+<td>40/40，<code>dup_rids=0</code></td>
+<td>0</td>
+<td>OK 24 / PARTIAL 6 / TIMEOUT 10</td>
+<td><code>late_dropped=10</code>，<code>use_after_destroy=0</code></td>
+</tr>
+<tr>
+<td>naive</td>
+<td>40/40</td>
+<td>0</td>
+<td>同上</td>
+<td><code>use_after_destroy=10</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>rid 为 4 的倍数的 10 个请求 comment 慢到 400ms → 150ms 时超时，带着已到达的部分结果回 <code>TIMEOUT</code>；</li>
+<li>rid 为 5 的倍数且不慢的 6 个请求（5/10/15/25/30/35）relation 失败 → 非关键下游失败，降级回 <code>PARTIAL</code>（若 article 失败则回 <code>ERROR</code>）；</li>
+<li>safe 下这 10 个超时请求的 comment 回调都晚到，全部被弱引用检查丢弃；naive 下同样 10 个回调全部摸到了已销毁上下文。safe p50≈84ms、p99≈154ms（p99 被 150ms 超时封顶）。</li>
+</ul>
+<p><strong>B. 串行 vs 并行</strong>（40 个请求一次性突发进入，timeout=1000 不触发超时）</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>p50</th>
+<th>p99</th>
+<th>聚合层同时在途的下游调用峰值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>并行 fan-out</td>
+<td>124.4ms</td>
+<td>475.7ms</td>
+<td>148</td>
+</tr>
+<tr>
+<td>串行</td>
+<td>249.9ms</td>
+<td>595.0ms</td>
+<td>40</td>
+</tr>
+</tbody>
+</table>
+<p>并行把关键路径从"各下游之和"压到"最慢那个"，p50 减半；代价是同一瞬间压到下游的调用数从 40 涨到 148（理论上限 40×4=160）——这正是 tradeoffs 说的"并行调用降低关键路径时间，也放大下游瞬时并发"。（突发 40 个请求、每个连接一线程，排队使 p50 高于单请求的约 60–70ms。）</p>
+<p><strong>C. 超时与正常完成同时到达</strong>（comment 固定 60ms，timeout 也设 60ms，200 个请求，检查-设置之间 2ms 窗口）</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th><code>dup_rids</code>（客户端收到 ≥2 次响应的请求数）</th>
+<th>服务端 <code>replies</code></th>
+<th><code>double_complete</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive（普通布尔）</td>
+<td><strong>184</strong></td>
+<td>384</td>
+<td>184</td>
+</tr>
+<tr>
+<td>safe（锁内 CAS）</td>
+<td><strong>0</strong></td>
+<td>200</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>这就是 pitfalls「超时处理与正常完成可能并发发生，不能只靠普通布尔标记」的直接证据：定时器线程和最后一个下游回调几乎同时通过 <code>if not done</code>，同一请求回了两次包。safe 下 200 个请求恰好 200 次回包（本次 200 个都被定时器抢先，状态为 TIMEOUT；谁赢不重要，重要的是只有一个赢家）。</p>
+<p><strong>D. 客户端取消后引用最终释放</strong>（comment 全部 400ms，发出 100ms 后取消全部 30 个请求，取消后 150ms 采样）</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>取消后 150ms <code>inflight_ops</code></th>
+<th><code>alive_ctx</code></th>
+<th><code>registry</code></th>
+<th>comment <code>aborted</code> / <code>served</code></th>
+<th>之后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>safe</td>
+<td><strong>0</strong></td>
+<td><strong>0</strong></td>
+<td>0</td>
+<td>30 / 0</td>
+<td>30 个均 <code>CANCELLED</code> 完成一次</td>
+</tr>
+<tr>
+<td>naive</td>
+<td>30</td>
+<td>30</td>
+<td>—</td>
+<td>0</td>
+<td>再等 500ms 后归零，但 <code>use_after_destroy=30</code></td>
+</tr>
+</tbody>
+</table>
+<p>safe：取消传播到下游，comment 30 次全部放弃在途工作，在途操作、存活上下文、注册表引用全部归零——满足 acceptance「取消后所有引用最终释放」。naive：取消只是回了包，下游继续白干 300ms，回调晚到时全部写向已销毁上下文——违反 acceptance「回调晚到不会访问已销毁上下文」。</p>
+<p>最后一行输出：</p>
+<div class="codehilite"><pre><span></span><code>ALL_CHECKS_PASSED
+</code></pre></div>
+
+<h3 id="4_1">4. 对照验收标准</h3>
+<table>
+<thead>
+<tr>
+<th>acceptance 原文</th>
+<th>本实验证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>回调晚到不会访问已销毁上下文</td>
+<td>A：safe <code>late_dropped=10</code>、<code>use_after_destroy=0</code>；naive 对照 <code>use_after_destroy=10</code>；D：naive 取消后 <code>use_after_destroy=30</code></td>
+</tr>
+<tr>
+<td>取消后所有引用最终释放</td>
+<td>D：safe 取消后 150ms <code>inflight_ops=0</code>、<code>alive_ctx=0</code>（由 <code>weakref.finalize</code> 在对象真正回收时计数）、<code>registry=0</code>，下游 <code>aborted=30</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5_1">5. 延伸练习</h3>
+<ol>
+<li>把 <code>RACE_WINDOW</code> 改成 0，提高请求数到 2000，观察 naive 的 <code>dup_rids</code> 是否仍偶发出现——窗口变小只是降低概率，不是消除。</li>
+<li>把 safe 的弱引用方案改成"回调持强引用（类 <code>shared_ptr</code>）+ 最后一个回调结束才释放"：<code>alive_ctx</code> 在 D 中会延迟到下游结束才归零，体会"完成"与"释放"是两个时刻。</li>
+<li>给 fan-out 加一个并发度上限（例如全局 <code>threading.BoundedSemaphore(64)</code>），重跑 B，观察 <code>peak_inflight_ops</code> 与 p99 的变化。</li>
+<li>用 C++ 对照：阅读 gRPC callback 示例，找到你的 reactor 在哪里 <code>delete this</code>，确认它在 <code>OnDone</code> 中（以所读版本为准）。</li>
+</ol>
+<h2 id="_14">源码与文档阅读</h2>
+<blockquote>
+<p><strong>sourceStudy 原文</strong>：沿gRPC官方callback示例研究OnDone、取消通知和对象销毁时序，核对当前版本API约束。</p>
+</blockquote>
+<h3 id="_15">阅读路线</h3>
+<ol>
+<li><strong>打开 <a href="https://grpc.io/docs/languages/cpp/callback/">Asynchronous Callback API Tutorial</a></strong>，先读 Overview：gRPC C++ 有同步 API 和两种异步 API——较老的基于完成队列（completion-queue based）、较新的基于回调（callback-based）。本课实验的 naive/safe 对照，对应的就是这两种异步 API 都要面对的寿命问题。</li>
+<li><strong>一元 RPC · Custom Unary Reactor</strong>：注意 <code>OnDone()</code> 里做最终清理并 <code>delete this</code>，<code>OnCancel()</code> 只记日志；以及 NOTE——回调方法应快速返回，不要做阻塞工作。</li>
+<li><strong>一元 RPC · Client</strong>：客户端把 <code>ClientContext</code>、请求、响应和一个 <code>std::function&lt;void(Status)&gt;</code> 交给 <code>stub_-&gt;async()-&gt;GetFeature()</code>；示例用 mutex + 条件变量等回调完成后才返回，所以栈上的 <code>context</code> 和按引用捕获的局部变量是安全的。思考：去掉等待会怎样？</li>
+<li><strong>服务端流式 / 客户端流式 / 双向流</strong>：比较 <code>ServerWriteReactor</code>、<code>ServerReadReactor</code>、<code>ServerBidiReactor</code> 中 <code>OnWriteDone(ok)</code> / <code>OnReadDone(ok)</code> 遇到 <code>ok == false</code> 时如何调用 <code>Finish()</code>，以及 <code>Finish()</code> 之后为什么还要等 <code>OnDone()</code> 才释放。</li>
+<li><strong>客户端 <code>ClientWriteReactor</code> 中的 <code>AddHold()</code> / <code>RemoveHold()</code></strong>：示例注释说明，部分 <code>StartWrite</code> 是从定时器（<code>grpc::Alarm</code>）回调间接发起的，所以用 hold 防止 RPC 提前结束。这是"外部事件源与 RPC 寿命协调"的官方样例。</li>
+<li><strong>双向流服务端的注释</strong>："reactor 很可能让我们跳线程"——这就是回调可能在不同线程执行、共享状态需要加锁的证据。</li>
+<li><strong>源码仓库</strong>：在 gRPC 仓库中找到 route_guide 的 callback 版本示例（具体目录与文件名以仓库当前版本为准），对照教程逐段读；再在头文件中查 reactor 基类对 <code>OnDone</code>、<code>OnCancel</code>、<code>TryCancel</code> 的注释，核对"<code>OnCancel</code> 何时会被调用、能否与其他回调并发"的当前约束。</li>
+<li>记录<strong>访问日期</strong>和你核对的 <strong>gRPC 版本 / 提交</strong>。本教程页面底部写有最近修改日期（本课写作时为 2024-06-18 的 C++ Callback API Tutorial 版本），读的时候以你看到的为准。</li>
+</ol>
+<h3 id="_16">阅读笔记模板</h3>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>文档/源码原文要点</th>
+<th>我的理解</th>
+<th>待验证（写个小实验）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OnDone</code> 何时调用？之后框架还会访问 reactor 吗？</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>OnCancel</code> 会在什么线程、什么时刻到达？可能与 <code>OnReadDone</code> 并发吗？</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Finish()</code> 调用后还能 <code>delete this</code> 吗？</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>客户端回调里 <code>ClientContext</code> 必须活到什么时候？</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>TryCancel()</code> 之后回调还会不会到？带什么状态？</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>AddHold()</code> 解决了什么问题？不加会怎样？</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>完成队列模式下 <code>Next()</code> 返回 <code>ok=false</code> 代表什么？</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_17">边界</h3>
+<ul>
+<li>公开文档只描述开源 gRPC 的 API 语义，<strong>不能</strong>据此推断任何企业内部 RPC 框架的实现。</li>
+<li>本课 Python 实验（线程 + 弱引用 + 关闭连接）只模拟"一次性完成 / 晚到回调 / 取消传播"的语义，不等于 C++ API；C++ 中真正的风险（use-after-free）在 Python 里只能用 <code>destroyed</code> 标记来计数观测。</li>
+<li>文档中的类名与约束会随版本变化（callback API 曾长期处于 experimental 命名空间），一切以你核对的版本为准。</li>
+</ul>
+<h2 id="_18">自测题</h2>
+<p><strong>1. 聚合服务用 <code>if not self.done: self.done = True; reply()</code> 防重复回包，压测中仍偶发重复回包，为什么？怎么修？</strong></p>
+<p>答案：检查与设置是两步而非一个原子操作，超时定时器线程与最后一个下游回调线程可以同时读到 <code>done == False</code>，都进入分支各回一次包。修法：把"检查并设置"变成原子抢占——锁内检查并设置、<code>std::atomic&lt;bool&gt;::compare_exchange_strong(expected=false, true)</code>、或 <code>std::call_once</code>；只有抢到的一方回包，其余路径只做清理并退出。</p>
+<p>解析：这正是 pitfalls「超时处理与正常完成可能并发发生，不能只靠普通布尔标记」。C++ 里非原子 bool 并发读写还是数据竞争（UB）。实验 C 中 naive 模式 200 个请求有 184 个被重复回包，safe 模式恰好 200 次回包。注意：GIL / 单线程事件循环只能降低概率，只要检查与设置之间有线程切换点或 <code>await</code>，窗口就在。</p>
+<p><strong>2. 超时先触发并回包、释放了请求对象，200ms 后评论服务回调到达导致 crash。给出至少两种修法，并说明各自对"释放时机"的影响。</strong></p>
+<p>答案：
+- <strong>回调持 <code>weak_ptr</code>，用前 <code>lock()</code></strong>：请求完成即可释放对象，晚到回调 <code>lock()</code> 失败直接丢弃。释放最早，但要确保每个下游调用自己的 <code>ClientContext</code>/响应缓冲区由该调用单独持有、活到其回调结束。
+- <strong>回调持 <code>shared_ptr</code></strong>：对象寿命延长到最后一个在途回调结束；回包（完成）早，释放晚。要警惕引用环，并配合取消下游以缩短"白等"的时间。
+- <strong>引用计数 + 统一释放点</strong>：每个在途操作 +1，完成/取消通知到达 -1，归零时释放（与 callback API 中"在 <code>OnDone</code> 里 <code>delete this</code>"同一思路）。释放点集中、可监控，但计数必须无竞态。</p>
+<p>解析：三者都把"完成（回包）"与"释放（所有在途操作结束）"分成两个时刻，满足 acceptance「回调晚到不会访问已销毁上下文」。实验 A：safe 模式 10 个晚到回调全部被 <code>late_dropped</code>，naive 模式 10 个全部 <code>use_after_destroy</code>。</p>
+<p><strong>3. 一个请求 fan-out 4 路，客户端取消后，如何证明"取消后所有引用最终释放"？tradeoffs 中的下游并发放大如何影响取消的价值？</strong></p>
+<p>答案：暴露并断言三类指标最终归零——在途下游操作数（进出操作时增减）、存活请求上下文数（对象真正析构/回收时减 1，如 Python <code>weakref.finalize</code>、C++ 析构函数计数）、注册表/在途请求表大小；同时在下游侧看"被放弃的工作"计数，证明取消确实传播了。测试方法：让一个下游固定很慢，发请求后中途取消，在一个小于下游耗时的时间点采样，期望已全部归零。实验 D：safe 模式取消后 150ms <code>inflight_ops=0</code>、<code>alive_ctx=0</code>、<code>registry=0</code>，下游 <code>aborted=30</code>；naive 模式同一时刻 <code>inflight_ops=30</code>，下游一个没放弃。</p>
+<p>解析：并行 fan-out 会把一次入口请求变成同一瞬间的 4 个下游调用（实验 B：峰值 40 → 148），所以一次取消如果不传播，浪费的是 4 份下游资源；在下游已经变慢、用户纷纷放弃的时刻，这正是雪崩的燃料。并发放大越大，取消传播的价值越大。</p>
+<h2 id="_19">推荐资源</h2>
+<ul>
+<li><a href="https://grpc.io/docs/languages/cpp/callback/">异步RPC与生命周期协调：参考文档 / 原始资料</a>，来源 grpc.io｜文档｜英文｜深入｜免费。阅读重点：重点阅读完成队列与状态机与一次性完成和取消竞态，用于核对本节点实验的语义和边界。建议结合 practice94 核对：先跑 <code>./test.sh</code> 看 naive/safe 的对照数字，再回到教程中 <code>OnDone</code> / <code>OnCancel</code> / <code>AddHold</code> 的段落，逐条对应。</li>
+</ul>
+<h2 id="_20">本课小结</h2>
+<ul>
+<li><strong>summary</strong>：异步调用允许重叠等待（关键路径从"求和"变成"取最大"），但必须协调完成、取消、超时和回调可能到达的顺序。</li>
+<li><strong>完成队列与状态机</strong>：事件靠 tag 找回每请求状态机；DONE 是吸收态，之后所有事件只做清理。</li>
+<li><strong>一次性完成和取消竞态</strong>：完成、超时、取消三路可能并发，唯一裁决点必须是原子抢占；取消是合作式的，抢到完成权的一方要取消所有在途下游。</li>
+<li><strong>响应对象及控制器寿命</strong>："回包"和"释放"是两个时刻；回调用 <code>weak_ptr</code> / <code>shared_ptr</code> / 引用计数之一管理寿命，callback API 中在 <code>OnDone</code> 里做最终清理。</li>
+<li><strong>acceptance</strong>：回调晚到不会访问已销毁上下文；取消后所有引用最终释放——两条都要用指标和测试证明，而不是靠"看起来没 crash"。</li>
+<li><strong>pitfalls</strong>：超时处理与正常完成可能并发发生，不能只靠普通布尔标记。</li>
+<li><strong>tradeoffs</strong>：并行调用降低关键路径时间，也放大下游瞬时并发；需要时限制并发度、分阶段调用，并让超时/取消真正传播到下游。</li>
+<li><strong>边界</strong>：Python 实验只模拟语义；gRPC API 细节以所读版本为准；文中业务场景均为教学假设，不代表任何企业内部实现。</li>
+</ul><div class="pn"><span><a href="93.html">← RPC身份、TLS与授权</a></span><span>下一课 待更新</span></div></main></div></body></html>
