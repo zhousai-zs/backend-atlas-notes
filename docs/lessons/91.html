@@ -1,0 +1,1349 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>91. 背压与并发限制 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（91/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（11/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="cur" href="../lessons/91.html">91. 背压与并发限制</a></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 91 课 · 领域 F · 阶段 4</p><p class="dl"><a href="../files/91-f-backpressure.md" download>⬇ 本课 Markdown</a><a href="../files/practice91.tar.gz" download>⬇ 练习包 practice91.tar.gz</a></p><h1 id="91208">第 91/208 课：背压与并发限制</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-backpressure</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Backpressure</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>流量与服务治理</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-grpc</code>、<code>f-deadline</code>、<code>e-queue</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Backpressure</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://grpc.io/docs/guides/flow-control/">背压与并发限制：参考文档 / 原始资料</a>（grpc.io）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>背压把下游消费能力反馈给上游，限队列、限并发和流控需覆盖整个请求路径。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>边界说明：下文中的公众号内容后台、图文发布服务、消息推送流式下发、评论/阅读数异步写入、长连接网关等，都是用于讲解通用后端问题的教学假设，不代表任何企业的真实内部实现，也不声称了解微信内部实现。涉及 gRPC、HTTP/2、各语言库的默认值和 API 名称时，一律以实际所读文档版本为准。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<p>想象一条通往收费站的高速公路：入口不断放车进来，收费口却因为扫码、找零或设备故障变慢。如果入口不限制车流，车辆很快就会排满匝道和主路，连应急车辆也进不来；如果入口根据收费口的通过速度放车，队伍就被限制在一个可接受的长度内，虽然仍要排队，但系统不会整体堵死。</p>
+<p>水管和水龙头也是同一个道理：水龙头开得小，上游还拼命注水，压力最终会顶在某段管壁或接头上；背压就是让上游知道“现在只能收这么多”，而不是把多余的水硬塞进管道。</p>
+<p>背压不是故意让系统变慢，而是把下游真实的消费能力反馈给上游，让上游在有限缓冲、有限并发和有限时间内做选择：等待、降速、拒绝、丢弃低优先级工作，或者取消已经不值得继续的任务。没有背压，系统并不会变快，只会把排队从下游搬到内存里，最后以更高的延迟或 OOM 收场。</p>
+<p>前面的课程已经接触了 gRPC、截止时间和队列：gRPC 负责调用与流式传输，截止时间负责给单次调用设上限，队列负责解耦生产与消费。这一课补上缺失的一环：下游到底能处理多快，上游如何知道，以及知道之后如何限制自己。截止时间解决“等到什么时候不等了”，背压解决“在等待期间最多允许多少工作进入系统”。</p>
+<p>教学时间线可以这样设置。假设一个消息推送服务向大量长连接消费者流式下发事件，生产端每秒产生数万条消息，消费端因为网络抖动或客户端处理慢而暂时跟不上：</p>
+<ul>
+<li>第 0 秒：生产速度约为消费速度的两倍，发送端把消息放进一个无界队列，write 调用很快返回，看起来一切正常。</li>
+<li>第 5 秒：慢消费者对应的发送队列开始持续增长，单条连接占用从几十 MB 慢慢上升，进程 RSS 随之上涨。</li>
+<li>第 30 秒：队列中积压大量待发送消息，延迟监控显示消息从产生到真正发出的时间从毫秒级变成数十秒。</li>
+<li>第 2 分钟：垃圾回收或内存分配压力变大，其他正常消费者的延迟也被拖高，重试请求继续叠加。</li>
+<li>第 3 分钟：单个进程的发送缓冲从约 50MB 涨到约 4GB，最终被 OOM kill；重启后积压消息丢失或重复，故障范围从一个慢消费者扩散到整个实例。</li>
+</ul>
+<p>这条时间线不是某个真实系统的运行记录，而是教学假设，用来说明一个关键区别：<code>write</code> 返回只代表数据被交给本地库或内核缓冲，不代表消息已经到达网络，更不代表对端已经处理。把“写入成功”误当成“投递成功”，就会在该施加背压的地方继续加速生产。</p>
+<p>常见错误与正确做法可以对照如下：</p>
+<table>
+<thead>
+<tr>
+<th>错误做法</th>
+<th>典型后果</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口只限制 QPS，发送队列无界</td>
+<td>队列吃光内存，延迟无限增长</td>
+<td>发送队列有界，并设置高、低水位</td>
+</tr>
+<tr>
+<td>每条消息创建一个线程或阻塞等待</td>
+<td>线程数随慢下游膨胀，调度开销压垮进程</td>
+<td>固定 worker 数或并发许可，排队有上限</td>
+</tr>
+<tr>
+<td>把 <code>write</code> 返回当作发送成功</td>
+<td>对端未处理却继续生产，积压被掩盖</td>
+<td>区分“已入缓冲”“已出网络”“已被确认”</td>
+</tr>
+<tr>
+<td>下游变慢后立即无限重试</td>
+<td>重试放大流量，形成重试风暴</td>
+<td>重试预算、退避、截止时间和幂等保护</td>
+</tr>
+<tr>
+<td>控制面事件与数据面共用一个饱和队列</td>
+<td>取消、心跳、配置更新被数据积压饿死</td>
+<td>控制面独立通道或保留容量</td>
+</tr>
+<tr>
+<td>慢消费者永不取消</td>
+<td>一条坏连接长期占用内存和并发许可</td>
+<td>按截止时间、滞后量或心跳结果取消流</td>
+</tr>
+<tr>
+<td>只在网关限流，应用内部令牌无限</td>
+<td>网关之后仍然堆积，故障转移到下一层</td>
+<td>每一层都明确队列上限和拒绝策略</td>
+</tr>
+<tr>
+<td>只看平均延迟，不看队列深度</td>
+<td>平均值正常时尾部已经严重恶化</td>
+<td>同时观察水位、排队时间、在途数和取消率</td>
+</tr>
+</tbody>
+</table>
+<p>表格中的最后一行尤其容易被忽略：平均延迟可能因为大量快速请求而看起来正常，但少数慢消费者已经在制造长队列。背压需要可观测的“水位”，否则限流参数只能靠猜。</p>
+<p>本课围绕节点给出的三条主线展开：</p>
+<ol>
+<li><strong>有界缓冲和水位</strong>：任何等待队列都要有上限，并在接近上限时提前发出信号，而不是等内存耗尽才处理。</li>
+<li><strong>并发许可与排队超时</strong>：限制同时进行的工作数量，同时限制等待许可的时间，避免请求在队列里无限期排队。</li>
+<li><strong>stream flow control</strong>：理解流式 RPC 中接收方如何通过窗口反馈消费能力，以及发送方在窗口不足时是阻塞还是缓冲。</li>
+</ol>
+<h2 id="_3">学习目标</h2>
+<ul>
+<li>能解释有界缓冲和水位</li>
+<li>能独立完成：对流式RPC设置慢消费者，验证发送队列、内存与取消行为。</li>
+<li>能区分背压、限流和降级：背压反馈下游能力，限流约束上游速率，降级是在资源不足时主动降低服务质量。</li>
+<li>能用 Little 定律粗算给定到达率和下游延迟下的在途请求数，并判断当前并发上限是否可能造成排队失控。</li>
+<li>能为一条请求路径上的入口队列、业务并发池、RPC 发送队列和流控窗口分别说明上限与拒绝策略。</li>
+<li>能识别“write 返回即成功”的误区，并用队列深度、发送滞后、取消率和端到端确认等指标验证真实进展。</li>
+<li>能设计慢消费者的处理方式：限速、断开、取消或隔离，而不是让它无限占用共享资源。</li>
+<li>能说明为什么控制面事件需要与数据面隔离，避免数据积压导致取消、心跳或配置更新无法及时生效。</li>
+</ul>
+<h2 id="_4">为什么后端要懂</h2>
+<blockquote>
+<p>避免慢下游拖垮调用端内存与线程。</p>
+</blockquote>
+<p>这句话背后是一个常见误判：调用端以为自己在“等待结果”，实际上它同时在保留请求对象、响应缓冲、超时计时器、重试状态和连接资源。下游变慢时，等待时间变长，这些资源被占用的时间也随之变长；如果入口仍然按原来的速度接收请求，资源占用就会线性放大，直到某一层先耗尽。</p>
+<p>慢下游拖垮调用端，通常不是一条路径，而是三条路径叠加。</p>
+<h3 id="_5">无界队列先吃掉内存</h3>
+<p>最直接的问题是队列没有上限。生产端把消息放进队列的速度高于消费端取走的速度，队列长度就会增长；队列里的每个元素都持有实际数据、元信息、回调和计时器，内存占用远大于“消息大小”本身。更糟的是，许多语言和运行时在内存紧张时会频繁触发垃圾回收，CPU 被回收工作吃掉，消费速度进一步下降，队列反而增长得更快。</p>
+<p>有界队列并不是简单地“把上限设小”。上限太小会在突发流量下频繁拒绝，上限太大则会把故障恢复时间拉长，因为进程重启后可能要处理大量过期消息。水位的作用是把“还能撑多久”提前暴露出来：低水位表示可以正常运行，高水位表示开始降速或拒绝，超过硬上限则必须丢弃、断开或取消，而不是继续接收。</p>
+<h3 id="_6">每请求一线程会把线程池耗尽</h3>
+<p>如果每个请求都创建一个线程并阻塞等待下游，下游延迟从 20ms 变成 2s，同一个线程池能承载的并发就会下降到原来的百分之一左右。线程本身还有栈空间、上下文切换和调度开销；当线程数超过系统能力时，即使下游恢复，调用端也可能因为线程创建失败、锁竞争或调度延迟而无法迅速恢复。</p>
+<p>把“每请求一线程”换成固定大小的 worker 池、协程池或信号量许可，本质上是在显式表达并发上限。并发上限必须配合排队上限：只限制正在执行的任务数，却让等待队列无限增长，只是把内存问题从工作线程转移到了队列；只限制队列长度，却让工作线程数量随负载增长，则可能把下游压得更慢。两者要一起设计。</p>
+<h3 id="_7">重试叠加会把小故障放大</h3>
+<p>下游变慢时，调用端的超时先触发，重试随后到来。第一次请求还没有结束，第二次、第三次请求已经进入队列；如果重试没有预算、没有退避、没有幂等保护，瞬时负载可能变成原来的数倍。对于写操作，重试还可能造成重复发布、重复计数或状态冲突，进一步增加下游处理成本。</p>
+<p>重试应该被视为一种有限的资源，而不是免费的可靠性开关。调用端需要明确：哪些错误可以重试，最多重试几次，退避多久，是否受截止时间约束，以及下游是否支持幂等。没有这些约束，重试会把“慢”升级成“雪崩”。</p>
+<h3 id="little">用 Little 定律估算在途请求</h3>
+<p>可以用 Little 定律做一个快速估算。稳定系统中，平均在途请求数 <code>L</code> 约等于到达率 <code>λ</code> 乘以平均停留时间 <code>W</code>，即 <code>L = λ × W</code>。这里的 <code>W</code> 包含排队时间和处理时间，单位要统一。</p>
+<p>假设到达率为 1000 QPS：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>下游平均延迟 W</th>
+<th>平均在途请求 L = λ × W</th>
+<th>每请求保留 100KB 时的粗略内存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正常</td>
+<td>20ms = 0.02s</td>
+<td>1000 × 0.02 = 20</td>
+<td>约 2MB</td>
+</tr>
+<tr>
+<td>下游变慢</td>
+<td>2s</td>
+<td>1000 × 2 = 2000</td>
+<td>约 200MB</td>
+</tr>
+</tbody>
+</table>
+<p>在途请求从 20 增加到 2000，放大了 100 倍。如果每个请求还持有更大的消息缓冲、序列化结果或响应对象，内存放大同样会达到百倍量级。这个估算解释了一个现象：下游只是慢了一点，调用端却可能从“内存充足”迅速变成“频繁 GC 甚至 OOM”。</p>
+<p>需要强调，Little 定律描述的是稳定关系，不是“系统一定能承受 2000 个在途请求”。如果下游容量只能处理 500 QPS，而入口仍以 1000 QPS 到达，系统就不稳定，队列会持续增长，<code>L</code> 不会自动停在 2000。此时要么降低到达率，要么增加下游容量，要么用有界队列和拒绝策略保护自己；继续让请求无限排队，只是把不稳定隐藏起来。</p>
+<h3 id="_8">背压信号从哪里来</h3>
+<p>背压需要的是可观测信号，而不是等 OOM 才反应。常用的信号可以分为三类：队列状态、并发状态和下游反馈。它们回答的问题不同，不能只盯住其中一个指标。</p>
+<table>
+<thead>
+<tr>
+<th>信号</th>
+<th>它回答的问题</th>
+<th>适合的动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>队列深度 / 字节数</td>
+<td>已经积压多少</td>
+<td>触发高水位、停止接收或降速</td>
+</tr>
+<tr>
+<td>最老元素等待时间</td>
+<td>用户实际等了多久</td>
+<td>丢弃过期工作、取消请求</td>
+</tr>
+<tr>
+<td>在途请求数 / 已用许可</td>
+<td>并发池是否打满</td>
+<td>停止发放许可、排队超时</td>
+</tr>
+<tr>
+<td>下游 P95/P99 延迟</td>
+<td>下游是否整体变慢</td>
+<td>熔断、降级、切换实例</td>
+</tr>
+<tr>
+<td>流控窗口 / 发送缓冲</td>
+<td>对端还能接收多少</td>
+<td>暂停生产、等待窗口恢复</td>
+</tr>
+<tr>
+<td>确认 / 消费位点</td>
+<td>对端真正处理到哪里</td>
+<td>判断重发、补偿或告警</td>
+</tr>
+</tbody>
+</table>
+<p>这些信号里，队列深度和窗口通常是更靠前的信号，平均延迟和错误率往往更滞后。只看聚合指标还会掩盖局部问题：一个慢连接可能占用大量发送缓冲，但整体平均值仍然漂亮。因此，背压指标至少要能按连接、租户或消息类别拆分，否则最危险的那条路径可能一直不可见。</p>
+<p>水位也不应该凭感觉设置。更可靠的做法是从内存预算、下游容量和可接受等待时间反推：先确定这条路径最多能占用多少内存、允许多少并发、队列里的消息最多可以等多久，再据此设置软水位和硬上限。这样限流参数才有解释力，也便于在容量变化后重新校准。</p>
+<h3 id="_9">从“慢”到“拒绝”的策略谱</h3>
+<p>发现下游变慢后，并不是只有“继续等”这一种选择。不同业务对丢失、延迟和错误的容忍度不同，策略也应该不同。</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>适用场景</th>
+<th>主要代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阻塞生产者</td>
+<td>强背压、不能丢数据</td>
+<td>可能阻塞无关工作，甚至拖住控制面</td>
+</tr>
+<tr>
+<td>有界缓冲加超时</td>
+<td>吸收短时突发</td>
+<td>增加尾延迟和内存占用</td>
+</tr>
+<tr>
+<td>快速拒绝</td>
+<td>保护核心系统</td>
+<td>调用方收到错误，可能触发重试</td>
+</tr>
+<tr>
+<td>丢弃低优先级或过期消息</td>
+<td>实时性优先</td>
+<td>数据不完整，需要业务补偿</td>
+</tr>
+<tr>
+<td>取消慢流</td>
+<td>释放连接和内存</td>
+<td>对端需要重连，可能造成重复</td>
+</tr>
+<tr>
+<td>降级或隔离</td>
+<td>防止故障扩散</td>
+<td>实现复杂，可能牺牲部分功能</td>
+</tr>
+</tbody>
+</table>
+<p>选择哪种策略，要看这条流承载的是什么工作。控制面事件、支付类写入和可延迟的统计消息不应该共享同一套丢弃规则；同样，慢消费者也不应该因为“以后可能会快起来”而无限期占用公共资源。背压设计的难点往往不是识别慢，而是决定慢下来之后牺牲什么。</p>
+<h3 id="_10">背压与限流不是同义词</h3>
+<p>限流通常约束上游进入系统的速率，例如每秒最多接受多少请求；背压则把下游当前的消费能力反馈给上游，让上游根据真实进展调整生产速度。两者经常一起使用，但不能互相替代：只有入口限流，下游变慢时系统仍可能在队列里堆积；只有背压而没有入口约束，突发流量仍可能瞬间打满所有缓冲。</p>
+<p>截止时间和队列也不是背压本身。截止时间规定“最多等到什么时候”，队列提供“先放一放”的空间，背压决定“什么时候不该再放进来”。把这几件事混在一起，容易出现“队列很大、超时很长、看起来没有错误，但内存一直在涨”的假健康状态。</p>
+<h3 id="_11">队列越大越安全吗</h3>
+<p>更大的队列确实能平滑短时突发，让生产端不必因为瞬时抖动立刻失败。但它也会增加尾延迟：消息在队列里等待的时间变长，用户感知到的完成时间随之变长；故障恢复时间也会变长，因为进程重启或下游恢复后，还要先消化积压。</p>
+<p>队列上限应该由业务能接受的最长等待时间、下游处理速度和内存预算共同决定，而不是“越大越保险”。对于有时效性的消息，超过一定年龄就应该过期；对于不能丢的消息，则需要持久化和明确的补偿机制，而不是把内存队列当成可靠存储。</p>
+<h3 id="_12">为什么“只看平均延迟”会误判</h3>
+<p>平均值会把少数极端请求的影响摊薄，尤其在请求量很大、慢消费者占比很小时，平均延迟可能仍然正常，但尾部已经出现严重积压。背压需要关注分位数、队列年龄和最慢的那部分连接。</p>
+<ul>
+<li>平均延迟正常，但队列深度持续上升，说明生产速度长期高于消费速度。</li>
+<li>平均吞吐很高，但少数连接的发送滞后不断增长，说明资源正在被局部慢消费者占用。</li>
+<li>错误率不高，但取消率或重试率上升，说明调用方已经在用超时和重试表达“等不起了”。</li>
+</ul>
+<h3 id="_13">背压失效的常见信号</h3>
+<p>背压失效不一定立刻表现为 OOM，很多时候先表现为一些容易被解释掉的现象。</p>
+<table>
+<thead>
+<tr>
+<th>观察</th>
+<th>可能含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发送队列持续增长，但下游处理量没有上升</td>
+<td>生产与消费能力不匹配，缓冲正在掩盖问题</td>
+</tr>
+<tr>
+<td><code>write</code> 很快返回，但确认或消费位点长期落后</td>
+<td>数据只到了本地缓冲，并没有真正被对端处理</td>
+</tr>
+<tr>
+<td>取消后内存没有下降，任务仍继续执行</td>
+<td>取消信号被积压队列堵住，或没有传播到工作线程</td>
+</tr>
+<tr>
+<td>流量下降后内存仍维持高位</td>
+<td>积压没有及时消化，队列上限或过期策略有问题</td>
+</tr>
+<tr>
+<td>下游报错后重试量成倍增加</td>
+<td>重试放大，可能把局部慢故障变成全局过载</td>
+</tr>
+</tbody>
+</table>
+<p>看到这些信号时，应先判断压力堆在哪一层，而不是直接扩大队列或加大超时。扩大缓冲通常只能把故障推迟，不能消除生产与消费之间的速度差。</p>
+<h3 id="_14">一个容量账本</h3>
+<p>把容量写成一个可复核的账本，比拍脑袋设置队列长度更可靠。账本至少要同时包含到达率、下游延迟、并发许可、单请求资源占用和可接受等待时间。</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>示例假设</th>
+<th>推论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内存预算</td>
+<td>这条路径最多使用 200MB</td>
+<td>超过预算就必须拒绝、丢弃或落盘</td>
+</tr>
+<tr>
+<td>单请求占用</td>
+<td>平均 1MB</td>
+<td>最多约 200 个在途请求</td>
+</tr>
+<tr>
+<td>下游延迟</td>
+<td>2s</td>
+<td>200 个许可最多支撑约 100 QPS</td>
+</tr>
+<tr>
+<td>入口到达率</td>
+<td>1000 QPS</td>
+<td>约有 900 QPS 需要降速、拒绝或扩容</td>
+</tr>
+</tbody>
+</table>
+<p>这张账本说明，背压不是“限制一下并发”这么简单。如果入口速率、下游延迟和资源预算互相矛盾，就必须明确选择牺牲什么；否则系统会用无界队列把矛盾暂时藏起来，最后以更昂贵的方式暴露。</p>
+<h3 id="_15">限队列、限并发和流控要覆盖整个请求路径</h3>
+<p>节点摘要说得很准确：背压把下游消费能力反馈给上游，限队列、限并发和流控需覆盖整个请求路径。只在最外层加一个并发限制，并不等于整条路径都有背压。</p>
+<p>以一次“发布图文后触发消息推送”的教学假设为例，请求可能依次经过这些层：</p>
+<table>
+<thead>
+<tr>
+<th>路径层</th>
+<th>这一层可能存在的缓冲或并发</th>
+<th>如果这一层没有上限</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口网关</td>
+<td>连接数、请求队列、每连接并发</td>
+<td>入口继续收流量，把压力传给下游</td>
+</tr>
+<tr>
+<td>业务线程池或协程池</td>
+<td>正在执行的发布、审核、推送任务</td>
+<td>任务无限排队，内存和延迟一起上涨</td>
+</tr>
+<tr>
+<td>RPC 客户端发送队列</td>
+<td>待编码、待写入连接的消息</td>
+<td>慢连接独自占用大量发送缓冲</td>
+</tr>
+<tr>
+<td>HTTP/2 / gRPC 流控窗口</td>
+<td>接收方允许发送方继续发送的额度</td>
+<td>发送方可能阻塞或继续缓冲，取决于实现</td>
+</tr>
+<tr>
+<td>内核 socket 缓冲</td>
+<td>等待发往网络的数据</td>
+<td>应用层以为写完，实际仍堆在内核</td>
+</tr>
+<tr>
+<td>对端应用接收队列</td>
+<td>对端待处理消息</td>
+<td>对端过载后反过来拖慢发送方</td>
+</tr>
+</tbody>
+</table>
+<p>表格不是说每一层都必须由同一个团队控制，而是说每一层都要有明确的容量边界和过载策略。常见故障是：网关限制了 500 个并发请求，业务层却给每个请求创建一个协程并向无界 channel 写消息；或者业务层限制了 worker 数，RPC 客户端却使用无界发送队列。最终内存仍然会涨，只是增长点换了一个名字。</p>
+<p>再结合前面的账本：如果目标是以 1000 QPS 处理请求、下游延迟为 2s，那么按 Little 定律需要约 2000 个在途请求；若每个请求保留 1MB，就是约 2GB。假设进程只愿意给这条路径 200MB，那么只够约 200 个在途请求；在下游延迟仍为 2s 的情况下，200 个许可最多支撑约 100 QPS。入口仍以 1000 QPS 到达时，剩下的压力只能通过拒绝、降速或扩容解决，不能靠再加一层无界队列解决。</p>
+<p>控制面事件也需要单独考虑。取消信号、心跳、配置更新、健康检查这些事件通常很小，但如果它们和数据面消息共用一个已经饱和的队列，就会被大量积压消息堵住。数据面可以降速、丢弃或断开，控制面却必须尽量保持及时；否则调用端已经决定取消，取消信号却排在几万条消息后面，资源无法及时释放。教学上常见的做法是给控制面独立通道、独立并发配额或保留容量，具体设计取决于协议和运行时。</p>
+<p>gRPC 的流控建立在 HTTP/2 流控之上。公开文档层面的要点是：接收方通过窗口告诉发送方还能发送多少数据；接收方处理慢时，窗口不再更新，发送方会被阻塞或缓冲；流控对流式 RPC 尤其重要；部分语言允许应用层手动控制何时请求更多消息，也就是所谓的手动 flow control。这里不假设某个版本的默认窗口大小，也不展开各语言的具体 API 名称，实际实现以所读 gRPC 文档和所用版本文档为准。</p>
+<p>这也解释了为什么“write 返回”不能作为背压是否生效的证据。发送端可能已经把数据写进库的发送队列，也可能只是写进了内核缓冲；窗口不足时，库可能选择阻塞调用方，也可能选择在内部继续排队。不同语言、不同流式 API、不同写法的行为并不完全一致，必须结合版本文档、队列指标和端到端确认来验证。</p>
+<p>因此，背压的核心不是某一个开关，而是一组贯穿请求路径的约束：每一层都知道自己的容量，队列有界，水位可见，并发许可有限，等待有超时，慢消费者可以被取消，控制面不被数据面饿死。缺少任何一环，压力都会在那一环重新堆积，直到以内存、延迟或可用性的形式暴露出来。</p>
+<h2 id="_16">核心概念</h2>
+<p>背压（backpressure）不是某一个 API，而是一组让上游生产速度适配下游消费速度的机制。它要回答三个问题：数据先放在哪里、放不下时怎么办、调用方如何知道“现在别发了”。在通用内容后台里，图文发布、评论写入、阅读数聚合、消息推送和长连接下发都可能出现生产快于消费的情况；下面用这些场景做教学假设，不涉及任何具体产品的内部实现。</p>
+<h3 id="1">1. 有界缓冲和水位</h3>
+<p><strong>无界队列的问题。</strong> 无界队列把“暂时放不下”变成“永远先收下”。短时间看请求都成功了，实际上内存随着积压线性增长，延迟也被队列长度放大。等内存或 GC 顶不住时，进程往往整体失败，而不是只失败某类请求。通用后台里，评论异步落库、阅读数批量聚合、推送任务分发都容易踩这个坑。</p>
+<p><strong>有界队列</strong>承认容量有限：队列满时必须做一个明确选择。常见策略如下（数字仅为教学示例，实际阈值要压测后确定）：</p>
+<table>
+<thead>
+<tr>
+<th>队列满时策略</th>
+<th>行为</th>
+<th style="text-align: right;">优点</th>
+<th>代价</th>
+<th>适合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阻塞生产者</td>
+<td>等待空位，带超时</td>
+<td style="text-align: right;">不丢数据、实现简单</td>
+<td>占住调用线程/连接，尾延迟上升</td>
+<td>内部批处理、可接受排队</td>
+</tr>
+<tr>
+<td>拒绝/快速失败</td>
+<td>立即返回 429/503/RESOURCE_EXHAUSTED</td>
+<td style="text-align: right;">保护自身、上游可退避</td>
+<td>需要上游处理错误</td>
+<td>在线 API、入口层</td>
+</tr>
+<tr>
+<td>丢最旧</td>
+<td>淘汰队首旧数据</td>
+<td style="text-align: right;">保留最新状态</td>
+<td>丢失历史、可能破坏顺序语义</td>
+<td>指标采样、状态快照</td>
+</tr>
+<tr>
+<td>丢最新</td>
+<td>直接丢弃新到数据</td>
+<td style="text-align: right;">保护已有工作</td>
+<td>新请求失败、可能不公平</td>
+<td>非关键日志、低价值事件</td>
+</tr>
+<tr>
+<td>降级采样</td>
+<td>按比例只处理一部分</td>
+<td style="text-align: right;">保留代表性数据</td>
+<td>结果不完整、需标注</td>
+<td>监控、非计费统计</td>
+</tr>
+</tbody>
+</table>
+<p>选择原则：<strong>能明确失败就不要静默堆积</strong>；如果业务不能丢，就把阻塞和超时写进 SLA，并让调用方看到背压信号。</p>
+<p><strong>水位不是越大越好。</strong> 高水位越高，吸收突发的能力越强，但队列里等待的数据也越多：假设下游每秒处理 200 条、队列积压 2000 条，新请求仅排队就要等约 10 秒；如果上游 deadline 只有 2 秒，这些请求注定失败，却已经占用了内存和连接。水位应结合“可接受尾延迟 × 消费速率”估算，而不是只按内存上限设置。</p>
+<p><strong>高低水位与滞回。</strong> 只在“满/不满”一个点上开关，会让系统在边界附近频繁抖动：一到 64 KB 就暂停，一降到 63.9 KB 又恢复，上游被反复启停。工程上常用两个阈值：</p>
+<ul>
+<li>高水位 high watermark：缓冲达到该值，暂停读取上游或暂停接收新任务；</li>
+<li>低水位 low watermark：缓冲降到该值以下，才恢复。</li>
+</ul>
+<p>两者之间的差值形成滞回区（hysteresis），状态切换需要跨越一段距离，避免抖动。比如高水位 64 KB、低水位 16 KB，意味着暂停后要消化掉约 48 KB 才恢复，恢复动作不会立刻再次触发暂停。若生产者和消费者速度接近，滞回区太小仍可能频繁切换；这时应增大差值，或加入最短暂停时间。</p>
+<p>Netty 的 <code>Channel.isWritable()</code> / writability 是类似思路的公开例子：写缓冲超过高水位时通道变为不可写，低于低水位后恢复可写；具体阈值和 API 语义以所读文档版本为准。应用层不必自己猜内核缓冲，但必须把“当前能不能继续写”作为一等信号向上游传递。</p>
+<p><strong>按字节而不是按条数计量。</strong> “最多 1000 条”并不等于内存可控：一条评论可能 100 B，一条图文正文或推送 payload 可能 100 KB，同样 1000 条可能相差三个数量级。因此有界缓冲通常按字节计量，条数上限只作为辅助保护。计量对象还应尽量包含对象头和引用开销；如果只算 payload，实际内存会高于账面值。</p>
+<p>下面是一个可运行的 Python 示例：容量 128 KB，高水位 64 KB 暂停，低水位 16 KB 恢复，并在状态切换时打印。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+
+<span class="n">KB</span> <span class="o">=</span> <span class="mi">1024</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BoundedBuffer</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="mi">128</span> <span class="o">*</span> <span class="n">KB</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">64</span> <span class="o">*</span> <span class="n">KB</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="mi">16</span> <span class="o">*</span> <span class="n">KB</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">low</span> <span class="o">&lt;</span> <span class="n">high</span> <span class="o">&lt;=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span> <span class="o">=</span> <span class="n">capacity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high</span> <span class="o">=</span> <span class="n">high</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low</span> <span class="o">=</span> <span class="n">low</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bytes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bytes</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bytes</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bytes</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_state</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_q</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_q</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bytes</span> <span class="o">-=</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_state</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">item</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_state</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bytes</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">high</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[pause ] size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2">B &gt;= high=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">high</span><span class="si">}</span><span class="s2">B"</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bytes</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">paused</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[resume] size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="si">:</span><span class="s2">&gt;6</span><span class="si">}</span><span class="s2">B &lt;= low =</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">low</span><span class="si">}</span><span class="s2">B"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">BoundedBuffer</span><span class="p">()</span>
+    <span class="n">chunk</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">"x"</span> <span class="o">*</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">KB</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">):</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="n">buf</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"put#</span><span class="si">{</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: ok=</span><span class="si">{</span><span class="n">ok</span><span class="si">}</span><span class="s2"> paused=</span><span class="si">{</span><span class="n">buf</span><span class="o">.</span><span class="n">paused</span><span class="si">}</span><span class="s2"> size=</span><span class="si">{</span><span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">B"</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">buf</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">buf</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"drained: paused=</span><span class="si">{</span><span class="n">buf</span><span class="o">.</span><span class="n">paused</span><span class="si">}</span><span class="s2"> size=</span><span class="si">{</span><span class="n">buf</span><span class="o">.</span><span class="n">size</span><span class="si">}</span><span class="s2">B"</span><span class="p">)</span>
+</code></pre></div>
+
+<p>运行后可以看到：第 8 次写入达到 64 KB 时进入暂停，第 9 次仍能放进剩余容量但状态保持暂停；消费降到 16 KB 时才恢复。真实系统里，<code>paused</code> 应直接驱动“停止从上游读取/停止接收新任务”，而不是只打印日志。</p>
+<h3 id="2">2. 并发许可与排队超时</h3>
+<p><strong>信号量限制“同时在途”的数量。</strong> 只限制 QPS 不够，因为慢请求会占住连接、内存和下游资源。信号量（semaphore）用固定数量的许可表示并发上限：任务开始前 <code>acquire</code>，结束或出错后 <code>release</code>。许可数不是越大越好——超过下游承载能力只会把排队从本机转移到下游。</p>
+<p><strong>排队必须带超时，并且要和前置 deadline 一起算。</strong> 如果调用方只给了 200 ms 的剩余时间，排队等了 150 ms 才拿到许可，真正处理只剩 50 ms，继续做通常只会制造超时和无效负载。正确做法是把总 deadline 作为预算：等待许可的时间从预算里扣，拿不到许可或预算耗尽就快速失败。</p>
+<p>可以把一次请求的时间预算拆成：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th style="text-align: right;">示例耗时</th>
+<th>超时后的动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口排队等许可</td>
+<td style="text-align: right;">30 ms</td>
+<td>返回 RESOURCE_EXHAUSTED / 503</td>
+</tr>
+<tr>
+<td>下游连接/首包</td>
+<td style="text-align: right;">80 ms</td>
+<td>取消下游调用，释放许可</td>
+</tr>
+<tr>
+<td>业务处理</td>
+<td style="text-align: right;">60 ms</td>
+<td>按业务语义返回失败或部分结果</td>
+</tr>
+<tr>
+<td>剩余预算</td>
+<td style="text-align: right;">30 ms</td>
+<td>不再发起新的串行依赖</td>
+</tr>
+</tbody>
+</table>
+<p>这里的关键不是把每一段都写死，而是让<strong>等待许可</strong>也消耗同一份 deadline。否则入口限流看起来生效了，超时请求仍在系统里排队，反而放大尾延迟。</p>
+<p><strong>Little 定律做初始估算。</strong> 对稳定系统：并发 ≈ QPS × 平均延迟。例如某图文读取接口峰值 800 QPS、P99 延迟 50 ms，则大致需要 800 × 0.05 = 40 个在途请求；如果下游只能承受 30 个并发，就要么扩容，要么限流到约 600 QPS。这个估算只给起点，真实值要靠压测和线上指标修正。</p>
+<p><strong>固定限制与自适应限制。</strong> 固定许可简单、可预测，适合容量明确的阶段。自适应并发限制会根据成功率和延迟动态调整许可数：一类思路是 AIMD（加性增、乘性减），顺利时慢慢加、超时或失败时快速减；另一类是观察延迟梯度，在排队开始显著恶化前停止增加。它们借鉴 TCP 拥塞控制的反馈闭环，但具体算法实现差异很大，本文只介绍思路，不绑定某个库。</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>调整依据</th>
+<th>优点</th>
+<th>风险</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>固定许可</td>
+<td>压测得到的容量</td>
+<td>稳定、易解释</td>
+<td>流量结构变化时可能过保守或过激进</td>
+</tr>
+<tr>
+<td>AIMD</td>
+<td>成功/失败反馈</td>
+<td>能适应容量变化</td>
+<td>参数不当会震荡</td>
+</tr>
+<tr>
+<td>延迟梯度</td>
+<td>排队延迟趋势</td>
+<td>在恶化前收敛</td>
+<td>对噪声和采样窗口敏感</td>
+</tr>
+</tbody>
+</table>
+<p><strong>快速失败要给出可识别的错误。</strong> 许可等待超时通常返回 <code>RESOURCE_EXHAUSTED</code>（gRPC）或 HTTP 503/429，具体状态码和语义以所读文档版本为准。上游看到明确信号才能退避、降级或切换副本；如果只是卡住，调用方无法区分“慢”和“已经放弃”。</p>
+<p>实现上还要注意两点：许可必须在 <code>finally</code> 中释放，避免异常路径泄漏；拒绝统计要单独计数，不要和业务失败混在一起，否则无法判断是容量不足还是逻辑错误。</p>
+<p>下面的例子用 <code>asyncio.Semaphore</code> 限制 4 个并发，20 个请求竞争许可，排队超过 0.3 s 的请求被拒绝。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="n">PERMITS</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">QUEUE_TIMEOUT</span> <span class="o">=</span> <span class="mf">0.3</span>
+<span class="n">TOTAL_REQUESTS</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">semaphore</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="n">PERMITS</span><span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"ok"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"rejected"</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+<span class="n">lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">req_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">semaphore</span><span class="o">.</span><span class="n">acquire</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="n">QUEUE_TIMEOUT</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s2">"rejected"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">))</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+            <span class="n">stats</span><span class="p">[</span><span class="s2">"ok"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">semaphore</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">handle</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">TOTAL_REQUESTS</span><span class="p">)))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"permits=</span><span class="si">{</span><span class="n">PERMITS</span><span class="si">}</span><span class="s2"> queue_timeout=</span><span class="si">{</span><span class="n">QUEUE_TIMEOUT</span><span class="si">}</span><span class="s2">s"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ok=</span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'ok'</span><span class="p">]</span><span class="si">}</span><span class="s2"> rejected=</span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">'rejected'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></div>
+
+<p>每次运行的具体分配可能不同，但结构固定：最多 4 个请求同时处理，其余在等待队列里；0.3 s 内拿不到许可的请求被拒绝。生产代码中，这个超时不应是一个孤立常数，而应是“入口 deadline − 已消耗时间 − 预留处理时间”的结果。</p>
+<h3 id="3-stream-flow-control">3. stream flow control</h3>
+<p>流式 RPC 的背压核心在传输层。gRPC 基于 HTTP/2 的流控：接收方通过窗口告诉发送方“你还能发多少数据”；接收方处理慢时窗口不再更新，发送方会被阻塞或在应用缓冲里累积。流控对流式 RPC 尤其重要，部分语言还允许应用层手动控制何时请求更多消息（手动 flow control）。以下要点以所读文档版本为准。</p>
+<p><strong>两级窗口。</strong> HTTP/2 有流级窗口和连接级窗口：流级窗口限制单条 RPC 未确认的数据量，连接级窗口限制这条 TCP 连接上所有流的总量。两者任一耗尽，发送都会受限。接收方消费数据后才发送 <code>WINDOW_UPDATE</code>，把可用额度还回去；不是“收到就立刻还”，否则窗口形同虚设。默认窗口大小、是否启用自动窗口更新、以及每个语言的配置项都不同，以所读文档版本为准。</p>
+<p>对长连接网关和消息推送流式下发这类场景，一个连接上可能同时有多条流。某条流处理慢，只应该卡住它自己的流级窗口；如果连接级窗口被少数大流量流占满，其他流也会被拖累。因此既要看单流积压，也要看连接级总积压，不能只盯一个数字。</p>
+<p><strong>发送方看到的“写成功”很浅。</strong> 这是流式下发最容易误判的地方：</p>
+<blockquote>
+<p>write 返回不代表消息已发送到网络或被对端处理。</p>
+</blockquote>
+<p>把一次 <code>write</code> 放回数据路径看，至少经过这些层：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>数据可能停在哪里</th>
+<th>对调用方的含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>应用缓冲</td>
+<td>自己的队列、批处理缓冲</td>
+<td>还没进入框架</td>
+</tr>
+<tr>
+<td>gRPC / HTTP/2 缓冲</td>
+<td>流控窗口、帧发送队列</td>
+<td>受窗口和对端消费速度限制</td>
+</tr>
+<tr>
+<td>内核 socket 发送缓冲</td>
+<td><code>Send-Q</code> 等</td>
+<td>已交给内核，不代表已出网卡</td>
+</tr>
+<tr>
+<td>网络</td>
+<td>链路、拥塞、重传</td>
+<td>可能延迟或丢失后重传</td>
+</tr>
+<tr>
+<td>对端接收缓冲</td>
+<td><code>Recv-Q</code>、连接窗口</td>
+<td>对端内核已收，应用未必读</td>
+</tr>
+<tr>
+<td>对端应用</td>
+<td>业务处理队列</td>
+<td>只有业务确认才算真正处理</td>
+</tr>
+</tbody>
+</table>
+<p>所以 <code>write</code> 成功最多说明“本进程暂时接下了”，不能用来判断对端是否收到、是否处理、是否持久化。真正的确认只能来自应用层：例如业务 ack、消息 ID 回执、对端提交位点，或者查询接口。流式场景要把“已写入本地”和“对端已确认”分成两个状态，指标也要分开；否则监控上写成功率为 100%，用户却可能没有收到消息。</p>
+<p>一个常见的错误做法是：循环里 <code>write</code> 很快返回，就认为下发完成，然后继续从数据库读下一批。此时数据可能只是堆在应用或 HTTP/2 缓冲里，内存上涨、对端延迟变大，但日志没有任何错误。正确做法是同时观察三类信号：本地发送缓冲是否持续增长、流控窗口是否长期接近耗尽、对端 ack 是否按预期推进。三者中任意一个不健康，都应该减慢生产，而不是继续 <code>write</code>。</p>
+<p><strong>手动流控。</strong> 当单条消息处理成本高（如图文审核、批量导出）时，接收端可以按自身处理能力请求下一条，而不是让框架一次性灌满缓冲。手动流控的 API 名称和默认窗口大小因语言和版本而异，以所读文档版本为准；设计上要保证“处理完再要下一条”，否则只是把积压从框架挪到业务队列。接收端一旦采用手动模式，就要明确每次请求几条、由哪个线程/协程触发、异常时如何恢复请求，避免忘记继续请求导致流停住。</p>
+<p><strong>窗口不是越大越好。</strong> 更大的窗口能提高带宽时延积较大链路上的吞吐，但也允许更多未确认数据在途；接收方内存压力、故障时重放范围和尾延迟都会增加。反过来，窗口过小会让高延迟链路频繁等待 <code>WINDOW_UPDATE</code>，吞吐上不去。窗口大小应结合单条消息大小、RTT、接收端处理速率和可接受内存来定，而不是只追求大。</p>
+<p><strong>用系统工具看真实排队。</strong> Linux 上可以用：</p>
+<div class="codehilite"><pre><span></span><code>ss<span class="w"> </span>-tmi
+sysctl<span class="w"> </span>net.ipv4.tcp_wmem
+</code></pre></div>
+
+<p><code>ss -tmi</code> 能看到连接的 <code>Send-Q</code> / <code>Recv-Q</code> 以及 <code>skmem</code> 内存占用；<code>net.ipv4.tcp_wmem</code> 查看内核 TCP 发送缓冲的默认/最小/最大值（单位通常是字节，具体含义以所读文档版本为准）。如果应用 <code>write</code> 很快但 <code>Send-Q</code> 持续很大，说明瓶颈在网络或对端；如果应用缓冲持续增长而 socket 队列不大，瓶颈更可能在应用消费或流控窗口。两个指标要一起看，单看一个容易得出相反结论。</p>
+<p><strong>控制面与数据面分开。</strong> 取消、心跳、配置变更、限流指令属于控制面事件，不能和大量业务数据共用同一个有界队列。否则数据积压会把取消信号饿死，导致“想停停不下来”。常见做法是控制面走独立通道或高优先级队列，数据面单独限流；控制面队列也要有界，但容量和调度策略应保证低延迟。</p>
+<p>例如长连接网关向客户端推送消息时，业务消息可能瞬间堆积，而“关闭连接”“切换配置”“心跳超时”这类事件必须及时处理。把二者放在同一个 FIFO 队列里，前面的消息发不出去，后面的取消就要等很久；分开排队后，控制事件可以立即执行，数据面则按自己的窗口和许可慢慢消化。</p>
+<p><strong>把三层机制串起来看一个教学假设。</strong> 假设长连接网关要把一批图文更新推给在线用户：上游峰值 50,000 条/秒，稳定消费能力 20,000 条/秒，平均消息 2 KB。若直接把峰值写进无界队列，每秒净积压 30,000 条、约 60 MB；几十秒后内存就会成为问题。合理的组合是：</p>
+<table>
+<thead>
+<tr>
+<th>位置</th>
+<th>机制</th>
+<th>观察信号</th>
+<th>触发后的动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>接入层</td>
+<td>每连接/每租户并发许可</td>
+<td>等待许可 p99、拒绝率</td>
+<td>快速失败或让上游退避</td>
+</tr>
+<tr>
+<td>服务内队列</td>
+<td>64 MB 有界缓冲 + 高低水位</td>
+<td>队列字节数、最老消息年龄</td>
+<td>高水位暂停读上游，低水位恢复</td>
+</tr>
+<tr>
+<td>批量发送</td>
+<td>有界 batch + 超时</td>
+<td>batch 大小、flush 延迟</td>
+<td>满批或到时即发，不无限攒批</td>
+</tr>
+<tr>
+<td>gRPC 流</td>
+<td>HTTP/2 流控窗口 + 应用 ack</td>
+<td>可用窗口、ack 滞后</td>
+<td>窗口耗尽则减慢生产，不继续 write</td>
+</tr>
+<tr>
+<td>连接级</td>
+<td>连接级窗口、socket 缓冲</td>
+<td>Send-Q、skmem</td>
+<td>判断瓶颈在对端还是本机</td>
+</tr>
+</tbody>
+</table>
+<p>这类场景里，单看“发送线程忙不忙”没有意义。发送线程可能一直很忙地在往缓冲里写，但对端一条都没处理。要看的是<strong>积压年龄</strong>和<strong>确认进度</strong>：最老消息等了多久、对端 ack 推进到哪个位点。积压年龄持续上升，说明生产超过消费；ack 不推进但本地缓冲不大，说明问题在链路或对端。</p>
+<p><strong>观测指标要能区分“忙”和“堵”。</strong> 建议至少保留以下指标，并按租户/连接维度做聚合，避免全局平均值掩盖局部问题：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>queue_bytes / queue_depth</td>
+<td>当前缓冲字节数与条数</td>
+<td>判断水位、容量规划</td>
+</tr>
+<tr>
+<td>oldest_age_ms</td>
+<td>最老一条数据的等待时间</td>
+<td>比平均延迟更早暴露尾延迟</td>
+</tr>
+<tr>
+<td>acquire_wait_p99</td>
+<td>等许可时间</td>
+<td>判断并发限制是否过紧</td>
+</tr>
+<tr>
+<td>reject_total / reject_rate</td>
+<td>快速失败数量与比例</td>
+<td>判断限流是否触发、上游是否退避</td>
+</tr>
+<tr>
+<td>window_available</td>
+<td>可用流控窗口</td>
+<td>判断发送是否被传输层卡住</td>
+</tr>
+<tr>
+<td>ack_lag</td>
+<td>对端确认位点与本地发送位点之差</td>
+<td>判断真实消费进度</td>
+</tr>
+<tr>
+<td>sendq_bytes / skmem</td>
+<td>内核发送队列与内存</td>
+<td>区分应用缓冲与网络瓶颈</td>
+</tr>
+</tbody>
+</table>
+<p>没有这些指标时，背压参数只能靠猜。调参顺序通常是：先保证有界和可观测，再根据尾延迟确定水位，最后用压测校准许可数和窗口；不要同时改多个参数，否则无法归因。</p>
+<p><strong>故障时的降级顺序。</strong> 当下游明显变慢，优先做“减少新工作”，而不是“加大缓冲”。一个可操作的顺序是：</p>
+<ol>
+<li>停止从上游预读，关闭批量预取；</li>
+<li>拒绝低优先级或可重试的请求，保留控制面和关键业务；</li>
+<li>缩小批量和在途窗口，降低单次故障影响面；</li>
+<li>如果仍然积压，按业务优先级丢弃可丢数据，并明确记录丢弃量；</li>
+<li>最后才考虑扩容；扩容前要确认瓶颈不是下游或网络。</li>
+</ol>
+<p><strong>批量与重试也会制造假背压。</strong> 批量发送能提高吞吐，但 batch 过大时，一条慢消息会拖住整批；重试如果没有预算和退避，会在下游恢复前再次压满队列。批量应有大小上限和最长等待时间，重试应只针对可重试错误，并计入同一个 deadline。否则“重试”会把一次失败放大成多次负载，背压系统看起来生效，实际是被重试流量撑爆。</p>
+<p><strong>最后检查一遍语义。</strong> 有界队列的“满”是拒绝还是阻塞，必须和上游约定清楚；许可超时要返回可识别错误；流式发送成功只代表本地接受，业务完成要以对端 ack 为准。把这三件事分别写进接口契约、监控和告警，背压才不是一段孤立的代码。</p>
+<p><strong>应用层许可与传输层窗口的区别。</strong> 两者都像“额度”，但治理对象不同：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>应用层许可</th>
+<th>HTTP/2 流控窗口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>控制对象</td>
+<td>同时在途的业务任务数</td>
+<td>尚未被对端确认的字节数</td>
+</tr>
+<tr>
+<td>粒度</td>
+<td>请求/任务</td>
+<td>字节/流/连接</td>
+</tr>
+<tr>
+<td>反馈来源</td>
+<td>本地 acquire/release</td>
+<td>对端 WINDOW_UPDATE 与消费</td>
+</tr>
+<tr>
+<td>失效后果</td>
+<td>下游过载或本机排队</td>
+<td>发送阻塞、缓冲增长</td>
+</tr>
+<tr>
+<td>调参依据</td>
+<td>QPS × 延迟、下游容量</td>
+<td>RTT、消息大小、接收端处理速率</td>
+</tr>
+</tbody>
+</table>
+<p>许可拿到不代表窗口够用，窗口够用也不代表业务并发安全。一个流式请求可能只占 1 个许可，却因为消息很大很快耗尽窗口；反过来，很多小请求可能窗口充足，但已经把下游 CPU 打满。所以生产端要同时看“许可证占用”和“可写窗口”，任一紧张就减速。</p>
+<p><strong>确认协议的最小设计。</strong> 如果业务需要知道对端真的处理了，就不能依赖 <code>write</code> 返回值。一个最小设计是：发送方给每批消息带序号，接收方处理完一批后回报“已处理到序号 N”；发送方只保留 N 之后的未确认数据，并把 N 之前的缓冲释放。这样既能计算 <code>ack_lag</code>，也能在重连后决定从哪里重放。序号、批大小和重放窗口都要有上限，避免确认协议自己变成无界缓冲。</p>
+<p>如果没有应用层 ack，至少也要有可观测的完成信号，例如下游任务的提交结果、数据库写入位点或客户端上报。完全没有完成信号时，只能把“写成功”当作“已尽力”，并在产品语义上接受可能丢失；这一点必须在接口契约里写清楚。</p>
+<p><strong>不要把所有背压都推给队列。</strong> 队列只能吸收短时突发，不能解决长期容量不足。若生产速率持续高于消费速率，任何有界队列最终都会满；此时正确动作是限流、扩容或降级，而不是继续调大队列。判断标准很简单：看积压是否在多个采样窗口内持续上升。持续上升就是容量问题，不是缓冲参数问题。</p>
+<p><strong>水位和许可的初始值怎么定。</strong> 可以用一个简单算式起步：可接受排队时间 × 消费速率 = 水位上限。例如希望新消息最多等 2 秒、下游每秒处理 5,000 条、平均 2 KB，那么队列上限大约 2 × 5,000 × 2 KB = 20 MB；高水位取上限的 50%～70%，低水位取 20%～30%，再通过压测调整。许可数则用 Little 定律估算，并留出下游故障时的收缩空间。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>起步值</th>
+<th>观察后调整</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>队列上限</td>
+<td>可接受排队时间 × 消费速率</td>
+<td>最老年龄超预算则调小</td>
+</tr>
+<tr>
+<td>高水位</td>
+<td>上限的 50%～70%</td>
+<td>频繁暂停则调高</td>
+</tr>
+<tr>
+<td>低水位</td>
+<td>上限的 20%～30%</td>
+<td>恢复后立刻再暂停则调低</td>
+</tr>
+<tr>
+<td>许可数</td>
+<td>QPS × 延迟</td>
+<td>下游过载则调小，排队过长则调大</td>
+</tr>
+<tr>
+<td>排队超时</td>
+<td>剩余 deadline 的一部分</td>
+<td>拒绝率过高时检查上游预算</td>
+</tr>
+</tbody>
+</table>
+<p>这不是精确公式，而是让参数有来源。上线后要对照 <code>oldest_age_ms</code> 和 <code>acquire_wait_p99</code> 修正：如果拒绝率很低但最老年龄经常超预算，说明水位偏大或消费不足；如果拒绝率很高但队列不深，说明许可或下游容量才是瓶颈。</p>
+<p><strong>参数之间会互相掩盖。</strong> 队列很大时，许可不足可能表现为“排队很久”；许可很小时，队列又可能长期不满。排查时先固定一个变量：先看队列是否持续满，再看等待许可时间，最后看窗口和 ack。否则容易把容量问题误判成水位问题。</p>
+<p>三点收束：</p>
+<ol>
+<li>有界缓冲负责“放在哪里、满了怎么办”，高低水位负责“什么时候暂停和恢复”，按字节计量才接近真实内存成本。</li>
+<li>并发许可负责“同时做多少”，排队超时必须从调用方剩余 deadline 中扣除，失败要返回可识别的错误让上游退避。</li>
+<li>流式 RPC 的窗口只是传输层信用，<code>write</code> 返回不代表对端已处理；要用应用层 ack 确认，并把控制面与数据面隔离。</li>
+</ol>
+<h2 id="practice91">动手实践：practice91</h2>
+<p>节点给的实践是：<strong>对流式RPC设置慢消费者，验证发送队列、内存与取消行为。</strong> 验收标准有两条：</p>
+<ul>
+<li>吞吐不足时内存仍有上界</li>
+<li>控制面事件不会被数据积压饿死</li>
+</ul>
+<p>真实的 gRPC 环境搭起来比较重，这里用 Python asyncio 在本机 TCP 上写一个「流式下发」的最小模型（教学简化，不是 gRPC 实现）：服务端按客户端请求连续推送 1KB 消息，客户端每条消息处理 2ms，扮演慢消费者；读 1.5 秒后发 <code>CANCEL</code>。服务端有两种模式对比：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>应用队列</th>
+<th>写缓冲</th>
+<th>取消怎么处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bounded</code>（正确做法）</td>
+<td><code>asyncio.Queue(maxsize=64)</code>，满了生产者就被挂起</td>
+<td><code>set_write_buffer_limits(high=64KB, low=16KB)</code>，每次 <code>write</code> 后 <code>await drain()</code></td>
+<td>独立的控制读循环收到 <code>CANCEL</code> 立刻置位事件，生产和发送都马上停</td>
+</tr>
+<tr>
+<td><code>unbounded</code>（错误示范）</td>
+<td>无界队列</td>
+<td>只 <code>write()</code> 不 <code>drain()</code>，数据全堆在传输层缓冲</td>
+<td><code>CANCEL</code> 也塞进同一个 FIFO；已写入缓冲的数据还得排队发完，流才能结束</td>
+</tr>
+</tbody>
+</table>
+<p>另外用 <code>permits.py</code> 单独验证「并发许可与排队超时」：40 个请求同时到达，下游每次 200ms，许可 4 个，排队超时 0.3s（同时不超过 1s 截止时间的剩余量），第 7 个请求下游抛异常，检查许可是否被归还。</p>
+<h3 id="_17">文件</h3>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>server.py</code></td>
+<td>流式发送服务端，<code>--mode bounded|unbounded</code>，结束时打印统计 JSON（生产数、<code>write()</code> 次数、应用队列+写缓冲峰值字节、取消生效耗时）</td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>慢消费者：<code>SO_RCVBUF=16KB</code>，每条 sleep 2ms，1.5s 后发 <code>CANCEL</code>，最多再等 3s 看流是否结束</td>
+</tr>
+<tr>
+<td><code>permits.py</code></td>
+<td><code>asyncio.Semaphore</code> 许可 + <code>wait_for</code> 排队超时；<code>--limit 0</code> 表示不限并发</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>一键跑两种模式（用 <code>ps -o rss=</code> 每 50ms 采样服务端 RSS）、两种并发设置、端口占用检查，输出 <code>ALL_CHECKS_PASSED</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_18">步骤</h3>
+<p><strong>第 1 步：解压并运行</strong></p>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/p91<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>xzf<span class="w"> </span>practice91.tar.gz<span class="w"> </span>-C<span class="w"> </span>/tmp/p91<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/p91/practice91
+bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>用到端口 18191-18193，需要 Python 3.8+，<code>ps</code> 可用即可，约 10 秒跑完。</p>
+<p><strong>第 2 步：看有界缓冲的核心代码</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">q</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="n">QUEUE_MAX</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"bounded"</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">writer</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">set_write_buffer_limits</span><span class="p">(</span><span class="n">high</span><span class="o">=</span><span class="n">HIGH</span><span class="p">,</span> <span class="n">low</span><span class="o">=</span><span class="n">LOW</span><span class="p">)</span>   <span class="c1"># 64KB / 16KB</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">producer</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">seq</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cancel</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span> <span class="k">break</span>
+        <span class="k">await</span> <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="s2">"DATA"</span><span class="p">,</span> <span class="n">msg</span><span class="p">(</span><span class="n">seq</span><span class="p">)))</span>   <span class="c1"># 队列满时挂在这里 = 背压传回生产者</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">sender</span><span class="p">():</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cancel</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span> <span class="k">break</span>
+        <span class="n">kind</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>                <span class="c1"># 只是放进缓冲，不代表对端收到</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"bounded"</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">writer</span><span class="o">.</span><span class="n">drain</span><span class="p">()</span>          <span class="c1"># 写缓冲超过高水位就等，降到低水位再继续</span>
+</code></pre></div>
+
+<p>内存上界可以直接算：应用队列 64 条 × 1KB + 写缓冲高水位 64KB ≈ 132KB（内核 socket 缓冲另算，这里用 <code>SO_SNDBUF=32KB</code> 压小）。</p>
+<p><strong>第 3 步：看控制面优先</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">control</span><span class="p">():</span>                      <span class="c1"># 独立的读循环，不排在数据后面</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="k">await</span> <span class="n">reader</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">"CANCEL"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"bounded"</span><span class="p">:</span>
+                <span class="n">cancel</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>              <span class="c1"># 立即生效</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">((</span><span class="s2">"CANCEL"</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>   <span class="c1"># 错误示范：和数据挤同一个 FIFO</span>
+</code></pre></div>
+
+<p><strong>第 4 步：看并发许可的关键三点</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">wait</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">queue_timeout</span><span class="p">,</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">())</span>  <span class="c1"># 排队时间也要从截止时间里扣</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait_for</span><span class="p">(</span><span class="n">sem</span><span class="o">.</span><span class="n">acquire</span><span class="p">(),</span> <span class="n">wait</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s2">"rejected"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>               <span class="c1"># 快速失败，上游可退避</span>
+    <span class="k">return</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">await</span> <span class="n">downstream</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">sem</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>                        <span class="c1"># 异常路径也归还</span>
+</code></pre></div>
+
+<h3 id="_19">实测结果（本机一次运行）</h3>
+<div class="codehilite"><pre><span></span><code>bounded:   produced=899  written=835   peak_buffered_bytes=132096  cancel_latency_ms=119.8
+           client received=835, stream_closed_after_cancel=true, 服务端峰值 RSS≈21MB
+unbounded: produced=8641 written=8641  peak_buffered_bytes=8035328
+           client received=2123, stream_closed_after_cancel=false, 服务端峰值 RSS≈29MB
+permits(limit=4):  ok=7 failed=1 rejected=32 peak_inflight=4 max_reject_wait_ms=301.8 permits_left=4
+nolimit(limit=0):  ok=39 failed=1 peak_inflight=40
+...
+ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p>逐条解读：</p>
+<ol>
+<li><strong>吞吐不足时内存仍有上界</strong>：<code>bounded</code> 模式下应用队列加写缓冲峰值正好 132096 字节（64×1KB + 64KB），生产者在 1.5 秒里只生产了 899 条就被 <code>q.put</code> 挂住；<code>unbounded</code> 同样时间里缓冲堆到约 8MB，而且只要流不停就会继续涨。</li>
+<li><strong>write 返回不代表对端已处理</strong>：<code>unbounded</code> 里 <code>write()</code> 成功返回 8641 次，但客户端到结束只收到 2123 条，其余 6000 多条都还躺在服务端缓冲里。</li>
+<li><strong>控制面事件不会被数据积压饿死</strong>：<code>bounded</code> 取消约 120ms 生效，客户端随即看到流结束；<code>unbounded</code> 发了 <code>CANCEL</code> 3 秒后流仍未结束，因为已经 <code>write</code> 出去的约 8MB 积压要按 FIFO 慢慢发完，慢消费者每秒只消化约 500 条。</li>
+<li><strong>并发许可</strong>：许可 4 个时在途峰值恰好 4；排队超过 0.3s 的 32 个请求被快速拒绝，最长只等了约 301ms，而不是一直挂到截止时间；第 7 个请求下游抛异常后许可仍被 <code>finally</code> 归还，最终剩余 4。不限并发时 40 个请求同时压到下游。</li>
+</ol>
+<blockquote>
+<p>数字会因机器负载略有不同，<code>test.sh</code> 检查的是关系和上界（比如 bounded ≤ ~132KB、unbounded &gt; 4MB、取消 &lt; 500ms），不是精确值。</p>
+</blockquote>
+<h3 id="_20">扩展练习</h3>
+<ol>
+<li>把 <code>QUEUE_MAX</code> 从 64 改到 4096，重新跑，观察 bounded 模式的峰值缓冲和取消耗时怎么变，对应 tradeoffs：「更大队列平滑突发，也增加尾延迟和故障恢复时间。」</li>
+<li>去掉 <code>permits.py</code> 里的 <code>finally: sem.release()</code>，改成只在成功路径释放，看 <code>permits_left</code> 变成多少。</li>
+<li>跑测试时另开终端执行 <code>ss -tmi '( sport = :18192 )'</code>，观察 unbounded 模式下 Send-Q 和 <code>skmem</code> 里的写缓冲占用。</li>
+<li>把客户端每条处理时间改成 0（快消费者），确认两种模式都能顺利跑完，体会背压只在「下游比上游慢」时才起作用。</li>
+</ol>
+<h2 id="_21">常见误区与设计权衡</h2>
+<p>本节讨论背压与并发限制落地时最常见的误区，以及几组必须结合业务目标选择的权衡。</p>
+<p>以下场景均为教学假设：通用内容后台的图文发布服务、消息推送的流式下发、评论与阅读数的异步写入、长连接网关的消息广播。它们只用于说明通用后台问题，不代表任何具体产品的内部实现。</p>
+<p>判断一套背压方案是否成立，不只看“有没有队列”，而要看三件事：内存是否有上界；慢消费者是否会把生产者拖垮；控制面事件是否会被数据面饿死。</p>
+<p>一个常见现象是：系统在压测流量下表现正常，一到真实突发或下游变慢就出现内存上涨、请求超时、取消不生效。原因往往不是缺少某个组件，而是某一段链路没有把“慢”反馈回去，或者反馈了但没有人处理。</p>
+<h3 id="_22">误区清单</h3>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>常见误区</th>
+<th>问题所在</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>把 write 返回当作消息已送达</td>
+<td>pitfalls 原文：“write返回不代表消息已发送到网络或被对端处理。” 本地写成功只说明数据进入了缓冲区或内核路径，后续仍可能排队、失败或未被消费。</td>
+<td>区分“写入本地缓冲”“已发出”“对端已处理”；需要可靠语义时，以应用层确认或可重放的持久化记录作为完成依据。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>用无界队列“防止丢消息”</td>
+<td>无界队列只是把“丢弃”改写成“延迟发生的 OOM”；堆积时故障恢复、重启重放都会更慢，且单点内存压力会传导到整机。</td>
+<td>同时设置字节上限与条数上限，并明确满载策略：阻塞、拒绝、丢弃或降级；不要用“永不丢弃”掩盖容量问题。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>只在入口限流，中间层无界</td>
+<td>入口被限住不代表链路可控；扇出、重试、异步落库、跨线程交接等中间环节仍可能无限堆积。</td>
+<td>在每一段跨线程、跨进程、跨网络的边界定义容量与背压传导方式，避免“上游有界、下游无界”。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>队列按条数限制，忽略消息大小差异</td>
+<td>同样一万条消息，小消息可能只有几 MB，大消息可能达到几 GB；按条数限制无法约束真实内存。</td>
+<td>以字节为主、条数为辅；对大消息单独限额或分片，并在入队前估算大小。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>排队等许可不设超时</td>
+<td>请求可能已经超过截止时间仍在等许可，既占用并发槽位，又放大尾延迟，还让上游误以为请求仍有机会成功。</td>
+<td>等待许可必须带 deadline 或超时；超时后快速失败、释放已占资源，并让调用方决定重试或降级。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>许可在异常路径不释放</td>
+<td>异常、取消或提前返回时漏掉 release，信号量会逐渐泄漏，最终表现为“没有报错但永久卡住”。</td>
+<td>用 try/finally、defer 或上下文管理器保证成对释放；监控可用许可与等待时长，给泄漏设置告警。</td>
+</tr>
+<tr>
+<td>7</td>
+<td>取消或心跳与业务数据共用一个 FIFO</td>
+<td>数据积压时，取消、心跳等控制面消息排在队尾，连接状态会失真，取消也无法及时生效。</td>
+<td>控制面使用独立通道、独立队列或明确优先级；至少保证控制消息不被数据面长期阻塞。</td>
+</tr>
+<tr>
+<td>8</td>
+<td>把队列调大当作扩容</td>
+<td>队列只能吸收短时突发，不能提升处理能力；更大队列通常带来更长尾延迟和更慢的故障恢复。</td>
+<td>优先提升处理能力或降低生产速率；队列只作为有限缓冲，并配套排空时间与恢复目标。</td>
+</tr>
+</tbody>
+</table>
+<p>这八条的共同点是：把“看起来没丢”当成“系统健康”。真正要回答的是满载时会发生什么、谁会先慢下来、以及恢复需要多久。</p>
+<p>其中第 1 条最容易被忽略，因为 write 的返回值看起来很像“已经完成”。在流式下发和长连接广播里，只有把“进入发送缓冲”和“对端已消费”分开计数，才能知道背压究竟发生在哪一段。</p>
+<h3 id="_23">几个容易混淆的边界</h3>
+<ul>
+<li>背压不是限流：限流控制进入系统的速率，背压让下游的慢反馈到上游；只有入口限流、没有反馈，仍然会在中间层堆积。</li>
+<li>有界队列不等于背压：队列满了以后如果只是阻塞生产者，而生产者又承担事件循环或心跳职责，仍可能拖死控制面；需要确认阻塞发生在哪一层。</li>
+<li>并发限制不等于吞吐上限：限制并发通常保护下游，但单请求变慢时吞吐仍会下降；要同时观察排队时间与处理时间。</li>
+<li>按条数限制不等于按成本限制：一条大消息和一条小消息的 CPU、内存、网络成本可能差几个数量级。</li>
+<li>超时不是背压：超时能缩短故障暴露时间，但不能阻止已经进入系统的任务继续占用资源。</li>
+<li>取消要能传导：客户端取消后，服务端若继续生产、继续排队，取消只释放了连接，没有释放工作量。</li>
+<li>观测要同时看深度、停留时间和拒绝率：只看队列深度容易误判；队列很浅但停留时间很长，说明下游已经饱和。</li>
+<li>窗口不是越大越好：窗口大可以填满带宽时延积，但接收方处理慢时会积累更多在途数据，内存与尾延迟都会上升。</li>
+</ul>
+<p>这些边界提醒我们：背压是一个端到端属性，任何一段“无界”都会让其他段的有界设计失效。</p>
+<h3 id="_24">权衡清单</h3>
+<p>权衡没有全局最优，只有与目标匹配。下表每行都给出“选它的条件”；条件不成立时，不要默认沿用某一侧。</p>
+<table>
+<thead>
+<tr>
+<th>权衡项</th>
+<th>收益与代价</th>
+<th>选它的条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>队列大小</td>
+<td>tradeoffs 原文：“更大队列平滑突发，也增加尾延迟和故障恢复时间。”</td>
+<td>选它的条件：突发幅度大且持续时间短、下游能在可接受时间内排空、故障恢复有重放或补偿机制。若尾延迟敏感或恢复窗口有限，应保持小队列并尽快把压力反馈给上游。</td>
+</tr>
+<tr>
+<td>过载处理：阻塞、拒绝、丢弃</td>
+<td>阻塞能保住消息，但占用生产者、连接和内存；拒绝能快速失败，但要求上游可重试；丢弃成本最低，但可能破坏业务语义。</td>
+<td>选它的条件：消息不可丢且上游能承受阻塞时选阻塞；请求可重试且需要快速释放资源时选拒绝；允许采样或非关键数据时选丢弃，并记录丢弃原因与计数。</td>
+</tr>
+<tr>
+<td>并发控制：固定限制、自适应</td>
+<td>固定限制简单、可预测，但难跟上容量变化；自适应能跟随下游延迟或错误率调整，但需要可靠指标并防止振荡。</td>
+<td>选它的条件：流量稳定、下游容量已知时用固定限制；容量波动大且有可信的延迟与饱和度指标时用自适应，并设置上下界、冷却时间与回退策略。</td>
+</tr>
+<tr>
+<td>计量单位：按字节、按条数</td>
+<td>按字节贴近内存与网络成本；按条数实现简单，但会忽略消息大小差异。</td>
+<td>选它的条件：消息大小差异明显、内存是主要约束时以字节为主；消息大小稳定且更关心处理条数时可用条数，但仍需辅以字节上限。</td>
+</tr>
+<tr>
+<td>流控窗口：大窗口、小窗口</td>
+<td>大窗口提高带宽时延积利用率，但接收方慢时在途数据更多；小窗口更早暴露慢消费者并限制内存，但可能限制吞吐。</td>
+<td>选它的条件：链路时延高、带宽充足且接收方处理稳定时可用较大窗口；接收方能力不确定、内存紧张或需要快速反馈时用小窗口。默认窗口值与调参接口以所读文档版本为准。</td>
+</tr>
+</tbody>
+</table>
+<p>表中最容易被误读的是“队列大小”这一行：把队列调大并不是免费的弹性，而是用尾延迟和恢复时间换取短时平滑。若业务指标是 P99 延迟或故障后分钟级恢复，队列上限就应该按这些目标反推，而不是按“能存多少”来定。</p>
+<p>以所读文档版本为准，gRPC 的流控基于 HTTP/2：接收方通过窗口告诉发送方还能发送多少数据；接收方处理慢时窗口不再更新，发送方会被阻塞或在本地缓冲；流控对流式 RPC 尤其重要；部分语言允许应用层手动控制何时请求更多消息（例如手动 flow control）。具体默认窗口大小、配置项和 API 名称以所读文档版本为准，不要凭记忆写死。</p>
+<p>在消息推送的流式下发这类教学假设场景里，窗口与消费速度不匹配时，问题往往先表现为发送端缓冲膨胀，而不是立即报错。等到内存告警出现，可能已经离真正的瓶颈很远。</p>
+<p>需要强调的是，窗口大小只是流控的一部分；接收方处理慢、应用层消费慢、下游写放大，都可能让窗口长时间不更新。观察时要把窗口、在途字节、消费延迟放在一起看。</p>
+<h3 id="_25">场景映射（教学假设）</h3>
+<p>把上面的原则放回四个教学假设场景，可以看到误区通常不是孤立出现的：</p>
+<ul>
+<li>图文发布服务：发布请求可能触发多路下游写入和素材处理。入口并发限制之外，还要给素材队列、转码队列和重试队列分别设上限；否则入口很稳，后台任务仍会把内存吃满。</li>
+<li>消息推送的流式下发：发送端不能只按“写入连接成功”计数；对慢连接要限制在途条数或字节数，窗口不更新时及时让生产端减速。</li>
+<li>评论与阅读数的异步写入：这类写入常被当作可合并、可延迟的流量。队列要有字节上限和合并策略，避免热点内容让单条大消息或突发批量挤占全部容量。</li>
+<li>长连接网关：心跳、订阅变更、取消等控制面消息应与业务消息分离；数据积压时仍要保证控制面可调度，否则会出现“连接还在、状态已失真”的假健康。</li>
+</ul>
+<p>四个场景的共同点是：最危险的无界往往不在入口，而在“异步一点、重试一下、扇出几路”的中间层。背压设计要沿着数据流逐段确认容量，而不是只守住第一道门。</p>
+<p>一个具体判断方法是：假设下游处理速度降到原来的十分之一，系统会在哪个队列开始堆积、多久达到内存上限、控制面还能不能响应。这个假设不需要真实故障，但能暴露大部分设计缺口。</p>
+<h3 id="_26">从误区到设计动作</h3>
+<p>如果只记住结论，可以把上面的误区转成六个动作：</p>
+<ul>
+<li>先定上界：每个队列和每个在途集合都写明字节上限与条数上限，并说明超限时做什么。</li>
+<li>再定满载策略：阻塞、拒绝、丢弃或降级必须显式选择，不能留给默认值。</li>
+<li>给等待加时限：等待许可、等待队列空位、等待下游响应都要带超时，并与请求 deadline 对齐。</li>
+<li>把释放做成结构：用语言提供的确定性清理机制保证许可成对释放，减少异常路径遗漏。</li>
+<li>隔离控制面：取消、心跳、配置变更走独立通道或高优先级路径，不被数据面饿死。</li>
+<li>用指标验证：至少观察队列深度、最老元素停留时间、拒绝率、可用许可、在途字节和恢复耗时。</li>
+</ul>
+<p>这些动作不是一次性配置，而是需要在上线后根据真实流量复核。尤其是“最老元素停留时间”，它比平均深度更能说明尾延迟是否正在恶化。</p>
+<h3 id="_27">两个容易漏掉的成本</h3>
+<p>第一是故障恢复成本：队列里积压的任务在重启后往往需要重放或补偿，积压越多，恢复越慢，还可能超过下游承受能力。第二是协调成本：自适应算法、优先级队列和超时策略都会增加系统复杂度，若缺少指标和演练，调参本身会成为新的故障源。</p>
+<p>因此，简单的固定限制加有界队列，常常比复杂的自适应方案更可靠；只有当容量变化确实频繁、且指标可信时，才值得引入自适应。</p>
+<h3 id="_28">评审问题</h3>
+<p>把误区压缩成评审问题，可以在设计阶段逐条追问：</p>
+<ul>
+<li>满载时，内存上界由哪个配置保证，单位是字节还是条数？</li>
+<li>慢消费者出现时，压力如何传回生产者，哪一层会阻塞？</li>
+<li>阻塞的那一层是否承担控制面职责，会不会拖死心跳或取消？</li>
+<li>取消、超时、异常三条路径上，许可和缓冲是否都能释放？</li>
+<li>控制面事件是否有独立通道或明确优先级？</li>
+<li>队列变大后，尾延迟和故障恢复时间的目标分别是多少？</li>
+<li>观测能否区分“排队中”和“处理中”，能否看到最老元素的停留时间？</li>
+<li>客户端取消后，服务端是否真的停止生产，还是只关闭了连接？</li>
+<li>队列按条数限制时，是否估算过最坏情况下的字节数？</li>
+<li>下游变慢时，拒绝和排队两种策略分别会把压力传给谁？</li>
+</ul>
+<p>如果某个问题答不上来，通常说明该处仍依赖默认行为，而不是经过明确设计。默认行为在平稳流量下往往没问题，但在过载和故障恢复时最容易失控。</p>
+<h3 id="_29">验收视角</h3>
+<p>对应本节的验收要点：</p>
+<ul>
+<li>吞吐不足时内存仍有上界</li>
+<li>控制面事件不会被数据积压饿死</li>
+</ul>
+<p>这两条看似简单，但覆盖了背压的核心：有界与隔离。只要其中一条不成立，其他优化都可能只是在推迟故障。</p>
+<p>最后回到两条原文：pitfalls 是“write返回不代表消息已发送到网络或被对端处理。”；tradeoffs 是“更大队列平滑突发，也增加尾延迟和故障恢复时间。” 前者要求我们不要把本地写成功当作完成，后者要求我们不要用队列大小掩盖处理能力不足。</p>
+<h3 id="_30">小结</h3>
+<ul>
+<li>背压的核心不是“加队列”，而是让慢反馈可见、可传导、可恢复。</li>
+<li>任何一段“无界”都会把局部问题放大成全局问题；控制面必须与数据面隔离。</li>
+<li>队列大小、阻塞与拒绝与丢弃、固定与自适应、按字节与按条数、窗口大小，都要按目标与条件选择。</li>
+<li>最终检查仍然回到两条验收：内存有上界，控制面不被饿死。</li>
+</ul>
+<p>在评审时，可以把“满载时会怎样”作为固定问题：谁先慢下来，哪里开始堆积，超时和取消是否仍然有效，恢复需要多久。</p>
+<p>如果只能保留一个指标，优先保留“最老元素的停留时间”，因为它同时反映了排队深度、处理速度和尾延迟风险。</p>
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<p>本节点的 sourceStudy 原文是：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>把它落成可执行的阅读动作，就是「先定义、再示例、再错误路径、最后记边界」。下面给出一条建议路径，读者可以按自己的节奏拆成两三次完成。</p>
+<p><strong>第一步：打开资料并记录访问信息。</strong>
+访问 https://grpc.io/docs/guides/flow-control/ ，在笔记顶部写下访问日期（例如「访问日期：2026-11-10」）与页面标题。这一步看似形式化，实际作用是把「我读过」变成「我在某天读过某个版本」，后续框架升级时你能判断笔记是否过期。若页面存在版本选择器或「本页适用于某版本」的提示，一并抄下来；没有明确版本时写「未标注版本，以所读文档版本为准」。</p>
+<p><strong>第二步：核对流控的定义。</strong>
+用自己的话回答三个问题：流控解决的是什么问题？它发生在哪一层？它和「限流（rate limiting）」是不是一回事？公开文档的表述是：gRPC 的流控建立在 HTTP/2 的流控机制之上，接收方通过窗口（window）告诉发送方「你还能再发多少数据」。注意这里的主语是<strong>接收方</strong>，方向是<strong>从下游反馈到上游</strong>，这正是本课 summary 所说的「背压把下游消费能力反馈给上游」。把「窗口」理解为一种信用额度，比理解为「带宽」更准确。</p>
+<p><strong>第三步：核对窗口与缓冲的关系。</strong>
+文档会说明：接收方在处理数据时，窗口会随着消费而补充；接收方处理慢时，窗口不再更新，发送方就会受阻或把数据缓冲起来。阅读时请特别区分两件事：
+- 窗口是<strong>协议层的信用</strong>；
+- 缓冲区是<strong>实现层的存储</strong>。</p>
+<p>窗口不更新，并不自动等于「内存不会涨」——发送端或中间层可能仍在缓冲。这一点与本课 pitfalls 直接相关：<code>write</code> 返回不代表消息已发送到网络或被对端处理。文档不会替你保证进程内存有上界，<strong>有界缓冲与水位属于本课扩展</strong>，需要应用自己实现。</p>
+<p><strong>第四步：核对慢接收方时发送方的行为。</strong>
+在笔记里画一条时序：发送方写入 → 本地缓冲 → 受窗口约束发出 → 接收方消费 → 窗口补充。然后标注「接收方变慢」发生在哪一步，以及发送方 API 的表现是「阻塞」还是「缓冲」。文档通常会说明不同语言/实现的差异，这里不要记成统一结论，写「以所读文档版本为准」。若你的场景是消息推送流式下发（教学假设），这条时序就是长连接网关上最常见的拥塞形态：客户端网络差，服务端仍在往里塞。</p>
+<p><strong>第五步：记录文档示例使用的语言与版本。</strong>
+抄下示例代码的语言、包名、方法名和页面标注的版本。不要凭记忆补全 API 名称；不同语言对「请求更多消息」的暴露方式不同，有的语言允许应用层手动控制何时请求更多消息（手动 flow control），有的则交给运行时自动补充。笔记里统一写成「以所读文档版本为准」，避免半年后把旧 API 当成金科玉律。</p>
+<p><strong>补充：沿错误处理路径再读一遍。</strong>
+sourceStudy 特意提到「错误处理路径」，因为背压相关的故障几乎都出现在异常分支：
+- 窗口长期不补充时，发送是阻塞还是返回错误？文档示例里有没有超时参数？
+- 流被取消或对端断开时，未发出的缓冲如何处理？是丢弃还是保留？
+- 手动 flow control 的语言绑定中，忘记「请求更多消息」会发生什么？是静默停滞还是报错？</p>
+<p>把这三个问题的答案记成「现象 → 原因 → 处理」三列，比抄定义更有用。遇到文档没写清楚的，明确标注「文档未覆盖，需实测或查对应语言实现」，不要自行补全。</p>
+<p><strong>第六步：对比本课的两个扩展点。</strong>
+文档讲的是传输层流控，本课在它之上补了两块应用层控制，阅读时要主动区分：
+- <strong>有界缓冲和水位</strong>：队列长度上限、高水位/低水位阈值、超限时的拒绝或降级策略。文档不提供这些，属于本课扩展。
+- <strong>并发许可与排队超时</strong>：用许可数限制同时在途的请求，配合排队超时与截止时间，避免许可被慢请求长期占用。文档同样不涉及，属于本课扩展。</p>
+<p>可以做一个三列表格：<code>机制 | 作用层级 | 文档是否覆盖 | 本课补充了什么</code>。填完这张表，你就能说清「哪些是协议保证的，哪些是我自己必须写的」。</p>
+<p><strong>第七步：阅读笔记模板。</strong>
+建议每次阅读都按下面六项记录，控制在半页以内：</p>
+<div class="codehilite"><pre><span></span><code>资料：&lt;标题&gt; &lt;URL&gt;
+访问日期：YYYY-MM-DD
+文档版本/适用版本：&lt;页面标注，或「未标注，以所读版本为准」&gt;
+核心定义：&lt;一句话，用自己的话&gt;
+窗口/缓冲/发送方行为：&lt;三点，各一句&gt;
+示例语言与关键 API：&lt;语言、方法名，注明以文档为准&gt;
+与本课差异：&lt;有界缓冲水位 / 并发许可排队超时 属于本课扩展&gt;
+未覆盖与边界：&lt;文档没回答的问题清单&gt;
+</code></pre></div>
+
+<p><strong>一张可填的核对表。</strong>
+把下面的表抄进笔记，逐行填写，空格即待办：</p>
+<table>
+<thead>
+<tr>
+<th>核对项</th>
+<th>文档结论</th>
+<th>是否明确</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>流控建立在什么协议机制上</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>窗口由谁维护、向谁反馈</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>慢接收方时发送方表现</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>示例语言与版本</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>手动 flow control 的 API</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>取消/断开的错误路径</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>有界缓冲与水位</td>
+<td>文档不涉及</td>
+<td>否</td>
+<td>本课扩展</td>
+</tr>
+<tr>
+<td>并发许可与排队超时</td>
+<td>文档不涉及</td>
+<td>否</td>
+<td>本课扩展</td>
+</tr>
+</tbody>
+</table>
+<p>「是否明确」一栏诚实填写。填「否」并不丢人，它恰好提醒你：这些地方需要靠实践节点验证，而不是靠文档推断。</p>
+<p><strong>第八步：写清边界。</strong>
+公开文档只能说明 gRPC/HTTP2 的通用机制与示例用法，不能据此推断任何企业内部实现。企业内部的服务拓扑、队列参数、超时取值、监控口径都属于未公开信息；本课举的公众号后台、图文发布、评论/阅读数异步写入、长连接网关等场景均为<strong>教学假设</strong>，只用于说明通用模式，不代表真实系统设计。</p>
+<p><strong>阅读节奏建议。</strong>
+第一遍只读定义与窗口部分，用 15 分钟确认「谁告诉谁还能发多少」；第二遍读示例，逐行对照自己熟悉的语言，记下真实 API 名但注明以文档为准；第三遍只看错误处理与取消相关段落，把异常路径补进笔记。三遍之间隔一天，比一次读完更能发现理解偏差。</p>
+<p>如果只想用一句话检查自己是否读懂，可以试着向同事解释：「慢接收方不是让发送方报错，而是让窗口停止补充，于是发送方要么阻塞，要么把数据缓冲起来。」能说清这句，就已经抓住了流控的核心。</p>
+<p>阅读完成的判断标准不是「看完了」，而是：你能不看资料复述「接收方通过窗口告诉发送方还能发多少」，能指出「窗口不更新 ≠ 内存有上界」，并且能说出本课哪两个机制是文档之外的补充。做到这三点，sourceStudy 要求的「定义、示例、错误处理路径、版本与边界」就都留下了可复查的记录。</p>
+<h2 id="_31">自测题</h2>
+<h3 id="1write">题 1：write 很快，客户端却没收到</h3>
+<p><strong>题干。</strong> 推送服务（教学假设）用服务端流式 RPC 给客户端下发数据消息。服务端每次 <code>stream.write()</code> 都在微秒级返回，日志显示「已发送 10 万条」，但客户端只收到 2 万条，进程 RSS 持续上涨。为什么？怎么改？</p>
+<p><strong>答案。</strong> 因为 <code>write</code> 的返回只表示「消息被交给了本进程的发送侧」，<strong>不代表消息已发送到网络或被对端处理</strong>（本节点 pitfalls）。当客户端消费慢时，HTTP/2 流控窗口得不到补充，数据在发送端或中间缓冲区堆积，于是写入路径依然「很快」，内存却一路上涨。修改方向是三层一起收：
+1. 设<strong>有界队列</strong>与高/低水位，队列满时对上游施加背压（阻塞生产者、拒绝或降级），让内存有上界；
+2. 把「已入队」「已发出」「已被对端确认（若业务需要）」分成不同指标，不要用 <code>write</code> 次数当成功率；
+3. 对慢消费者设定超时或断开策略，避免一条慢流拖垮整个进程。</p>
+<p>补充一个判据：如果队列深度与 RSS 同步单调上涨，而下游确认速率不变，基本可以判定压力没有被传导回去；如果 RSS 稳定但客户端收得慢，则更可能是协议层窗口在起作用、应用层队列已有界。两种现象对应不同的修复优先级。</p>
+<p><strong>变体。</strong> 若日志改成「已入队 10 万条」，结论不变；只有当指标变成「对端确认 2 万条」时，才说明真实进度。选指标就是选语义。</p>
+<p><strong>解析。</strong> 这道题考的是「异步 API 的成功语义」。很多团队把 <code>write</code> 当 <code>send</code> 用，日志口径因此失真。正确的观测口径应以「对端确认/客户端回执」为准；若协议本身没有逐条确认，至少要监控队列深度与发送缓冲水位，并把「入队成功」明确标注为弱语义。RSS 持续上涨只是症状，根因是缺少<strong>有界缓冲</strong>，而流控只在协议层约束在途字节，不会替你给应用队列设上限。</p>
+<h3 id="2-50-p99-20ms-1s">题 2：许可 50，下游 p99 从 20ms 涨到 1s</h3>
+<p><strong>题干。</strong> 某服务用信号量把并发限制为 50，下游依赖的 p99 从 20ms 恶化到 1s，调用方排队但没有超时。会发生什么？如何设置排队超时与截止时间配合？</p>
+<p><strong>答案。</strong> 每个许可被占用的时间从约 20ms 拉长到约 1s，吞吐上限近似降到原来的 1/50，请求在队列里越积越多；由于没有排队超时，请求会一直等到前排释放，尾延迟持续放大，最终触发调用方超时、重试放大，形成雪崩。配置上应做三件事：
+1. <strong>排队超时</strong>：请求在许可队列里等待超过预算就快速失败（如 50–100ms，按业务 SLO 定），不要无限等；
+2. <strong>截止时间（deadline）贯通</strong>：把调用方剩余预算传给下游，剩余时间不足时直接放弃，不再占用许可；
+3. <strong>许可数与下游容量对齐</strong>：许可数应基于下游可承受并发与自身 SLO 推导，而不是拍脑袋；同时监控「排队时长」「许可占用时长」两个指标。</p>
+<p>容易踩的坑是把排队超时设得比下游 p99 还短，导致大量请求在「马上就能拿到许可」时被拒；也可能把截止时间只设在入口，忘记向下游透传，结果下游仍在做已经无人等待的工作。两种都属于「预算没有贯通」。</p>
+<p><strong>变体。</strong> 若把许可数从 50 调到 500，短期吞吐可能上升，但下游 p99 若继续恶化，只是把排队从本地挪到了下游，整体并未变好。许可数不是越大越好。</p>
+<p><strong>解析。</strong> 并发许可解决的是「同时有多少个在途」，不解决「每个在途有多慢」。下游变慢时，固定许可数会把排队时间变成主要延迟来源。排队超时的本质是<strong>给等待也设预算</strong>；截止时间的本质是<strong>让预算沿调用链传播</strong>。两者配合，才能保证「吞吐不足时内存仍有上界」（acceptance）：队列不会无限增长，许可不会被早已超时的请求长期占用。注意具体数值要按自己的 SLO 压测得出，这里给的是量级示例，不是通用常数。</p>
+<h3 id="3-5">题 3：取消来了，但积压 5 万条</h3>
+<p><strong>题干。</strong> 推送流中客户端发送了取消，但服务端队列里积压了 5 万条数据消息，取消迟迟不生效。如何设计，让「控制面事件不会被数据积压饿死」，同时保证「吞吐不足时内存仍有上界」？</p>
+<p><strong>答案。</strong> 核心是把<strong>控制面</strong>与<strong>数据面</strong>分离，而不是让取消信号排在 5 万条数据后面：
+1. <strong>独立通道/优先级</strong>：取消、心跳、限速调整等控制事件走单独路径（独立队列或优先队列），不与应用数据共享同一条 FIFO；
+2. <strong>可中断的发送循环</strong>：发送循环在每批之间检查取消标志或 context 状态，命中即停止并释放资源，避免把剩余积压全部发完；
+3. <strong>有界队列 + 水位</strong>：数据队列设硬上限，超限拒绝或降级；取消后立即丢弃该流的待发数据，释放内存；
+4. <strong>背压向上游传导</strong>：下游慢时通过有界队列把压力反馈给上游生产端，必要时丢弃过期数据（推送场景中旧消息的价值本就随时间衰减）。</p>
+<p>一个可检查的设计细节：取消标志应当是<strong>每个流独立</strong>的状态，而不是全局布尔；发送循环在批量发送时按小批次检查，批次越大，取消生效越慢。批次大小本身也是延迟与吞吐的权衡，需要压测确定。</p>
+<p><strong>变体。</strong> 若业务允许丢弃旧消息，取消后可直接清空该流队列；若不允许，则至少要停止生产并快速失败，而不是继续堆积。策略选择取决于消息价值是否随时间衰减，这属于业务判断，不是协议能回答的。</p>
+<p><strong>解析。</strong> 这道题同时命中两个 acceptance。第一，「控制面不被饿死」要求控制事件<strong>不进入数据队列</strong>，或者具备抢占能力；否则无论取消多紧急，都要排在 5 万条之后。第二，「内存仍有上界」要求数据面有硬上限，取消时能立刻回收。二者结合的设计原则是：<strong>控制面短路径、数据面有边界、取消可中断</strong>。另外要区分「取消已收到」与「取消已生效」两个状态并分别打点，否则线上只能看到「取消没反应」，无法判断是信号没到、还是被积压挡住、还是发送循环不检查取消。</p>
+<h2 id="_32">推荐资源</h2>
+<ul>
+<li><a href="https://grpc.io/docs/guides/flow-control/">背压与并发限制：参考文档 / 原始资料</a>，来源 grpc.io｜文档｜英文｜深入｜免费，阅读重点：重点阅读有界缓冲和水位与并发许可与排队超时，用于核对本节点实验的语义和边界，建议结合 practice91 核对。</li>
+</ul>
+<h2 id="_33">本课小结</h2>
+<ul>
+<li>背压的本质是把<strong>下游消费能力</strong>反馈给上游；它不是一个库，而是一条贯穿请求路径的控制回路。</li>
+<li>有界缓冲和水位给内存设上限：队列有硬上限，高/低水位决定何时施加压力、何时恢复。</li>
+<li>并发许可与排队超时控制「同时在途」与「愿意等多久」；许可数要与下游容量对齐，等待也要有预算。</li>
+<li>stream flow control 是协议层的信用机制：接收方用窗口告诉发送方还能发多少，慢接收方会让发送方受阻或缓冲。</li>
+<li><code>write</code> 返回不代表消息已发送到网络或被对端处理（pitfalls），观测口径要区分入队、发出与对端确认。</li>
+<li>更大队列能平滑突发，但也会增加尾延迟和故障恢复时间（tradeoffs）；突发平滑与恢复速度需要权衡。</li>
+<li>两条验收线：吞吐不足时内存仍有上界；控制面事件（取消、心跳）不会被数据积压饿死——控制面走短路径、数据面有边界、取消可中断。</li>
+<li>边界：公开文档只说明通用机制与示例，不能推断任何企业内部实现；本课的业务场景均为教学假设，框架细节以所读文档版本为准。</li>
+</ul><div class="pn"><span><a href="90.html">← 负载均衡与热点倾斜</a></span><span>下一课 待更新</span></div></main></div></body></html>
