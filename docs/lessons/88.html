@@ -1,0 +1,1044 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>88. 幂等键与重复请求处理 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（88/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（8/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="cur" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li class="todo">89. 服务发现与地址变化 <em>待更新</em></li><li class="todo">90. 负载均衡与热点倾斜 <em>待更新</em></li><li class="todo">92. 请求上下文与链路传播 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">91. 背压与并发限制 <em>待更新</em></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 88 课 · 领域 F · 阶段 3</p><p class="dl"><a href="../files/88-f-idempotency.md" download>⬇ 本课 Markdown</a><a href="../files/practice88.tar.gz" download>⬇ 练习包 practice88.tar.gz</a></p><h1 id="88208">第 88/208 课：幂等键与重复请求处理</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-idempotency</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Idempotency</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>失败与请求语义</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-retry</code>、<code>a-db</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Idempotency</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://google.aip.dev/155">幂等键与重复请求处理：参考文档 / 原始资料</a>（google.aip.dev）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>幂等使重复执行产生受控等价效果；幂等键通常需与业务结果原子保存，并定义保留与冲突规则。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>边界说明：本课讨论通用的幂等设计与重复请求处理思路，不涉及任何具体公司或产品的内部实现。文中出现的“公众号后台”“图文发布”“素材上传”“群发任务提交”“计数”等场景，均为方便理解而设的教学假设。Google AIP-155 与 HTTP <code>Idempotency-Key</code> 头（IETF 草案）的字段、保留时长与错误语义，均以所读文档版本为准。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">两个直觉</h3>
+<p>电梯按钮按一次和按五次，电梯都只会来接你一趟——多按几次不会叫来五部电梯。这是“幂等”的直觉：重复动作不改变最终效果。</p>
+<p>自动售货机则相反：投一次币按一次出货，投两次币按两次出货。它是“非幂等”的直觉：每按一次都产生新的效果，重复就重复扣费。</p>
+<p>后端接口大多更像自动售货机：每来一次写请求就多做一次事。幂等键要做的，是把“创建类”接口在重复请求下表现得像电梯按钮——无论按几次，结果只发生一次。</p>
+<h3 id="_4">接上一课</h3>
+<p>上一课讲重试：当结果未知时，客户端会再发一次，让请求“至少一次”到达服务端。这是可用性的必要手段，但代价是服务端可能收到同一请求的多份副本。</p>
+<blockquote>
+<p>重试让请求“至少一次”到达；幂等让“多次到达 = 一次效果”。</p>
+</blockquote>
+<p>所以重试和幂等是一对搭档：没有重试，系统在抖动时容易失败；没有幂等，重试会把失败放大成重复副作用。重试解决“能不能成功”，幂等解决“成功了几次”。</p>
+<h3 id="_5">为什么要用“键”</h3>
+<p>幂等键（idempotency key）是客户端为“一次业务意图”生成并随请求发送的标识。它表达的是“这一次业务意图”，而不是“这一次网络传输”。</p>
+<ul>
+<li>同一个业务意图因为超时被重发多次，应携带同一个键。</li>
+<li>用户真正发起了两次不同的提交，应使用不同的键。</li>
+</ul>
+<p>这也解释了为什么键通常由客户端生成：只有客户端知道当前这次是“重试”还是“新的提交”，服务端无法从重复的请求体里可靠地推断。</p>
+<h3 id="_6">一条教学时间线（教学假设）</h3>
+<ol>
+<li>客户端提交一个群发任务，请求里带上幂等键 <code>K1</code>。</li>
+<li>服务端处理成功，已经在数据库里创建了任务 <code>T1</code>，但响应在返回途中超时丢失。</li>
+<li>客户端只看到“超时”，不知道任务到底建没建，于是用同样的 <code>K1</code> 重试。</li>
+<li>如果服务端没有幂等处理：它会再建一个任务 <code>T2</code>，同一次提交变成两个群发任务。</li>
+<li>如果服务端正确处理幂等：它发现 <code>K1</code> 已经存在，直接返回首次的结果 <code>T1</code>，不再新建任务。</li>
+</ol>
+<p>这条时间线贯穿全课：客户端永远无法凭“超时”判断服务端状态，只有服务端能把重复请求收敛成一次效果。注意第 2 步和第 3 步之间没有“坏掉的代码”，只是一个正常的超时，就足以制造重复。</p>
+<h3 id="_7">错误与正确做法对照</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>常见但错误的做法</th>
+<th>后果</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>超时后重试提交任务</td>
+<td>每次请求都直接插入一条新任务</td>
+<td>同一次提交生成多个任务，可能重复触达</td>
+<td>客户端带幂等键，服务端按键去重并复用首次结果</td>
+</tr>
+<tr>
+<td>先查键、再执行业务、最后写键</td>
+<td>检查与写入分成多步，不在同一原子操作里</td>
+<td>并发下两个请求都查不到键，都执行业务</td>
+<td>用唯一约束或事务把“键 + 结果”原子保存</td>
+</tr>
+<tr>
+<td>同一键第二次请求参数不同</td>
+<td>不比对参数，直接当成新请求执行</td>
+<td>语义冲突，结果不可预期</td>
+<td>保存参数指纹，不一致时拒绝并返回明确错误</td>
+</tr>
+<tr>
+<td>幂等键永久保留</td>
+<td>所有键永不过期</td>
+<td>存储无限增长，边界语义难维护</td>
+<td>明确保留时长，并在接口文档中说明</td>
+</tr>
+<tr>
+<td>只靠网关去重</td>
+<td>认为“入口拦一下重复包”就够了</td>
+<td>网关窗口很短，且无法理解业务结果</td>
+<td>传输去重只是辅助，业务幂等仍要自己保证</td>
+</tr>
+</tbody>
+</table>
+<p>这张表里的每一行，本质上都是把“检查”和“执行”拆开、或把“契约”留给运气。后面实验会专门验证其中最容易出错的两处：并发提交与崩溃恢复。</p>
+<h3 id="_8">本课三条主线</h3>
+<ol>
+<li><strong>业务幂等与传输去重。</strong> 传输层去重（例如网关根据请求头丢弃重复包）只能覆盖很短的时间窗口，也不理解业务结果；业务幂等要保证“业务结果只发生一次”。两者层次不同，不能互相替代。</li>
+<li><strong>键作用域和参数指纹。</strong> 幂等键不是全局唯一的魔法字符串，它必须有明确作用域（哪个用户、哪类接口、哪段时间）。同一键配不同参数时，要靠参数指纹识别冲突，而不是默默执行或默默覆盖。</li>
+<li><strong>原子提交、TTL 与结果复用。</strong> “键 + 业务结果”必须在一次原子提交中落库；键要定义保留多久；重复请求要能取回首次结果，而不是重新执行业务。</li>
+</ol>
+<p>这三条主线对应节点要点，也对应实验的验收方向：同键并发只产生一个任务、同键不同参数被拒绝、崩溃恢复后重复请求仍按契约处理。学习时不要只记结论，要把“为什么必须是原子提交”讲清楚。</p>
+<h3 id="_9">常见误解</h3>
+<ul>
+<li><strong>“幂等就是加个 if 查一下键。”</strong> 单线程下看似可行，但在并发和崩溃面前会暴露竞态窗口。</li>
+<li><strong>“同一个键永远有效。”</strong> 键需要保留时长；无限保留既贵，也会让很久以后的重放行为变得难以解释。</li>
+<li><strong>“参数不同也没关系，键相同就复用结果。”</strong> 这会把两次不同的业务意图错误地合并，必须比对参数指纹。</li>
+<li><strong>“做了传输层去重就不需要业务幂等。”</strong> 传输层看不到业务是否已提交，也无法覆盖长时间跨度的重试。</li>
+<li><strong>“幂等只影响写接口。”</strong> 计数的重复累加、任务的重复提交，都是写副作用，一样需要处理。</li>
+</ul>
+<h2 id="_10">学习目标</h2>
+<p>学完本课，你应当能够：</p>
+<ol>
+<li>能解释业务幂等与传输去重的区别，以及为什么传输层去重不能替代业务幂等。</li>
+<li>能独立完成：实现创建任务接口，同一键并发提交只产生一个任务且返回同一结果。</li>
+<li>能说明幂等键的作用域应该怎样界定，并解释为什么作用域不清会带来误判。</li>
+<li>能为请求参数设计稳定的参数指纹，并说明“同键不同参数”时应如何拒绝。</li>
+<li>能描述“键 + 结果”原子提交的必要性，并识别“先查键、再执行、再记键”的竞态与崩溃窗口。</li>
+<li>能为幂等键设定合理的保留时长（TTL），并说明结果复用的边界。</li>
+<li>能根据接口文档说明幂等契约，而不是把幂等当成某个函数里的临时判断。</li>
+<li>能在崩溃恢复后验证重复请求仍按契约处理，而不是产生第二次副作用。</li>
+</ol>
+<h2 id="_11">为什么后端要懂</h2>
+<blockquote>
+<p>节点原文：“处理支付、写入和任务提交的结果未知。”</p>
+</blockquote>
+<p>“结果未知”不是一句抽象的话。一次请求从客户端发出到收到响应，中间要经过网络、网关、服务进程、数据库等多个环节，任何一个环节都可能让“结果”变得不可见。</p>
+<p>对客户端来说，失败通常只有两种表现：</p>
+<ul>
+<li>一直没有响应，最后超时；</li>
+<li>收到错误，但这个错误无法说明业务到底执行没有。</li>
+</ul>
+<p>而服务端的真实状态，至少有以下三种。</p>
+<h3 id="_12">三种“结果未知”</h3>
+<ol>
+<li>
+<p><strong>请求没到。</strong>
+   请求在网络中丢失，或还没进入服务端。
+   服务端什么都没做，重试通常是安全的。</p>
+</li>
+<li>
+<p><strong>到了，没执行完。</strong>
+   请求已经进入服务端，业务只完成了一部分，进程崩溃、超时或被中断。
+   数据可能处于中间状态，重试可能补完，也可能重复。</p>
+</li>
+<li>
+<p><strong>执行完，响应丢了。</strong>
+   业务已经成功提交，但响应在返回路上丢失。
+   数据已经改了，客户端却以为失败，重试会再改一次。</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>服务端真实状态</th>
+<th>客户端看到的现象</th>
+<th>客户端能区分吗</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>请求没到</td>
+<td>超时 / 无响应</td>
+<td>不能</td>
+</tr>
+<tr>
+<td>到了没执行完</td>
+<td>超时 / 错误</td>
+<td>不能</td>
+</tr>
+<tr>
+<td>执行完响应丢了</td>
+<td>超时 / 无响应</td>
+<td>不能</td>
+</tr>
+</tbody>
+</table>
+<p>这张表的关键在最后一列：三种完全不同的真实状态，在客户端看来几乎一样。</p>
+<h3 id="_13">为什么客户端只能重试</h3>
+<p>客户端不知道服务端发生了什么，只知道“这次没有拿到确定结果”。</p>
+<ul>
+<li>不重试：如果是请求丢了，业务永远不成功；</li>
+<li>重试：如果服务端其实已经成功，就会重复执行。</li>
+</ul>
+<p>两害相权，大多数系统选择重试，因为“可能重复”至少比“确定失败”更有机会完成任务。于是，“结果未知”被转化成了“可能重复”。</p>
+<h3 id="_14">重复的代价</h3>
+<p>不同场景下，重复的代价差别很大：</p>
+<ul>
+<li><strong>支付。</strong> 重复执行可能重复扣款，直接涉及资金，通常不可接受。</li>
+<li><strong>写入。</strong> 重复写入会造成数据重复、计数翻倍、状态被覆盖，事后修复成本高。</li>
+<li><strong>任务提交。</strong> 一次提交变成两个任务，可能触发两次群发、两次推送，用户直接感知到重复。</li>
+<li><strong>素材与内容（教学假设）。</strong> 同一张图片被重复上传、同一篇图文被重复创建，既浪费存储，也让后续统计失真。</li>
+</ul>
+<p>在通用内容后台里，素材上传、图文发布、群发任务提交、计数更新往往都不是“重放一遍没关系”的纯查询（教学假设）。它们会留下副作用，而副作用一旦重复，就很难优雅地撤回。</p>
+<h3 id="_15">重复不是异常，而是常态</h3>
+<p>更重要的是：重复请求本来就会不断出现，并不是“客户端不听话”的偶发事故。</p>
+<ul>
+<li><strong>消息队列重投。</strong> 消费者处理完但确认丢失，消息会被再次投递。</li>
+<li><strong>网关或代理重试。</strong> 上游超时后按策略重发，下游可能收到重复请求。</li>
+<li><strong>用户连点。</strong> 页面卡顿时用户重复点击“提交”，浏览器可能发出多个请求。</li>
+<li><strong>定时任务补偿。</strong> 补偿逻辑可能把已经成功的任务再提交一次。</li>
+</ul>
+<p>这些机制的共同点是“至少一次”（at-least-once）语义：消息或请求至少到达一次，但可能到达多次。</p>
+<blockquote>
+<p>在“至少一次”的投递世界里，服务端不能假设“每个请求只会来一次”。</p>
+</blockquote>
+<p>既然重复必然存在，正确做法不是要求客户端永不重试，而是在服务端把重复收敛成一次效果。</p>
+<h3 id="if">幂等是接口契约，不是一个 if</h3>
+<p>很多人的第一反应是：在接口里加一句“如果键已存在就返回旧结果”。这通常不够，原因有三。</p>
+<ol>
+<li>
+<p><strong>契约要写清楚。</strong>
+   幂等键字段叫什么、作用域是什么、保留多久、同键不同参数怎么处理，这些都要在接口文档里说明，而不是藏在实现里。</p>
+</li>
+<li>
+<p><strong>并发下要成立。</strong>
+   两个携带同一键的请求可能同时到达，简单的“先查再写”会让它们都查不到键，于是都执行。</p>
+</li>
+<li>
+<p><strong>崩溃后要成立。</strong>
+   服务端可能在“业务已执行、键还没记录”的瞬间崩溃。如果两者不是原子保存，恢复后重复请求仍可能产生第二次副作用。</p>
+</li>
+</ol>
+<h4 id="_16">契约至少要说明什么</h4>
+<p>一个可用的幂等契约，通常要交代以下内容：</p>
+<ul>
+<li>键字段的名称和类型；</li>
+<li>键由谁生成、建议格式；</li>
+<li>键的作用域；</li>
+<li>保留时长；</li>
+<li>同键重复请求返回什么；</li>
+<li>同键不同参数如何处理；</li>
+<li>键过期后如何解释。</li>
+</ul>
+<p>参考 Google AIP-155 的思路（以所读文档版本为准）：请求可带 <code>request_id</code> 字段（字符串，建议 UUID v4），服务端在一段时间内看到同一 <code>request_id</code> 时应返回与首次相同的响应而不重复执行；<code>request_id</code> 应在 API 文档中说明保留时长。它与 HTTP 的 <code>Idempotency-Key</code> 头思路相同（IETF 草案，以版本为准）。</p>
+<h4 id="_17">一个简单的判断方法</h4>
+<p>判断一个接口是否真正幂等，不要只看代码里有没有“查键”，而要问四个问题：</p>
+<ol>
+<li><strong>同一键并发提交会怎样？</strong> 两个请求同时到达，会不会都认为键不存在？</li>
+<li><strong>执行到一半崩溃会怎样？</strong> 业务已改、键未记，恢复后重放会不会再来一次？</li>
+<li><strong>键过期后重放会怎样？</strong> 过期边界是否在文档里说清楚，客户端是否知道？</li>
+<li><strong>同键不同参数会怎样？</strong> 是拒绝、报错，还是悄悄复用旧结果？</li>
+</ol>
+<p>四个问题都能按文档回答，幂等才算真正落地。</p>
+<h4 id="_18">为什么这属于后端基本功</h4>
+<p>因为幂等的每一个关键点，都落在后端最熟悉的地方：</p>
+<ul>
+<li>数据模型：键和业务结果放在哪里、如何建唯一约束；</li>
+<li>事务与并发：如何把“检查 + 执行 + 记录”收敛成原子操作；</li>
+<li>存储生命周期：TTL、归档、清理策略；</li>
+<li>接口契约：文档、错误码、返回语义。</li>
+</ul>
+<p>这些都是后端工程师每天要做的取舍，也是“能写接口”和“能写可靠接口”的分界线。幂等做得好，重试才是安全的；幂等没做好，重试越多，重复越多。</p>
+<p>（再次说明：本课中的“公众号后台”“群发”“素材”“计数”等均为教学假设，仅用于说明通用后台场景，不涉及任何具体产品的内部实现；相关规范细节以所读文档版本为准。）</p>
+<h2 id="_19">核心概念</h2>
+<p>幂等的目标不是“请求永不重复”，而是<strong>重复执行产生受控的等价效果</strong>：调用方在结果未知时可以重试，服务端不会把同一件事做成两件或多件。本课面向通用内容后台，下面涉及图文发布、素材上传、群发任务提交、计数等例子，均为教学假设，不代表任何具体产品的内部实现。</p>
+<p>Google AIP-155（Request identification）公开要点是：请求可以携带 <code>request_id</code> 字段（字符串，建议 UUID v4）；服务端在一段时间内看到同一 <code>request_id</code> 时，应返回与首次相同的响应，而不是重复执行；<code>request_id</code> 的保留时长应写入 API 文档。它与 HTTP 的 <code>Idempotency-Key</code> 头（IETF 草案）思路相同。具体字段、错误码和保留期以所读文档版本及团队规范为准。</p>
+<h3 id="1">1. 业务幂等与传输去重</h3>
+<p>先明确两个层次。</p>
+<ul>
+<li><strong>传输去重</strong>：解决“同一条报文在传输链路上出现多次”。典型机制包括 TCP 序号与重传、消息队列的 message id 去重、网关的 request id 映射。它的作用域是某条连接、某个队列或某个网关的去重窗口。</li>
+<li><strong>业务幂等</strong>：解决“同一件业务动作被发起多次”。它由业务定义什么是“同一件事”，通常落在业务键或客户端生成的幂等键上，并把判定结果持久化。</li>
+</ul>
+<p>传输去重只能挡住同一传输链路上的重复，挡不住用户换一条连接重试、上游系统重新发起、跨网关重放，或者进程崩溃后客户端再次提交。因此，<strong>传输层去重不能替代业务幂等</strong>；前者是优化和减噪，后者才是结果契约。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>判重依据</th>
+<th>能挡住</th>
+<th>挡不住</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TCP</td>
+<td>连接内的序号</td>
+<td>链路层重传造成的重复字节</td>
+<td>新连接上的业务重试</td>
+</tr>
+<tr>
+<td>消息队列</td>
+<td>message id + 去重窗口</td>
+<td>同一消息的重复投递</td>
+<td>生产者重新构造消息再次发送</td>
+</tr>
+<tr>
+<td>网关</td>
+<td>request id / trace id</td>
+<td>经过同一网关的重复转发</td>
+<td>绕过网关的调用、跨网关重放</td>
+</tr>
+<tr>
+<td>业务层</td>
+<td>业务唯一键 / 幂等键</td>
+<td>同一业务动作的重复提交</td>
+<td>业务键本身设计错误导致的误合并</td>
+</tr>
+</tbody>
+</table>
+<h4 id="_20">天然幂等与非幂等</h4>
+<p>有些操作天然幂等，重复执行的结果与执行一次等价：</p>
+<ul>
+<li><code>GET /tasks/{id}</code>：只读查询，不改变状态。</li>
+<li><code>PUT /tasks/{id}</code> 整体覆盖：同一份表示覆盖多次，最终状态相同。</li>
+<li><code>DELETE /tasks/{id}</code>：第一次删除成功，后续按“已不存在”处理，效果可控。</li>
+<li>条件状态更新：<code>UPDATE tasks SET status='paid' WHERE id=? AND status='pending'</code>。只有第一次能把 <code>pending</code> 推到 <code>paid</code>，重复执行影响 0 行。</li>
+</ul>
+<p>非幂等操作则会在每次执行时产生新效果：</p>
+<ul>
+<li><code>INSERT</code> 一条新任务：执行两次就有两条任务。</li>
+<li><code>count = count + 1</code>：执行两次计数加 2。</li>
+<li>扣款、发券、发送通知：执行两次就是两笔资金或两次触达。</li>
+<li>追加日志或追加消息：每次都会多一条记录。</li>
+</ul>
+<p>设计新接口时，优先问一句：能不能把它改造成天然幂等？例如把“创建任务”改成“以业务单号 upsert 任务”，把“设置状态”改成带前置状态的条件更新。改造不了，再引入幂等键。</p>
+<h4 id="_21">三种常用实现手段</h4>
+<ol>
+<li><strong>天然幂等设计</strong>：用 <code>PUT</code>、按业务主键 upsert、条件更新表达语义，让重复请求落到同一行或影响 0 行。</li>
+<li><strong>唯一约束</strong>：给业务唯一键加数据库唯一索引，让重复插入在数据库层失败或变成无操作。这是最后一道兜底，成本低、可靠性高。</li>
+<li><strong>幂等键表</strong>：客户端为一次逻辑操作生成 key，服务端持久化 key、参数指纹、处理状态和首次响应；重复请求复用结果。它适合“创建类”接口，尤其是任务提交这类不能靠业务自然键完全表达的操作。</li>
+</ol>
+<p>唯一约束的两种常见写法如下。MySQL 风格（<code>biz_no</code> 是业务唯一号）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tasks</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+<span class="w">  </span><span class="n">tenant_id</span><span class="w"> </span><span class="nb">BIGINT</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">biz_no</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">payload</span><span class="w"> </span><span class="n">JSON</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="k">UNIQUE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="n">uk_tasks_tenant_biz</span><span class="w"> </span><span class="p">(</span><span class="n">tenant_id</span><span class="p">,</span><span class="w"> </span><span class="n">biz_no</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tasks</span><span class="w"> </span><span class="p">(</span><span class="n">tenant_id</span><span class="p">,</span><span class="w"> </span><span class="n">biz_no</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">,</span><span class="w"> </span><span class="o">?</span><span class="p">)</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">DUPLICATE</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="k">UPDATE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LAST_INSERT_ID</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>
+</code></pre></div>
+
+<p>PostgreSQL 风格：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">tasks</span><span class="w"> </span><span class="p">(</span><span class="n">tenant_id</span><span class="p">,</span><span class="w"> </span><span class="n">biz_no</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="p">)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="err">$</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="err">$</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="err">$</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">CONFLICT</span><span class="w"> </span><span class="p">(</span><span class="n">tenant_id</span><span class="p">,</span><span class="w"> </span><span class="n">biz_no</span><span class="p">)</span><span class="w"> </span><span class="k">DO</span><span class="w"> </span><span class="k">NOTHING</span>
+<span class="n">RETURNING</span><span class="w"> </span><span class="n">id</span><span class="p">;</span>
+</code></pre></div>
+
+<p><code>ON CONFLICT DO NOTHING</code> 可能不返回行，调用方需要再按 <code>(tenant_id, biz_no)</code> 查询已有记录。注意：唯一约束只能保证“业务键不重复”，不能自动保证“返回首次响应”；如果契约要求同键返回同一响应体，仍需要幂等记录或可重建的稳定表示。</p>
+<h3 id="2">2. 键作用域和参数指纹</h3>
+<p>幂等键由客户端生成。AIP-155 建议 <code>request_id</code> 使用 UUID v4；实际落地时，键必须是足够随机、不可预测，并由调用方在“一次逻辑操作”开始时生成。不要用时间戳、自增 ID 或“用户 ID + 秒级时间”拼一个容易碰撞的键。</p>
+<h4 id="_22">作用域：先回答“这是谁的哪件事”</h4>
+<p>只存一个 key 不够。不同租户或用户可能生成相同的 key，同一个 key 也可能被误用到另一个接口。因此幂等记录的主键应是：</p>
+<div class="codehilite"><pre><span></span><code>(tenant_id / user_id, operation, key)
+</code></pre></div>
+
+<p>其中：</p>
+<ul>
+<li>第一维是身份或租户边界，避免跨用户撞键；</li>
+<li>第二维是接口或操作名，避免同一个 key 在“创建任务”和“上传素材”之间复用；</li>
+<li>第三维才是客户端生成的 key。</li>
+</ul>
+<p>如果系统是多租户的，建议把 <code>tenant_id</code> 纳入作用域，而不是只依赖当前登录用户。身份切换、代理调用、后台代操作都要在作用域设计里说清楚。</p>
+<p>Python 中可以把身份和操作规范化成一个 <code>scope</code>，再与 key 组成主键：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">scope_key</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">operation</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="n">scope</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">user_id</span><span class="p">,</span> <span class="n">operation</span><span class="p">],</span>
+        <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="s2">":"</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">scope</span><span class="p">,</span> <span class="n">key</span>
+
+<span class="n">scope</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="n">scope_key</span><span class="p">(</span><span class="s2">"u_1001"</span><span class="p">,</span> <span class="s2">"create_publish_job"</span><span class="p">,</span> <span class="s2">"6f1c2f8e-4d7a-4c31-9b2e-7a8d5c1e9b20"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</code></pre></div>
+
+<p>用 JSON 数组而不是用冒号拼接，是为了避免 <code>a:b</code> 与 <code>a</code>、<code>b</code> 之类组件的边界歧义。若团队已有统一的 scope 编码规则，以团队规范为准。</p>
+<h4 id="key">参数指纹：同一个 key 必须对应同一份请求</h4>
+<p>只有 key 还不够。客户端可能复用了 key，却改了请求体；这时不能把新请求当成旧请求执行，也不能返回第一次的响应，否则调用方会以为新参数生效了。常见做法是对<strong>规范化后的业务参数</strong>计算指纹：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="n">EXCLUDED_FIELDS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"request_id"</span><span class="p">,</span>
+    <span class="s2">"idempotency_key"</span><span class="p">,</span>
+    <span class="s2">"trace_id"</span><span class="p">,</span>
+    <span class="s2">"timestamp"</span><span class="p">,</span>
+    <span class="s2">"client_time"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fingerprint</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">clean</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">body</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">EXCLUDED_FIELDS</span><span class="p">}</span>
+    <span class="n">canonical</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+        <span class="n">clean</span><span class="p">,</span>
+        <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="s2">":"</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">canonical</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</code></pre></div>
+
+<p>规范化至少要做到：对象键排序、无多余空白、统一字符编码、明确数字与金额的表示（金额建议用最小货币单位的整数字符串，避免浮点误差），数组保持业务顺序。对于嵌套对象，<code>sort_keys=True</code> 会递归排序；如果业务上数组顺序不重要，需要在计算指纹前显式排序或转成集合语义。</p>
+<p>指纹应排除“每次重试都会变化、但不改变业务含义”的字段，例如请求 ID、链路追踪 ID、客户端时间戳、传输签名和重试次数。反过来，<strong>任何会改变业务结果的字段都不能排除</strong>，例如任务类型、目标账号、图文内容 ID、定时发送时间、金额。是否排除某个字段，要看它是否属于业务输入，不能为了“让重试通过”而随意放宽。</p>
+<h4 id="_23">同键不同指纹的冲突语义</h4>
+<p>服务端查到同一作用域下的 key 后，按指纹和状态分支：</p>
+<table>
+<thead>
+<tr>
+<th>已有记录</th>
+<th>新请求指纹</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无</td>
+<td>任意</td>
+<td>创建幂等记录并执行业务</td>
+</tr>
+<tr>
+<td>有，指纹相同，<code>DONE</code></td>
+<td>相同</td>
+<td>返回首次保存的响应，不再执行业务</td>
+</tr>
+<tr>
+<td>有，指纹相同，<code>PROCESSING</code></td>
+<td>相同</td>
+<td>返回“处理中”，让客户端按契约重试</td>
+</tr>
+<tr>
+<td>有，指纹不同</td>
+<td>不同</td>
+<td>拒绝，提示幂等键被复用于不同参数</td>
+</tr>
+<tr>
+<td>有，但已过期</td>
+<td>任意</td>
+<td>按新请求处理，具体语义写入 API 契约</td>
+</tr>
+</tbody>
+</table>
+<p>“同键不同参数被拒绝”是本课的验收点之一。HTTP 可以用 <code>422 Unprocessable Content</code> 或 <code>409 Conflict</code> 表达，gRPC 可以用 <code>INVALID_ARGUMENT</code> 或 <code>ALREADY_EXISTS</code> 的语义；具体选哪个、错误详情怎么放，以团队 API 规范和所读文档版本为准。关键是：<strong>拒绝必须可观测、可区分</strong>，不能让调用方误以为请求成功。</p>
+<p>还有一个容易忽略的点：指纹要在进入业务逻辑之前计算，并且基于原始业务参数，而不是基于某个已经补全了默认值、时间戳或服务端生成字段的对象。否则同一个逻辑请求在不同时间可能得到不同指纹。</p>
+<h3 id="3-ttl">3. 原子提交、TTL与结果复用</h3>
+<p>本课节点给出的陷阱是：「先查键再执行业务再记键会留下竞态和崩溃窗口」。下面两条时间线说明它为什么不是理论问题。</p>
+<p><strong>时间线 A：并发请求各执行一次。</strong></p>
+<div class="codehilite"><pre><span></span><code>请求 A：SELECT 幂等键 -&gt; 不存在
+请求 B：SELECT 幂等键 -&gt; 不存在
+请求 A：INSERT 任务 1 -&gt; 成功
+请求 B：INSERT 任务 2 -&gt; 成功
+请求 A/B：记录幂等键（此时已晚）
+</code></pre></div>
+
+<p>两个请求都通过了“查不到键”的检查，结果产生两个任务。最后记录键时即使唯一冲突，另一条业务写入也已经发生，无法靠幂等表回滚。</p>
+<p><strong>时间线 B：业务成功、记键前崩溃。</strong></p>
+<div class="codehilite"><pre><span></span><code>请求 A：SELECT 幂等键 -&gt; 不存在
+请求 A：INSERT 任务 1 -&gt; 提交成功
+进程崩溃，尚未写幂等键
+客户端重试：SELECT 幂等键 -&gt; 不存在
+请求 A'：INSERT 任务 2 -&gt; 成功
+</code></pre></div>
+
+<p>客户端看到超时，自然会重试；服务端却因为“键还没记上”再次执行，产生重复任务。</p>
+<h4 id="_24">正确结构：幂等记录与业务结果同事务提交</h4>
+<p>把幂等记录当成业务数据的一部分，而不是事后日志。推荐流程：</p>
+<ol>
+<li>在同一个数据库事务中，先 <code>INSERT</code> 幂等记录，状态为 <code>PROCESSING</code>，靠 <code>(scope, key)</code> 唯一约束抢占。</li>
+<li>唯一约束冲突时读取已有记录：<code>DONE</code> 返回保存的响应；<code>PROCESSING</code> 返回“处理中/稍后重试”；指纹不同则拒绝。</li>
+<li>抢占成功后执行真正的业务写入，例如插入任务行。</li>
+<li>在<strong>同一事务</strong>内把幂等记录更新为 <code>DONE</code>，保存响应体或可重建响应的业务对象 ID。</li>
+<li>提交事务。业务写入与幂等记录要么都成功，要么都回滚。</li>
+</ol>
+<p>表结构示例（SQLite/MySQL 风格；MySQL 中 <code>key</code> 是保留字时需按方言加反引号）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">idempotency_keys</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  </span><span class="k">scope</span><span class="w">         </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="k">key</span><span class="w">           </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">fingerprint</span><span class="w">   </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w">     </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">status</span><span class="w">        </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="w">  </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">response</span><span class="w">      </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="n">created_at</span><span class="w">    </span><span class="k">TIMESTAMP</span><span class="w">    </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="n">expires_at</span><span class="w">    </span><span class="k">TIMESTAMP</span><span class="w">    </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<span class="w">  </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="k">scope</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_idempotency_expires</span>
+<span class="w">  </span><span class="k">ON</span><span class="w"> </span><span class="n">idempotency_keys</span><span class="w"> </span><span class="p">(</span><span class="n">expires_at</span><span class="p">);</span>
+</code></pre></div>
+
+<p>Python <code>sqlite3</code> 伪代码骨架如下；生产代码还要补齐错误映射、超时、日志和指标。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">timezone</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">handle_create_task</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">scope</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+    <span class="n">expires</span> <span class="o">=</span> <span class="n">now</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">conn</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s2">"INSERT INTO idempotency_keys "</span>
+                <span class="s2">"(scope, key, fingerprint, status, response, created_at, expires_at) "</span>
+                <span class="s2">"VALUES (?, ?, ?, 'PROCESSING', NULL, ?, ?)"</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">now</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="n">expires</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()),</span>
+            <span class="p">)</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"id"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span> <span class="s2">"payload"</span><span class="p">:</span> <span class="n">payload</span><span class="p">}</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s2">"INSERT INTO tasks (id, payload) VALUES (?, ?)"</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">task</span><span class="p">[</span><span class="s2">"id"</span><span class="p">],</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)),</span>
+            <span class="p">)</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+                <span class="s2">"UPDATE idempotency_keys SET status='DONE', response=? "</span>
+                <span class="s2">"WHERE scope=? AND key=?"</span><span class="p">,</span>
+                <span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">scope</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">task</span>
+    <span class="k">except</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">IntegrityError</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+            <span class="s2">"SELECT fingerprint, status, response FROM idempotency_keys "</span>
+            <span class="s2">"WHERE scope=? AND key=?"</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="n">saved_fp</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">response</span> <span class="o">=</span> <span class="n">row</span>
+        <span class="k">if</span> <span class="n">saved_fp</span> <span class="o">!=</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"IDEMPOTENCY_KEY_REUSED_WITH_DIFFERENT_PAYLOAD"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="s2">"DONE"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"REQUEST_IN_PROGRESS"</span><span class="p">)</span>
+</code></pre></div>
+
+<blockquote>
+<p>补充：在 SQLite 这类“写事务串行化”的库里，<code>PROCESSING</code> 占位在提交前对其他连接不可见，并发的第二个请求会等锁，拿到锁后直接读到 <code>DONE</code>；只有当你把“占位”和“完成”拆成两个事务（例如业务里要调外部系统）时，<code>PROCESSING</code> 分支才真正会被别的请求看到，这时必须给它定义超时与接管规则。</p>
+</blockquote>
+<p>关键不是 SQL 写法，而是<strong>顺序</strong>：先占位，再执行业务，最后标记完成，三步同事务。若业务写入失败，事务回滚，幂等记录也不会留下，客户端可以安全重试；若进程在提交前崩溃，数据库回滚，同样可以重试；若提交成功但响应在网络上丢失，客户端重试会读到 <code>DONE</code> 并拿到首次结果。这是“崩溃恢复后重复请求仍按契约处理”的基础。</p>
+<p>注意方言差异：这段骨架按 SQLite 语义书写；PostgreSQL 中唯一冲突会让当前事务进入失败状态，捕获异常后通常需要 <code>SAVEPOINT</code>，或改用 <code>INSERT ... ON CONFLICT DO NOTHING</code> 后再查询；MySQL 的重复键错误一般不会中止整个事务。并发行为还要按实际数据库版本和隔离级别验证。</p>
+<h4 id="redis">跨存储：键在 Redis、业务在数据库</h4>
+<p>如果幂等键放 Redis、业务数据放数据库，就无法用一个本地事务原子提交两边。常见流程是用 <code>SET key value NX PX ttl</code> 抢占，再执行业务，最后把 Redis 值改成完成状态。它的问题与上面的时间线同构：</p>
+<ul>
+<li>业务已提交、Redis 尚未标记完成时崩溃，重试会看到“处理中”，可能长时间拿不到结果；</li>
+<li>Redis 过期或故障切换后，同一个 key 可能被当成新请求，业务再次执行；</li>
+<li>Redis 的 <code>SET NX</code> 只能做占位或锁，不能保证“键记录与业务结果同时生效”。</li>
+</ul>
+<p>因此，跨存储时至少要有数据库层的业务唯一约束兜底，或者用 outbox/事务消息把状态变更可靠地传播到幂等存储。更稳妥的默认方案是：<strong>幂等记录与业务数据同库同事务</strong>；Redis 只承担缓存、限流或短期锁，不作为唯一的正确性来源。这些取舍要结合团队已有基础设施，以实际组件文档版本为准。</p>
+<h4 id="ttl">TTL：保留多久，过期后算什么</h4>
+<p>节点给出的权衡是：「长期去重更可靠，但存储成本与业务有效期需明确」。保留期至少要覆盖客户端的最大重试窗口，包括网络超时后的重试、消息队列重投、批量任务重跑和人工补偿。若客户端可能在 24 小时后用同一个 key 重试，而服务端只保留 1 小时，那么第 25 小时的请求会被当成新请求，重复执行。</p>
+<p>保留期还要写进 API 契约：AIP-155 也强调 <code>request_id</code> 的保留时长应在文档中说明。过期后的语义必须明确，例如“过期后同一 key 视为新请求”，或者“过期后拒绝并要求客户端生成新 key”。不要留下“可能复用、也可能新建”的模糊地带。</p>
+<p>过期清理可以定时按 <code>expires_at</code> 分批删除，但不要删除仍在 <code>PROCESSING</code> 的记录；删除前确认没有事务正在使用；大批量删除要限速，避免影响在线业务。长期保留的收益是更可靠的重放保护，成本是存储、索引和隐私合规；保留多久由业务有效期和重试契约共同决定。</p>
+<h4 id="id">结果复用：存响应体还是存业务对象 ID</h4>
+<p>两种做法都可行，取决于契约：</p>
+<ul>
+<li><strong>保存首次响应体</strong>：重放时原样返回状态码和响应内容，最贴近“同一请求返回同一响应”的要求。适合响应较小、包含创建时间或服务端生成字段的场景；要注意敏感信息、序列化版本和字段演进。</li>
+<li><strong>保存业务对象 ID，重放时重建响应</strong>：节省存储，但重建出的响应可能随对象状态变化，不再是“首次响应”。只有在契约允许返回“当前表示”，且对象未被删除或改变语义时才适合。</li>
+</ul>
+<p>如果选择保存响应，建议把状态码、内容类型和响应体一起序列化到 <code>response</code> 字段，避免只存 body 导致重放时状态码不一致。无论哪种方式，都要保证读取响应和判断状态在同一个一致性视图内完成，不能出现“读到 <code>DONE</code> 但响应还没写完”的中间态。</p>
+<h4 id="_25">收束</h4>
+<p>三点可以连成一条线：<strong>业务幂等</strong>定义“什么是同一件事”，<strong>键作用域和参数指纹</strong>定义“如何认出同一件事、如何发现参数变了”，<strong>原子提交、TTL 与结果复用</strong>定义“如何可靠地记住并重放这件事”。只做传输去重，会在换连接或上游重发时失效；只做先查后写，会留下竞态和崩溃窗口；只设 TTL 而不写清过期语义，则会把可靠性问题推迟到未来。把唯一约束、同事务提交和明确的保留契约组合起来，重复请求才会变成可预测的等价效果。</p>
+<h2 id="_26">常见误区与设计权衡</h2>
+<p>本实践用请求头 <code>Idempotency-Key</code> 承载幂等键，与 AIP-155 把 <code>request_id</code> 放在请求体里的思路相同，只是载体不同。</p>
+<h3 id="_27">误区</h3>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>问题</th>
+<th>更稳妥的做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只靠前端防连点</td>
+<td>前端禁用按钮或防抖只能减少同一页面内的重复点击，无法阻止超时重试、网关重试、多标签页或多实例提交。</td>
+<td>服务端定义幂等键契约，并让重复请求返回首次结果。</td>
+</tr>
+<tr>
+<td>用 Redis 锁代替持久记录</td>
+<td>锁只能提供短期互斥；锁过期、进程重启或主从切换后，服务端可能已经忘记首次结果，无法按契约重放。</td>
+<td>把幂等键、参数指纹和业务结果持久化；分布式锁只作为减少竞争的优化。</td>
+</tr>
+<tr>
+<td>键作用域只用 key，不含用户或路由</td>
+<td>不同用户或不同接口复用同一个字符串时可能互相撞键，甚至返回他人的结果。</td>
+<td>作用域至少包含调用方/租户、HTTP 方法和路由，再与 key 组成唯一约束。</td>
+</tr>
+<tr>
+<td>同键不同参数也返回旧结果</td>
+<td>客户端误用键或篡改参数时，旧结果会被当成本次请求的结果，造成隐蔽的数据错误。</td>
+<td>保存规范化参数指纹；同键但指纹不同明确拒绝，本实践返回 422。</td>
+</tr>
+<tr>
+<td>把失败也缓存成永久结果</td>
+<td>5xx、超时和连接中断代表结果未知；把其缓存成永久失败会阻止本可成功的重试。校验失败等是否记录也要看契约。</td>
+<td>区分确定性拒绝与暂态失败；结果未知的请求允许同键重试，成功后才记录可重放响应。</td>
+</tr>
+<tr>
+<td>TTL 短于客户端重试窗口</td>
+<td>键记录先过期，客户端仍在重试窗口内，后续请求会被当成新请求，重复创建任务。</td>
+<td>保留时长覆盖客户端重试、回调重试和业务对账周期，并在 API 文档中写清。</td>
+</tr>
+<tr>
+<td>服务端自己生成幂等键</td>
+<td>每次请求生成新键，重试自然无法命中；若通过响应返回键，客户端也未必能在重试时稳定带上。</td>
+<td>由发起方生成并复用同一个键，服务端只负责校验、记录和重放。</td>
+</tr>
+<tr>
+<td>把“查键—执行业务—记键”拆成三个独立步骤</td>
+<td>先查键再执行业务再记键会留下竞态和崩溃窗口：并发请求可能都查不到键，崩溃可能发生在业务已写、键未写之间。</td>
+<td>在同一事务中完成键占用、业务写入和结果记录；用唯一约束和事务串行化保护。</td>
+</tr>
+</tbody>
+</table>
+<p>失败缓存需要单独定契约。进入业务副作用之前就被拒绝的格式错误、鉴权失败或参数校验失败，通常不产生业务结果，可以不写入幂等结果，允许客户端修正后重试；明确且可复现的业务拒绝是否缓存，要看 API 文档。5xx、超时、连接中断属于“结果未知”，不应缓存成永久成功，也不应让同键重试永久失败。AIP-155 的要点是同一 <code>request_id</code> 返回首次响应而不重复执行，但“哪些响应算首次响应、保留多久”仍要以所读文档版本和自己的 API 文档为准。</p>
+<p>计数类副作用尤其要小心：重试不能重复加一。更稳妥的做法是让计数由唯一业务事件派生，或者在业务事务内做带条件的更新；不要先加计数再单独记录幂等键。</p>
+<h3 id="_28">权衡</h3>
+<p>节点给出的总权衡是：“长期去重更可靠，但存储成本与业务有效期需明确。”</p>
+<table>
+<thead>
+<tr>
+<th>权衡</th>
+<th>偏向</th>
+<th>需要明确的代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>长期去重 vs 存储成本</td>
+<td>保留更久能覆盖更长的重试与对账窗口，减少重复副作用。</td>
+<td>键表会增长；需要 TTL、归档、清理策略和可观测的过期指标。</td>
+</tr>
+<tr>
+<td>存完整响应 vs 存引用</td>
+<td>存完整响应便于原样重放，不依赖业务表还能查到旧结果。</td>
+<td>占空间，可能包含敏感字段；存引用则要保证引用生命周期不短于幂等记录，并能还原状态码和响应体。</td>
+</tr>
+<tr>
+<td>DB 事务内 vs Redis</td>
+<td>与业务表同库同事务，键记录和业务写入能一起提交或一起回滚。</td>
+<td>数据库压力与锁竞争；Redis 方案快，但跨存储一致性、持久化和故障恢复要额外设计，不能想当然。</td>
+</tr>
+<tr>
+<td>业务唯一键 vs 通用幂等键表</td>
+<td>业务唯一键直接表达“同一资源只能有一个”，查询简单。</td>
+<td>只适用于有自然唯一性的场景；通用幂等键表可覆盖创建任务、提交批处理等更多接口，但要处理作用域、指纹、TTL 和响应存储。</td>
+</tr>
+</tbody>
+</table>
+<p>选择时先问三个问题：重复请求的最长窗口有多长？失败是否允许重试？响应里是否含敏感数据？答案不明确时，不要把幂等实现成“只加一把锁”。</p>
+<h2 id="practice88">动手实践：practice88</h2>
+<blockquote>
+<p>practice 原文：实现创建任务接口，同一键并发提交只产生一个任务且返回同一结果。</p>
+</blockquote>
+<p>下面的“创建任务”是教学假设：它可以是内容后台的一次图文发布准备任务，也可以是素材处理或群发提交任务。重点是接口契约与数据库事务，不依赖任何平台内部接口。</p>
+<h3 id="1_1">1. 准备目录与解释器</h3>
+<div class="codehilite"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/practice88<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/practice88
+python3<span class="w"> </span>--version
+</code></pre></div>
+
+<p>本实践只使用 Python 标准库：<code>sqlite3</code>、<code>http.server</code>、<code>threading</code>、<code>hashlib</code>、<code>json</code>、<code>uuid</code>。不需要安装 Web 框架或数据库驱动。</p>
+<h3 id="2-serverpy">2. server.py 的接口与数据约束</h3>
+<ul>
+<li><code>POST /tasks</code>，请求头 <code>Idempotency-Key</code>（必填）和 <code>X-User</code>（模拟鉴权主体，默认 <code>u1</code>），请求体 <code>{"title": "...", "payload": ...}</code>；<code>GET /stats</code> 返回 <code>{"tasks_in_db": N}</code> 方便验证。</li>
+<li>表 <code>tasks</code> 存业务任务；表 <code>idempotency_keys</code> 存作用域、键、参数指纹、状态、响应体和过期时间，主键 <code>(scope, key)</code>。</li>
+<li>作用域 = <code>用户:操作</code>（如 <code>u1:create_task</code>），再与 key 组成主键；参数指纹 = 规范化后 <code>{title, payload}</code> 的 SHA-256，所以字段顺序不同仍算同参数。</li>
+<li><code>tasks</code> 与 <code>idempotency_keys</code> 在同一个 SQLite 事务中提交；写事务用 <code>BEGIN IMMEDIATE</code> 拿写锁，让同键并发请求排队，而不是都读到“键不存在”。</li>
+<li>首次成功返回 <code>201</code> 和 <code>{"task_id": "..."}</code>；同键同参数重放返回同样的 <code>201</code> 和响应体；同键不同参数返回 <code>422</code>；缺少键返回 <code>400</code>；记录过期（TTL 24 小时）后同键按新请求处理。</li>
+<li>设置 <code>CRASH_AFTER_BUSINESS=1</code> 时，在业务行写入后、事务提交前用 <code>os._exit(1)</code> 模拟进程崩溃；未提交事务随之回滚。</li>
+<li>端口被占用时进程以退出码 2 结束。</li>
+</ul>
+<p>表结构：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tasks</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="k">owner</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">payload</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="nb">REAL</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">idempotency_keys</span><span class="p">(</span>
+<span class="w">  </span><span class="k">scope</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">fingerprint</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span><span class="w"> </span><span class="n">response</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">  </span><span class="n">created_at</span><span class="w"> </span><span class="nb">REAL</span><span class="p">,</span><span class="w"> </span><span class="n">expires_at</span><span class="w"> </span><span class="nb">REAL</span><span class="p">,</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">(</span><span class="k">scope</span><span class="p">,</span><span class="w"> </span><span class="k">key</span><span class="p">));</span>
+</code></pre></div>
+
+<p>下面是 <code>server.py</code> 里的指纹与事务核心（完整文件见附件 practice88）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">handle_create</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""返回 (http_status, response_dict)。"""</span>
+    <span class="n">scope</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">owner</span><span class="si">}</span><span class="s2">:create_task"</span>
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">fingerprint</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">isolation_level</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"BEGIN IMMEDIATE"</span><span class="p">)</span>          <span class="c1"># 拿写锁：同库并发写串行化</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"SELECT fingerprint,status,response,expires_at FROM idempotency_keys "</span>
+                           <span class="s2">"WHERE scope=? AND key=?"</span><span class="p">,</span> <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">row</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">now</span><span class="p">:</span>                 <span class="c1"># 过期：按契约视为新请求</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"DELETE FROM idempotency_keys WHERE scope=? AND key=?"</span><span class="p">,</span> <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">row</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"COMMIT"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">fp</span><span class="p">:</span>
+                <span class="k">return</span> <span class="mi">422</span><span class="p">,</span> <span class="p">{</span><span class="s2">"error"</span><span class="p">:</span> <span class="s2">"idempotency key reused with different parameters"</span><span class="p">}</span>
+            <span class="k">return</span> <span class="mi">201</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>       <span class="c1"># 重放：返回首次结果</span>
+        <span class="n">task_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO tasks VALUES(?,?,?,?,?)"</span><span class="p">,</span>
+                     <span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">owner</span><span class="p">,</span> <span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"title"</span><span class="p">),</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"payload"</span><span class="p">)),</span> <span class="n">now</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"CRASH_AFTER_BUSINESS"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"1"</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"simulated crash before commit"</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                          <span class="c1"># 未提交 -&gt; 事务随进程消失</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"task_id"</span><span class="p">:</span> <span class="n">task_id</span><span class="p">}</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"INSERT INTO idempotency_keys VALUES(?,?,?,?,?,?,?)"</span><span class="p">,</span>
+                     <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="s2">"DONE"</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">resp</span><span class="p">),</span> <span class="n">now</span><span class="p">,</span> <span class="n">now</span> <span class="o">+</span> <span class="n">TTL_SECONDS</span><span class="p">))</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"COMMIT"</span><span class="p">)</span>                   <span class="c1"># 业务 + 幂等记录 一起提交</span>
+        <span class="k">return</span> <span class="mi">201</span><span class="p">,</span> <span class="n">resp</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">conn</span><span class="o">.</span><span class="n">in_transaction</span><span class="p">:</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"ROLLBACK"</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+
+<p>这段代码的关键点不是函数名，而是顺序：先开启写事务，再检查键；键不存在时写业务行和键记录，最后一起提交。重放路径只读取已提交的键记录，不会重新执行业务。</p>
+<h3 id="3">3. 启动服务并做三次手工请求</h3>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>server.py<span class="w"> </span>--port<span class="w"> </span><span class="m">18088</span><span class="w"> </span>--db<span class="w"> </span>tasks.db<span class="w"> </span><span class="p">&amp;</span>
+</code></pre></div>
+
+<p>首次请求：</p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:18088/tasks<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">'Idempotency-Key: demo-key-001'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"title":"周末图文任务","payload":{"article_id":"a-1001"}}'</span>
+</code></pre></div>
+
+<p>预期：HTTP <code>201</code>，响应体包含 <code>{"task_id": "&lt;首次生成的 UUID&gt;"}</code>。</p>
+<p>同键、同参数重放：</p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:18088/tasks<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">'Idempotency-Key: demo-key-001'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"title":"周末图文任务","payload":{"article_id":"a-1001"}}'</span>
+</code></pre></div>
+
+<p>预期：仍为 HTTP <code>201</code>，<code>task_id</code> 与首次完全相同，数据库中没有新增任务。</p>
+<p>同键、改参数：</p>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-i<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:18088/tasks<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">'Content-Type: application/json'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s1">'Idempotency-Key: demo-key-001'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">'{"title":"另一个任务","payload":{"article_id":"a-1001"}}'</span>
+</code></pre></div>
+
+<p>预期：HTTP <code>422</code>，响应体为 <code>{"error": "idempotency key reused with different parameters"}</code>；这是“同键不同参数被拒绝”的直接验证。</p>
+<p>缺少 <code>Idempotency-Key</code> 时返回 <code>400</code>，可以在浏览器或 curl 中自行补测；它不属于上面三条主实验，但应在 <code>test.sh</code> 中断言。</p>
+<h3 id="4">4. 并发提交实验</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 用一个新库重启，避免手工请求的任务干扰计数</span>
+<span class="nb">kill</span><span class="w"> </span>%1<span class="p">;</span><span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>tasks.db*<span class="p">;</span><span class="w"> </span>python3<span class="w"> </span>server.py<span class="w"> </span>--port<span class="w"> </span><span class="m">18088</span><span class="w"> </span>--db<span class="w"> </span>tasks.db<span class="w"> </span><span class="p">&amp;</span>
+python3<span class="w"> </span>client.py<span class="w"> </span>--concurrency<span class="w"> </span><span class="m">20</span><span class="w"> </span>--same-key
+</code></pre></div>
+
+<p>客户端启动 20 个线程，使用相同的 <code>Idempotency-Key</code> 和相同 body 同时 POST。预期输出包含：</p>
+<div class="codehilite"><pre><span></span><code>statuses=[201] distinct_task_ids=1 tasks_in_db=1
+</code></pre></div>
+
+<p>这说明同键并发请求只产生一个任务，所有调用方拿到同一个 <code>task_id</code>。如果输出中 <code>tasks_in_db&gt;1</code>，优先检查是否真的把键记录与任务写入放在同一事务中，以及是否用了 <code>BEGIN IMMEDIATE</code> 或等价的唯一约束保护。</p>
+<h3 id="5">5. 崩溃恢复实验</h3>
+<div class="codehilite"><pre><span></span><code><span class="nv">CRASH_AFTER_BUSINESS</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>python3<span class="w"> </span>server.py<span class="w"> </span>--port<span class="w"> </span><span class="m">18088</span><span class="w"> </span>--db<span class="w"> </span>tasks.db<span class="w"> </span><span class="p">&amp;</span>
+</code></pre></div>
+
+<p>用 <code>crash-key-001</code> 和固定 body 发起一次请求。该请求可能直接断开连接，预期不会得到成功的 <code>201</code> 响应。随后停止服务进程，正常启动：</p>
+<div class="codehilite"><pre><span></span><code>python3<span class="w"> </span>server.py<span class="w"> </span>--port<span class="w"> </span><span class="m">18088</span><span class="w"> </span>--db<span class="w"> </span>tasks.db<span class="w"> </span><span class="p">&amp;</span>
+</code></pre></div>
+
+<p>用同一个 <code>crash-key-001</code> 和完全相同的 body 重试，预期得到 <code>201</code> 和某个 <code>task_id</code>；再用同一键重放，预期得到相同的 <code>task_id</code>。再 <code>curl -s 127.0.0.1:18088/stats</code>，若这是一个新库，预期 <code>tasks_in_db</code> 为 <code>1</code>。</p>
+<p>这一步验证的是“崩溃恢复后重复请求仍按契约处理”：崩溃时业务行虽已执行，但事务没有提交，恢复时回滚；正常重试会重新执行并提交一份结果。不同 SQLite 日志模式或操作系统行为可能有差异，具体以实际版本和文档为准。</p>
+<h3 id="6">6. 反例：先查键再执行再记键</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">kill</span><span class="w"> </span>%1<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="p">;</span><span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>naive.db*
+python3<span class="w"> </span>server_naive.py<span class="w"> </span>--port<span class="w"> </span><span class="m">18088</span><span class="w"> </span>--db<span class="w"> </span>naive.db<span class="w"> </span><span class="p">&amp;</span>
+python3<span class="w"> </span>client.py<span class="w"> </span>--concurrency<span class="w"> </span><span class="m">20</span><span class="w"> </span>--same-key
+</code></pre></div>
+
+<p><code>server_naive.py</code> 故意把流程拆成“查键—执行业务—记键”，并在业务执行中加入 <code>sleep</code> 放大竞态。并发提交同一键时，多个请求都可能先查不到键，于是各自创建任务，预期 <code>tasks_in_db&gt;1</code>。具体条数取决于调度顺序，不要把它写成固定值。</p>
+<p>这个反例对应误区表中的原句：先查键再执行业务再记键会留下竞态和崩溃窗口。修复思路不是加更多日志，而是把键占用、业务写入和结果记录收进同一事务，并用唯一约束兜底。</p>
+<h3 id="7">7. 一键断言</h3>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>脚本至少覆盖：缺键 <code>400</code>、首次 <code>201</code>、同键重放同 body、同键改参数 <code>422</code>、20 并发同键只产生一个任务、崩溃恢复后重试只产生一个任务、反例出现重复任务、端口占用退出码 2。参考运行里反例 20 个并发产生了 18 个任务。全部通过时输出：</p>
+<div class="codehilite"><pre><span></span><code>ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p>若脚本失败，先看它打印的最后一个失败断言，再按第 10 节的排障项定位。</p>
+<h3 id="8">8. 结果记录表模板</h3>
+<table>
+<thead>
+<tr>
+<th>记录项</th>
+<th>你的结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>首次请求状态码与 <code>task_id</code></td>
+<td></td>
+</tr>
+<tr>
+<td>同键同参数重放的 <code>task_id</code> 是否一致</td>
+<td></td>
+</tr>
+<tr>
+<td>同键改参数的 HTTP 状态</td>
+<td></td>
+</tr>
+<tr>
+<td>缺键请求的 HTTP 状态</td>
+<td></td>
+</tr>
+<tr>
+<td>20 并发同键的 <code>distinct_task_ids</code></td>
+<td></td>
+</tr>
+<tr>
+<td>20 并发同键的 <code>tasks_in_db</code></td>
+<td></td>
+</tr>
+<tr>
+<td>崩溃后重试的 <code>task_id</code></td>
+<td></td>
+</tr>
+<tr>
+<td>崩溃后重试的任务总数</td>
+<td></td>
+</tr>
+<tr>
+<td>反例的 <code>tasks_in_db</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>bash test.sh</code> 的最终输出</td>
+<td></td>
+</tr>
+<tr>
+<td>AIP-155 所读版本与阅读日期</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="9">9. 验收清单</h3>
+<ul>
+<li>[ ] 同键不同参数被拒绝</li>
+<li>[ ] 崩溃恢复后重复请求仍按契约处理</li>
+</ul>
+<p>过程自检：</p>
+<ul>
+<li>[ ] 缺少 <code>Idempotency-Key</code> 返回 <code>400</code></li>
+<li>[ ] 首次请求返回 <code>201</code> 且响应体含 <code>task_id</code></li>
+<li>[ ] 同键同参数重放返回相同状态码和相同响应体</li>
+<li>[ ] <code>--concurrency 20 --same-key</code> 输出 <code>distinct_task_ids=1</code>、<code>tasks_in_db=1</code></li>
+<li>[ ] 崩溃后正常重启，同一键重试只创建 <code>1</code> 个任务，随后重放返回同一 <code>task_id</code></li>
+<li>[ ] <code>bash test.sh</code> 输出 <code>ALL_CHECKS_PASSED</code></li>
+</ul>
+<h3 id="10">10. 排障清单</h3>
+<ul>
+<li><code>database is locked</code>：确认每个请求使用独立连接、事务尽量短、没有在持有写事务时做网络 IO；给连接设置合理 <code>timeout</code>，并检查异常路径是否回滚和关闭连接。不要用“加大超时”掩盖长事务。</li>
+<li>键作用域错误：同一字符串在不同用户、租户或路由下可能撞键。把作用域定义为“调用方/租户 + HTTP 方法 + 路由”，再与键建立唯一约束；不要只用 key，也不要把 body 放进作用域。</li>
+<li>参数指纹不一致：确认客户端重试时 body 的字段集合和值完全一致；服务端固定规范化规则（例如排序键、稳定分隔符），并明确哪些字段参与指纹。若两次请求的指纹不同，应按同键不同参数拒绝，而不是返回旧结果。</li>
+<li>重放结果不一致：检查是否只保存了 <code>task_id</code> 却临时拼装响应，或状态码没有和响应一起保存。把需要重放的状态码和响应体一起持久化，按契约返回。</li>
+<li>崩溃后出现重复任务：检查业务写入和键记录是否在同一事务、是否真的提交前崩溃、恢复后是否用同一作用域和同一键重试。以所读 SQLite 文档和实际运行结果为准。</li>
+</ul>
+<p>本节只展示 <code>handle_create</code> 的核心事务片段；<code>server.py</code>、<code>client.py</code>、<code>server_naive.py</code> 和 <code>test.sh</code> 的完整文件由作者另附。参考资料为节点给出的 Google AIP-155（https://google.aip.dev/155），阅读时以所读文档版本为准。</p>
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>阅读时先打开 https://google.aip.dev/155 ，并把访问日期写进笔记。本课示例将访问日期记为 2026-11-10；实际写作或复习时以你打开页面的日期为准，不要沿用示例日期冒充最新核对。</p>
+<p><strong>建议阅读路径</strong></p>
+<ol>
+<li><strong>先记录版本。</strong> 记下页面标题、访问日期和页面中可见的版本/更新信息；后文所有结论都以此为准。</li>
+<li><strong>核对字段定义。</strong> 找到请求标识字段 <code>request_id</code> 的说明，确认它是请求级标识，而不是业务单号、用户 ID 或任务 ID。</li>
+<li><strong>核对格式建议。</strong> 看文档是否建议使用 UUID，公开要点中的建议是 UUID v4；确认“建议”与“强制”的区别，不要把建议写成协议强制项。</li>
+<li><strong>核对重复请求行为。</strong> 服务端在一段时间内再次看到同一 <code>request_id</code> 时，应返回与首次相同的响应，而不是再次执行原操作。</li>
+<li><strong>核对保留期。</strong> 找到文档对 <code>request_id</code> 保留时长的说明；如果没有固定值，应理解为由具体 API 文档约定，而不是由公开页面统一规定。</li>
+<li><strong>对照传输语义。</strong> 注意 <code>request_id</code> 与 HTTP <code>Idempotency-Key</code> 头的思路相同；后者属于 IETF 草案，细节以所读草案版本为准。</li>
+<li><strong>回到本课实验。</strong> 把读到的字段语义映射到“创建任务接口”，再检查本课补充的作用域、参数指纹、冲突和崩溃恢复规则。</li>
+<li><strong>记录差异。</strong> 如果页面表述与本课概括不一致，保留原文摘录和链接，并在笔记中标注“待复核”，不要用记忆覆盖版本差异。</li>
+</ol>
+<p><strong>三个常见误读</strong></p>
+<ul>
+<li>把 <code>request_id</code> 当成业务单号：业务单号通常由业务创建，而请求标识用于识别一次调用；二者可能相同，但不能混为一谈。</li>
+<li>把“建议 UUID v4”当成唯一合法格式：本课按字符串接收，格式校验强度由接口文档决定。</li>
+<li>把“返回相同响应”理解成“任何同键请求都返回旧响应”：同键不同参数属于冲突，必须拒绝；这是本课的扩展规则。</li>
+</ul>
+<h3 id="1-request_id">1. request_id 的公开要点</h3>
+<p>按本课可引用的 Google AIP-155 公开要点（以所读版本为准）：</p>
+<ul>
+<li><strong>字段定义</strong>：请求可以带 <code>request_id</code> 字段，用于标识一次请求；它是字符串。</li>
+<li><strong>格式建议</strong>：建议使用 UUID v4。客户端应为一次新的业务操作生成新值，而不是每次重试都换值。</li>
+<li><strong>保留期内行为</strong>：服务端在一段时间内看到同一 <code>request_id</code> 时，应返回与首次相同的响应，并避免重复执行。</li>
+<li><strong>文档义务</strong>：API 文档应说明 <code>request_id</code> 的保留时长，让客户端知道多久之内可以安全重试。</li>
+<li><strong>与 HTTP 头的关系</strong>：<code>request_id</code> 与 HTTP 的 <code>Idempotency-Key</code> 头思路相同；相关 IETF 草案的字段、错误码和语义以所读版本为准。</li>
+</ul>
+<blockquote>
+<p>注：公开要点描述的是可观察契约，不等于某家公司内部如何建表、如何清理、如何部署。具体实现应回到你所读的接口文档和代码。</p>
+</blockquote>
+<h3 id="2_1">2. 与本课扩展的对照</h3>
+<table>
+<thead>
+<tr>
+<th>主题</th>
+<th>AIP-155 公开要点</th>
+<th>本课的处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标识对象</td>
+<td>标识“一次请求”，同一标识在一段时间内复用首次响应</td>
+<td>区分传输去重与业务幂等：前者避免重复投递，后者保证业务结果不被重复执行（本课扩展）</td>
+</tr>
+<tr>
+<td>值的格式</td>
+<td>字符串，建议 UUID v4</td>
+<td>接口接收字符串；校验长度与字符集，但不把 UUID 格式当成唯一合法格式（本课扩展）</td>
+</tr>
+<tr>
+<td>重复请求</td>
+<td>保留期内返回首次相同响应，不重复执行</td>
+<td>记录键、参数指纹与业务结果；重复请求返回同一结果（本课扩展）</td>
+</tr>
+<tr>
+<td>保留时长</td>
+<td>由 API 文档说明保留时长</td>
+<td>保留期应覆盖客户端最长重试窗口并留余量；具体值写入文档（本课扩展）</td>
+</tr>
+<tr>
+<td>作用域</td>
+<td>公开要点未展开租户、接口、资源的细分规则</td>
+<td>本课要求明确 <code>(租户/调用方, 操作类型, 幂等键)</code> 作用域，避免不同接口互相碰撞（本课扩展）</td>
+</tr>
+<tr>
+<td>参数绑定</td>
+<td>公开要点不替代业务参数一致性规则</td>
+<td>本课增加参数指纹：同键但参数不同必须拒绝，不能复用旧结果（本课扩展）</td>
+</tr>
+<tr>
+<td>冲突规则</td>
+<td>需结合具体 API 的错误处理路径阅读</td>
+<td>本课要求定义可重试、不可重试和冲突错误，并写清响应（本课扩展）</td>
+</tr>
+<tr>
+<td>原子性</td>
+<td>公开规范不能直接推出企业内部存储方案</td>
+<td>本课要求业务结果与幂等记录原子保存，避免“先查、再执行、再记键”的窗口（本课扩展）</td>
+</tr>
+</tbody>
+</table>
+<p>说明：表中标为“本课扩展”的内容，是为了完成实验和验收而补充的工程约束，不应倒推成 AIP-155 原文。</p>
+<h3 id="3_1">3. 阅读笔记模板</h3>
+<p>可把笔记写成下面几行，方便下次核对时复用：</p>
+<ul>
+<li>资源与版本：标题、URL、访问日期、页面可见版本信息。</li>
+<li>字段：字段名、类型、是否必填、由谁生成。</li>
+<li>格式：UUID 是建议还是强制；大小写、长度、字符集是否有额外要求。</li>
+<li>服务端行为：同键重复请求返回什么；首次响应如何保存；是否可能执行两次。</li>
+<li>保留期：文档声明的时长、从何时开始计算、过期后的语义。</li>
+<li>作用域：键在调用方、租户、接口、资源之间是否隔离。</li>
+<li>参数指纹：哪些参数参与比较；规范化规则是什么；同键不同参数如何处理。</li>
+<li>冲突与错误：可重试错误、不可重试错误、冲突错误分别是什么。</li>
+<li>崩溃窗口：业务写入与幂等记录之间是否可能中断，恢复后如何判定。</li>
+<li>实验映射：把上述结论对应到 practice88 的创建任务接口和验收项。</li>
+</ul>
+<h3 id="4_1">4. 边界</h3>
+<ul>
+<li>公开规范只能支持字段语义、重复请求行为和文档义务等公开结论，不能推断任何企业内部实现。</li>
+<li>不能从公开页面推断具体保留时长、存储引擎、清理任务、错误码全集或部署方式；这些以实际接口文档和代码为准。</li>
+<li>若所读版本与本课摘要措辞不同，以所读文档版本为准，并在笔记中记录差异。</li>
+<li>本课的参数指纹、作用域、TTL 下限和原子提交方案属于教学扩展，不冒充 AIP 原文。</li>
+</ul>
+<h2 id="_29">自测题</h2>
+<h3 id="1_2">题 1：先查键、再执行、再记键，会漏在哪里？</h3>
+<p><strong>题干</strong></p>
+<p>某创建任务接口的实现顺序是：查询幂等表，若没有记录就创建任务，创建成功后再写入幂等表。请指出两种会出错的时间线，并给出修正方案。</p>
+<p><strong>答案</strong></p>
+<ul>
+<li>时间线 A（并发）：两个请求几乎同时查询，都看到“无记录”，于是都创建任务。若幂等键没有唯一约束，会产生两个任务；若有唯一约束，后写入者可能失败，但如果没有把首次结果读回来，仍可能给调用方返回错误或不一致结果。</li>
+<li>时间线 B（崩溃）：请求创建任务成功，但在写入幂等记录之前进程崩溃。客户端重试时仍查不到键，于是再创建一个任务，造成重复执行。</li>
+</ul>
+<p>修正方向是不要把“检查”和“执行”拆成两个可被并发或崩溃打断的步骤：在同一事务中创建任务并写入幂等记录，并用唯一约束保护作用域加幂等键；插入冲突时读取已保存的首次结果并返回。若业务写入涉及外部系统，还应设计状态机、补偿或对账，不能假装数据库事务能覆盖一切。</p>
+<p><strong>解析</strong></p>
+<p>这正对应本课 pitfalls：“先查键再执行业务再记键会留下竞态和崩溃窗口。”关键不是把检查写得更早，而是让“业务结果”和“幂等记录”成为一个原子提交单元，并让重复请求走结果复用路径。</p>
+<p>补充：只加唯一约束仍不够。若冲突后直接报错，客户端拿不到首次结果；若冲突后重新执行，又回到重复执行。需要“冲突时读取首次记录”的结果复用路径。</p>
+<h3 id="2-a-b-a">题 2：同一把键，先 A 后 B，应该返回 A 的结果吗？</h3>
+<p><strong>题干</strong></p>
+<p>客户端使用同一个 <code>Idempotency-Key</code> 先提交 <code>title=A</code> 的任务创建请求，随后又用同一把键提交 <code>title=B</code>。服务端应如何响应？为什么不能直接返回 A 的结果？</p>
+<p><strong>答案</strong></p>
+<p>服务端应拒绝第二个请求，返回契约中定义的冲突错误，并明确说明同一个幂等键已经绑定到不同参数。不能执行 B，也不能把 A 的结果当作 B 的结果返回。具体状态码和错误体以所读接口文档为准。</p>
+<p>不能返回 A 的结果，是因为幂等键代表“同一个操作”的重试，不是“随便复用上一次响应”。如果客户端拿到 A 的结果，会误以为 B 已经创建成功；服务端则悄悄丢掉了 B 的意图。正确做法是让客户端为新业务操作生成新键，或由客户端显式发起一个不同的操作。</p>
+<p><strong>解析</strong></p>
+<p>这对应验收项“同键不同参数被拒绝”。实现上要对参与业务语义的参数做规范化后计算指纹，并把指纹与幂等记录一起保存；重复请求先比较指纹，再决定是返回旧结果还是拒绝冲突。哪些参数进入指纹属于本课扩展，应按接口契约明确列出。</p>
+<p>补充：参数指纹应有稳定的规范化规则，例如字段顺序、空白和可选字段默认值的处理；规则应写入接口契约，避免客户端与服务端对“同参数”理解不同。</p>
+<h3 id="3ttl">题 3：TTL 太短、重试窗口太长，会发生什么？</h3>
+<p><strong>题干</strong></p>
+<p>幂等记录 TTL 设为 10 分钟，而客户端最长重试窗口是 24 小时。两者不一致会发生什么？应如何确定保留期？如果业务已经写完，进程在提交前崩溃，重试又会怎样？</p>
+<p><strong>答案</strong></p>
+<p>TTL 只有 10 分钟时，10 分钟后幂等记录被清理；客户端在 24 小时内重试时，服务端已经无法识别这是旧请求，会把它当成新请求再次执行，可能产生重复任务。保留期应至少覆盖客户端最长重试窗口，并留出时钟偏差、清理延迟和运维处置的余量；同时要结合业务有效期与存储成本，把最终时长写进 API 文档。公开要点只要求文档说明保留时长，具体取值以所读文档版本为准。</p>
+<p>关于崩溃：如果任务和幂等记录在同一事务中提交，业务写完但事务尚未提交时崩溃，事务回滚，重试会重新执行一次，因此只产生一次可见结果；如果已经提交，任务和幂等记录都在，重试会命中记录并返回同一结果。若业务写入先独立提交、幂等记录后写，那么提交前崩溃就会留下“业务已存在但键不存在”的窗口，重试可能重复创建，需要靠原子提交或恢复对账处理。</p>
+<p>确定保留期可按四步记录：</p>
+<ol>
+<li>读取客户端重试策略，确认最长重试窗口。</li>
+<li>确认业务结果的有效期和可撤销、可补偿时间。</li>
+<li>加上清理延迟、时钟偏差和人工排障余量。</li>
+<li>把最终值、起算点和过期语义写进 API 文档，并用测试覆盖边界。</li>
+</ol>
+<p><strong>解析</strong></p>
+<p>这对应验收项“崩溃恢复后重复请求仍按契约处理”。判断标准不是“进程有没有崩”，而是“恢复后能否从事务状态和幂等记录判断原请求是否已经生效”。先记键后执行、执行后补记键、TTL 短于重试窗口，都会破坏这个判断。</p>
+<h2 id="_30">推荐资源</h2>
+<ul>
+<li><a href="https://google.aip.dev/155">幂等键与重复请求处理：参考文档 / 原始资料</a>，来源 google.aip.dev｜文档｜英文｜进阶｜免费，阅读重点：“重点阅读业务幂等与传输去重与键作用域和参数指纹，用于核对本节点实验的语义和边界。”，建议结合 practice88 核对。</li>
+</ul>
+<h2 id="_31">本课小结</h2>
+<ul>
+<li>幂等不是“请求不重复到达”，而是重复执行只产生受控的等价业务效果；传输去重解决重复投递，业务幂等解决重复生效。</li>
+<li>幂等键要有明确作用域，至少区分调用方/租户、操作类型和键值；脱离作用域谈唯一性容易让不同接口互相碰撞。</li>
+<li>参数指纹把“同一个操作”具体化：同键同参数可复用首次结果，同键不同参数必须拒绝，不能静默覆盖或返回旧结果。</li>
+<li>原子提交是核心：业务结果与幂等记录应在同一事务中落定，避免“先查键、再执行业务、再记键”留下的并发竞态和崩溃窗口。</li>
+<li>TTL 要覆盖客户端最长重试窗口并留余量，同时把保留时长写进文档；TTL 过短会让旧请求在过期后被当成新请求。</li>
+<li>崩溃恢复后能否按契约处理，取决于提交是否原子、记录是否可读；若业务已独立提交而键未写入，需要恢复或对账机制兜底。</li>
+<li>长期去重更可靠，但会增加存储与清理成本；保留期、业务有效期和存储预算必须一起明确，不能只追求“永久保存”。</li>
+<li>公开的 AIP-155 要点和 IETF 草案只能支撑公开语义；具体保留时长、错误码、存储和清理方式，以所读文档版本及实际接口契约为准。</li>
+</ul><div class="pn"><span><a href="87.html">← 重试、退避与重试风暴</a></span><span>下一课 待更新</span></div></main></div></body></html>
