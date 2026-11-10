@@ -1,0 +1,998 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>92. 请求上下文与链路传播 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（92/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（12/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="cur" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li class="todo">93. RPC身份、TLS与授权 <em>待更新</em></li><li class="todo">94. 异步RPC与生命周期协调 <em>待更新</em></li><li class="todo">95. 接口兼容与服务演进 <em>待更新</em></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 92 课 · 领域 F · 阶段 3</p><p class="dl"><a href="../files/92-f-context.md" download>⬇ 本课 Markdown</a><a href="../files/practice92.tar.gz" download>⬇ 练习包 practice92.tar.gz</a></p><h1 id="92208">第 92/208 课：请求上下文与链路传播</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-context</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Context Propagation</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>上下文与接口边界</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-deadline</code>、<code>e-tls</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Context Propagation</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://opentelemetry.io/docs/concepts/context-propagation/">请求上下文与链路传播：参考文档 / 原始资料</a>（opentelemetry.io）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>上下文携带追踪、截止时间和身份等跨调用信息，应明确可信来源和生命周期而非依赖隐式全局变量。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课出现的“微信公众号后台”“图文发布服务”“审核服务”“评论/阅读数服务”“消息推送”“网关到多级 RPC”等，都是为讲解通用后端问题而设置的<strong>教学假设</strong>，不代表任何企业的真实架构或内部实现。</p>
+<p>文中涉及 OpenTelemetry 的 Context、Propagation、Baggage，W3C Trace Context 的 <code>traceparent</code>，以及 gRPC deadline 与 metadata 的行为，均<strong>以你所阅读的文档版本为准</strong>；不同语言、不同框架的 API 名称和头部字段细节可能不同，本课不把它们当作固定事实。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个快递的比喻</h3>
+<p>想象一个包裹从仓库发往收件人，中间要经过多个中转站。</p>
+<ul>
+<li><strong>快递单号</strong>：包裹每到一站，扫描一次，就留下一条“某站、某时刻、经手人”的记录。只要单号一致，事后就能把分散在各个中转站的记录按顺序串成一条完整轨迹。这就是 <strong>trace（追踪）</strong> 的直觉：用同一个标识把一次请求经过的所有服务、所有 span 关联起来。</li>
+<li><strong>随件附言</strong>：比如“易碎”“请放前台”“工作日送达”。它跟着包裹走，每一站都能看到，也会继续往下一站传。这就是 <strong>baggage</strong> 的直觉：一组随上下文传播的键值对。正因为它每一站都能看到，所以<strong>绝不能写银行卡密码、身份证号、令牌这类敏感信息</strong>。</li>
+<li><strong>派送截止时间</strong>：包裹上写着“请在周五 18:00 前送达”。每一站都能看到剩余时间，若已经来不及，就不必再安排后续中转。这就是 <strong>deadline（截止时间）</strong> 的直觉：它随请求传播，让下游知道“还有多少时间可用”，并在超时或取消时停止工作。</li>
+</ul>
+<h3 id="_4">接上前两课</h3>
+<p>前面已经学过两件事：</p>
+<ol>
+<li><strong>截止时间（<code>f-deadline</code>）</strong>：调用方设置一个 deadline，被调用方读取剩余时间；一旦超时或取消，就应停止无意义的工作。</li>
+<li><strong>TLS（<code>e-tls</code>）</strong>：它解决传输加密和对端身份可信的问题，让“我连的是谁”有基本保障。</li>
+</ol>
+<p>但这两件事都留下同一个问题：<strong>这些信息怎样沿着调用链继续往下传？</strong> 网关知道请求的 deadline，发布服务知道吗？发布服务再调审核服务时，审核服务知道吗？如果中间经过线程池、异步队列、协程切换，信息还在吗？</p>
+<p>本课要讲的，就是“请求上下文（Context）”如何<strong>显式</strong>携带 trace、baggage、deadline 和身份信息，跨过函数、线程、进程和协议的边界，并且不串请求。</p>
+<h3 id="_5">教学时间线：一次“发布图文”的排障事故</h3>
+<p>以下场景为教学假设。</p>
+<ol>
+<li>作者在后台点击“发布图文”，请求先到<strong>网关</strong>。网关生成或接收一个 trace 标识，并设置本次请求的 deadline，然后调用<strong>发布服务</strong>。</li>
+<li>发布服务校验参数、落库草稿，再调用<strong>审核服务</strong>；审核服务可能还要调用内容安全能力或存储服务。</li>
+<li>发布服务同时可能调用<strong>评论/阅读数服务</strong>做初始化，调用<strong>消息推送</strong>通知关注者。</li>
+<li>为了不阻塞主线程，发布服务把“写操作日志”“发通知”等任务提交到<strong>线程池</strong>，线程池里的任务需要知道“我属于哪一个请求”。</li>
+</ol>
+<p>事故版本是这样的：代码用一个<strong>全局变量</strong>（或进程级单例）保存 <code>trace_id</code>，线程池任务启动时直接读这个全局变量。</p>
+<ul>
+<li>高并发下，A 请求刚把 <code>trace_id</code> 写成 <code>A-001</code>，线程被调度去处理 B 请求，全局变量被改成 <code>B-002</code>；A 的异步任务随后读到的却是 <code>B-002</code>。</li>
+<li>于是 A 请求的日志里出现了 B 的 trace 标识，排障时按 <code>A-001</code> 过滤，发现链路缺了一段；按 <code>B-002</code> 过滤，又混进了不属于它的记录。</li>
+<li>更糟的是，deadline 也没传进线程池：上游网关在 800ms 后已经超时返回，线程池里的任务仍在慢慢调用下游，占用连接和 CPU。</li>
+<li>如果再把“用户身份”也从全局变量里读，异步任务甚至可能拿着<strong>另一个用户</strong>的身份去访问数据，形成越权风险。</li>
+</ul>
+<h3 id="_6">错误做法与正确做法对照</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>错误做法</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在线程池里取 trace</td>
+<td>读全局变量或“当前线程”的隐式状态</td>
+<td>在提交任务时把 Context 作为参数显式传入，任务内部从该 Context 读取</td>
+</tr>
+<tr>
+<td>跨服务传递 trace</td>
+<td>只在本服务日志里打印一个自造 ID，不放进请求头</td>
+<td>按所选传播规范把上下文注入跨进程请求（如 HTTP 头），对端再提取；具体头名以文档版本为准</td>
+</tr>
+<tr>
+<td>传递截止时间</td>
+<td>下游重新给一个很长的默认超时</td>
+<td>从上游 Context 读取剩余时间，据此设置下游调用 deadline；已超时就不要再发起</td>
+</tr>
+<tr>
+<td>传递用户身份</td>
+<td>把完整令牌、手机号塞进 baggage</td>
+<td>baggage 只放非敏感的、可跨服务可见的少量键值；身份凭据走专门的认证通道并校验</td>
+</tr>
+<tr>
+<td>信任外部字段</td>
+<td>直接把外部传入的 <code>trace_id</code> 或“用户 ID”当授权依据</td>
+<td>外部字段只用于观测和关联；授权必须由服务端基于可信凭据重新判定</td>
+</tr>
+<tr>
+<td>记录日志</td>
+<td>每条日志各自拼字符串，字段命名不统一</td>
+<td>统一从 Context 取 trace 标识等字段，结构化输出，保证可过滤、可关联</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_7">本课三条主线</h3>
+<ol>
+<li><strong>trace 与 baggage</strong>：trace 让一次请求的调用链可关联；baggage 让少量业务键值随链路传播，但必须守住敏感数据边界。</li>
+<li><strong>deadline 与取消</strong>：截止时间要沿调用链传下去，下游要能读取剩余时间，并在超时或取消时及时停止工作。</li>
+<li><strong>身份信息与敏感数据边界</strong>：身份信息可以随上下文传递，但“传过来”不等于“可信”，更不能把外部传入的字段直接当授权依据。</li>
+</ol>
+<p>这三条主线共同指向一个结论：上下文应当是<strong>显式</strong>的、有<strong>可信来源</strong>、有<strong>生命周期</strong>的，而不是散落在全局变量里的隐式状态。</p>
+<h2 id="_8">学习目标</h2>
+<p>学完本课，你应当能够：</p>
+<ol>
+<li><strong>能解释 trace 与 baggage</strong>：说清 trace 解决“同一次请求的记录如何串起来”，baggage 解决“少量键值如何随链路传播”，以及二者在敏感数据上的不同风险。</li>
+<li><strong>能独立完成：为跨线程 RPC 传播 trace 和 deadline，验证并发请求互不覆盖。</strong> 也就是在提交异步任务、发起下游 RPC 时显式携带上下文，并用并发测试证明 A 请求不会读到 B 请求的 trace 或 deadline。</li>
+<li>解释 OpenTelemetry 中 Context 的作用：它用于跨 API 边界和逻辑执行单元携带值；Propagation 负责把上下文注入跨进程请求并在对端提取（具体 API 名称以所读文档版本为准）。</li>
+<li>说明常见传播格式的定位：默认常用的 W3C Trace Context 使用 <code>traceparent</code> 头，其形态为 <code>version-traceid-parentid-flags</code>；字段细节以所读规范版本为准。</li>
+<li>在代码中正确使用 deadline：调用方设置，服务端读取剩余时间，超时或取消时停止后续工作，而不是继续“无主”地消耗资源。</li>
+<li>划清身份信息与敏感数据边界：baggage 对下游可见且会跨服务传播，不放令牌和隐私数据；外部传入的 trace 或身份字段不能直接当授权依据。</li>
+<li>让日志可关联：日志中稳定输出 trace 标识等上下文字段，能够按一次请求过滤出完整调用链。</li>
+<li>认识显式上下文的取舍：显式传递比全局变量冗长，但依赖清晰、便于测试，也更容易在异步边界上做对。</li>
+</ol>
+<h2 id="_9">为什么后端要懂</h2>
+<p>节点给出的理由是：</p>
+<blockquote>
+<p>让异步和多服务链路可诊断且不串请求。</p>
+</blockquote>
+<p>这句话看起来简单，但它同时点出了两个目标：<strong>可诊断</strong>（出了问题能查）和<strong>不串请求</strong>（A 的数据不能跑到 B 身上）。下面把它展开。</p>
+<h3 id="1">1. “当前请求”不再等于“当前线程”</h3>
+<p>在最小的同步程序里，一个请求从头到尾占用一个线程，“当前线程”差不多就是“当前请求”。但真实后端很快会引入：</p>
+<ul>
+<li><strong>线程池</strong>：请求处理到一半，把任务丢给另一个线程；</li>
+<li><strong>异步回调 / future</strong>：任务完成时才继续，执行时机与提交时机分离；</li>
+<li><strong>协程</strong>：同一个线程上交错执行多个逻辑执行单元；</li>
+<li><strong>消息队列</strong>：请求的后续处理甚至发生在另一个进程、另一台机器。</li>
+</ul>
+<p>一旦发生这些切换，用全局变量或线程局部变量保存“当前请求的信息”就会出问题：全局变量会被并发覆盖，线程局部变量在切换到另一个线程时丢失，协程场景下还可能被同一线程上的其他任务看到。结果就是<strong>串请求</strong>或<strong>丢上下文</strong>。显式 Context 的意义，是把“这段逻辑属于哪个请求”变成调用参数的一部分，跟着逻辑执行单元走，而不是跟着碰巧执行它的线程走。</p>
+<h3 id="2-trace">2. 多服务链路没有 trace，日志就拼不起来</h3>
+<p>一个请求经过网关、发布服务、审核服务、存储、消息推送，每个服务都会打日志。没有统一 trace 标识时，你只能靠时间戳、用户 ID、请求参数去猜哪些日志属于同一次请求。请求量一上来，日志交错，猜错几乎是必然的。</p>
+<p>有了 trace，日志里带上同一个 trace 标识，过滤一次就能得到整条链路；再结合 span 的父子关系，还能看出时间花在哪个下游、哪次重试上。trace 不是“多打一行日志”，而是把<strong>可观测性</strong>从“按服务各看各的”变成“按请求串起来看”。</p>
+<h3 id="3-deadline">3. deadline 不传下去，上游放弃了，下游还在干活</h3>
+<p>假设网关给本次请求设置了 800ms 的 deadline，发布服务调审核服务时却不传这个信息，而是用了一个默认 5 秒超时。网关在 800ms 时已经超时返回，用户看到失败；发布服务还在等审核服务，审核服务还在调更下游，连接、线程、CPU 都被一个“已经没人要的结果”占着。</p>
+<p>deadline 随请求传播后，下游能读到“只剩 200ms”，就可以：</p>
+<ul>
+<li>不再发起明显来不及的调用；</li>
+<li>给下游设置更短的超时；</li>
+<li>在收到取消信号时尽快释放资源。</li>
+</ul>
+<p>这类浪费在高峰期会放大：越忙，越多“无主请求”占资源，形成恶性循环。</p>
+<h3 id="4">4. 身份信息传错边界，会造成越权</h3>
+<p>身份信息和 trace 一样会随上下文流动，但它的安全含义完全不同。trace 标识主要用于观测，泄露通常影响的是隐私和排障；身份信息一旦被错误地跨请求复用，或者把外部传入的“用户 ID”直接当成已认证身份，就可能让一个用户读到另一个用户的数据。</p>
+<p>因此要区分两件事：</p>
+<ul>
+<li><strong>传递</strong>：把“这次调用代表谁”作为上下文的一部分带下去，方便下游做审计和权限判断；</li>
+<li><strong>信任</strong>：下游必须知道这个身份是<strong>谁认证的、经过什么边界、是否可被外部伪造</strong>。来自网关的、经过认证的内部字段，和来自公网请求、可被客户端随意填写的字段，可信度完全不同。</li>
+</ul>
+<p>外部传入的 trace 或身份字段，只能用于关联和参考，不能直接当授权依据。授权必须基于可信凭据在服务端重新判定。</p>
+<h3 id="20-span">一个算例：20 个 span 的人工拼接有多难</h3>
+<p>假设一次“发布图文”请求扇出到 5 个下游服务，每个下游再调用 3 个更下游，整条链路约 20 个 span。每个服务只打印自己的日志，没有统一 trace 标识：</p>
+<ul>
+<li>5 个下游可能在同一毫秒内都有日志，时间戳无法区分谁属于 A 请求、谁属于 B 请求；</li>
+<li>同一个下游会被不同请求复用，日志里出现大量同名方法，只能靠参数猜；</li>
+<li>重试会让同一下游出现多次调用，缺少父子关系时看不出哪次是重试；</li>
+<li>线程池和异步任务让日志顺序与逻辑顺序不一致，人工排序容易出错；</li>
+<li>一旦某个服务日志缺少用户 ID，整条线索就断了。</li>
+</ul>
+<p>如果 20 个 span 各自只属于一次请求，但请求量是每秒上千次，那么“人工拼接”实际上是不可完成的任务。反过来，只要每个 span 都带上同一个 trace 标识和正确的父子关系，过滤、排序、聚合都可以自动完成。这就是“可诊断”的具体含义。</p>
+<h3 id="summary">逐词拆解 summary</h3>
+<p>节点摘要说：</p>
+<blockquote>
+<p>上下文携带追踪、截止时间和身份等跨调用信息，应明确可信来源和生命周期而非依赖隐式全局变量。</p>
+</blockquote>
+<ul>
+<li><strong>上下文</strong>：不是某个具体变量，而是伴随一次逻辑执行的一组信息的集合；它需要被显式创建、传递和结束。</li>
+<li><strong>携带</strong>：上下文本身不产生业务价值，它的作用是“带着走”，让跨函数、跨线程、跨进程的调用仍能拿到同一组信息。</li>
+<li><strong>追踪、截止时间和身份等</strong>：这是三类典型内容。追踪用于关联调用链，截止时间用于控制资源，身份用于审计和权限判断；它们的敏感级别和可信要求并不相同。</li>
+<li><strong>跨调用信息</strong>：强调边界。信息要跨过的不只是函数调用，还包括线程池、异步回调、协程、RPC、消息队列等边界。</li>
+<li><strong>应明确可信来源</strong>：每个字段都要能回答“谁写入的、经过哪些边界、是否可能被外部伪造”。外部传入的 trace 或身份字段不能直接当授权依据。</li>
+<li><strong>和生命周期</strong>：上下文从哪开始、在哪结束、异步任务持有它多久、请求结束后是否还应继续使用，都要有明确约定，避免悬挂引用和跨请求复用。</li>
+<li><strong>而非依赖隐式全局变量</strong>：全局变量看似省事，却把“当前请求”绑定到进程状态上；并发、线程池和协程会让它串请求或丢数据。显式传递虽然冗长，但依赖清晰、便于测试，也更容易在异步边界上做对。</li>
+</ul>
+<p>理解了这些，后面的实践才有意义：我们要做的不是“多打几个日志字段”，而是让 trace、deadline 和身份信息在跨线程 RPC 时<strong>跟着请求走</strong>，并用并发验证证明它们不会互相覆盖。</p>
+<h3 id="5">5. 把四个问题收束成一张检查清单</h3>
+<p>以后写任何跨边界代码时，可以先问四个问题：</p>
+<ol>
+<li><strong>“这段逻辑属于哪个请求？”</strong>——如果答案依赖“当前线程碰巧在处理谁”，就存在串请求风险。应当从显式传入的 Context 取 trace 标识，而不是从全局变量取。</li>
+<li><strong>“这段逻辑还有多少时间？”</strong>——如果下游调用使用固定的长超时，而不看上游剩余时间，就可能在上游已经放弃后继续消耗资源。deadline 应随 Context 传递，并在每次发起下游调用前重新评估。</li>
+<li><strong>“这段逻辑代表谁？”</strong>——身份信息是否已经过可信边界？它来自网关注入并校验过的字段，还是来自公网请求里可以随意填写的字段？两者不能混用。</li>
+<li><strong>“这些字段能放到哪里？”</strong>——trace 标识可以进日志和传播头；deadline 可以进调用选项；身份凭据要走专门的认证通道；baggage 只放非敏感、下游可见也无妨的少量键值。</li>
+</ol>
+<p>这四个问题不需要复杂工具才能回答，但它们能挡住大部分“看起来能跑、出事查不了”的上下文问题。</p>
+<h3 id="6">6. 显式上下文的代价与收益</h3>
+<p>节点给出的取舍是：</p>
+<blockquote>
+<p>显式上下文较冗长，但依赖清晰且便于测试。</p>
+</blockquote>
+<p>“冗长”体现在：</p>
+<ul>
+<li>函数签名要多一个 Context 参数，或者调用下游时要显式传入传播信息；</li>
+<li>线程池任务、异步回调、定时任务在提交时都要把 Context 一起带走；</li>
+<li>代码评审时要多看一眼“这个字段是从哪来的”，不能靠“全局里应该有人设置过”。</li>
+</ul>
+<p>“依赖清晰”体现在：</p>
+<ul>
+<li>读代码时能顺着参数看到上下文从哪里进入、在哪里被使用；</li>
+<li>不需要猜测某个全局变量在某个时刻被谁改过；</li>
+<li>异步任务的行为不依赖它碰巧运行在哪个线程上。</li>
+</ul>
+<p>“便于测试”体现在：</p>
+<ul>
+<li>可以构造一个带有指定 trace 标识和 deadline 的 Context，直接传给被测函数；</li>
+<li>可以并发提交多个带不同 Context 的任务，断言它们互不覆盖；</li>
+<li>可以模拟“剩余时间已经不足”的 Context，验证代码是否正确放弃下游调用。</li>
+</ul>
+<p>反过来，隐式全局变量在单线程小脚本里确实省事，但一旦进入线程池、协程和多服务链路，省下的参数会以排障成本和越权风险的形式还回来。对后端工程师来说，显式上下文是更值得长期维护的选择。</p>
+<p>把上面这些串起来看：异步和并发让“当前线程”不再可靠，多服务让日志必须靠 trace 关联，deadline 决定资源是否被浪费，身份边界决定是否越权；而显式 Context 正是把这些信息从“碰巧存在的全局状态”变成“可传递、可验证、可结束的请求属性”的机制。这就是本课要建立的直觉。</p>
+<h2 id="_10">核心概念</h2>
+<p>在通用内容后台中，一次「打开图文详情」可能经过网关、图文服务、评论服务、计数服务等多级调用。为了在日志、指标和故障排查中把同一次用户请求串起来，也为了让每一跳都知道还剩多少时间、当前是谁在调用，我们需要请求上下文（request context）及其跨进程传播。下面以教学假设的公众号后台为例，说明 trace、baggage、deadline 与身份边界。</p>
+<blockquote>
+<p>教学假设：文中网关、图文发布、评论/阅读数、消息推送等场景只用于说明通用后台模式，不代表任何公司内部实现。</p>
+</blockquote>
+<h3 id="1-tracebaggage">1. trace与baggage</h3>
+<p><strong>trace、span 与父子关系。</strong> 一次完整的请求链路称为一个 trace；trace 内的每个工作单元称为 span。每个 trace 有全局标识 <code>trace_id</code>，每个 span 有自己的 <code>span_id</code>，并记录 <code>parent_span_id</code> 指向直接上游。多个 span 通过相同的 <code>trace_id</code> 和父子关系组成调用树。</p>
+<div class="codehilite"><pre><span></span><code>trace_id = 4bf92f3577b34da6a3ce929d0e0e4736
+└─ span A  gateway              (parent = 无)
+   ├─ span B  article-api       (parent = A)
+   │  └─ span C  article-db     (parent = B)
+   └─ span D  comment-rpc       (parent = A)
+      └─ span E  comment-cache  (parent = D)
+</code></pre></div>
+
+<p>排查「某篇图文详情为什么慢」时，可以用 <code>trace_id</code> 找到整棵树，再用 <code>span_id</code> / <code>parent_span_id</code> 看清时间花在哪一跳。日志中至少带 <code>trace_id</code> 与当前 <code>span_id</code>，需要时再带 <code>parent_span_id</code>，不要把整棵树都塞进每条日志。</p>
+<p><strong>进程内 Context 与跨进程 Propagation。</strong> 进程内 Context 解决「当前这次执行到底属于哪个请求」：在线程、协程、异步回调之间传递 trace 信息和 baggage。跨进程 Propagation 解决「把哪些上下文写进网络请求，又在对端还原」：发送方 inject（注入）到 HTTP 头或 RPC metadata，接收方 extract（提取）后建立本进程的 Context。两者不是一回事：Context 是内存中的执行作用域，Propagation 是线协议上的序列化与还原。</p>
+<p><strong>W3C Trace Context。</strong> 常用默认传播格式是 W3C Trace Context，核心是 <code>traceparent</code> 头。一个常见示例：</p>
+<div class="codehilite"><pre><span></span><code>traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+</code></pre></div>
+
+<p>按常见格式拆解：</p>
+<table>
+<thead>
+<tr>
+<th>段</th>
+<th>示例值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>version</td>
+<td><code>00</code></td>
+<td>协议版本；不同版本的处理规则以所读 W3C 文档为准</td>
+</tr>
+<tr>
+<td>trace-id</td>
+<td><code>4bf92f3577b34da6a3ce929d0e0e4736</code></td>
+<td>32 个十六进制字符，标识整条 trace</td>
+</tr>
+<tr>
+<td>parent-id / span-id</td>
+<td><code>00f067aa0ba902b7</code></td>
+<td>16 个十六进制字符，标识当前调用方的 span</td>
+</tr>
+<tr>
+<td>trace-flags</td>
+<td><code>01</code></td>
+<td>采样等标志；具体位含义以所读文档版本为准</td>
+</tr>
+</tbody>
+</table>
+<p>接收方应校验长度、字符集和版本；无法识别时按团队约定决定拒绝、丢弃还是新建 trace。不要把 <code>traceparent</code> 当作可信身份或权限凭据，它只用于关联调用链。</p>
+<p><strong>baggage。</strong> Baggage 是随上下文一起传播的键值对，通常放非敏感的业务标签，例如教学假设中的 <code>tenant=t-42</code>、<code>experiment=detail_v2</code>、<code>channel=oa</code>。它的关键特点是：会跨服务传播，并且下游可以读取；它可能被中间件、日志、APM 记录。因此绝不能把访问令牌、会话 Cookie、手机号、身份证号等敏感数据放进去。Baggage 的编码、大小限制和是否允许修改，以所读 OpenTelemetry / W3C Baggage 文档及团队规范为准。</p>
+<p><strong>trace 与 baggage 对照。</strong></p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>trace（traceparent 等）</th>
+<th>baggage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主要目的</td>
+<td>串联调用链、定位耗时与错误</td>
+<td>携带非敏感业务标签</td>
+</tr>
+<tr>
+<td>核心内容</td>
+<td><code>trace_id</code>、<code>span_id</code>、采样标志</td>
+<td>业务键值对，如租户、实验组、渠道</td>
+</tr>
+<tr>
+<td>是否描述调用树</td>
+<td>是，配合 parent span 形成树</td>
+<td>否，只是伴随传播的标签</td>
+</tr>
+<tr>
+<td>下游可见性</td>
+<td>下游用于继续建 span</td>
+<td>下游可读取，也可能继续传下去</td>
+</tr>
+<tr>
+<td>安全定位</td>
+<td>关联信息，不是授权凭据</td>
+<td>不可信输入，不能放秘密或隐私</td>
+</tr>
+<tr>
+<td>常见载体</td>
+<td>HTTP <code>traceparent</code>、RPC metadata</td>
+<td>HTTP <code>baggage</code>、RPC metadata（以版本为准）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最小可运行示例。</strong> 下面的代码只用 Python 标准库 <code>contextvars</code>，演示进程内 Context、父子 span、inject/extract 以及 baggage 传播。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextvars</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextVar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">secrets</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Ctx</span><span class="p">:</span>
+    <span class="n">trace_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">span_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">parent_span_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">baggage</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+
+<span class="n">current</span><span class="p">:</span> <span class="n">ContextVar</span><span class="p">[</span><span class="n">Ctx</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContextVar</span><span class="p">(</span><span class="s2">"ctx"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+
+<span class="nd">@contextmanager</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">use</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">Ctx</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Ctx</span><span class="p">]:</span>
+    <span class="n">token</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">ctx</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">current</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="n">parent</span><span class="p">:</span> <span class="n">Ctx</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">baggage</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Ctx</span><span class="p">:</span>
+    <span class="n">parent</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">parent</span>
+    <span class="k">return</span> <span class="n">Ctx</span><span class="p">(</span>
+        <span class="n">trace_id</span><span class="o">=</span><span class="n">parent</span><span class="o">.</span><span class="n">trace_id</span> <span class="k">if</span> <span class="n">parent</span> <span class="k">else</span> <span class="n">secrets</span><span class="o">.</span><span class="n">token_hex</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span>
+        <span class="n">span_id</span><span class="o">=</span><span class="n">secrets</span><span class="o">.</span><span class="n">token_hex</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span>
+        <span class="n">parent_span_id</span><span class="o">=</span><span class="n">parent</span><span class="o">.</span><span class="n">span_id</span> <span class="k">if</span> <span class="n">parent</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">baggage</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">baggage</span><span class="p">)</span> <span class="k">if</span> <span class="n">parent</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">(</span><span class="n">baggage</span> <span class="ow">or</span> <span class="p">{}),</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">inject</span><span class="p">(</span><span class="n">ctx</span><span class="p">:</span> <span class="n">Ctx</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"traceparent"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"00-</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">trace_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">span_id</span><span class="si">}</span><span class="s2">-01"</span><span class="p">}</span>
+    <span class="k">if</span> <span class="n">ctx</span><span class="o">.</span><span class="n">baggage</span><span class="p">:</span>
+        <span class="n">headers</span><span class="p">[</span><span class="s2">"baggage"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">","</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ctx</span><span class="o">.</span><span class="n">baggage</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">headers</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">extract</span><span class="p">(</span><span class="n">headers</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Ctx</span><span class="p">:</span>
+    <span class="n">version</span><span class="p">,</span> <span class="n">trace_id</span><span class="p">,</span> <span class="n">span_id</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">headers</span><span class="p">[</span><span class="s2">"traceparent"</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">version</span> <span class="o">!=</span> <span class="s2">"00"</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">trace_id</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">32</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">span_id</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">16</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"unsupported traceparent"</span><span class="p">)</span>
+    <span class="n">baggage</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"baggage"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s2">"="</span><span class="p">)</span>
+            <span class="n">baggage</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">Ctx</span><span class="p">(</span><span class="n">trace_id</span><span class="p">,</span> <span class="n">span_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">baggage</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">Ctx</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">:</span><span class="s2">8s</span><span class="si">}</span><span class="s2"> trace=</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">trace_id</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span><span class="si">}</span><span class="s2"> span=</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">span_id</span><span class="si">}</span><span class="s2"> "</span>
+          <span class="sa">f</span><span class="s2">"parent=</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">parent_span_id</span><span class="si">}</span><span class="s2"> baggage=</span><span class="si">{</span><span class="nb">dict</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">baggage</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">start</span><span class="p">(</span><span class="n">baggage</span><span class="o">=</span><span class="p">{</span><span class="s2">"tenant"</span><span class="p">:</span> <span class="s2">"t-42"</span><span class="p">,</span> <span class="s2">"channel"</span><span class="p">:</span> <span class="s2">"oa"</span><span class="p">})</span>
+<span class="n">show</span><span class="p">(</span><span class="s2">"root"</span><span class="p">,</span> <span class="n">root</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">use</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+    <span class="n">gateway</span> <span class="o">=</span> <span class="n">start</span><span class="p">()</span>
+    <span class="n">show</span><span class="p">(</span><span class="s2">"gateway"</span><span class="p">,</span> <span class="n">gateway</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">use</span><span class="p">(</span><span class="n">gateway</span><span class="p">):</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="n">inject</span><span class="p">(</span><span class="n">gateway</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"headers:"</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">use</span><span class="p">(</span><span class="n">extract</span><span class="p">(</span><span class="n">headers</span><span class="p">)):</span>
+            <span class="n">article</span> <span class="o">=</span> <span class="n">start</span><span class="p">()</span>
+            <span class="n">show</span><span class="p">(</span><span class="s2">"article"</span><span class="p">,</span> <span class="n">article</span><span class="p">)</span>
+</code></pre></div>
+
+<p>运行后可以看到 <code>gateway</code> 的父 span 是 <code>root</code>，<code>article</code> 的父 span 是网关传下来的 span；<code>tenant</code>、<code>channel</code> 随 baggage 到达下游。这里的 <code>extract</code> 只演示协议还原，生产代码还必须做长度限制、字符校验、异常处理和头过滤。</p>
+<h3 id="2-deadline">2. deadline和取消</h3>
+<p><strong>deadline（绝对时间）与 timeout（相对时长）。</strong> deadline 是「最晚什么时候必须完成」的绝对时间点；timeout 是「最多允许等多久」的相对时长。入口常配置相对超时，例如教学假设中网关给图文详情设 800ms；进程内应立刻换算成绝对 deadline（<code>now + 800ms</code>）保存在 Context 里，之后每一跳都从这个时间点算剩余，而不是每一跳重新拿到 800ms，否则链路越深总耗时越长。</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>含义</th>
+<th>在链路中的处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timeout</td>
+<td>相对时长，例如 800ms</td>
+<td>只在入口配置；进入进程后换算为绝对 deadline</td>
+</tr>
+<tr>
+<td>deadline</td>
+<td>绝对时间点，例如本机单调时钟上的「现在 + 800ms」</td>
+<td>进程内沿 Context 传递同一个上限</td>
+</tr>
+<tr>
+<td>剩余预算</td>
+<td><code>deadline - now</code></td>
+<td>跨进程时传这个相对值，接收方用自己的时钟换算回本地 deadline</td>
+</tr>
+</tbody>
+</table>
+<p><strong>为什么跨进程传「剩余预算」。</strong> 两台机器的时钟不完全一致，直接传绝对时间戳会被时钟偏差放大或缩小；所以常见做法是在发出请求的那一刻计算剩余时长写进请求（gRPC 在线协议里用相对的超时值表达 deadline，具体头名与格式以所读文档版本为准），接收方收到后立即换算成本地的绝对 deadline。网络传输、序列化、排队、数据库访问都会消耗预算，因此每往下一跳，剩余值都会自然变小；若还要给本跳收尾留余量，可以在剩余时间上再减去本跳预估开销。剩余时间过小就应快速失败，而不是继续发起注定超时的子调用。</p>
+<p><strong>取消要向下传播。</strong> 上游用户断开、网关超时或调用方主动取消时，取消信号应沿调用链向下传：服务端停止无意义的计算，关闭数据库查询，取消下游 RPC，释放连接和线程。否则会出现「上游已经返回 504，下游还在写数据」的僵尸工作。gRPC 客户端设置的 deadline 会随请求传到服务端，服务端可读取剩余时间并在超时或取消时停止工作；具体 API 名称和可读取的字段以所读 gRPC 文档版本为准。</p>
+<p><strong>线程池与协程中的上下文丢失。</strong> <code>contextvars</code> 的值绑定在当前线程/任务的执行上下文中。把函数提交给 <code>ThreadPoolExecutor</code> 时，框架不会自动把提交方的 Context 复制到工作线程，所以工作线程里的 <code>ContextVar.get()</code> 往往拿到默认值。需要显式用 <code>contextvars.copy_context()</code> 捕获当前上下文，再调用 <code>ctx.run(fn, ...)</code>。协程场景也要注意：<code>asyncio.create_task</code> 会复制创建时的上下文，但任务内的 <code>set</code> 不会反向写回父任务；跨任务共享可变状态应使用明确的数据结构，而不是依赖 Context 自动同步。</p>
+<p><strong>可运行示例。</strong> 对比直接提交与复制上下文，并演示 deadline 已过期时提前放弃。</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">concurrent.futures</span><span class="w"> </span><span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextvars</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextVar</span><span class="p">,</span> <span class="n">copy_context</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">time</span><span class="w"> </span><span class="kn">import</span> <span class="n">monotonic</span>
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Ctx</span><span class="p">:</span>
+    <span class="n">trace_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">deadline</span><span class="p">:</span> <span class="nb">float</span>
+
+
+<span class="n">ctx_var</span><span class="p">:</span> <span class="n">ContextVar</span><span class="p">[</span><span class="n">Ctx</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContextVar</span><span class="p">(</span><span class="s2">"ctx"</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">work</span><span class="p">(</span><span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">ctx_var</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">: 无上下文，无法关联 trace/deadline"</span>
+    <span class="n">remaining</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">deadline</span> <span class="o">-</span> <span class="n">monotonic</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">: trace=</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">trace_id</span><span class="si">}</span><span class="s2"> 已过期，放弃下游调用"</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">: trace=</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">trace_id</span><span class="si">}</span><span class="s2"> 剩余=</span><span class="si">{</span><span class="n">remaining</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">s"</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">expired_job</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">ctx_var</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">Ctx</span><span class="p">(</span><span class="s2">"trace-expired"</span><span class="p">,</span> <span class="n">monotonic</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">work</span><span class="p">(</span><span class="s2">"过期任务"</span><span class="p">)</span>
+
+
+<span class="n">ctx_var</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">Ctx</span><span class="p">(</span><span class="s2">"trace-92"</span><span class="p">,</span> <span class="n">monotonic</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">work</span><span class="p">(</span><span class="s2">"主线程"</span><span class="p">))</span>
+
+<span class="k">with</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="n">lost</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">work</span><span class="p">,</span> <span class="s2">"直接提交"</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="n">carried</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">copy_context</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">work</span><span class="p">,</span> <span class="s2">"复制上下文"</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="n">expired</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">copy_context</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">expired_job</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">lost</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">carried</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">expired</span><span class="p">)</span>
+</code></pre></div>
+
+<p>预期现象：<code>直接提交</code> 拿不到 <code>trace-92</code>；<code>复制上下文</code> 能拿到 trace_id 和剩余 deadline；<code>过期任务</code> 在调用下游前就返回。生产环境还要把取消信号接入 RPC/数据库客户端，并在 <code>finally</code> 中释放资源。</p>
+<h3 id="3">3. 身份信息与敏感数据边界</h3>
+<p><strong>身份必须来自可信来源。</strong> 用户 ID、租户 ID、调用方服务身份不能由客户端随便写在头里。正确做法是：入口先验证令牌、会话或 mTLS 证书（例如经过前置 e-tls），验证通过后由服务端代码把身份写进 Context；下游只信任「由可信入口写入」的上下文，或通过 mTLS/服务网格再次验证调用方服务身份。教学假设：网关校验登录态后写入内部用户主键，图文服务据此判断作者权限，评论服务据此判断能否删除评论，消息推送服务据此确定消息归属。</p>
+<div class="codehilite"><pre><span></span><code>外部请求
+  │  令牌 / 外部请求头（均不可信）
+  ▼
+边界网关
+  │  校验令牌/mTLS；剥离外部内部身份头；写入可信身份
+  ▼
+图文服务 ──► 评论服务 ──► 计数服务
+        trace 头继续传播，仅用于关联
+</code></pre></div>
+
+<p><strong>为什么不能直接信外部头。</strong> 常见反例是攻击者构造：</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">GET</span> <span class="nn">/api/articles/123</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">example.internal</span>
+<span class="na">x-user-id</span><span class="o">:</span> <span class="l">10001</span>
+<span class="na">traceparent</span><span class="o">:</span> <span class="l">00-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-bbbbbbbbbbbbbbbb-01</span>
+</code></pre></div>
+
+<p>如果服务直接读取 <code>x-user-id</code> 当作用户身份，攻击者就能冒充 10001。因此节点 pitfalls 明确写的是：<strong>「外部传入trace或身份字段不能直接当授权依据。」</strong> 正确边界是：边界网关剥离客户端带来的内部身份头（如 <code>x-user-id</code>、<code>x-tenant-id</code>、<code>x-internal-service</code> 等，具体名单按团队规范），验证令牌后重新生成这些头；下游不得把原始外部值当授权依据。</p>
+<p><strong>trace 头可以接收，但只用于关联。</strong> 外部传入的 <code>traceparent</code> 可以接受，用于把外部请求接入同一条链路；但要校验格式、限制长度，必要时重新生成 trace_id 或强制采样，避免被恶意值污染日志和采样。即使接受了 trace 头，它也不能参与鉴权。baggage 同理：外部 baggage 只能作为不可信标签，入口应做白名单过滤，不能凭 <code>role=admin</code> 或某个租户标签直接放行。</p>
+<p><strong>敏感数据边界。</strong> Baggage 会传到所有下游，可能进入访问日志、APM、消息队列和第三方系统；它的完整性和机密性不能作为安全假设。因此验收要求是「不在baggage中放令牌和隐私数据」。令牌、Cookie、API Key、密码、验证码、手机号、身份证号、精确位置、完整请求体等都不应放进去。日志关联所需的 trace 信息可以放，但日志本身也要脱敏。</p>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>放进程内 Context</th>
+<th>放跨进程 baggage</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>trace_id</code> / <code>span_id</code> / 采样标志</td>
+<td>可以</td>
+<td>可以，走 trace 头</td>
+<td>仅用于关联调用链</td>
+</tr>
+<tr>
+<td>已鉴权用户内部主键</td>
+<td>可以，按最小权限控制</td>
+<td>不建议</td>
+<td>属于个人数据，下游按需读取或只传引用</td>
+</tr>
+<tr>
+<td>租户、实验组、来源渠道</td>
+<td>可以</td>
+<td>可以</td>
+<td>非敏感标签，且入口应校验来源</td>
+</tr>
+<tr>
+<td>访问令牌、Cookie、API Key</td>
+<td>不放</td>
+<td>绝不</td>
+<td>泄露后可直接冒用身份</td>
+</tr>
+<tr>
+<td>手机号、身份证号、精确位置</td>
+<td>不放</td>
+<td>绝不</td>
+<td>隐私数据，可能进入日志或第三方</td>
+</tr>
+<tr>
+<td><code>is_admin=true</code>、<code>role=admin</code></td>
+<td>不放</td>
+<td>绝不</td>
+<td>授权结论应在服务端实时计算</td>
+</tr>
+<tr>
+<td>原始请求体、带查询参数的完整 URL</td>
+<td>不放</td>
+<td>不放</td>
+<td>可能包含秘密参数或个人信息</td>
+</tr>
+</tbody>
+</table>
+<p><strong>验收与取舍。</strong> 两个可检查点：</p>
+<ul>
+<li>日志可关联完整调用链：每条关键日志至少带 <code>trace_id</code>（建议再带 <code>span_id</code>），能从入口查到下游。</li>
+<li>不在baggage中放令牌和隐私数据：代码审查和日志采样中不应出现此类值。</li>
+</ul>
+<p>显式上下文较冗长，但依赖清晰且便于测试。团队需要约定哪些键允许进入 Context、哪些只在本进程使用、哪些可以跨进程传播；把规则写进基础库和网关配置，比在每个业务函数里临时拼头更可靠。对于教学假设中的评论删除场景，尤其要把「身份来自网关校验结果」和「评论归属来自数据库查询」分开，不能用一个可伪造的头同时完成身份与授权。</p>
+<p><strong>把身份写入上下文的推荐顺序。</strong> 实现时可以固定顺序，让「不可信输入」和「可信身份」不混在一起：</p>
+<ol>
+<li>在边界完成令牌或 mTLS 校验，失败立即拒绝，不进入业务服务。</li>
+<li>剥离客户端伪造的内部身份头；只保留允许透传的 trace 头和经白名单过滤的 baggage。</li>
+<li>用校验结果构造身份对象并写入当前请求 Context，后续业务代码只读取这个对象。</li>
+<li>调用下游时由基础库重新注入内部身份头，同时继续传递 trace 头与 deadline。</li>
+<li>记录日志时只打印必要的身份标识和 trace 信息，敏感字段脱敏。</li>
+</ol>
+<p><strong>同步与异步场景的差异。</strong> 教学假设中的评论删除是同步 RPC，消息推送则可能由异步消费者触发。同步场景可以在入口建立 Context 后沿调用链传；异步场景要把已鉴权的身份、trace 信息和 deadline（或消息的过期时间）写入消息属性或任务参数，不能假设消费者线程自动拥有生产者的 Context。消息体里只放内部引用和必要标签，令牌等秘密应通过服务身份或短期凭据获取，不随消息长期保存。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>可信身份从哪里来</th>
+<th>需要传播什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTTP 同步请求</td>
+<td>网关校验令牌后的结果</td>
+<td>trace、deadline、内部身份引用</td>
+</tr>
+<tr>
+<td>服务间 RPC</td>
+<td>mTLS/服务网格验证的调用方身份，或上游可信 Context</td>
+<td>trace、deadline、租户/实验标签</td>
+</tr>
+<tr>
+<td>异步消息/定时任务</td>
+<td>生产者的已鉴权上下文 + 消息系统的服务身份</td>
+<td>trace、消息过期时间、内部业务引用</td>
+</tr>
+<tr>
+<td>外部 webhook</td>
+<td>签名校验或令牌校验结果</td>
+<td>新 trace（或受控关联）、处理时限</td>
+</tr>
+</tbody>
+</table>
+<p><strong>上下文对象的生命周期。</strong> 一个请求的 Context 应在入口创建、在请求结束时释放；不要在全局变量里缓存某个用户的 Context，也不要把 Context 传给无关的线程长期持有。对线程池任务，复制上下文后尽快执行；对协程任务，注意父任务取消时子任务也要收到取消信号。上下文对象应尽量小，只放标识和轻量标签，避免把大对象、数据库连接或请求体塞进去。</p>
+<p><strong>出错时的边界。</strong> 如果 trace 头格式非法，可以丢弃该头并新建 trace；如果身份头缺失或校验失败，应返回未认证/无权限，而不是回退到某个默认用户；如果 deadline 已过期，应在入口或下游调用前直接失败。所有回退策略都应显式记录，不要让「默认值」悄悄变成越权或无限等待。</p>
+<p><strong>不要把「关联」和「授权」混为一谈。</strong> 即使网关已经校验过身份，业务服务仍要针对具体资源做权限判断。例如用户 10001 已登录，不代表他有权删除别人的评论；Context 里的用户 ID 只说明「是谁」，资源归属和操作权限需要业务服务根据数据库状态判断。把两者分开，才能避免「只要能传上下文就被信任」的错误。</p>
+<p><strong>可观测性检查。</strong> 上线前可以确认：入口日志只记录 trace_id 与认证结果，不记录令牌；下游日志能带 trace_id/span_id 与内部身份引用；网关会覆盖客户端伪造的内部身份头；采样日志中搜索 baggage 键，确认没有令牌和隐私字段。</p>
+<p><strong>采样与重新生成策略。</strong> 外部 trace 头可能是旧版本、超长或被构造的。入口可以按策略选择「接受并校验」「丢弃后新建」「保留 trace_id 但更换当前 span」；如果团队要求外部请求单独成链，就重新生成 trace_id。无论哪种，采样标志只影响是否记录详细 span，不影响鉴权，也不影响 deadline。</p>
+<p><strong>一个请求上下文的推荐内容。</strong> 可以把上下文分成三层：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>例子</th>
+<th>是否跨进程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>调用链标识</td>
+<td>trace_id、span_id、采样标志</td>
+<td>是，通常走 trace 头</td>
+</tr>
+<tr>
+<td>请求约束</td>
+<td>deadline、剩余预算、取消信号</td>
+<td>是，通过 RPC/HTTP 元数据传递</td>
+</tr>
+<tr>
+<td>业务标签与身份</td>
+<td>租户、实验组、已鉴权用户引用</td>
+<td>视场景而定，敏感字段不进入 baggage</td>
+</tr>
+</tbody>
+</table>
+<p>三层不要互相替代：trace 不能证明身份，租户标签不能代替资源归属查询，deadline 也不能代替业务超时策略。</p>
+<p><strong>日志关联的边界。</strong> 「日志可关联完整调用链」不等于把所有上下文都打进日志。推荐只记录 trace_id、span_id、服务名、关键状态和脱敏后的业务标识；baggage 中的标签按白名单记录，避免把用户输入或隐私字段原样落盘。</p>
+<p><strong>收束。</strong> 第一，trace 负责「串起来」：用 <code>trace_id</code> 和父子 span 还原调用链，跨进程靠 inject/extract。第二，deadline 负责「来得及」：进程内保存绝对截止时间，跨进程传剩余预算，取消信号要向下传，线程池/协程要显式携带 Context。第三，身份和敏感数据负责「别越界」：身份只来自可信鉴权，trace 只用于关联，baggage 不放令牌和隐私数据。</p>
+<h2 id="practice92">动手实践：practice92</h2>
+<blockquote>
+<p>节点 practice 原文：「为跨线程RPC传播trace和deadline，验证并发请求互不覆盖。」
+验收标准（acceptance 原文）：「日志可关联完整调用链」「不在baggage中放令牌和隐私数据」。</p>
+</blockquote>
+<p>本实验只用 Python 3 标准库，在本机起两个 HTTP 服务模拟一次两跳 RPC：<code>gateway</code>（端口 18920）负责认证、提取上下文，然后把下游调用<strong>提交到线程池</strong>；<code>storage</code>（端口 18921）继承剩余预算干活，预算耗尽就中止。所有服务把日志写成一行一个 JSON，带 <code>trace_id</code>、<code>span_id</code>、<code>parent_id</code>，方便事后用脚本拼链路。附件 <code>practice92.tar.gz</code> 里是全部代码，解压后运行 <code>./test.sh</code> 即可。以下场景都是教学假设，不代表任何企业的内部实现。</p>
+<h3 id="_11">文件说明</h3>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ctx.py</code></td>
+<td>最小上下文：<code>contextvars.ContextVar</code> 保存当前请求；<code>inject()</code> 生成 <code>traceparent</code> / <code>baggage</code> / <code>x-deadline-ms</code> 出站头；<code>extract()</code> 解析入站头，traceparent 格式不对就重新生成 trace；两处都会过滤名字里含 token、authorization、password、phone、id_card 的 baggage 键</td>
+</tr>
+<tr>
+<td><code>server.py</code></td>
+<td>gateway + storage。<code>--naive</code> 模式用全局字典 <code>GLOBAL_TRACE</code> 保存当前 trace（反面教材）；正常模式用 <code>contextvars.copy_context().run</code> 把上下文带进线程池</td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>三种压测：<code>concurrent</code>（40 个请求、20 并发、各带自己的 traceparent）、<code>deadline</code>（预算 150ms、下游需要 400ms）、<code>security</code>（伪造 <code>x-user-id</code>、往 baggage 塞令牌和手机号）</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>依次跑 4 组场景并断言，最后打印 <code>ALL_CHECKS_PASSED</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="1_1">步骤 1：看清关键的三行</h3>
+<p>线程池任务默认<strong>拿不到</strong>提交方的 contextvars（新线程里是默认值 <code>None</code>），必须显式复制：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># server.py（正常模式）</span>
+<span class="n">fut</span> <span class="o">=</span> <span class="n">POOL</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">contextvars</span><span class="o">.</span><span class="n">copy_context</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">storage_task</span><span class="p">,</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">hdr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"x-sleep-ms"</span><span class="p">,</span> <span class="s2">"50"</span><span class="p">)))</span>
+</code></pre></div>
+
+<p>下游只拿「剩余预算」，不拿绝对时间（两台机器的时钟不一致）：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># ctx.py inject()</span>
+<span class="n">h</span><span class="p">[</span><span class="s2">"x-deadline-ms"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">rem</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+</code></pre></div>
+
+<p>身份只来自令牌校验，外部的 <code>x-user-id</code> 头只记日志、从不使用：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># server.py Gateway.do_GET</span>
+<span class="n">user</span> <span class="o">=</span> <span class="n">TOKENS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hdr</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"authorization"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"Bearer "</span><span class="p">))</span>
+</code></pre></div>
+
+<h3 id="2">步骤 2：运行</h3>
+<div class="codehilite"><pre><span></span><code>tar<span class="w"> </span>xzf<span class="w"> </span>practice92.tar.gz<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>practice92
+./test.sh<span class="w">            </span><span class="c1"># 端口被占用时：PORT=19920 ./test.sh</span>
+</code></pre></div>
+
+<h3 id="3_1">步骤 3：对照实测输出（本机一次实际运行）</h3>
+<div class="codehilite"><pre><span></span><code>== 1. 反面教材：全局变量保存 trace（--naive）
+  {"requests": 40, "status_200": 40, "trace_mismatch": 38, "storage_lines_with_foreign_trace": 0, "complete_chains": 0}
+  PASS: naive 模式出现串请求
+== 2. contextvars + copy_context 跨线程传播
+  {"requests": 40, "status_200": 40, "trace_mismatch": 0, "storage_lines_with_foreign_trace": 0, "complete_chains": 40}
+  PASS: 40 个并发请求全部 200
+  PASS: trace 互不覆盖
+  PASS: 日志可关联完整调用链（父子 span 相连）
+== 3. deadline 继承与提前放弃
+  {"status": 504, "storage_recv_remaining_ms": 148, "storage_aborted": true, "work_done_ms": 150, "write_ok": false}
+  PASS: 存储服务收到的剩余预算 &lt; 150ms
+  PASS: 网关按截止时间返回 504
+  PASS: 预算耗尽后中止且未写入
+== 4. 身份来源与 baggage 边界
+  {"forged_only_status": 401, "forged_with_token_user": "alice", "storage_baggage": {"channel": "app"}, "secret_reached_storage": false}
+  PASS: 只带伪造 x-user-id 被拒 401
+  PASS: 有令牌时身份取自令牌而非 x-user-id
+  PASS: 令牌和手机号没有进入下游 baggage
+ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p>怎么读这些数字：</p>
+<ul>
+<li><strong>场景 1</strong>：所有请求都返回 200，看起来「一切正常」，但 40 个请求里有 38 个在下游看到的是<strong>别人的</strong> trace_id。这就是全局变量的危害：功能不报错，排障时链路全串了。<code>complete_chains=0</code> 说明一条完整调用链都拼不出来。</li>
+<li><strong>场景 2</strong>：换成 contextvars + <code>copy_context</code>，串请求数为 0，40 条链路全部能按 <code>parent_id == 上一跳 span_id</code> 拼完整，对应验收「日志可关联完整调用链」。</li>
+<li><strong>场景 3</strong>：上游给 150ms，storage 收到时还剩 148ms（扣掉了网关和网络开销），干到 150ms 预算耗尽就中止，<code>write_ok=false</code> 表示没有在上游放弃之后还去写库；网关自己也按剩余预算超时，返回 504 而不是傻等 400ms。</li>
+<li><strong>场景 4</strong>：只带 <code>x-user-id: admin</code> 没有令牌的请求被拒（401）；带合法令牌又伪造 <code>x-user-id: admin</code> 时，身份取的是令牌对应的 <code>alice</code>。baggage 里的 <code>access_token</code> 和 <code>user_phone</code> 在网关提取时就被丢掉，storage 只看到 <code>channel=app</code>，对应验收「不在baggage中放令牌和隐私数据」。</li>
+</ul>
+<h3 id="4_1">步骤 4：用日志手工拼一条链路</h3>
+<p><code>test.sh</code> 跑完后目录里会留下 <code>good.log</code>，从中挑一个 trace_id 看它经过的所有 span：</p>
+<div class="codehilite"><pre><span></span><code><span class="nv">TID</span><span class="o">=</span><span class="k">$(</span>head<span class="w"> </span>-1<span class="w"> </span>good.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import json,sys;print(json.loads(sys.stdin.readline())['trace_id'])"</span><span class="k">)</span>
+grep<span class="w"> </span><span class="s2">"</span><span class="nv">$TID</span><span class="s2">"</span><span class="w"> </span>good.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import json,sys</span>
+<span class="s2">for l in sys.stdin:</span>
+<span class="s2">    r=json.loads(l); print(r['svc'], r['event'], 'span', r['span_id'], '&lt;- parent', r['parent_id'])"</span>
+</code></pre></div>
+
+<p>预期能看到 <code>gateway recv → gateway call_storage → storage recv → storage write_ok → gateway done</code>，且 storage 的 <code>parent_id</code> 等于 gateway call_storage 那一行的 <code>span_id</code>。</p>
+<h3 id="5_1">步骤 5：自己动手改一改（选做）</h3>
+<ol>
+<li>把正常模式里的 <code>contextvars.copy_context().run</code> 去掉，直接 <code>POOL.submit(storage_task, ...)</code>，重跑场景 2：<code>storage_task</code> 里 <code>C.current()</code> 会变成 <code>None</code> 并抛错，体会「上下文不会自动跟进线程池」。</li>
+<li>把 <code>ctx.py</code> 的 <code>SENSITIVE</code> 改成空元组，重跑场景 4：<code>secret_reached_storage</code> 变成 <code>true</code>，令牌一路传到下游日志里。</li>
+<li>把场景 3 的 <code>x-deadline-ms</code> 改成 <code>1000</code>：storage 正常写完，网关返回 200，对比两次的 <code>work_done_ms</code>。</li>
+</ol>
+<h3 id="_12">实验边界</h3>
+<ul>
+<li>这里的 <code>traceparent</code> 只是按 W3C Trace Context 的格式拼字符串，没有实现采样标志的完整语义；生产中应使用 OpenTelemetry SDK 自带的 propagator（具体 API 以所读文档版本为准）。</li>
+<li>令牌表 <code>TOKENS</code> 是写死的假数据，只为演示「身份来自服务端校验」，真实系统应由认证服务或 mTLS（前置节点 e-tls）给出可信身份。</li>
+<li>敏感键过滤按名字匹配，只是兜底；正确做法是从源头就不往 baggage 里放敏感数据。</li>
+</ul>
+<h2 id="_13">常见误区与设计权衡</h2>
+<p>请求上下文（Context）的价值，不是“多打一行日志”，而是让一次请求在跨线程、跨队列、跨服务之后仍然可被解释：它从哪里来、经过了谁、还剩多少时间、为什么被取消。上下文既要携带观测信息，也可能携带调用预算、取消信号和已经过校验的内部主体信息；但它不是“什么都能装”的袋子。</p>
+<p>以教学假设的“网关 → 图文发布服务 → 内容处理与消息推送 → 评论/阅读数服务”为例：网关负责入口校验和边界决策，后面每一跳消费已经验证过的上下文，并把自己的处理结果继续向下传递。以下场景均为教学假设，不代表任何公司的真实架构。</p>
+<p>上下文传播通常包含两件事：进程内携带值，以及跨进程序列化与提取。OpenTelemetry 将前者描述为跨 API 边界和逻辑执行单元携带值的机制，把后者描述为 Propagation：把上下文写入 HTTP 头等载体，在对端再提取出来。常见默认是 W3C Trace Context，<code>traceparent</code> 的基本形状可理解为 <code>version-traceid-parentid-flags</code>；具体字段校验、大小写和版本兼容规则以所读文档版本为准。</p>
+<p>教学假设中，一次“发布图文”的链路可能这样走：网关解析外部请求，创建或接续 trace，并设置总 deadline；图文发布服务写草稿后调用内容处理；内容处理成功后调用消息推送；评论或阅读数服务在另一个写路径上被调用。每增加一跳，父 span 与子 span 的关系都应保留，日志、指标和异常才能落到同一条调用链上，而不是只留下一个孤立的请求号。</p>
+<p>下面先列出常见误区，再逐类解释它们为什么危险，以及更稳妥的替代做法。表中的“纠正”不是唯一实现，具体 API 和组件能力以所读文档版本为准。</p>
+<table>
+<thead>
+<tr>
+<th>误区</th>
+<th>典型表现</th>
+<th>后果与纠正</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>把外部传入的 trace 或身份字段直接当授权依据</td>
+<td>网关把 trace 标识、用户标识或租户标识透传给下游，下游据此放行或判断数据归属</td>
+<td>外部字段可能被伪造、篡改或重放；trace 只用于关联观测，身份与权限必须由可信边界完成认证和校验。<strong>pitfalls：外部传入trace或身份字段不能直接当授权依据。</strong></td>
+</tr>
+<tr>
+<td>用全局变量或单例保存当前请求的 trace_id</td>
+<td>为了少传参数，在模块级维护“当前 trace_id”，处理函数随用随取</td>
+<td>并发请求会相互覆盖，异步切换和线程复用时尤其明显；测试之间也会互相污染。应使用每次请求独立创建的上下文对象，或由框架管理的上下文机制，并明确其生命周期。</td>
+</tr>
+<tr>
+<td>以为 threading.local 或 contextvars 会自动进入线程池任务</td>
+<td>把任务提交给线程池后，直接读取调用线程里的上下文</td>
+<td>新线程或复用的 worker 不保证自动继承调用方上下文，结果可能是空值、旧值或错配值。不要默认“提交即传播”；是否自动复制、如何复制，以所读运行时和框架文档版本为准，并在任务边界显式捕获和恢复需要的上下文。</td>
+</tr>
+<tr>
+<td>把 access token、手机号放进 baggage，或把 baggage 当成业务参数通道</td>
+<td>为了方便下游直接读取令牌、手机号、租户白名单，甚至把业务状态塞进 baggage</td>
+<td>Baggage 会随上下文跨服务传播，对下游可见，容易进入日志、调试页面和第三方系统；它不适合承载秘密和隐私数据，也不应替代明确的接口参数。<strong>纠正：不在 baggage 中放令牌和隐私数据，只保留最少、非敏感、确有跨服务需要的标记。</strong></td>
+</tr>
+<tr>
+<td>每一跳重新生成 trace_id，导致链路断开</td>
+<td>每个服务入口都新建一个“请求编号”，或只在最外层日志里打一个自增号</td>
+<td>父子关系丢失，跨服务排障只能靠时间猜测；应接续可信上游的 trace 上下文，在必要边界做校验和补全，而不是逐跳重置。若必须重新生成，应保留关联字段并在文档中说明断点。</td>
+</tr>
+<tr>
+<td>下游使用固定超时，而不是继承剩余 deadline</td>
+<td>上游只剩 200ms，下游仍然按固定的 3s 去调用数据库或另一个服务</td>
+<td>上游已经放弃，下游还在占用连接和资源；gRPC 客户端设置的 deadline 会随请求传到服务端，服务端可读取剩余时间并在超时或取消时停止工作，具体 metadata 键名与 API 以所读文档版本为准。更稳妥的是基于剩余预算设置下游超时，并保留少量收尾余量。</td>
+</tr>
+<tr>
+<td>上游取消后，下游继续写库或继续推送</td>
+<td>收到取消信号后只停止返回响应，后台任务仍完成“最后一步”</td>
+<td>会产生用户已离开但消息已发、请求已失败但计数已加等不一致；取消应沿调用链传递，写操作要有幂等、补偿或事务边界，异步任务应在真正执行前再次检查上下文和截止时间。</td>
+</tr>
+<tr>
+<td>日志只打 trace_id，不打 span_id，无法还原父子关系</td>
+<td>所有日志都带同一个请求号，但没有当前操作、父操作或调用阶段的信息</td>
+<td>只能知道“属于同一请求”，不能知道“谁调用了谁、慢在哪一段”；应同时记录当前 span 标识和父子关系，或至少记录阶段名与上下游服务名，具体字段命名以团队规范和所读文档版本为准。</td>
+</tr>
+</tbody>
+</table>
+<p>这些误区的共同点，是把“上下文可用”误认为“上下文可信”，或者把“进程内能读到”误认为“跨边界一定会传播”。前者首先是安全问题，后者是观测与可靠性问题。通用内容后台往往同时存在 HTTP 入口、消息队列、定时任务和多级 RPC，任何一处默认“自动传播”，都可能在故障时变成盲区。</p>
+<p><strong>一、外部字段不等于可信身份。</strong> <code>traceparent</code> 这类头适合做链路关联，但它不是身份凭证；即使格式合法，也只说明“某个调用方声称自己属于某条链路”。身份字段同理：网关注入的用户标识、租户标识，只有在网关完成签名、会话或令牌校验后，才能作为内部可信主体的一部分传给下游。</p>
+<p>下游仍应按最小权限校验资源归属，不能因为“头里有管理员标识”就跳过授权。对于评论、阅读数、消息推送这类会改变状态或影响他人的操作，尤其要把“观测关联”和“业务授权”分开：前者可以来自请求头，后者必须来自可信认证、服务端会话或内部授权服务。</p>
+<p><strong>二、进程内保存要明确归属。</strong> 全局变量和单例的风险不只是并发覆盖，还包括请求结束后忘记清理、后台任务复用了上一个请求的值、测试并行时相互干扰。显式上下文对象或由框架管理的上下文，能让“这个值属于哪次请求”变得清楚。</p>
+<p>如果使用 <code>contextvars</code> 或线程局部存储，必须把创建、复制、清理和跨线程提交视为设计的一部分，而不是顺手使用。提交任务时，调用方应在提交点捕获当前上下文，在 worker 侧恢复它，并在任务结束后清理；至于框架是否已经替你完成这一步，以所读文档版本为准。</p>
+<p><strong>三、跨进程传播要保留因果链。</strong> trace 的任务是保持因果链，不是保证业务正确。每一跳都应记录“我收到了什么、我是否接受、我生成或沿用了什么”，但不要把未经校验的外部值直接写进授权判断。对消息推送和评论/阅读数这类异步或旁路服务，尤其要区分“观测上的关联”与“业务上的命令”：消息里可以带关联标识，但消费方仍要按消息本身和业务状态做幂等与权限判断。</p>
+<p>在 HTTP、消息队列和 RPC 之间传播时，载体可能不同：HTTP 常用头，消息系统常用消息属性，gRPC 常用 metadata。不要假设每种载体的键名和默认行为完全一致；具体键名、大小写和注入方式以所读文档版本为准。跨语言服务之间更要先确认双方使用同一套传播约定，否则会出现“每段都有 trace，但拼不起来”的情况。</p>
+<p><strong>四、超时与取消是上下文的一部分。</strong> 教学假设的网关到多级 RPC 链路中，入口设置总预算，后面每一跳根据剩余时间决定是否继续；这样上游放弃时，下游不会继续做无意义的工作。固定超时看似简单，但它会把“上游已经失败”的请求继续拖在系统里，尤其在下游排队严重时更明显。</p>
+<p>继承剩余 deadline 不等于每一层都机械地减一个常数。中间服务要扣除自身处理、序列化和网络开销，并给收尾日志、补偿和响应预留余量；如果剩余时间已经不足以完成关键步骤，应尽早失败并返回可识别的超时原因。具体如何从请求中读取 deadline，以所读文档和框架版本为准。</p>
+<p>取消不是“少返回一个响应”，而是“停止继续产生副作用”。写库、发消息、加计数都需要考虑幂等和补偿，避免半成功状态。比如发布图文已经写入草稿，但消息推送被取消时，后续重试要能识别“这次推送是否已经发生”；评论计数写入后请求超时，也不能简单再叠加一次。</p>
+<p><strong>五、日志要能还原调用树。</strong> 只有 trace_id 时，你能把日志串起来，却很难解释调用树；只有 span_id 时，又缺少全局关联。两者配合阶段名、服务名和结果状态，才能回答“慢在哪一跳、错在哪一跳、是谁调用了谁”。字段名和采集方式以团队规范及所读文档版本为准。</p>
+<p>一个实用的检查方法是：从入口日志出发，能否找到每一次下游调用的父操作、子操作和结束状态；从一条错误日志出发，能否回到入口请求和受影响的业务对象。如果只能看到同一个 trace_id 却看不到父子关系，说明上下文只传播了“编号”，没有传播“结构”。</p>
+<p><strong>六、baggage 要克制。</strong> Baggage 是随上下文传播的键值对，会跨服务传播且对下游可见，因此它适合放少量非敏感的传播标记，比如教学假设中的灰度分组或调用来源；不适合放令牌、手机号、完整用户资料或业务对象。字段越少，越容易审计，也越不容易在日志和调试工具中泄露。</p>
+<p>还要注意，baggage 不是隐藏参数。把它当成跨服务的业务参数通道，会让接口契约变得不可见：调用方以为只是传了一个上下文值，下游却把它当成必需输入，最终难以测试、难以演进，也难以判断谁应该为字段的语义负责。</p>
+<p><strong>设计权衡</strong></p>
+<table>
+<thead>
+<tr>
+<th>权衡</th>
+<th>倾向</th>
+<th>选它的条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>显式参数传递 vs 隐式 contextvars/线程局部</td>
+<td>核心链路优先显式；横切关注点可用受控的隐式上下文。<strong>tradeoffs：显式上下文较冗长，但依赖清晰且便于测试。</strong></td>
+<td>选择显式：调用关系需要被单测、跨团队接口需要稳定契约、调用栈虽然深但结构明确。选择隐式：同一类横切信息需要穿过大量中间层，框架已有统一注入和清理机制，并且测试能够构造和检查完整上下文。</td>
+</tr>
+<tr>
+<td>接受外部 trace 头 vs 在边界重新生成</td>
+<td>可信入口接受并校验后沿用；不可信入口重新生成并保留关联。</td>
+<td>接受外部：有可信网关能校验格式、长度、采样标志和来源，且希望与前端或上游系统打通链路。重新生成：外部来源不可控、格式混乱或存在伪造风险；此时可把经过校验的外部值作为关联属性，而不是直接作为父子关系。</td>
+</tr>
+<tr>
+<td>baggage 多放字段 vs 最小化</td>
+<td>默认最小化。</td>
+<td>最小化：字段非敏感、跨服务确实需要、命名稳定、生命周期可解释，并且不会成为隐式业务契约。多放：仅在短期排障、受控环境和明确审计下考虑；不能以“下游方便”为理由放入令牌、隐私数据或会频繁变化的业务状态。</td>
+</tr>
+<tr>
+<td>全量采样 vs 采样</td>
+<td>常规流量采样；关键故障窗口再提高采样率。</td>
+<td>采样：流量大、存储和查询成本敏感，且采样决策能沿链路一致传播，不会只留下半条调用链。全量：低流量关键链路、短时故障排查或必须完整审计的场景；同时要评估敏感字段进入日志和追踪系统的风险。</td>
+</tr>
+</tbody>
+</table>
+<p>权衡不是“选一个永远正确的答案”，而是把代价放到能被看见的位置。显式传递会让签名和调用点变长，但阅读代码时不必猜“这个值从哪里来”；隐式机制让业务代码更短，却要求团队把生命周期、清理和跨线程复制讲清楚。二者可以组合：业务依赖显式，观测与预算等横切信息由框架携带，但组合方式必须可测试。</p>
+<p>接受外部 trace 头能打通前后端和上下游，却把外部输入的校验责任带进边界；在边界重新生成更安全、更可控，却会失去与上游的直接关联。选择前者时，要能校验格式并限制其影响范围；选择后者时，要保留经过校验的关联信息，避免排障时从零开始。</p>
+<p>baggage 的取舍同样不是“多放一点更方便”。每增加一个字段，就多一份跨服务可见性和泄露面，也多一条隐式契约；最小化不是教条，而是让每个字段都能回答“谁写入、谁读取、何时清理、为何必须跨服务”。如果回答不了，就不应该放进 baggage。</p>
+<p>采样则要在“看得见”和“付得起”之间取平衡。全量采样最容易解释单次请求，但成本高、敏感数据暴露面也大；采样能控制成本，却要求采样标记在链路中一致传播，否则会出现父链路被采样、子链路没被采样，排障时只看到半条调用链。</p>
+<p><strong>把选择写进代码结构，而不是只写进约定。</strong></p>
+<p>上下文设计最容易停留在“大家都知道要传 trace”的口号里，真正落地时却依赖某个人记得复制、某个框架默认帮忙、某个中间件碰巧注入。只要这些前提有一个不成立，链路就会在故障时断开。因此，团队需要把关键动作固定到边界和抽象上：入口统一校验与接续，进程内统一创建与清理，出口统一注入，异步任务统一捕获与恢复。</p>
+<p>这样做会增加一些样板代码，但它把隐式假设变成了可检查的结构。显式上下文较冗长，但依赖清晰且便于测试；隐式机制则适合承载那些确实横切、且框架能够保证生命周期的信息。关键不是二选一，而是不要把业务依赖藏进隐式上下文。</p>
+<p><strong>边界处要做三件事。</strong></p>
+<p>第一，判断外部输入是否可信，并完成认证、签名或会话校验；不能因为请求带了 trace 或身份字段就直接授权。第二，校验传播载体的格式和大小，拒绝异常值，避免把不可控内容原样写入日志或继续传播。第三，决定是接续外部链路还是在边界重新生成，并记录这个决定，保证后续排障时知道链路在哪里开始或断开。</p>
+<p>这里还要区分“入口”与“可信边界”。教学假设中，网关可能是统一入口，但真正的身份校验可能由认证服务完成；在认证完成之前，下游不能把上游传来的主体字段当成已授权。若链路跨越不同信任域，边界服务应重新建立内部上下文，而不是简单透传外部所有字段。</p>
+<p><strong>进程内要做三件事。</strong></p>
+<p>第一，为每次请求创建独立的上下文对象，并明确哪些字段是请求级、哪些是进程级配置。第二，在提交线程池任务、定时任务或异步回调时，捕获需要的上下文并显式恢复；不要假设 worker 会自动继承提交线程的值。第三，在请求结束、异常退出和取消路径上清理上下文，避免复用线程时串值。</p>
+<p>如果使用框架提供的上下文机制，应确认它的作用域和复制规则，而不是只看 API 是否方便。<code>contextvars</code>、线程局部存储和异步任务调度各自有边界；具体行为以所读运行时与框架文档版本为准。测试里可以构造两个并发请求，分别检查它们的 trace、deadline 和内部主体不会互相污染。</p>
+<p><strong>下游与异步任务要做三件事。</strong></p>
+<p>第一，基于剩余 deadline 计算下游超时，而不是每层写死一个更大的固定值；剩余预算不足时尽早失败。第二，把取消信号继续传给真正执行工作的层，并在产生副作用之前再次检查是否已经取消。第三，为写库、发消息、加计数设计幂等键或补偿逻辑，让“上游失败、下游半成功”可以被修复。</p>
+<p>消息推送和评论/阅读数这类场景尤其需要这种意识。教学假设中，发布图文成功后可能触发推送，阅读数可能在另一个写路径上累加；如果上游取消而消费者继续执行，用户会看到与请求结果不一致的状态。解决方式不是简单地“不要取消”，而是让每个副作用都能被识别、重试或补偿。</p>
+<p><strong>日志与隐私要做三件事。</strong></p>
+<p>第一，日志同时保留 trace 与 span 的关联，至少能看出当前阶段和上下游关系；只打一个请求号不足以还原调用树。第二，对进入日志、baggage 和追踪系统的字段做分级，令牌、手机号等敏感信息不进入传播上下文。第三，给上下文字段设定大小和数量上限，避免把大对象或不可控输入带进每一跳。</p>
+<p>这些动作看起来分散，实际都指向同一个原则：上下文只承载“跨边界仍然有意义、且可以被治理”的信息。观测标识用于关联，deadline 用于预算，取消用于停止工作，已校验的主体用于授权；业务参数应留在明确接口里，敏感数据应留在受控存储和授权路径里。</p>
+<p><strong>需要避免的“看似省事”。</strong></p>
+<ul>
+<li>为了少改接口，把用户身份塞进 baggage，让下游自己取。</li>
+<li>为了日志好看，在每一跳重新生成 trace_id，导致父子关系消失。</li>
+<li>为了代码短，把当前请求放进全局单例，默认并发不会出问题。</li>
+<li>为了统一，给所有下游设置同一个固定超时，不读剩余 deadline。</li>
+<li>为了“保证成功”，上游取消后仍继续写库或发消息。</li>
+<li>为了省字段，日志只打 trace_id，不打阶段和 span 关系。</li>
+</ul>
+<p>这些做法在单请求、低并发、无故障的演示里往往能工作，但在真实后台里会把问题推迟到最难的时刻暴露。上下文设计的目标不是让代码看起来更短，而是让并发、超时、取消和跨服务调用仍然可解释、可测试、可治理。</p>
+<p><strong>一个可复用的判断顺序。</strong></p>
+<ol>
+<li>这个字段是观测关联，还是业务契约？观测关联可以进上下文，业务契约应显式建模。</li>
+<li>这个字段会跨服务传播吗？会传播就对下游可见，必须按可见数据治理。</li>
+<li>这个字段是否敏感？令牌、手机号、隐私资料不进入 baggage 和日志。</li>
+<li>这个值是否已被可信边界校验？未校验的外部 trace 或身份字段不能直接授权。</li>
+<li>这个调用还有多少剩余预算？下游超时应基于剩余 deadline，而不是固定值。</li>
+<li>取消后还会不会产生副作用？会，就补幂等、补偿或事务边界。</li>
+<li>日志能否还原父子关系？至少保留 trace、span、阶段和上下游服务。</li>
+<li>这个隐式依赖能否被测试？不能构造和检查的上下文设计，通常不可靠。</li>
+</ol>
+<p>回到本课的两个验收点：日志可关联完整调用链；不在 baggage 中放令牌和隐私数据。前者要求 trace 与 span 的结构被保留，后者要求对“会传播且对下游可见”的字段保持克制。做到这两点，再叠加明确的 deadline 与取消处理，上下文才真正成为后台系统的基础设施，而不是日志里的一串编号。</p>
+<h2 id="sourcestudy">延伸阅读：sourceStudy</h2>
+<p>本节点的 sourceStudy 原文是：</p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p>这句话可以拆成三个动作：先读定义，再对照示例，最后沿错误处理路径检查边界，并把“读的是哪个版本”写进笔记。</p>
+<p>公开文档会更新，API 名称、默认配置和字段语义都可能变化，因此本课涉及框架细节时统一以你所读文档的版本为准。</p>
+<h3 id="_14">阅读路径</h3>
+<ol>
+<li>打开 https://opentelemetry.io/docs/concepts/context-propagation/ ，在笔记第一行记录访问日期。
+   本稿按 2026-11-10 记录；复习时请改成你的实际访问日期。</li>
+<li>找到 Context 的定义，用自己的话回答：它解决的是什么问题？它跨越哪些边界？它是否等同于“全局变量”？</li>
+<li>找到 Propagation 的定义，区分两件事：上下文在进程内如何传递，以及它如何被序列化到跨进程请求中、又如何在另一端被提取。</li>
+<li>核对默认 propagator。公开文档通常以 W3C Trace Context 与 Baggage 作为常用组合；具体默认值和启用方式以所读文档版本为准。
+   重点观察 <code>traceparent</code> 头的形状：<code>version-traceid-parentid-flags</code>。</li>
+<li>阅读 inject / extract 的示例。不同语言 SDK 的入口名称和参数可能不同，以所读文档版本为准。
+   不要只记函数名，要记“在哪个边界注入、在哪个边界提取、失败时怎么办”。</li>
+<li>阅读文档对 Baggage 的说明：它是随上下文传播的键值对，会跨服务传播，对下游可见；因此不应放敏感数据。
+   把这句话与后面的自测题 3 对照。</li>
+<li>检查示例中的错误处理路径：缺少头部、头部格式不合法、上下文为空、下游不识别时，程序是拒绝、降级还是创建新的上下文？
+   把答案写成边界条件。</li>
+<li>补读 deadline 与取消。OpenTelemetry 的上下文传播文档未必涉及 gRPC deadline；这部分标为本课扩展，需结合你所读的 gRPC deadline 文档核对。
+   公开资料中的通用语义是：客户端设置的 deadline 会随请求传到服务端，服务端可读取剩余时间，并在超时或取消时停止工作。</li>
+</ol>
+<h3 id="_15">读完后应能回答</h3>
+<ul>
+<li>Context 与 Propagation 各自解决什么问题，二者为什么不能混为一谈？</li>
+<li>一次 HTTP 或 RPC 调用中，上下文在哪些边界被注入、在哪些边界被提取？</li>
+<li>默认传播格式是什么，头部不合法时会发生什么？</li>
+<li>Baggage 为什么不能承载令牌、手机号等敏感信息？</li>
+<li>deadline 如何从客户端传到服务端，服务端如何读取剩余时间并响应取消？</li>
+<li>哪些结论来自公开文档，哪些只是本课的教学假设？</li>
+</ul>
+<h3 id="_16">阅读笔记模板</h3>
+<p>可以按下面的骨架记录，每项都要求写出“版本/日期”和“证据位置”：</p>
+<ul>
+<li>文档版本与访问日期：</li>
+<li>Context 的定义（原文摘录 + 自己的解释）：</li>
+<li>Propagation 的定义（进程内 / 跨进程分别是什么）：</li>
+<li>默认 propagator 与头部示例（以所读文档版本为准）：</li>
+<li>inject 的调用边界与失败处理：</li>
+<li>extract 的调用边界与失败处理：</li>
+<li>Baggage 的用途与安全提醒：</li>
+<li>deadline / 取消：本课扩展，参考的 gRPC 文档版本与结论：</li>
+<li>本课实验可复现的最小步骤：</li>
+<li>仍未确认、需要问团队或查内部文档的问题：</li>
+</ul>
+<h3 id="_17">边界</h3>
+<p>公开文档只能说明公开规范与通用实现语义，不能据此推断任何企业内部的服务拓扑、字段设计、鉴权流程或存储细节。</p>
+<p>阅读时请把“文档事实”“本课教学假设”“个人推断”分开记录，避免把三者混成结论。</p>
+<h2 id="_18">自测题</h2>
+<h3 id="1-trace_id">题 1：线程池里串了 trace_id</h3>
+<p><strong>题干</strong>：某服务用线程池处理下游调用。压测时发现 A 请求的日志里出现了 B 请求的 <code>trace_id</code>。为什么会这样？应该怎么改？</p>
+<p><strong>答案</strong>：常见原因是把当前请求上下文放在线程本地变量或隐式全局状态里，而线程池会复用线程；提交任务时没有把 A 的上下文随任务一起捕获，执行时读到的是该线程上一次或另一个任务留下的上下文。</p>
+<p>修改方式是显式传递上下文：在提交任务时捕获当前 Context，在执行任务时恢复它，任务结束后清理；或者让任务对象携带上下文参数，避免依赖线程本地状态。在 Python 里就是 <code>pool.submit(contextvars.copy_context().run, fn, ...)</code>；practice92 的场景 1 用全局变量时 40 个并发请求里有 38 个在下游看到了别人的 trace_id，改成 <code>copy_context</code> 后串请求数为 0。</p>
+<p>不同语言和框架的上下文 API 名称不同，以所读文档版本为准。关键不是记住某个函数，而是确保“捕获—传递—恢复—清理”四步都发生在正确的生命周期里。</p>
+<p><strong>解析</strong>：这题考的是“可信来源”和“生命周期”。上下文不是越全局越方便，而是要有明确的创建、复制、恢复和销毁边界。</p>
+<p>日志里的 <code>trace_id</code> 只是表象，真正的问题是并发任务之间共享了可变状态。修复后应能用并发测试证明：每个任务的日志只包含自己的追踪标识，线程复用不会造成串扰。</p>
+<p>教学假设场景：评论服务把“写阅读数”的任务丢进线程池，任务里直接读取当前线程的追踪上下文；高并发下线程被反复复用，于是评论区日志可能挂到另一篇图文的链路上。排查时应先看任务提交点，而不是先怀疑日志组件。</p>
+<h3 id="2300ms-deadline-1s">题 2：300ms deadline 被下游写死成 1s</h3>
+<p><strong>题干</strong>：上游给网关 300ms deadline。网关耗时 20ms，业务服务本地处理 50ms 后调用存储服务。存储服务把超时写死为 1s。会出什么问题？正确做法和数值是多少？</p>
+<p><strong>答案</strong>：存储服务不应该重新获得 1s 的预算。到业务服务发起存储调用时，整条链路大约只剩 <code>300 - 20 - 50 = 230ms</code>；存储服务应继承上游 deadline，取剩余时间作为自己的上限，并在继续调用更下游时再扣除本地开销后继续传递。</p>
+<p>如果存储调用前还有序列化、排队、连接建立等本地开销，实际可用时间应小于 230ms。正确做法是“继承剩余预算，再扣本地下游开销”，而不是“每个服务按自己的配置重新计时”。</p>
+<p>具体 API 和“剩余时间”的读取方式以所读 gRPC 文档版本为准；不要凭记忆写字段名或 metadata 键名。</p>
+<p><strong>解析</strong>：写死 1s 会让下游在整条请求已经超时后继续工作，浪费资源，还可能出现“上游已取消、下游仍在写”的不一致。</p>
+<p>deadline 应沿调用链传播，取消信号也应尽早向下传递。验收时可以构造慢存储实验：上游 300ms 超时后，业务服务和存储服务都应在预算耗尽时停止，而不是各自按本地配置继续跑满 1s。</p>
+<p>教学假设场景：网关收到“发布图文”请求后调用发布服务，发布服务写完元数据再调用评论/阅读数服务初始化计数。若最底层把超时写死，前端早已收到超时，后台仍在补写数据，重试时就容易出现重复计数或覆盖。</p>
+<h3 id="3-baggage">题 3：请求头身份与 baggage 里的手机号</h3>
+<p><strong>题干</strong>：某内部服务直接读取请求头 <code>x-user-id</code> 判断是否允许删除文章；另一个团队提议把用户手机号放进 baggage，方便下游展示。分别有什么问题？</p>
+<p><strong>答案</strong>：第一，外部传入的 <code>x-user-id</code> 不能直接当作授权依据：请求头可能被伪造、被网关错误透传，或者缺少签名与来源校验。</p>
+<p>身份应来自可信的认证/鉴权边界，例如经过校验的会话或令牌，再由该边界把“已认证主体”写入内部上下文；<code>x-user-id</code> 最多作为提示，不能单独决定删除权限。</p>
+<p>第二，手机号属于隐私数据。baggage 会跨服务传播且对下游可见，可能进入日志、监控或第三方组件，不应放入；这与本节点 acceptance 中的“不在 baggage 中放令牌和隐私数据”一致。</p>
+<p><strong>解析</strong>：这题同时对应 pitfalls 与 acceptance。要点不是“头部一定不能用”，而是“不能把不可信输入直接升级为授权结论”。</p>
+<p>追踪字段、身份字段、授权结论是三类不同信息：追踪字段用于关联日志，身份字段用于标识主体，授权结论必须由可信策略计算。</p>
+<p>下游确实需要用户信息时，可以传不敏感的稳定标识，再由下游按权限读取，并遵循最小必要原则；不要把“方便展示”当成扩大敏感数据传播范围的理由。</p>
+<p>教学假设场景：内容后台的删除入口若只看 <code>x-user-id</code>，外部伪造请求头就可能越权；而把手机号塞进 baggage 后，消息推送、审计日志等下游都可能无意间记录它，排查时很难彻底清理。</p>
+<p>做完三题后可以自查：</p>
+<ul>
+<li>我能否指出上下文的创建点和销毁点？</li>
+<li>我能否画出 deadline 在各跳的剩余时间？</li>
+<li>我能否说明哪些字段只用于观测、哪些字段参与授权？</li>
+<li>我能否列出 baggage 中允许出现的字段，并解释为什么？</li>
+</ul>
+<h2 id="_19">推荐资源</h2>
+<ul>
+<li><a href="https://opentelemetry.io/docs/concepts/context-propagation/">请求上下文与链路传播：参考文档 / 原始资料</a>，来源 opentelemetry.io｜文档｜英文｜进阶｜免费，阅读重点：重点阅读trace与baggage与deadline和取消，用于核对本节点实验的语义和边界。建议结合 practice92 核对。</li>
+</ul>
+<p>本课只推荐这一条资源。阅读时先按“延伸阅读：sourceStudy”的路径做笔记，再回到自测题检查自己是否能把定义用于排错。</p>
+<h2 id="_20">本课小结</h2>
+<ul>
+<li>上下文携带追踪、截止时间和身份等跨调用信息，应明确可信来源和生命周期，而不是依赖隐式全局变量。</li>
+<li>trace 与 baggage 是两件事：trace 用于串联调用链，baggage 是随上下文传播的键值对；二者都不等于授权依据。</li>
+<li>deadline 与取消要沿调用链传递；下游应读取剩余时间并在超时/取消时停止工作，而不是各自写死超时。</li>
+<li>身份信息必须来自可信边界，敏感数据要设边界；外部传入的 trace 或身份字段不能直接当授权依据。</li>
+<li>acceptance 回顾：日志可关联完整调用链；不在 baggage 中放令牌和隐私数据。</li>
+<li>pitfalls 回顾：外部传入 trace 或身份字段不能直接当授权依据；追踪字段可以来自外部，但只能用于观测，不能用于授权。</li>
+<li>tradeoffs 回顾：显式上下文较冗长，但依赖清晰且便于测试；相比之下，隐式全局状态短期省事，长期容易产生并发串扰和不可复现问题。</li>
+<li>边界提醒：公开文档不能推断任何企业内部实现；OpenTelemetry API 名称、W3C 头部细节、gRPC metadata 键名等，以所读文档版本为准。</li>
+</ul>
+<p>把这八条压缩成一句话：让每一次跨调用都带着“可追踪、可截止、可审计但不越权”的上下文，并让它的来源和生命周期在代码里看得见。</p>
+<p>复盘时建议沿着一次真实调用追问：入口处谁创建上下文、来源是否可信；跨进程边界是否执行 inject / extract、失败时如何降级；每一跳的 deadline 还剩多少、谁负责在超时或取消时停止；日志能否只凭 trace 字段关联完整调用链；baggage 是否只放了非敏感、必要的数据。</p>
+<p>如果这些问题都能在代码与实验记录中找到答案，本节点的目标就达到了。</p>
+<p>如果只能回答“框架应该会自动处理”，就回到 sourceStudy 的定义和示例重新核对，并把不确定的 API 名称、头部细节与键名标注为“以所读文档版本为准”。</p><div class="pn"><span><a href="91.html">← 背压与并发限制</a></span><span>下一课 待更新</span></div></main></div></body></html>
