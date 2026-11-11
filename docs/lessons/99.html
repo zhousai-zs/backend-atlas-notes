@@ -1,0 +1,569 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>99. 事务、隔离与异常 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（99/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（3/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="cur" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 99 课 · 领域 G · 阶段 3</p><p class="dl"><a href="../files/99-g-transaction.md" download>⬇ 本课 Markdown</a><a href="../files/practice99.tar.gz" download>⬇ 练习包 practice99.tar.gz</a></p><h1 id="99208">第 99/208 课：事务、隔离与异常</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-transaction</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Transactions</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>关系数据库</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>a-db</code>、<code>e-lock</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Transactions</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://www.postgresql.org/docs/current/transaction-iso.html">事务、隔离与异常：参考文档 / 原始资料</a>（www.postgresql.org，文档）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>事务把操作组织成受约束的原子单元，隔离级别决定并发可观察行为，不能只记ACID缩写。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中出现的「内容后台」「创作者钱包」「付费文章购买」「分成结算」「值班编辑」等场景都是<strong>教学假设</strong>，用来让概念落地，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库加 sqlite3 写的教学服务，外加一个名为 <code>IsolationEngine</code> 的<strong>教学隔离引擎</strong>：它用版本链和简化的读写依赖检查，按脚本化的交错去演示脏读、不可重复读、幻读、丢失更新和写偏斜。它<strong>不是</strong> PostgreSQL，<strong>不是</strong> InnoDB，也<strong>不是</strong> SQLite 内核。sqlite3 实验用的是本机 Python 3.13.5、SQLite 3.46.1 的两个或多个真实连接；SQLite 的隔离实现（<code>BEGIN DEFERRED</code> / <code>IMMEDIATE</code> / <code>EXCLUSIVE</code>、WAL 下的快照与读写并发、默认连接之间看不到未提交改动）和 PostgreSQL、InnoDB 都不同，绝不能把某一边的现象直接说成另一边的语义。本课出现的余额、总额、等待时间和重试次数只来自这次教学实验。PostgreSQL 的隔离定义、各级别允许的现象以及序列化失败后的错误处理，以官方文档 <a href="https://www.postgresql.org/docs/current/transaction-iso.html">13.2. Transaction Isolation</a> 为准（本文已核对，文档版本为 PostgreSQL 18，访问日期 2026-11-11）。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：柜台里的两本账和一只交割袋</h3>
+<p>想象内容后台的创作者钱包，像银行柜台里的分户账。alice 的账本记着余额 100，bob 的账本也是 100。一笔「把 30 打给 bob」的分成，必须在两本账上同时落下：alice 变成 70，bob 变成 130。柜员不会把这两笔记成互不相干的两张便条，而是把它们放进<strong>同一只交割袋</strong>。袋子要么盖章入库，两本账一起生效；要么整袋作废，两本账都回到原样。这就是<strong>原子性</strong>。</p>
+<p>盖章入库之后，哪怕这位柜员下班、柜台停电，第二天换一个人打开库房，也应该看到 alice=70、bob=130。还没盖章就停电，第二天袋子是空的，账本上不能留下只扣了一半的铅笔痕。这就是<strong>持久性</strong>。</p>
+<p>两个柜员同时给同一本账做扣减，麻烦就来了。他们各自把「余额 100」抄到自己的草稿纸上，各自减去 30，再分别写成 70。后盖章的那一笔，把先盖章的那一笔盖掉了——钱包里只少了 30，有一笔扣款像没发生过。这就是<strong>丢失更新</strong>。隔离要管的是：一个柜员能不能看见另一个人还没盖章的草稿（脏读），同一袋里连读两次会不会对不上（不可重复读、幻读），以及两个人各改各的行、合在一起却打破「至少留一个人值班」这种规则（写偏斜）。</p>
+<p>交割袋是事务，盖章是提交，作废是回滚。隔离级别决定两个柜员在盖章之前能看见彼此多少东西；它改变的是并发下「可以观察到什么」，不是把 ACID 四个字母背熟就能自动得到的性质。</p>
+<h3 id="_4">接上前置</h3>
+<ul>
+<li><strong>a-db</strong>：表、行、主键、一条 SQL 如何读写一个库。本课不再讨论模式该怎么设计，而是问：几条读写怎样被收成一个要么全部生效、要么全部不作数的单元，崩溃和并发会怎样破坏这个单元。</li>
+<li><strong>e-lock</strong>：锁保护临界区，防止两个执行流同时改同一份状态。本课把这件事情放到数据库会话里：行锁、<code>BEGIN IMMEDIATE</code> 这样的写锁、条件更新这种「把检查和写入收成一句」的办法，以及锁顺序反了之后的死锁。锁是手段之一，不是事务的全部——原子性和持久性即使在没有第二个会话时也要成立。</li>
+</ul>
+<p>前面单独看都学过：会写 SQL，也知道要加锁。本课把它们组装成「两个会话同时扣同一笔余额、转账中途崩溃、冲突之后该重试什么」，然后看组装之后才出现的问题：每条 SQL 都「成功」了，钱包却对不上；崩溃只发生在第二步之前，一边的钱已经少了；序列化失败时只把最后一句再执行一遍，入账被做了两次。锁能把两个写者排成队，条件更新能把检查写进同一句，但它们都要放进事务的生命周期里才完整：没有袋子，排完队的两步仍可能在中途崩溃后只留下一半；有了袋子却在失败时只重放最后一步，又会把已经成功的那一半再做一次。</p>
+<h3 id="_5">一次事务的生命周期</h3>
+<div class="codehilite"><pre><span></span><code>  BEGIN
+    SQLite:  BEGIN DEFERRED | BEGIN IMMEDIATE | BEGIN EXCLUSIVE
+    PostgreSQL: BEGIN;  [SET TRANSACTION ISOLATION LEVEL …]
+        │
+        ▼
+  读写
+    SELECT / UPDATE / INSERT / DELETE
+        │
+        │  ← 并发冲突点：
+        │      另一个会话改了你读过的行，或要写同一行；
+        │      应用如果先 SELECT 再按草稿纸上的数字去 UPDATE，
+        │      丢失更新就发生在这一段。
+        │  ← 业务检查点：余额是否足够，总额、非负等不变量是否仍成立。
+        │
+        ├─► COMMIT
+        │      改动成为已提交状态；新打开的连接应能读到。
+        │      ← 崩溃点 A：COMMIT 之后进程退出，改动必须还在（持久性）。
+        │
+        └─► ROLLBACK，或尚未 COMMIT 就关闭连接 / 进程崩溃
+               这一袋里的改动全部不作数。
+               ← 崩溃点 B：只完成了转账的一半，袋子必须整袋作废（原子性）。
+
+  死锁、锁等待超时、序列化失败（PostgreSQL 的 40001，
+  教学模型里的 SerializationFailure / Deadlock，
+  sqlite3 的 database is locked / busy）：
+        │
+        ▼
+  重试边界：回滚整个事务，从 BEGIN 再走一遍读写。
+            不能只把失败的那一条 SQL 再执行一次。
+</code></pre></div>
+
+<p>正常路径看起来只是「BEGIN、改两行、COMMIT」。本课真正要讲的是图上那三个标记：崩溃点决定原子性和持久性有没有兑现；并发冲突点决定隔离级别和你选择的写法会不会丢掉一次扣款；重试边界决定冲突被正确拒绝之后，会不会在修复时把账做重。</p>
+<h3 id="_6">教学场景（教学假设）</h3>
+<p>内容后台的钱包服务要支撑付费文章购买和创作者分成。灰度期间出现了几件「每条语句都成功，账却不对」的事：</p>
+<ol>
+<li>同一笔余额被两个会话各扣 30。双方都先 <code>SELECT</code> 看到 100，再把余额写成 70。最终钱包里是 70，不是 40。实践里两个真实的 sqlite3 连接稳定复现了这个结果。</li>
+<li>一笔 30 元分成先扣 alice、再给 bob 入账。naive 路径每条自动提交，在入账前「崩溃」：alice 变成 70，bob 仍是 100，总额从 200 变成 170。safe 路径用事务包起来，崩溃回滚后两边都还是 100，总额仍是 200。</li>
+<li>八个会话一起从 1000 元里各扣 10。naive 路径大家都读到 1000、都写成 990，最终只扣掉一次；safe 的条件更新得到 920。另一次脚本化的互转里，总额甚至从 300 变成了 310。</li>
+<li>入账时报了一次失败，naive 只把入账那一句又执行了一遍：alice 扣了 30，bob 却进了 60，总额变成 230。safe 在失败时回滚整袋、从扣款重新开始，得到 70 和 130，总额仍是 200。</li>
+</ol>
+<p>这些数字都来自本课的 <code>practice99</code>，可以用 <code>bash test.sh</code> 再跑出来。它们证明的是教学代码的行为，不是某家生产钱包的事故报告。</p>
+<h3 id="_7">本课三条主线</h3>
+<ol>
+<li><strong>原子性和持久性</strong>：一个事务里的改动要么一起生效，要么一起不作数；一旦提交，新会话在崩溃之后仍能读到。</li>
+<li><strong>隔离级别与并发异常</strong>：脏读、不可重复读、幻读、丢失更新、写偏斜会在哪些级别出现；同名级别在 PostgreSQL、SQLite 和教学模型里并不相同。</li>
+<li><strong>重试边界和业务不变量</strong>：冲突或失败之后要重试整个事务；并发下要守住总额、非负、扣款次数与余额变化一致这类不变量。</li>
+</ol>
+<p>三条主线对应三个很容易分开学、合在一起才出问题的点。只会背 ACID，可能把自动提交里的两条 <code>UPDATE</code> 当成已经有了原子性；只记住隔离级别的名字，可能拿 SQLite 默认「序列化」去套 PostgreSQL 的表，或反过来；只在失败的那一行上加重试，可能把已经扣过的款再入一次账。下面按这个顺序展开。</p>
+<h2 id="_8">学习目标</h2>
+<p>学完本课，你应该能够：</p>
+<ol>
+<li><strong>能解释原子性和持久性</strong>（goals 原文）；</li>
+<li><strong>能独立完成：用两个会话复现丢失更新，采用条件更新或锁修复余额扣减。</strong>（goals 原文）；</li>
+<li>面对一份「两个会话各扣 30」的记录，指出 naive 路径为什么得到 70，条件更新或 <code>BEGIN IMMEDIATE</code> 为什么得到 40，并能说清这是应用层读写分离造成的丢失更新，不是「SQLite 会脏读」；</li>
+<li>对照脏读、不可重复读、幻读、丢失更新和写偏斜，说明教学模型在四个级别下的现象，并明确它们和 PostgreSQL 18 文档（2026-11-11 核对）以及 SQLite 3.46.1 的差异；</li>
+<li>在并发扣款和互转里守住不变量：safe 路径八次扣款后余额是 920，640 次互转后总额仍是 10000、没有负余额；遇到序列化失败或 <code>database is locked</code> 时，回滚整个事务再重试，而不是只重试最后一条 SQL。</li>
+</ol>
+<h2 id="_9">为什么后端要懂</h2>
+<p>节点的 why 原文是：「防止并发业务更新导致丢失、幻读或不一致。」拆开看，至少有两层。</p>
+<p><strong>语句成功，不等于账对。</strong> 后台几乎每天都要写扣余额、做分成、改状态这类更新。每一条 <code>UPDATE</code> 都返回成功，只说明这一句在当时被执行了；真正要守住的是跨语句、跨会话的不变量：两本账的总额不能变，单账户不能变成负数，扣了几次就应该少掉相应的钱。实践里，naive 的「先读后写」在两个会话下把 100 扣成 70 而不是 40；八个会话一起扣时，1000 只变成了 990；互转甚至让总额从 300 涨到 310。如果只看报错日志，这三件事可能全都不会响起警报。</p>
+<p>同一件扣款，写成 <code>UPDATE wallet SET balance = balance - 30 WHERE id=1 AND balance &gt;= 30</code>，和写成「先 SELECT，再把 Python 里算好的数字写回去」，在并发下根本不是同一条路。PostgreSQL 的读已提交对前一种相对更新，会在对方提交后改最新行版本；后一种则把过时的 100 又写成 70。入职后排这类事故，优先看的不是「隔离级别是不是不够高」，而是新值到底在哪算、检查和写入是否还在同一句或同一只袋子里。</p>
+<p><strong>失败之后怎么重试，本身也是业务语义。</strong> 转账扣了 alice、给 bob 入账时失败，若只把入账再执行一遍，实践里 alice=70、bob=160，总额 230。教学模型和 sqlite3 路径上的 safe 写法都是：整段回滚，从读取余额重新开始，得到 70 和 130。PostgreSQL 文档在可重复读一节写得很直白：收到不能序列化的错误时，应当中止当前事务，<strong>从头重试整个事务</strong>。入职后写钱包、库存、计数器，重试边界和隔离级别一样，都是设计的一部分，不是出了错再临时加的 <code>try</code>。</p>
+<p>把「单独看都像对的、合在一起才破账」的情况列成表，入职后可以当排查清单用：</p>
+<table>
+<thead>
+<tr>
+<th>失败情况</th>
+<th>谁先发现</th>
+<th>若处理不当会怎样</th>
+<th>本次实践中的对照</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>两个会话先 SELECT 再按绝对余额 UPDATE</td>
+<td>最终余额对不上扣款次数</td>
+<td>后写盖掉先写，少扣一笔</td>
+<td>100 各扣 30：naive=70，safe=40</td>
+</tr>
+<tr>
+<td>转账的两步各自自动提交</td>
+<td>中途崩溃或第二步失败</td>
+<td>一边少了钱，一边没加上，总额被破坏</td>
+<td>崩溃后 naive 总额 170，safe 仍 200</td>
+</tr>
+<tr>
+<td>未提交的改动被当成已经入库</td>
+<td>换连接、重启进程之后</td>
+<td>读到不该存在的值，或误以为持久化成功</td>
+<td>COMMIT 后新连接读到 70；未提交就关闭，新连接仍是 100</td>
+</tr>
+<tr>
+<td>只重试失败的那一条 SQL</td>
+<td>入账被做两次，或扣款做了两次</td>
+<td>总额漂掉，对账平不了</td>
+<td>naive 总额 230；safe 回滚后重试，总额 200</td>
+</tr>
+<tr>
+<td>把同名隔离级别在不同库之间互换</td>
+<td>按「这一级一定不会出现某现象」写代码</td>
+<td>在 A 库不会发生的异常，在 B 库里出现</td>
+<td>见「常见误区」中 PostgreSQL / SQLite / 教学模型对照</td>
+</tr>
+</tbody>
+</table>
+<p>入职后你多半直接用公司现成的库和默认隔离级别，但出问题时要知道往哪查：</p>
+<ul>
+<li>「两个请求都显示扣款成功，余额却少扣了」，先看是不是先读后写的绝对更新，有没有条件更新或在一个写事务里完成读写；</li>
+<li>「转账后一边账动了、另一边没动」，先看两步是不是在同一个事务里，崩溃或异常时有没有整段回滚；</li>
+<li>「重试之后钱多了或少了」，先看重试是整段事务还是只重复了最后一句；</li>
+<li>「换了一个库、同名隔离级别，现象却变了」，先核对目标数据库自己的文档，不要把 PostgreSQL 的表或 SQLite 的默认行为直接套过去。</li>
+</ul>
+<h2 id="_10">核心知识点</h2>
+<h3 id="1">1. 原子性和持久性</h3>
+<p>先把两件经常被缩写成一个词的事情分开。</p>
+<p><strong>原子性</strong>说的是：一个事务里的若干改动，对外只呈现「全部发生」或「全部没发生」。它不保证并发时别人看见什么，那是隔离的事；也不保证停电之后一定还在，那是持久性的事。付费分成要扣 alice、给 bob 入账，这两步必须待在同一只交割袋里。</p>
+<p>实践里这条路径是这样写的。naive 让每一句自己提交（Python 里把 sqlite3 设成自动提交，先做一次绝对扣款，再去做入账）：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">naive_rmw_debit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>   <span class="c1"># 这一句已经落盘</span>
+<span class="c1"># 在这里模拟崩溃：关闭连接，入账还没执行</span>
+</code></pre></div>
+
+<p>重新打开数据库之后，alice=70，bob=100，总额 170。预期总额是 200。少掉的 30 不是丢在网络里，而是只完成了袋子里的第一张纸条。</p>
+<p>safe 把两步放进同一个 <code>BEGIN IMMEDIATE</code>，在入账之前、<code>COMMIT</code> 之前关闭连接：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"BEGIN IMMEDIATE"</span><span class="p">)</span>
+<span class="c1"># 读 alice、bob，准备把 30 从一边移到另一边</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"UPDATE wallet SET balance=? WHERE id=?"</span><span class="p">,</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="c1"># 在这里关闭连接，没有 COMMIT</span>
+</code></pre></div>
+
+<p>重新打开之后，alice=100，bob=100，总额仍是 200。SQLite 会回滚未提交的事务。这是原子性在崩溃点 B 上的样子：袋子没有盖章，两本账都不变。</p>
+<p><strong>持久性</strong>说的是另一面：一旦 <code>COMMIT</code> 成功返回，新的连接在进程退出之后仍然要读到这次改动。实践里先提交把余额写成 70，关掉连接，再开一个新连接，读到的就是 70。对比组是：同样写成 70，但不提交就关闭，新连接读到的仍是 100。未提交的修改既没有原子性要保护的「另一半」，也没有持久性要保证的「还在」。</p>
+<p>有两点需要收窄，避免把教学实验说成所有引擎的实现细节。第一，本课的「崩溃」是关掉 sqlite3 连接或让进程结束，没有去拔磁盘、没有去关操作系统的缓存；它用来区分「已提交」和「未提交」，不是对 <code>fsync</code>、WAL checkpoint 或 PostgreSQL <code>synchronous_commit</code> 的测试。第二，PostgreSQL 文档特别提醒：有些对象不受事务回滚约束，例如序列（<code>serial</code> 计数器）的取值在事务中止后也不会退回去。原子性的边界要以目标数据库的文档为准，不能假设「库里每一样东西都会跟着 ROLLBACK」。</p>
+<p>把原子性和持久性放在转账上一起看：没提交就崩溃，两边都应保持 100——这是原子性；提交成功后再崩溃，新会话应看到 70 和 130——这是持久性。少谈一个，都会在故障恢复时把账做乱。</p>
+<h3 id="2">2. 隔离级别与并发异常</h3>
+<p>隔离决定的是：一个尚未完成的事务，和另一个并发事务之间，彼此能观察到什么。SQL 标准用几种现象来定义级别，PostgreSQL 18 文档的表 13.1（2026-11-11 核对）把它们列成了下面这样。请注意，表里写的是「这一级不得出现什么」，并且 PostgreSQL 在两处提供了<strong>比标准更强</strong>的保证：</p>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+<th>序列化异常</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read uncommitted</td>
+<td>标准允许，<strong>但 PostgreSQL 中不会出现</strong>（实现上等同 Read committed）</td>
+<td>可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td>Read committed</td>
+<td>不可能</td>
+<td>可能</td>
+<td>可能</td>
+<td>可能</td>
+</tr>
+<tr>
+<td>Repeatable read</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>标准允许，<strong>但 PostgreSQL 中不会出现</strong></td>
+<td>可能</td>
+</tr>
+<tr>
+<td>Serializable</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>不可能</td>
+<td>不可能</td>
+</tr>
+</tbody>
+</table>
+<p>这几件现象的含义，按官方文档的定义是：</p>
+<ul>
+<li><strong>脏读</strong>：读到了并发事务<strong>尚未提交</strong>的修改。</li>
+<li><strong>不可重复读</strong>：同一事务里再读同一行，发现它已被<strong>另一个已提交事务</strong>改过。</li>
+<li><strong>幻读</strong>：同一事务里再执行同样的查找条件，满足条件的<strong>行集合</strong>变了，因为另一个已提交事务插入或删除了行。</li>
+<li><strong>序列化异常</strong>：一组已经成功提交的事务，其效果和「按某一种顺序一个一个执行」都对不上。写偏斜是这一类里最常被提到的例子。</li>
+</ul>
+<p><strong>丢失更新</strong>没有单独占表 13.1 的一列，但它是本节点实践的核心。典型写法是：两个会话都先把余额读到应用里，各自减 30，再按草稿纸上的数字去 <code>UPDATE</code>。后提交的那一方，把先提交的结果盖掉。它和不可重复读同源——你依据的是一份已经过时的读结果——但破坏的是写入，账会少扣一笔。</p>
+<p>本课用教学模型把这些现象跑成了稳定数字。再强调一次：这是 <code>IsolationEngine</code> 的脚本化结果，用来对照文档里的定义，不是 PostgreSQL 或 InnoDB 的内核输出。</p>
+<p>脏读。T1 把 alice 改成 999 但尚未提交，T2 来读：</p>
+<ul>
+<li><code>READ UNCOMMITTED</code>：T2 读到 999；T1 回滚之后再读，是 100。教学模型在这一级允许脏读。</li>
+<li><code>READ COMMITTED</code> 以及更强的级别：T2 始终读到已提交的 100，不脏。</li>
+</ul>
+<p>这和 PostgreSQL 不同：在 PostgreSQL 里，即使你声明 Read uncommitted，也看不到脏数据，行为按 Read committed 来。不要拿教学模型的 RU 去描述 PostgreSQL。</p>
+<p>不可重复读。T1 先读到 100，T2 把余额改成 70 并提交，T1 再读同一行：</p>
+<ul>
+<li><code>READ UNCOMMITTED</code>、<code>READ COMMITTED</code>：第二次是 70，不可重复。</li>
+<li><code>REPEATABLE READ</code>、<code>SERIALIZABLE</code>：第二次仍是 100。教学模型的可重复读采用「事务开始时的快照」，方向和 PostgreSQL 的可重复读一致：快照从第一次真正的语句开始（本课在 <code>BEGIN</code> 之后立即读，二者等价）。</li>
+</ul>
+<p>幻读。T1 按 <code>status='paid'</code> 计数，先看到 2 行；T2 插入一条已支付订单并提交；T1 再计数：</p>
+<ul>
+<li>读未提交、读已提交：第二次是 3，出现幻行（id=4）。</li>
+<li>可重复读、可序列化：第二次仍是 2。这和 PostgreSQL 的可重复读一样，<strong>强于</strong> SQL 标准——标准允许这一级出现幻读，PostgreSQL 用快照隔离把它挡住了。如果有人只背标准表格，会以为「可重复读还会幻读」；在 PostgreSQL 里这句话不成立。</li>
+</ul>
+<p>丢失更新。两个事务都读到 100，都要写成 70：</p>
+<ul>
+<li>读未提交、读已提交：双方都提交，最终 70，一次扣款被静默盖掉。</li>
+<li>可重复读、可序列化：T1 提交之后，T2 在写入时收到 <code>could not serialize access due to concurrent update</code>（教学模型沿用了 PostgreSQL 可重复读文档里的这句错误信息），T2 中止。此时账上是 70——不是静默丢失，而是 T2 还没成功。T2 从头重试后读到 70，再扣 30，最终 40。</li>
+</ul>
+<p>这里要单独把两种 SQL 写法分开，否则很容易把「读已提交一定会丢失更新」说死。PostgreSQL 文档在 Read committed 一节给过一个转账例子：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">BEGIN</span><span class="p">;</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">accounts</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">balance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">balance</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">100</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">acctnum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12345</span><span class="p">;</span>
+<span class="k">UPDATE</span><span class="w"> </span><span class="n">accounts</span><span class="w"> </span><span class="k">SET</span><span class="w"> </span><span class="n">balance</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">balance</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">100</span><span class="p">.</span><span class="mi">00</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">acctnum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7534</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></div>
+
+<p>文档的意思是：在读已提交下，后一条 <code>UPDATE</code> 若发现目标行已被并发事务改过，会等到对方结束，然后在<strong>更新后的行版本</strong>上重新检查条件并继续。新值是用当前行的 <code>balance</code> 加减出来的，不是应用在事务开始时抄下来的那个数。所以「相对更新」在这一级常常正是想要的行为。本课 naive 路径做的是另一件事：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">bal</span> <span class="o">=</span> <span class="n">get_balance</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>          <span class="c1"># 把 100 抄到 Python 里</span>
+<span class="c1"># ……期间另一个会话已经把同一行提交成 70……</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="s2">"UPDATE wallet SET balance=? WHERE id=?"</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">bal</span> <span class="o">-</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>                  <span class="c1"># 仍写成 70，把别人的扣款盖掉</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>新余额在引擎看不见的地方算完，写回时又不用 <code>WHERE balance = 旧值</code> 或 <code>balance = balance - 30</code>。教学模型在读已提交下放行丢失更新，模拟的就是这种绝对写；sqlite3 两个连接得到 70，也是这种绝对写。条件更新能修到 40，是因为它把减法放回了语句里。不要把「读已提交会丢失更新」理解成「只要隔离级别叫这个名字，任何 UPDATE 都会丢」——要先看新值是在哪算的。</p>
+<p>写偏斜。两个值班编辑都在岗，不变量是「至少留一个人」。T1、T2 都读到「两人都在」，T1 给自己签退并提交，T2 也给自己签退：</p>
+<ul>
+<li>教学模型的 <code>REPEATABLE READ</code>（快照隔离）：双方都能提交，在岗人数变成 0，不变量被打破。这就是序列化异常。PostgreSQL 的可重复读同样不能排除这类异常，文档把它实现为 Snapshot Isolation，并提醒：只靠这一级去执行复杂业务规则，往往还要额外加锁。</li>
+<li><code>SERIALIZABLE</code>：T2 提交时被拒绝，错误是 <code>could not serialize access due to read/write dependencies</code>。在岗的还剩 1 人（编辑 2 仍在岗，T1 已签退）。这对应文档里 SSI 的方向：监测读写依赖，必要时让一方中止并重试。教学模型的依赖检查是简化版，不能当成 PostgreSQL 谓词锁的实现。</li>
+</ul>
+<p>SQLite 要单独说，否则最容易把本课的 sqlite3 实验讲错。根据 SQLite 官方的 Isolation 文档，以及本机 3.46.1 上的实验：</p>
+<ul>
+<li>两个不同连接之间，默认看不到对方未提交的修改。默认情况下谈不上脏读。只有共享缓存并且打开 <code>PRAGMA read_uncommitted</code> 才例外。官方的概括是：除这一例外，SQLite 的事务是 SERIALIZABLE，写操作实际上被串行化，同一时刻只能有一个写者。</li>
+<li><code>BEGIN</code> 默认是 <code>DEFERRED</code>：真正碰到读或写才加锁。<code>BEGIN IMMEDIATE</code> 一开始就拿保留锁，其他写者进不来，但读还可以继续；成功之后，同一事务里后续语句不会再因为另一个写者而收到 <code>SQLITE_BUSY</code>。<code>BEGIN EXCLUSIVE</code> 更强，连读者也挡在外面。</li>
+<li>WAL 模式下，读和写可以同时进行，读者看到的是它开始读时的快照。若一个事务先读、期间另一个写者已经提交，再想把自己升级为写事务，会遇到 <code>SQLITE_BUSY_SNAPSHOT</code>。这和 rollback journal 模式下「写的时候把读者请出去」不一样。</li>
+<li><strong>即便引擎声称是可序列化的，应用层的丢失更新仍然会发生。</strong> 本课用两个 sqlite3 连接，各自 <code>SELECT</code> 到 100，再把余额绝对更新成 70，最终就是 70。原因不是 SQLite 脏读，而是新值在 Python 里算完、写回时没有带上「我读到的仍是这一版」这一约束，两次写又不在同一个已取得写锁的事务里。修复可以是条件更新 <code>UPDATE wallet SET balance = balance - 30 WHERE id=1 AND balance &gt;= 30</code>（本课两个会话先后执行，最终 40），或 <code>BEGIN IMMEDIATE</code> 后再读再写（第二个会话等到第一个提交，本次等待 0.23 秒，持锁侧故意睡眠了 0.20 秒，最终也是 40），或带版本号的 CAS。</li>
+</ul>
+<p>所以：隔离级别的名字是一张公共菜单，厨房的做法并不相同。本课的数字分别标明来自教学模型还是 sqlite3，结论回到 PostgreSQL 时只用已经核对过的那一页文档。把三边并排看一眼，会更清楚 pitfalls 在说什么（教学模型的数字是本次实验，PostgreSQL 一列来自 18 文档表 13.1，SQLite 一列来自官方 Isolation 文档和本课 3.46.1 实验）：</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>教学模型</th>
+<th>PostgreSQL 18（2026-11-11 核对）</th>
+<th>SQLite 3.46.1（默认，非共享缓存）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>脏读</td>
+<td>仅 RU 读到未提交的 999</td>
+<td>标准允许 RU 脏读，但 PG 的 RU 等同 RC，不会脏读</td>
+<td>默认连接之间不可见未提交数据，谈不上脏读</td>
+</tr>
+<tr>
+<td>不可重复读 / 幻读</td>
+<td>RC：100→70，已支付 2→3 行；RR 起不再出现</td>
+<td>RC 可能；RR 两者都不出现（幻读强于标准）</td>
+<td>同一写事务外的已提交变化，何时可见取决于你是否还握着读快照、以及是不是 WAL</td>
+</tr>
+<tr>
+<td>丢失更新（先读后按绝对值写）</td>
+<td>RC 静默得到 70；RR 中止再重试得到 40</td>
+<td>RC 下相对更新会跟最新行版本；应用层绝对写仍会丢。RR 遇到并发更新会报错并要求整段重试</td>
+<td>本课两个连接绝对写得到 70；条件更新或 <code>BEGIN IMMEDIATE</code> 得到 40</td>
+</tr>
+<tr>
+<td>写偏斜 / 序列化异常</td>
+<td>RR 在岗 0 人；Serializable 在岗 1 人</td>
+<td>RR（快照隔离）可能出现；Serializable 排除</td>
+<td>官方把普通事务概括为 SERIALIZABLE，且写者串行；不要据此推断应用层绝对写也安全</td>
+</tr>
+<tr>
+<td>默认级别 / 入口</td>
+<td>由 <code>begin(iso)</code> 显式传入</td>
+<td>默认 Read committed</td>
+<td>没有一套和 PG 一一对应的 <code>SET TRANSACTION</code>；用 <code>DEFERRED</code> / <code>IMMEDIATE</code> / <code>EXCLUSIVE</code> 和 journal 模式</td>
+</tr>
+</tbody>
+</table>
+<p>这一表只用于分清边界，不能当成三套引擎的性能对比，也不能把教学模型的 RU 脏读抄进 PostgreSQL 的笔记里。</p>
+<h3 id="3">3. 重试边界和业务不变量</h3>
+<p>隔离冲突被正确地拒绝，只是故事的一半。另一半是：拒绝之后做什么。</p>
+<p>PostgreSQL 在可重复读一节写明，应用收到 concurrent update 这类错误时，应当中止当前事务，然后<strong>从开头重试整个事务</strong>。第二次会把已经提交的变更收进自己的初始快照，于是不再和那一行的旧版本打架。可序列化级别同样要求应用准备好重试，错误码是 <code>SQLSTATE 40001</code>。文档还提醒：不要依赖一个后来中止的事务里读到的数据，包括只读事务在内（可延迟的只读事务是例外）。</p>
+<p>实践里把「只重试失败的那一句」和「重试整个事务」做成了对照。教学场景是：alice 转 30 给 bob。</p>
+<p>naive 路径上，扣款已经提交，入账在客户端看来失败了——本课模拟的是「入账其实已经落下，但调用方收到了超时或丢失的响应」，于是只把入账再执行一遍。结果是 alice=70、bob=160，总额 230。钱凭空多出了 30。若失败发生在入账从未落下时，只重试入账偶尔看起来还能平，但调用方区分不了这两种失败，这种重试策略是不安全的。</p>
+<p>safe 路径把扣款和入账放在同一个事务里，在 <code>COMMIT</code> 前注入一次失败并回滚，然后从 <code>BEGIN</code> 再走一遍。第一次中止，第二次成功，alice=70、bob=130，总额 200，重试 1 次、共 2 次尝试。教学模型里还有一个锁顺序相反的死锁：T1 锁住 alice、T2 锁住 bob，再互相要对方的行，模型抛出 <code>Deadlock</code>；safe 同样是整段回滚再来。sqlite3 上两个 <code>BEGIN IMMEDIATE</code> 的分成重叠时，后到的一方会碰到 <code>database is locked</code> / busy，本课让它<strong>整段事务</strong>重试，而不是只重试某一句：等待期间持锁侧睡眠了 0.15 秒，后到的一方遇到 2 次锁定错误、重试 2 次后成功，两笔各 10 元的分成都落下，alice=80、bob=120，总额仍是 200。</p>
+<p>SQLite 不容易稳定复现经典的双写者死锁——它本来就把写者串行化，<code>BEGIN IMMEDIATE</code> 更是一开始就排队。本课在 sqlite3 上复现的是 <strong>busy / locked 之后重试整个事务</strong>，死锁本身在教学模型里用锁顺序循环演示。课文和测试都按这个边界来写，不把模型里的死锁说成「在 SQLite 里抓到了死锁」。</p>
+<p>不变量是重试和隔离共同要服务的东西。本课用了三条可以检查的规则：</p>
+<ol>
+<li><strong>扣款次数和余额变化一致。</strong> 八个会话从 1000 各扣 10，预期 920。它们在读完之后用栅栏对齐，再一起按草稿纸上的绝对值写回：naive 最终是 990，相当于只扣成功一次，偏差 70。safe 用条件更新，八次都成功，最终 920。</li>
+<li><strong>互转不改变总额，账户不为负。</strong> 脚本化的 naive 互转里，T1 把 10 从 A 转到 B，T2 把 10 从 B 转到 C，双方都先读到 B=100。T2 先把 B 写成 90、C 写成 110，T1 再按自己的旧读数把 B 写成 110。A=90、B=110、C=110，总额 310，比初始的 300 多出 10。safe 路径上 10 个账户各 1000，16 个线程各做 40 次、每次 7 元的互转，640 次全部成功，总额仍是 10000，没有负余额；本次结束时最低 937、最高 1098，进出都发生在账户之间，没有漏出系统。</li>
+<li><strong>失败重试不额外制造或销毁金额。</strong> 上面那组 230 对 200，以及 locked 重试后的 80 / 120，都是在查这件事。</li>
+</ol>
+<p>条件更新、版本号 CAS、<code>BEGIN IMMEDIATE</code>，都是把「检查」和「写入」重新收进一个不会被别人插队的单元里。条件更新把不变量写进 <code>WHERE balance &gt;= ?</code>；CAS 把「我读到的版本还在」写进 <code>WHERE version=?</code>；<code>BEGIN IMMEDIATE</code> 则让第二个写者在门口排队，读到的已经是前一位提交后的余额。本课三种 safe 扣款最终都是 40。选择哪一种，要看目标数据库和冲突率，但共同的要求是：不变量在并发下可检查，失败后重试的是整个单元。</p>
+<h3 id="_11">三条主线的收束</h3>
+<p>原子性保证袋子是整袋生效或整袋作废，持久性保证盖章之后还能被下一个会话看见，隔离决定两只并发的袋子之间能看见多少，重试决定袋子被拒收之后怎样再走一次而不把账做重。本课的数字可以收成一句对照：两个会话各扣 30，naive 得到 70，safe 得到 40；转账中途崩溃，naive 总额 170，safe 仍是 200；八人一起扣，naive 990，safe 920；只重试入账得到 230，整段重试得到 200。这些是教学实验里的账，生产上要换成目标数据库上实测的隔离级别、冲突率和错误码，但要守的不变量是同一类东西。</p>
+<h2 id="_12">常见误区</h2>
+<p>节点 pitfalls 原文是：「隔离级别相同名称在不同数据库实现细节可能不同。」它可以拆成下面几句具体的话。</p>
+<p><strong>不要把 PostgreSQL 的表当成 SQLite 或 InnoDB 的行为。</strong> 同一级名字下面，厨房并不相同。PostgreSQL 的 Read uncommitted 实际上按 Read committed 来，不会脏读；它的 Repeatable read 是快照隔离，标准允许的幻读在这里不会出现，但序列化异常（例如写偏斜）仍可能发生；真正要排除序列化异常，需要 Serializable，并且应用必须准备好按 40001 重试整个事务。SQLite 默认在连接之间看不到未提交数据，官方甚至把普通事务概括为 SERIALIZABLE，写者被串行化；WAL 下读者看到的是开始读时的快照，写升级可能遇到 <code>BUSY_SNAPSHOT</code>；<code>DEFERRED</code> / <code>IMMEDIATE</code> / <code>EXCLUSIVE</code> 决定的是何时取锁，而不是一套和 PostgreSQL 一一对应的隔离级别开关。InnoDB 也使用这四个名字，但默认级别、普通 <code>SELECT</code> 与加锁读、间隙锁和下一个键锁的细节，既不能用 PostgreSQL 的表替换，也不能用 SQLite 的默认行为替换。本课只把已经核对的 PostgreSQL 18 文档和已经跑过的 sqlite3 / 教学模型写进结论，不把其中一边的数字套到另一边上。</p>
+<p><strong>不要只记 ACID 四个字母。</strong> 原子性和持久性管的是「这一袋自己」；隔离管的是「两袋之间看见什么」；一致性在不同讨论里有时指数据库约束，有时指业务不变量，不能靠缩写自动就位。会默写定义，仍可能在自动提交下写出拆成两步的转账，或在可重复读下以为写偏斜不会发生。</p>
+<p><strong>不要把自动提交当事务。</strong> 一条 <code>UPDATE</code> 自己提交，只对这一句有原子性。分成扣款和入账如果各提交一次，崩溃点 B 就会留下总额 170 这种半截账。开启事务却在中途多写了一次 <code>COMMIT</code>，效果和没开是同类问题。</p>
+<p><strong>不要在冲突时只重试最后一条 SQL。</strong> 这是本课验收的另一半。naive 只重试入账，得到 bob=160、总额 230。文档和 safe 路径要求的是：回滚，然后从读取余额开始把整个事务再做一遍。</p>
+<p><strong>不要以为「引擎是可序列化的」就不必再写条件更新。</strong> SQLite 官方说事务是 SERIALIZABLE，本课仍然用两个会话做出了最终余额 70 的丢失更新。问题出在应用把新值算在事务或语句之外，再按绝对值写回。隔离级别不替你改掉这种写法。</p>
+<h2 id="_13">设计权衡</h2>
+<p>节点 tradeoffs 原文是：「更强隔离简化推理，也可能增加冲突和重试。」实践把这句话落到了可以并列填写的两列上。</p>
+<p><strong>推理成本对冲突成本。</strong> 若一组可序列化事务里，你能证明单笔事务单独跑是对的，提交成功的并发组合就应当和某一种串行顺序等价——这是 PostgreSQL 文档为 Serializable 给出的理由。代价是监测读写依赖、以及更多的序列化失败。本课教学模型里，可重复读放行了写偏斜（在岗从 2 变成 0），可序列化拒绝了第二次签退（在岗仍为 1），被拒的一方必须重试。读已提交冲突更少，但应用要自己面对不可重复读、幻读和丢失更新，推理从「语句本身」移到了「语句和并发怎样咬合」。</p>
+<p><strong>排队对条件更新。</strong> <code>BEGIN IMMEDIATE</code> 让第二个写者在门口等，本课等待约 0.23 秒（持锁 0.20 秒），读到的是已经扣过的余额，最终 40。条件更新不必把读和写拉得很长，一行 <code>WHERE balance &gt;= ?</code> 就挡住透支和丢失更新，八个会话同时扣也能到 920。代价是调用方要处理「本句未改到任何行」（余额不够或版本变了），并在需要时整段重试。冲突很低时，排队简单；冲突高时，短事务加条件更新通常更合适。更强的锁（例如 <code>EXCLUSIVE</code>）还会挡住读者，需要另算读路径的账单。</p>
+<p><strong>失败即重试，对失败即人工介入。</strong> 自动整段重试能把偶发的 40001、locked 消化掉，本课里 1 次注入失败、2 次 locked 之后账仍然平。但重试必须是整个事务，必须有次数上限，必须仍然检查不变量。把重试范围收错，就会出现总额 230。有些失败（余额确实不足、业务上拒绝）不该重试，只该返回给调用方。</p>
+<p>用隔离级别、锁和条件更新做取舍时，一份负责任的说明至少要有：目标不变量是什么，选择的隔离级别在<strong>目标数据库</strong>上实际排除哪些现象，冲突时重试的范围和上限，以及一次并发压测里总额、负余额、成功次数这些数字。本课的数字来自教学模型和 sqlite3，生产上要换成你在目标版本上实际跑出的现象和错误码，但报告的结构可以一样。</p>
+<h2 id="_14">动手实践：用两个会话复现丢失更新，并修好余额扣减</h2>
+<p>实践对应节点原文：「用两个会话复现丢失更新，采用条件更新或锁修复余额扣减。」验收是：不变量在并发压测中成立；死锁或序列化失败能重试整个事务。</p>
+<p>配套代码在 <code>practice99/</code>，用 Python 3 标准库加 sqlite3，另有一个教学隔离引擎，不依赖 PostgreSQL 或 MySQL 服务。跑通 <code>bash test.sh</code> 即可得到下面这些数字；它们是这一次实验的输出，不是生产指标。</p>
+<h3 id="0">0. 文件结构</h3>
+<div class="codehilite"><pre><span></span><code>practice99/
+  engine.py      # 教学隔离引擎：四个级别上的脏读 / 不可重复读 / 幻读 / 丢失更新 / 写偏斜、死锁与整段重试
+  app.py         # sqlite3 创作者钱包：naive / safe 扣款与转账，以及各对照实验
+  test_tx.py     # 断言与 results.json
+  test.sh        # python3 test_tx.py
+  results.json   # 本次运行的完整数字
+</code></pre></div>
+
+<p><code>IsolationEngine</code> 只用于隔离现象和死锁演示，注释和模型字段里标明了它不是生产内核。丢失更新、原子性、持久性、并发不变量、busy 重试，都走真实的 sqlite3 连接。</p>
+<p>读代码时可以按这条线索走：<code>app.py</code> 里 <code>naive_rmw_debit</code> / <code>naive_transfer</code> 是绝对写和自动提交，<code>safe_conditional_debit</code>、<code>safe_immediate_debit</code>、<code>safe_cas_debit</code>、<code>safe_conditional_transfer</code> 是三条修法；<code>experiment_lost_update</code> 等五个函数把对照跑成字典。<code>engine.py</code> 里 <code>demo_dirty_read</code>、<code>demo_nonrepeatable_read</code>、<code>demo_phantom_read</code>、<code>demo_lost_update</code>、<code>demo_write_skew</code>、<code>demo_deadlock_and_retry</code> 都是单线程脚本，数字不依赖调度。<code>test_tx.py</code> 负责用确切数字或明显倍数作断言，并写 <code>results.json</code>。</p>
+<h3 id="1_1">步骤 1：准备数据与目标操作</h3>
+<p>实验用一张很瘦的 <code>wallet</code> 表：<code>id</code>、<code>name</code>、<code>balance</code>、<code>version</code>。主场景是创作者 alice 的余额 100，两个会话各扣 30，预期 40；转账则是 alice 与 bob 各 100，移动 30 之后总额仍为 200。命令在 <code>practice99</code> 目录下执行：</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>成功时标准输出以 <code>ALL_CHECKS_PASSED</code> 开头，随后一行 <code>SUMMARY</code> 列出关键数字；完整结果写入 <code>results.json</code>。本次运行的摘要是：</p>
+<div class="codehilite"><pre><span></span><code>ALL_CHECKS_PASSED
+SUMMARY lost_update naive=70 safe_cond=40 safe_imm=40 expected=40 imm_wait_s≈0.23
+atomic_naive_total=170 atomic_safe_total=200 debit_naive=990 debit_safe=920
+xfer_naive_total=310 soak_total=10000 soak_ok=640/640
+retry_naive_total=230 retry_safe_total=200 retry_safe_retries=1 busy_retries=2
+skew_rr_on_duty=0 skew_s_on_duty=1
+</code></pre></div>
+
+<p>（实际是一行；这里只为阅读折开。<code>imm_wait_s</code> 会在 0.23 附近随调度有很小的波动，其它关键余额和总额在本课测试里是稳定断言。）</p>
+<h3 id="2_1">步骤 2：两条执行路径</h3>
+<p>naive 路径把新余额算在 Python 里，再按绝对值 <code>UPDATE</code>；转账的两步各自提交；失败时只重复「看起来没成功」的那一句。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">bal</span> <span class="o">=</span> <span class="n">get_balance</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">wallet_id</span><span class="p">)</span>          <span class="c1"># 读到 100</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
+    <span class="s2">"UPDATE wallet SET balance=? WHERE id=?"</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">bal</span> <span class="o">-</span> <span class="mi">30</span><span class="p">,</span> <span class="n">wallet_id</span><span class="p">),</span>                  <span class="c1"># 写成 70</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>safe 路径提供三种互相对照的修法，本课测试全部要求得到 40：</p>
+<ul>
+<li>条件更新：<code>UPDATE wallet SET balance = balance - ? WHERE id=? AND balance &gt;= ?</code></li>
+<li><code>BEGIN IMMEDIATE</code> 之后再读再写，第二个写者排队</li>
+<li>版本号 CAS：<code>UPDATE ... SET balance=?, version=version+1 WHERE id=? AND version=?</code></li>
+</ul>
+<p>转账则是一个 <code>BEGIN IMMEDIATE</code> 里完成扣款和入账；任何注入失败、<code>locked</code> / busy 都先 <code>ROLLBACK</code>，再从头开始。</p>
+<h3 id="21">步骤 2.1：两个会话怎样交错</h3>
+<p>丢失更新的 sqlite3 对照不是「靠运气撞车」，而是显式地让两个连接都先读到 100，再各自写 70。并发扣款更用栅栏把八个会话的读对齐，再一起写回，所以 naive 的 990 是稳定结果，不是偶发。互转打破总额的那一组，也用事件规定了「T2 先写 B=90，T1 再按旧读数把 B 写成 110」，总额 310 可以复现。读实验结果时，要把「脚本保证的交错」和「线程调度下的等待时间」分开：前者是精确断言，后者如 <code>BEGIN IMMEDIATE</code> 等待约 0.23 秒，会在持锁睡眠附近小幅波动，断言只要求它明显不短于持锁时间。</p>
+<h3 id="3_1">步骤 3：运行并解读几组对照（真实输出）</h3>
+<p>下面的数字来自本次 <code>bash test.sh</code> 写进 <code>results.json</code> 的结果。</p>
+<p><strong>对照 1：两个 sqlite3 会话的丢失更新（核心）。</strong> 初值 100，各扣 30。naive 最终 70，safe 的条件更新、<code>BEGIN IMMEDIATE</code>、CAS 都是 40。<code>BEGIN IMMEDIATE</code> 这一组里，第一个会话持锁睡眠 0.20 秒，第二个会话等到锁，本次等待 0.23 秒，然后读到的已经是扣过一次的余额。</p>
+<p><strong>对照 2：转账中途崩溃（原子性）。</strong> 各 100，要转 30。naive 在入账前关闭连接：alice=70，bob=100，总额 170。safe 在 <code>COMMIT</code> 前关闭：两边仍是 100，总额 200。</p>
+<p><strong>对照 3：提交与未提交（持久性）。</strong> 把余额写成 70 并 <code>COMMIT</code>，新连接读到 70。同样的写法但不提交就关闭，新连接读到 100。</p>
+<p><strong>对照 4：教学模型里的隔离现象。</strong> 脏读只出现在教学模型的读未提交（读到未提交的 999）；读已提交及以上看不到。不可重复读、幻读出现在读未提交和读已提交（100 变成 70，已支付订单 2 行变成 3 行），可重复读和可序列化各读两次结果一致。丢失更新在读已提交下被静默放行（70）；在可重复读 / 可序列化下 T2 中止，重试后得到 40。写偏斜在可重复读下把在岗人数从 2 降到 0，在可序列化下第二次签退被拒绝，仍剩 1 人在岗。这些数字用来对照 PostgreSQL 表 13.1 的定义，不是 SQLite 跑出来的。</p>
+<p><strong>对照 5：并发压测中的不变量（验收 1）。</strong> 八个会话各扣 10：naive=990（偏差 70），safe=920，八次都成功，没有负余额。naive 互转让总额变成 310（A=90，B=110，C=110）。safe 互转 10 账户、初始总额 10000，16×40=640 次全部成功，总额仍是 10000，负账户 0，本次最低 937、最高 1098。</p>
+<p><strong>对照 6：失败后重试整个事务（验收 2）。</strong> naive 只重试入账：70 / 160，总额 230。safe 整段回滚再来：70 / 130，总额 200，重试 1 次。sqlite3 上重叠的 <code>BEGIN IMMEDIATE</code> 遇到 2 次 locked / busy，整段重试 2 次后两笔各 10 元都落下，80 / 120，总额 200。教学模型同时抓到了一次锁顺序死锁；sqlite3 路径没有声称自己复现了死锁。</p>
+<p>把六组对照收成一张表，方便和 <code>results.json</code> 对读：</p>
+<table>
+<thead>
+<tr>
+<th>对照</th>
+<th>naive / 较弱隔离</th>
+<th>safe / 较强隔离或整段重试</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>两会话各扣 30（初值 100）</td>
+<td>最终 70</td>
+<td>条件更新 / IMMEDIATE / CAS 都是 40</td>
+</tr>
+<tr>
+<td>转账 30，入账前崩溃</td>
+<td>alice=70，bob=100，总额 170</td>
+<td>两边 100，总额 200</td>
+</tr>
+<tr>
+<td>写成 70 后换连接</td>
+<td>已提交可见 70；未提交关闭后仍 100</td>
+<td>同左，这是持久性本身</td>
+</tr>
+<tr>
+<td>教学模型丢失更新</td>
+<td>读已提交静默 70</td>
+<td>可重复读中止后重试，40</td>
+</tr>
+<tr>
+<td>教学模型写偏斜</td>
+<td>可重复读：在岗 0 人</td>
+<td>可序列化：在岗 1 人</td>
+</tr>
+<tr>
+<td>八人各扣 10（初值 1000）</td>
+<td>990，偏差 70</td>
+<td>920，8 次都成功</td>
+</tr>
+<tr>
+<td>互转不变量</td>
+<td>总额 310（A=90，B=110，C=110）</td>
+<td>640 次后总额 10000，最低 937，最高 1098</td>
+</tr>
+<tr>
+<td>入账失败后的重试</td>
+<td>70 / 160，总额 230</td>
+<td>70 / 130，总额 200，重试 1 次</td>
+</tr>
+<tr>
+<td>sqlite3 locked / busy</td>
+<td>—</td>
+<td>整段重试 2 次，80 / 120，总额 200</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4">步骤 4：对照验收标准</h3>
+<h1 id="1_2">验收 1：不变量在并发压测中成立</h1>
+<h1 id="safe_final920-1000-810-successes8">八次扣款：safe_final=920，与 1000-8×10 一致，successes=8，无负余额；</h1>
+<h1 id="naive_final990-70">naive_final=990，偏差 70。</h1>
+<h1 id="safe-640-10000delta0negative_accounts0">互转：safe 640 次后总额 10000、delta=0、negative_accounts=0；</h1>
+<h1 id="naive-310">naive 脚本化互转总额 310，不变量被打破。</h1>
+<h1 id="2_2">验收 2：死锁或序列化失败能重试整个事务</h1>
+<h1 id="deadlock-serializationfailure">教学模型：Deadlock 被捕获；注入的 SerializationFailure 后整段重试，</h1>
+<h1 id="safe_a70safe_b130safe_total200retries1">safe_a=70、safe_b=130、safe_total=200、retries=1。</h1>
+<h1 id="sqlite3lockedbusy-2">sqlite3：注入失败同样整段重试，结果相同；locked/busy 整段重试 2 次后</h1>
+<h1 id="80120-200naive-230">80/120，总额 200。naive 只重试入账得到 230。</h1>
+<h3 id="5">步骤 5：自己动手的扩展练习</h3>
+<ol>
+<li>把 naive 丢失更新改成「两次更新都在各自的 <code>BEGIN DEFERRED</code> 里，但新值仍在 Python 里算」。在 rollback journal 和 WAL 下分别观察：最终是静默的 70，还是 <code>BUSY</code> / <code>BUSY_SNAPSHOT</code>？不要预先用某一模式的结果去猜另一种。</li>
+<li>给条件更新加上「余额不足」的路径，让 100 元面对三次 40 元扣款，确认第三次 <code>rowcount=0</code>，余额停在 20，而不是变成负数。</li>
+<li>在教学模型里把写偏斜改成「至少一侧准备金不为 0」，自己画一条读写依赖，看可序列化为什么拒绝第二次提交。</li>
+<li>给 safe 转账加上有上限的指数退避，再人为拉长持锁时间，观察重试次数和总额是否仍然为 200。</li>
+</ol>
+<h3 id="6">步骤 6：和生产引擎的对应关系（不要记错边界）</h3>
+<ul>
+<li>sqlite3 实验对应的是「两个会话、应用层读写、条件更新和 <code>BEGIN IMMEDIATE</code>」。它验证丢失更新、原子性、持久性、不变量和 locked 重试，不验证 PostgreSQL 的隔离级别矩阵。</li>
+<li>教学模型对应的是「把文档里的现象变成可复现的数字」。可重复读按快照来，方向接近 PostgreSQL 的 Repeatable read，不是标准里那个「还允许幻读」的 Repeatable read；可序列化只做了简化的读写依赖检查，没有实现 PostgreSQL 的谓词锁、<code>SIReadLock</code> 或 <code>READ ONLY DEFERRABLE</code>。</li>
+<li>把结论带回生产时，到目标库上用两个会话自己跑：看默认隔离级别是什么，丢失更新在「先读后写」和 <code>UPDATE balance = balance - ?</code> 两种写法下分别怎样，序列化失败的错误码是什么，以及中止后是否整段重试。PostgreSQL 请以 18 文档那一页为准（已核对，2026-11-11）；SQLite 请以官方 Isolation 文档和你使用的 journal 模式为准。本课的余额和耗时不能当成生产性能数据。</li>
+<li>sqlite3 实验默认走的是连接的默认 journal 模式，没有在测试里切换 WAL。WAL 下读者可以和一位写者并存，先读后写还可能遇到 <code>SQLITE_BUSY_SNAPSHOT</code>，现象会和 rollback journal 不一样。扩展练习第 1 题就是让你自己把两种模式跑一遍，而不是把本课默认模式下的 70 直接说成 WAL 的结果。</li>
+<li>Python 的 sqlite3 默认事务行为也值得在本地确认：本课把 <code>isolation_level</code> 设为 <code>None</code>（自动提交），需要事务的路径一律显式写 <code>BEGIN</code> / <code>COMMIT</code> / <code>ROLLBACK</code>，避免和库默认的隐式 <code>BEGIN DEFERRED</code> 搅在一起。换一种 Python 版本或包装库时，先看这一层，再下关于隔离的结论。</li>
+</ul>
+<h2 id="_15">源码与文档阅读</h2>
+<p>节点指定的资料是 PostgreSQL 参考手册 <a href="https://www.postgresql.org/docs/current/transaction-iso.html">13.2. Transaction Isolation</a>（www.postgresql.org，英文文档，访问日期 2026-11-11，页面标明为 PostgreSQL 18）。节点在资源说明里希望重点核对「原子性和持久性」与「隔离级别与并发异常」。需要如实记录的是：这一页的主题是隔离级别和并发现象，原子性、持久性的完整讨论在手册的其他章节；序列（<code>serial</code>）不受回滚约束，也写在本页的提醒里。阅读时按页面上实际出现的内容来，不要把本课实践里的 sqlite3 数字写成这篇文档里的原句。</p>
+<p>这篇文档里与本课直接对应、且已核对过的要点：</p>
+<ol>
+<li><strong>四个级别用现象来定义，Serializable 则用「与某种串行顺序等价」来定义。</strong> 表 13.1 列出脏读、不可重复读、幻读、序列化异常在各级是否可能。PostgreSQL 只真正实现了三种：Read uncommitted 与 Read committed 相同；Repeatable read 不允许幻读（强于标准）；Serializable 排除序列化异常。</li>
+<li><strong>Read committed 是 PostgreSQL 的默认级别。</strong> 一条 <code>SELECT</code> 看到的是语句开始时的快照，同一事务里两条 <code>SELECT</code> 可能看到不同数据。<code>UPDATE</code> 在等待并发事务结束之后，若对方已提交，会在<strong>更新后的行版本</strong>上重新检查 <code>WHERE</code>。文档用转账例子说明：对预定行的 <code>UPDATE balance = balance ± 100</code> 往往正需要看到最新版本；复杂谓词则可能在这一级看到不一致的组合。</li>
+<li><strong>Repeatable read 在 PostgreSQL 中是快照隔离。</strong> 快照从第一条非事务控制语句开始，后续 <code>SELECT</code> 看到同一份数据。若要修改的行在本事务开始之后已被别人改过，会失败并报 <code>ERROR: could not serialize access due to concurrent update</code>。文档明确要求：此时应中止，并从头重试整个事务。只读事务不会碰到这种写冲突。这一级仍可能出现序列化异常，文档还举了「控制记录已更新、明细却还是旧版」的例子，提醒不要单靠它执行复杂业务规则。</li>
+<li><strong>Serializable 在快照隔离之上监测读写依赖。</strong> 典型例子是两个事务各自按 <code>class</code> 求和再写到另一个 <code>class</code>：在可重复读下可以都提交，在可序列化下会有一方收到 <code>could not serialize access due to read/write dependencies among transactions</code>。谓词锁（<code>SIReadLock</code>）用于发现这类依赖，文档写明它们不引入额外阻塞，因此也不参与死锁。应用必须把 40001 当成常规错误来重试；一个后来中止的事务里读到的数据，不能当成有效结果。</li>
+<li><strong>错误处理路径是「整段重试」，不是「重放最后一条」。</strong> 这一点同时支撑本课的验收 2 和教学实验里 230 对 200 的对照。另外，本页提醒序列的增值不会随事务中止回滚，这是原子性的一条真实边界。</li>
+</ol>
+<p>建议的阅读方法：先只读这一页，用自己的话写下「四个级别各自排除什么、PostgreSQL 在哪两处强于标准、可重复读和可序列化失败时分别报什么、应用应该怎样重试」。然后再回到本课实践，看哪一组数字在模拟其中哪一条，哪一组（sqlite3 的丢失更新、<code>BEGIN IMMEDIATE</code>、WAL 与 <code>DEFERRED</code>）需要另读 SQLite 的 Isolation 文档并用两个连接验证。记录：文档版本 PostgreSQL 18、访问日期 2026-11-11、实际打开的 URL、你亲自跑过的 <code>bash test.sh</code> 输出。</p>
+<p>边界：教学实验只模拟语义和可复现的数字，不代表 PostgreSQL 的 MVCC 实现、谓词锁的粒度、InnoDB 的间隙锁，或 SQLite 在某种 journal 模式下的锁升级时序。</p>
+<h2 id="_16">自测题</h2>
+<p>下面三道题都可以用 practice99 里的数字来回答，不必默写定义。若某一问只能说出「要有事务」却对不上 70 / 40、170 / 200 或 230 / 200，说明还要回到对应的对照表。</p>
+<p><strong>题 1</strong>：alice 钱包里有 100 元，两个会话各要扣 30。为什么 naive 路径最终是 70 而不是 40？条件更新和 <code>BEGIN IMMEDIATE</code> 分别是怎样把结果修成 40 的？这件事能说明 SQLite 发生了脏读吗？</p>
+<details><summary>答案</summary>
+
+- 两个连接都先 `SELECT` 到 100，再把余额写成 `100-30=70`。后一次绝对写盖掉前一次，少扣了 30，最终 70。这是丢失更新，实践里用两个真实 sqlite3 连接稳定得到这个数字。
+- 条件更新把「余额够不够」和「减 30」收成一句：`SET balance = balance - 30 WHERE ... AND balance >= 30`。两次各成功改一行，最终 40。`BEGIN IMMEDIATE` 让第二个写者等到第一个提交（本次等待 0.23 秒，持锁睡眠 0.20 秒），再读到已经扣过的余额，同样得到 40。版本号 CAS 走的是「版本没变才能写」这一条，最终也是 40。
+- 不能说这是脏读。脏读的定义是读到**尚未提交**的修改。SQLite 默认在连接之间看不到未提交数据；本课的 70 来自两次都已提交的绝对写，新值算在应用里。官方文档把普通 SQLite 事务概括为 SERIALIZABLE，但这并不自动修好应用层的先读后写。
+
+</details>
+
+<p><strong>题 2</strong>：为什么转账中途崩溃时，naive 会把总额从 200 变成 170，而 safe 仍是 200？<code>COMMIT</code> 之后再打开新连接，读到 70，说明了哪一条性质？如果入账失败后只重试入账，为什么总额会变成 230？PostgreSQL 文档要求的重试范围是什么？</p>
+<details><summary>答案</summary>
+
+- naive 让扣款自己提交，崩溃发生在入账之前，于是 alice=70、bob=100，总额 170。safe 把两步放在同一事务里，未提交就关闭连接，SQLite 回滚整袋，两边仍是 100，总额 200。这是原子性：要么两步都发生，要么都不发生。
+- 提交后再开新连接读到 70，是持久性：已提交的改动在连接关闭之后仍然可见。对比组是未提交就关闭，新连接仍读到 100。
+- 只重试入账时，本课模拟「入账其实已经落下、客户端却以为失败」，于是 bob 被加了两次：70 / 160，总额 230。safe 在 `COMMIT` 前失败就回滚，从扣款重新开始，得到 70 / 130，总额 200，重试 1 次。
+- PostgreSQL 18 文档在可重复读一节要求：收到不能序列化的错误时，中止当前事务，从头重试整个事务。可序列化级别同样把 40001 当作需要整段重试的常规错误。不能只重放最后一条 SQL。
+
+</details>
+
+<p><strong>题 3</strong>：根据 2026-11-11 核对的 PostgreSQL 18 文档，Read uncommitted 在 PostgreSQL 里会脏读吗？Repeatable read 还会幻读吗？它能阻止写偏斜吗？为什么本课还要单独做一套教学模型，而不能直接把 sqlite3 的默认行为说成这些级别？请用本课的写偏斜数字和 SQLite 边界来说明。</p>
+<details><summary>答案</summary>
+
+- PostgreSQL 的 Read uncommitted 不会脏读，实现上等同 Read committed。它的 Repeatable read 不允许幻读，这比 SQL 标准更强，因为它是快照隔离。快照隔离仍可能出现序列化异常：两个事务各改各的行，合在一起却没有一种串行顺序能解释结果。写偏斜就属于这一类。要排除它，需要 Serializable，并且准备好重试。
+- 教学模型里，可重复读下放行写偏斜，两个值班编辑都签退，在岗从 2 变成 0；可序列化拒绝第二次提交，仍剩 1 人在岗。这用来对照文档的定义，不是 InnoDB 或 SQLite 的输出。
+- SQLite 的默认行为不能拿来充当这张级别表。它在连接之间默认不可脏读，写者串行，官方概括为 SERIALIZABLE；但 WAL、`DEFERRED` / `IMMEDIATE`、应用层先读后写，都会改变你实际看到的现象。本课在声称 SERIALIZABLE 的引擎上仍然做出了丢失更新（最终 70）。同名隔离级别在不同数据库里的细节不同，这正是本节点的 pitfalls。结论只能写回已经核对的文档，和你在目标引擎上亲自跑过的两个会话。
+
+</details>
+
+<h2 id="_17">推荐资源</h2>
+<ul>
+<li><a href="https://www.postgresql.org/docs/current/transaction-iso.html">事务、隔离与异常：参考文档 / 原始资料</a>，来源 www.postgresql.org｜文档｜英文｜进阶｜免费。阅读重点：「重点阅读原子性和持久性与隔离级别与并发异常，用于核对本节点实验的语义和边界。」请注意该页正文实际详述的是隔离级别、现象定义、PostgreSQL 在 Read uncommitted / Repeatable read 上强于标准的部分，以及可重复读、可序列化失败时的错误信息和整段重试要求；原子性、持久性的完整专章要另找手册，SQLite 的 <code>BEGIN</code> 模式和 WAL 要以 SQLite 自己的 Isolation 文档为准。建议结合 practice99 逐项对照，并记下 PostgreSQL 18、访问日期 2026-11-11，以及 <code>bash test.sh</code> 的输出。</li>
+</ul>
+<h2 id="_18">本课小结</h2>
+<ul>
+<li>事务把操作组织成受约束的原子单元，隔离级别决定并发可观察行为，不能只记 ACID 缩写。</li>
+<li><strong>原子性和持久性</strong>：转账的两步必须在同一事务里。实践中中途崩溃后，naive 总额 170（alice=70，bob=100），safe 回滚后仍是 200。<code>COMMIT</code> 之后新连接读到 70；未提交就关闭，新连接仍是 100。</li>
+<li><strong>隔离级别与并发异常</strong>：按 2026-11-11 核对的 PostgreSQL 18 文档，脏读、不可重复读、幻读、序列化异常在各级的含义并不与「同名级别在所有数据库里都一样」重合。教学模型里，脏读只出现在读未提交（999）；不可重复读和幻读出现在读已提交（100→70，2 行→3 行）；丢失更新在读已提交下静默得到 70，在可重复读下中止并重试后得到 40；写偏斜在可重复读下把在岗人数降到 0，在可序列化下仍剩 1 人。sqlite3 两个会话的丢失更新是 70，条件更新和 <code>BEGIN IMMEDIATE</code>（等待 0.23 秒）把它修成 40。</li>
+<li><strong>重试边界和业务不变量</strong>：只重试入账得到 230；整段回滚再试得到 200。八人各扣 10，naive=990，safe=920。safe 的 640 次互转总额仍是 10000，没有负余额。locked / busy 整段重试 2 次后，80 / 120，总额仍为 200。</li>
+<li>验收：不变量在并发压测中成立；死锁或序列化失败能重试整个事务。实践里 920 和 10000 必须和「重试的是整段事务、而不是最后一句」写在同一份报告里。</li>
+<li>误区：隔离级别相同名称在不同数据库实现细节可能不同。不要用 PostgreSQL 的表去描述 SQLite，也不要把 SQLite 默认的 SERIALIZABLE 当成「先读后写也不会丢失更新」。</li>
+<li>权衡：更强隔离简化推理，也可能增加冲突和重试。选级别、锁还是条件更新之前，先写出要守的不变量，以及冲突时重试的范围。</li>
+</ul>
+<p>学完后可以用三句话自检：一笔跨行更新在崩溃之后是整袋生效还是留下半截；两个会话先读后写时，最终余额和扣款次数是否一致，你用的是条件更新、版本号还是写锁；冲突或锁定之后，重试的是整个事务还是最后一条 SQL，总额还能不能对上。三句都能答上来，并且能指出 practice99 里对应的那组数字，这一课就算过关。</p>
+<p>如果有一句答不上来，先回到对应的实验表，再回到 PostgreSQL 18 文档里关于现象定义和整段重试的那几句，不要只把 ACID 的四个字母背下来。</p>
+<p>写作笔记时顺便记下三件事：你核对文档的日期和版本、目标数据库的默认隔离级别、以及一次失败之后你的代码到底重试了什么。这三件事能把本课的边界说明带进下一课，而不是只留下一串实验数字。</p><div class="pn"><span><a href="98.html">← B+Tree与索引访问路径</a></span><span>下一课 待更新</span></div></main></div></body></html>
