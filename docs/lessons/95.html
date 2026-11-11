@@ -1,0 +1,1100 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>95. 接口兼容与服务演进 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（95/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details open><summary>领域 F（15/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="cur" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li class="todo">96. 轻量RPC框架设计与边界 <em>待更新</em></li></ul></details><details><summary>领域 G（0/16）</summary><div>阶段 2</div><ul><li class="todo">97. MySQL访问与连接管理 <em>待更新</em></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 95 课 · 领域 F · 阶段 4</p><p class="dl"><a href="../files/95-f-evolution.md" download>⬇ 本课 Markdown</a><a href="../files/practice95.tar.gz" download>⬇ 练习包 practice95.tar.gz</a></p><h1 id="95208">第 95/208 课：接口兼容与服务演进</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>f-evolution</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>API Evolution</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>F / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>上下文与接口边界</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>f-protobuf</code>、<code>f-model</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>API Evolution</code>、<code>F</code>、<code>C++</code></td>
+</tr>
+<tr>
+<td>参考文档</td>
+<td><a href="https://protobuf.dev/best-practices/dos-donts/">接口兼容与服务演进：参考文档 / 原始资料</a>（protobuf.dev）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>接口演进要同时考虑线格式兼容、业务语义、默认行为及新旧客户端共存。滚动发布期间必须在旧服务与新客户端等组合中验证兼容性。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课出现的后台系统、服务划分、字段名、数字与事故时间线均为教学假设，用于讲解通用后端工程概念，
+不代表任何企业的内部实现或真实架构。protobuf 各语言实现对未知字段、未知枚举的具体行为以所用版本为准；
+课内实验在本机 protobuf Python 7.36.2（upb 后端）上实测，C++ 生成代码的细节请以对应版本文档为准。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉例子：表格加了一列</h3>
+<p>财务部的共享表格原来有「日期、金额、状态」三列，状态只有「已付 / 未付」。某天有人加了第四列「备注」，又给状态加了一个新值「部分已付」。</p>
+<ul>
+<li>老的报表脚本按列名取数：读到不认识的「备注」列，<strong>应该忽略而不是崩溃</strong>——这是「未知字段」。</li>
+<li>老脚本里写着 <code>if 状态 != "未付": 计入已收款</code>：读到「部分已付」时，脚本不报错，却把只付了一半的单子算成全额收款——这是「<strong>线格式可解析，但业务语义不兼容</strong>」。</li>
+<li>有人用老脚本「读出来改个日期再写回去」，结果脚本只认识三列，写回时把「备注」整列抹掉了——这是「<strong>读-改-写丢字段</strong>」，回滚时最容易发生。</li>
+<li>表格不是一瞬间换掉的：有的同事已经用新模板，有的还在用旧脚本——这是「<strong>新旧客户端共存</strong>」。</li>
+</ul>
+<p>接口演进要处理的就是这四件事，只是「表格」换成了 protobuf 消息，「同事」换成了滚动发布中的几百个实例。</p>
+<h3 id="_4">接上前置课</h3>
+<ul>
+<li><code>f-protobuf</code>：学了字段号、wire type 和二进制编码——<strong>线上传的是字段号，不是字段名</strong>，这是本课所有兼容规则的物理基础。</li>
+<li><code>f-model</code>：学了怎样给接口建数据模型（实体、状态、可选/必填）——本课讨论这些模型<strong>随时间变化</strong>时如何不破坏调用方。</li>
+<li>protobuf.dev 的 Best Practices 开宗明义：客户端和服务端<strong>永远不会恰好同时更新</strong>，即使你努力让它们同时更新；任何一方都可能被回滚。所以不能假设「两边同步上线就没事」。</li>
+</ul>
+<h3 id="_5">教学时间线（教学假设）</h3>
+<p>某内容后台的「文章详情」接口要上 v2：新增 <code>cover_style</code>（封面样式）字段，文章状态枚举新增 <code>ARTICLE_STATE_FANS_ONLY = 3</code>（仅粉丝可见）。</p>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>事件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T+0</td>
+<td>发布服务（写端）和详情服务（读端）同时开始滚动升级，计划 1 小时内 100%</td>
+</tr>
+<tr>
+<td>T+15min</td>
+<td>30% 实例已是 v2。v2 发布服务开始写出 <code>FANS_ONLY</code> 文章</td>
+</tr>
+<tr>
+<td>T+18min</td>
+<td>舆情反馈：部分游客能看到「仅粉丝可见」文章。排查：仍是 v1 的详情服务实例判可见性写的是 <code>state != DRAFT 就展示</code>，不认识的 3 被当成公开</td>
+</tr>
+<tr>
+<td>T+20min</td>
+<td>另一类告警：旧版后台管理页渲染状态标签时 <code>Name(3)</code> 抛异常，页面 500</td>
+</tr>
+<tr>
+<td>T+25min</td>
+<td>决定回滚到 v1。回滚后接口全部 200，没有任何解析错误，大家松了口气</td>
+</tr>
+<tr>
+<td>T+2 天</td>
+<td>修好后重新发布 v2，发现回滚期间被编辑过标题的文章 <code>cover_style</code> 全没了：v1 的编辑路径把消息转成内部 DTO 再写回，只拷了自己认识的字段</td>
+</tr>
+</tbody>
+</table>
+<p>这条时间线里<strong>没有一次 protobuf 解析失败</strong>。出问题的是：语义（未知枚举当公开）、实现方式（用名字渲染枚举）、数据路径（读-改-写丢未知字段）、发布顺序（读端还没全量认识新值，写端就开始产生它）。</p>
+<h3 id="_6">错误做法与正确做法对照</h3>
+<table>
+<thead>
+<tr>
+<th>环节</th>
+<th>错误做法</th>
+<th>正确做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新枚举</td>
+<td>黑名单 <code>state != DRAFT</code> 就展示</td>
+<td>白名单：只有 <code>PUBLIC</code> 放行，未知值走最严格分支并计数</td>
+</tr>
+<tr>
+<td>渲染枚举</td>
+<td><code>Name(state)</code> 直接取名字</td>
+<td>先判断值是否已知，未知显示「未知状态」</td>
+</tr>
+<tr>
+<td>新字段缺失</td>
+<td>新代码把 <code>""</code> 当「用户选了空样式」</td>
+<td>用 <code>optional</code> 区分「没传」和「传了空」，没传走业务默认值</td>
+</tr>
+<tr>
+<td>读-改-写</td>
+<td>拷到 DTO 再序列化</td>
+<td>在解析出的原消息上修改，保留 unknown fields</td>
+</tr>
+<tr>
+<td>发布顺序</td>
+<td>读写端同时放量</td>
+<td>先全量发布「认识新值」的读端，再打开写端产生新值</td>
+</tr>
+<tr>
+<td>测试</td>
+<td>只测 v2 客户端 × v2 服务端</td>
+<td>v1/v2 × v1/v2 四种组合 + 回滚演练的契约测试</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_7">本课三条主线</h3>
+<ol>
+<li><strong>新增字段和未知字段</strong>：线格式层面，新旧版本各自看到了什么。</li>
+<li><strong>语义兼容与版本策略</strong>：能解析之后，业务含义是否一致；选择怎样的演进方式。</li>
+<li><strong>灰度、契约测试和回滚</strong>：如何在真实的新旧组合里证明兼容，以及如何安全退回。</li>
+</ol>
+<h2 id="_8">学习目标</h2>
+<p>学完本课，你应该能够：</p>
+<ol>
+<li>能解释新增字段和未知字段。（goals 原文）</li>
+<li>能独立完成：模拟v1/v2客户端与服务端四种组合，验证字段缺失和新枚举。（goals 原文）</li>
+<li>能说清 protobuf 二进制线格式中「字段号 + wire type」为什么让新增字段、重命名（仅二进制）安全，而复用编号、改类型危险。</li>
+<li>能区分 proto3 隐式 presence 与 <code>optional</code> 显式 presence，并据此设计字段缺失时的默认行为。</li>
+<li>能举出至少三种「线格式可解析但语义不兼容」的变更（新枚举落入默认分支、单位变化、默认值变化），并给出保守兜底写法。</li>
+<li>能按 expand-contract 顺序安排一次带新字段、新枚举的灰度发布，并列出按版本分桶的观测指标。</li>
+<li>能为「回滚不因新数据无法解析而失败」设计契约测试与回滚演练，并证明读-改-写不丢数据。</li>
+</ol>
+<h2 id="_9">为什么后端要懂</h2>
+<blockquote>
+<p>why 原文：<strong>让滚动发布和回滚不破坏数据与调用方。</strong></p>
+</blockquote>
+<p>后台服务几乎从不「停机升级」：</p>
+<ul>
+<li><strong>滚动发布期间新旧版本必然共存</strong>。几百个实例分批替换，一个请求可能是 v2 网关 → v1 业务服务 → v2 存储服务；调用方（App、前端、其它团队的服务）的升级节奏你也控制不了。</li>
+<li><strong>回滚时新数据已经写进去了</strong>。代码能回滚，数据不会。v2 写入存储、消息队列、缓存的消息，回滚后要被 v1 读，被 v1 改写，再被将来的 v2 重新读。</li>
+<li>破坏「调用方」表现为报错、展示错误、越权；破坏「数据」表现为静默丢字段——后者往往几天后才被发现，而且难以恢复。</li>
+</ul>
+<h3 id="summary">逐句读 summary</h3>
+<blockquote>
+<p>「接口演进要同时考虑<strong>线格式兼容、业务语义、默认行为及新旧客户端共存</strong>。」</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>问的问题</th>
+<th>例子（教学假设）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线格式兼容</td>
+<td>对方的字节我能解析吗？</td>
+<td>删掉 <code>view_count = 4</code> 后把 4 号复用为 <code>like_count</code>：同为 varint，解析不报错，但旧数据里的阅读数 12345 被读成了 12345 个赞（本课实验实测）</td>
+</tr>
+<tr>
+<td>业务语义</td>
+<td>解析出来的值，两边理解一致吗？</td>
+<td>新增 <code>FANS_ONLY</code>，旧服务按「非草稿即公开」处理</td>
+</tr>
+<tr>
+<td>默认行为</td>
+<td>字段没传时，两边各自怎么理解？</td>
+<td>v2 把「不传可见性」从默认公开改成默认仅自己可见；旧客户端不传，结果文章全被藏起来</td>
+</tr>
+<tr>
+<td>新旧客户端共存</td>
+<td>发布期间所有组合都还能工作吗？</td>
+<td>30% 实例是 v2 时，v1 服务读 v2 数据、v2 服务读 v1 数据会同时发生</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>「滚动发布期间必须在<strong>旧服务与新客户端等组合</strong>中验证兼容性。」</p>
+</blockquote>
+<p>四种组合各有自己的风险点：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>服务端 v1</th>
+<th>服务端 v2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>客户端 v1</strong></td>
+<td>基线。仍要回归：v2 上线后又回滚时，这一格读的可能是 v2 写入的数据</td>
+<td>字段缺失：v1 客户端不传 <code>cover_style</code>，服务端要有合理默认；v1 客户端收到 <code>FANS_ONLY</code> 时能否安全展示</td>
+</tr>
+<tr>
+<td><strong>客户端 v2</strong></td>
+<td>新客户端遇上旧服务（发布早期或回滚后）：新字段被忽略，新功能不可用但不能出错；旧服务读到新枚举要保守处理</td>
+<td>目标态：新字段、新枚举的完整语义</td>
+</tr>
+</tbody>
+</table>
+<p>这四格里，平时最容易被漏测的是右上和左下，而回滚场景会把「v2 写入的数据」带进左上这一格。本课的动手实践会把四格都真实跑一遍。</p>
+<h2 id="_10">核心知识点</h2>
+<p>本课讨论的"兼容"有三层：二进制线格式能不能解析、解析出来的业务语义对不对、发布和回滚期间新旧组合会不会互相踩。三层都过了，才算一次安全的接口演进。</p>
+<p>下面的场景是<strong>教学假设</strong>：公众号内容后台有一个文章详情接口，返回 <code>Article</code> 消息；v1 只有标题、正文、状态，v2 新增封面样式，并给文章状态增加"仅粉丝可见"。不涉及任何真实产品的内部实现，只借这个场景讲通用方法。</p>
+<h3 id="1">1. 新增字段和未知字段</h3>
+<h4 id="11">1.1 线格式只认字段号，不认字段名</h4>
+<p>protobuf 的二进制线格式里，每个字段由两部分组成：</p>
+<ul>
+<li><strong>tag</strong>：<code>(field_number &lt;&lt; 3) | wire_type</code>，决定"这是几号字段、后面怎么读"；</li>
+<li><strong>payload</strong>：字段值本身，编码方式由 wire type 决定。</li>
+</ul>
+<p>常见 wire type：0 是 varint（int32/int64/bool/enum 等），1 是 64 位，2 是 length-delimited（string/bytes/嵌套消息），5 是 32 位。</p>
+<p>举例：字段号 5、类型 string，wire type 是 2，tag = <code>(5 &lt;&lt; 3) | 2 = 42 = 0x2A</code>。解析器读到 <code>0x2A</code>，就知道后面跟一个长度前缀加字节串。<strong>字段名根本不出现在二进制里</strong>，所以：</p>
+<ul>
+<li>二进制层面重命名字段是安全的（但 JSON/text format 不安全，见 1.6）；</li>
+<li>字段号一旦发布就是契约的一部分，删字段后不能把编号让给新字段。</li>
+</ul>
+<h4 id="12-v1v2-proto">1.2 一份 v1/v2 的 .proto 对比</h4>
+<p>v1 的定义如下（与本课实践 <code>practice95/article_v1.proto</code> 一致）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">syntax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"proto3"</span><span class="p">;</span>
+<span class="kn">package</span><span class="w"> </span><span class="nn">atlas.article</span><span class="p">;</span>
+
+<span class="kd">enum</span><span class="w"> </span><span class="n">ArticleState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_UNSPECIFIED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_PUBLIC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_DRAFT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">Article</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int64</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="n">ArticleState</span><span class="w"> </span><span class="na">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int64</span><span class="w"> </span><span class="na">view_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>v2 只做两件事：新增字段号 5，给枚举末尾加一个值 3（<code>practice95/article_v2.proto</code>）。包名不变——这是「在原消息上演进」，不是另起 <code>v2</code> 包。</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">enum</span><span class="w"> </span><span class="n">ArticleState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_UNSPECIFIED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_PUBLIC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_DRAFT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_FANS_ONLY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">     </span><span class="c1">// v2 新增：仅粉丝可见，教学假设</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">Article</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int64</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="n">ArticleState</span><span class="w"> </span><span class="na">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int64</span><span class="w"> </span><span class="na">view_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="k">optional</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="na">cover_style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="c1">// v2 新增：封面样式；optional 才能区分"没传"和"传了空串"</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>用 v2 序列化 <code>Article(id=1, title="t", state=FANS_ONLY, cover_style="big")</code>，本机实测字节为 <code>08 01 12 01 74 18 03 2a 03 62 69 67</code>：<code>08</code>=1 号 varint、<code>12</code>=2 号 length-delimited、<code>18 03</code>=3 号 varint 值 3、<code>2a 03 "big"</code>=5 号字符串——和上面算出的 tag <code>0x2A</code> 对得上。</p>
+<p>注意两个细节：</p>
+<ul>
+<li>新字段必须用<strong>没用过的</strong>字段号，这里是 5；</li>
+<li>新枚举值加在末尾，编号 3 也是新的，不能把 3 让给别的含义。</li>
+</ul>
+<h4 id="13-unknown-fields">1.3 旧解析器读到新字段：跳过并放进 unknown fields</h4>
+<p>v1 的代码只认识 1~4 号字段。当它解析一条 v2 写出的数据时，遇到字段号 5：</p>
+<ol>
+<li>按 tag 读出字段号和 wire type；</li>
+<li>发现自己的 schema 里没有 5 号字段；</li>
+<li>按 wire type 算出这个字段占多少字节，<strong>跳过 payload</strong>；</li>
+<li>把这段原始字节记进 unknown fields（未知字段集合）。</li>
+</ol>
+<p>所以"旧代码读新数据"通常不会解析失败。但"读到"不等于"理解"，更不等于"改写后还在"：</p>
+<ul>
+<li>只读路径：旧服务忽略 <code>cover_style</code>，照常返回它能返回的字段，没有影响；</li>
+<li>读-改-写路径（代理、ETL、缓存回填）：旧服务把消息解析成 v1 对象，修改别的字段，再序列化。现代 proto3 实现（3.5 之后，以所读版本为准）在解析后重新序列化时会保留 unknown fields，因此 <code>cover_style</code> 不会丢；但不同语言、不同版本、手写编码或某些中间件不保证这一点，必须在自己使用的实现上验证；</li>
+<li>如果旧代码把消息转成 JSON 再存回去，未知字段可能直接丢失，或者解析直接报错。</li>
+</ul>
+<h4 id="14">1.4 新解析器读旧数据：字段缺失得到默认值</h4>
+<p>反过来，v2 解析一条 v1 写出的数据，消息里没有 5 号字段，<code>cover_style</code> 取默认值 <code>""</code>；<code>state</code> 如果没写，取 <code>0</code>，也就是 <code>ARTICLE_STATE_UNSPECIFIED</code>。</p>
+<p>这里有一个 proto3 的常见坑：<strong>普通标量字段无法区分"没传"和"传了零值"</strong>。v1 客户端传 <code>title = ""</code> 和完全不传 <code>title</code>，在 v2 读出来都是 <code>""</code>。如果业务需要区分，常见做法是：</p>
+<ul>
+<li>用 <code>optional string cover_style = 5;</code> 开启显式 presence（proto3 的 field presence，具体支持情况以所读文档和语言版本为准）；</li>
+<li>或用包装类型，例如 <code>google.protobuf.StringValue</code>。</li>
+</ul>
+<p>两种做法都会改变"有没有值"的判断方式，接入前先确认序列化、JSON 映射和代码生成的行为。</p>
+<h4 id="15">1.5 未知枚举值：线格式能保留，业务代码未必看得懂</h4>
+<p>枚举在线上就是一个变长整数。v1 的 <code>ArticleState</code> 里没有 3，读到 <code>ARTICLE_STATE_FANS_ONLY = 3</code> 时会发生什么，取决于 proto 版本和语言实现：</p>
+<ul>
+<li>按 protobuf.dev 的口径，旧客户端可能把新枚举值看作未设置，getter 返回默认值；</li>
+<li>同时 proto3 的枚举支持未知值 round-trip：解析后再序列化，数值 3 可以保留下来；</li>
+<li>有些语言的 getter 会返回 <code>UNRECOGNIZED</code> 或原始数字，有些则退化成默认值（proto2 的 closed enum 会把未知值放进 unknown fields）。</li>
+<li>本机实测（protobuf Python 7.36.2，proto3）：v1 读 v2 数据，<code>old.state == 3</code>，数值原样保留；但 v1 的 <code>EnumTypeWrapper(ArticleState).Name(3)</code> 抛 <code>ValueError: Enum ArticleState has no name defined for value 3</code>——「能解析」和「代码能处理」是两回事。</li>
+</ul>
+<p>这两件事不矛盾：<strong>业务代码读到的默认值，不代表线格式把值丢了</strong>。工程上不要赌某一端的具体行为，而要做到：</p>
+<ol>
+<li>旧代码里所有 <code>switch/if</code> 枚举的分支必须有 default，且 default 走保守路径；</li>
+<li>新枚举值只加在末尾，不复用旧编号；</li>
+<li>需要删除枚举值时，同样要 reserved 其编号和名字。</li>
+</ol>
+<p>教学假设的例子：文章列表页的旧版本只认识"草稿/已发布"，遇到"仅粉丝可见"若没有 default 分支或 default 当成公开，就会把仅粉丝可见的文章展示成公开文章，这是业务语义事故，而不是解析错误。</p>
+<h4 id="16-jsontext-format">1.6 为什么不能用 JSON/text format 做数据交换</h4>
+<p>二进制线格式里字段名不参与编码，所以改名字、加字段，旧二进制解析器都能跳过。JSON 和 protobuf text format 是按<strong>字段名</strong>匹配的：</p>
+<ul>
+<li>旧代码遇到新字段名，默认可能直接报错；</li>
+<li>需要显式打开类似 <code>ignore_unknown_fields</code> 的选项才可能跳过（选项名和行为以语言实现为准）；</li>
+<li>新增枚举值时，旧代码如果按字符串匹配枚举，也会失败或落到未知分支。</li>
+</ul>
+<p>所以：<strong>RPC API 和存储用二进制 protobuf 消息，不要把 JSON/text format 当成持久化格式或跨服务交换格式</strong>。如果确实要对外提供 JSON，就要把 JSON 当成另一套契约单独做兼容测试。</p>
+<h4 id="17-python">1.7 Python 实测：默认值与未知字段</h4>
+<p>下面是 <code>practice95/contract_test.py</code> 里的真实片段（<code>ArticleV1</code>/<code>ArticleV2</code> 由 <code>schema.py</code> 用 <code>descriptor_pb2</code> 动态构造，不需要 protoc）：</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf</span><span class="w"> </span><span class="kn">import</span> <span class="n">unknown_fields</span><span class="p">,</span> <span class="n">json_format</span>
+<span class="n">b2</span> <span class="o">=</span> <span class="n">ArticleV2</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"fans"</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">view_count</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">cover_style</span><span class="o">=</span><span class="s2">"big"</span><span class="p">)</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">()</span>
+
+<span class="n">old</span> <span class="o">=</span> <span class="n">ArticleV1</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">b2</span><span class="p">)</span>                     <span class="c1"># 不抛异常</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>                                   <span class="c1"># 3   ← open enum 保留数值</span>
+<span class="nb">print</span><span class="p">([(</span><span class="n">f</span><span class="o">.</span><span class="n">field_number</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">unknown_fields</span><span class="o">.</span><span class="n">UnknownFieldSet</span><span class="p">(</span><span class="n">old</span><span class="p">)])</span>
+                                                   <span class="c1"># [(5, b'big')]  ← 进了 unknown fields</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">old</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">()</span> <span class="o">==</span> <span class="n">b2</span><span class="p">)</span>               <span class="c1"># True ← 原样再序列化，新字段还在</span>
+
+<span class="n">v2_from_v1</span> <span class="o">=</span> <span class="n">ArticleV2</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">ArticleV1</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">v2_from_v1</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"cover_style"</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v2_from_v1</span><span class="o">.</span><span class="n">cover_style</span><span class="p">))</span>   <span class="c1"># False ''</span>
+</code></pre></div>
+
+<p>JSON 路径则严格得多（同样是实测）：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">js</span> <span class="o">=</span> <span class="n">json_format</span><span class="o">.</span><span class="n">MessageToJson</span><span class="p">(</span><span class="n">ArticleV2</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">b2</span><span class="p">))</span>   <span class="c1"># "state": "ARTICLE_STATE_FANS_ONLY", "coverStyle": "big"</span>
+<span class="n">json_format</span><span class="o">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">ArticleV1</span><span class="p">())</span>
+<span class="c1"># ParseError: Failed to parse state field: Invalid enum value ARTICLE_STATE_FANS_ONLY ...</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">json_format</span><span class="o">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">js</span><span class="p">,</span> <span class="n">ArticleV1</span><span class="p">(),</span> <span class="n">ignore_unknown_fields</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>   <span class="c1"># 0 —— 不报错了，但状态变成 UNSPECIFIED，cover_style 也没了</span>
+</code></pre></div>
+
+<p><code>ignore_unknown_fields=True</code> 看似「解决了兼容」，实际是把新枚举静默变成 0、把新字段静默丢掉；如果这个对象再被写回存储，数据就真的丢了。</p>
+<p>还有一个容易忽略的点：<strong>不要依赖跨构建的序列化稳定性</strong>。同一消息在不同版本、不同语言、不同字段顺序下序列化出的字节可能不同，不能拿序列化字节直接做缓存键、去重键，跨版本/跨语言的 golden 断言也应比较字段值（本课实践里「v1 原样再序列化与 v2 字节一致」只是在固定的 Python 实现与版本下验证 unknown fields 被原样保留）。需要稳定标识时，用业务主键或显式计算的摘要。</p>
+<h3 id="2">2. 语义兼容与版本策略</h3>
+<h4 id="21">2.1 线格式兼容 ≠ 语义兼容</h4>
+<p>解析成功只是第一层。下面这些变更，两端都能解析，但业务会出错：</p>
+<ul>
+<li><strong>单位变化</strong>：v1 的 <code>due_time</code> 是毫秒，v2 改成秒，字段号和类型都没变，解析没问题，值差 1000 倍；</li>
+<li><strong>默认行为变化</strong>：v1 不传可见性时默认公开，v2 把默认改成"仅自己可见"，旧客户端不传字段，语义就变了；</li>
+<li><strong>可选变必填</strong>：v2 业务要求 <code>cover_style</code> 必填，但 v1 客户端不会传，服务端校验直接失败；</li>
+<li><strong>枚举语义扩展</strong>：旧端不认识"仅粉丝可见"，default 分支若按"公开"处理，就把受限内容放出去了；</li>
+<li><strong>布尔扩展</strong>：<code>is_deleted</code> 只有 true/false，将来要表达"删除中/已删除/恢复中"时无路可走，应该一开始就用 enum。</li>
+</ul>
+<h4 id="22">2.2 安全变更与破坏性变更清单</h4>
+<table>
+<thead>
+<tr>
+<th>变更</th>
+<th>二进制线格式</th>
+<th>业务语义与注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>新增可选字段，使用新编号</td>
+<td>安全</td>
+<td>旧端忽略；新端缺省值必须有合理含义</td>
+</tr>
+<tr>
+<td>新增枚举值</td>
+<td>可解析</td>
+<td>旧端 default 必须走保守路径，否则语义破坏</td>
+</tr>
+<tr>
+<td>删除字段，reserved 编号和名字</td>
+<td>安全</td>
+<td>旧数据里的该字段变成 unknown fields；编号和名字都不能复用</td>
+</tr>
+<tr>
+<td>重命名字段</td>
+<td>安全</td>
+<td>仅限二进制；JSON/text format 按名字匹配，会失败</td>
+</tr>
+<tr>
+<td>修改字段类型</td>
+<td>破坏性</td>
+<td>即使 wire type 相同，解释方式也可能变</td>
+</tr>
+<tr>
+<td>复用已删除的 tag 号</td>
+<td>破坏性</td>
+<td>旧数据会被当成新字段解析，静默错乱</td>
+</tr>
+<tr>
+<td>修改字段默认值</td>
+<td>破坏性</td>
+<td>版本错位时两端对"未设置"读出不同结果</td>
+</tr>
+<tr>
+<td>repeated 改为 scalar</td>
+<td>破坏性</td>
+<td>会丢数据</td>
+</tr>
+<tr>
+<td>scalar 改为 repeated</td>
+<td>有条件可行</td>
+<td>proto2 及 proto3 <code>[packed=false]</code> 下二进制可行，但业务语义仍需检查</td>
+</tr>
+<tr>
+<td>新增 required 字段</td>
+<td>禁止</td>
+<td>proto3 已无 required；proto2 也不要新增</td>
+</tr>
+</tbody>
+</table>
+<p>两条容易被忽略的规则：</p>
+<ul>
+<li>删除字段时，除了 <code>reserved 5;</code>，还要 <code>reserved "cover_style";</code>，防止编号和名字被后来的人复用；</li>
+<li>删除枚举值时也要 reserved。只删定义不 reserved，等于给未来埋了一个"编号复用"的雷。</li>
+</ul>
+<h4 id="23-unspecified">2.3 枚举设计：第一个值是 UNSPECIFIED</h4>
+<p>按 protobuf.dev 的建议（以所读版本为准）：</p>
+<ul>
+<li>枚举第一个值应为 <code>FOO_UNSPECIFIED = 0</code>，作为"未设置/未知"的显式表达；</li>
+<li>新增值加在末尾，不复用编号；</li>
+<li>旧端所有分支都要有 default，且 default 的语义要<strong>保守</strong>：未知可见性按"不可见/最严格"处理，未知状态按"需要人工审核"处理，而不是按"公开/正常"处理；</li>
+<li>不要用 bool 表示现在只有两种、将来可能更多的状态。</li>
+</ul>
+<p>教学假设：文章可见性 v1 只有"公开/私密"，v2 增加"仅粉丝可见"。如果 v1 的列表接口把未知值当公开，灰度期间就会出现"仅粉丝文章出现在公开列表"的越权展示；正确做法是未知值按不可见处理，等读端全部升级后再放开。</p>
+<h4 id="24-v2">2.4 版本策略：加字段、并行 v2，还是能力协商</h4>
+<p>三种常见策略，按变更规模选：</p>
+<ol>
+<li><strong>在原消息上加字段</strong>：适合向后兼容的小步演进，例如新增 <code>cover_style</code>。包名不变，成本最低；风险是语义慢慢漂移，必须配合契约测试和弃用计划。</li>
+<li><strong>新包名/新消息并行</strong>：例如 <code>package article.v2</code>，定义一套新的 <code>Article</code>。适合字段类型要改、单位要改、语义要大改的场景。做法是 v1/v2 并行一段时间，读端先支持双读或迁移，写端切换，确认 v1 无流量后再下线。代价是两套 schema 和两套测试的维护成本。</li>
+<li><strong>能力协商/特性开关</strong>：客户端上报支持的接口版本或特性，服务端按能力决定返回什么；或者服务端用开关控制是否写新字段。适合无法强制升级的客户端。注意开关必须可回滚，且不能让新旧语义在同一个字段上打架。</li>
+</ol>
+<p>配套的两条实践：</p>
+<ul>
+<li><strong>RPC API 和存储用不同的消息类型</strong>。对外可以是 <code>ArticleView</code>，落库可以是 <code>ArticleRecord</code>。这样 API 的兼容策略不会把存储 schema 锁死，存储的内部字段也不必暴露给调用方。</li>
+<li><strong>弃用流程</strong>：先标 <code>deprecated</code>（字段或 RPC），再观测调用量和字段读取量，确认无人使用后删除，并 reserved 编号和名字。删除枚举值同理。弃用期要覆盖至少一个完整的发布周期，具体时长按业务节奏定。</li>
+</ul>
+<h3 id="3">3. 灰度、契约测试和回滚</h3>
+<h4 id="31">3.1 发布顺序：先读端，后写端，最后清理</h4>
+<p>接口演进推荐 expand-contract（扩展-收缩）的顺序：</p>
+<ol>
+<li><strong>Expand（扩展读端）</strong>：先发布能识别新字段、新枚举的读服务。此时写端还不产生新值，旧数据也能正常读。旧代码的 default 分支要在这时补齐。</li>
+<li><strong>Migrate（写端放量）</strong>：再让写端产生新字段/新枚举，先小流量灰度，观察旧读端的表现。</li>
+<li><strong>Contract（清理）</strong>：确认旧读端都已升级或下线，再清理兼容分支、删除旧字段并 reserved。</li>
+</ol>
+<p>教学假设：文章状态新增"仅粉丝可见"时，先让详情、列表、审核、搜索等所有读服务认识 3 并走保守分支；再让发布服务写 3；最后清理"只有两种状态"的旧假设。顺序反了，旧读服务就会先看到不认识的值。</p>
+<h4 id="32">3.2 灰度矩阵：四种组合都要跑</h4>
+<p>课程练习要求模拟 v1/v2 客户端与服务端的四种组合，验证字段缺失和新枚举。矩阵如下：</p>
+<table>
+<thead>
+<tr>
+<th>客户端</th>
+<th>服务端</th>
+<th>重点观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1</td>
+<td>v1</td>
+<td>基线，确认旧行为不变</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>v2</td>
+<td>旧客户端不传新字段；服务端默认值是否合理；新枚举在旧界面如何展示</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>v1</td>
+<td>新字段被旧服务忽略或保留；旧服务读-改-写是否丢字段；新枚举旧服务是否报错</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>v2</td>
+<td>目标态，字段和新枚举的完整语义</td>
+</tr>
+</tbody>
+</table>
+<p>观测指标建议按 <code>client_version</code>、<code>server_version</code> 分桶：</p>
+<ul>
+<li>解析失败数、反序列化异常率；</li>
+<li>未知枚举值计数（可以在代码里显式统计 default 分支命中）；</li>
+<li>新字段缺失率（判断升级覆盖率）；</li>
+<li>业务状态分布，例如"仅粉丝可见"文章的展示、审核、搜索路径是否异常；</li>
+<li>按版本分桶的错误率和延迟，避免只看总量掩盖局部问题。</li>
+</ul>
+<p>日志里记录版本号和字段是否存在即可，不要把文章正文等敏感内容打进日志。</p>
+<h4 id="33">3.3 契约测试：把每个版本的样本存档</h4>
+<p>契约测试的目标不是"测一遍业务逻辑"，而是固定住"哪个版本能读哪种数据"。做法：</p>
+<ol>
+<li>每个版本的 schema 存档，至少保留已发布过的版本；</li>
+<li>保存 golden 样本消息：v1 旧数据、v2 新数据、带未知字段的数据、带未知枚举值的数据；</li>
+<li>CI 里跑三类用例：旧读新、新读旧、旧读改写新（验证 unknown fields 是否保留）；</li>
+<li>对枚举单独加用例：未知值必须走 default 的保守分支；</li>
+<li>如果对外还有 JSON 接口，JSON 路径单独测，不能拿二进制的结果代替。</li>
+</ol>
+<p>schema 层面可以用 <code>buf breaking</code> 一类的检查工具，把当前 schema 和主干或已发布版本做对比，拦截删字段不 reserved、改类型、复用编号等问题。具体规则和命令以所读工具文档为准。</p>
+<p>注意：golden 断言不要直接比较序列化后的字节，跨构建、跨语言、字段顺序变化都可能不同。应该比较字段值，或者固定实现和版本后再做字节级断言。</p>
+<h4 id="34">3.4 回滚：先确认旧版本读得懂新数据</h4>
+<p>回滚不是"把镜像换回去"这么简单。回滚前至少确认：</p>
+<ul>
+<li>旧版本能解析新版本已经写入的数据：未知字段会跳过，未知枚举值不导致异常；</li>
+<li>旧版本读-改-写不会丢新字段。如果会丢（老实现、第三方库、JSON 管道），先关掉写新字段的开关，再回滚；</li>
+<li>数据库、消息队列、缓存里的数据格式都检查一遍，不要只检查 RPC；</li>
+<li>双写场景先停新写路径或关特性开关，观察一段时间，再回滚代码，避免旧代码覆盖新字段；</li>
+<li>回滚后保留新字段的数据，不要顺手清理，等下次升级继续用。</li>
+</ul>
+<p>如果新数据已经被旧代码以 JSON 形式写回，且旧代码不认识新字段，数据可能已经丢了。这类路径要在发布前就纳入契约测试，而不是等回滚时才发现。</p>
+<h4 id="35">3.5 小结</h4>
+<p>把三点连起来看：</p>
+<ul>
+<li><strong>新增字段和未知字段</strong>解决"字节能不能读懂"：字段号是契约，未知字段要能跳过，必要时保留；</li>
+<li><strong>语义兼容和版本策略</strong>解决"读懂了会不会做错事"：枚举 default 要保守，单位、默认值、必填性都不能悄悄改；</li>
+<li><strong>灰度、契约测试和回滚</strong>解决"在真实的新旧组合里验证过没有"：先读端后写端，四象限矩阵，样本存档，回滚前确认旧版本能读新数据。</li>
+</ul>
+<p>线格式可解析不代表业务语义兼容。长期兼容能降低升级耦合，但保留旧语义会增加维护负担，所以每次演进都要同时准备弃用和清理计划。具体到本课场景，就是：先让所有读端认识"仅粉丝可见"并保守处理，再让写端产生它，最后用契约测试和回滚演练证明新旧组合都不会丢数据、不会放错权限。</p>
+<h2 id="_11">常见误区</h2>
+<blockquote>
+<p>原节点给出的核心判断是：「线格式可解析不代表业务语义兼容。」</p>
+</blockquote>
+<p>这句话至少要拆成三层来看。第一层是线格式：二进制能按字段号和 wire type 解出来，不报错。第二层是接口契约：双方对字段号、字段类型、出现条件和默认行为有共识。第三层才是业务语义：同一个值在旧代码和新代码里被解释成同一件事。前两层通过，第三层仍可能出错。</p>
+<p>教学假设：文章详情接口的 <code>state</code> 枚举新增「仅粉丝可见」。旧客户端可以把这个新值解析出来，但如果它的逻辑是“不是 <code>PUBLIC</code> 就当草稿”，那么一篇仅粉丝可见的文章会被显示成草稿，甚至进入错误的编辑入口。解析成功，业务结论却是错的。</p>
+<p>再比如，把发布时间从秒改成毫秒，字段类型没变、字段号没变，线格式完全兼容，但旧服务会把 1.7e12 当成一个荒谬的秒级时间戳；把未设置字段的默认值从 0 改成“当前时间”，两端对同一条缺失字段的记录会读出不同结果。它们都属于“能解析，但不兼容”。</p>
+<p>因此每次演进都要分别回答三个问题：线格式变了吗？契约变了吗？语义变了吗？下面这些误区，大多是把第一层的成功当成了第三层的成功。</p>
+<h3 id="_12">误区一：复用已删除字段的编号或名字</h3>
+<p><strong>误区</strong>：删除一个字段后，觉得编号空着浪费，下一版又拿来放新字段；或者只删代码里的读写逻辑，不在 <code>.proto</code> 里做 <code>reserved</code>。</p>
+<p><strong>后果</strong>：历史数据、消息队列里的旧消息、尚未升级的客户端，仍可能按旧含义写入该编号。新代码用新类型读取旧字节，轻则得到垃圾值，重则解析失败；本课实验实测：删掉 <code>int64 view_count = 4</code> 后把 4 号复用成 <code>int64 like_count</code>，旧数据里 <code>view_count=12345</code> 不报任何错，直接被读成 <code>like_count=12345</code>；反过来，旧代码读到新字段也会误判。问题往往在回滚、补数据或跨版本联调时才暴露。</p>
+<p><strong>正确做法</strong>：删除字段时同时 <code>reserved</code> 其编号和名字，删除枚举值也要 <code>reserved</code>。编号只增不复用，名字也不要给新字段再用。以所读 protobuf 文档版本为准，<code>reserved</code> 是编译器和后来者都能看到的硬约束，不是一句注释。</p>
+<h3 id="_13">误区二：以为客户端和服务端会同时升级</h3>
+<p><strong>误区</strong>：联调时只测 v2 客户端打 v2 服务端，认为发布完成后大家自然都是新版本；或者把“我这边测过了”当成兼容性结论。</p>
+<p><strong>后果</strong>：滚动发布期间真实存在四种组合：v1 客户端 × v1 服务端、v1 × v2、v2 × v1、v2 × v2。旧客户端还可能长期不升级。只测一种组合，等于把另外三种留给线上流量去验证。对应节点 acceptance 的要求：所有兼容组合都要有契约测试。</p>
+<p><strong>正确做法</strong>：把四种组合写进契约测试矩阵，至少覆盖新字段缺失、新枚举值、未知字段保留、回滚后的读改写。教学假设：草稿/发布服务滚动升级时，让 v1 与 v2 实例同时处理同一篇草稿，验证双方都能读、都能写，并且不会把对方新增的字段抹掉。</p>
+<h3 id="_14">误区三：回滚时旧版本遇到新数据就报错，或读改写时丢掉新字段</h3>
+<p><strong>误区</strong>：只考虑“新代码如何读旧数据”，不考虑“旧代码如何读新代码写下的数据”；或者认为回滚就是把镜像换回去，数据自然也会回去。</p>
+<p><strong>后果</strong>：</p>
+<ul>
+<li>新版本写入的存储消息里带了新字段或新枚举值，回滚后的旧版本解析失败，服务起不来或请求大面积报错。</li>
+<li>旧版本能解析，但读出来以后做了一次“读—改—写”，把不认识的字段重新序列化时丢掉，造成静默数据损坏。</li>
+<li>消息队列里已经堆积了新格式消息，旧消费者回滚后无法处理，只能跳过或阻塞。</li>
+<li>契约测试只覆盖正向升级，没有覆盖回滚，问题在故障恢复最紧张的时候出现。</li>
+</ul>
+<p>对应节点 acceptance 的要求：回滚不因新数据无法解析而失败。</p>
+<p><strong>正确做法</strong>：</p>
+<ul>
+<li>回滚演练要使用新版本真实写下的数据，而不是旧版本的测试夹具。</li>
+<li>读改写路径要验证未知字段是否保留。一般 protobuf 知识：现代 proto3 实现解析后再序列化会保留未知字段（3.5 之后，以所读版本文档为准），但不要把它当成所有语言、所有手写解析器都自动具备的能力。</li>
+<li>内部 DTO 映射不要只挑认识的字段，否则在业务层就把未知字段丢了。本课实践实测：回滚到 v1 naive（DTO 拷贝）对 50 篇文章读改写，接口全部 200、<code>parse_error=0</code>，前滚回 v2 后 <code>cover_style</code> 保留 0/50；v1 safe（原消息上改）保留 50/50。</li>
+<li>存储消息和 API 消息分开设计，回滚时至少保证存储层可读；必要时让新字段先只写不读，观察一个发布周期后再启用读逻辑。</li>
+<li>教学假设：草稿服务升级后写入“仅粉丝可见”状态，回滚前先确认旧版本对该状态的默认分支是拒绝写入还是降级为草稿，不能让它误发布。</li>
+</ul>
+<h3 id="json-text-format">误区四：用 JSON 或 text format 做内部数据交换，还随意重命名、加枚举值</h3>
+<p><strong>误区</strong>：觉得 JSON 可读性好，就拿它做服务间消息或存储格式；字段重命名时只改新代码，或者新增枚举值时不考虑旧消费者。</p>
+<p><strong>后果</strong>：</p>
+<ul>
+<li>二进制线格式里字段名不参与编码，改字段名通常不影响兼容；JSON 里字段名就是契约，重命名等于删除旧字段再加新字段，旧代码直接读不到。</li>
+<li>旧代码遇到不认识的枚举字符串，可能反序列化失败，而不是像二进制枚举那样保留未知值。</li>
+<li>text format 和 JSON 都不具备 protobuf 二进制线格式那种按字段号演进的能力，跨版本解析更脆弱。</li>
+<li>一旦把 JSON 当存储格式，历史数据的字段名会被永久冻结，后续清理成本更高。</li>
+</ul>
+<p><strong>正确做法</strong>：</p>
+<ul>
+<li>内部 RPC 和存储优先使用二进制 protobuf 消息，不用 text format 或 JSON 做数据交换。</li>
+<li>如果外部 HTTP 接口必须用 JSON，把它当成独立契约管理：字段只增不删、改名走新增别名和迁移期、枚举新增值要确认旧客户端行为。</li>
+<li>对外 JSON 与内部消息之间做显式转换，不要让内部字段名直接暴露成外部契约。</li>
+<li>契约测试要覆盖旧版本解析新 JSON 的行为，包括未知字段和未知枚举值。</li>
+</ul>
+<h3 id="bool">误区五：用 bool 表达以后可能扩展的状态</h3>
+<p><strong>误区</strong>：现在只有“是/否”两种状态，就加一个 <code>bool is_fans_only</code>；以后要多一种可见范围，再继续加 <code>bool is_friend_only</code>、<code>bool is_internal_only</code>。</p>
+<p><strong>后果</strong>：</p>
+<ul>
+<li>多个 bool 会出现互斥、组合和优先级问题，旧代码只认识其中一个，读到新组合时行为不确定。</li>
+<li>字段语义从“是否仅粉丝可见”扩展成“可见范围”时，旧字段无法表达新值，只能再加字段并处理冲突。</li>
+<li>默认值 <code>false</code> 同时承担“未设置”和“明确为否”两种含义，版本错位时无法区分。</li>
+</ul>
+<p><strong>正确做法</strong>：</p>
+<ul>
+<li>只要状态存在扩展可能，就用 enum，而不是 bool。</li>
+<li>枚举第一个值设为 <code>FOO_UNSPECIFIED = 0</code>，让“未设置”和业务值分开。</li>
+<li>按 protobuf.dev 的说法，旧客户端遇到新枚举值时可能把字段看作未设置、getter 返回默认值（proto3 open enum 在一些实现里则保留原始数值，本课 Python 实测 <code>state == 3</code>）；无论哪种，业务代码都要明确这个默认分支是拒绝、降级还是走通用逻辑。</li>
+<li>一般 protobuf 知识：proto 枚举可以 round-trip 未知枚举值，但业务代码不能假设自己认识所有值。</li>
+</ul>
+<h3 id="_15">误区六：把序列化字节当缓存键或做签名比较</h3>
+<p><strong>误区</strong>：把 protobuf 序列化后的字节直接做缓存 key、去重指纹或签名内容，认为同样的业务对象一定得到同样的字节。</p>
+<p><strong>后果</strong>：</p>
+<ul>
+<li>序列化结果不保证跨构建、跨语言、跨版本稳定，字段顺序、未知字段、map 顺序等都可能变化。</li>
+<li>同一个业务对象在不同版本算出不同 key，缓存命中率下降，甚至出现同一实体多份缓存。</li>
+<li>用序列化字节做签名比较时，升级序列化库或消息定义就可能让旧签名全部失效。</li>
+<li>这类问题通常不报错，只是悄悄多占存储、多打下游。</li>
+</ul>
+<p><strong>正确做法</strong>：</p>
+<ul>
+<li>缓存 key 用明确的业务主键和版本前缀，不用序列化字节。</li>
+<li>需要指纹时，显式定义参与计算的字段和规范化编码，并给指纹加版本号。</li>
+<li>签名比较使用协议规定的规范化输入，不直接拿内存里的序列化结果。</li>
+<li>把“跨构建序列化稳定性”当成不存在的保证，以所读文档版本为准。</li>
+</ul>
+<h2 id="_16">设计权衡</h2>
+<blockquote>
+<p>原节点给出的 tradeoff 是：「长期兼容降低升级耦合，但保留旧语义会增加维护负担。」</p>
+</blockquote>
+<p>兼容不是免费的。每保留一个旧字段，就要在文档、序列化定义、读写路径、契约测试和监控里保留它；每保留一个旧枚举值，就要在业务分支里回答“旧值现在该怎么处理”。时间一长，代码里会出现大量“为什么这里还判断 <code>LEGACY_*</code>”的注释，新人不敢删，老人也说不清。</p>
+<p>教学假设：文章服务为了兼容旧客户端，同时保留 <code>is_fans_only</code> 和新的 <code>visibility</code> 枚举。双写期间每次发布都要保证两个字段一致；读路径还要先看新字段、缺失时回退旧字段。等所有读者升级后，旧字段才能停止写入，但仍不能复用编号，只能 <code>reserved</code>。这就是“升级耦合降低”换来的“长期维护负担”。</p>
+<p>常见的兼容成本包括：</p>
+<ul>
+<li>兼容层代码：新旧字段映射、默认分支、版本判断，往往散落在多个服务里。</li>
+<li>双写与回填：过渡期写两份、读时回退，回填历史数据还要限流和校验。</li>
+<li>旧字段长期留存：不能删编号、不能改语义、不能改默认值，测试矩阵持续变大。</li>
+<li>认知负担：值班和排障时要先判断消息来自哪个版本，日志和监控也要按版本切分。</li>
+</ul>
+<h3 id="v2">在原消息上演进、v2 并行与网关翻译层</h3>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>升级耦合</th>
+<th>维护成本</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>在原消息上演进</td>
+<td>低，调用方通常无需改代码</td>
+<td>中，字段和兼容分支长期累积</td>
+<td>调用方多、无法强制升级、变更以新增字段和枚举值为主</td>
+</tr>
+<tr>
+<td>新版本包 v2 并行</td>
+<td>中，调用方需显式选择版本</td>
+<td>高，两套消息、两套逻辑和转换代码</td>
+<td>语义要大改、需要清晰迁移边界、能推动调用方切换</td>
+</tr>
+<tr>
+<td>网关做翻译层</td>
+<td>低，客户端只面对网关协议</td>
+<td>中到高，多一层映射、观测和故障点</td>
+<td>协议异构、外部合作方、客户端无法修改</td>
+</tr>
+</tbody>
+</table>
+<p>一般经验（非绝对结论）：多数后台系统以“在原消息上做增量演进”为主，因为它对现有调用方最友好；当业务语义发生结构性变化、继续叠加字段会让消息变得不可解释时，才值得起 v2 并行；当客户端完全不可控或协议栈异构时，网关翻译层更现实。</p>
+<p>三种方案也可以组合：内部存储消息按 v2 设计，对外 RPC 仍在 v1 上增量演进，由服务内部做转换。关键是明确哪一层承担兼容责任，不要让每个调用方各自猜。</p>
+<h3 id="_17">何时值得做破坏性变更</h3>
+<p>破坏性变更不是绝对不能做，而是要算清楚代价和窗口。以下情况通常值得考虑：</p>
+<ul>
+<li>调用方完全可控，能在同一发布窗口内一起升级，例如内部管理后台。</li>
+<li>旧语义已经造成持续的数据错误或安全问题，继续兼容等于保留缺陷。</li>
+<li>有明确的数据迁移方案和回滚方案，迁移期间新旧数据能共存并可校验。</li>
+<li>旧客户端可以下线，或者有强制的升级手段和足够的通知周期。</li>
+<li>变更收益足够大，能抵消双写、转换层和契约测试的长期成本。</li>
+</ul>
+<p>反之，面对无法强制升级的外部客户端、长期保留的历史存储数据、以及仍在消费旧消息的离线任务，破坏性变更要非常谨慎。教学假设中的公众号后台场景，如果调用方包含第三方或大量不可控客户端，就更偏向增量演进和长弃用期。</p>
+<h3 id="_18">弃用周期取决于什么</h3>
+<p>弃用周期不是拍脑袋定一个“三个月”，而是由几个现实约束共同决定：</p>
+<ul>
+<li>客户端更新周期：强制更新能力弱、长尾版本多的客户端，需要更长窗口。</li>
+<li>存储数据保留时间：历史数据还在，旧字段的读取逻辑就不能立刻删；编号则永久保留。</li>
+<li>日志和消息队列里的历史数据：离线回放、审计和对账任务可能仍在读旧格式。</li>
+<li>回滚窗口：至少要覆盖一次完整发布和回滚周期，避免回滚后无代码可读新数据。</li>
+<li>观测与通知：要能统计还有多少调用方在用旧字段，否则无法判断何时真正可以下线。</li>
+</ul>
+<p>一个可执行的做法是：先停止写入旧字段，观察一个完整发布周期；再停止读取并保留转换逻辑；最后删除代码但永久 <code>reserved</code> 编号和名字。每一步都用契约测试和线上指标确认没有残余流量。</p>
+<h3 id="api">API 消息与存储消息要不要分开</h3>
+<p>公开的最佳实践建议 RPC API 和存储使用不同的消息类型。收益是两边可以独立演进：对外接口可以隐藏内部字段，存储可以保留更久的兼容字段，回滚时也不必被 API 契约绑死。</p>
+<p>成本也很直接：需要维护两套定义和一层映射代码，容易出现字段漂移、默认值不一致和转换遗漏；每次新增字段都要改两处并补测试。若早期消息很简单，强行拆分可能过度设计。</p>
+<p>判断标准一般看两点：存储数据的生命周期是否明显长于 API 版本周期；以及 API 契约是否需要对调用方隐藏内部结构。只要其中一点成立，分开通常更划算。教学假设：文章正文在存储里保留草稿、审核、发布多个阶段的历史字段，而对外详情接口只暴露当前可见结果，这种场景就适合分开建模。</p>
+<h2 id="v1v2">动手实践：v1/v2 客户端与服务端四种组合，验证字段缺失和新枚举</h2>
+<blockquote>
+<p>对应 practice 原文：<strong>模拟v1/v2客户端与服务端四种组合，验证字段缺失和新枚举。</strong>
+代码在 <code>practice95/</code>（Python 3 + <code>protobuf</code> 运行时，本机为 protobuf Python 7.36.2、upb 后端；<strong>不需要 protoc</strong>，两版 schema 用 <code>descriptor_pb2</code> 动态构造，等价 <code>.proto</code> 一并附上）。场景是教学假设的「文章详情服务」：v2 新增 <code>optional string cover_style = 5</code> 和枚举值 <code>ARTICLE_STATE_FANS_ONLY = 3</code>。Python 只模拟线格式与业务语义，C++ 生成代码的细节以所用版本为准。</p>
+</blockquote>
+<h3 id="0">0. 文件一览</h3>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>article_v1.proto</code> / <code>article_v2.proto</code></td>
+<td>两版 schema 原文（仅供阅读，对照 <code>schema.py</code>）</td>
+</tr>
+<tr>
+<td><code>schema.py</code></td>
+<td>动态构造 <code>ArticleV1</code> / <code>ArticleV2</code>（各自独立 DescriptorPool），以及反例 <code>ArticleBadReuse</code>（删掉 <code>view_count</code> 后把 4 号复用成 <code>like_count</code>）</td>
+</tr>
+<tr>
+<td><code>server.py</code></td>
+<td>文章服务：二进制 protobuf over HTTP，文件存储；<code>--version v1/v2</code>，<code>--mode safe/naive</code>；<code>/put</code>、<code>/get?viewer=guest\|fan</code>、<code>/update_title</code>（读-改-写）、<code>/stats</code></td>
+</tr>
+<tr>
+<td><code>client.py</code></td>
+<td>v1/v2 客户端：<code>seed</code> 写数据、<code>check</code> 以游客/粉丝身份读全部文章并统计、<code>retitle</code> 批量改标题</td>
+</tr>
+<tr>
+<td><code>contract_test.py</code></td>
+<td>进程内契约测试：golden 样本覆盖 writer{v1,v2} × reader{v1,v2}，外加 JSON、复用编号等反例</td>
+</tr>
+<tr>
+<td><code>test.sh</code></td>
+<td>一键端到端：契约测试 + 四种组合 + 字段缺失 + naive 反例 + 回滚/前滚，最后输出 <code>ALL_CHECKS_PASSED</code></td>
+</tr>
+</tbody>
+</table>
+<p>两版 schema 的差别（<code>article_v2.proto</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="kd">enum</span><span class="w"> </span><span class="n">ArticleState</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_UNSPECIFIED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_PUBLIC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_DRAFT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="na">ARTICLE_STATE_FANS_ONLY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w">     </span><span class="c1">// v2 新增：放在最后；v1 只看到数值 3</span>
+<span class="p">}</span>
+<span class="kd">message</span><span class="w"> </span><span class="nc">Article</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int64</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="n">ArticleState</span><span class="w"> </span><span class="na">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int64</span><span class="w"> </span><span class="na">view_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="k">optional</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="na">cover_style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="c1">// v2 新增：optional 才能区分"没传"和"传了空串"</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p><code>safe</code> 与 <code>naive</code> 服务端的区别就是本课的两类风险：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th><code>naive</code>（反面教材）</th>
+<th><code>safe</code>（正确做法）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语义：未知枚举</td>
+<td>黑名单：<code>return state != DRAFT</code>，不认识的 3 被当成"公开"</td>
+<td>白名单：只有 PUBLIC 放行；未知值按最严格（不可见）处理并计数 <code>unknown_enum</code></td>
+</tr>
+<tr>
+<td>回滚：读-改-写</td>
+<td>DTO 拷贝：<code>Article(id=..., title=..., state=..., view_count=...)</code>，只拷自己认识的字段</td>
+<td>在解析出的原消息上改 <code>title</code> 再序列化，unknown fields 随之保留</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1_1">1. 关键代码</h3>
+<p>服务端可见性判断（<code>server.py</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">visible</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">viewer</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">state</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">KNOWN</span><span class="p">:</span>
+        <span class="n">stats</span><span class="p">[</span><span class="s2">"unknown_enum"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>           <span class="c1"># 可观测：灰度时按版本看这个计数</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"naive"</span><span class="p">:</span>                 <span class="c1"># 反例：黑名单，只拦已知的 DRAFT</span>
+        <span class="k">return</span> <span class="n">s</span> <span class="o">!=</span> <span class="n">schema</span><span class="o">.</span><span class="n">DRAFT</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">==</span> <span class="n">schema</span><span class="o">.</span><span class="n">PUBLIC</span><span class="p">:</span> <span class="k">return</span> <span class="kc">True</span>        <span class="c1"># 白名单</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">version</span> <span class="o">==</span> <span class="s2">"v2"</span> <span class="ow">and</span> <span class="n">s</span> <span class="o">==</span> <span class="n">schema</span><span class="o">.</span><span class="n">FANS_ONLY</span><span class="p">:</span> <span class="k">return</span> <span class="n">viewer</span> <span class="o">==</span> <span class="s2">"fan"</span>
+    <span class="k">return</span> <span class="kc">False</span>                              <span class="c1"># DRAFT / UNSPECIFIED / 未知值 -&gt; 最严格</span>
+</code></pre></div>
+
+<p>读-改-写（回滚期间最危险的路径）：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">old</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="s2">"id"</span><span class="p">])</span>
+<span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"naive"</span><span class="p">:</span>   <span class="c1"># 反例：DTO 拷贝，只认识自己版本的字段</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">Article</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">old</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">old</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="n">old</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">view_count</span><span class="o">=</span><span class="n">old</span><span class="o">.</span><span class="n">view_count</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">old</span>                <span class="c1"># 在原消息上改，未知字段随之保留</span>
+<span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">q</span><span class="p">[</span><span class="s2">"title"</span><span class="p">];</span> <span class="n">save</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</code></pre></div>
+
+<p>v2 客户端处理字段缺失（<code>client.py</code>）：<code>cover_style</code> 是 <code>optional</code>，所以能用 <code>HasField</code> 区分"旧数据没有这个字段"和"显式设置"，前者走业务默认值（比如 <code>classic</code>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"cover_style"</span><span class="p">):</span> <span class="n">r</span><span class="p">[</span><span class="s2">"cover_present"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">else</span><span class="p">:</span> <span class="n">r</span><span class="p">[</span><span class="s2">"cover_default_used"</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>     <span class="c1"># 旧数据缺字段 -&gt; 客户端用 "classic" 兜底</span>
+</code></pre></div>
+
+<h3 id="2_1">2. 操作步骤</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice95
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import google.protobuf as g; print(g.__version__)"</span><span class="w">   </span><span class="c1"># 记录版本，本机 7.36.2</span>
+python3<span class="w"> </span>contract_test.py<span class="w">        </span><span class="c1"># 第 1 步：进程内契约测试（golden 样本存到 golden/）</span>
+./test.sh<span class="w">                       </span><span class="c1"># 第 2 步：端到端，约 4.4 秒</span>
+
+<span class="c1"># 第 3 步：手动体验一次"v1 服务读 v2 数据"</span>
+python3<span class="w"> </span>server.py<span class="w"> </span>--version<span class="w"> </span>v2<span class="w"> </span>--port<span class="w"> </span><span class="m">18200</span><span class="w"> </span>--store<span class="w"> </span>/tmp/s95<span class="w"> </span><span class="p">&amp;</span>
+python3<span class="w"> </span>client.py<span class="w"> </span>--version<span class="w"> </span>v2<span class="w"> </span>--port<span class="w"> </span><span class="m">18200</span><span class="w"> </span>seed<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="m">4</span>
+<span class="nb">kill</span><span class="w"> </span>%1
+python3<span class="w"> </span>server.py<span class="w"> </span>--version<span class="w"> </span>v1<span class="w"> </span>--mode<span class="w"> </span>naive<span class="w"> </span>--port<span class="w"> </span><span class="m">18201</span><span class="w"> </span>--store<span class="w"> </span>/tmp/s95<span class="w"> </span><span class="p">&amp;</span>
+python3<span class="w"> </span>client.py<span class="w"> </span>--version<span class="w"> </span>v1<span class="w"> </span>--port<span class="w"> </span><span class="m">18201</span><span class="w"> </span>check<span class="w"> </span><span class="m">10</span><span class="w">     </span><span class="c1"># 看 fans_only_seen_by_guest</span>
+curl<span class="w"> </span>-s<span class="w"> </span><span class="m">127</span>.0.0.1:18201/stats<span class="p">;</span><span class="w"> </span><span class="nb">kill</span><span class="w"> </span>%1
+</code></pre></div>
+
+<p><code>test.sh</code> 的流程：</p>
+<ol>
+<li>契约测试（进程内）。</li>
+<li>准备两份数据：v1 客户端经 v1 服务写 50 篇；v2 客户端经 v2 服务写 50 篇（其中 20 篇 FANS_ONLY，全部 <code>cover_style=big</code>）。</li>
+<li><strong>四种组合</strong>：v1/v2 safe 服务端各读 v2 数据，各用 v1/v2 客户端以游客和粉丝身份读全部 50 篇。</li>
+<li><strong>字段缺失</strong>：v2 客户端经 v2 服务读 v1 写入的数据。</li>
+<li><strong>新枚举反例</strong>：v1 naive 服务读 v2 数据。</li>
+<li><strong>回滚</strong>：复制 v2 数据，回滚到 v1（safe / naive 各一次），对全部文章做读-改-写，然后前滚回 v2 检查新字段还在不在。</li>
+</ol>
+<h3 id="3-testsh">3. 真实运行结果（本机一次 <code>./test.sh</code>）</h3>
+<p>契约测试（节选，16 项全部 PASS）：</p>
+<div class="codehilite"><pre><span></span><code>PASS  v2-&gt;v1 可解析且 id/title 一致  bytes=17 state=3
+PASS  v1 读 v2：新枚举以数值 3 保留(open enum)  state=3
+PASS  v1 读 v2：cover_style 进入 unknown fields  unknown=[(5, b'big')]
+PASS  v1 原样再序列化与 v2 字节一致
+PASS  v1 读改写后 v2 仍读到 cover_style/FANS_ONLY  cover='big' state=3 title=fans-edited
+PASS  反例 DTO 拷贝：cover_style 丢失(被检测到)
+PASS  v2 读 v1：optional 字段 HasField=False，可用业务默认值兜底  cover=''
+PASS  反例：v1 用 Name(state) 渲染标签会抛 ValueError  Enum ArticleState has no name defined for value 3
+PASS  v1 解析 v2 JSON 直接失败  Failed to parse state field: Invalid enum value ARTICLE_STATE_FANS_ONL...
+PASS  ignore_unknown_fields：不报错但 state 变 0、cover 丢失  state=0
+PASS  删 view_count 后复用 4 号为 like_count：旧数据被静默读成点赞数  like_count=12345
+ALL_CONTRACT_PASSED
+</code></pre></div>
+
+<p>端到端（50 篇 v2 数据，其中 20 篇 FANS_ONLY；每篇游客、粉丝各读一次）：</p>
+<table>
+<thead>
+<tr>
+<th>组合</th>
+<th>游客 200 / 403</th>
+<th>粉丝 200</th>
+<th>5xx</th>
+<th>游客看到 FANS_ONLY</th>
+<th>客户端遇到未知枚举</th>
+<th>客户端拿到 cover_style</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>client v1 × server v1(safe)</td>
+<td>30 / 20</td>
+<td>30</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>—（v1 不认识）</td>
+</tr>
+<tr>
+<td>client v2 × server v1(safe)</td>
+<td>30 / 20</td>
+<td>30</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>30</td>
+</tr>
+<tr>
+<td>client v1 × server v2</td>
+<td>30 / 20</td>
+<td>50</td>
+<td>0</td>
+<td>0</td>
+<td>20</td>
+<td>—（v1 不认识）</td>
+</tr>
+<tr>
+<td>client v2 × server v2</td>
+<td>30 / 20</td>
+<td>50</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>50</td>
+</tr>
+<tr>
+<td>client v1 × server v1(<strong>naive</strong>)</td>
+<td><strong>50 / 0</strong></td>
+<td>50</td>
+<td>0</td>
+<td><strong>20</strong></td>
+<td>20</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>v1 safe 服务端 <code>/stats</code>：<code>unknown_enum=80</code>（20 篇 × 游客/粉丝 × 两个客户端）、<code>parse_error=0</code>。线格式一次都没解析失败，<strong>出问题的全是语义</strong>。</li>
+<li>注意 v1 safe 那两行粉丝也只看到 30 篇：v1 不认识 FANS_ONLY，只能走"最严格"，于是<strong>粉丝在回滚期间暂时看不到那 20 篇</strong>。这是用可用性换安全的取舍，不是零成本——正确的发布顺序（先让所有读端认识新值，再放开写端产生新值）就是为了尽量不进入这个状态。</li>
+<li>字段缺失：v2 客户端经 v2 服务读 50 篇 v1 数据，<code>cover_default_used=50</code>、<code>err=0</code>，全部走默认值兜底。</li>
+<li>naive 黑名单：游客看到 20 篇 FANS_ONLY——<strong>线格式可解析不代表业务语义兼容</strong>的现场版。</li>
+</ul>
+<p>回滚 / 前滚：</p>
+<table>
+<thead>
+<tr>
+<th>回滚到</th>
+<th>v1 读改写 50 篇</th>
+<th>前滚 v2 后 cover_style 保留</th>
+<th>前滚后粉丝可见</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1 safe（原消息上改）</td>
+<td>ok=50, fail=0, parse_error=0</td>
+<td><strong>50 / 50</strong></td>
+<td>50</td>
+</tr>
+<tr>
+<td>v1 naive（DTO 拷贝）</td>
+<td>ok=50, fail=0, parse_error=0</td>
+<td><strong>0 / 50</strong>（全部变成走默认值）</td>
+<td>50</td>
+</tr>
+</tbody>
+</table>
+<p>naive 这一行最阴险：回滚过程中<strong>没有任何报错</strong>，接口全部 200，等前滚回 v2 才发现 50 篇的封面样式全没了。state 没丢只是因为 DTO 恰好拷了 <code>state</code> 这个旧字段（数值 3 原样拷过去）；凡是 v1 不认识的字段，都会在这条路径上丢。</p>
+<p>最终输出：<code>ALL_CHECKS_PASSED</code>，总耗时约 4.4 秒（real 0m4.395s）。</p>
+<h3 id="4">4. 对照验收标准</h3>
+<table>
+<thead>
+<tr>
+<th>acceptance</th>
+<th>本实践中的证据</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>所有兼容组合有契约测试</td>
+<td><code>contract_test.py</code> 用 golden 样本覆盖 writer{v1,v2}×reader{v1,v2} 四格，再加未知字段 round-trip、读改写、JSON、复用编号反例；<code>test.sh</code> 第 2 段再用真实进程跑 client{v1,v2}×server{v1,v2} 四种组合，全部 <code>err=0</code> 且游客看不到 FANS_ONLY</td>
+</tr>
+<tr>
+<td>回滚不因新数据无法解析而失败</td>
+<td>回滚到 v1 后读改写 <code>ok=50, fail=0, parse_error=0</code>；并且进一步验证"不丢数据"：safe 前滚后 <code>cover_present=50</code>，naive 为 0 被测试抓出来</td>
+</tr>
+</tbody>
+</table>
+<h3 id="5">5. 延伸练习</h3>
+<ol>
+<li>把 <code>cover_style</code> 改成 proto3 隐式 presence（去掉 <code>optional</code>），重跑第 3 步，<code>HasField</code> 会怎样？你还能区分"旧数据"和"显式空串"吗？</li>
+<li>在 <code>server.py</code> 里增加"按客户端版本分桶"的 <code>unknown_enum</code> 计数（请求头带 <code>x-client-version</code>），模拟灰度看板。</li>
+<li>给 <code>schema.py</code> 加一版 v3：删除 <code>view_count</code> 并 <code>reserved 4; reserved "view_count";</code>，用 <code>ArticleBadReuse</code> 对照说明 reserved 防的是什么。</li>
+<li>把服务间交换格式改成 JSON，重跑四种组合，记录哪些格子会从 200 变成解析失败或静默丢字段。</li>
+</ol>
+<h2 id="_19">源码与文档阅读</h2>
+<p><strong>sourceStudy 原文：</strong></p>
+<blockquote>
+<p>沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。</p>
+</blockquote>
+<p><strong>阅读路线：</strong> 打开 <a href="https://protobuf.dev/best-practices/dos-donts/">https://protobuf.dev/best-practices/dos-donts/</a>，逐条核对下列条目，并把结论写成可执行的兼容规则。不要只抄标题。</p>
+<p><strong>访问记录</strong>
+- 访问日期：2026-11-11。
+- 文档：protobuf.dev 的 Proto Best Practices，具体修订与措辞以所读页面版本为准。
+- protobuf 运行时版本：本课实验为 protobuf Python 7.36.2（upb 后端，<code>python3 -c "import google.protobuf as g; print(g.__version__)"</code>）；未使用 protoc。你自己的环境请记录 <code>protoc --version</code> 与语言运行时版本。
+- C++ 行为：以对应 protobuf/C++ 版本文档和生成代码为准；Python 实验只模拟语义，不替代 C++ 实测。</p>
+<h3 id="_20">逐条阅读卡</h3>
+<h4 id="dont-re-use-a-tag-number">Don't Re-use a Tag Number</h4>
+<ul>
+<li>要点：tag 号标识线格式字段；复用编号会让旧数据被新定义误读。</li>
+<li>与本课实践的对应：v1/v2 四种组合必须覆盖“旧数据被新字段号读取”。</li>
+<li>待验证：构造旧消息后以新 schema 解析，记录实际读到的值、unknown fields 与是否报错。</li>
+</ul>
+<h4 id="reserve-tag-numbers">Reserve Tag Numbers</h4>
+<ul>
+<li>要点：删除字段应写 <code>reserved 4;</code> 和 <code>reserved "old_tag";</code>，编号和名字都保留，防止人和工具再用。</li>
+<li>与本课实践的对应：删除 <code>old_tag</code> 的发布检查项与代码评审检查。</li>
+<li>待验证：所用编译器/代码生成器对 reserved 冲突是否编译报错；proto3 语法以所读版本为准。</li>
+</ul>
+<h4 id="include-an-unspecified-value-in-an-enum">Include an Unspecified Value in an Enum</h4>
+<ul>
+<li>要点：枚举首值用 <code>FOO_UNSPECIFIED = 0</code>；旧客户端可能把新枚举值视作未设置、getter 返回默认值，但二进制可 round-trip 未知枚举值。</li>
+<li>与本课实践的对应：新增 <code>FANS_ONLY = 3</code>，以及 v1 读取时的兜底。</li>
+<li>待验证：本版本生成代码对未知枚举值的 getter、<code>has_*</code>、重新序列化行为。</li>
+</ul>
+<h4 id="dont-change-the-default-value">Don't Change the Default Value</h4>
+<ul>
+<li>要点：默认值变化在版本错位时会让两端对“未设置字段”读出不同结果；不要把默认值当业务开关。</li>
+<li>与本课实践的对应：新增字段缺省时的可见性或审核策略。</li>
+<li>待验证：未设置、显式设置为默认值、旧端解析三种情况是否可区分。</li>
+</ul>
+<h4 id="dont-go-from-repeated-to-scalar">Don't Go from Repeated to Scalar</h4>
+<ul>
+<li>要点：repeated→scalar 会丢数据；scalar→repeated 在 proto2 及 proto3 <code>[packed=false]</code> 下可能二进制可行，但 API 语义与实现差异仍需谨慎。</li>
+<li>与本课实践的对应：标签列表、图片列表等字段的演进。</li>
+<li>待验证：以目标版本验证 packed 与 JSON/文本路径，不以“能编译”代替兼容性测试。</li>
+</ul>
+<h4 id="dont-use-text-format-messages-for-interchange">Don't use Text Format Messages for Interchange</h4>
+<ul>
+<li>要点：text format/JSON 依赖字段名，重命名或新增枚举值时旧代码可能解析失败；二进制线格式不编码字段名。</li>
+<li>与本课实践的对应：服务间数据交换与调试日志不能混用；调试展示可读，交换仍走二进制。</li>
+<li>待验证：新增枚举值、重命名字段在旧 JSON 解析器上的失败方式。</li>
+</ul>
+<h4 id="never-rely-on-serialization-stability">Never Rely on Serialization Stability</h4>
+<ul>
+<li>要点：同一消息跨构建/跨版本的字节不保证稳定，不能把序列化结果当缓存键、幂等键或内容哈希。</li>
+<li>与本课实践的对应：文章详情缓存、消息去重键。</li>
+<li>待验证：对同一消息多次运行/不同进程序列化并比较；改用业务 ID+版本做键。</li>
+</ul>
+<h4 id="use-different-messages-for-rpc-apis-and-storage">Use Different Messages For RPC APIs and Storage</h4>
+<ul>
+<li>要点：RPC 契约和存储格式的演进节奏不同；共用消息会把外部兼容压力带进存储，或把存储迁移暴露给调用方。</li>
+<li>与本课实践的对应：文章详情 API 与草稿/发布存储消息分开定义。</li>
+<li>待验证：检查现有 proto 是否一份消息同时承担 RPC 与落盘；若是，先加适配层再演进。</li>
+</ul>
+<p><strong>边界</strong>
+- 公开文档只能说明 protobuf 的通用规则，不能推断任何企业内部实现、字段或发布流程。
+- Python 实验用于模拟“缺失字段、未知字段、未知枚举、序列化后读回”的语义；C++ 生成代码、反射和 unknown field 保留细节以对应版本为准。
+- “业务语义兼容”需另写领域断言：线格式不报错，不等于可见性、计数、审核状态正确。</p>
+<h2 id="_21">自测题</h2>
+<h3 id="1-fans_only3-v1">题 1：新增 FANS_ONLY=3 后，v1 服务为什么仍可能出事故？</h3>
+<p><strong>题干</strong>
+文章状态定义为 <code>ARTICLE_STATE_UNSPECIFIED=0, ARTICLE_STATE_PUBLIC=1, ARTICLE_STATE_DRAFT=2</code>；v2 新增 <code>ARTICLE_STATE_FANS_ONLY=3</code>。v1 服务读到 v2 写入的 FANS_ONLY 消息时，线格式可以解析。为什么仍可能出事故？v1 代码应如何写兜底？发布顺序应怎样？</p>
+<p><strong>答案</strong>
+线格式能解析只说明字段号和 wire type 能走通；v1 不认识 3，可能把状态看成未设置/getter 返回默认值。若 v1 的默认分支被写成“公开可见”，仅粉丝文章就可能被错误曝光；若过滤、审核、推荐把未知值当 PUBLIC，也会产生错误行为。v1 应把未知/未设置状态放进显式的保守分支：不可公开、拒绝或转人工，并打点记录；不能依赖 switch 的 default 静默放行（本课实践：v1 naive 黑名单让游客看到 20/20 篇 FANS_ONLY，v1 safe 白名单为 0，同时 <code>unknown_enum</code> 计数 80 可用于告警；代价是回滚期间粉丝也暂时看不到这 20 篇）。若 v1 会重写消息，应尽量保留未知枚举的原始数值，避免 round-trip 丢失。发布顺序：先让所有可能读取新值的实例升级并具备安全兜底，灰度验证后再允许写入 FANS_ONLY；滚动期间避免未升级实例接读写流量；回滚时先停止写入新值，再回退读取方。</p>
+<p><strong>解析</strong>
+这是“可解析但语义不兼容”。枚举新增是线格式层面的前向兼容变化，不是自动的业务兼容。契约测试必须覆盖“v2 写、v1 读”；只测“v1 写、v2 读”会漏掉旧读取方。未知枚举的 getter 与保留行为和实现版本有关，以所读文档及实际运行时为准。</p>
+<h3 id="2-old_tag4-4">题 2：删除 old_tag=4 后复用编号 4，会发生什么？</h3>
+<p><strong>题干</strong>
+v2 删除了 <code>string old_tag = 4;</code>，半年后同事新增 <code>int64 like_count = 4;</code>。线上仍有历史消息和可能回滚的旧客户端。会发生什么？怎么预防？</p>
+<p><strong>答案</strong>
+历史消息仍可能带有 tag 4。若旧字段与新字段的 wire type 相同，新解析器会把旧值直接解释成 <code>like_count</code>，形成脏计数且很难发现；若 wire type 不同，不同实现和代码路径可能跳过、放入 unknown fields 或报错，不能把“这次碰巧不兼容”当成保护。更危险的是，旧客户端回滚后又会把 tag 4 当成 <code>old_tag</code>。删除时必须 <code>reserved 4;</code> 和 <code>reserved "old_tag";</code>，并在 CI/lint 中检查 reserved 冲突；新字段改用从未使用过的编号。</p>
+<p><strong>解析</strong>
+tag 号是长期契约，不是代码里的局部变量。编号复用的故障往往跨发布周期、跨存储副本才暴露。预防依赖 schema 规范、代码评审、lint 和历史数据生命周期检查；具体工具能力以所读文档和项目版本为准。</p>
+<h3 id="3v2-v1">题 3：v2 数据回滚到 v1，如何证明能解析且不丢数据？</h3>
+<p><strong>题干</strong>
+v2 已写入带新字段的数据，此时需要回滚到 v1。如何证明“回滚不因新数据无法解析而失败”，并且不丢数据？给出契约测试矩阵和关键断言。</p>
+<p><strong>答案</strong>
+先固定 v1/v2 的 schema、运行时版本和样本，再跑四种组合；每种组合都做“读—校验—读改写—再校验”，不能只做一次反序列化。</p>
+<table>
+<thead>
+<tr>
+<th>写入方</th>
+<th>读取方</th>
+<th>必测内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1</td>
+<td>v1</td>
+<td>基线字段、默认值、旧数据回归</td>
+</tr>
+<tr>
+<td>v1</td>
+<td>v2</td>
+<td>新字段缺省语义、迁移/兼容逻辑</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>v1</td>
+<td>新字段被忽略时能否解析、基础字段是否正确、未知字段是否保留</td>
+</tr>
+<tr>
+<td>v2</td>
+<td>v2</td>
+<td>新字段、新枚举的正常读写与回滚后语义</td>
+</tr>
+</tbody>
+</table>
+<p>关键断言：
+1. v1 读取 v2 数据不抛解析异常，文章 ID、标题、正文、状态等基础字段保持一致。
+2. 新字段不会映射到任何 v1 字段；v1 业务逻辑不会因未知字段改变可见性、计数或审核状态。
+3. v1 读改写后重新序列化，v2 仍能读到新字段的原值；现代 proto3 实现通常在 3.5 之后保留未知字段，但必须以本项目实际版本验证。
+4. 未知枚举值在 v1 中不得被误当成 PUBLIC；若实现能保留原始数值，回写后仍应是 FANS_ONLY。
+5. 存储链路要做端到端测试：若中间层按已知字段重建消息，unknown fields 会被丢掉，回滚就会丢数据。
+6. 用 v2 数据快照做回滚演练：停写新值、备份、让 v1 处理、再让 v2 读回并比对；比对失败则阻断回滚。</p>
+<p>本课 <code>test.sh</code> 第 5 段就是这个演练的缩小版：v1 safe 读改写 <code>ok=50, fail=0, parse_error=0</code>，前滚 v2 后 <code>cover_present=50</code>；换成 DTO 拷贝的 naive 版本同样全部 200，但 <code>cover_present=0</code>——只断言「不报错」是抓不住的。</p>
+<p><strong>解析</strong>
+“v1 能启动”不等于“回滚安全”。证明对象是数据在 v1 读写之后仍可被 v2 解释，且业务字段没有变化。unknown fields 的保留是版本相关实现细节，不能只凭常识；契约测试矩阵覆盖“所有兼容组合有契约测试”，回滚演练对应“回滚不因新数据无法解析而失败”。</p>
+<h2 id="_22">推荐资源</h2>
+<ul>
+<li><a href="https://protobuf.dev/best-practices/dos-donts/">接口兼容与服务演进：参考文档 / 原始资料</a>，来源 protobuf.dev｜文档｜英文｜深入｜免费。
+  阅读重点：重点阅读新增字段和未知字段与语义兼容与版本策略，用于核对本节点实验的语义和边界。
+  建议结合 practice95 核对。</li>
+</ul>
+<h2 id="_23">本课小结</h2>
+<ul>
+<li>接口演进要同时处理线格式兼容、业务语义、默认行为和新旧客户端共存；滚动发布与回滚是主战场。</li>
+<li>新增字段和 unknown fields 是兼容的起点，但旧端“能解析”不代表业务流程正确；未知字段保留能力以实现版本为准。</li>
+<li>枚举新增必须显式处理未知值，首值使用 <code>*_UNSPECIFIED=0</code>；默认分支不得静默放行。</li>
+<li>删除字段必须 reserved 编号和名字；永远不复用 tag，不靠 wire type 碰巧不匹配来兜底。</li>
+<li>不改字段类型、默认值；repeated/scalar 变更按文档与实测评估；跨服务交换不用 text format/JSON。</li>
+<li>RPC API 与存储使用不同消息；不要把序列化字节当作缓存键或跨构建稳定标识。</li>
+<li>灰度与回滚需要四种组合的契约测试、数据快照演练和“先读后写”的发布顺序，验收关注所有兼容组合与回滚可解析性。</li>
+<li>权衡：长期兼容降低升级耦合，但保留旧语义增加维护负担；公开文档不推断企业内部实现，C++/运行时细节以所读版本文档为准。</li>
+</ul><div class="pn"><span><a href="94.html">← 异步RPC与生命周期协调</a></span><span>下一课 待更新</span></div></main></div></body></html>
