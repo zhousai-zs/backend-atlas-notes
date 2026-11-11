@@ -1,0 +1,802 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>97. MySQL访问与连接管理 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（97/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（1/16）</summary><div>阶段 2</div><ul><li><a class="cur" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">98. B+Tree与索引访问路径 <em>待更新</em></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 97 课 · 领域 G · 阶段 2</p><p class="dl"><a href="../files/97-g-mysql.md" download>⬇ 本课 Markdown</a><a href="../files/practice97.tar.gz" download>⬇ 练习包 practice97.tar.gz</a></p><h1 id="97208-mysql">第 97/208 课：MySQL访问与连接管理</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-mysql</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>MySQL</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 2 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>关系数据库</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>基础</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>a-db</code>、<code>d-pool</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>MySQL</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://dev.mysql.com/doc/refman/8.4/en/sql-prepared-statements.html">MySQL 8.4 · SQL Prepared Statements</a>（dev.mysql.com，文档）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>MySQL服务端与客户端通过会话交互，连接、事务和字符集设置影响正确性及资源占用。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中出现的「内容后台」「用户服务」「编辑用户简介」等场景都是<strong>教学假设</strong>，用来让概念落地，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库加 sqlite3 写的教学模型，用来暴露会话、连接池、重连与绑定参数的语义；它不是 MySQL 服务器，本课出现的耗时数字只来自这次教学实验，不能当成生产 MySQL 的性能数据。MySQL 8.4 的具体行为以官方文档为准（本文已核对照的文档，访问日期 2026-11-11）。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：银行柜台窗口</h3>
+<p>想象一家银行，厅里有三个柜台窗口。你办业务时，窗口前的柜员会打开你的卷宗、改一笔账、切到某种表格语言、再请你签字提交。窗口和你之间形成的是一次<strong>会话</strong>：它记得「这笔账还没提交」「表格正在用哪种语言」，而不是一个忘了刚才发生过什么的无状态窗口。</p>
+<p>现在把这三个窗口做成一个「窗口池」——办完就还回去，下一个人接着用，省得每次重新签到。这套做法会碰到四种麻烦：</p>
+<ul>
+<li>有人递进来一张写成「姓名 = 张三' 或者 1=1」的查询单。如果柜员把这张纸条直接拼进指令，窗口会把全行客户的卷宗都翻出来（<strong>SQL 注入</strong>）；</li>
+<li>柜员改完账还没请你签字，突然电话断了。再拨通时已经是另一个柜员、另一本空白卷宗，原来那笔未提交的账已经作废。如果系统还显示「继续刚才那笔业务，提交成功」，你以为改完了，库里其实没变（<strong>静默重连、假成功</strong>）；</li>
+<li>上一个人把窗口的表格语言切成了另一种，还留下一笔没提交的「把普通客户升级成管理员」，人走了却不收拾。你一签字，别人的升级就被你提交了（<strong>归还前不清理会话</strong>）；</li>
+<li>三个窗口都被人坐着办理「很长的一笔账」不走，第四个人只能在外面一直等（<strong>长事务占满池</strong>）。</li>
+</ul>
+<p>MySQL 的客户端和连接池，做的就是这家银行的窗口管理。</p>
+<h3 id="_4">接上前置</h3>
+<ul>
+<li><strong>a-db</strong>：SQL、事务、提交和回滚——这是本课「会话里那笔还没签字的账」的基础；</li>
+<li><strong>d-pool</strong>：对象池的借还、容量上限、借不到就等待或失败——这是本课连接池的骨架。</li>
+</ul>
+<p>前面单独看都学过：数据库能记账，池能复用资源。本课把它们组装成「带会话状态的 MySQL 连接」，然后看组装之后才出现的问题：连接不再是一根干净的管子，它上面还挂着事务、字符集、预处理语句和超时；复用它时，这些状态会跟着走。</p>
+<h3 id="_5">一次查询与一次事务的生命周期</h3>
+<div class="codehilite"><pre><span></span><code> 调用方                          连接池                         会话 / 服务端
+ ──────                          ────                          ────────────
+ store.get_user_by_name(n)
+        ──checkout──────────▶ ① 取出一条空闲连接
+                              ② 若连接已死（wait_timeout / 断连）
+                                 则换成一条全新会话
+        ③ 绑定参数，执行
+           SELECT ... WHERE name = ?  ──▶  ④ 在这条会话里执行
+                                            （charset / autocommit / 事务
+                                             / 预处理语句都属于这条会话）
+        ◀─ 行集合 ──────────────────────── ⑤ 返回结果集（要读完）
+        ──checkin───────────▶ ⑥ 归还前复位：ROLLBACK 残留事务，
+                                 charset 回到默认，autocommit=1
+                                 （语义上接近 mysql_reset_connection）
+</code></pre></div>
+
+<p>正常路径只有这几步。本课真正要讲的是：第 ② 步发现死连接之后能不能假装还在原来的事务里；第 ⑥ 步如果省略，下一位调用方会继承哪些脏状态。</p>
+<h3 id="_6">教学场景（教学假设）</h3>
+<p>内容后台的用户服务用一个很小的连接池做用户查询和更新。灰度期间出现了三件「接口都返回成功」的事：</p>
+<ol>
+<li>有人用名字查用户，却拿到了全部 5 个用户——查询条件是把用户输入直接拼进 SQL；</li>
+<li>编辑 alice 的简介时，事务中途连接被服务端断开。客户端静默重连后报告「提交成功」，但 alice 的 <code>bio</code> 仍是 <code>hello</code>；</li>
+<li>一个请求把会话切到 <code>latin1</code>，并在未提交的事务里把 bob 的 <code>role</code> 改成了 <code>admin</code>，然后把连接还回池。下一个请求随手 <code>COMMIT</code>，bob 真的变成了管理员。</li>
+</ol>
+<p>实践里这三件事都复现了，而且全程可以没有语法错误。解析成功、提交返回成功，都不等于业务是对的。</p>
+<h3 id="_7">本课三条主线</h3>
+<ol>
+<li><strong>预处理语句与参数</strong>：用占位符绑定用户输入，语句结构不再被输入改写；</li>
+<li><strong>连接池和会话状态</strong>：连接是有状态的会话，借还和重连都要按「新会话 / 复位会话」来处理；</li>
+<li><strong>字符集、超时与结果集</strong>：<code>SET NAMES</code>、<code>wait_timeout</code> 和未读完的结果，都会让下一次使用这条连接时偏离预期。</li>
+</ol>
+<p>三条主线对应三个很容易分开学、合在一起才出问题的点。只会写 <code>PREPARE</code> 但不处理池，脏会话仍会漏出去；只会建池但不理解重连，事务会在沉默中消失；只记得 <code>SET NAMES</code> 却不处理 <code>wait_timeout</code>，空闲连接会在池里变成另一条会话。下面按这个顺序展开。</p>
+<h2 id="_8">学习目标</h2>
+<p>学完本课，你应该能够：</p>
+<ol>
+<li><strong>能解释预处理语句与参数</strong>（goals 原文）；</li>
+<li><strong>能独立完成：实现带连接池的用户查询与更新，覆盖断连重连和SQL注入输入。</strong>（goals 原文）；</li>
+<li>说清为什么 <code>' OR '1'='1</code> 能让拼接 SQL 返回全部用户，而绑定参数后它只是一个普通字符串；</li>
+<li>画出连接从 checkout 到 checkin 的生命周期，并指出归还前必须复位哪些会话状态；</li>
+<li>解释「重连是新会话」：原事务已被回滚，预处理语句、字符集和会话变量都不再属于你，不能静默续接；</li>
+<li>用一次回滚演练证明：池被长事务占满时，新的 checkout 会在超时后失败。</li>
+</ol>
+<h2 id="_9">为什么后端要懂</h2>
+<p>节点的 why 原文是：「正确使用关系存储支持后台业务。」拆开看，这里的「正确」至少有两层。</p>
+<p><strong>正确性。</strong> 后台业务几乎都要读写用户、内容、权限这类关系数据。如果查询把用户输入拼进 SQL，一条恶意名字就能读走整张表；如果编辑简介的事务在断线后被客户端当成「还在原来那笔事务里」，调用方会以为提交成功，数据却丢了；如果连接还回池时还带着别人的未提交更新和错误字符集，下一个完全无关的请求就会提交一次提权，或者把多字节字符写坏。这些都不是「SQL 语法没过」，而是会话被用错了。</p>
+<p><strong>资源占用。</strong> 建立 MySQL 连接有握手、认证、会话初始化的成本，所以生产上普遍用连接池复用连接。但池里的每一条连接同时只能被一个请求占用：长事务、忘了归还、或者结果集没有读完，都会把池占满，让后面的请求排队或失败。超时（如 <code>wait_timeout</code>）还会在服务端悄悄丢掉空闲会话，池里那条连接其实已经死了。</p>
+<p>把「单独测都对、组合起来才错」的情况列成表，入职后可以当排查清单用：</p>
+<table>
+<thead>
+<tr>
+<th>失败情况</th>
+<th>谁先发现</th>
+<th>若处理不当会怎样</th>
+<th>本次实践中的对照</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>用户输入被拼进 SQL</td>
+<td>往往不是报错，而是多返回了行</td>
+<td>越权读取或被改写 WHERE</td>
+<td>naive 注入返回 5 行，错误数为 0</td>
+</tr>
+<tr>
+<td>事务中途断连</td>
+<td>下一次读写或 <code>COMMIT</code></td>
+<td>假成功，或继续用已失效的预处理语句</td>
+<td>naive：<code>COMMIT</code> 成功但 bio 仍是 hello</td>
+</tr>
+<tr>
+<td>归还时留下事务 / charset</td>
+<td>下一个借用者的 <code>COMMIT</code> 或写入</td>
+<td>错提交别人的更新、用错字符集</td>
+<td>naive：bob 被提成 admin</td>
+</tr>
+<tr>
+<td>空闲连接被 <code>wait_timeout</code> 踢掉</td>
+<td>下一次 checkout 或第一条 SQL</td>
+<td>当成原会话继续用，脏设置被「继承」到新会话</td>
+<td>naive：重连后仍是 latin1，且 kept_id=True</td>
+</tr>
+<tr>
+<td>长事务不归还</td>
+<td>其他请求的 checkout</td>
+<td>池被占满，接口超时</td>
+<td>3 个占用者让第 4 次等待 200.188 ms 后失败</td>
+</tr>
+<tr>
+<td>结果集未读完</td>
+<td>同一条连接上的下一条语句</td>
+<td>连接无法复用，或结果错位</td>
+<td>本次未单独对照，见扩展练习 1</td>
+</tr>
+</tbody>
+</table>
+<p>入职后你多半直接用公司现成的客户端和连接池，但出问题时要知道往哪查：</p>
+<ul>
+<li>偶发「查一个用户却返回很多行」，先查是不是把输入拼进了 SQL；</li>
+<li>「提交成功但数据没变」，先查中间有没有断连和静默重连；</li>
+<li>「这个请求改了另一个请求的数据」或「字符集突然不对」，先查连接归还前有没有复位；</li>
+<li>「突然大量获取连接超时」，先查是不是有长事务或泄漏的借用一直占着池。</li>
+</ul>
+<h2 id="_10">核心知识点</h2>
+<h3 id="1">1. 预处理语句与参数</h3>
+<p>MySQL 8.4 支持服务端预处理语句。文档给出的两个直接好处是：</p>
+<ul>
+<li>同类语句反复执行时，减少每次都要重新解析的开销；</li>
+<li><strong>防止 SQL 注入</strong>：参数里可以包含未转义的引号和分隔符，它们不再改变语句结构。</li>
+</ul>
+<p>SQL 接口由三条语句组成（访问日期 2026-11-11，<a href="https://dev.mysql.com/doc/refman/8.4/en/sql-prepared-statements.html">MySQL 8.4 · SQL Prepared Statements</a>）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">PREPARE</span><span class="w"> </span><span class="n">stmt1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="s1">'SELECT SQRT(POW(?,2) + POW(?,2)) AS hypotenuse'</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="o">@</span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="k">SET</span><span class="w"> </span><span class="o">@</span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="k">EXECUTE</span><span class="w"> </span><span class="n">stmt1</span><span class="w"> </span><span class="k">USING</span><span class="w"> </span><span class="o">@</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">b</span><span class="p">;</span>
+<span class="k">DEALLOCATE</span><span class="w"> </span><span class="k">PREPARE</span><span class="w"> </span><span class="n">stmt1</span><span class="p">;</span>
+</code></pre></div>
+
+<p><code>?</code> 是占位符。应用里更常见的是客户端 API 的绑定参数（走高效的 client/server binary protocol），语义一样：先确定语句结构，再单独传参数值。教学实践里，safe 路径的查询写成：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute_bound</span><span class="p">(</span>
+    <span class="s2">"SELECT id, name, role, bio FROM users WHERE name = ?"</span><span class="p">,</span>
+    <span class="p">(</span><span class="n">name</span><span class="p">,),</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>naive 路径则是字符串拼接：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">conn</span><span class="o">.</span><span class="n">execute_concat</span><span class="p">(</span>
+    <span class="s2">"SELECT id, name, role, bio FROM users WHERE name = '</span><span class="si">%s</span><span class="s2">'"</span><span class="p">,</span>
+    <span class="n">name</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>当 <code>name</code> 是 <code>' OR '1'='1</code> 时，拼接后的语句变成：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">role</span><span class="p">,</span><span class="w"> </span><span class="n">bio</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="s1">'1'</span><span class="o">=</span><span class="s1">'1'</span>
+</code></pre></div>
+
+<p><code>OR '1'='1</code> 恒为真，WHERE 失去过滤作用，整张表都被选出来。实践中 naive 路径返回了 <strong>5</strong> 行：<code>alice,bob,cindy,dave,admin</code>。绑定参数的路径里，SQL 文本始终是 <code>WHERE name = ?</code>，参数是字面量 <code>' OR '1'='1</code>，库里没有这个名字，结果是 <strong>0</strong> 行。用正常名字 <code>alice</code> 查询时，两条路径都准确返回 <strong>1</strong> 行——所以 naive 不是「完全不能用」，它只是在特殊输入上悄悄改写了语义。</p>
+<p>预处理语句属于<strong>创建它的 session</strong>。文档写明：如果会话结束时还没有 <code>DEALLOCATE PREPARE</code>，服务端会自动释放。它对该 session 是全局的：在存储过程里创建的语句，过程结束时不会自动释放。系统变量 <code>max_prepared_stmt_count</code> 可以限制同时存在的预处理语句，设为 0 等于禁止使用。另外，SQL 语法的预处理不支持在一条字符串里用分号写多条语句，也不能嵌套 <code>PREPARE</code>。这些边界以 8.4 文档为准，不要想当然。</p>
+<p>再看一遍结构是怎么被改写的。naive 的模板是：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">role</span><span class="p">,</span><span class="w"> </span><span class="n">bio</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'&lt;这里填入输入&gt;'</span>
+</code></pre></div>
+
+<p>输入里的单引号提前结束了字符串字面量，后面的 <code>OR '1'='1</code> 被解析成 SQL 布尔表达式。绑定参数不会走这一步：解析器先看到完整的 <code>WHERE name = ?</code>，再把参数当作值，而不是当作源代码。所以参数里即使有引号、分号、注释符，也不会多出新的子句。</p>
+<p>有人会问：那我把输入里的引号换成 <code>''</code>，是不是就安全了？转义能挡住一部分直接断弦的注入，但不是完整答案。转义规则依赖当前字符集（这正好连到第三条主线）、也容易在「拼了两次」「漏掉某一处」「改用了另一种字面量写法」时失效。预处理语句把「语句」和「值」分成两条通道，从机制上就不再依赖每一次手工转义都写对。8.4 文档把「参数可以包含未转义的引号和分隔符」写成预处理语句的好处之一，依据就在这里。</p>
+<p>教学代码里还有一个显式证据，不只依赖「结果行数看起来对」：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">c</span><span class="o">.</span><span class="n">execute_bound</span><span class="p">(</span><span class="s2">"SELECT id, name FROM users WHERE name = ?"</span><span class="p">,</span> <span class="p">(</span><span class="n">payload</span><span class="p">,))</span>
+<span class="k">assert</span> <span class="n">payload</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">last_sql</span>
+<span class="k">assert</span> <span class="n">c</span><span class="o">.</span><span class="n">last_params</span> <span class="o">==</span> <span class="p">(</span><span class="n">payload</span><span class="p">,)</span>
+</code></pre></div>
+
+<p>本次运行满足：<code>last_sql</code> 为 <code>SELECT id, name FROM users WHERE name = ?</code>，<code>payload_in_sql=False</code>，<code>bind_delta=1</code>。如果有人后来又在 safe 路径里偷偷改回拼接，这一组断言会先失败。</p>
+<p>关于两种接口。文档区分了「应用里通过 C API / 连接器走 binary protocol」和「在 SQL 层写 <code>PREPARE</code>/<code>EXECUTE</code>/<code>DEALLOCATE PREPARE</code>」。后者不需要编程接口、适合在 mysql 客户端里试语义、排查和写复现用例，但效率不如前者。两者都是服务端预处理，都按 session 管理生命周期。教学实现对外暴露的是 <code>execute_bound(sql, params)</code>，内部也可以用 <code>PREPARE stmt FROM ...</code> 再 <code>EXECUTE</code>，语义对齐的是「先固定结构、再传值」，并不声称自己实现了 MySQL 的 binary protocol。</p>
+<p>这也是为什么重连和连接池复位必须处理预处理语句：新会话里旧的语句名已经不存在了。实践中，naive 在静默重连后仍拿着客户端缓存的 <code>get_alice</code> 去 <code>EXECUTE</code>，结果「还能跑」——它把旧语句文本在新会话上悄悄用了一次，把「服务端已释放」这件事掩盖了。safe 路径重连后旧句柄失效，再次执行得到 <code>PreparedGone</code>。</p>
+<h3 id="2">2. 连接池和会话状态</h3>
+<p>一条 MySQL 连接不是无状态的套接字。服务端为它保留一次会话，会话上至少可能包括：</p>
+<ul>
+<li>当前事务（是否已 <code>BEGIN</code>、尚未 <code>COMMIT</code>/<code>ROLLBACK</code>）；</li>
+<li><code>autocommit</code>；</li>
+<li>字符集相关的会话变量（例如 <code>SET NAMES</code> 会隐式改到的那些）；</li>
+<li>用户变量、预处理语句、临时表、表锁、<code>GET_LOCK()</code>、<code>LAST_INSERT_ID()</code> 等。</li>
+</ul>
+<p>连接池复用的是这样一条会话，而不只是一个 TCP 连接。所以「借还」必须带上状态协议：</p>
+<div class="codehilite"><pre><span></span><code>checkout：
+  从空闲队列取出一条连接
+  若已死（服务端已踢掉 / 本进程已 close）→ 换成全新会话，而不是继续用
+  交给调用方独占
+
+调用方使用期间：
+  这条连接上的事务、charset、预处理语句都属于当前请求
+
+checkin：
+  若连接已死 → 丢弃，补一条新的进池
+  若仍活着 → 复位后再入队
+</code></pre></div>
+
+<p>复位的语义，应对齐 MySQL 8.4 C API 的 <code>mysql_reset_connection()</code>（访问日期 2026-11-11）：在<strong>不断开连接、不做重新认证</strong>的前提下清理会话。文档列出的效果包括：回滚任何活动事务并复位 autocommit；释放表锁；关闭并删除 <code>TEMPORARY</code> 表；将会话系统变量重新初始化为对应的全局值（包括 <code>SET NAMES</code> 隐式设置的变量）；丢失用户变量；释放预处理语句；关闭 <code>HANDLER</code>；将 <code>LAST_INSERT_ID()</code> 置 0；释放 <code>GET_LOCK()</code> 锁。教学实现做了其中最容易测错的几项：回滚残留事务、charset 回到 <code>utf8mb4</code>、<code>autocommit</code> 回到 True、清空预处理语句登记。</p>
+<p>实践里，借用者 A 执行 <code>SET NAMES latin1</code>，再 <code>BEGIN</code> 后把 bob 的 <code>role</code> 改成 <code>admin</code>，不提交就归还。下一位借用者 B：</p>
+<ul>
+<li><strong>naive</strong>：B 拿到的就是这条脏会话，<code>charset=latin1</code>，<code>in_tx=True</code>。B 随手 <code>COMMIT</code>，bob 的 <code>role</code> 变成了 <code>admin</code>（<code>tx_leaked=True</code>）；</li>
+<li><strong>safe</strong>：归还时已经 <code>ROLLBACK</code> 并把 charset 复位为 <code>utf8mb4</code>。B 看到的是干净会话，<code>in_tx=False</code>，bob 仍是 <code>user</code>。</li>
+</ul>
+<p>用一次调用把状态变化画全。假设 checkout 得到 <code>conn_id=21</code> 的会话，随后：</p>
+<div class="codehilite"><pre><span></span><code>BEGIN                              in_tx=True, autocommit=False
+UPDATE users SET bio=? WHERE name=?   （参数: 'in-tx-change', 'alice'）
+           ┌─ 此时服务端踢掉会话 / 进程调用 kill()
+           │    未提交的 UPDATE 被回滚
+           │    服务端预处理语句释放
+           │    这条会话的 thread_id 不再有效
+           └─ 客户端如果没被通知，仍可能以为 in_tx=True
+</code></pre></div>
+
+<p>safe 的下一步是承认「21 号会话没了」，打开 22 号会话，并把 <code>TransactionAborted(old=21, new=22, was_in_tx=True)</code> 抛给调用方。naive 的下一步是打开一条新的服务端会话，却把客户端的 <code>in_tx</code>、charset、conn_id、预处理缓存原样留着，然后对一条并没有活动事务的新会话执行 <code>COMMIT</code>——在 MySQL 里，没有活动事务时 <code>COMMIT</code> 仍是成功的空操作。这就是假成功的机制，不是「COMMIT 实现写错了」。</p>
+<p>教学池的关键片段如下（缩写，完整代码在 practice97 里）：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SafePool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="o">.</span><span class="n">alive</span> <span class="ow">or</span> <span class="n">conn</span><span class="o">.</span><span class="n">is_idle_timed_out</span><span class="p">():</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">())</span>  <span class="c1"># 补一条全新会话</span>
+            <span class="k">return</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">reset_like_mysql_reset_connection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>  <span class="c1"># 满了就 PoolTimeout</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="o">.</span><span class="n">alive</span> <span class="ow">or</span> <span class="n">conn</span><span class="o">.</span><span class="n">is_idle_timed_out</span><span class="p">():</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_new</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">conn</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">NaivePool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>          <span class="c1"># 原样还回去</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">checkout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idle</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">conn</span><span class="o">.</span><span class="n">alive</span> <span class="ow">or</span> <span class="n">conn</span><span class="o">.</span><span class="n">is_idle_timed_out</span><span class="p">():</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">silent_reconnect</span><span class="p">()</span>   <span class="c1"># 新会话，旧客户端状态</span>
+        <span class="k">return</span> <span class="n">conn</span>
+</code></pre></div>
+
+<p><code>autocommit</code> 也值得单独说一句。MySQL 默认自动提交：一条非事务型语句结束，效果立刻持久化。<code>BEGIN</code>/<code>START TRANSACTION</code> 之后进入显式事务，必须 <code>COMMIT</code> 或 <code>ROLLBACK</code>（或会话结束时回滚）。连接池里最危险的组合是：A 关闭了 autocommit、开了事务、改了数据、把连接还回去；B 以为自己在 autocommit 下做了一次只读查询，最后却执行了一次 <code>COMMIT</code>，把 A 的修改持久化了。实验 3 就是这个组合的最小版本。</p>
+<p>归还时为什么选择「复位但不断开」？因为断开再连要重新握手、重新认证，等于把池的主要收益吐回去。<code>mysql_reset_connection()</code> 的定位正是：在同一条物理连接上把会话擦干净。教学实现用同一条 sqlite 连接做 <code>ROLLBACK</code> 并清字段，来逼近这一语义；它没有重新做 MySQL 协议上的认证，这是刻意的简化。</p>
+<p>注意：脏状态泄漏的是「下一次借用到<strong>同一条物理连接</strong>的人」。池里如果还有别的空闲连接，不一定是下一个请求立刻中招，但这只是时机问题，不是安全保证。</p>
+<p><strong>重连是新会话，不是原会话的续集。</strong> 8.4 文档 <em>Automatic Reconnection Control</em> 写得很清楚（访问日期 2026-11-11）：客户端库可以在发现连接断开时自动重连并再发一次语句，但自动重连已经 <strong>deprecated</strong>，<code>MYSQL_OPT_RECONNECT</code> 仍可用却会告警，未来会移除，而且默认是关闭的。若发生自动重连，应用<strong>不会收到明确通知</strong>——可以用重连前后 <code>mysql_thread_id()</code> 是否变化来检测。重连会在服务端重置连接相关状态，列表与 <code>mysql_reset_connection()</code> 高度相同，其中第一条就是：<strong>回滚任何活动事务并复位 autocommit</strong>，同时丢失会话变量、用户变量和预处理语句。</p>
+<p>所以官方 pitfalls 不是吓唬人，而是文档里的行为：</p>
+<blockquote>
+<p>重连可能丢失事务和会话设置，不能静默续接原事务。</p>
+</blockquote>
+<p>实践里把这件事做成了对照。事务中把 alice 的 <code>bio</code> 改成 <code>in-tx-change</code>（不提交），然后模拟服务端踢掉会话：</p>
+<ul>
+<li><strong>naive</strong> 静默重连：客户端仍然认为 <code>in_tx=True</code>，接着 <code>COMMIT</code> 并报告成功；但新会话上这句 <code>COMMIT</code> 只是空提交，alice 的 <code>bio</code> 仍是 <code>hello</code>（<code>false_success=True</code>）。客户端缓存的预处理语句也能继续执行，好像什么都没丢；</li>
+<li><strong>safe</strong> 把重连当作新会话：抛出 <code>TransactionAborted</code>，<code>in_tx=False</code>，会话 id 从 <strong>21 变成 22</strong>，charset 回到 <code>utf8mb4</code>，旧预处理句柄再执行会得到 <code>PreparedGone</code>。alice 的 <code>bio</code> 同样仍是 <code>hello</code>，但这一次是<strong>符合预期的回滚</strong>，调用方知道必须重新 <code>BEGIN</code> 并重做全部语句。</li>
+</ul>
+<p>两种路径数据都没改上去，差别在于：naive 告诉你「提交成功」，safe 告诉你「原事务已经没了」。排障时，假成功比明确失败危险得多。</p>
+<h3 id="3">3. 字符集、超时与结果集</h3>
+<p><strong>字符集。</strong> <code>SET NAMES charset_name</code> 会改动当前会话上与客户端、连接、结果相关的字符集变量（具体变量集合和默认值以 8.4 文档为准，这里不编造未核过的默认值）。错误的字符集不只是「日志看起来怪」：它可能造成写入截断、乱码、或同一列在不同连接上的比较结果不一致。连接池把这个问题放大了——A 改了 charset 却不还原，B 在不知情的情况下用错误的字符集读写。实践实验 3 已经用 <code>latin1</code> 泄漏给出了可观察的对照；实验 5 里，naive 在 <code>wait_timeout</code> 之后静默重连，<strong>仍然把 <code>latin1</code> 带到了新会话</strong>，这是「会话设置丢失却被客户端伪装成还在」的另一个侧面。</p>
+<p><strong>超时。</strong> 服务端会按会话上的 <code>wait_timeout</code>（交互式连接则是 <code>interactive_timeout</code>，以文档为准）踢掉空闲连接。连接池里一条看起来还在队列里的连接，其实可能已经被服务端关掉了。下一次使用必须按死连接处理：丢掉旧会话，建立新会话，并认为旧事务和旧设置都已不在。实践把全局 <code>wait_timeout</code> 设为 <strong>0.12s</strong>，连接归还后空闲 <strong>0.25s</strong>：</p>
+<ul>
+<li><strong>safe</strong> 再 checkout 时发现会话已死，换成新会话：id 从 <strong>1 变成 2</strong>，charset 是默认的 <code>utf8mb4</code>；</li>
+<li><strong>naive</strong> 静默重连：保留原来的客户端会话 id，charset 仍是归还前留下的 <code>latin1</code>。</li>
+</ul>
+<p><strong>结果集。</strong> 一条连接在结果还没读完（或多结果集还没消耗完）时，不能安全地开始下一条语句，更不能还回池。教学实现把结果一次性 <code>fetchall()</code>，是为了让主线实验聚焦在参数绑定、事务和 charset 上；生产客户端里，未读完的结果集、存储过程多结果集，都是归还前必须清掉的状态。文档还提到，SQL 预处理接口本身不支持在一条字符串里发送多条语句，应用如果打开了多语句，更要小心结果集边界。</p>
+<p>对内容后台这种含中文的业务（教学假设），字符集出错的典型路径是：某次调试或某条历史代码执行了 <code>SET NAMES latin1</code>，连接被还回池后一直没被复位。后续请求用这条连接写入文章标题或用户简介时，多字节字符可能按错误的字符集编码、截断或在比较时对不上。教学实验没有模拟真实的编码转换（sqlite3 层按 Unicode 文本处理），它只把 <code>charset</code> 当作会话上必须复位的状态来测量泄漏。这一点要说清楚：实验 3 和实验 5 证明的是「状态会漏」，不是「latin1 在 sqlite 里真的截断了中文」。真实的截断和乱码，要在 MySQL 8.4 里用同样的 <code>SET NAMES</code> 自己验证。</p>
+<p>超时和池的交互可以按时间线来看（本次实验的设置是 <code>wait_timeout=0.12s</code>，空闲 <code>0.25s</code>）：</p>
+<div class="codehilite"><pre><span></span><code>t=0.00  checkout，SET NAMES latin1，checkin
+        safe：charset 被复位为 utf8mb4，wait_timeout 回到全局默认 0.12s
+        naive：charset 仍是 latin1，wait_timeout 仍是 0.12s
+t=0.12  服务端认为这条空闲会话已经到期，踢掉它
+t=0.25  下一次 checkout
+        safe：发现已死，新建会话（id 1→2），charset=utf8mb4
+        naive：静默重连，保留客户端 id 和 latin1
+</code></pre></div>
+
+<p>生产上默认的 <code>wait_timeout</code> 通常远大于 0.12 秒（具体数值以 8.4 文档和你的实例配置为准，这里不写死一个未在本次实验里读到的默认值）。把它缩到 0.12 秒是为了让实验在一秒内跑完。机制不变：池里的空闲连接随时可能已经被服务端关掉，checkout 必须会处理死连接。</p>
+<p>结果集为什么单独列出来？因为「语句执行完了」和「连接可以借给别人了」不是同一件事。典型的坑包括：</p>
+<ul>
+<li>只取了第一行就走，剩下的行还在这条连接的协议缓冲区里，下一条语句被拒绝，或者更糟，和下一条语句的结果混在一起；</li>
+<li>存储过程或多语句一次返回多个结果集，只读了第一个；</li>
+<li>出错时跳过了读完或 <code>close</code> 结果集的路径，连接带着未完成的状态回到池里。</li>
+</ul>
+<p>教学代码在 <code>execute()</code> 里对有描述符的游标一次性 <code>fetchall()</code>，是为了让前两条主线的实验稳定可重复。它把「结果集必须被消费」这个规则写进了实现，但没有单独做一组「故意不读完」的对照。扩展练习第 1 条就是留给你补的。</p>
+<p>会话还有一些和结果、身份相关的值，例如 <code>LAST_INSERT_ID()</code>。自动重连和 <code>mysql_reset_connection()</code> 都会把它置 0。如果调用方在插入一行之后、读取插入 id 之前发生了复位或重连，读到的就不再是刚才那一行。教学实验没有单独测这一项，但归还和重连的原则是一样的：不要假设「这条连接上一次调用留下的会话值还在」。</p>
+<p>和长度、报文相关的上限（例如 <code>max_allowed_packet</code>）同样属于「不可信输入要设上限」的意识，具体默认值以你使用的 8.4 文档为准，不要背二手数字。</p>
+<h3 id="_11">三条主线的收束</h3>
+<ul>
+<li>预处理语句与参数，解决「用户输入会不会改写语句结构」；</li>
+<li>连接池和会话状态，解决「这条连接现在属于谁、上面还挂着什么、还回去时怎么擦干净、断了之后算不算同一笔事务」；</li>
+<li>字符集、超时与结果集，解决「会话的默认环境被谁改过、空闲会不会被踢、结果有没有消费完」。</li>
+</ul>
+<h2 id="_12">常见误区</h2>
+<blockquote>
+<p>重连可能丢失事务和会话设置，不能静默续接原事务。</p>
+</blockquote>
+<ol>
+<li><strong>把用户输入拼进 SQL。</strong> <code>' OR '1'='1</code> 不是「奇怪的用户名」，它改写了 WHERE。实践中 naive 一次查询返回 5 行全表，safe 用 <code>WHERE name = ?</code> 绑定同一段输入，结果是 0 行；正常查询 <code>alice</code> 时两种路径都是 1 行。看起来「功能测过了」，只是没测恶意输入。</li>
+<li><strong>断线后静默重连，并继续 COMMIT 原来的事务。</strong> 服务端已经把旧事务回滚了。naive 的客户端仍把 <code>in_tx</code> 设为 True，<code>COMMIT</code> 报告成功，alice 的 <code>bio</code> 却还是 <code>hello</code>（假成功）。safe 抛出 <code>TransactionAborted</code>，会话 id 21→22，要求调用方重做整笔事务。</li>
+<li><strong>以为预处理语句在重连后还在。</strong> 文档写明预处理语句属于 session，会话结束即释放。naive 用客户端缓存把 <code>get_alice</code> 在新会话上重新用起来，<code>prepared_ok=True</code>，把丢失掩盖了；safe 再执行得到 <code>PreparedGone</code>。</li>
+<li><strong>连接还回池时不清理事务和 charset。</strong> 实践中 naive 的下一位借用者看到 <code>latin1</code> 和 <code>in_tx=True</code>，一次 <code>COMMIT</code> 就把 bob 提成了 <code>admin</code>。safe 归还前复位，bob 仍是 <code>user</code>。</li>
+<li><strong>把连接池当成无状态对象池。</strong> 复用的是会话。checkout 拿到的连接可能带着上次的事务、变量、预处理语句，也可能其实已经因 <code>wait_timeout</code> 死了。</li>
+<li><strong>忽略空闲超时。</strong> 实践中连接在池里只坐了 0.25s，短于或长于 <code>wait_timeout</code> 决定了它还是不是原来那条会话。naive 在超时后仍保留脏 charset，等于把「已经是新会话」这件事瞒过去了。</li>
+</ol>
+<p>这些误区有一个共同结构：客户端和调用方看到的「成功」，和服务器会话里实际还在的状态，已经不是同一回事。注入时，语句在服务器上的结构已经变了，客户端却还以为自己在按名字查一个人；假成功提交时，服务器上的事务早就没了，客户端却还握着 <code>in_tx=True</code>；脏连接归还时，服务器上那笔未提交的更新还在，下一个调用方却以为自己从一张干净的桌子开始。排查时不要只看错误率——这三组对照里，naive 路径都可以做到「没有抛异常」。</p>
+<p>再补一个和重连相关的操作层面提醒。8.4 文档说，可以用重连前后的 <code>mysql_thread_id()</code> 是否变化来检测自动重连。如果你必须在遗留代码里面对仍开启着的自动重连，至少要在关键事务前后核对这个 id，发现变化就按「整笔事务失败」处理，而不是继续 <code>COMMIT</code>。长期做法仍是关掉自动重连（它已 deprecated），在应用层显式处理断开、建立新会话、按幂等规则决定是否重试。</p>
+<h2 id="_13">设计权衡</h2>
+<blockquote>
+<p>连接池减少握手，也需防止长事务占满池。</p>
+</blockquote>
+<p>建立一条 MySQL 连接要做网络握手、认证和会话初始化，比在已经鉴权的会话上再跑一条 SQL 贵得多。连接池用「先建好、借还复用」把握手成本摊掉，这是它存在的理由。</p>
+<p>代价是：池的容量是硬上限。每一条被借走、却迟迟不还的连接，都是一个不能再给别人用的窗口。最常见的占满原因就是<strong>长事务</strong>——<code>BEGIN</code> 之后做很多业务计算、调别人的接口、甚至等用户，连接一直被握在手里。实践里池大小为 <strong>3</strong>，三个借用者都 <code>BEGIN</code> 后不归还，第四次 <code>checkout</code> 在 <strong>200.188 ms</strong> 后超时失败；三个都归还之后，再 checkout 只需 <strong>0.003 ms</strong> 就拿到了连接。数字来自教学池的 200ms 等待上限，用来证明「占满是可观察的」，不是 MySQL 服务端自己的排队延迟。</p>
+<p>工程上常见的制衡手段（具体名称以你用的客户端和框架为准）包括：</p>
+<ul>
+<li>限制池大小与等待时间，让占满尽快变成明确错误，而不是无限排队；</li>
+<li>限制单次借用时间和连接最长存活时间，避免一条连接无限期被占，也避免把脏会话留得太久；</li>
+<li>归还时做复位（<code>mysql_reset_connection()</code> 这类路径）。复位有 CPU 和往返成本，但远小于一次脏会话造成的错账；</li>
+<li>把「打开事务」的临界区缩到真正需要原子写的那几条 SQL，而不是包住整个请求。</li>
+</ul>
+<p>池不是越大越好：池大会增加服务端会话占用（内存、文件描述符、并发事务）。先设上限，再用占满率和等待时间来调，而不是先开一个「应该够用」的很大的池。</p>
+<p>把「减少握手」说得更具体一点。每次新建会话，服务端都要分配连接线程（或等价的会话对象）、做认证、初始化一组会话变量。如果每个 HTTP 请求都新建并关掉一条 MySQL 连接，数据库的连接建立速率会先于 SQL 本身成为瓶颈，TIME_WAIT 和认证日志也会跟着涨。池把「建连」从请求路径里拿出去，请求路径上只剩 checkout（通常是取一条已存在的会话）和 SQL。</p>
+<p>但这笔收益有一个隐形前提：调用方占用连接的时间必须短。占用时间 = 事务里所有 SQL 的执行时间 + 你在握着连接时做的任何非 SQL 工作。如果在事务中间调用下游 RPC、读远程文件、甚至等锁，连接就从「在工作」变成了「被拿来当会话级的锁」。池大小是 3 的时候，3 个这样的请求就能让整个用户服务不再能访问数据库——实验 4 用 200ms 的等待上限把这件事变成了明确的 <code>PoolTimeout</code>。如果把等待改成无限期，对外表现就会变成「接口偶尔卡死」，更难定位。</p>
+<p>所以调池的顺序通常是：先缩短占用（事务尽量短、不要在持连时做远程调用），再考虑要不要加大池。只加大池，会把问题从「应用获取连接超时」变成「数据库会话和并发事务变多」，服务端先撑不住。</p>
+<p>复位成本也可以量化地理解，不必编造生产数字：实验 3 的 safe 路径在归还时多做了一次 <code>ROLLBACK</code> 和若干字段重置，但避免了一次错误的 <code>admin</code> 提升。一次复位的代价是有限的本地操作；一次脏提交的代价是数据修回、审计和可能的安全事故。权衡几乎总是偏向归还前复位。</p>
+<h2 id="_14">动手实践：实现带连接池的用户查询与更新</h2>
+<p><strong>要求：</strong> 实现带连接池的用户查询与更新，覆盖断连重连和 SQL 注入输入。查询走绑定参数；连接归还前事务和会话状态可控。</p>
+<p>环境是 Python 3 标准库加 sqlite3，用教学会话模型模拟 MySQL 的会话、预处理语句、连接池和重连语义。不要把下面的毫秒数当成生产 MySQL 的基准。</p>
+<div class="codehilite"><pre><span></span><code>tar<span class="w"> </span>xzf<span class="w"> </span>practice97.tar.gz<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>practice97
+./test.sh<span class="w">        </span><span class="c1"># 约 1 秒，最后一行是 ALL_CHECKS_PASSED</span>
+</code></pre></div>
+
+<p>本次运行的完整输出见实验表。本次 <code>./test.sh</code> 以 <code>ALL_CHECKS_PASSED</code> 结束，退出码 0。</p>
+<h3 id="0">0. 文件结构</h3>
+<div class="codehilite"><pre><span></span><code>practice97/
+  engine.py        # 教学会话：绑定/拼接、事务、charset、预处理、断连与重连
+  pool.py          # SafePool / NaivePool
+  app.py           # UserStore：get_user_by_name / update_user_bio
+  test_mysql.py    # 5 组对照实验，并写入 results.json
+  test.sh          # 启动入口
+  results.json     # 本次运行的数字
+</code></pre></div>
+
+<p>教学表 <code>users</code> 预置 5 行（教学假设）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">id</th>
+<th>name</th>
+<th>role</th>
+<th>bio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>alice</td>
+<td>user</td>
+<td>hello</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>bob</td>
+<td>user</td>
+<td>hobby:chess</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>cindy</td>
+<td>user</td>
+<td>hobby:music</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td>dave</td>
+<td>user</td>
+<td>hobby:coding</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td>admin</td>
+<td>admin</td>
+<td>root bio</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1enginepy-apppy">步骤 1：两条执行路径（engine.py / app.py）</h3>
+<p>safe 的查询和更新必须走绑定参数，SQL 文本里是 <code>?</code>，用户输入只出现在参数里。naive 用 <code>'%s' % name</code> 直接拼接。<code>UserStore.get_user_by_name()</code> 按模式选择其中一条路径。验收时除了看注入结果，还断言：safe 最近一次 SQL 不含 payload 原文，<code>params</code> 等于 <code>["' OR '1'='1"]</code>，绑定次数加 1。</p>
+<p><code>UserStore</code> 本身很短，差别全在「参数怎么进 SQL」：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">UserStore</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_user_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">checkout</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"safe"</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute_bound</span><span class="p">(</span>
+                    <span class="s2">"SELECT id, name, role, bio FROM users WHERE name = ?"</span><span class="p">,</span>
+                    <span class="p">(</span><span class="n">name</span><span class="p">,),</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">conn</span><span class="o">.</span><span class="n">execute_concat</span><span class="p">(</span>
+                <span class="s2">"SELECT id, name, role, bio FROM users WHERE name = '</span><span class="si">%s</span><span class="s2">'"</span><span class="p">,</span>
+                <span class="n">name</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">checkin</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+</code></pre></div>
+
+<p>请注意 <code>finally</code> 里一定会 <code>checkin</code>。若在 <code>return</code> 之前漏掉归还，实验 4 那种占满会在正常流量里出现。safe 路径即使查询抛错，也必须能走进复位逻辑，否则一次失败的请求就会留下脏会话。</p>
+<h3 id="2poolpy">步骤 2：连接池的归还和重连（pool.py）</h3>
+<ul>
+<li><strong>SafePool.checkin</strong>：若连接已死就丢弃并补新的；否则调用复位（回滚残留事务、charset=<code>utf8mb4</code>、autocommit=True、清空预处理语句），再入队。checkout 时若发现 <code>wait_timeout</code> 已到，同样换成新会话。</li>
+<li><strong>NaivePool.checkin</strong>：原样归还，脏事务和脏 charset 留给下一个人。checkout 时若连接已死，走 <code>silent_reconnect()</code>：新开一条服务端会话，但客户端仍保留原来的 <code>in_tx</code>、charset、会话 id 和预处理语句缓存。</li>
+</ul>
+<h3 id="21-api">步骤 2.1：断连 API 在教学模型里怎么写</h3>
+<p><code>TeachingConnection.kill()</code> 只拆服务端：关闭底层 sqlite 连接（未提交事务随之回滚），清空服务端预处理登记，把 <code>alive=False</code>。它故意不改客户端仍能看到的 <code>in_tx</code>、<code>charset</code> 和 <code>client_prepared</code>——因为真实的客户端库在 TCP 被对端关掉时，也不是立刻把你的「我在事务里」这个本地标志清掉。差别出在发现死连接之后：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">silent_reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>   <span class="c1"># naive</span>
+    <span class="c1"># 记下客户端仍相信的状态，打开新的服务端会话，再写回去</span>
+    <span class="n">old_in_tx</span><span class="p">,</span> <span class="n">old_charset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">charset</span>
+    <span class="n">cached</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client_prepared</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_open_sqlite</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">in_tx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">charset</span> <span class="o">=</span> <span class="n">old_in_tx</span><span class="p">,</span> <span class="n">old_charset</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">client_prepared</span> <span class="o">=</span> <span class="n">cached</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">prepared</span> <span class="o">=</span> <span class="p">{}</span>        <span class="c1"># 服务端其实是空的</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">safe_reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>     <span class="c1"># safe</span>
+    <span class="n">old_id</span><span class="p">,</span> <span class="n">was_in_tx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_tx</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_open_sqlite</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">charset</span> <span class="o">=</span> <span class="n">DEFAULT_CHARSET</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">autocommit</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">in_tx</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">prepared</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">client_prepared</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="c1"># 由调用方改写 conn_id，并抛出 TransactionAborted(old_id, new_id, was_in_tx)</span>
+</code></pre></div>
+
+<p>实验 2 就是对这两段逻辑的直接测量。读代码时请对照 <code>test_mysql.py</code> 里的断言，不要只看函数名。</p>
+<h3 id="22-resultsjson">步骤 2.2：如何读 results.json</h3>
+<p><code>./test.sh</code> 除了在终端打印对照表，也会把同一组数字写进 <code>results.json</code>。教案引用的毫秒数都以本次运行的这份文件为准。再次执行时，注入和事务的行数、布尔值应当稳定；毫秒数会随机器负载轻微波动。如果某次运行注入不再是 5 对 0、或 safe 归还后 bob 变成了 admin，那是实现被改坏了，而不是「正常抖动」。</p>
+<h3 id="3-5">步骤 3：运行并解读 5 组对照（真实输出）</h3>
+<p><strong>实验 1：SQL 注入</strong></p>
+<p>输入 <code>' OR '1'='1</code> 调用 <code>get_user_by_name</code>：</p>
+<table>
+<thead>
+<tr>
+<th>path</th>
+<th style="text-align: right;">rows</th>
+<th>names</th>
+<th style="text-align: right;">正常查 alice</th>
+<th style="text-align: right;">本次耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive</td>
+<td style="text-align: right;">5</td>
+<td>alice,bob,cindy,dave,admin</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.64 ms</td>
+</tr>
+<tr>
+<td>safe</td>
+<td style="text-align: right;">0</td>
+<td>（无）</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.087 ms</td>
+</tr>
+</tbody>
+</table>
+<p>safe 的绑定证据：<code>sql='SELECT id, name FROM users WHERE name = ?'</code>，<code>params=["' OR '1'='1"]</code>，<code>payload_in_sql=False</code>，<code>bind_delta=1</code>。</p>
+<p><strong>实验 2：事务中途断连再重连</strong></p>
+<p>在事务里把 alice 的 <code>bio</code> 改成 <code>in-tx-change</code>，然后杀掉服务端会话：</p>
+<table>
+<thead>
+<tr>
+<th>path</th>
+<th>重连后 in_tx</th>
+<th>COMMIT</th>
+<th>之后的 bio</th>
+<th>假成功</th>
+<th>旧预处理还能用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive</td>
+<td>True</td>
+<td>报告成功</td>
+<td>hello</td>
+<td>True</td>
+<td>True</td>
+</tr>
+<tr>
+<td>safe</td>
+<td>False</td>
+<td>中止（TransactionAborted）</td>
+<td>hello</td>
+<td>False</td>
+<td>False（PreparedGone）</td>
+</tr>
+</tbody>
+</table>
+<p>safe 的会话 id 从 21 变为 22。两边数据都没改上去，但只有 safe 把「原事务已经丢了」告诉了调用方。</p>
+<p>把实验 2 的时间顺序再展开一次，避免把「数据没改上去」误读成两种路径行为相同：</p>
+<div class="codehilite"><pre><span></span><code>初始：alice.bio = hello
+BEGIN
+UPDATE bio='in-tx-change'          -- 仅在当前会话可见，未持久化
+kill()                             -- 服务端回滚，磁盘上仍是 hello
+
+naive.silent_reconnect()
+  客户端 in_tx 仍为 True
+  COMMIT                           -- 新会话上空提交，返回成功
+  读取 alice.bio                   -- hello
+  结论：调用方记录「提交成功」，数据未变（假成功）
+
+safe.safe_reconnect()
+  抛出 TransactionAborted（21→22）
+  in_tx=False
+  读取 alice.bio                   -- hello
+  结论：调用方知道要重试整笔事务（真失败）
+</code></pre></div>
+
+<p>排障口诀：断连之后如果看到「成功」却对不上数据，先假设发生过静默重连，而不是先怀疑 UPDATE 语句写错。</p>
+<p><strong>实验 3：归还前的事务和会话状态</strong></p>
+<p>借用者 A：<code>SET NAMES latin1</code> + <code>BEGIN</code> + 把 bob 的 role 改为 <code>admin</code>，不提交就归还。借用者 B 取出同一条物理连接并 <code>COMMIT</code>。本实验把池大小设为 1，保证 B 就是这条连接的下一位借用者。</p>
+<table>
+<thead>
+<tr>
+<th>path</th>
+<th>B 的 charset</th>
+<th>B 的 in_tx</th>
+<th>bob 的 role</th>
+<th>事务泄漏</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive</td>
+<td>latin1</td>
+<td>True</td>
+<td>admin</td>
+<td>True</td>
+</tr>
+<tr>
+<td>safe</td>
+<td>utf8mb4</td>
+<td>False</td>
+<td>user</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+<p>这同时覆盖了两条验收标准里的第二条：「连接归还前事务和会话状态可控」。</p>
+<p><strong>实验 4：长事务占满池</strong></p>
+<p>池大小 3，三个借用者都 <code>BEGIN</code> 后不归还。第四次 checkout（等待上限 200ms）超时失败，等待 <strong>200.188 ms</strong>；三人归还后再 checkout，<strong>0.003 ms</strong> 就取到了。<code>fourth_timed_out=True</code>。这组数字用来支撑权衡里「池会减少握手，也会被长事务占满」。</p>
+<p><strong>实验 5：<code>wait_timeout</code> 空闲断连</strong></p>
+<p>全局 <code>wait_timeout=0.12s</code>，归还后空闲 <code>0.25s</code> 再 checkout：</p>
+<ul>
+<li>safe：新会话，id 1→2，charset=<code>utf8mb4</code>；</li>
+<li>naive：静默重连，<code>kept_id=True</code>，charset 仍是 <code>latin1</code>。</li>
+</ul>
+<h3 id="4">步骤 4：对照验收标准</h3>
+<ul>
+<li><strong>查询使用绑定参数：</strong> 实验 1 中 safe 对注入输入返回 0 行，SQL 文本是 <code>?</code> 占位，payload 只出现在参数里，<code>bind_delta=1</code>。</li>
+<li><strong>连接归还前事务和会话状态可控：</strong> 实验 3 中 safe 归还后，下一位借用者看到 <code>utf8mb4</code>、<code>in_tx=False</code>，bob 仍为 <code>user</code>；naive 则把 <code>latin1</code> 和未提交的提权一并泄漏。实验 2 和实验 5 进一步证明：重连和空闲超时之后，safe 不会假装还在原会话里。</li>
+</ul>
+<p>把验收标准直接映射到 <code>test_mysql.py</code> 里的断言，便于你改代码后回归：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 验收 1：查询使用绑定参数（实验 1）</span>
+<span class="k">assert</span> <span class="n">naive_rows</span> <span class="o">==</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">safe_rows</span> <span class="o">==</span> <span class="mi">0</span>
+<span class="k">assert</span> <span class="n">naive_alice</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">safe_alice</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="k">assert</span> <span class="n">bind_count_delta</span> <span class="o">==</span> <span class="mi">1</span>
+<span class="k">assert</span> <span class="n">payload</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">last_sql</span>
+<span class="k">assert</span> <span class="n">last_params</span> <span class="o">==</span> <span class="p">[</span><span class="n">payload</span><span class="p">]</span>
+
+<span class="c1"># 验收 2：归还前事务和会话状态可控（实验 3）</span>
+<span class="k">assert</span> <span class="n">naive_b_charset</span> <span class="o">==</span> <span class="s2">"latin1"</span> <span class="ow">and</span> <span class="n">naive_bob_role</span> <span class="o">==</span> <span class="s2">"admin"</span>
+<span class="k">assert</span> <span class="n">safe_b_charset</span> <span class="o">==</span> <span class="s2">"utf8mb4"</span> <span class="ow">and</span> <span class="n">safe_b_in_tx</span> <span class="ow">is</span> <span class="kc">False</span>
+<span class="k">assert</span> <span class="n">safe_bob_role</span> <span class="o">==</span> <span class="s2">"user"</span>
+
+<span class="c1"># 配套：重连不得静默续接（实验 2）</span>
+<span class="k">assert</span> <span class="n">naive_false_success</span> <span class="ow">is</span> <span class="kc">True</span>          <span class="c1"># COMMIT 成功，bio 仍是 hello</span>
+<span class="k">assert</span> <span class="n">safe_aborted</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">safe_id_changed</span> <span class="ow">is</span> <span class="kc">True</span>
+<span class="k">assert</span> <span class="n">safe_prepared_err</span> <span class="o">==</span> <span class="s2">"PreparedGone"</span>
+</code></pre></div>
+
+<p>这三组断言同时失败或同时被删掉，通常意味着有人把对照实验「改简单了」。改练习代码时可以加功能，但不要为了让 naive 看起来也正确而删掉这些断言。</p>
+<p>运行时间方面，本次 <code>./test.sh</code> 大约 1 秒（主要花在两段 0.25s 的 <code>wait_timeout</code> 空闲等待，以及实验 4 的 200ms checkout 超时上）。若你把 <code>wait_timeout</code> 或池等待上限改得更大，总时间会按你改的值增加。没有网络，也不需要本机安装 MySQL。</p>
+<h3 id="5">步骤 5：自己动手的扩展练习</h3>
+<p>这些是练习，不是本次已经跑过的数字，不要把设想的结果写进总结。</p>
+<ol>
+<li>给 safe 的 <code>checkin</code> 补上「未读结果集必须清掉」的路径：故意留一个未 <code>fetch</code> 完的查询，再借给下一个人，观察 naive 与 safe 的差异。</li>
+<li>把实验 2 改成「断连后自动重试整笔事务」：safe 捕获 <code>TransactionAborted</code>，重新 <code>BEGIN</code> 并重做 <code>UPDATE</code>，最后再 <code>COMMIT</code>，确认 alice 的 <code>bio</code> 变为 <code>in-tx-change</code>。naive 的假成功在这一步会显得更危险——它以为已经提交，根本不会重试。</li>
+<li>把池大小改回 3，再做实验 3：脏连接在队列末尾，不一定下一个请求立刻中招。加一个循环，直到再次借到那条物理连接，确认泄漏仍然发生。这能帮你理解「偶发错账」。</li>
+<li>对照 8.4 文档，把复位列表里教学实现还没做的项（临时表、用户变量、<code>LAST_INSERT_ID()</code>）补一条最小演示。</li>
+</ol>
+<h3 id="6">步骤 6：和生产客户端的对应关系（不要记错边界）</h3>
+<p>教学模型和你之后在公司里看到的客户端，可以按职责对齐，而不能按类名对齐：</p>
+<table>
+<thead>
+<tr>
+<th>教学模型</th>
+<th>生产里通常由谁做</th>
+<th>你要对齐的语义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>execute_bound</code> / <code>PREPARE</code>+<code>EXECUTE</code></td>
+<td>官方连接器或框架的预处理/参数绑定 API</td>
+<td>用户输入走参数通道，不进 SQL 文本</td>
+</tr>
+<tr>
+<td><code>SafePool.checkin</code> 复位</td>
+<td>连接池在归还时调用 <code>mysql_reset_connection()</code> 或等价重置</td>
+<td>下一位借用者看不到上一位的事务和会话变量</td>
+</tr>
+<tr>
+<td><code>TransactionAborted</code></td>
+<td>关闭自动重连后，应用自己处理断开并决定是否重试</td>
+<td>新会话 ≠ 原事务；只有幂等的整笔事务才能重试</td>
+</tr>
+<tr>
+<td><code>silent_reconnect</code></td>
+<td>已 deprecated 的自动重连（<code>MYSQL_OPT_RECONNECT</code>）</td>
+<td>可能无通知、丢失事务和会话设置</td>
+</tr>
+<tr>
+<td><code>PoolTimeout</code></td>
+<td>池的最大等待时间 / 获取连接超时</td>
+<td>长事务占满时要快速失败，而不是无限等</td>
+</tr>
+<tr>
+<td><code>wait_timeout</code> 检测</td>
+<td>服务端踢掉空闲会话 + 客户端发现连接已死</td>
+<td>checkout 或第一次用时必须按新会话处理</td>
+</tr>
+</tbody>
+</table>
+<p>表里的生产 API 名称，只包含本课已在 8.4 文档中核对过的部分。框架各自的池配置项名称以该框架文档为准，不要把教学类名抄进生产代码。</p>
+<h2 id="_15">源码与文档阅读</h2>
+<blockquote>
+<p>sourceStudy 原文：「沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。」</p>
+</blockquote>
+<p>入口必须是本课唯一指定的资源：<a href="https://dev.mysql.com/doc/refman/8.4/en/sql-prepared-statements.html">MySQL 8.4 · SQL Prepared Statements</a>。版本记为 <strong>MySQL 8.4</strong>，访问日期记为 <strong>2026-11-11</strong>。下面只给「带着什么问题去读」，具体段落以你打开的那一版文档为准。</p>
+<p><strong>1. 定义与示例（对照：教学代码的 <code>prepare</code> / <code>execute_bound</code> / <code>PREPARE ... EXECUTE</code>）</strong></p>
+<ul>
+<li><code>PREPARE</code>、<code>EXECUTE ... USING</code>、<code>DEALLOCATE PREPARE</code> 各自做什么？占位符 <code>?</code> 出现在语句的哪些位置（包括文档提到的 <code>LIMIT</code>）？</li>
+<li>预处理语句与 session 的关系：会话结束时未释放会怎样？在存储过程里创建的语句，过程结束时会不会被自动释放？</li>
+<li><code>max_prepared_stmt_count</code> 为 0 时意味着什么？SQL 语法的预处理为什么不能嵌套、不能在一条字符串里写多条语句？</li>
+<li>记录待验证：你自己在 8.4 环境里跑一遍文档中的 hypotenuse 示例，把结果记下来。教学实践用 sqlite3 模拟语义，不替代这一步。</li>
+</ul>
+<p><strong>2. 错误处理与生命周期（对照：实验 2 的 <code>PreparedGone</code>、实验 5 的新会话）</strong></p>
+<ul>
+<li>文档如何描述「语句属于创建它的 session」？如果会话已经没了，再 <code>EXECUTE</code> 旧名字，你预期看到什么错误（以你实际跑到的为准，不要提前背一个未核对的错误码）？</li>
+<li>应用接口（C API / 连接器）和 SQL 接口是两条路径：文档强调它们并不等价。记下这条边界，避免在教案或代码里把 <code>PREPARE</code> 语句再拿去给 <code>mysql_stmt_prepare()</code> 用（文档写了这是不允许的）。</li>
+</ul>
+<p><strong>3. 需要另外对照、且本课已核对的两份 8.4 文档（访问日期同样是 2026-11-11）</strong></p>
+<p>连接池和重连不在 Prepared Statements 这一页里写完。本课已核过的两份是：</p>
+<ul>
+<li><a href="https://dev.mysql.com/doc/c-api/8.4/en/c-api-auto-reconnect.html">Automatic Reconnection Control</a>：自动重连已 deprecated、默认关闭、重连无明确通知、状态重置列表（含回滚活动事务）；</li>
+<li><a href="https://dev.mysql.com/doc/c-api/8.4/en/mysql-reset-connection.html">mysql_reset_connection()</a>：不断开连接的会话复位，适合归还连接池时使用。</li>
+</ul>
+<p>阅读时请自己打开原文，核对这些结论有没有随小版本变化，并记下你看到的版本号。</p>
+<p><strong>阅读笔记模板</strong></p>
+<table>
+<thead>
+<tr>
+<th>条款</th>
+<th>文档位置（版本 / 访问日期）</th>
+<th>机制要点</th>
+<th>教学模型对应</th>
+<th>差异 / 边界</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>占位符与防注入</td>
+<td>8.4 Prepared Statements / 2026-11-11</td>
+<td>参数不改变语句结构</td>
+<td><code>execute_bound</code> / 实验 1</td>
+<td>教学层用 sqlite3 占位符，不是 MySQL binary protocol</td>
+</tr>
+<tr>
+<td>语句的 session 生命周期</td>
+<td>同上</td>
+<td>会话结束自动释放</td>
+<td>实验 2 的 <code>PreparedGone</code></td>
+<td>naive 的客户端缓存会掩盖这一点</td>
+</tr>
+<tr>
+<td>自动重连会丢事务</td>
+<td>8.4 Auto-reconnect / 2026-11-11</td>
+<td>回滚活动事务，无明确通知</td>
+<td><code>silent_reconnect</code> vs <code>TransactionAborted</code></td>
+<td>教学模型主动抛错；真实自动重连可能完全沉默</td>
+</tr>
+<tr>
+<td>归还前复位</td>
+<td>8.4 mysql_reset_connection() / 2026-11-11</td>
+<td>回滚 + 复位会话变量</td>
+<td><code>SafePool.checkin</code></td>
+<td>教学实现只覆盖事务、charset、autocommit、预处理语句</td>
+</tr>
+</tbody>
+</table>
+<p>阅读时建议按「定义 → 示例 → 边界 → 错误路径」的顺序做笔记，而不是只收藏链接。一个可操作的最小流程是：</p>
+<ol>
+<li>把文档中的 hypotenuse 示例原样抄进 8.4 的 mysql 客户端（如果你有的话）跑通，记下 <code>PREPARE</code>/<code>EXECUTE</code>/<code>DEALLOCATE</code> 三步各自的输出；</li>
+<li>故意 <code>EXECUTE</code> 一个从未 <code>PREPARE</code> 的名字，或先 <code>DEALLOCATE</code> 再 <code>EXECUTE</code>，把报错原文记下来；</li>
+<li>在一个会话里 <code>PREPARE</code>，换一个会话再 <code>EXECUTE</code> 同一个名字，确认它是 session 级而不是实例级；</li>
+<li>回头看 practice97 的实验 1 和实验 2，问自己：教学模型的哪一步对应文档的哪一条，哪一步是简化（例如用 sqlite3 而不是 binary protocol）。</li>
+</ol>
+<p>没有 8.4 实例也不要跳过第 4 步。sourceStudy 要求「沿资源中的定义、示例与错误处理路径核对实现」，「核对」的意思是你能指出实现和文档一致的地方，以及实现故意没覆盖的地方，而不是把文档再复述一遍。</p>
+<p>记录：文档版本、访问日期、你实际打开的 URL、你亲自跑过的示例。边界：教学实验只模拟语义，不代表 MySQL 服务端的实现方式、错误码和性能。</p>
+<h2 id="_16">自测题</h2>
+<p><strong>题 1</strong>：为什么 <code>' OR '1'='1</code> 作为用户名传给拼接 SQL 会返回全部用户，而传给绑定参数的 <code>WHERE name = ?</code> 却一行都没有？怎样证明查询真的使用了绑定参数？</p>
+<details><summary>答案</summary>
+
+- 拼接后的语句是 `WHERE name = '' OR '1'='1'`，后半段恒真，过滤条件被掏空。实践中 naive 返回 5 行：alice、bob、cindy、dave、admin。
+- 绑定参数时，语句结构固定为 `WHERE name = ?`，`' OR '1'='1` 只是要匹配的字符串。表里没有这个名字，所以是 0 行。同一套数据上查 `alice`，两条路径都返回 1 行，说明差异来自输入被如何对待，而不是查询函数本身坏了。
+- 证明绑定：看执行日志或计数器。本次实验里 safe 的 SQL 文本是 `SELECT id, name FROM users WHERE name = ?`，`params=["' OR '1'='1"]`，`payload_in_sql=False`，`bind_delta=1`。只看「没有报错」不够，必须看到「输入没有进入 SQL 文本」。
+</details>
+
+<p><strong>题 2</strong>：事务中已经 <code>UPDATE</code> 了 alice 的 bio，连接在 <code>COMMIT</code> 前被服务端断开。naive 静默重连后再 <code>COMMIT</code>，会怎样？safe 应该怎样处理？为什么不能续接原事务？</p>
+<details><summary>答案</summary>
+
+- naive：客户端仍认为 `in_tx=True`，`COMMIT` 报告成功，但原事务在断连时已经回滚，alice 的 bio 仍是 `hello`（`false_success=True`）。预处理语句的客户端缓存也还在，可能继续「成功」执行，把会话丢失掩盖掉。
+- safe：把重连当作新会话，抛出 `TransactionAborted`，`in_tx=False`，会话 id 从 21 变为 22，旧预处理句柄失效（`PreparedGone`）。bio 同样是 `hello`，但这是预期中的回滚。调用方必须重新 `BEGIN` 并重做全部语句。
+- 原因写在 8.4 自动重连文档里：重连会回滚任何活动事务并复位 autocommit，会话变量和预处理语句一并丢失，而且自动重连还可能不通知应用。不能静默续接原事务。
+</details>
+
+<p><strong>题 3</strong>：借用者 A 执行了 <code>SET NAMES latin1</code>，并在未提交的事务里把 bob 改成 admin，然后把连接还回池。B 取到这条连接并 <code>COMMIT</code>。naive 和 safe 分别会发生什么？这和「长事务占满池」有什么关系？</p>
+<details><summary>答案</summary>
+
+- naive：B 看到 `charset=latin1`、`in_tx=True`，它的 `COMMIT` 把 A 的更新提交了，bob 的 role 变成 `admin`。一次完全无关的请求完成了提权。
+- safe：归还前已经 `ROLLBACK` 并把 charset 复位为 `utf8mb4`，`in_tx=False`，bob 仍是 `user`。这就是验收标准「连接归还前事务和会话状态可控」。
+- 关系：归还不复位会把错误写进数据；归还不及时（长事务一直占着连接）会把正确的请求挡在池外。实践中池大小为 3 时，三个未归还的事务让第四次 checkout 等待 200.188 ms 后失败；归还后只需 0.003 ms。两个问题都来自「连接是带状态的、且数量有限」。
+</details>
+
+<h2 id="_17">推荐资源</h2>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/sql-prepared-statements.html">MySQL 8.4 · SQL Prepared Statements</a>，来源 dev.mysql.com｜文档｜英文｜进阶｜免费。阅读重点：「重点阅读预处理语句与参数与连接池和会话状态，用于核对本节点实验的语义和边界。」建议结合 practice97 逐项核对，并记下 8.4 版本与访问日期。</li>
+</ul>
+<h2 id="_18">本课小结</h2>
+<ul>
+<li>MySQL 服务端与客户端通过会话交互，连接、事务和字符集设置影响正确性及资源占用。</li>
+<li><strong>预处理语句与参数</strong>：用 <code>?</code> 占位并把值单独绑定，语句结构不会被输入改写。实践中同一段 <code>' OR '1'='1</code>，拼接路径泄漏 5 行，绑定路径返回 0 行。</li>
+<li><strong>连接池和会话状态</strong>：复用的是会话。归还前要回滚残留事务、复位 charset 和 autocommit（语义接近 <code>mysql_reset_connection()</code>）。重连是新会话，不能静默续接原事务——否则会出现「COMMIT 成功但数据没变」的假成功。</li>
+<li><strong>字符集、超时与结果集</strong>：<code>SET NAMES</code> 会改变会话环境；<code>wait_timeout</code> 会在服务端踢掉空闲连接；结果集要消费完才能安全复用连接。</li>
+<li>验收：查询使用绑定参数；连接归还前事务和会话状态可控。实践中 safe 路径两项都成立，naive 路径在注入、假成功提交、脏连接提权上全部暴露。</li>
+<li>误区：重连可能丢失事务和会话设置，不能静默续接原事务。</li>
+<li>权衡：连接池减少握手，也需防止长事务占满池（实践中 3 条连接被占时，第 4 次 checkout 等待 200.188 ms 后失败）。</li>
+</ul>
+<p>学完后可以用三句话自检：查询有没有把输入和语句结构分开；还回池的连接是否像新会话一样干净；断连之后有没有把「新会话」误当成「原事务的继续」。三句都能答上来，并且能指出 practice97 里对应的那组数字，这一课就算过关。</p>
+<p>如果有一句答不上来，先回到对应的实验表，再回到文档里那条定义，不要只把结论背下来。</p>
+<ul>
+<li>边界：业务场景为教学假设；配套代码是教学模型；MySQL 细节以 8.4 官方文档为准。</li>
+</ul><div class="pn"><span><a href="96.html">← 轻量RPC框架设计与边界</a></span><span>下一课 待更新</span></div></main></div></body></html>
