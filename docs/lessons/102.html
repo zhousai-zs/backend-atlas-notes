@@ -1,0 +1,557 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>102. 缓存一致性与失效策略 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（102/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（6/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="cur" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 102 课 · 领域 G · 阶段 3</p><p class="dl"><a href="../files/102-g-cache.md" download>⬇ 本课 Markdown</a><a href="../files/practice102.tar.gz" download>⬇ 练习包 practice102.tar.gz</a></p><h1 id="102208">第 102/208 课：缓存一致性与失效策略</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-cache</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Caching</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>缓存与KV</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>g-redis</code>、<code>g-transaction</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Caching</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://redis.io/docs/latest/develop/use/client-side-caching/">缓存一致性与失效策略：参考文档 / 原始资料</a>（redis.io，文档；该 URL 在 2026-11-11 访问返回 404，正文见下方「源码与文档阅读」）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>缓存是数据库或计算结果的副本，失效、并发加载和更新顺序决定可见陈旧与放大流量。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中出现的「内容后台」「文章详情缓存」「热门稿同时过期」「不存在的稿件 ID 被反复探测」等场景都是<strong>教学假设</strong>，用来让概念落地，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学服务，核心是一个名为 <code>CacheEngine</code> 的<strong>教学引擎</strong>（<code>ArticleDB</code> + <code>CacheStore</code> + <code>CacheAside</code>）：它在进程内用字典保存文章主数据和带 TTL 的缓存副本，演示 cache-aside 的读路径与写后失效、TTL 对陈旧窗口的上界、singleflight 合并同时未命中、过期抖动摊平峰值、负缓存吸收对空键的探测，以及用代际号拒绝「失效之后才写回的旧值」。它<strong>不是</strong> Redis，<strong>不是</strong> redis-py，也<strong>不是</strong>一个对外提供网络协议的缓存服务。本课没有实现 <code>CLIENT TRACKING</code>、跨进程的 Lua 锁、字段级更新、内存淘汰或持久化。本课出现的数据库加载次数、峰值、TTL 和标题结果只来自这次教学实验。cache-aside、TTL 作为陈旧上界、写后删除缓存、以及热 key 过期时的击穿防护，以 Redis 官方文档为准（本文已核对，访问日期 2026-11-11）：<a href="https://redis.io/docs/latest/develop/use-cases/cache-aside/">Redis cache-aside</a>、<a href="https://redis.io/docs/latest/develop/use-cases/cache-aside/redis-py/">Redis cache-aside with redis-py</a>。节点给出的客户端缓存页面实际位置是 <a href="https://redis.io/docs/latest/develop/clients/client-side-caching/">Client-side caching introduction</a> 与 <a href="https://redis.io/docs/latest/develop/reference/client-side-caching/">Client-side caching reference</a>。过期抖动的说明见 Redis 官方博客 <a href="https://redis.io/blog/how-to-tame-the-thundering-herd-problem/">How to tame the thundering herd problem</a> 与 <a href="https://redis.io/blog/cache-layer-architecture-guide/">Cache layer architecture</a>。也不要把本课进程内的合并与代际守卫，说成 Redis 源码里的 Tracking 或 Lua 锁实现。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：柜台上那份复印的稿</h3>
+<p>想象内容后台的主库是唯一的原稿柜，每次去取都要排队。为了让详情页快点打开，柜台边上放了一台复印机：同一篇稿被反复查看时，先看复印件。复印件能快，是因为它不是原稿；它和原稿可能暂时不一样，也可能在某一刻一下子全作废。</p>
+<p>作废之后，如果一百个人同时发现复印件没了，他们会一起冲去原稿柜，柜子就被打满。如果八百篇稿的复印件写了同一个到期时间，整点一到会一起消失，原稿柜一样会被打满。如果有人把一份已经作废的旧复印件又塞回去，后面来的人会在到期之前一直看到过期标题。</p>
+<p>缓存要解决的不是「怎么让内存比磁盘快」，而是这三件事怎么收束：什么时候去主库、同时有多少人去、过期的旧值会在读者眼前停留多久。</p>
+<h3 id="_4">接上前置</h3>
+<ul>
+<li><strong>g-redis</strong>：Redis 按类型提供原子命令，<code>GET</code> / <code>SET</code> 可以带 <code>EX</code> / <code>PX</code> 把过期时间写进同一条命令，<code>DEL</code> 删除一个键，<code>TTL</code> 查看剩余存活时间。上一课还看到：一条命令内部是原子的，并不等于客户端连续两步也是原子的；热 key 会把代价放大。本课不再讨论 string、hash、sorted set 各自检查多少项，而是问：把 Redis（或任何缓存）当作主数据的副本时，未命中、过期和失效应该怎么排。</li>
+<li><strong>g-transaction</strong>：更新顺序、隔离和崩溃决定你最终看到哪一份数据。两个会话各自成功，拼起来却可能丢更新。本课把同样的思路用到缓存上：主库更新成功、缓存删除成功、回填也成功，拼起来仍可能把旧标题写回去。</li>
+</ul>
+<p>前面单独看都学过：会给一个键设 TTL，也知道并发更新要对齐顺序。本课把它们组装成「详情页为什么不能在热 key 过期时把主库打满，发布后为什么读者还会看到旧标题」。组装之后才会出现的问题是：每个步骤都成功了，数据库请求峰值却到了 200，延迟双删跑完后缓存里仍是 <code>draft v1</code>。</p>
+<h3 id="_5">一次读和一次写走进缓存层之后</h3>
+<div class="codehilite"><pre><span></span><code>  读请求
+        │
+        ▼
+  查缓存（cache-aside：先缓存，未命中再回源）
+        │
+        ├─ 命中 ────────────────────────────────── 直接返回
+        │     可能是正常值，也可能是短 TTL 的「不存在」
+        │     在剩余 TTL 内，主库若已更新但没失效缓存，这里仍是旧值
+        │
+        └─ 未命中
+              │
+              ├─ naive：每个请求都打数据库，再 SET（固定 TTL，不写负缓存）
+              │
+              └─ safe：
+                    同一 key 的并发未命中合并成一次加载（singleflight）
+                    加载后按 TTL ± 抖动写入；缺席则写入更短的负缓存
+                    若加载期间发生过失效（代际变了），放弃这次写回
+
+  写请求
+        │
+        ▼
+  先写主库
+        │
+        ├─ 再 DEL 缓存（官方 cache-aside 推荐：失效，而不是改缓存）
+        ├─ 若在 DEL 之前崩溃：读者会继续看到旧值，直到这条缓存自己过期
+        └─ 延迟双删：第一次 DEL 之后再删一次
+              第二次删除仍挡不住「更晚才写回的旧值」
+</code></pre></div>
+
+<p>正常路径看起来只是「先查缓存，没有再查库，写的时候删掉缓存」。本课真正要讲的是图上那几处分叉：未命中是否会被合并、过期是否会扎堆、缺席是否会被反复查询，以及一次已经读出的旧值会不会在失效之后被写回去。</p>
+<h3 id="_6">教学场景（教学假设）</h3>
+<p>内容后台把文章详情缓存在主库前面，键名是 <code>cache:article:{id}</code>，用来抗详情页的重复读取。灰度期间出现了几件「每一步都成功，主库压力和读者看到的标题却对不上」的事：</p>
+<ol>
+<li>文章 42 的标题是 Weekly digest。第一次读取未命中，主库加载 1 次，TTL 剩余 2.0 秒；紧接着再读是命中，加载次数仍是 1。把时钟推进 2.0 秒后再读，加载变成 2。编辑把标题改成 Weekly digest (revised) 并删除缓存后，下一次读取拿到的就是新标题，删除当时 TTL 是 -2。</li>
+<li>热门稿过期后，200 个请求同时来读。naive 路径主库加载 200 次；加上 singleflight 之后，加载是 1 次，两边读到的标题都是 Weekly digest。另外 200 篇文章如果都用 1.0 秒的固定 TTL，会在 t=1.0 一起过期，这一步的主库峰值是 200；给 TTL 加上 ±0.2 秒抖动后，过期被摊到 0.8002 到 1.1997 秒，跨度 0.3995 秒，单步峰值降到 30。</li>
+<li>50 个请求同时查一篇不存在的稿 999。naive 路径加载 50 次，再补 20 次顺序读取后累计 70 次；安全路径加载 1 次，并把「不存在」缓存 0.4 秒，后面 20 次读取不再打主库。编辑把标题从 draft v1 改成 published v2 并删除缓存时，一条正在回填的旧读取仍可能把 draft v1 写回去：naive 路径随后读到的仍是 draft v1；带代际守卫的路径拒绝这次写回，随后读到 published v2。把同样的时序套进「延迟双删」（第二次删除延迟 0.05 秒），第二次删除完成之后旧值还是被写了回去，随后读到的仍是 draft v1。</li>
+</ol>
+<h3 id="_7">本课三条主线</h3>
+<p>节点给出的核心要点是这三条，后面的原理、实验和验收都沿着它们展开：</p>
+<ol>
+<li><strong>cache-aside 和 TTL</strong>：先读缓存，未命中再读主库并回填；更新主库后删除缓存。TTL 给出「最多能陈旧多久」的上界。</li>
+<li><strong>请求合并与随机过期</strong>：热 key 同时过期时，只让一个请求回源；给 TTL 加抖动，避免大批键在同一时刻失效。</li>
+<li><strong>负缓存与更新竞态</strong>：把「不存在」也缓存一小段时间；写后失效并不能自动挡住「更早读出、更晚写回」的旧值，延迟双删也不是对所有时序的证明。</li>
+</ol>
+<h2 id="_8">学习目标</h2>
+<ul>
+<li>能解释 cache-aside 和 TTL：读路径为什么是「先缓存后主库」，写路径为什么推荐「先主库再删除缓存」，以及 TTL 如何成为陈旧时间的上界。</li>
+<li>能独立完成：实现带 singleflight 和过期抖动的缓存层，测试热 key 同时过期；并结合负缓存与更新竞态，说明数据库请求峰值如何被管住，以及数据最大允许陈旧时间是多少。</li>
+</ul>
+<h2 id="_9">为什么后端要懂</h2>
+<p>内容后台的文章详情、草稿状态、配置项，常常是读多写少。主库为了持久化，每次查找都更贵；把热点结果做成副本后，命中的请求不必再打主库。可副本一旦过期或被删除，并发读取会在同一瞬间把流量放大回主库，这就是击穿；如果大批键共用同一个到期时间，还会在同一时刻一起失效，这就是雪崩。对不存在的 ID 反复探测，主库同样会被空键打满。</p>
+<p>另一面是可见性。编辑点了发布，主库里已经是新标题，缓存若还留着旧值，读者就会在整个剩余 TTL 里看到旧稿。若一次过期的回填和一次发布交织，旧值还可能在失效之后被写回来，陈旧时间不再是「到下一次删除为止」，而是「到这条被错误写回的缓存自己过期为止」。</p>
+<p>官方 cache-aside 文档把 TTL 写成陈旧数据的上界，并把写后删除、热 key 过期时的击穿防护写成这条路径必须处理的问题。先能画出未命中、失效和回填的顺序，才能在详情页、配置读取这类后台路径上，同时写出「主库峰值受控」和「最多能陈旧多久」。</p>
+<h2 id="_10">核心知识点</h2>
+<h3 id="1-cache-aside-ttl">1. cache-aside 和 TTL</h3>
+<p>cache-aside 的意思是：缓存不试图做主数据的镜像，应用自己决定何时读它、何时回填、何时丢掉。读的时候先查缓存；命中就返回，未命中再读主库，并把结果连同 TTL 写回缓存。写的时候先更新主库，再删除对应的缓存键，下一次读取会从主库重新填充。</p>
+<p>这次实验里，文章 42 的标题是 Weekly digest，TTL 设为 2.0 秒（先不加抖动，方便把剩余时间看成整数）：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>看到的标题</th>
+<th>主库加载次数</th>
+<th>缓存剩余 TTL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一次读取（未命中）</td>
+<td>Weekly digest</td>
+<td>1</td>
+<td>2.0 秒</td>
+</tr>
+<tr>
+<td>紧接着再读（命中）</td>
+<td>Weekly digest</td>
+<td>1</td>
+<td>2.0 秒</td>
+</tr>
+<tr>
+<td>时钟推进 2.0 秒后再读</td>
+<td>Weekly digest</td>
+<td>2</td>
+<td>重新填回 2.0 秒</td>
+</tr>
+<tr>
+<td>更新标题并 <code>DEL</code> 后立刻再读</td>
+<td>Weekly digest (revised)</td>
+<td>3</td>
+<td>删除当时是 -2，随后重新填回</td>
+</tr>
+</tbody>
+</table>
+<p>两次命中之间主库一次都没有加；过期之后才出现第二次加载。更新后删除缓存，TTL 变成 -2，表示键已经不在，下一次读取拿到的是主库里的新标题。这就是 cache-aside 最干净的一条路：缓存只是副本，权威在主库，TTL 用来限制「没有被及时删掉」时的陈旧时间。</p>
+<p>TTL 的含义要说清楚：它不是「过了这么久数据一定还是对的」，而是「即使一次失效漏掉了，这条副本最多再被看到这么久」。实践里把 TTL 设为 2.0 秒、抖动 0.2 秒，于是<strong>对外声明的最大允许陈旧时间是 2.2 秒</strong>。然后模拟一次「主库已更新、删除缓存前进程崩溃」：回填时实际 TTL 是 2.0558 秒，崩溃发生在 0.3 秒之后，当时剩余 1.7558 秒。在这段时间里读者看到的仍是 Old headline，主库加载次数还是 1，说明请求命中了旧缓存；等这 1.7558 秒走完，下一次读取才加载到 New headline。1.7558 秒没有超出 2.2 秒的声明上界。</p>
+<p>这也是官方文档里那句「Choose a TTL that matches your staleness tolerance」的实验版：先写出业务能接受的陈旧窗口，再决定 TTL 和抖动；需要更短窗口的写入，再叠加显式删除。不要指望「缓存会自动和主库保持一致」。</p>
+<h3 id="2">2. 请求合并与随机过期</h3>
+<p>热 key 一过期，所有并发读者都会在同一时刻看到未命中。如果每个未命中都去主库，缓存本来要挡住的流量会在这一瞬全部打回去，这就是击穿（cache stampede / thundering herd）。官方 cache-aside 指南用 Lua 脚本做短锁：只有抢到 <code>SET NX</code> 的那个请求去加载，其余人短暂等待缓存被填上。本课教学引擎把同一件事收成进程内的 singleflight：同一 key 上只允许一个加载者，其他人等这份结果。</p>
+<p>实验把文章 42 的缓存删掉，然后 200 个线程对齐后同时 <code>get</code>。每次主库读取都会故意睡 0.05 秒，用来模拟一次不算便宜的回源：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>并发请求</th>
+<th>主库加载次数</th>
+<th>读到的标题</th>
+<th>耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive（各自回源）</td>
+<td>200</td>
+<td>200</td>
+<td>都是 Weekly digest</td>
+<td>0.101 秒</td>
+</tr>
+<tr>
+<td>safe（singleflight）</td>
+<td>200</td>
+<td>1</td>
+<td>都是 Weekly digest</td>
+<td>0.0994 秒</td>
+</tr>
+</tbody>
+</table>
+<p>两边标题都对，差的是主库被打了多少次。200 个请求都观察到了未命中（<code>misses=200</code>，<code>hits=0</code>），但安全路径只有一个请求走进了 <code>ArticleDB.get</code>。耗时接近，是因为这一波都在等那 0.05 秒的回源；要看的不是「加了合并就一定更快」，而是数据库请求峰值从 200 收到了 1。</p>
+<p>击穿管的是「同一把热 key」。若好多把键写了同一个到期时间，它们会在同一时刻一起消失，这是雪崩的一种常见触发方式。缓解办法是给每个键的 TTL 加一点随机抖动。实验里 200 篇文章都在 t=0 写入缓存，基准 TTL 是 1.0 秒，安全路径再叠加 ±0.2 秒；之后每隔 0.05 秒对这 200 篇各读一次，记下这一步有多少键需要回源：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>过期时间范围</th>
+<th>跨度</th>
+<th>单步峰值</th>
+<th>峰值时刻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive，固定 1.0 秒</td>
+<td>全部 1.0 秒</td>
+<td>0.0 秒</td>
+<td>200</td>
+<td>t=1.0</td>
+</tr>
+<tr>
+<td>safe，1.0 ± 0.2 秒</td>
+<td>0.8002 ～ 1.1997 秒</td>
+<td>0.3995 秒</td>
+<td>30</td>
+<td>t=0.9</td>
+</tr>
+</tbody>
+</table>
+<p>安全路径上，有加载的步骤从 t=0.85 到 t=1.2，每一步是 22 到 30 次，不再出现「整步 200」。200 篇最终还是都会回源一次（<code>total_reloads=200</code>），被改掉的是峰值，不是总量。抖动不会减少需要刷新的键，它只是让刷新不要发生在同一拍。</p>
+<h3 id="3">3. 负缓存与更新竞态</h3>
+<p>未命中有两种：主库里有、缓存里没有；以及主库里根本没有。后一种如果每次都打到主库，对不存在 ID 的探测会变成另一类击穿。安全路径把 <code>None</code> 也写成缓存项，并用更短的 TTL（本课是 0.4 秒），这就是负缓存。官方 redis-py 指南写过同一条建议：演示代码本身只返回 <code>None</code>、并不缓存缺席，但生产上可以用短 TTL 的哨兵吸收这类负载，并让哨兵比正向缓存更短，以便新创建的记录能较快可见。</p>
+<p>50 个请求同时查询不存在的稿 999，随后再顺序读 20 次：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>50 次并发后的加载</th>
+<th>再读 20 次后的累计加载</th>
+<th>是否缓存了「不存在」</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive</td>
+<td>50</td>
+<td>70</td>
+<td>否，TTL 为 -2</td>
+</tr>
+<tr>
+<td>safe</td>
+<td>1</td>
+<td>1</td>
+<td>是，当时剩余 0.3942 秒</td>
+</tr>
+</tbody>
+</table>
+<p>安全路径上，另一次用冻结时钟的对照把这件事拆开：第一次加载 1 次；负缓存窗口走到一半，加载仍是 1；刚好走到 0.4 秒边界时键消失（剩余 TTL 为 -2），再读一次，加载变成 2。负缓存不是「永远记住没有」，它只是把空键的放行频率降下来。</p>
+<p>更新竞态是另一类「步骤都成功、结果却错」的问题。典型顺序是：</p>
+<ol>
+<li>请求 A 未命中，从主库读到 draft v1，但还没来得及写回缓存。</li>
+<li>请求 B 把主库改成 published v2，并删除缓存。</li>
+<li>请求 A 把刚才读到的 draft v1 写进缓存。</li>
+<li>之后的读者在 TTL 内一直看到 draft v1，而主库里已经是 published v2。</li>
+</ol>
+<p>实践里这条 naive 路径的后续读取就是 draft v1，主库加载次数仍是 1——因为错误的旧值已经被种进缓存，后来的人甚至不会再去主库。安全路径在加载前记下这个键的代际号，失效时把代际加一；回填时若代际已经变了，就放弃 <code>SET</code>（本次实验 <code>stale_fills_aborted=1</code>）。那个正在加载的请求自己仍可能拿到 draft v1，但缓存没有被种脏，随后的读取会再次回源，读到 published v2，主库加载次数是 2。</p>
+<p>有一种常见做法叫延迟双删：更新主库后删一次，等一小会儿再删一次，希望把「中间插进来的回填」清掉。它不是对所有故障和时序的通用一致性证明。实践把第二次删除的延迟设为 0.05 秒，并让那次旧值写回发生在<strong>第二次删除之后</strong>：后续读取看到的仍是 draft v1，主库加载次数是 1。第二次删除当时确实把键拿掉了，但它挡不住更晚才到达的 <code>SET</code>。</p>
+<div class="codehilite"><pre><span></span><code>  时间 →
+
+  加载者：读到 draft v1 ────────────────────────── SET draft v1
+  写者：            改主库为 v2，DEL，等 0.05 秒，再 DEL
+                                                      ↑
+                                      第二次 DEL 在这里结束
+                                      旧值的 SET 还在后面
+</code></pre></div>
+
+<p>要挡住这种回填，需要的是「失效之后的写回必须被拒绝」，或者接受「这次错误写回会在整个 TTL 内可见」，并把这个 TTL 写成明确的陈旧上界。延迟等待并不能代替这两者。</p>
+<h3 id="_11">把三条主线串在同一篇稿上</h3>
+<p>还是文章 42。平时读详情走 cache-aside：第一次回源，之后在 2.0 秒内命中，主库加载停在 1；TTL 走完会再回源一次。发布时先改主库再删除缓存，下一次读取就是 Weekly digest (revised)。</p>
+<p>若这篇稿正在热读，缓存一过期，200 个请求会同时看到未命中。没有合并时主库被打 200 次；有 singleflight 时只打 1 次。若同一批 200 篇稿的缓存写了同一个到期时间，它们会在 t=1.0 一起失效，单步峰值 200；加上 ±0.2 秒抖动后，峰值是 30，跨度 0.3995 秒。</p>
+<p>若有人拿一个不存在的 ID 来探测，不写负缓存会让 50 次并发变成 50 次加载，再读 20 次就累计 70；写了 0.4 秒负缓存后，这 70 次请求只加载 1 次。若发布和一次尚未写回的旧读取撞车，naive 回填会把 draft v1 重新种进缓存；代际守卫会拒绝这次写回。延迟双删在「第二次删除更早、旧值 SET 更晚」时仍然失败。</p>
+<p>这三条不是三件无关的优化。cache-aside 和 TTL 给出副本的读法和陈旧上界；合并与抖动把回源的峰值按「同一把键」和「同一批键」分别管住；负缓存和代际守卫处理空键与写回顺序。少任何一条，就可能在「标题已经发布」或「这篇稿根本不存在」时，把主库或读者看到的内容放过去。</p>
+<h3 id="_12">三条主线的收束</h3>
+<p>读的时候先看缓存，未命中再回源，写的时候删缓存而不是改缓存，TTL 是陈旧时间的上界。同一把热 key 过期，要把并发未命中收成一次加载；同一批键不要共用一个到期时刻。空键要有更短的负缓存。写回旧值是竞态，不是再删一次就能证明的事。验收时要同时看到两份数字：数据库请求峰值，以及最大允许陈旧时间。</p>
+<h2 id="_13">常见误区</h2>
+<ul>
+<li><strong>以为写后删除缓存，缓存就一定不会再出现旧值。</strong> 删除只能清掉当时已经在的副本。实践里 naive 路径在删除之后，仍把事先读到的 draft v1 写了回去，后来的读取不再打主库，看到的一直是旧标题。</li>
+<li><strong>把延迟双删当成对所有故障和时序的一致性证明。</strong> 第二次删除延迟 0.05 秒并且已经执行完，只要旧值的 <code>SET</code> 发生在它之后，缓存里仍是 draft v1。节点的原文就是这条误区：它不是通用证明。</li>
+<li><strong>只设 TTL，却不说最大允许陈旧时间是多少。</strong> TTL 加上抖动，才是声明上界。本课是 2.0 + 0.2 = 2.2 秒。主库更新后若没删缓存，读者会在剩余的 1.7558 秒里看到 Old headline；这个时间必须能对上声明值，而不是事后解释「过一会儿就好了」。</li>
+<li><strong>以为 singleflight 或抖动会减少需要回源的总量。</strong> 200 个并发未命中被合并后，主库从 200 次降到 1 次，这是峰值。200 篇文章各自过期后，总量仍是 200 次回源；抖动只把单步峰值从 200 降到 30。</li>
+</ul>
+<h2 id="_14">设计权衡</h2>
+<p>强一致缓存的代价很高。若每次写入都要等到所有副本失效或更新成功才返回，读路径会更慢，失败模式也更多（缓存不可用时要不要阻断写入、跨进程锁如何续期、失效消息丢失怎么办）。官方文档给出的默认建议更朴素：先定义业务可接受的陈旧窗口，用 TTL 把窗口封顶，再在「不能陈旧」的写入上做显式删除。</p>
+<p>本课声明的窗口是 2.2 秒。详情页的标题、封面、已发布正文，通常能接受数秒内的陈旧；计数、权限和「是否已发布」有时不能。不能接受的路径就不要只靠 TTL，而要把失效做成写入的一部分，并用代际或等价机制拒绝过期回填。能接受的路径则应把窗口写进配置和文档，而不是留在口头。</p>
+<p>请求合并、抖动和负缓存也会换来新的边界。合并锁的存活时间必须长过最坏回源时间，否则锁过期会重新放进第二个加载者；抖动越大，个别键的陈旧上界越大，峰值越平。负缓存越长，对空键越省，新创建的记录也越晚可见。这些都不是「越强越好」，而是要和声明的陈旧窗口放在同一张表里。</p>
+<h2 id="singleflight-key">动手实践：实现带 singleflight 和过期抖动的缓存层，测试热 key 同时过期</h2>
+<p>下面这套练习用 Python 3 标准库完成，不连接外部 Redis，也不安装 redis-py。目标不是做一个缓存产品，而是跑出可对照的数字：同一把热 key 过期时主库打了多少次，同一批键过期时单步峰值是多少，空键和更新竞态分别变成了什么，以及声明的最大陈旧时间是否罩得住一次漏掉的失效。</p>
+<h3 id="0">0. 文件结构</h3>
+<div class="codehilite"><pre><span></span><code>/workspace/atlas/lessons/practice102/
+  engine.py       # Clock、ArticleDB、CacheStore、CacheAside
+  app.py          # 五组对照实验
+  test_cache.py   # 验收断言，并写出 results.json
+  test.sh         # python3 test_cache.py
+  results.json    # 本次运行的完整输出
+</code></pre></div>
+
+<p><code>CacheAside</code> 的安全开关会同时打开四件事：singleflight、TTL 抖动、负缓存、回填前的代际守卫。naive 路径关掉它们，用来对照。</p>
+<h3 id="1">步骤 1：准备数据与目标操作</h3>
+<p>教学主库里放文章 ID、标题、状态和版本。缓存键是 <code>cache:article:{id}</code>。正向缓存的基准 TTL 是 2.0 秒，抖动 0.2 秒，因此声明的最大陈旧时间是 2.2 秒；负缓存 TTL 是 0.4 秒。回源在并发实验里会睡 0.05 秒，便于把「一次加载」和「两百次加载」分开。需要冻结时间时用教学时钟的 <code>advance</code>，需要线程对齐时用实时时钟。</p>
+<p>目标操作就五组：命中 / 过期 / 写后失效，以及一次漏掉删除时的陈旧窗口；200 个并发打同一把刚过期的热 key；200 篇文章同时到期与加抖动后的单步峰值；对空键的并发探测；更新与回填交织，包括延迟双删。</p>
+<h3 id="2_1">步骤 2：两条执行路径</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># naive：未命中就各自打主库，固定 TTL，缺席不缓存，回填前不看代际</span>
+<span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">ttl_s</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ttl_s</span><span class="p">)</span>
+
+<span class="c1"># 写者只删当时的键，并不抬世代</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">article_id</span><span class="p">,</span> <span class="o">**</span><span class="n">fields</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+<span class="c1"># safe：同一 key 只允许一个加载者；TTL 加抖动；缺席写短 TTL；</span>
+<span class="c1"># 失效时抬世代，回填时世代变了就放弃 SET</span>
+<span class="n">expected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">generation</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+<span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">article_id</span><span class="p">)</span>
+<span class="n">ttl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">choose_ttl</span><span class="p">(</span><span class="n">negative</span><span class="o">=</span><span class="p">(</span><span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">))</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">set_if_generation</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">ttl</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">negative</span><span class="o">=</span><span class="p">(</span><span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">))</span>
+</code></pre></div>
+
+<p>写路径两边在「正常更新」时都是先改主库再删缓存，这是官方 cache-aside 的推荐顺序。差别出在回填会不会在删除之后把旧值种回来，以及未命中会不会被合并。</p>
+<h3 id="21">步骤 2.1：并发和失效是怎样交错的</h3>
+<p>热 key 实验先把文章 42 填进缓存再删掉，让 200 个线程在同一道屏障后调用 <code>get</code>。naive 路径里这 200 次都走进主库；safe 路径里只有一个加载者调用 <code>db.get</code>，其余人等同一份结果。</p>
+<p>更新竞态则把「加载已经读完、写回还没发生」切开：</p>
+<div class="codehilite"><pre><span></span><code>  加载者：未命中，读到 draft v1，在写回前停下
+  写者：        把主库改为 published v2，并失效缓存
+  加载者：                            试图 SET draft v1
+  后来的读者：                              再 get 一次
+</code></pre></div>
+
+<p>naive 的后来读者看到 draft v1；safe 的后来读者看到 published v2。延迟双删的对照把写者改成「删除、等 0.05 秒、再删除」，然后才放行加载者的 <code>SET</code>。</p>
+<h3 id="3_1">步骤 3：运行并解读几组对照（真实输出）</h3>
+<p>在 <code>practice102</code> 目录执行：</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>本次在 Python 3.13.5 下得到 <code>ALL_CHECKS_PASSED</code>。关键数字如下。</p>
+<p>cache-aside 与 TTL（文章 42，TTL=2.0 秒，无抖动）：</p>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>标题</th>
+<th>加载次数</th>
+<th>剩余 TTL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>未命中后</td>
+<td>Weekly digest</td>
+<td>1</td>
+<td>2.0 秒</td>
+</tr>
+<tr>
+<td>命中后</td>
+<td>Weekly digest</td>
+<td>1</td>
+<td>2.0 秒</td>
+</tr>
+<tr>
+<td>过期后再读</td>
+<td>Weekly digest</td>
+<td>2</td>
+<td>2.0 秒（新填的）</td>
+</tr>
+<tr>
+<td>更新并删除后再读</td>
+<td>Weekly digest (revised)</td>
+<td>3</td>
+<td>删除当时为 -2</td>
+</tr>
+</tbody>
+</table>
+<p>漏删时的陈旧窗口（TTL=2.0，抖动=0.2，声明上界 2.2 秒）：回填实际 TTL 2.0558 秒，崩溃时剩余 1.7558 秒，期间标题仍是 Old headline，加载次数 1；过期后标题变成 New headline，加载次数 2。1.7558 ≤ 2.2。</p>
+<p>热 key 同时过期（200 并发，回源睡眠 0.05 秒）：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>加载次数</th>
+<th>标题</th>
+<th>耗时</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive</td>
+<td>200</td>
+<td>Weekly digest</td>
+<td>0.101 秒</td>
+</tr>
+<tr>
+<td>safe</td>
+<td>1</td>
+<td>Weekly digest</td>
+<td>0.0994 秒</td>
+</tr>
+</tbody>
+</table>
+<p>一批键同时过期（200 篇文章，基准 TTL 1.0 秒，步长 0.05 秒）：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>过期范围</th>
+<th>跨度</th>
+<th>单步峰值（时刻）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive</td>
+<td>全是 1.0 秒</td>
+<td>0.0 秒</td>
+<td>200（t=1.0）</td>
+</tr>
+<tr>
+<td>safe，±0.2 秒</td>
+<td>0.8002 ～ 1.1997 秒</td>
+<td>0.3995 秒</td>
+<td>30（t=0.9）</td>
+</tr>
+</tbody>
+</table>
+<p>安全路径在 t=0.85、0.9、0.95、1.0、1.05、1.1、1.15、1.2 的加载次数分别是 28、30、23、22、25、24、23、25。</p>
+<p>负缓存（不存在的 ID 999，负 TTL 0.4 秒）：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>50 次并发加载</th>
+<th>再读 20 次后累计</th>
+<th>窗口内 / 过期后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive</td>
+<td>50</td>
+<td>70</td>
+<td>不缓存缺席</td>
+</tr>
+<tr>
+<td>safe</td>
+<td>1</td>
+<td>1</td>
+<td>窗口中仍是 1；过期后再读变成 2</td>
+</tr>
+</tbody>
+</table>
+<p>更新竞态：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>加载者读到</th>
+<th>后来读者读到</th>
+<th>主库标题</th>
+<th>放弃写回</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>naive 回填</td>
+<td>draft v1</td>
+<td>draft v1</td>
+<td>published v2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>代际守卫</td>
+<td>draft v1</td>
+<td>published v2</td>
+<td>published v2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>延迟双删（0.05 秒）</td>
+<td>draft v1</td>
+<td>draft v1</td>
+<td>published v2</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4">步骤 4：对照验收标准</h3>
+<h1 id="1_1">验收 1：数据库请求峰值受控</h1>
+<h1 id="key200-naive-200-safe-1">同一把热 key：200 个并发未命中，naive 加载 200 次，safe 加载 1 次。</h1>
+<h1 id="200-ttl-200-02-30-03995">同一批 200 个键：固定 TTL 时单步峰值 200，加 ±0.2 秒抖动后峰值 30，过期跨度 0.3995 秒。</h1>
+<h1 id="50-20-naive-70-safe-1">空键：50 次并发加 20 次续读，naive 累计 70 次，safe 保持 1 次。</h1>
+<h1 id="2_2">验收 2：明确数据最大允许陈旧时间</h1>
+<h1 id="ttl-20-02-22">声明值 = TTL 2.0 + 抖动 0.2 = 2.2 秒。</h1>
+<h1 id="17558-old-headline-new-headline">主库更新后漏掉删除时，读者在 1.7558 秒内仍看到 Old headline，未超出上界；过期后看到 New headline。</h1>
+<h1 id="published-v2-ttl">写后删除且代际守卫生效时，后来的读者看到 published v2，不会把错误写回的陈旧时间延长到整个 TTL。</h1>
+<h1 id="ttl">延迟双删不能改写这个声明：它失败时，陈旧时间重新回到「被种回去的那条缓存的 TTL」。</h1>
+<h3 id="5">步骤 5：自己动手的扩展练习</h3>
+<p>可以把抖动改成「基准 TTL 的 ±10%」再跑一次雪崩，看峰值和声明上界如何一起变化。也可以让 singleflight 的等待超时短于 0.05 秒的回源时间，观察是否重新放进第二个加载者。若再加一条「加载成功后不删除、直接把新值写入缓存」的写路径，把它和「只失效」放在同一组更新竞态里比较，会更清楚官方为什么建议删除而不是改缓存。这些都不在本次 <code>results.json</code> 里，不要把预想的数字写进报告。</p>
+<h3 id="6">步骤 6：和生产引擎的对应关系（不要记错边界）</h3>
+<ul>
+<li>教学引擎是进程内的字典和锁，用来演示 cache-aside 的顺序、合并、抖动、负缓存和代际守卫。它不是 Redis，也不是 redis-py。生产里的请求合并通常是官方示例中的 Lua <code>SET NX</code> 短锁，要跨进程、带锁的 TTL 和持有者令牌。</li>
+<li>本课的代际号是教学近似，用来拒绝「失效之后的旧值写回」。官方客户端缓存文档用另一种方式描述相近的竞态：失效消息若先于 <code>GET</code> 的回复到达，本地不该再把这份回复写进缓存。不要把代际号说成 <code>CLIENT TRACKING</code> 的实现。</li>
+<li>冻结时钟、按 0.05 秒步进，是为了让过期分布可重复。生产中的 TTL 由 Redis 的过期机制执行，抖动算法也可以是百分比而不是固定的 ±0.2 秒。换一台机器重跑，整数断言（200 与 1、70 与 1、draft v1 / published v2）应当相同；并发耗时允许波动，但 naive 的加载次数仍应明显多于 safe。</li>
+<li>Python 3.13.5 只是本次跑实验的解释器版本。教学引擎不依赖第三方包，也不连接外部 Redis。</li>
+</ul>
+<h2 id="_15">源码与文档阅读</h2>
+<p>节点指定的资料是 <a href="https://redis.io/docs/latest/develop/use/client-side-caching/">缓存一致性与失效策略：参考文档 / 原始资料</a>（redis.io，英文文档）。2026-11-11 访问该 URL 返回 404。需要如实记录的是：客户端缓存的正文现在位于 <a href="https://redis.io/docs/latest/develop/clients/client-side-caching/">Client-side caching introduction</a> 和 <a href="https://redis.io/docs/latest/develop/reference/client-side-caching/">Client-side caching reference</a>；节点在资源说明里希望重点阅读的 cache-aside、TTL、请求合并与随机过期，主要在 <a href="https://redis.io/docs/latest/develop/use-cases/cache-aside/">Redis cache-aside</a> 与 <a href="https://redis.io/docs/latest/develop/use-cases/cache-aside/redis-py/">Redis cache-aside with redis-py</a> 里。随机过期的展开还出现在 Redis 官方博客 <a href="https://redis.io/blog/how-to-tame-the-thundering-herd-problem/">How to tame the thundering herd problem</a> 和 <a href="https://redis.io/blog/cache-layer-architecture-guide/">Cache layer architecture</a> 中。阅读时按页面上实际出现的内容来，不要把本课实践里的 200、1、30、2.2、draft v1 写成这些文档里的原句。</p>
+<p>这几页里与本课直接对应、且已核对过的要点：</p>
+<ol>
+<li><strong>cache-aside 把缓存当成按需填充的副本。</strong> 应用先读 Redis，未命中再读主库并按 TTL 写回；更新主库后删除缓存键，而不是试图让缓存与主库时刻保持同步。TTL 是陈旧数据的上界；更短的 TTL 降低命中率、增加主库压力，更长的 TTL 提高命中率、延长两次写入之间可能被看到的旧值。把 TTL 选成业务能接受的窗口，并在不能陈旧的写入上叠加显式失效。</li>
+<li><strong>热 key 过期会产生击穿，要用合并来收峰值。</strong> redis-py 指南用 Lua 短锁实现 single-flight：只有获得锁的请求加载主库，其他人等待缓存被填充。锁的 TTL 必须长过最坏回源时间。官方博客则给出过期抖动：例如希望大约 1 小时过期时，把 TTL 随机打散到 55 到 65 分钟，避免整点一起消失。</li>
+<li><strong>缺席和竞态要单独处理。</strong> redis-py 指南建议在生产中把「未找到」做成短 TTL 哨兵。客户端缓存参考文档提醒：失效通知若早于读取回复到达，不应再把这份回复写入本地缓存；每个本地键都宜带一个最大 TTL，连接断开时要清空本地缓存。这些并不是延迟双删的证明。</li>
+</ol>
+<p>建议的阅读方法：先读 cache-aside 总述，再打开 redis-py 那一页，用手画出「命中 / 未命中 / 写后 <code>DEL</code> / Lua 锁」四条路径，并记下「TTL 是陈旧上界」「失效而不是改缓存」「缺席要用更短的哨兵」这三句。然后再读客户端缓存的介绍和参考页，分清它说的是「应用进程里的 Redis 回复缓存 + Tracking 失效」，和本课「Redis（或教学缓存）作为主库副本」不是同一层。最后对照 <code>bash test.sh</code> 的输出，看哪一组数字在模拟哪一条。记录：访问日期 2026-11-11、实际打开的 URL，以及你亲自跑过的实验输出。</p>
+<p>阅读时还应注意这些页面写了、但本课实验没有用数字去覆盖的边界，避免把「没做」当成「文档没说」。cache-aside 页还谈到用 hash / JSON 做字段级缓存、用 <code>WATCH</code>/<code>MULTI</code> 做条件字段更新、以及生态里的 Spring / Django 集成。客户端缓存参考页有广播模式、<code>OPTIN</code> / <code>OPTOUT</code>、<code>NOLOOP</code>、RESP2 与 RESP3 的失效通道、以及服务端失效表的内存上限。Lua 锁在多进程下的令牌释放、锁过期后的二次加载，本课只在扩展练习里点了一下，没有给出对应数字。这些都是官方原文里的路径，本课既没有在教学引擎里实现 Tracking 或 Lua，也没有在 <code>results.json</code> 里给出对应数字。</p>
+<p>边界：教学实验只模拟已核对、并且已经跑出数字的那一部分语义，不代表 Redis 的 Tracking、过期抽样、淘汰策略、复制或集群槽。不确定的地方，应写「文档未覆盖」或「本课未实验」，而不是用教学输出去填空。</p>
+<h2 id="_16">自测题</h2>
+<p>下面三道题都可以用 practice102 里的数字来回答，不必默写定义。若某一问只能说出「加了缓存就更快」却对不上 200 与 1、2.2 与 1.7558，或 draft v1 与 published v2，说明还要回到对应的对照表。</p>
+<p><strong>题 1</strong>：cache-aside 的读路径和写路径各是什么？文章 42 第一次读取、紧接着再读、TTL 2.0 秒走完后再读，主库加载次数分别是多少？更新标题并删除缓存后，为什么能读到 Weekly digest (revised)，当时 TTL 为什么是 -2？如果主库已经改成 New headline，却在删除缓存前崩溃，读者会在多久里看到 Old headline，这个时间为什么必须和 2.2 秒放在一起说？</p>
+<details><summary>答案</summary>
+
+- 读：先查缓存，命中则返回，未命中再读主库并按 TTL 回填。写：先更新主库，再删除缓存，让下一次读取从主库重新填充。不要在写路径上直接改缓存来「保持同步」。
+- 第一次未命中加载 1 次，命中后再读仍是 1 次，过期后再读变成 2 次。删除缓存后键不在了，TTL 为 -2，下一次读取回源，得到 Weekly digest (revised)，累计加载 3 次。
+- 漏掉删除时，缓存按自己的剩余 TTL 继续提供旧标题。实践里剩余 1.7558 秒，期间加载次数仍是 1，标题是 Old headline；过期后才加载到 New headline。声明的最大陈旧时间是 TTL 2.0 加抖动 0.2，即 2.2 秒，1.7558 没有超出这个上界。TTL 的意义就是把这种情况封顶，而不是保证「写入后立刻到处可见」。
+
+</details>
+
+<p><strong>题 2</strong>：热门文章过期后 200 个请求同时到达，为什么 naive 路径主库是 200 次，safe 路径是 1 次，两边读到的标题却都对？200 篇文章如果都写 1.0 秒的固定 TTL，为什么会在 t=1.0 出现 200 次的单步峰值；加上 ±0.2 秒抖动后，过期范围、跨度和峰值分别变成了什么？抖动有没有减少回源总量？</p>
+<details><summary>答案</summary>
+
+- 200 个请求都看到了未命中。naive 路径各自打主库，所以是 200 次加载；safe 路径用 singleflight 让其中一次加载，其余人等这份结果，所以是 1 次。标题都是 Weekly digest，因为主库里本来就是这个值，错的是放大出去的回源次数，不是这一波读到的内容。
+- 固定 TTL 时 200 个键在 1.0 秒同时到期，这一步峰值 200，跨度 0.0 秒。加上 ±0.2 秒后，过期从 0.8002 秒摊到 1.1997 秒，跨度 0.3995 秒，单步峰值 30（出现在 t=0.9）。总量仍是 200 次回源，抖动改变的是峰值而不是总数。
+
+</details>
+
+<p><strong>题 3</strong>：50 个请求同时查询不存在的稿，再续读 20 次，为什么 naive 累计 70 次加载，safe 仍是 1 次，0.4 秒之后再读又变成 2 次？发布时主库已经是 published v2，为什么 naive 的后来读者仍看到 draft v1，带代际守卫的路径却能看到 published v2？延迟 0.05 秒的第二次删除为什么仍然留下 draft v1？</p>
+<details><summary>答案</summary>
+
+- naive 不缓存缺席，每次探测都打主库：50 次并发是 50，再加 20 次是 70。safe 把 `None` 写成 0.4 秒的负缓存，并发被合并成 1 次加载，窗口内续读不再打主库；负缓存到期后键消失（TTL=-2），再读才会第二次回源。
+- naive 的加载者在失效之前读到了 draft v1，又在失效之后把它写回缓存，后来的读取命中这份旧值，主库加载次数仍是 1。代际守卫发现失效已经发生，放弃这次 `SET`（`stale_fills_aborted=1`），后来的读取重新回源，得到 published v2，加载次数是 2。
+- 延迟双删只删除「当时已经在的键」。实践里第二次删除发生在旧值 `SET` 之前，`SET` 在它之后仍把 draft v1 写了回去。所以延迟双删不是对所有时序的一致性证明；要挡住这种写回，需要代际或等价的拒绝机制，否则就只能接受整段 TTL 的陈旧，并把它写进声明上界。
+
+</details>
+
+<h2 id="_17">推荐资源</h2>
+<ul>
+<li><a href="https://redis.io/docs/latest/develop/use/client-side-caching/">缓存一致性与失效策略：参考文档 / 原始资料</a>，来源 redis.io｜文档｜英文｜进阶｜免费。阅读重点：「重点阅读 cache-aside 和 TTL 与请求合并与随机过期，用于核对本节点实验的语义和边界。」请注意该 URL 在 2026-11-11 返回 404。客户端缓存的现行正文以 <a href="https://redis.io/docs/latest/develop/clients/client-side-caching/">Client-side caching introduction</a> 和 <a href="https://redis.io/docs/latest/develop/reference/client-side-caching/">Client-side caching reference</a> 为准；cache-aside、TTL 作为陈旧上界、写后 <code>DEL</code>、以及用锁合并热 key 过期后的回源，以 <a href="https://redis.io/docs/latest/develop/use-cases/cache-aside/">Redis cache-aside</a> 和 <a href="https://redis.io/docs/latest/develop/use-cases/cache-aside/redis-py/">Redis cache-aside with redis-py</a> 为准；过期抖动以 <a href="https://redis.io/blog/how-to-tame-the-thundering-herd-problem/">How to tame the thundering herd problem</a> 和 <a href="https://redis.io/blog/cache-layer-architecture-guide/">Cache layer architecture</a> 为准。建议结合 practice102 逐项对照，并记下访问日期 2026-11-11，以及 <code>bash test.sh</code> 的输出。</li>
+</ul>
+<h2 id="_18">本课小结</h2>
+<ul>
+<li>缓存是数据库或计算结果的副本，失效、并发加载和更新顺序决定可见陈旧与放大流量。</li>
+<li><strong>cache-aside 和 TTL</strong>：先读缓存，未命中再回源并按 TTL 回填；写主库后删除缓存。实践里文章 42 命中前后加载都是 1，过期后是 2，删除后读到 Weekly digest (revised)，当时 TTL 为 -2。声明的最大陈旧时间是 2.2 秒；漏删时旧标题还要再停留 1.7558 秒。</li>
+<li><strong>请求合并与随机过期</strong>：200 个并发打过期热 key，naive 加载 200 次，singleflight 后是 1 次。200 个键固定 1.0 秒到期时单步峰值 200；加上 ±0.2 秒抖动，过期跨度 0.3995 秒，峰值 30。</li>
+<li><strong>负缓存与更新竞态</strong>：空键 50 次并发加 20 次续读，naive 累计 70 次，负缓存后是 1 次，0.4 秒到期再读变成 2 次。naive 回填会把 draft v1 种回去；代际守卫拒绝这次写回，后来读到 published v2。延迟 0.05 秒的第二次删除之后，旧值仍可被写回，后来读到的还是 draft v1。</li>
+<li>验收：数据库请求峰值受控（200 / 1，以及 200 / 30）；明确最大允许陈旧时间（2.2 秒，漏删时实际 1.7558 秒）。这两份数字要写在同一份报告里。</li>
+<li>误区：不要以为删过缓存就不会再出现旧值，也不要把延迟双删当成通用证明，更不要只设 TTL 却不声明陈旧上界。</li>
+<li>权衡：强一致缓存代价高，应先定义业务可接受的陈旧窗口，再决定 TTL、抖动、合并和失效是否要做成写入的一部分。</li>
+</ul>
+<p>学完后可以用三句话自检：命中、过期、写后删除各把加载次数变成了多少，漏删时旧值停留多久、声明上界是多少；热 key 200 并发和 200 个键同时到期时，naive 与 safe 的峰值各是多少；空键、错误回填和延迟双删分别留下了哪组标题和加载次数。三句都能答上来，并且能指出 practice102 里对应的那组数字，这一课就算过关。</p>
+<p>如果有一句答不上来，先回到对应的实验表，再回到官方文档里关于 TTL 作为陈旧上界、写后删除而不是改缓存、以及热 key 过期要用合并来挡住击穿的那几句，不要只把「加一层缓存就好了」这句话背下来。</p>
+<p>写作笔记时顺便记下三件事：你核对文档的日期和实际打开的页面（包括节点 URL 的 404），目标服务的最大允许陈旧时间有没有写进配置，以及热 key 过期和批量过期时主库峰值有没有被测过。这三件事能把本课的边界说明带进后面的持久化与复制，而不是只留下一串实验数字。</p><div class="pn"><span><a href="101.html">← Redis数据结构与命令成本</a></span><span>下一课 待更新</span></div></main></div></body></html>
