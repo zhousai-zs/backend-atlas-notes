@@ -1,0 +1,591 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>98. B+Tree与索引访问路径 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（98/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（2/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li class="todo">101. Redis数据结构与命令成本 <em>待更新</em></li></ul><div>阶段 3</div><ul><li><a class="cur" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li class="todo">99. 事务、隔离与异常 <em>待更新</em></li><li class="todo">102. 缓存一致性与失效策略 <em>待更新</em></li><li class="todo">103. Redis持久化与恢复窗口 <em>待更新</em></li><li class="todo">104. KV语义、索引与并发 <em>待更新</em></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">100. MVCC、快照与锁 <em>待更新</em></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 98 课 · 领域 G · 阶段 3</p><p class="dl"><a href="../files/98-g-index.md" download>⬇ 本课 Markdown</a><a href="../files/practice98.tar.gz" download>⬇ 练习包 practice98.tar.gz</a></p><h1 id="98208-btree">第 98/208 课：B+Tree与索引访问路径</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-index</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>B Tree Indexes</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>关系数据库</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>g-mysql</code>、<code>a-tree</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>B Tree Indexes</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://dev.mysql.com/doc/refman/8.4/en/innodb-physical-structure.html">B+Tree与索引访问路径：参考文档 / 原始资料</a>（dev.mysql.com，文档）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>B+Tree类索引以页为单位组织有序键，范围访问、回表和页分裂共同影响读写成本。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中出现的「内容后台」「付费订单」「某用户已支付且落在时间窗口内的订单」等场景都是<strong>教学假设</strong>，用来让概念落地，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库加 sqlite3 写的教学模型：一棵按页组织的 B+Tree，加上用 sqlite3 的 <code>EXPLAIN QUERY PLAN</code> 做访问路径对照。它不是 InnoDB，也不是 MySQL 优化器；页容量被刻意设成 16 个键，是为了让页分裂和填充率在两千行数据里就能看清。本课出现的扫描行数、页读写和耗时只来自这次教学实验，不能当成生产 MySQL 的性能数据。InnoDB 的页大小、填充策略和物理结构以 MySQL 8.4 官方文档为准（本文已核对 <a href="https://dev.mysql.com/doc/refman/8.4/en/innodb-physical-structure.html">The Physical Structure of an InnoDB Index</a>，访问日期 2026-11-11）。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：图书馆的书和卡片目录</h3>
+<p>图书馆里的书按索书号排在书架上。索书号连续的书挨在一起，同一层书架（一「页」）上能放的本数有限。这就是<strong>聚簇主键</strong>：数据本身就按主键顺序躺在叶子页里，按订单号点查或按订单号范围扫，走的是这棵树。</p>
+<p>前台还摆着一套卡片目录，按「作者 → 书名 → 出版年」排。卡片上写着索书号。你要找「某位作者、某一本书、某一年」时，顺着这套目录的<strong>最左前缀</strong>就能翻到那一小叠卡片。如果目录的第一项是作者，你却只记得出版年，卡片无法从中间插入，只能从头翻到尾。这就是<strong>联合索引的左前缀</strong>。</p>
+<p>卡片上如果已经写了你要的全部信息（比如册数、是否在馆），你不用再跑去书架，这叫<strong>覆盖索引</strong>。卡片上只有索书号、你还想看内容简介时，必须拿着索书号再走一趟书架，这叫<strong>回表</strong>。每多做一套目录，每进一本新书都要多写一张卡片，满了的抽屉还要拆成两个——索引能让查询少翻很多页，但会把写入和存储放大。</p>
+<p>「目录里能查到」不等于「查得快」。一整面抽屉都是「已支付」这种低选择性标签时，即使用了这套目录，你仍然要翻掉其中的一半卡片。</p>
+<h3 id="_4">接上前置</h3>
+<ul>
+<li><strong>a-tree</strong>：搜索树为什么能按对数层数定位，有序键为什么适合范围扫描。本课把它落到「以页为单位的 B+Tree」：内部页只放分界键和子页编号，真正的记录在叶子，叶子之间有顺序指针。</li>
+<li><strong>g-mysql</strong>：SQL 怎样经过连接和会话到达服务器。本课不再讨论连接池和绑定参数，而是问：这条 <code>SELECT</code> 到达存储引擎之后，沿哪条访问路径读数据，要读多少页、回不回表、写入时要维护几棵树。</li>
+</ul>
+<p>前面单独看都学过：树能查找，SQL 能发出去。本课把它们组装成「为订单查询选择联合索引」，然后看组装之后才出现的问题：列顺序错了，EXPLAIN 仍然显示用了索引，扫描行数却差两个数量级；索引里缺一个要返回的列，每一行都要回表；给低选择性列和每条经常更新的列都建索引，查询看似「有索引」，写入却被写放大拖住。</p>
+<h3 id="_5">一次索引查询的生命周期</h3>
+<div class="codehilite"><pre><span></span><code>  SQL
+    WHERE user_id=? AND status=? AND created_at BETWEEN ? AND ?
+    SELECT order_id, ...
+        │
+        ▼
+  选计划（教学模型里的 plan_safe / plan_naive）
+        ① 看每棵二级索引能不能用上最左前缀
+        ② 等值条件可以从左往右连续使用，遇到第一个范围条件后停止
+        ③ 需要的列是否都在这棵索引里？能则覆盖，否则回表
+        │
+        ▼
+  沿 B+Tree 下行
+        ④ 从根页走到目标叶子（内部页只比较分界键）
+        ⑤ 在叶子上按 [start, end] 顺序扫描，不够就沿 next_leaf 走下一页
+        ⑥ 用剩余谓词过滤（没用进前缀的条件在这里做）
+        ⑦ 非覆盖：取出主键，再走一遍聚簇索引（回表）
+        │
+        ▼
+  返回行，并留下计数：rows_examined、pages_read、bookmark_lookups
+</code></pre></div>
+
+<p>正常路径看起来只是「走索引」。本课真正要讲的是：第 ① 步如果把「索引里出现过这个列」当成「能用这个索引」，就会从错误的一侧走进树；第 ③ 步如果永远回表，覆盖索引的收益会全部消失；第 ⑤ 步如果范围很大或选择性很低，即使用了索引，examined 仍然接近全表。</p>
+<h3 id="_6">教学场景（教学假设）</h3>
+<p>内容后台的订单服务要支撑这类查询：某用户、已支付、落在某个时间窗口里的订单。灰度期间出现了三件「看起来用了索引」的事：</p>
+<ol>
+<li>有人建了 <code>(created_at, user_id, status)</code>，<code>EXPLAIN</code> 里确实是 <code>SEARCH ... USING INDEX</code>，但扫描行数是正确联合索引的大约 96 倍；</li>
+<li>查某用户某状态下的 <code>amount</code> 时，索引里没有金额，每一行都拿主键回表；即使后来把 <code>amount</code> 加进了索引，naive 路径仍然每次回表；</li>
+<li>只按 <code>status = 'paid'</code> 查，计划里写着 <code>USING COVERING INDEX</code>，实际却是一次整索引扫描；同时表上还挂了三个二级索引，两千行插入的写页数大约是只保留主键时的 4 倍。</li>
+</ol>
+<p>实践里这三件事都复现了，而且查询结果是对的。结果对、计划里出现了 INDEX，都不等于访问路径是便宜的。</p>
+<h3 id="_7">本课三条主线</h3>
+<ol>
+<li><strong>多列索引与左前缀</strong>：联合索引的列顺序决定能用多长的前缀，范围条件会截断后面的列；</li>
+<li><strong>覆盖索引和回表</strong>：二级索引的叶子默认带主键，要的列都在索引里就可以不回聚簇索引；</li>
+<li><strong>选择性、页分裂与写放大</strong>：低选择性索引即使用上了也扫很多行；页满了要分裂；每多一棵二级树，插入都要多写。</li>
+</ol>
+<p>三条主线对应三个很容易分开学、合在一起才出问题的点。只会背「最左前缀」但不看执行计划，可能把 <code>(created_at, user_id, status)</code> 当成「三个列都有了」；只会建覆盖索引但执行时仍然回表，页数优势出不来；只记得「要建索引」却不看选择性和写入成本，会得到一张读得一般、写得很痛的表。下面按这个顺序展开。</p>
+<h2 id="_8">学习目标</h2>
+<p>学完本课，你应该能够：</p>
+<ol>
+<li><strong>能解释多列索引与左前缀</strong>（goals 原文）；</li>
+<li><strong>能独立完成：为订单查询设计联合索引，用 EXPLAIN 比较扫描行数与写入成本。</strong>（goals 原文）；</li>
+<li>面对 <code>(user_id, status, created_at)</code>，说出哪些 WHERE 能 SEARCH 进这棵树，哪些只能 SCAN 或只用到部分前缀；</li>
+<li>分清覆盖索引和回表：同样 20 行命中，为什么非覆盖路径会多出 20 次回表、页数从 5 变成 66；</li>
+<li>解释「使用索引不代表查询必然高效」：同样是 <code>USING INDEX</code>，按 <code>status</code> 走低选择性索引要扫 1000 行，按 <code>user_id</code> 只需 20 行；</li>
+<li>报告查询收益的同时报告额外存储和写放大：本课里三个二级索引把总页数从 149 升到 829，把插入写页数从 2292 升到 9632。</li>
+</ol>
+<h2 id="_9">为什么后端要懂</h2>
+<p>节点的 why 原文是：「从执行计划理解慢查询而非只给所有列加索引。」拆开看，至少有两层。</p>
+<p><strong>正确的路径，而不只是正确的结果。</strong> 后台几乎每天都要写「按用户 + 状态 + 时间窗口」这类列表查询。结果集对，只说明谓词最终被应用了；真正决定延迟和负载的是途中读了多少页、回了多少次表。实践里同一条 Q1（<code>user_id=42 AND status='paid' AND created_at BETWEEN 10000 AND 15000</code>），正确前缀扫描 4 行、4 页就得到 4 条命中；把列顺序做成 <code>(created_at, user_id, status)</code> 之后，仍然能搜到同一 4 行，但 examined 变成 384，页数变成 28。如果只看「有没有索引」「结果对不对」，这两种计划会被当成同一件事。</p>
+<p><strong>写入和存储是查询收益的账单。</strong> 每加一条二级索引，插入、更新、删除都要维护另一棵 B+Tree，页满了还要分裂。本课在 2000 行订单上，只保留聚簇主键时写了 2292 页、分裂 146 次、共 149 页；加上一条联合索引后写页 4720、总页 366；三条二级索引后写页 9632、总页 829。查询快了一截，账单写在写入路径和磁盘占用上。入职后做慢查询优化，报告里必须同时出现「扫描少了多少」和「多占了多少、写入多了多少」，这正是本节点的验收标准。</p>
+<p>把「单独看都像对的、合在一起才贵」的情况列成表，入职后可以当排查清单用：</p>
+<table>
+<thead>
+<tr>
+<th>失败情况</th>
+<th>谁先发现</th>
+<th>若处理不当会怎样</th>
+<th>本次实践中的对照</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>联合索引列顺序与查询不符</td>
+<td>EXPLAIN 仍可能显示 SEARCH / USING INDEX</td>
+<td>结果对，但扫描行数差一到两个数量级</td>
+<td>正确前缀 examined=4；错序 examined=384</td>
+</tr>
+<tr>
+<td>只记住「索引里有这个列」</td>
+<td>按非前导列查询时</td>
+<td>无法二分定位，只能扫叶子链</td>
+<td><code>status</code> 单独查询：safe 走聚簇 SCAN，examined=2000</td>
+</tr>
+<tr>
+<td>需要的列不在二级索引里</td>
+<td>每行一次回表的页读</td>
+<td>命中行一多，回表变成随机点查</td>
+<td>20 行金额查询：回表 20 次、66 页；覆盖 0 次、5 页</td>
+</tr>
+<tr>
+<td>覆盖索引在执行时仍回表</td>
+<td>页数和时延掉不下来</td>
+<td>白付了索引存储，没吃到覆盖收益</td>
+<td>同一棵覆盖树，naive 仍回表 20 次、65 页</td>
+</tr>
+<tr>
+<td>低选择性列上的「有效索引」</td>
+<td>EXPLAIN 写着 USING INDEX</td>
+<td>扫描接近该值的全部行</td>
+<td><code>status='paid'</code> examined=1000；<code>user_id=42</code> 只需 20</td>
+</tr>
+<tr>
+<td>给常用列都建索引</td>
+<td>写入变慢、页数上升</td>
+<td>查询略快，插入和维护成本线性增加</td>
+<td>0/1/3 条二级索引：写页 2292 → 4720 → 9632</td>
+</tr>
+</tbody>
+</table>
+<p>入职后你多半直接用公司现成的表结构和 <code>EXPLAIN</code>，但出问题时要知道往哪查：</p>
+<ul>
+<li>「这条查询有索引还是慢」，先看执行计划用了哪个索引、用了多长前缀、是 SEARCH 还是 SCAN，再看扫描行数是不是接近命中行数；</li>
+<li>「选了几个列却几乎没过滤」，先看范围条件是不是截断了后面的列，或查询根本没碰到最左列；</li>
+<li>「索引已经包含返回列，为什么仍然很慢」，先看是不是在回表，以及执行层有没有忽略覆盖；</li>
+<li>「读写都变慢、磁盘涨得快」，先数二级索引的数量，并看插入是否在随机位置分裂。</li>
+</ul>
+<h2 id="_10">核心知识点</h2>
+<h3 id="1">1. 多列索引与左前缀</h3>
+<p>联合索引不是「这几列各建一条索引再 OR 起来」，而是把多列拼成一个复合键，按字典序排进同一棵 B+Tree。键 <code>(user_id, status, created_at, order_id)</code> 的比较是先比 <code>user_id</code>，相等再比 <code>status</code>，再比 <code>created_at</code>，最后用主键打散相同组合。于是：</p>
+<ul>
+<li><code>user_id=42 AND status='paid' AND created_at BETWEEN 10000 AND 15000</code> 对应树上一段连续区间，可以从根页一路落到起点叶子，再沿 <code>next_leaf</code> 扫到终点；</li>
+<li>只有 <code>user_id=42</code> 时，仍然是一段连续区间（该用户所有状态、所有时间），前缀长度为 1；</li>
+<li>只有 <code>status='paid'</code> 时，<code>'paid'</code> 散落在每个 <code>user_id</code> 段里，这段索引上不存在一个可以二分进去的连续区间。</li>
+</ul>
+<p>等值条件可以从左往右连续使用；<strong>遇到第一个范围条件之后，后面的列不能再用来划定区间</strong>，只能当剩余谓词做过滤。所以 <code>(user_id, status, created_at)</code> 很适合「先定位用户和状态，再在时间上做范围」。如果把顺序改成 <code>(created_at, user_id, status)</code>，同一条 Q1 只能用上 <code>created_at</code> 这一段范围，<code>user_id</code> 和 <code>status</code> 变成在大段叶子里做过滤。</p>
+<p>实践里 2000 行订单、100 个用户，Q1 的命中是 4 行。两种联合索引、两种计划给出的访问路径如下（教学模型自己的 EXPLAIN 文本）：</p>
+<table>
+<thead>
+<tr>
+<th>计划</th>
+<th>索引列顺序</th>
+<th>用上的前缀</th>
+<th>剩余谓词</th>
+<th style="text-align: right;">examined</th>
+<th style="text-align: right;">页数</th>
+<th style="text-align: right;">命中</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>safe</td>
+<td><code>(user_id, status, created_at)</code></td>
+<td>user_id, status, created_at</td>
+<td>无</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>错序但规划正确</td>
+<td><code>(created_at, user_id, status)</code></td>
+<td>只有 created_at</td>
+<td>user_id, status</td>
+<td style="text-align: right;">384</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>naive（错序 + 强制回表）</td>
+<td>同上</td>
+<td>created_at</td>
+<td>user_id, status</td>
+<td style="text-align: right;">412</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+<p>四行结果完全一致（<code>ids_match=True</code>）。差别全部在路上：正确前缀几乎只碰命中行；错序索引把时间窗口里的 384 行都翻了一遍，再扔掉不符合用户和状态的那些。naive 路径还要为过滤后的行回表，examined 和页数再高一截。</p>
+<p>同一棵正确的 <code>(user_id, status, created_at)</code> 上，另外两条查询把「前缀用不满」说得更清楚：</p>
+<table>
+<thead>
+<tr>
+<th>查询</th>
+<th>用上的前缀</th>
+<th style="text-align: right;">examined</th>
+<th style="text-align: right;">命中</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status='paid'</code>（safe）</td>
+<td>无，走聚簇 SCAN</td>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">1000</td>
+<td>最左列不在谓词里，不能进这棵二级树</td>
+</tr>
+<tr>
+<td><code>user_id=42 AND created_at BETWEEN ...</code>（中间有洞）</td>
+<td>只有 user_id</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">4</td>
+<td>范围落到了被跳过的 <code>status</code> 之后，只能扫该用户全部 20 行再过滤时间</td>
+</tr>
+</tbody>
+</table>
+<p>「中间有洞」是左前缀里很常见的坑：你以为 <code>user_id</code> 和 <code>created_at</code> 都在索引里，就一定能在时间上做范围，其实 <code>status</code> 挡在中间，时间条件只能当 residual。</p>
+<p>sqlite3 用同一份 2000 行数据和同一条 Q1，<code>EXPLAIN QUERY PLAN</code> 给出了同一件事情的另一张口吻（这是 sqlite 的计划，不是 MySQL 的 <code>EXPLAIN</code>）：</p>
+<div class="codehilite"><pre><span></span><code>无索引：          SCAN orders
+错序 idx_wrong：  SEARCH orders USING INDEX idx_wrong (created_at&gt;? AND created_at&lt;?)
+正确 idx_safe：   SEARCH orders USING INDEX idx_safe (user_id=? AND status=? AND created_at&gt;? AND created_at&lt;?)
+只查 status：     SCAN orders USING COVERING INDEX idx_safe
+</code></pre></div>
+
+<p>注意后两行都出现了 INDEX，但一个是带完整前缀的 SEARCH，一个是 SCAN。<code>USING COVERING INDEX</code> 在这里只表示 sqlite 可以只读索引、不必回表，并不表示它按 <code>status</code> 做了一次点查。使用索引、覆盖索引、高效，是三件不同的事。</p>
+<p>用一条规则来记列顺序：<strong>把等值条件放在左边，把范围条件放在等值之后，把只为覆盖而追加的列放在最后。</strong> 本课 Q1 的自然顺序就是 <code>(user_id, status, created_at)</code>；若还想覆盖 <code>amount</code>，写成 <code>(user_id, status, created_at, amount)</code>，不要把 <code>amount</code> 插到时间前面。</p>
+<h3 id="2">2. 覆盖索引和回表</h3>
+<p>InnoDB 一类的存储里，表的主数据就在主键 B+Tree 的叶子上，这叫聚簇。二级索引的叶子不存放完整行，而是「索引键 + 主键」。教学模型沿用这个结构：创建二级索引时，如果定义里没有 <code>order_id</code>，会自动把它追加到键尾，既保证键唯一，也让 <code>SELECT order_id</code> 有机会被覆盖。</p>
+<p>于是一次二级索引查询有两条出口：</p>
+<ul>
+<li><strong>覆盖</strong>：计划需要的列都能从二级叶子上取到（键里的列、附带的包含列、主键），不再访问聚簇树；</li>
+<li><strong>回表</strong>：拿出主键，再对聚簇树做一次点查。命中行有多少，就多多少次随机点查。</li>
+</ul>
+<p>实践里查「某用户、已支付」的 <code>order_id</code> 和 <code>amount</code>，命中 20 行：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>索引</th>
+<th style="text-align: right;">回表次数</th>
+<th style="text-align: right;">examined</th>
+<th style="text-align: right;">页数</th>
+<th style="text-align: right;">耗时（教学模型）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>safe 覆盖</td>
+<td><code>(user_id, status, amount)</code></td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.030 ms</td>
+</tr>
+<tr>
+<td>safe 非覆盖</td>
+<td><code>(user_id, status)</code></td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">165</td>
+<td style="text-align: right;">66</td>
+<td style="text-align: right;">0.099 ms</td>
+</tr>
+<tr>
+<td>naive（即使索引已覆盖仍回表）</td>
+<td><code>(user_id, status, amount)</code></td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">165</td>
+<td style="text-align: right;">65</td>
+<td style="text-align: right;">0.069 ms</td>
+</tr>
+</tbody>
+</table>
+<p>非覆盖路径的 examined 是 165 而不是 20，是因为 20 次回表会在聚簇叶子上继续比较键，这些比较也被计进了 <code>rows_examined</code>。页数从 5 跳到 66，才是回表真正贵的地方：二级叶子是一段连续扫描，聚簇点查则可能落到 20 个不同的主键页上。</p>
+<p>naive 路径的对照很刻意：索引已经包含 <code>amount</code>，计划却仍然「ALWAYS 回表」。结果一样对，页数几乎和不覆盖时一样。这说明覆盖不是「把列写进 <code>CREATE INDEX</code> 就自动生效」，执行时还必须真的从索引叶子取列。生产里要在执行计划中确认这一点——sqlite 的说法是 <code>USING COVERING INDEX</code>；MySQL 8.4 里对应的是 Extra 中出现 <code>Using index</code>（以你实际看到的 <code>EXPLAIN</code> 文本为准，本课没有连真实 MySQL）。</p>
+<p>sqlite 对同一条「按用户和状态取 amount」的对照是：</p>
+<div class="codehilite"><pre><span></span><code>未覆盖（只有 idx_safe）：SEARCH orders USING INDEX idx_safe (user_id=? AND status=?)
+已覆盖（idx_cover）：    SEARCH orders USING COVERING INDEX idx_cover (user_id=? AND status=?)
+</code></pre></div>
+
+<p>前面多一个 <code>COVERING</code>，就是少一次回表。为了覆盖而追加的列要放在联合索引的右边，以免破坏左边的前缀。</p>
+<h3 id="3">3. 选择性、页分裂与写放大</h3>
+<p><strong>选择性。</strong> 一个谓词值如果对应表里很大一部分行，即使用索引定位到了这个值，你也得把这些行逐个读出来。2000 行里 <code>paid</code> 有 1000 行（一半），每个用户只有 20 行。同样是 COVERING SEARCH：</p>
+<table>
+<thead>
+<tr>
+<th>索引</th>
+<th>查询</th>
+<th style="text-align: right;">examined</th>
+<th style="text-align: right;">命中</th>
+<th style="text-align: right;">页数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(status)</code></td>
+<td><code>status='paid'</code></td>
+<td style="text-align: right;">1000</td>
+<td style="text-align: right;">1000</td>
+<td style="text-align: right;">128</td>
+</tr>
+<tr>
+<td><code>(user_id)</code></td>
+<td><code>user_id=42</code></td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">6</td>
+</tr>
+</tbody>
+</table>
+<p>两条计划都「用了索引」，扫描量差 50 倍。给 <code>status</code> 单独建索引，对「列出所有已支付订单」这类查询几乎就是一次半表扫描；它解决不了 Q1，反而让每次插入多维护一棵树。选择性要看的是「这个条件能把行数收到多小」，不是「这一列有没有索引」。</p>
+<p><strong>页分裂与填充率。</strong> B+Tree 以页为单位。教学模型每页最多 16 个键，叶子满了就要分裂成两页，并可能把一个分界键推到父页——父页满了再裂，一直裂到根，树就长高。分裂怎么切，决定页有多满。</p>
+<p>官方文档对 InnoDB 聚簇索引的描述是（8.4，访问日期 2026-11-11）：插入时会尝试给页留出 1/16 的空闲；<strong>按顺序插入时页大约 15/16 满，随机插入时页的满度在 1/2 到 15/16 之间</strong>。默认页大小是 16KB，在实例初始化时由 <code>innodb_page_size</code> 决定。本课没有实现 16KB 页，但用两种分裂策略模拟「满度」这件事：</p>
+<ul>
+<li><strong>naive</strong>：一律对半切。顺序插入主键时，左边那一页再也接不到新行，叶子填充率最后只有 0.502，2000 行占了 249 个叶子、树高 4、共 280 页，分裂 276 次；</li>
+<li><strong>safe</strong>：如果这次插入落在最右叶子（顺序追加），按 15/16 做右偏切，左边几乎是满的。同样 2000 行主键，填充率 0.9328，叶子 134，树高 3，共 149 页，分裂 146 次。</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">_split_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nkeys</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">right_biased</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">right_biased</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_mode</span> <span class="o">==</span> <span class="s2">"safe"</span><span class="p">:</span>
+        <span class="c1"># 顺序插入时让左页接近 15/16 满，对应文档里 sequential 的填充</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">nkeys</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">MAX_KEYS</span> <span class="o">*</span> <span class="mi">15</span><span class="p">)</span> <span class="o">//</span> <span class="mi">16</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nkeys</span> <span class="o">//</span> <span class="mi">2</span>
+</code></pre></div>
+
+<p>填充率差一倍，不是微优化：同样的 2000 行，对半切多占一个树高、将近一倍叶子页。随机写入的二级索引（如按 <code>user_id</code>）做不到这种右偏，满度会更接近文档说的「一半到 15/16」。InnoDB 在重建索引时还有 sorted index build 和 <code>innodb_fill_factor</code>；页的填充率掉到 <code>MERGE_THRESHOLD</code>（默认 50%）以下时，会尝试合并以回收页。这些是生产引擎的细节，教学模型没有做合并，只把「分裂策略影响占用」跑了出来。</p>
+<p><strong>写放大。</strong> 每条二级索引都是一棵要与聚簇树一起维护的 B+Tree。一次 <code>INSERT</code> 要写主键叶子，还要往每一棵二级树里插一把键；任何一页满了都会多一次分裂写。2000 行、safe 分裂下的账单：</p>
+<table>
+<thead>
+<tr>
+<th>表上的二级索引</th>
+<th style="text-align: right;">写页数</th>
+<th style="text-align: right;">分裂次数</th>
+<th style="text-align: right;">二级索引页</th>
+<th style="text-align: right;">总页数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无（只有主键）</td>
+<td style="text-align: right;">2292</td>
+<td style="text-align: right;">146</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">149</td>
+</tr>
+<tr>
+<td>1 条 <code>(user_id, status, created_at)</code></td>
+<td style="text-align: right;">4720</td>
+<td style="text-align: right;">360</td>
+<td style="text-align: right;">217</td>
+<td style="text-align: right;">366</td>
+</tr>
+<tr>
+<td>3 条（再加上 <code>status</code>、<code>amount</code>）</td>
+<td style="text-align: right;">9632</td>
+<td style="text-align: right;">816</td>
+<td style="text-align: right;">680</td>
+<td style="text-align: right;">829</td>
+</tr>
+</tbody>
+</table>
+<p>从 0 条到 3 条，写页数大约变成 4.2 倍（2292 → 9632），总页数大约变成 5.6 倍（149 → 829）。第三条里那条 <code>(status)</code> 对 Q1 几乎没有帮助，却把写入和存储一起推高——这就是「给所有列加索引」的典型账单。</p>
+<p>如果更新的是索引列本身（比如把订单从 <code>pending</code> 改成 <code>paid</code>），二级树里往往是先删旧键再插新键，写放大比一次插入更明显。本课没有单独测更新，但机制是同一套：多一棵树，就多一次删除和一次插入，并且都可能分裂。</p>
+<h3 id="_11">三条主线的收束</h3>
+<p>列顺序决定你在树上能跳到多准的一段叶子；覆盖决定这段叶子够不够用，要不要再付一次回表；选择性和分裂策略决定这段叶子本身有多长、这棵树平时有多贵。三者分开都好讲，合在一张订单表上才会同时出现「EXPLAIN 里有 INDEX、结果也对、系统却又慢又占空间」。</p>
+<h2 id="_12">常见误区</h2>
+<p>节点 pitfalls 原文是：「使用索引不代表查询必然高效。」它可以拆成下面几句具体的话。</p>
+<p><strong>EXPLAIN 里出现 INDEX，不表示前缀用对了。</strong> sqlite 对错序索引给出的是 <code>SEARCH orders USING INDEX idx_wrong (created_at&gt;? AND created_at&lt;?)</code>，看起来和正确计划一样「用了索引」。真正的差别在括号里：错序只用上了时间范围，教学模型里因此扫了 384 行。只看「有没有 USING INDEX」会把这两种计划当成一类。</p>
+<p><strong>覆盖扫描也可以很贵。</strong> 只按 <code>status</code> 查询时，sqlite 给出 <code>SCAN orders USING COVERING INDEX idx_safe</code>。它确实没回表，也确实在用索引，但它是整条叶子链扫过去。教学模型的 safe 路径选择不走这棵以 <code>user_id</code> 开头的树，而是聚簇 SCAN，examined=2000；naive 路径坚持「索引里有 status」，扫二级叶子再回表，examined 飙到 9970。两种「跟索引有关」的计划都不高效。</p>
+<p><strong>列都在索引里，不等于范围都能用上。</strong> <code>(user_id, status, created_at)</code> 对 <code>user_id + created_at</code> 这种「中间有洞」的条件，只能用 <code>user_id</code> 前缀，该用户的 20 行都要看，时间条件是 residual。不要看见列名出现在索引定义里就认为它们会一起参与定位。</p>
+<p><strong>结果集对，不能证明路径便宜。</strong> 上面所有对照的命中行都一致。慢查询分析要看 examined、页数和是否回表，而不是只看返回值。</p>
+<p><strong>把索引加满不会自动变快，但会自动变贵。</strong> 低选择性的 <code>(status)</code>、很少被当作前缀的单列索引，写入成本是确定的，查询收益可能接近零。</p>
+<h2 id="_13">设计权衡</h2>
+<p>节点 tradeoffs 原文是：「索引提高读取能力，也增加写放大和维护开销。」实践把这句话落到了可以并列填写的两列数字上。</p>
+<p><strong>为哪条查询付钱。</strong> Q1 是「某用户 + 某状态 + 时间窗口」，<code>(user_id, status, created_at)</code> 把 examined 从错序的 384 收到 4，这是值得付的一棵树：多 217 个索引页、写页从 2292 升到 4720。再为 <code>status</code>、<code>amount</code> 各加一条单列索引，总页数到 829、写页到 9632，对 Q1 几乎没有额外帮助。索引要按查询的前缀来设计，而不是按列的出现次数来堆。</p>
+<p><strong>覆盖还是更窄的索引。</strong> 把 <code>amount</code> 追加进联合索引，20 行查询的回表从 20 降到 0、页数从 66 降到 5。代价是索引叶子更宽，同样一页放更少的键，范围扫描可能多读几页，写入也要多维护这个列。如果 <code>amount</code> 经常被改，更新路径还会多一次删键再插键。覆盖值得做，但是加在「已经对上前缀」的那棵树上，而不是另起一棵很宽、却对不上查询的树。</p>
+<p><strong>顺序键和随机键。</strong> 主键若按订单号顺序追加，右偏分裂能让叶子接近 15/16 满（本课 0.9328）；二级索引的键（用户、状态）更接近随机插入，分裂更碎，占用更接近「一半到 15/16」。把随机性很大、选择性又低的列放在联合索引最左，既不利于查询，也容易让这棵树更「胖」。</p>
+<p><strong>用执行计划做取舍，而不是用感觉。</strong> 验收要求「能解释索引列顺序」，并且「报告同时包含查询收益和额外存储」。一份负责任的变更说明至少要有：目标查询的计划（前缀、是否覆盖）、扫描行数的前后对比、新增索引的页数或体积、插入路径的写放大。本课的数字来自教学模型，生产上要换成你在目标 MySQL 版本上实际跑出的 <code>EXPLAIN</code> 和统计，但报告的结构可以一样。</p>
+<h2 id="_14">动手实践：为订单查询设计联合索引</h2>
+<p>实践对应节点原文：「为订单查询设计联合索引，用EXPLAIN比较扫描行数与写入成本。」验收是：能解释索引列顺序；报告同时包含查询收益和额外存储。</p>
+<p>配套代码在 <code>practice98/</code>，用 Python 3 标准库加 sqlite3，不依赖 MySQL 服务。跑通 <code>./test.sh</code> 即可得到下面这些数字；它们是这一次实验的输出，不是生产指标。</p>
+<h3 id="0">0. 文件结构</h3>
+<div class="codehilite"><pre><span></span><code>practice98/
+  btree.py       # 按页组织的 B+Tree：查找、范围扫描、分裂、读写计数
+  engine.py      # 订单表（聚簇主键 + 二级索引）、safe/naive 计划器、实验和 sqlite 对照
+  app.py         # 薄封装 OrderStore，课文里提到的查询入口
+  test_index.py  # 断言与 results.json
+  test.sh        # python3 test_index.py
+  results.json   # 本次运行的完整数字
+</code></pre></div>
+
+<p>教学模型的硬边界再强调一次：每页最多 16 个键；<code>pages_written</code> 按「一次插入里被改过的页数」累计，不是 InnoDB 的 redo 或 flush 统计；计划器是我们写的规则，不是 MySQL 优化器。sqlite 部分只负责 <code>EXPLAIN QUERY PLAN</code> 文本和结果一致性。</p>
+<h3 id="1_1">步骤 1：准备数据与目标查询</h3>
+<p><code>generate_orders()</code> 固定生成 2000 行订单：100 个用户循环分配，<code>status</code> 大约一半为 <code>paid</code>（1000 行），<code>created_at</code> 落在 1000–29000，金额是一个确定的线性公式。目标查询 Q1 是：</p>
+<div class="codehilite"><pre><span></span><code>user_id = 42 AND status = 'paid' AND created_at BETWEEN 10000 AND 15000
+</code></pre></div>
+
+<p>在这份数据上命中恰好 4 行。先不要建索引去「调」这个数字，它应当由数据生成函数决定；测试里用同一套生成函数做 gold，再要求各条计划的命中 id 完全一致。</p>
+<h3 id="2_1">步骤 2：两条执行路径</h3>
+<p><code>OrderTable.plan_safe</code> 从聚簇主键和所有二级索引里挑访问路径：从左统计能用上的等值前缀，最多再收一个范围列，其余谓词当 residual；需要的列都在索引里则标记 COVERING，否则回表。评分按「前缀更长、能覆盖、键更短」的顺序。</p>
+<p><code>OrderTable.plan_naive</code> 的两个刻意错误是：</p>
+<ol>
+<li>只要索引列集合与谓词有交集，就「用这棵树」，即使最左列根本不在谓词里——这时它会 SCAN 整条叶子链；</li>
+<li>无论索引是否已经覆盖，都 ALWAYS 回表。</li>
+</ol>
+<p>对照时不要改查询结果的计算方式：两条路径都必须用完整谓词过滤，保证结果与 gold 一致，差异只出现在 examined、页数和回表次数上。</p>
+<h3 id="21">步骤 2.1：左前缀在代码里怎么判断</h3>
+<p><code>plan_safe</code> 对每个索引从左往右走一遍列，等值就纳入前缀，碰到第一个范围列后停止，后面即使出现在索引定义里也不再用来划区间：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">used</span><span class="p">,</span> <span class="n">saw_range</span> <span class="o">=</span> <span class="p">[],</span> <span class="kc">False</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">equals</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">saw_range</span><span class="p">:</span>
+        <span class="n">used</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="k">continue</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ranges</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">saw_range</span><span class="p">:</span>
+        <span class="n">used</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">saw_range</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">continue</span>
+    <span class="k">break</span>
+</code></pre></div>
+
+<p>所以 <code>(user_id, status, created_at)</code> 面对 Q1 时 <code>used</code> 是三列；面对 <code>user_id + created_at</code> 时，<code>status</code> 不在谓词里，循环在第二列 <code>break</code>，<code>created_at</code> 只能当 residual。<code>plan_naive</code> 不走这套规则，只要索引列和谓词有交集就开扫。</p>
+<p>范围扫描本身在 <code>btree.py</code> 的 <code>range_scan</code>：先从根下行到 <code>lo</code> 所在叶子，再沿 <code>next_leaf</code> 顺序吐出 <code>lo &lt;= key &lt;= hi</code> 的记录。页在这次下行和沿链前进时计入 <code>pages_read</code>，落入区间的每一行计入 <code>rows_examined</code>。回表则是另一次对聚簇树的 <code>search</code>。</p>
+<h3 id="3-5">步骤 3：运行并解读 5 组对照（真实输出）</h3>
+<p>在 <code>practice98/</code> 下执行：</p>
+<div class="codehilite"><pre><span></span><code>./test.sh
+</code></pre></div>
+
+<p>本次运行的最后几行是：</p>
+<div class="codehilite"><pre><span></span><code>ALL_CHECKS_PASSED
+prefix: safe_examined=4 wrong_examined=384 gold=4
+covering: lookups 20 -&gt; 0; pages 66 -&gt; 5
+write: pk_written=2292 one=4720 three=9632
+fill: naive=0.502 safe=0.9328 leaves 249-&gt;134
+selectivity: status_examined=1000 user_examined=20
+sqlite safe plan: ['SEARCH orders USING INDEX idx_safe (user_id=? AND status=? AND created_at&gt;? AND created_at&lt;?)']
+</code></pre></div>
+
+<p><strong>对照 1：列顺序 / 左前缀。</strong> 正确索引 <code>(user_id, status, created_at)</code> 对 Q1 是 COVERING SEARCH，examined=4、pages=4。错序索引 <code>(created_at, user_id, status)</code> 只能用 <code>created_at</code> 前缀，examined=384、pages=28。naive 在错序树上再强制回表，examined=412、pages=40。三种路径都返回同一 4 个 <code>order_id</code>。</p>
+<p><strong>对照 2：单独用 status、以及「中间有洞」。</strong> 在正确的联合索引上，<code>status='paid'</code> 的 safe 计划拒绝把它当前缀用，改为聚簇 SCAN，examined=2000；naive 坚持扫这棵二级树再回表，examined=9970。<code>user_id + created_at</code>（跳过中间的 status）用上的前缀只有 <code>user_id</code>，examined=20（该用户全部订单），命中 4。sqlite 对 status 单独查询给出 <code>SCAN orders USING COVERING INDEX idx_safe</code>：用了索引，但是 SCAN。</p>
+<p><strong>对照 3：覆盖与回表。</strong> 20 行「用户 + 状态 → amount」：非覆盖索引回表 20 次、66 页、examined=165；覆盖索引回表 0 次、5 页、examined=20。naive 拿着已经覆盖的索引仍然回表 20 次、65 页。sqlite 对覆盖路径的文本是 <code>SEARCH orders USING COVERING INDEX idx_cover (user_id=? AND status=?)</code>。</p>
+<p><strong>对照 4：选择性。</strong> 同样 2000 行，<code>(status)</code> 上查 <code>paid</code> 要 examined=1000、128 页；<code>(user_id)</code> 上查 42 号用户只需 20 行、6 页。两条都是 COVERING SEARCH，「有索引」三个字覆盖不了 50 倍的扫描差。</p>
+<p><strong>对照 5：分裂策略与写放大。</strong> 主键顺序插入，对半切填充率 0.502、249 个叶子、树高 4；右偏 15/16 切填充率 0.9328、134 个叶子、树高 3。写入账单：无二级索引写页 2292 / 总页 149；一条联合索引写页 4720 / 总页 366（其中索引页 217）；三条二级索引写页 9632 / 总页 829（其中索引页 680）。查询收益写在对照 1 的 4 对 384，额外存储和写放大写在这一组。</p>
+<h3 id="4">步骤 4：对照验收标准</h3>
+<div class="codehilite"><pre><span></span><code># 验收 1：能解释索引列顺序
+# Q1 的等值列在左、范围列在后；(created_at, user_id, status) 只能用上时间范围。
+# 证据：safe_examined=4，wrong_examined=384，计划文本里 used_prefix 不同。
+
+# 验收 2：报告同时包含查询收益和额外存储
+# 收益：Q1 扫描 384 → 4；覆盖查询回表 20 → 0、页数 66 → 5。
+# 成本：一条联合索引把总页 149 → 366、写页 2292 → 4720；
+#       再堆两条低价值索引会到总页 829、写页 9632。
+</code></pre></div>
+
+<p>两项都要写进同一份报告里。只报「慢查询变快了」或只报「不能加太多索引」，都不算完成验收。</p>
+<h3 id="5">步骤 5：自己动手的扩展练习</h3>
+<ol>
+<li>把 Q1 的覆盖列改成 <code>(user_id, status, amount, created_at)</code>，再跑一次 Q1。想一想：<code>amount</code> 插在时间前面之后，时间范围还能不能进前缀？examined 会不会从 4 变成「该用户该状态下的全部订单」？</li>
+<li>给 sqlite 的订单表再加一条 <code>(status, created_at)</code>，单独跑 <code>WHERE status='paid' AND created_at BETWEEN ...</code>，看 <code>EXPLAIN QUERY PLAN</code> 是 SEARCH 还是 SCAN，扫描代价如何对上选择性。</li>
+<li>在教学模型里实现一次「改 status」的更新（先删旧键再插新键），比较只维护主键和再维护 <code>(user_id, status, created_at)</code> 时的写页差。本课没有把这组数字放进 <code>test.sh</code>，跑出来后记在实验笔记里即可。</li>
+</ol>
+<h3 id="6">步骤 6：和生产引擎的对应关系（不要记错边界）</h3>
+<table>
+<thead>
+<tr>
+<th>本课教学模型</th>
+<th>生产 InnoDB / MySQL 8.4（以官方文档为准）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每页 16 键</td>
+<td>默认页大小 16KB，由实例初始化时的 <code>innodb_page_size</code> 决定</td>
+</tr>
+<tr>
+<td>叶子载荷 + <code>next_leaf</code></td>
+<td>索引记录存在 B-tree 的叶子页；文档称 InnoDB 索引为 B-tree（空间索引除外，用 R-tree）</td>
+</tr>
+<tr>
+<td>二级键自动追加 <code>order_id</code></td>
+<td>二级索引叶子包含主键，用于回表到聚簇索引</td>
+</tr>
+<tr>
+<td><code>COVERING</code> / 回表计数</td>
+<td>计划 Extra 中的 <code>Using index</code> 表示只读索引；否则按主键回聚簇树（以实际 EXPLAIN 为准）</td>
+</tr>
+<tr>
+<td>右偏 15/16 分裂</td>
+<td>文档：顺序插入约 15/16 满，随机插入在 1/2 到 15/16 之间；另有 <code>innodb_fill_factor</code>、<code>MERGE_THRESHOLD</code></td>
+</tr>
+<tr>
+<td>sqlite <code>EXPLAIN QUERY PLAN</code></td>
+<td>应对目标实例跑 MySQL 的 <code>EXPLAIN</code> / <code>EXPLAIN ANALYZE</code>，不要直接搬 sqlite 的关键字</td>
+</tr>
+</tbody>
+</table>
+<p>教学模型用来把语义跑成你可以动手改的数字；下结论到生产行为时，回到 8.4 文档和你自己的 <code>EXPLAIN</code>。</p>
+<h2 id="_15">源码与文档阅读</h2>
+<p>节点指定的资料是 MySQL 8.4 参考手册 <a href="https://dev.mysql.com/doc/refman/8.4/en/innodb-physical-structure.html">17.6.2.2 The Physical Structure of an InnoDB Index</a>（dev.mysql.com，英文文档，访问日期 2026-11-11）。节点在资源说明里希望重点核对「多列索引与左前缀」和「覆盖索引和回表」，但<strong>这篇正文本身主要讲的是页的物理形态和填充</strong>，并没有展开左前缀或回表。阅读时按页面上实际出现的内容来，不要把本课其他章节的结论当成这篇文档里的原句。</p>
+<p>这篇文档里与本课直接对应、且已核对过的要点：</p>
+<ol>
+<li><strong>除空间索引外，InnoDB 索引是 B-tree，记录存在叶子页。</strong> 空间索引用 R-tree。文档用的是 “B-tree” 这个词；本课标题沿用节点的 「B+Tree」，指的是「记录在叶子、叶子可顺序穿起来」这一类结构。不要在笔记里写成「官方文档称其为 B+Tree」，那不是该页的用词。</li>
+<li><strong>默认页大小 16KB</strong>，由实例初始化时的 <code>innodb_page_size</code> 决定，不是会话级可以随便改的参数。本课用 16 个键模拟「一页会满」，没有模拟 16KB。</li>
+<li><strong>插入聚簇索引时会尝试留出 1/16 空闲。</strong> 顺序（升序或降序）插入后，页大约 15/16 满；随机插入时，页的满度在 1/2 到 15/16 之间。这是对照 5 里两种分裂策略的文档依据。教学模型的 0.9328 和 0.502 是我们自己那套 16 键页上的填充率，方向与文档一致，数值不能当成 InnoDB 的实测。</li>
+<li><strong>重建或创建 B-tree 索引时走 sorted index build</strong>，<code>innodb_fill_factor</code> 控制构建时每页填到百分之多少，余量留给后续增长；该值为 100 时，聚簇索引页仍会留出 1/16。空间索引不支持这种构建方式。</li>
+<li><strong>页填充率低于 <code>MERGE_THRESHOLD</code>（未指定时默认 50%）时，InnoDB 会尝试收缩树以回收页。</strong> 教学模型没有实现合并，所以你只会在实验里看到分裂让树变大，看不到删除之后的回收。</li>
+</ol>
+<p>建议的阅读方法：先只读这一页，用自己的话写下「页多大、顺序插入和随机插入的满度、什么时候合并」。然后再回到本课实践，看哪一组数字在模拟其中哪一条，哪一组（左前缀、回表）需要另找手册章节或用 <code>EXPLAIN</code> 验证。记录：文档版本 8.4、访问日期 2026-11-11、实际打开的 URL、你亲自跑过的 <code>./test.sh</code> 输出。</p>
+<p>边界：教学实验只模拟语义和计数，不代表 InnoDB 的页内记录格式、change buffer、缓冲池刷新和优化器代价模型。</p>
+<h2 id="_16">自测题</h2>
+<p><strong>题 1</strong>：订单查询是 <code>WHERE user_id=? AND status=? AND created_at BETWEEN ? AND ?</code>。为什么 <code>(user_id, status, created_at)</code> 和 <code>(created_at, user_id, status)</code> 都能返回同一 4 行，但扫描行数差了近两个数量级？只按 <code>status=?</code> 查时，为什么即使用了覆盖索引也不高效？</p>
+<details><summary>答案</summary>
+
+- 联合索引按列的字典序排列。正确顺序能把「用户 + 状态 + 时间范围」收成一段连续叶子，教学模型里 examined=4、pages=4，计划是 `used_prefix=(user_id,status,created_at)`。
+- 错序索引的最左列是 `created_at`，同一条 SQL 只能在时间窗口上划区间，`user_id` 和 `status` 变成 residual。本次实验 examined=384、pages=28，命中仍是同一 4 行。sqlite 的计划是 `SEARCH ... idx_wrong (created_at>? AND created_at<?)`，看起来也在用索引。
+- 只按 `status` 查时，`(user_id, status, created_at)` 的最左列不在谓词里，不能二分定位。sqlite 给出 `SCAN orders USING COVERING INDEX idx_safe`：覆盖只说明不必回表，SCAN 说明要走完整条索引。教学模型里 safe 索性聚簇 SCAN（examined=2000）；naive 去扫二级树再回表（examined=9970）。使用索引、覆盖、高效，不是同一件事。
+
+</details>
+
+<p><strong>题 2</strong>：查「某用户已支付订单的金额」命中 20 行。为什么非覆盖索引会读 66 页、回表 20 次，而把 <code>amount</code> 加进索引后只需 5 页、回表 0 次？如果执行层忽略覆盖，会怎样？把 <code>amount</code> 插到 <code>(user_id, amount, status)</code> 这种位置有什么风险？</p>
+<details><summary>答案</summary>
+
+- 二级索引叶子默认是「索引键 + 主键」。要 `amount` 但不在索引里时，必须拿 `order_id` 再走聚簇点查。20 次点查可能落在许多不同主键页上，所以 pages=66、lookups=20、examined=165（回表过程中的键比较也被计入）。
+- 索引变成 `(user_id, status, amount)` 后，需要的列都在叶子上，COVERING，lookups=0、pages=5、examined=20。sqlite 文本从 `USING INDEX idx_safe` 变成 `USING COVERING INDEX idx_cover`。
+- naive 路径在已经覆盖的树上仍然 ALWAYS 回表，lookups=20、pages=65，和没有覆盖几乎一样。覆盖必须在执行时生效，不能只看 `CREATE INDEX` 语句。
+- 为覆盖追加的列应放在前缀右边。若把 `amount` 插到 `status` 前面，等值前缀在 `amount` 处被截断，`status` 可能变成 residual，Q1 这类查询会退化。覆盖是附加能力，不能破坏左前缀。
+
+</details>
+
+<p><strong>题 3</strong>：为什么「给所有列加索引」不能当默认策略？请用本次实验的写入和存储数字，以及选择性对照，说明一份合格报告应该同时包含哪些内容。顺序插入时，对半分裂和 15/16 右偏分裂对占用有什么影响？这和官方文档哪句话对应？</p>
+<details><summary>答案</summary>
+
+- 每条二级索引都是一棵要一起维护的 B+Tree。2000 行订单上，只保留主键：写页 2292、总页 149；加一条 Q1 需要的联合索引：写页 4720、总页 366（索引页 217）；再加 `(status)` 和 `(amount)` 两条：写页 9632、总页 829（索引页 680）。查询收益如果写的是 Q1 的 384 → 4，账单就必须把 149 → 366 或 829 一并写上。
+- `(status)` 对 `paid` 是 COVERING SEARCH，但 examined=1000（半张表）；`(user_id)` 查一个用户只需 20 行。低选择性索引「用上了」也不便宜，却确定地增加写放大。
+- 合格报告至少包括：目标查询的列顺序和计划（前缀、是否覆盖）、扫描行数/回表的前后对比、新增索引带来的页数或体积、写入路径的放大。这就是验收标准里的「查询收益和额外存储」。
+- 对半切后主键叶子填充率 0.502、249 个叶子、树高 4；右偏 15/16 切填充率 0.9328、134 个叶子、树高 3。对应 8.4 文档：顺序插入时页大约 15/16 满，随机插入在 1/2 到 15/16 之间。教学模型的数值不能直接当成 InnoDB 的实测，但方向是同一句话。
+
+</details>
+
+<h2 id="_17">推荐资源</h2>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/8.4/en/innodb-physical-structure.html">B+Tree与索引访问路径：参考文档 / 原始资料</a>，来源 dev.mysql.com｜文档｜英文｜进阶｜免费。阅读重点：「重点阅读多列索引与左前缀与覆盖索引和回表，用于核对本节点实验的语义和边界。」请注意该页正文实际详述的是页大小、顺序/随机插入的填充率和合并阈值；左前缀与回表要用本课实践和 <code>EXPLAIN</code> 一起核对。建议结合 practice98 逐项对照，并记下 8.4 版本与访问日期 2026-11-11。</li>
+</ul>
+<h2 id="_18">本课小结</h2>
+<ul>
+<li>B+Tree 类索引以页为单位组织有序键，范围访问、回表和页分裂共同影响读写成本。</li>
+<li><strong>多列索引与左前缀</strong>：等值条件从左连续使用，范围条件截断后面的列。实践中同一条 Q1，正确顺序 examined=4，错序 examined=384，结果却是同一 4 行。</li>
+<li><strong>覆盖索引和回表</strong>：二级叶子带主键，要的列都在索引里就可以不回聚簇树。20 行金额查询，非覆盖回表 20 次、66 页，覆盖 0 次、5 页；执行时若仍强制回表，覆盖收益会全部消失。</li>
+<li><strong>选择性、页分裂与写放大</strong>：<code>status='paid'</code> 即使用索引也要扫 1000 行，按 <code>user_id</code> 只需 20 行。顺序插入用 15/16 右偏分裂时填充率 0.9328、134 个叶子；对半切只有 0.502、249 个叶子。三条二级索引把写页 2292 推到 9632，总页 149 推到 829。</li>
+<li>验收：能解释索引列顺序；报告同时包含查询收益和额外存储。实践中 Q1 的 384 → 4 必须和 149 → 366（或 829）写在同一份报告里。</li>
+<li>误区：使用索引不代表查询必然高效。<code>USING INDEX</code> 可能只是一次大范围 SEARCH，甚至是一次 COVERING SCAN。</li>
+<li>权衡：索引提高读取能力，也增加写放大和维护开销。先为真正的查询前缀付钱，再谨慎决定要不要为覆盖加列，不要给低选择性列默认各建一条。</li>
+</ul>
+<p>学完后可以用三句话自检：这条查询在联合索引上用了多长的最左前缀，范围条件有没有截断后面的列；要的列能不能在二级叶子上取完，还是每行都在回表；新增的索引让扫描少了多少，又让页数和写入多了多少。三句都能答上来，并且能指出 practice98 里对应的那组数字，这一课就算过关。</p>
+<p>如果有一句答不上来，先回到对应的实验表，再回到文档里关于页和填充率的那几句，不要只把结论背下来。</p>
+<ul>
+<li>边界：业务场景为教学假设；配套代码是教学模型；InnoDB 细节以 8.4 官方文档为准。</li>
+</ul><div class="pn"><span><a href="97.html">← MySQL访问与连接管理</a></span><span>下一课 待更新</span></div></main></div></body></html>
