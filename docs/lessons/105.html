@@ -1,0 +1,286 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>105. 预写日志与崩溃恢复 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（105/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（9/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="cur" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 105 课 · 领域 G · 阶段 3</p><p class="dl"><a href="../files/105-g-wal.md" download>⬇ 本课 Markdown</a><a href="../files/practice105.tar.gz" download>⬇ 练习包 practice105.tar.gz</a></p><h1 id="105208">第 105/208 课：预写日志与崩溃恢复</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-wal</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Write Ahead Logging</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>存储引擎</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>g-kv</code>、<code>c-file</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Write Ahead Logging</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-%28WAL%29">预写日志与崩溃恢复：参考文档 / 原始资料</a>（github.com，文档；2026-11-12 访问该 URL 返回 301，并跳转到 <a href="https://github.com/meta/rocksdb/wiki/Write-Ahead-Log-%28WAL%29">meta/rocksdb wiki：Write Ahead Log</a> 返回 200。核对时一并打开了 <a href="https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-File-Format">Write Ahead Log File Format</a>、<a href="https://github.com/facebook/rocksdb/wiki/WAL-Recovery-Modes">WAL Recovery Modes</a>、<a href="https://github.com/facebook/rocksdb/wiki/WAL-Performance">WAL Performance</a>，同样是 301 后 200）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>WAL先记录可重放修改再应用到数据结构，恢复需识别完整记录、重复重放和截断尾部。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中出现的「内容后台」「文章标题」「发布确认」「阅读计数」等场景都是<strong>教学假设</strong>，用来让概念落地，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学服务，核心是一个名为 <code>WALEngine</code> 的<strong>教学引擎</strong>：它先把带长度和校验的记录追加到预写日志，再把修改应用到进程内的内存表；可以用 <code>sync=true</code> 或 <code>sync=false</code> 决定是否在确认前 <code>fsync</code>，并在写入的各个阶段注入崩溃，用安全解析或天真解析去做恢复。它<strong>不是</strong> RocksDB，<strong>不是</strong> Redis，也<strong>不是</strong>一个对外提供网络协议的服务器。教学记录格式是 <code>length</code>（4 字节）+ <code>crc32</code>（4 字节）+ <code>payload</code>，<strong>不是</strong> RocksDB 的 32 KiB 分块，也没有 <code>FULL</code> / <code>FIRST</code> / <code>MIDDLE</code> / <code>LAST</code> 分片、可回收日志号、列族、MANIFEST、SST flush 或 WAL 压缩。本课出现的丢失条数、截断原因、fsync 次数、耗时和 ops/s 只来自这次教学实验。日志先于内存表、<code>WriteOptions.sync</code> 默认不保证掉电安全、group commit 以及四种恢复模式，以 2026-11-12 核过的 RocksDB 文档为准：<a href="https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-%28WAL%29">Write Ahead Log</a>、<a href="https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-File-Format">Write Ahead Log File Format</a>、<a href="https://github.com/facebook/rocksdb/wiki/WAL-Recovery-Modes">WAL Recovery Modes</a>、<a href="https://github.com/facebook/rocksdb/wiki/WAL-Performance">WAL Performance</a>。也不要把本课的记录格式或崩溃注入，说成 RocksDB 的生产实现。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：接口回了「已保存」，掉电后却不一定还在</h3>
+<p>想象内容后台把一篇稿的标题写进存储。编辑点发布，实例回了 OK。过了一会儿进程被杀掉，重启后再读，标题还在，于是有人得出结论：这次写入已经持久了。可如果只是把日志写进了操作系统的页缓存，机器掉电时缓存会一起消失，那 20 次已经对调用方确认过的写入，恢复后一条都找不到。节点把这件事写成：WAL 先记录可重放的修改，再应用到数据结构；恢复时要认出完整记录，重复重放必须仍然得到同一份状态，并且把写坏的尾巴截掉，不能把它当成一次有效提交。</p>
+<p>「写成功了」要先问成功到哪一步：写进了进程内存，写进了页缓存，还是 <code>fsync</code> 到了持久介质。提交点就卡在你愿意等待的那一步，确认语义必须和这一步对齐。</p>
+<h3 id="_4">接上前置</h3>
+<p>上一课 <code>g-kv</code>（第 104 课）把单机 KV 的契约讲清楚了：空键、并发覆盖、容量和 TTL。那里已经对比过「只改内存」和「每次 <code>fsync</code> 写日志」的成本，但还没有回答：这条日志怎样才算写完，崩溃发生在半截记录时恢复该怎么办。本课的另一门前置是 <code>c-file</code>（第 37 课）：<code>write</code> 进入页缓存，<code>fsync</code> 才把缓存送到持久介质。把这两课接起来，就是预写日志要解决的问题——内存表很快，但进程一亡就空了；必须先留下一份可重放的日志，并且说清楚这份日志在哪种崩溃下还在。</p>
+<h3 id="_5">一次写入走进预写日志之后</h3>
+<p>一次同步确认的 <code>SET article:11:title = published-11</code>，在教学引擎里走这条路径：</p>
+<ol>
+<li>分配单调序号，把操作编码成一条记录：4 字节长度、4 字节 CRC-32，后面是操作码、序号、键和值。</li>
+<li>把完整记录 <code>write</code> 到日志文件（先进入页缓存）。</li>
+<li>若 <code>sync=true</code>，调用 <code>fsync</code>，这一刻才是掉电后仍能恢复的提交点。</li>
+<li>再把修改应用到内存表，然后向调用方返回 OK。</li>
+</ol>
+<p>如果第 3 步已经完成、第 4 步还没做就崩溃，内存表是空的，但日志里已有完整记录，恢复重放后标题会回来。如果第 2 步写完却还没 <code>fsync</code> 就掉电，这条记录会丢失；若此时已经向调用方确认，确认语义就和耐久策略不一致了。RocksDB 的官方概述写的是同一件事：每次更新写入内存表和磁盘上的 WAL，失败时用 WAL 重建内存表。默认配置会在每次用户写入后把 WAL flush 到操作系统，从而保证<strong>进程崩溃</strong>一致性；这和「掉电也安全」不是同一句话，后者要看 <code>WriteOptions.sync</code>。</p>
+<h3 id="_6">教学场景（教学假设）</h3>
+<p>下面用「文章标题发布」和「阅读计数加一」做例子。这是教学假设，用来让提交点、尾部截断和重放幂等变得可观察，不代表任何线上存储的内部实现。实验里的键是 <code>article:01:title</code>、<code>article:42:reads</code> 这类前缀。</p>
+<h3 id="_7">本课三条主线</h3>
+<ol>
+<li><strong>日志顺序和提交点</strong>：必须先把可重放记录写进日志，再改内存表；调用方听到的「已确认」，对应的是 <code>fsync</code> 之后（若策略要求同步）还是仅仅 <code>write</code> 之后。</li>
+<li><strong>校验、长度与尾部截断</strong>：恢复时只接受长度完整且校验通过的记录；写坏的尾巴要截掉，不能当成一次提交。</li>
+<li><strong>fsync 和重放幂等</strong>：<code>write</code> 成功不等于掉电安全；同一份日志重放两次，以及把增量操作记成「再加一次」，结果可能不再一样。</li>
+</ol>
+<h2 id="_8">学习目标</h2>
+<ul>
+<li>能解释日志顺序和提交点：为什么必须先写日志再改内存表，一次确认到底对应 <code>write</code> 还是 <code>fsync</code>，以及崩溃发生在写入的各个阶段时，恢复后该不该还能读到新标题。</li>
+<li>能独立完成：实现长度加校验的 KV WAL，在写入各阶段注入崩溃并恢复；损坏的尾巴不得被读成有效提交，写确认的语义必须和 <code>fsync</code> 策略一致。</li>
+</ul>
+<h2 id="_9">为什么后端要懂</h2>
+<p>内容后台里，标题发布和计数更新都会被当成「已经写下了」。如果存储只是把记录写进页缓存就返回 OK，进程被杀时看起来一切正常，掉电却会丢掉已经对上游确认过的写入。节点把「为什么要懂」写成一句话：为 KV 和数据库建立可验证持久性。后端要先能指出提交点在哪、尾部损坏时恢复会丢掉什么、重放会不会把计数加两次，才能决定发布路径要不要同步 <code>fsync</code>，以及计数是该把「加一」写进日志，还是该记下加完之后的绝对值。</p>
+<p>另一面是把「日志已经 write 成功」当成掉电安全。官方文档写得很直：<code>WriteOptions.sync</code> 默认是 <code>false</code>，这种模式下 WAL 写入不会同步到磁盘，「the WAL write is not crash safe」。本课实验会把这句话变成一组对照数字：同样 20 次已确认的写入，同步策略在掉电后丢失 0 条，不同步策略丢失 20 条；只杀进程时，不同步策略也能找回全部 20 条。没有这组对照，就分不清进程崩溃和机器掉电。</p>
+<h2 id="_10">核心知识点</h2>
+<h3 id="1">1. 日志顺序和提交点</h3>
+<p>先写日志、再改内存表，不是风格问题。内存表在进程里，崩溃后是空的；能够重建它的，只有已经到达提交点的那些日志记录。教学引擎把提交点定义为：在 <code>sync=true</code> 时，完整记录被 <code>fsync</code> 到持久映像的那一刻。从那之后，即使还没来得及写入内存表，恢复重放也会把标题找回来。</p>
+<p>实验先写入 10 篇标题，再对第 11 篇 <code>article:11:title = published-11</code> 在不同阶段注入崩溃，然后模拟掉电、用安全解析恢复：</p>
+<table>
+<thead>
+<tr>
+<th>崩溃点</th>
+<th>第 11 篇是否恢复</th>
+<th>是否截断</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>before_write</code>（还没动日志）</td>
+<td>否，仍是 10 把键</td>
+<td>否</td>
+<td>日志里根本没有这条记录</td>
+</tr>
+<tr>
+<td><code>partial_header</code>（只写下 2 个长度字节并已落到介质）</td>
+<td>否</td>
+<td>是，<code>short_header</code></td>
+<td>尾巴不够一条完整头</td>
+</tr>
+<tr>
+<td><code>partial_payload</code>（长度已写、正文不完整）</td>
+<td>否</td>
+<td>是，<code>short_body</code></td>
+<td>声明的长度超出文件剩余</td>
+</tr>
+<tr>
+<td><code>written_not_fsynced</code>（完整记录还在页缓存）</td>
+<td>否</td>
+<td>否</td>
+<td>掉电清空了页缓存，持久映像仍是 10 条</td>
+</tr>
+<tr>
+<td><code>fsynced_not_applied</code>（已 <code>fsync</code>，尚未写入内存表）</td>
+<td>是，值为 <code>published-11</code>，共 11 把键</td>
+<td>否</td>
+<td>提交点已过，重放补上了内存表</td>
+</tr>
+</tbody>
+</table>
+<p>这组对照把「提交点」说死了：只有完整记录到达持久映像之后，掉电恢复才承认这次发布。前四种崩溃都没有向调用方确认第 11 篇，丢失它和确认语义并不冲突。</p>
+<p>反例是先改内存表、再写日志，并且已经对调用方回了 OK。实验里内存表在崩溃前确实有 <code>article:11:title</code>，掉电恢复后这把键不在了，<code>lost_acked</code> 为真。这就是「先应用再记日志」加「提前确认」的代价：进程活着时谁都看见新标题，重启后标题失踪，而上游以为发布已经成功。</p>
+<p>RocksDB 的概述是同一条顺序：更新同时进入内存表和 WAL，用 WAL 在失败后重建内存表。本课没有实现它的列族、SST flush 和日志生命周期；只把「先留下可重放记录，提交点之后才能确认」这件事跑清楚。</p>
+<h3 id="2">2. 校验、长度与尾部截断</h3>
+<p>崩溃经常发生在一条记录写到一半。恢复程序若只看长度、不看校验，就可能把一段垃圾当成一次提交。教学记录的布局是：</p>
+<div class="codehilite"><pre><span></span><code>body_len: uint32     # crc32 + payload 的字节数
+crc32:    uint32     # 对 payload 做 CRC-32
+payload:  op、seq、key、value
+</code></pre></div>
+
+<p>安全解析的规则很短：剩下的字节不够 4 字节头，或者长度所声明的正文超出文件尾，或者算出来的 CRC 和存下的不一致，都把当前位置当作损坏尾巴，停下来，<strong>不把这条记录算作提交</strong>。这是在模拟「容忍尾部损坏」这一类恢复：不完整的最后一次写入被扔掉，已经完整的前缀保留。它不能区分「没写完」和「写完后被改坏」，官方文档在 <code>kTolerateCorruptedTailRecords</code> 里也写了这句启发式。</p>
+<p>对照实验用同一份损坏尾巴，比较安全解析和天真解析（只信长度、不校验）：</p>
+<ul>
+<li>第 11 次写入在 <code>partial_header</code> 处崩溃：尾巴剩 2 字节，安全解析恢复 10 条并截断（<code>short_header</code>），没有 <code>article:11:title</code>。天真解析同样拿不到第 11 篇，因为连长度都读不齐。</li>
+<li>在 <code>partial_payload</code> 处崩溃：尾巴剩 19 字节，安全解析恢复 10 条并截断（<code>short_body</code>），同样没有第 11 篇。</li>
+<li>在 10 条合法记录后面，追加一条长度完整、校验被改成 <code>0xDEADBEEF</code>、键为 <code>article:forged:title</code>、值为 <code>pwned-title</code> 的伪记录。安全解析恢复 10 条，原因是 <code>bad_checksum</code>，<strong>没有</strong>这把伪造键；天真解析接受了 11 条，读到 <code>pwned-title</code>。验收标准「损坏尾部不误读为有效提交」，指的就是这一组对照。</li>
+<li>若损坏出现在文件中部、后面还有一条合法的 <code>article:99:title</code>：安全解析在校验失败处停住，保留前 5 条，<strong>不会</strong>跳过损坏段去取第 99 篇；天真解析则会读到伪造键，也读到第 99 篇。这接近官方的 <code>kPointInTimeRecovery</code>（遇错即停在一致时点，RocksDB 从 6.6 起把它作为默认）和「跳过任意损坏、尽量多救」的差别。教学引擎没有实现四种模式的完整枚举，只把「停在第一个坏点」和「不校验继续往下读」跑出来。</li>
+</ul>
+<p>RocksDB 生产日志的记录头是 4 字节 CRC、2 字节长度、1 字节类型，再按 32 KiB 分块，超长记录会拆成 <code>FIRST</code> / <code>MIDDLE</code> / <code>LAST</code>。那是另一套格式。本课要带走的是同一条原则：长度用来框定记录，校验用来拒绝损坏，尾巴上的不完整或校验失败不得变成一次提交。</p>
+<h3 id="3-fsync">3. fsync 和重放幂等</h3>
+<p><code>write</code> 把字节送进页缓存，进程被杀时内核通常还留着这些页，所以只杀进程往往什么都不丢；掉电会清空没来得及 <code>fsync</code> 的缓存。官方文档把默认的 <code>WriteOptions.sync = false</code> 写明为「not crash safe」，<code>sync = true</code> 则在返回调用方之前对 WAL 做 <code>fsync</code>。教学引擎用同一组 20 次已确认的标题写入做对照（<code>ack_vs_fsync</code>，<code>n = 20</code>）：</p>
+<table>
+<thead>
+<tr>
+<th>策略与崩溃</th>
+<th>已确认</th>
+<th>其中已 <code>fsync</code></th>
+<th>恢复到</th>
+<th>丢失已确认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sync=true</code>，掉电</td>
+<td>20</td>
+<td>20</td>
+<td>20</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>sync=false</code>，掉电</td>
+<td>20</td>
+<td>0</td>
+<td>0</td>
+<td>20</td>
+</tr>
+<tr>
+<td><code>sync=false</code>，只杀进程</td>
+<td>20</td>
+<td>0</td>
+<td>20</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>sync=true</code>，只杀进程</td>
+<td>20</td>
+<td>20</td>
+<td>20</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>验收标准「写确认语义与 fsync 策略一致」，读的就是这张表：如果你在 <code>sync=false</code> 时也向调用方确认，就必须承认掉电可能丢掉这 20 条；如果你向调用方保证掉电后还在，确认之前就要 <code>fsync</code>。只拿「杀进程后数据还在」当耐久证明，会把默认的异步写误写成掉电安全。</p>
+<p>恢复还要把同一份日志再应用一遍，结果必须仍然正确。标题连续写成 <code>v1</code>、<code>v2</code>、<code>Weekly digest (revised)</code>，再删除一把本来就不存在的键，日志里共 4 条记录。安全解析第一次得到 <code>Weekly digest (revised)</code>，再解析一次还是这个值，把同一批记录应用到已经恢复好的状态上仍是这个值。<code>SET</code> / <code>DEL</code> 是最后一次写入获胜，天然可重放。</p>
+<p>计数就不同了。检查点里 <code>article:42:reads</code> 已经是 <code>5</code>。之后一次加一已经应用到内存（当前是 <code>6</code>），新 WAL 段里留下的是一条天真的 <code>INCR +1</code>。若错误地把这条增量重放到「已经加过一」的快照上，计数变成 <code>7</code>（<code>double_counted</code> 为真）。正确做法有两种：从检查点 <code>5</code> 重放这条增量，得到 <code>6</code>；或者按序号跳过已经包含在快照里的记录，结果也是 <code>6</code>。更稳的日志写法，是把「加一」记成绝对值 <code>SET 6</code>：无论从检查点 <code>5</code> 重放，还是误放到已经是 <code>6</code> 的快照上，结果都是 <code>6</code>。实验里 <code>safe_incr_as_set</code> 的两组恢复都是 <code>6</code>。这就是「重放幂等」：日志里记下的应当是再执行一次也不会越界的操作，或者恢复时用序号把已经应用过的记录跳掉。</p>
+<h2 id="_11">常见误区</h2>
+<p>节点写明的误区就一句：日志 <code>write</code> 成功不自动代表掉电安全。上面那张表是它的实验版。<code>sync=false</code> 时，20 次写入都已经对调用方返回 OK，页缓存里也有完整记录，只杀进程可以找回全部 20 条；掉电之后恢复 0 条，丢失的正是这 20 次已确认写入。RocksDB 默认配置保证的是进程崩溃一致性（每次用户写入后 flush WAL 到操作系统），不是默认 <code>fsync</code>。把「write 返回了」写成「已经持久」，会在掉电演练里才被发现。</p>
+<p>相邻的两个误解也值得挡住。其一是把「杀进程后还在」和「掉电后还在」当成同一件事，对照实验已经把它们拆开。其二是看见长度完整就把尾巴当成提交，不校验 CRC：伪造记录会被读成 <code>pwned-title</code>。恢复时宁肯丢掉最后一条不完整写入，也不能把垃圾当发布成功。</p>
+<h2 id="_12">设计权衡</h2>
+<p>节点给出的权衡是：逐次同步降低丢失窗口，group commit 提高吞吐但增加等待。逐次 <code>fsync</code> 的含义很直接：每一次确认都等到持久介质，掉电窗口可以收到 0，代价是每次写入都付一次同步。本课 4 个线程共 200 次同步写入，逐次同步打出 200 次 <code>fsync</code>，耗时 0.049137 秒，约 4070.2 ops/s，每次约 0.2457 毫秒，其中 <code>fsync</code> 本身累计 0.041753 秒；掉电后 200 条全部找回。</p>
+<p>Group commit 把已经在等待的并发写入合并，一次写日志、一次 <code>fsync</code>，让多笔确认分摊同一次 I/O。教学引擎按 RocksDB 文档里的思路做<strong>机会式</strong>合并：不主动拖延以凑大批次（官方写明最大分组 1 MB，并且「won't try to increase batch size by proactive delaying the writes」）。本次运行合并成 100 个批次，单批最多 3 条，<code>fsync</code> 次数降到 100，耗时 0.032282 秒，约 6195.4 ops/s，仍全部找回 200 条。<code>fsync</code> 次数是逐次策略的 2.0 倍差，墙钟时间是 1.52 倍差。这台机器上单次 <code>fsync</code> 很便宜，线程还来不及堆成很大的组，所以加速是中等的；换到更慢的介质上，合并的收益通常会更明显。调用方的「增加等待」，指的是你可能要等到同组里那一次共享的 <code>fsync</code> 结束，而不是再额外睡一笔固定延迟。</p>
+<p>发布路径若必须保证掉电后标题还在，就应该在确认前同步，并接受延迟；可以用 group commit 把并发发布的同步成本摊薄。允许短暂丢失的草稿路径，才适合 <code>sync=false</code>。两种策略可以并存，但不能用其中一种的确认语去承诺另一种的耐久。</p>
+<h2 id="kv-wal">动手实践：实现长度加校验的 KV WAL，在写入各阶段注入崩溃并恢复</h2>
+<p>实践目录是 <code>practice105/</code>，只依赖 Python 3 标准库。核心类型是 <code>WALEngine</code>（长度加校验的日志、<code>DurableFile</code> 把页缓存和持久映像分开、可在写入各阶段注入崩溃、安全或天真两种解析、机会式 group commit）。它不是 RocksDB，也不是 redis-py。</p>
+<h3 id="0">0. 文件结构</h3>
+<div class="codehilite"><pre><span></span><code>practice105/
+├── engine.py           # WALEngine、DurableFile、parse_safe / parse_naive
+├── app.py              # 全部对照实验
+├── test_wal.py         # 验收断言，并把结果写入 results.json
+├── test.sh             # python3 test_wal.py
+└── results.json        # 本次 ALL_CHECKS_PASSED 的完整输出
+</code></pre></div>
+
+<p>在该目录执行：</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>成功时第一行是 <code>ALL_CHECKS_PASSED</code>，第二行是本次摘要。下面的数字都来自这次运行生成的 <code>results.json</code>（Python 3.13.5，文档核对日期 2026-11-12）。换一台机器或再跑一次，耗时和 ops/s 会有波动，语义断言不应翻盘。</p>
+<h3 id="1_1">步骤 1：准备数据与目标操作</h3>
+<p>键使用 <code>article:</code> 这类教学前缀。先写入 10 篇标题，再对第 11 篇在不同阶段注入崩溃并掉电恢复；然后用伪造校验的尾巴对比两种解析；再用 20 次确认过的写入对照 <code>sync</code> 与掉电 / 杀进程；最后看同一份日志的重复重放，以及 4 线程 200 次同步写入的逐次 <code>fsync</code> 和 group commit。目标操作就是节点要求的那件事：实现长度加校验的 KV WAL，在写入各阶段注入崩溃并恢复。</p>
+<h3 id="2_1">步骤 2：要比较的几条路径</h3>
+<ol>
+<li>第 11 次写入分别在 <code>before_write</code>、<code>partial_header</code>、<code>partial_payload</code>、<code>written_not_fsynced</code>、<code>fsynced_not_applied</code> 崩溃，掉电后能否读到 <code>published-11</code>。</li>
+<li>先改内存表再写日志、并且提前确认，掉电后已确认的标题是否丢失。</li>
+<li>残缺头、残缺正文、错误校验的尾巴：安全解析不得读出伪造标题，天真解析会读到 <code>pwned-title</code>。</li>
+<li>文件中部损坏后再跟一条合法记录，安全解析是否停在坏点。</li>
+<li><code>sync=true</code> / <code>false</code> 对上掉电和只杀进程，已确认写入各丢失多少。</li>
+<li>同一份 <code>SET</code> 日志重放两次；天真的 <code>INCR</code> 对已应用快照是否变成 <code>7</code>，绝对值 <code>SET 6</code> 是否仍是 <code>6</code>。</li>
+<li>4 线程 200 次同步写入：逐次 <code>fsync</code> 对上机会式 group commit。</li>
+</ol>
+<h3 id="3">步骤 3：运行并解读几组对照（真实输出）</h3>
+<p>本次摘要如下（完整字段见 <code>results.json</code>）：</p>
+<div class="codehilite"><pre><span></span><code>ALL_CHECKS_PASSED
+SUMMARY before_write_11=False partial_header_11=False partial_payload_11=False written_not_fsynced_11=False fsynced_not_applied_11=True apply_first_lost=True forged_safe=False forged_naive=True naive_forged_value=pwned-title mid_safe_99=False sync_true_pl_lost=0 sync_false_pl_lost=20 sync_false_kill_lost=0 title=Weekly digest (revised) naive_incr=7 skip=6 safe_incr=6 per_fsync=200 group_fsync=100 per_s=0.049137 group_s=0.032282 per_ops=4070.2 group_ops=6195.4
+</code></pre></div>
+
+<p>读这行摘要时可以按三条主线拆开。提交点：前四个崩溃点都没有恢复第 11 篇，只有已经 <code>fsync</code>、尚未写入内存表的那一次找回了 <code>published-11</code>；先应用后记日志则把一次已确认写入弄丢。尾部：安全解析拒绝伪造键，天真解析读到 <code>pwned-title</code>；中部损坏时安全解析也不会跳去第 99 篇。确认语义：同步写掉电丢失 0，异步写掉电丢失 20，异步写只杀进程丢失 0。重放：标题最终是 <code>Weekly digest (revised)</code>；天真增量在错误快照上变成 <code>7</code>，跳过已应用序号或改记绝对值后是 <code>6</code>。合并提交：200 对 100 次 <code>fsync</code>，0.049137 秒对 0.032282 秒，4070.2 对 6195.4 ops/s。</p>
+<h3 id="4">步骤 4：对照验收标准</h3>
+<div class="codehilite"><pre><span></span><code># 验收 1：损坏尾部不误读为有效提交
+# partial_header / partial_payload：安全解析恢复 10 条并截断，没有 article:11:title。
+# 校验被改坏的尾巴：安全解析 10 条，原因 bad_checksum，没有 article:forged:title；
+# 天真解析 11 条，读到 pwned-title。
+# 中部损坏后再跟合法记录：安全解析停在坏点，没有 article:99:title。
+
+# 验收 2：写确认语义与 fsync 策略一致
+# sync=true 掉电：20 次确认，20 次已 fsync，恢复 20，丢失已确认 0。
+# sync=false 掉电：20 次确认，0 次已 fsync，恢复 0，丢失已确认 20。
+# sync=false 只杀进程：恢复 20，丢失 0。不能把这组数字写成掉电后的耐久保证。
+</code></pre></div>
+
+<h3 id="5">步骤 5：自己动手的扩展练习</h3>
+<p>在 <code>engine.py</code> 里加一种「遇到中部损坏就跳过、继续扫描后面合法记录」的解析，对同一份 <code>midfile_then_valid</code> 映像跑一遍，看看它会不会把 <code>article:99:title</code> 救回来，以及会不会把伪造键也一起收下。把它和本课安全解析的「停在坏点」对照着读官方的 <code>kSkipAnyCorruptedRecords</code> 与 <code>kPointInTimeRecovery</code>，不要把「多救回一条」自动写成更安全。</p>
+<h3 id="6">步骤 6：和生产引擎的对应关系（不要记错边界）</h3>
+<ul>
+<li>RocksDB 每次更新写入内存表和 WAL；默认 flush WAL 保证的是进程崩溃一致性。<code>WriteOptions.sync</code> 默认 <code>false</code>，该模式不是掉电安全；<code>sync=true</code> 才在返回前 <code>fsync</code>。</li>
+<li>生产日志是 32 KiB 分块加 CRC / 长度 / 类型，不是本课的 4+4 字节头。不要拿教学格式去对二进制 dump。</li>
+<li>恢复模式有四种。本课安全解析接近「容忍尾部损坏」和「在坏点停住」；没有实现绝对一致性或跳过任意损坏的完整策略。</li>
+<li>Group commit 是把已经并发的、可合并的写入合成一次 I/O，不主动拖延凑批，最大分组 1 MB。本课是机会式合并的教学模型，批次大小取决于线程是否撞在同一次 <code>fsync</code> 上。</li>
+</ul>
+<h2 id="_13">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。2026-11-12 实际打开的页面如下。</p>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-%28WAL%29">Write Ahead Log</a>（节点给出的入口；当日 301 到 <code>meta/rocksdb</code> 后 200）：更新进入内存表和 WAL，默认配置下每次用户写入后 flush WAL，保证进程崩溃一致性；WAL 在列族之间共享，flush 之后才进入归档与删除。本课没有实现这一段生命周期。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-File-Format">Write Ahead Log File Format</a>：记录头是 CRC、长度、类型，按 32 KiB 分块，超长记录分片。用它来对照本课「长度 + 校验、损坏则拒绝」的原则，而不是对照字段宽度。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/WAL-Recovery-Modes">WAL Recovery Modes</a>：四种模式的含义，以及「尾部损坏和未写完无法区分」。从 6.6 起默认是 <code>kPointInTimeRecovery</code>。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/WAL-Performance">WAL Performance</a>：<code>sync=false</code> 不是 crash safe；<code>sync=true</code> 在返回前 <code>fsync</code>；group commit 的合并规则、不主动延迟、最大 1 MB。文中还提到新建 WAL 上每次 <code>fsync</code> 至少两次 I/O（数据和元数据），以及小写入可能带来很高的写放大。本课没有单独测量元数据 I/O 和写放大。</li>
+</ul>
+<p>阅读时记下三件事：你打开页面的日期和最终 URL，<code>sync</code> 默认值到底保证哪一种崩溃，以及恢复模式在尾部损坏时准备丢掉什么。这三件事能把「可验证持久性」带进后面的存储引擎课，而不是只留下一句「有 WAL 就不会丢」。</p>
+<h2 id="_14">自测题</h2>
+<p><strong>1.</strong> 一次 <code>sync=true</code> 的标题发布，在 <code>fsync</code> 已经完成、内存表还没更新时进程崩溃并掉电。恢复之后能不能读到新标题？若同样的崩溃发生在 <code>write</code> 已完成但尚未 <code>fsync</code> 时，结果有什么不同？</p>
+<p><strong>答案：</strong> 能读到。提交点是完整记录到达持久映像的那一刻，内存表可以靠重放补回。实验里 <code>fsynced_not_applied</code> 恢复到 <code>published-11</code>，共 11 把键。若崩溃在 <code>written_not_fsynced</code>，掉电会清空页缓存，持久映像里没有这条记录，恢复后没有第 11 篇。这两种情况都还没有向调用方确认，所以「找不到第 11 篇」并不违背确认语义；一旦提前确认，就会变成验收里要挡住的那种丢失。</p>
+<p><strong>2.</strong> 日志尾巴上有一条长度完整、校验错误、值为 <code>pwned-title</code> 的记录。安全的恢复应当怎样处理？只信任长度、不校验，会看到什么？这和「损坏尾部不误读为有效提交」有什么关系？</p>
+<p><strong>答案：</strong> 安全解析在校验失败处截断，保留前面 10 条完整记录，不接受伪造键，原因是 <code>bad_checksum</code>。天真解析会收下第 11 条，读到 <code>pwned-title</code>。验收要求的正是前者：尾巴可以丢掉，但不能把损坏记录当成一次已提交的发布。官方的 <code>kTolerateCorruptedTailRecords</code> 也把尾部错误当成不完整写入丢掉；它同时提醒，这种方式区分不了「没写完」和「写完后被改坏」。</p>
+<p><strong>3.</strong> 为什么「日志已经 <code>write</code> 成功」不能写成掉电安全？若 20 次写入都已对调用方确认，<code>sync=false</code> 时掉电会怎样，只杀进程又会怎样？发布路径若要保证掉电后还在，确认点应该放在哪里？</p>
+<p><strong>答案：</strong> <code>write</code> 只进入页缓存，掉电会丢掉尚未 <code>fsync</code> 的字节。实验里 <code>sync=false</code> 的 20 次确认在掉电后全部丢失（恢复 0，<code>durable_acked</code> 为 0），只杀进程则 20 条都能找回。RocksDB 默认的 <code>WriteOptions.sync = false</code> 被明确写成 not crash safe；默认配置保证的是进程崩溃一致性。若发布路径要保证掉电后标题还在，必须在确认之前 <code>fsync</code>（可用 group commit 摊薄并发时的同步成本），不能用「杀进程后还在」来证明这一点。</p>
+<h2 id="_15">推荐资源</h2>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Write-Ahead-Log-%28WAL%29">预写日志与崩溃恢复：参考文档 / 原始资料</a>（github.com，英文文档，进阶，免费）。重点阅读日志顺序和提交点与校验、长度与尾部截断，用于核对本节点实验的语义和边界。2026-11-12 该入口 301 到 <a href="https://github.com/meta/rocksdb/wiki/Write-Ahead-Log-%28WAL%29">meta/rocksdb 的同一页</a> 后返回 200；同一次核对建议打开 File Format、WAL Recovery Modes 和 WAL Performance 三页。</li>
+</ul>
+<h2 id="_16">本课小结</h2>
+<ul>
+<li>WAL 先记下可重放的修改，再应用到内存表。掉电后能找回的，是已经到达提交点的记录：在 <code>sync=true</code> 时，就是完整记录被 <code>fsync</code> 的那一刻。实验里只有 <code>fsynced_not_applied</code> 找回了第 11 篇标题；先改内存表再记日志，会把一次已确认的发布弄丢。</li>
+<li>恢复必须认出完整记录，并把损坏尾巴截掉。安全解析在短头、短正文和 <code>bad_checksum</code> 处停住，拒绝 <code>pwned-title</code>；天真解析会把伪造记录当成提交。中部损坏时，本课选择停在坏点，不跳去后面的第 99 篇。</li>
+<li><code>write</code> 成功不等于掉电安全：<code>sync=false</code> 时 20 次已确认写入在掉电后丢失 20 条，只杀进程则丢失 0 条。<code>SET</code> 重放两次仍是 <code>Weekly digest (revised)</code>；天真的 <code>INCR</code> 在已应用快照上变成 <code>7</code>，记绝对值或按序号跳过则是 <code>6</code>。逐次同步 200 次 <code>fsync</code> 用 0.049137 秒换来丢失窗口 0；group commit 把 <code>fsync</code> 降到 100 次、耗时 0.032282 秒，调用方要等到那一次共享的同步结束。</li>
+</ul>
+<p>学完后可以用三句话自检：第 11 篇标题在五个崩溃点里哪一个能被掉电恢复，为什么提交点不在内存表更新；损坏尾巴怎样才不算有效提交，<code>pwned-title</code> 是被谁读出来的；为什么 20 条已确认写入在异步掉电时会丢光，而同一份日志里 <code>INCR</code> 和 <code>SET 6</code> 的重放结果不同。三句都能答上来，并且能指出 practice105 里对应的那组数字，这一课就算过关。</p>
+<p>如果有一句答不上来，先回到对应的实验表，再回到官方文档里关于默认 flush 只保证进程崩溃一致性、<code>sync=false</code> 不是 crash safe、尾部损坏与未写完无法区分、以及 group commit 不主动拖延的那几句，不要只把「有 WAL 就不会丢」这句话背下来。</p>
+<p>写作笔记时顺便记下三件事：你核对文档的日期和实际打开的页面，这套存储的确认语义和 <code>fsync</code> 策略有没有写成可验收的句子，以及恢复时损坏尾巴是被截断还是被当成了提交。这三件事能把本课的边界说明带进后面的存储引擎课，而不是只留下一句「先写日志」。</p><div class="pn"><span><a href="104.html">← KV语义、索引与并发</a></span><span>下一课 待更新</span></div></main></div></body></html>
