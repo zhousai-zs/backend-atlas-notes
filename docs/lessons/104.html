@@ -1,0 +1,459 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>104. KV语义、索引与并发 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（104/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（8/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="cur" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li class="todo">105. 预写日志与崩溃恢复 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li class="todo">106. LSM Tree、SST与压实 <em>待更新</em></li><li class="todo">107. RocksDB集成与读写调优 <em>待更新</em></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 104 课 · 领域 G · 阶段 3</p><p class="dl"><a href="../files/104-g-kv.md" download>⬇ 本课 Markdown</a><a href="../files/practice104.tar.gz" download>⬇ 练习包 practice104.tar.gz</a></p><h1 id="104208-kv">第 104/208 课：KV语义、索引与并发</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-kv</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>KV Storage Model</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>缓存与KV</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>a-hash</code>、<code>e-lock</code>、<code>g-cache</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>KV Storage Model</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://rocksdb.org/docs/">KV语义、索引与并发：参考文档 / 原始资料</a>（rocksdb.org，文档；2026-11-12 访问该 URL 返回 200，并跳转到 <a href="https://rocksdb.org/docs/getting-started.html">Getting started</a>；完整开发者文档在 <a href="https://github.com/facebook/rocksdb/wiki">RocksDB wiki</a>）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>KV系统不只是set/get接口，还需定义键空间、值上限、并发可见性、过期和失败语义。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中出现的「内容后台」「文章标题」「发布状态」「阅读计数」「编辑会话令牌」等场景都是<strong>教学假设</strong>，用来让概念落地，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学服务，核心是一个名为 <code>KVEngine</code> 的<strong>教学引擎</strong>：它在进程内用哈希表保存键值，用分片锁保护同一把键的读写，给每次操作分配单调序号作为线性化点，并按约定计费、拒绝或淘汰、以及按两种过期模式处理 TTL。它<strong>不是</strong> RocksDB，<strong>不是</strong> Redis，也<strong>不是</strong>一个对外提供网络协议的服务器。本课没有实现 LSM、MemTable 跳表、SST、WAL 的生产格式、列族、WriteBatch、RocksDB 的写停顿状态机，也没有实现网络复制。本课出现的撕裂次数、丢失更新、耗时、ops/s 和字节数只来自这次教学实验。CRUD 的 NotFound / Delete 空键、哈希 memtable 与并发插入、TTL 在 compaction 前仍可能被读到、以及内存组成与写停顿，以 2026-11-12 核过的 RocksDB 文档为准：<a href="https://rocksdb.org/docs/">rocksdb.org/docs</a>、<a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations">Basic Operations</a>、<a href="https://github.com/facebook/rocksdb/wiki/MemTable">MemTable</a>、<a href="https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB">Memory usage in RocksDB</a>、<a href="https://github.com/facebook/rocksdb/wiki/Write-Stalls">Write Stalls</a>、<a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ">RocksDB FAQ</a>。也不要把本课的分片锁，说成 RocksDB 默认的写路径实现。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="set-get">一个直觉：set / get 不是一份完整契约</h3>
+<p>想象内容后台把「文章 42 的标题」「是否已发布」「这篇稿此刻的阅读计数」放进一套 KV。编辑点保存，实例回了 OK；列表页再读一次，按理该看到完整的新标题。可如果这次写入是按字节往槽里填的，并发读就可能看到半截字符串。如果「键不存在」被当成一次故障而不是一种正常状态，监控会被空键刷爆。如果内存预算只按 value 的字节来算，一百个短标题就会把上限用穿。如果压测报告只写「每秒三十万次」，却不写键有多长、命中率多少、读写各占多少，下一次换了访问模式，这个数字就不能再用。</p>
+<p>KV 对外看起来是 <code>set</code> / <code>get</code> / <code>del</code> / <code>exists</code> 四件事，真正要验收的是契约：键空间和值上限、不存在时返回什么、并发覆盖谁赢、写成功之后下一次读从哪个点开始可见、TTL 到期后还能否读到、容量满了是拒绝还是淘汰。节点把这件事写成：为高性能 KV 项目建立可验收契约。</p>
+<h3 id="_3">接上前置</h3>
+<p><code>a-hash</code> 讲过哈希如何把键映射到槽位，点查询可以做到与键数量近似无关，范围扫描却往往要另做结构。<code>e-lock</code> 讲过互斥、持锁范围和死锁。<code>g-cache</code> 讲过旁路缓存、TTL 与容量；<code>g-redis</code> 和 <code>g-persistence</code> 则已经从命令成本和持久化窗口靠近了同一类存储。本课把镜头拉回单机内核本身：先把 set / get / del / exists 的语义、线性化点和容量约定写清楚，再谈索引与锁怎么撑起这些约定。持久化会重新作为权衡出现，但本课不再重复 RDB / AOF 的恢复窗口。</p>
+<h3 id="kv">一次写入走进 KV 之后</h3>
+<p>在教学引擎里，一次 <code>set</code> 大致走这样一条路径：</p>
+<ol>
+<li>用哈希把键映射到某一个分片，只持有这一片的锁（全局锁模式下则持有同一把大锁）。</li>
+<li>在锁内分配一个单调递增的序号，这就是本次操作的<strong>线性化点</strong>：序号更晚的读，必须看到这次写，或看到比它更晚的写。</li>
+<li>若这把键已经到期，按过期模式决定是立刻删除，还是先打标记、等压缩再删。</li>
+<li>按「键字节 + 值字节 + 每条固定开销」计费；超过容量则按约定拒绝或淘汰。</li>
+<li>把完整的新值一次性放进哈希槽，更新版本号，然后释放锁。可选的预写日志在这之后才落到文件。</li>
+</ol>
+<p>RocksDB 的生产路径不同：写入通常先进入 MemTable，并可选择写 WAL；<code>Get</code> 找不到键时返回 <code>NotFound</code> 状态，而不是把它当成一次崩溃；删除一个本来就不存在的键也不是错误。默认写是异步的，调用返回只表示数据已经交给操作系统，<code>WriteOptions.sync = true</code> 才会等到持久介质。这些句子来自官方 Basic Operations 与 FAQ，本课用教学内核去对齐「可见性、失败语义、容量约定」，而不是去复刻 LSM。</p>
+<h3 id="_4">教学场景（教学假设）</h3>
+<p>下面把内容后台的三样东西当作例子：文章标题（会被覆盖、会被读到半截就不合格）、阅读计数（不能在并发下丢更新）、编辑会话令牌（带 TTL，到期后的可见性必须说清）。它们只用于把契约落到一次可运行的实验上。</p>
+<h3 id="_5">本课三条主线</h3>
+<ol>
+<li><strong>CRUD 与不存在状态</strong>：空键是正常结果，删除空键要幂等，并发覆盖要定义谁赢，读写要有明确的线性化点。</li>
+<li><strong>哈希索引和分片锁</strong>：点查询走哈希槽；不同键可以并行，同一把键必须串行；不要把教学引擎的锁写成 RocksDB 的默认实现。</li>
+<li><strong>TTL、容量上限和内存计费</strong>：计费要包含键和元数据；满了是拒绝还是淘汰必须事先写清；TTL 到期后是否立即对读不可见，也是契约的一部分。</li>
+</ol>
+<h2 id="_6">学习目标</h2>
+<ul>
+<li>能解释 CRUD 与不存在状态：空键返回的是「未找到」而不是一次故障，删除空键仍然成功，覆盖写从哪一个线性化点开始对后续读可见，以及并发下最后写入为何必须是完整值。</li>
+<li>能独立完成：实现单机 KV 内核，支持 set / get / del / exists，并定义并发覆盖行为；在容量达到上限时按约定拒绝或淘汰，压测数字旁边写清键值大小、命中率和读写比例。</li>
+</ul>
+<h2 id="_7">为什么后端要懂</h2>
+<p>内容后台里，标题、发布标记和计数会被高频读写。接口看起来只是「写进去、读出来」，可一旦把空键当成故障、把「回了 OK」理解成「任何并发读都已经看到完整新值」、或把内存预算理解成「value 有多少字节」，线上就会在很普通的访问模式里出错：监控被空键刷掉，读者看到半截标题，或者短键把实例的内存打满。节点把「为什么要懂」写成一句话：为高性能 KV 项目建立可验收契约。后端要先能说出这套存储在不存在、并发、过期和失败时保证什么，才能决定标题路径能不能直接覆盖、计数路径该用比较并交换还是原子递增，以及会话令牌到期后还准不准被读到。</p>
+<p>另一面是把压测数字当成契约本身。同一套内核，键从 64 字节换成 1 KiB、命中率从 80% 降到 20%、读多写少换成各一半，数字都会变。官方文档和本课实验都在强调：报告一次性能，必须同时写下键值大小、命中率和读写比例。没有这三项，ops/s 不能在两个场景之间搬用。</p>
+<h2 id="_8">核心知识点</h2>
+<h3 id="1-crud">1. CRUD 与不存在状态</h3>
+<p>先把四件事的返回值写死，再谈并发。RocksDB 的 Basic Operations 把键和值都定义成任意字节数组，<code>Put</code> 在键已存在时覆盖旧值，值的大小必须小于 4GB。<code>Get</code> 找不到键时返回 <code>NotFound</code>——这是一种正常状态，不是异常崩溃。<code>Delete</code> 的注释写得很明确：键本来就不存在，也不是错误。FAQ 还确认 <code>Put</code> / <code>Write</code> / <code>Get</code> / <code>NewIterator</code> 是线程安全的。多键要一起成功或一起失败，应走 <code>WriteBatch</code>，而不是先 <code>Put</code> 再 <code>Delete</code>、指望两次调用之间进程不会倒下。</p>
+<p>教学引擎按同一组语义实现，并用文章标题跑通：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>结果（practice104）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对还不存在的 <code>article:42:title</code> 做 <code>get</code> / <code>exists</code></td>
+<td>状态是 <code>not_found</code>，<code>exists</code> 为假</td>
+</tr>
+<tr>
+<td>删除这把还不存在的键</td>
+<td>状态是 <code>ok</code>，<code>found</code> 为假（幂等）</td>
+</tr>
+<tr>
+<td>第一次 <code>set</code> 为 <code>Weekly digest</code></td>
+<td>成功，版本 1，随后 <code>get</code> 读到该标题</td>
+</tr>
+<tr>
+<td>再 <code>set</code> 为 <code>Weekly digest (revised)</code></td>
+<td>仍成功，但是一次覆盖（<code>created</code> 为假），版本 2</td>
+</tr>
+<tr>
+<td>删除后再 <code>get</code> / <code>exists</code></td>
+<td>又是 <code>not_found</code>，<code>exists</code> 为假</td>
+</tr>
+<tr>
+<td>再删一次</td>
+<td>仍然是 <code>ok</code></td>
+</tr>
+</tbody>
+</table>
+<p>对调用方来说，「从未写过」和「已经被删掉」在接口上可以是同一种 <code>not_found</code>。内部若要保留墓碑，那是实现细节，不应泄露成「删除失败」。把空键当异常抛出，是本课首先要挡住的误用。</p>
+<p>并发覆盖必须再补两条约定。第一，同一把键上的两个 <code>set</code>，后一个线性化点覆盖前一个，并且读到的必须是完整值，不能是前缀。第二，<code>get</code> 加 <code>set</code> 并不是一次线性化操作：中间的缝隙里，别人可以插进来。</p>
+<p>无锁、按字符慢慢写入的对照实现里，80 字节的标题在并发读下被看到 158 次撕裂，样本是 <code>"A"</code>、<code>"AA"</code>、<code>"AAA"</code> 这样的前缀；写完之后最终值是完整的，但过程不合格。换成 <code>KVEngine</code> 之后，15 个读线程加上两个写线程（各写 80 次 <code>A*80</code> 或 <code>B*80</code>）看到的只有这两个完整值，撕裂次数是 0，最终版本是 160，也就是两次写入次数之和。线性化点用序号表示：先 <code>set</code> 成 <code>draft</code> 的序号是 1，紧接着的 <code>get</code> 是 2，读到 <code>draft</code>；另一个线程在 <code>set</code> 返回之后再 <code>get</code>，序号 3 然后 4，读到的是 <code>published</code>。</p>
+<p>阅读计数把「覆盖语义」和「计数语义」分开。4 个线程各做 100 次「先 <code>get</code> 再 <code>set(+1)</code>」，期望是 400，naive 路径只剩 100，其余更新被盖掉。同样的 400 次增加，比较并交换（失败就重试，这次重试了 596 次）和锁内 <code>incr</code> 都得到 400。标题可以直接 last-writer-wins，计数不行，这就是要把并发覆盖行为写进契约的原因。</p>
+<h3 id="2">2. 哈希索引和分片锁</h3>
+<p>点查询走哈希：键被映射到固定数量的分片，再在该分片的表里查找。优点是单次定位成本低，适合标题、令牌这类按键点读的路径；代价是跨分片的范围扫描要另做结构，教学引擎没有实现按标题排序的全表扫描。</p>
+<p>锁也按分片切。不同键若落到不同分片，可以并行改；同一把键必须在同一把锁上排队，这样线性化点和「完整值」才站得住。8 个线程去写同一把热键 1600 次，最终版本正好是 1600，说明同一槽上的覆盖被完全串行化了。</p>
+<p>是不是分片一定更快，要看临界区里有没有实际工作。这次实验用 8 个线程写 800 把不同的键（键形如 <code>article:{i}:title</code>，约 15 到 17 字节，值 16 字节）：</p>
+<table>
+<thead>
+<tr>
+<th>锁模式</th>
+<th>临界区额外工作</th>
+<th>耗时</th>
+<th>ops/s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>16 分片</td>
+<td>无</td>
+<td>0.0052 秒</td>
+<td>152809.0</td>
+</tr>
+<tr>
+<td>一把全局锁</td>
+<td>无</td>
+<td>0.0056 秒</td>
+<td>143708.0</td>
+</tr>
+<tr>
+<td>16 分片</td>
+<td>每次持锁 0.0002 秒</td>
+<td>0.039 秒</td>
+<td>20528.8</td>
+</tr>
+<tr>
+<td>一把全局锁</td>
+<td>每次持锁 0.0002 秒</td>
+<td>0.2128 秒</td>
+<td>3760.2</td>
+</tr>
+</tbody>
+</table>
+<p>在这个 Python 教学内核里，临界区几乎只是改一个字典时，分片锁和全局锁的吞吐非常接近（分片还要多付哈希和多把锁的开销）。一旦每次写入在锁内多做 0.2 毫秒的工作，分片把 800 次写入从 0.2128 秒降到 0.039 秒，大约是全局锁的 5.5 倍吞吐。这是教学对照，用来解释「为什么要分片」，不是生产环境的绝对数字。</p>
+<p>RocksDB 默认的 MemTable 是跳表，不是「一张大哈希表加分片锁」。它也提供 <code>HashSkipList</code> / <code>HashLinkList</code>：先按前缀哈希到桶，桶内再跳表或链表。官方 MemTable 文档写明，这两类哈希 memtable <strong>不支持</strong>并发插入，并发插入只在 skiplist 上默认开启。不要把本课引擎的分片锁，说成 RocksDB 源码里的默认写路径。官方为了保持线性化，并发写入会等到本次插入完成并且序号推进；这与本课「锁内分配序号再改槽」是同一类可见性约定，实现完全不同。</p>
+<h3 id="3-ttl">3. TTL、容量上限和内存计费</h3>
+<p>内存不能只按 value 计费。100 个短标题，键 5 字节、值 10 字节，若只数 value，总共 1000 字节；教学引擎每条再加 32 字节的元数据开销，单条 47 字节，一共 <strong>4700</strong> 字节，是只数 value 的 4.7 倍。RocksDB 的内存页面把这件事说得更细：Block cache、索引和 Bloom filter、MemTable、迭代器钉住的 block，都占内存。尤其容易漏的是：索引和过滤器默认不一定计入你给 block cache 设的那个上限，于是「我给了 10GB cache」并不能解释进程为什么用了 15GB。Write Buffer Manager 可以把 MemTable 记进同一份预算，但要显式打开。</p>
+<p>容量满了必须先有约定。教学引擎支持两种：</p>
+<p><strong>拒绝。</strong> 单条计费 53 字节，预算 159 字节，正好放下 3 个标题。前三个 <code>set</code> 都是 <code>ok</code>，第四个状态是 <code>rejected</code>，原因是 <code>capacity</code>；前三把键还在，第四把不存在。同样大小的覆盖写仍然成功；把已有标题改长以致超出预算，这次覆盖被拒绝，槽里仍是原来的 <code>hello</code>。</p>
+<p><strong>淘汰。</strong> 同样的 3 个名额，先写入 1、2、3，再访问 1，于是最久未用的是 2。写入第 4 个标题时淘汰了 <code>article:02:title</code>，1、3、4 还在，计费仍是 159。一个比整个预算还大的值会被直接拒绝，原因是 <code>item_too_large</code>，<strong>并且不会为了给它腾地方而把已有键删掉</strong>——否则「拒绝」就会附带一次意外的数据丢失。这是契约里要写明的失败语义。</p>
+<p>RocksDB 达到内部压力时，更常见的是写停顿或写停止，而不是简单地 evict 一条用户键：immutable memtable 太多、Level-0 文件太多、或待压缩字节太多，都会让写线程入睡甚至无限期堵住。<code>WriteOptions.no_slowdown = true</code> 时，写不进去就立刻返回 <code>Status::Incomplete()</code>。这是另一份「满了怎么办」的约定，和本课的拒绝 / LRU 淘汰都合法，但不能混着宣传。</p>
+<p>TTL 也要写清「到期后读还能不能看到」。教学引擎默认是访问时惰性删除：会话令牌 <code>draft-token</code> 的 TTL 是 2.0 秒，1.0 秒时仍读得到，再过 1.5 秒（总共 2.5 秒）<code>get</code> 变成 <code>not_found</code>，<code>exists</code> 为假，计费回到 0。另一种 <code>compact_lazy</code> 用来对照 RocksDB <code>DBWithTTL</code> 的懒删除：到期后 <code>get</code> 仍然返回 <code>draft-token</code>，原因记为 <code>expired_pending</code>，内存仍占 57 字节（键 14、值 11、开销 32）；调用一次教学版 <code>compact()</code> 之后，才变成 <code>not_found</code>，内存归零。官方 TTL 的语义是：插入的数据至少保留 ttl 秒，过期条目在 compaction 时删除，<strong>在此之前 Get / Iterator 仍可能返回它们</strong>。不要把「TTL=2 秒」理解成「2 秒后任何读都一定看不到」。</p>
+<p>节点的权衡是：内存索引快，但容量受内存限制；加上持久化能在进程退出后找回数据，同时提高写入成本。400 次写入，键 16 字节、值 64 字节：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>耗时</th>
+<th>单次</th>
+<th>恢复</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只改内存</td>
+<td>0.0012 秒</td>
+<td>3.0 微秒</td>
+<td>进程一退就没有</td>
+</tr>
+<tr>
+<td>追加 WAL，只 <code>flush</code> 不 <code>fsync</code></td>
+<td>0.0028 秒</td>
+<td>6.9 微秒</td>
+<td>这次重放了 400 条、36800 字节，首尾都正确</td>
+</tr>
+<tr>
+<td>每次 <code>fsync</code></td>
+<td>0.0553 秒</td>
+<td>138.2 微秒</td>
+<td>同样找回 400 条，耗时约是只改内存的 46.1 倍</td>
+</tr>
+</tbody>
+</table>
+<p>这些数字只描述这次教学日志，不是 RocksDB WAL 的官方延迟。上一课已经讲过：<code>flush</code> 不等于掉电后还在。本课只借用这条对照，说明「要恢复，就要付写入成本」。</p>
+<p>最后是压测契约。节点的误区写得很硬：性能测试必须明确键值大小、命中率和读写比例。同一套教学内核上的五组对照：</p>
+<table>
+<thead>
+<tr>
+<th>工作负载</th>
+<th>键 / 值</th>
+<th>声明命中率</th>
+<th>读写</th>
+<th>其它</th>
+<th>ops/s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>16 / 64</td>
+<td>80%</td>
+<td>90% 读 / 10% 写</td>
+<td>无额外未命中代价，20000 次</td>
+<td>298042.2</td>
+</tr>
+<tr>
+<td>B</td>
+<td>16 / 1024</td>
+<td>80%</td>
+<td>同 A</td>
+<td>只把值改成 1 KiB</td>
+<td>290017.5</td>
+</tr>
+<tr>
+<td>C</td>
+<td>16 / 64</td>
+<td>80%</td>
+<td>50% / 50%</td>
+<td>写更多</td>
+<td>205236.6</td>
+</tr>
+<tr>
+<td>D</td>
+<td>16 / 64</td>
+<td>80%</td>
+<td>同 A</td>
+<td>未命中额外停 0.2 毫秒，8000 次</td>
+<td>49676.3</td>
+</tr>
+<tr>
+<td>E</td>
+<td>16 / 64</td>
+<td><strong>20%</strong></td>
+<td>同 A</td>
+<td>同样的 0.2 毫秒未命中代价</td>
+<td>19357.3</td>
+</tr>
+</tbody>
+</table>
+<p>A 和 B 在纯内存、且未命中也不额外停顿时几乎一样快，可它们不是同一份契约：值已经从 64 字节变成 1 KiB。一旦未命中要付出 0.2 毫秒（用来模拟一次轻量 IO），声明命中率从 80% 降到 20%，吞吐就从 49676.3 降到 19357.3。E 的实际 <code>get</code> 命中率是 0.308，高于声明的 0.20，因为一部分本来按「未命中键」去写的请求，后来又被读到了——这正好说明，报告里既要写声明的工作负载，也要写实际观察到的命中率。没有这些参数，就不要把「大约三十万 ops/s」单独拿去比较。</p>
+<h3 id="_9">把三条主线串在同一次发布上</h3>
+<p>编辑保存文章 42：<code>set</code> 标题是一次覆盖写，线性化点之后列表页必须读到完整的新标题，而不是半截字符串。阅读计数走 <code>incr</code> 或比较并交换，而不是 <code>get</code> 再 <code>set</code>。若这是一枚 2 秒过期的编辑令牌，还要写清到期后 <code>get</code> 是立即 <code>not_found</code>，还是等到压缩才消失。内存预算按键 + 值 + 开销来计，满了按事先选好的拒绝或淘汰处理；任何一张「有多快」的表，旁边都要写键有多长、命中率多少、读写各占多少。</p>
+<h3 id="_10">三条主线的收束</h3>
+<ul>
+<li>CRUD：空键是 <code>not_found</code>，删除空键是 <code>ok</code>，覆盖从明确的序号开始可见，完整值、比较并交换和原子递增，是三种不同的并发约定。</li>
+<li>索引与锁：哈希服务点查询；分片锁在临界区有实际工作时拉开差距；同一把键仍然串行。RocksDB 默认不是这样实现的。</li>
+<li>计费、容量、TTL 和压测参数，决定这套内核在满载、到期和被别人引用数字时还能否对上契约。</li>
+</ul>
+<h2 id="_11">常见误区</h2>
+<ul>
+<li>把 <code>get</code> 的空键当成一次故障，或把删除空键当成失败。官方语义里它们都是正常结果。</li>
+<li>认为「<code>set</code> 返回了」就等于任何并发读都已经看到完整新值，或认为 <code>get</code> 再 <code>set</code> 可以拿来做计数。前者要靠线性化点，后者在这次实验里把 400 次增加做成了 100。</li>
+<li>只按 value 字节做内存预算，或默认「满了会自动淘汰」却没写淘汰谁。只数 value 会把 4700 看成 1000；超大写入若先淘汰再拒绝，会把已经在线的标题一并删掉。</li>
+<li>以为 TTL 到期后读一定看不到。RocksDB 的 TTL 在 compaction 之前仍可能返回过期条目；本课的 <code>compact_lazy</code> 对照里，到期后读到的仍是 <code>draft-token</code>。</li>
+<li>性能测试只报一个 ops/s，不写键值大小、命中率和读写比例。A 和 B 数字接近，并不表示 64 字节和 1 KiB 是同一类负载；D 和 E 才把命中率的差别打出来。</li>
+<li>把教学引擎的分片锁或惰性 TTL，直接说成 RocksDB 的默认行为。</li>
+</ul>
+<h2 id="_12">设计权衡</h2>
+<ul>
+<li><strong>覆盖写 vs 比较并交换 / 原子递增。</strong> 标题这类「最后一版即真相」可以用 last-writer-wins，实现简单、吞吐也好说。计数和「只有版本匹配才许改」必须把读改写收成一次线性化操作，否则会丢更新。代价是重试次数（这次是 596）或把逻辑放进锁内。</li>
+<li><strong>全局锁 vs 分片锁。</strong> 全局锁容易推理；分片锁在临界区有工作时能拉开吞吐（0.2128 秒对 0.039 秒），但要约定锁顺序，淘汰路径还可能触及多把分片锁。临界区很短时，收益可能被哈希和锁开销吃掉。</li>
+<li><strong>拒绝 vs 淘汰。</strong> 拒绝保住已有数据、让调用方立刻收到失败，适合不能悄悄丢掉已发布标题的路径。淘汰能让新写入继续，但必须定义谁被踢掉，以及「一条放不进去的超大值」可不许附带误删。RocksDB 还有第三种：写停顿或返回 <code>Incomplete</code>。</li>
+<li><strong>访问时删除 vs 压缩时删除。</strong> 前者读路径更干净，到期后内存也可以马上回来；后者把清理成本移到后台，但读可能看到过期值，内存也不会立刻下降。</li>
+<li><strong>内存索引 vs 持久化。</strong> 只改内存时一次写入 3.0 微秒，加每次 <code>fsync</code> 的日志就变成 138.2 微秒，并且仍要面对上一课已经讲过的掉电窗口。需要恢复，就要把这份成本写进延迟预算。</li>
+</ul>
+<h2 id="kv-setgetdelexists">动手实践：实现单机 KV 内核，支持 set/get/del/exists 并定义并发覆盖行为</h2>
+<p>实践目录是 <code>practice104/</code>，只依赖 Python 3 标准库。核心类型是 <code>KVEngine</code>（哈希分片 + 分片锁或全局锁 + 计费 + 拒绝 / LRU 淘汰 + 两种 TTL），另外用 <code>NaiveTornKV</code> 做无锁撕裂对照。它不是 RocksDB，也不是 redis-py。</p>
+<h3 id="0">0. 文件结构</h3>
+<div class="codehilite"><pre><span></span><code>practice104/
+├── engine.py           # KVEngine、NaiveTornKV、Clock
+├── app.py              # 全部对照实验
+├── test_kv.py          # 验收断言，并把结果写入 results.json
+├── test.sh             # python3 test_kv.py
+└── results.json        # 本次 ALL_CHECKS_PASSED 的完整输出
+</code></pre></div>
+
+<p>在该目录执行：</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>成功时第一行是 <code>ALL_CHECKS_PASSED</code>，第二行是本次摘要。下面的数字都来自这次运行生成的 <code>results.json</code>（Python 3.13.5，文档核对日期 2026-11-12）。换一台机器或再跑一次，耗时和 ops/s 会有波动，语义断言不应翻盘。</p>
+<h3 id="1">步骤 1：准备数据与目标操作</h3>
+<p>键使用 <code>article:</code>、<code>session:</code> 这类教学前缀。先覆盖标题的 CRUD 与空键，再并发写同一把标题、并发增加阅读计数，然后比较分片锁和全局锁，最后看 TTL、计费、容量和带参数的压测。目标操作就是节点要求的四件事：<code>set</code> / <code>get</code> / <code>del</code> / <code>exists</code>，外加比较并交换、原子递增，以及容量满时的拒绝或淘汰。</p>
+<h3 id="2_1">步骤 2：要比较的几条路径</h3>
+<ol>
+<li>空键、覆盖、删除，以及删除空键是否仍返回 <code>ok</code>。</li>
+<li>无锁慢写 vs 锁内整值写入，看会不会读到半截标题。</li>
+<li><code>set</code> 返回后再 <code>get</code>，序号是否前进、能否读到新值。</li>
+<li>四线程各 100 次：<code>get</code>+<code>set</code>、比较并交换、锁内 <code>incr</code>。</li>
+<li>分片锁 vs 全局锁，以及临界区加上 0.2 毫秒工作之后的对照。</li>
+<li>访问时删除的 TTL，对上压缩前仍可见的 TTL。</li>
+<li>100 个短键的计费：4700 对 1000。</li>
+<li>容量拒绝和 LRU 淘汰，以及超大值被拒绝时不得误删。</li>
+<li>五组写明参数的工作负载，加上只改内存 / 写 WAL / 每次 <code>fsync</code> 的成本。</li>
+</ol>
+<h3 id="3">步骤 3：运行并解读几组对照（真实输出）</h3>
+<p>本次摘要如下（完整字段见 <code>results.json</code>）：</p>
+<div class="codehilite"><pre><span></span><code>ALL_CHECKS_PASSED
+SUMMARY missing=not_found del_missing=ok overwrite=Weekly digest (revised) after_del=not_found
+naive_torn=158 safe_torn=0 safe_final_complete=True lin_handoff=True
+naive_cnt=100 cas=400 incr=400 cas_retries=596
+sharded_ops=152809.0 global_ops=143708.0
+sharded_work=0.039s global_work=0.2128s
+lazy_after=not_found compact_stale=draft-token compact_removed=1
+bill=4700 vs_value=1000 fourth=rejected evicted=['article:02:title']
+A=298042.2/s hit=0.815 B=290017.5/s C=205236.6/s D=49676.3/s E=19357.3/s
+mem=3.0us wal=6.9us fsync=138.2us recovered=400
+</code></pre></div>
+
+<p>解读时按三条主线对齐：前两行是 CRUD、撕裂和线性化；<code>naive_cnt=100</code> 对上 <code>cas=400</code> / <code>incr=400</code> 是并发覆盖；分片在「锁内有 0.2 毫秒工作」时才明显快于全局锁；TTL 的两种可见性、4700 对 1000、拒绝第四把键、淘汰 <code>article:02:title</code>，是第三条主线；A 到 E 以及 3.0 / 6.9 / 138.2 微秒，用来兑现「性能必须带参数」和「持久化有写入成本」。</p>
+<h3 id="4">步骤 4：对照验收标准</h3>
+<div class="codehilite"><pre><span></span><code># 验收 1：读写有明确线性化点
+# set 成 draft 的序号是 1，随后 get 是 2，读到 draft。
+# 另一个线程在 set 返回之后再 get，序号 3 然后 4，读到 published。
+# 同一把键上 160 次完整覆盖没有撕裂；热键 1600 次写入的最终版本是 1600。
+# get+set 把 400 次增加做成 100；CAS（596 次重试）和 incr 都是 400。
+
+# 验收 2：达到容量上限时按约定拒绝或淘汰
+# 拒绝：预算 159，三条 53 字节的标题放满后，第四条是 rejected，已有标题仍在；
+# 改长超出预算同样被拒绝，槽里仍是 hello。
+# 淘汰：写入第四条时淘汰 article:02:title，1/3/4 还在，计费仍是 159；
+# 超大值返回 item_too_large，计费仍是 159，不会把工作集清掉。
+</code></pre></div>
+
+<p>这两份结论要写在同一份报告里：既要说清「从哪个序号开始可见、覆盖和计数各保证什么」，也要说清「满了按哪一份约定处理」。</p>
+<h3 id="5">步骤 5：自己动手的扩展练习</h3>
+<p>可以改 <code>n_shards</code>、把临界区工作时间改成 0 或 1 毫秒，观察分片收益何时出现；也可以给 <code>get</code> 未命中加上不同的停顿，重跑 D / E，看命中率怎样改写 ops/s。若给引擎加上范围扫描，注意哈希分片本身并不提供有序遍历。不要在练习里接入真实 RocksDB 却仍然引用这份 <code>results.json</code> 的数字。</p>
+<h3 id="6">步骤 6：和生产引擎的对应关系（不要记错边界）</h3>
+<table>
+<thead>
+<tr>
+<th>本课教学概念</th>
+<th>可对照的官方路径</th>
+<th>不要说成</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>not_found</code> / 删除空键为 <code>ok</code></td>
+<td><code>Get</code> 的 <code>NotFound</code>；<code>Delete</code> 在键不存在时仍成功</td>
+<td>空键等于一次 IO 错误或进程故障</td>
+</tr>
+<tr>
+<td>锁内分配序号再改槽</td>
+<td>写入推进 sequence number、保持线性化</td>
+<td>本课实现了 RocksDB 的 write thread / WAL 组提交</td>
+</tr>
+<tr>
+<td>哈希分片 + 分片锁</td>
+<td>HashSkipList / HashLinkList 按前缀分桶；默认 skiplist 才支持并发插入</td>
+<td>分片锁就是 RocksDB 默认写路径</td>
+</tr>
+<tr>
+<td>访问时删除的 TTL</td>
+<td>一种常见的内存 KV 约定</td>
+<td>RocksDB <code>DBWithTTL</code> 的默认行为</td>
+</tr>
+<tr>
+<td><code>compact_lazy</code></td>
+<td>TTL 文档：过期项在 compaction 时删除，此前 Get 仍可能读到</td>
+<td>本课的 <code>compact()</code> 等于生产里的 leveled compaction</td>
+</tr>
+<tr>
+<td>拒绝 / LRU 淘汰</td>
+<td>应用层容量约定；RocksDB 更常见的是写停顿或 <code>Incomplete</code></td>
+<td>「RocksDB 满了会 LRU 掉用户键」</td>
+</tr>
+<tr>
+<td>每条 32 字节开销</td>
+<td>官方内存组成：cache、index/filter、memtable、pinned blocks</td>
+<td>32 就是 RocksDB 每条记录的真实开销</td>
+</tr>
+<tr>
+<td>WAL + <code>fsync</code> 的 138.2 微秒</td>
+<td>Basic Operations 里 <code>WriteOptions.sync</code></td>
+<td>这是生产 WAL 的官方延迟</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_13">源码与文档阅读</h2>
+<p>节点指定的资料是 <a href="https://rocksdb.org/docs/">KV语义、索引与并发：参考文档 / 原始资料</a>（rocksdb.org，英文文档）。2026-11-12 访问该 URL 返回 200，页面会跳转到 <a href="https://rocksdb.org/docs/getting-started.html">Getting started</a>；该页写明完整文档在 <a href="https://github.com/facebook/rocksdb/wiki">GitHub wiki</a>。阅读时按页面上实际出现的内容来，不要把本课实践里的 158 次撕裂、4700 字节或 298042.2 ops/s 写成这些文档里的原句。</p>
+<p>与本课直接对应、且已核对过的要点：</p>
+<ol>
+<li><strong>CRUD 和不存在状态。</strong> <a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations">Basic Operations</a> 把键和值定义为任意字节数组，<code>Put</code> 覆盖已有值，<code>Get</code> 用状态表示成功或 <code>NotFound</code>，值必须小于 4GB。头文件对 <code>Delete</code> 的说明是：键不存在也不是错误。<a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ">FAQ</a> 确认基本读写是线程安全的。多键原子更新走 <code>WriteBatch</code>。默认写是异步的，<code>WriteOptions.sync = true</code> 才会等到持久介质。</li>
+<li><strong>索引与并发。</strong> <a href="https://github.com/facebook/rocksdb/wiki/MemTable">MemTable</a> 写明默认结构是 skiplist，哈希 memtable 用前缀哈希降低比较次数，但跨前缀扫描很贵，且哈希 memtable 不支持并发插入。不要把「哈希索引」理解成「一定配分片锁」，也不要把本课的锁写成官方默认实现。</li>
+<li><strong>TTL、内存计费与容量。</strong> RocksDB 的 TTL 保证数据至少保留 ttl 秒，过期删除发生在 compaction，此前读仍可能看到旧条目。<a href="https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB">Memory usage in RocksDB</a> 把内存拆成 block cache、索引和过滤器、MemTable、迭代器钉住的块，并提醒索引过滤器默认未必计入 cache 上限。<a href="https://github.com/facebook/rocksdb/wiki/Write-Stalls">Write Stalls</a> 描述 memtable、Level-0 和待压缩字节触发的减速或停写，以及 <code>no_slowdown</code> 立刻返回 <code>Incomplete</code>。</li>
+</ol>
+<p>建议的阅读方法：先打开 docs 入口和 Getting started，再读 Basic Operations 里 <code>Get</code> / <code>Put</code> / <code>Delete</code> / <code>WriteBatch</code> / <code>sync</code> 那几节，用手写出「空键、覆盖、删除空键、写成功后的可见性」四行约定。然后读 MemTable 的类型对照表，标出「谁支持并发插入、谁适合点查询」。最后读内存组成和写停顿，把「预算里到底包含什么」和「满了是停住、拒绝还是淘汰」写成可验收的句子。对照 <code>bash test.sh</code> 的输出，看哪一组数字在模拟哪一条。记录：访问日期 2026-11-12、实际打开的 URL，以及你亲自跑过的实验输出。</p>
+<p>阅读时还应注意这些页面写了、但本课实验没有用数字去覆盖的边界，避免把「没做」当成「文档没说」。文档还谈到 <code>PinnableSlice</code>、<code>SingleDelete</code> 的使用限制、列族、快照读、Merge 操作符、unordered_write，以及 Write Buffer Manager 跨列族共享预算。这些都是官方路径，本课既没有在教学引擎里实现它们，也没有在 <code>results.json</code> 里给出对应数字。</p>
+<p>边界：教学实验只模拟已核对、并且已经跑出数字的那一部分语义。不确定的地方，应写「文档未覆盖」或「本课未实验」，而不是用教学输出去填空。</p>
+<h2 id="_14">自测题</h2>
+<p>下面三道题都可以用 practice104 里的数字来回答，不必默写定义。若某一问只能说出「KV 就是 set/get」，却对不上 <code>not_found</code> 与删除空键的 <code>ok</code>、158 与 0、100 与 400，或 4700 与 1000，说明还要回到对应的对照表。</p>
+<p><strong>题 1</strong>：对还不存在的 <code>article:42:title</code> 做 <code>get</code>、<code>exists</code> 和 <code>delete</code>，教学引擎各返回什么？覆盖写成 <code>Weekly digest (revised)</code> 之后版本是多少？为什么空键不应当成故障？无锁慢写为什么会被读到 <code>"A"</code>、<code>"AA"</code> 这样的前缀，而 <code>KVEngine</code> 的撕裂次数是 0？<code>set</code> 返回之后再 <code>get</code>，序号 3 和 4 说明了什么？为什么 4 个线程各加 100 次，<code>get</code>+<code>set</code> 只剩 100，比较并交换和 <code>incr</code> 却是 400？</p>
+<details><summary>答案</summary>
+
+- `get` 的状态是 `not_found`，`exists` 为假；`delete` 的状态是 `ok`，`found` 为假。第一次写入后版本是 1，覆盖后版本是 2，标题变成 `Weekly digest (revised)`。再删除又回到 `not_found`，再删一次仍是 `ok`。
+- RocksDB 把 `NotFound` 写成一种正常状态，删除不存在的键也不是错误。把空键当故障，会把正常的未命中记成事故。
+- 无锁实现按字符填写 80 字节标题，并发读看到了 158 次撕裂，样本就是这些前缀。`KVEngine` 在分片锁内一次性放入完整字符串，读到的只有完整的 `A*80` 或 `B*80`，撕裂 0 次，最终版本 160。
+- 序号是线性化点：`set` 在序号 3 返回后，后续 `get` 的序号是 4，必须读到 `published`（或更晚的值），不能再回到这次写之前。
+- `get` 和 `set` 是两次线性化操作，中间会丢更新，400 次增加只留下 100。比较并交换失败就重试（这次 596 次），`incr` 在锁内完成读改写，两种都得到 400。标题可以用 last-writer-wins，计数不行。
+
+</details>
+
+<p><strong>题 2</strong>：哈希分片解决的是哪类访问？8 个线程写 800 把不同的键时，为什么「临界区几乎无工作」和「每次持锁 0.2 毫秒」两张表不能得出同一个结论？同一把热键写 1600 次，为什么最终版本正好是 1600？为什么不能把这套分片锁说成 RocksDB 的默认实现？</p>
+<details><summary>答案</summary>
+
+- 哈希分片服务的是点查询：先由键定位到分片，再在该表里找。它不自动提供有序的范围扫描。
+- 临界区几乎无工作时，分片是 152809.0 ops/s、0.0052 秒，全局锁是 143708.0 ops/s、0.0056 秒，二者接近，分片还要付哈希和多把锁的开销。每次持锁再做 0.2 毫秒工作后，分片是 0.039 秒、20528.8 ops/s，全局锁是 0.2128 秒、3760.2 ops/s。分片的收益出现在锁内有实际工作、且不同键能并行的时候，不能用第一张表宣称「分片一定更快」。
+- 同一把键落到同一分片，1600 次写入完全串行，版本累加到 1600，没有把两次覆盖合成一个撕裂值。
+- RocksDB 默认 MemTable 是 skiplist，哈希 memtable 不支持并发插入。本课的分片锁是教学模型，用来把「不同键并行、同一键串行、锁内分配序号」跑出数字，不是官方默认写路径。
+
+</details>
+
+<p><strong>题 3</strong>：100 个短标题如果只按 value 计费会得到多少，教学引擎实际记了多少？预算 159 字节时，拒绝策略下第四个标题和「改长」各发生什么？淘汰策略淘汰了哪一把键，超大值被拒绝时工作集为什么还在？TTL 设为 2.0 秒后，访问时删除和 <code>compact_lazy</code> 对 <code>draft-token</code> 的可见性有什么差别？为什么 A 和 B 的 ops/s 接近，仍然不能省略键值大小，D 和 E 又说明了命中率什么？只改内存 3.0 微秒、每次 <code>fsync</code> 138.2 微秒，对应哪一条权衡？</p>
+<details><summary>答案</summary>
+
+- 只数 value 是 1000 字节；计入 5 字节键和 32 字节开销后，单条 47、一共 4700，是前者的 4.7 倍。
+- 拒绝策略下第四个 `set` 是 `rejected`，已有三把键仍在；同样大小的覆盖成功，改长超出预算被拒绝，标题仍是 `hello`。淘汰策略在写入第四把时淘汰了最久未用的 `article:02:title`，1、3、4 还在，计费 159。超大值先按「单条已超过预算」拒绝，原因是 `item_too_large`，计费仍是 159，不会先清空工作集再失败。
+- 访问时删除：到期后再读是 `not_found`，内存回到 0。`compact_lazy`：到期后 `get` 仍返回 `draft-token`，占 57 字节，`compact()` 删掉 1 条之后才变成 `not_found`。这与官方 TTL「compaction 前仍可能读到过期值」是同一类约定。
+- A 是 16/64、80% 命中、90% 读，298042.2 ops/s；B 只把值改成 1 KiB，290017.5 ops/s。纯内存且未命中也不额外停顿时，二者接近，但契约已经变了，报告必须写明值长度。加上 0.2 毫秒未命中代价后，命中率 80% 的 D 是 49676.3 ops/s，20% 的 E 是 19357.3 ops/s，命中率会改写结论。
+- 内存索引快，但进程一退数据就没有；要恢复就要付写入成本。400 条日志、36800 字节可以重放找回，每次 `fsync` 的耗时大约是只改内存的 46.1 倍。
+
+</details>
+
+<h2 id="_15">推荐资源</h2>
+<ul>
+<li><a href="https://rocksdb.org/docs/">KV语义、索引与并发：参考文档 / 原始资料</a>，来源 rocksdb.org｜文档｜英文｜进阶｜免费。阅读重点：「重点阅读CRUD与不存在状态与哈希索引和分片锁，用于核对本节点实验的语义和边界。」2026-11-12 访问该 URL 返回 200，并跳转到 <a href="https://rocksdb.org/docs/getting-started.html">Getting started</a>；建议再读 <a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations">Basic Operations</a>、<a href="https://github.com/facebook/rocksdb/wiki/MemTable">MemTable</a>、<a href="https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB">Memory usage in RocksDB</a>、<a href="https://github.com/facebook/rocksdb/wiki/Write-Stalls">Write Stalls</a> 和 <a href="https://github.com/facebook/rocksdb/wiki/RocksDB-FAQ">RocksDB FAQ</a>，结合 practice104 逐项对照，并记下访问日期 2026-11-12，以及 <code>bash test.sh</code> 的输出。</li>
+</ul>
+<h2 id="_16">本课小结</h2>
+<ul>
+<li>KV 不只是 set / get。空键是 <code>not_found</code> 而不是故障，删除空键是 <code>ok</code>，覆盖从明确的线性化点对后续读可见。无锁慢写撕开了 158 次标题，教学内核撕裂 0 次；<code>get</code>+<code>set</code> 把 400 次计数做成 100，比较并交换和 <code>incr</code> 都是 400。</li>
+<li>哈希索引服务点查询，分片锁让不同键在临界区有工作时并行（0.039 秒对 0.2128 秒），同一把键仍然串行到版本 1600。这是教学模型，不是 RocksDB 默认的 skiplist 写路径。</li>
+<li>计费要包含键和开销（4700 对 1000）。满了就按约定拒绝或淘汰：第四把键被拒绝，或淘汰 <code>article:02:title</code>；超大值不得顺手清空工作集。TTL 到期后是否还能读到 <code>draft-token</code>，取决于惰性删除还是等到压缩。压测必须写明键值大小、命中率和读写比例（A 298042.2，命中率降到 20% 且未命中有代价时是 19357.3）。内存索引快（3.0 微秒），每次 <code>fsync</code> 的日志是 138.2 微秒，才能在重放后找回 400 条。</li>
+</ul>
+<p>学完后可以用三句话自检：空键和删除空键返回什么，线性化点之后读到的是不是完整新值，为什么计数不能用 <code>get</code>+<code>set</code>；分片锁在什么条件下比全局锁快，为什么不能把它说成 RocksDB 默认实现；4700 和 1000 差在哪里，拒绝和淘汰各怎样处理第四把键和超大值，TTL 的两种可见性以及 A 到 E 为什么必须带上工作负载参数。三句都能答上来，并且能指出 practice104 里对应的那组数字，这一课就算过关。</p>
+<p>如果有一句答不上来，先回到对应的实验表，再回到官方文档里关于 <code>NotFound</code>、删除空键、MemTable 类型、TTL 在 compaction 前仍可能可见、内存组成和写停顿的那几句，不要只把「KV 就是 set/get 很快」这句话背下来。</p>
+<p>写作笔记时顺便记下三件事：你核对文档的日期和实际打开的页面，这套存储的空键、并发覆盖、TTL 和满容约定有没有写成可验收的句子，以及压测数字旁边是否写了键值大小、命中率和读写比例。这三件事能把本课的边界说明带进后面的 KV 与存储引擎课，而不是只留下一串 ops/s。</p><div class="pn"><span><a href="103.html">← Redis持久化与恢复窗口</a></span><span>下一课 待更新</span></div></main></div></body></html>
