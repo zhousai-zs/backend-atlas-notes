@@ -1,0 +1,263 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>109. 存储复制、确认与故障切换 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（109/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（13/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="cur" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 109 课 · 领域 G · 阶段 4</p><p class="dl"><a href="../files/109-g-replication.md" download>⬇ 本课 Markdown</a><a href="../files/practice109.tar.gz" download>⬇ 练习包 practice109.tar.gz</a></p><h1 id="109208">第 109/208 课：存储复制、确认与故障切换</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-replication</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Storage Replication</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>数据生命周期</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>g-persistence</code>、<code>g-wal</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Storage Replication</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/replication/">存储复制、确认与故障切换：参考文档 / 原始资料</a>（redis.io，文档；2026-11-12 该 URL 返回 200，无跳转。同期打开的 <a href="https://redis.io/docs/latest/commands/wait/">WAIT</a>、<a href="https://redis.io/docs/latest/commands/waitaof/">WAITAOF</a>、<a href="https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/">Sentinel</a> 同样返回 200。旧地址 <code>https://redis.io/topics/replication</code> 返回 200，但最终跳到 <code>https://redis.io/docs/latest/develop/</code> 文档首页，不是复制页；<code>https://redis.io/docs/latest/topics/sentinel/</code> 返回 404。这两处本课不引用）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>复制把更新传播到其他节点，客户端写确认、传播顺序和切换规则决定故障时的数据与一致性边界。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中的「内容后台」「文章标题」「未发布稿」都是<strong>教学假设</strong>，用来让复制延迟、写确认和故障切换变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>ReplicationEngine</code>（<code>Node</code> / <code>Clock</code>），<strong>不是 Redis，不是 redis-py，也不是网络服务</strong>。它没有 TCP 协议、PSYNC/SYNC 握手、RDB/AOF 文件、diskless 传输、Sentinel 进程或 Redis Cluster 槽位。教学复制 ID 是短字符串；教学 offset 按命令计数，不是 Redis 复制流的字节偏移。故障切换是教学函数，按已应用 offset 挑选副本，或按测试指定副本提升，不是 Sentinel 的法定人数选举，也不是 Cluster 故障切换。官方文档已于 <strong>2026-11-12</strong> 用 curl 核对（见下文）。文中的官方机制只写到核对过的页面和源码能够支撑的范围；教学实验里的耗时、丢失条数和标题都来自 <code>/workspace/atlas/lessons/practice109/results.json</code>，不是生产 Redis 的基准数字。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：复制不是「多一份」，而是「多一份可能落后、也可能被提升的数据」</h3>
+<p>内容后台发布一篇修订标题时，写请求先在主库上成功，客户端收到 <code>ok</code>；随后主库把这次更新发给副本。问题从这里开始分叉：客户端看到的 <code>ok</code> 到底承诺了什么？是主库内存里有了，是主库磁盘里有了，还是至少一个副本也收到了？如果下一秒主库宕机，副本里有没有这条修订？如果副本落后，读请求落到它身上会看到什么？如果故障切换选中了一个落后的副本，已经确认的写会不会消失？</p>
+<p>节点把这条机制概括为：复制把更新传播到其他节点，客户端写确认、传播顺序和切换规则决定故障时的数据与一致性边界。这里最容易犯的错，是把「有 3 个副本」直接理解成「3 份一致的数据」或者「多数派已经确认」。副本数量只说明有多少份拷贝；写确认策略才说明客户端返回时数据到了哪里；故障切换规则才说明哪一份拷贝会被提升。三件事必须分开看。</p>
+<h3 id="_4">接上前置</h3>
+<p>第 103 课的 <code>g-persistence</code> 讲的是单节点持久化：数据在进程退出或机器重启后还在不在。第 105 课的 <code>g-wal</code> 讲的是单节点上的顺序与重放：一次写入先进入日志，按顺序应用，崩溃后可以恢复。复制把这两个问题扩展到多节点：主库本地持久化成功，不等于副本已经收到；副本收到了，不等于副本已经把它写进自己的持久存储；客户端收到 <code>ok</code>，也不等于故障切换后这条写一定还在。</p>
+<p>所以本课要补的不是「再讲一遍 WAL」，而是三个新边界：<strong>传播是异步的，确认是有范围的，切换是有选择规则的</strong>。把这三件事接起来，才能回答「故障时到底会丢什么」。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>教学数据只有几个键：<code>article:01:title</code>，旧值 <code>Weekly digest</code>，新值 <code>Weekly digest (revised)</code>；另有一个未发布稿的值 <code>unpublished draft</code>，以及另一篇文章的标题 <code>article:02:title = Product update</code>。默认拓扑是 1 个教学主库加 3 个副本 <code>r1</code> / <code>r2</code> / <code>r3</code>，除非某组实验另说。教学 offset 按命令计数：seed 写入旧标题占用 offset 1，随后「发布修订标题」这次写就是 offset 2。这个 offset 不是 Redis 复制流的字节偏移，教学复制 ID 也不是 Redis 的 40 位十六进制 ID。</p>
+<p>这些标题和未发布稿都是教学假设。真实内容后台还会有审核、版本、缓存和分片；本课只保留能观察「主库已写、副本未到、客户端已确认、切换后恢复出什么」的最小字段。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>同步与异步复制</strong>：主库什么时候把写发给副本，客户端什么时候收到确认，<code>WAIT</code> 和 <code>min-replicas-to-write</code> 各自改变了哪一段。</li>
+<li><strong>复制延迟和读陈旧</strong>：副本的 applied offset 落后主库时，读副本会看到旧值；延迟按 offset 和按时间分别怎么观察。</li>
+<li><strong>故障切换与已确认写丢失</strong>：客户端已经收到 <code>ok</code> 的写，在主库故障、副本被提升之后还在不在；切换规则如何决定丢多少。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释同步与异步复制：默认异步复制下客户端确认发生在哪里，<code>WAIT</code> 如何把某一次写的确认扩展到副本，以及为什么 <code>WAIT</code> 仍然不是强一致承诺。</li>
+<li>能独立完成：在教学主从上注入延迟和宕机，记录确认写与恢复数据的差异；能说明每组实验里「允许丢失」的写是哪一条，而不是用「开了三个副本就不会丢」代替结论；能区分副本数与参与共识节点数，知道 3 个副本只是 leader-follower 的拷贝数，默认写确认只在主库完成，Sentinel 的 quorum 和多数派是 Sentinel 进程之间的判断，本教学引擎没有共识组。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>内容后台的发布接口通常这样写：编辑点「发布」，服务端把 <code>article:01:title</code> 改成新标题，返回成功，页面提示已发布。如果这次写只在主库上完成，而副本还在传旧标题，那么主库故障后按副本提升，读者可能重新看到旧标题。更隐蔽的情况是：客户端已经收到成功，运营也以为发布完成，但故障切换后数据回退，事后只能从日志里补。复制课要解决的就是这种「成功到底意味着什么」的问题。</p>
+<p>另一个常见误判是把副本数当成一致性保证。3 个副本都在线，不代表这次写已经到达 3 个副本；默认异步复制下，主库返回成功时可能一个副本都还没应用。即使打开了 <code>min-replicas-to-write</code>，它检查的也只是「最近有 N 个副本 ping 过」，并不等待这一次写到达副本，官方明确称它是 best-effort 的数据安全机制，仍有丢失窗口。再往上，Sentinel 的 quorum 是 Sentinel 进程对「主库不可达」的判断，真正切换还需要多数派授权；它和「3 个 Redis 副本」不是同一层的东西。</p>
+<p>读路径也会受影响。编辑在后台刷新列表，如果读请求被路由到落后副本，可能看到旧标题；读者刚看到发布成功，再刷新又回到旧值。这不是缓存问题，而是复制延迟和读陈旧。理解 offset、ack 和 lag，才能在「读主库」「读副本」「等副本确认」之间做出有依据的选择。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1">1. 同步与异步复制</h3>
+<p>Redis 默认使用异步复制。连接正常时，主库把写命令、过期和淘汰的效果以命令流发给副本；副本定期向主库异步确认自己已经处理到的数据量。主库平时不等待副本，但它知道各副本处理到哪里，因此可以支持可选的同步复制。客户端可以用 <code>WAIT</code> 请求某些写入的同步复制：<code>WAIT numreplicas timeout</code> 会等待至少 <code>numreplicas</code> 个副本确认到这次写产生的复制 offset，<code>timeout</code> 以毫秒计，<code>0</code> 表示一直等。返回值是实际确认的副本数，客户端必须检查它是否大于等于要求的数量；超时和成功都会返回这个数字。</p>
+<p>这里要把「异步」和「没有传播」分开。异步复制不等于主库不发送，而是客户端不等待副本确认。教学引擎里，<code>set(..., wait_replicas=0)</code> 会在主库上写入、递增 offset，并把命令放进副本的待应用队列；如果没有暂停或附加延迟，教学实现会在返回前顺手应用队列，但返回的 <code>waited</code> 仍是 0，因为客户端没有等待副本确认。实验 <code>async_lag_stale_read</code> 里，异步 SET 返回 <code>ok</code>、<code>waited=0</code>，主库 offset 已经是 2；这并不表示副本一定收到了 offset 2，暂停的 <code>r1</code> 就仍停在 offset 1。</p>
+<p>同步复制的边界由确认策略决定，而不是由副本数量决定。<code>WAIT</code> 只保证「在其他 Redis 实例中有指定数量的已确认副本」，并不会把一组 Redis 变成具有强一致性的 CP 系统。官方文档明确写到：已确认的写在故障切换时仍可能丢失，取决于持久化配置；<code>WAIT</code> 只是把丢失概率降到某些难以触发的故障模式。<code>WAITAOF</code> 从 Redis 7.2 起可用，等待本地和/或副本把 AOF fsync 完成，官方同样写明它不会让 Redis 变成强一致存储；除非等待集群所有成员把写 fsync 到磁盘，故障切换或重启时仍可能丢数据。本课实验没有实现 <code>WAITAOF</code>，只在文档阅读里提及。</p>
+<p>复制本身是 leader-follower（主从）结构。高可用是 Redis Sentinel 或 Redis Cluster 提供的额外层，不是复制自带的。复制有三条路径：连接正常时主库发送命令流；断线后尝试部分重同步；部分重同步不行再做全量同步，主库先做快照，再继续发流。主库侧的复制是非阻塞的；副本在初次同步时可以使用旧数据集回答查询（如果配置允许），也可以配置成复制流中断时对客户端返回错误；初次同步之后，删除旧数据集并加载新数据集的窗口会阻塞。副本默认只读（<code>replica-read-only</code>，自 Redis 2.6），这也是为什么「读副本」通常需要显式路由。</p>
+<p>复制 ID 加 offset 用来标识一份精确的数据集版本。提升后的副本会使用新的复制 ID，因为旧主库可能仍然可用，不能继续用旧 ID 混淆两段历史。过期由主库合成 <code>DEL</code> 发给副本，副本不用自己的时钟决定过期；<code>INFO replication</code> 和 <code>ROLE</code> 可以查看复制状态和 offset。这些官方机制在本课里只作为阅读边界，教学引擎用短字符串 <code>replid</code> 和按命令计数的 <code>offset</code> 做近似，不能把教学字段当成 Redis 的字节偏移。</p>
+<p>同步复制改善的是持久性边界，但代价是延迟。实验 <code>sync_latency</code> 用 20 次写比较了几种确认策略：<code>async_fast</code> 不等待副本，总耗时 <code>9.975099237635732e-05</code> 秒，约 <code>200499.2584388598</code> ops/s，平均每次写 <code>4.987549618817866e-06</code> 秒；<code>wait1_fast</code> 等待 1 个副本，三副本都能立刻确认，<code>min_waited=3</code>、<code>max_waited=3</code>，总耗时 <code>0.00011532899225130677</code> 秒，约 <code>173416.93194040185</code> ops/s，平均 <code>5.766449612565339e-06</code> 秒。这些数字来自教学引擎，不是生产 Redis 的基准；它们说明的是「即使副本很快，WAIT 也多了确认往返和检查」。</p>
+<p>当副本变慢，同步复制的代价会直接体现出来。<code>wait1_all_slow_50ms</code> 让三个副本各延迟 0.05 秒，<code>WAIT 1</code> 的总耗时是 <code>1.0131437960080802</code> 秒，约 <code>19.740534442201223</code> ops/s，平均每次 <code>0.05065718980040401</code> 秒，<code>min_waited=3</code>、<code>max_waited=3</code>。<code>wait1_one_fast_two_200ms</code> 让 <code>r1</code> 不延迟、<code>r2</code> 和 <code>r3</code> 延迟 0.20 秒，<code>WAIT 1</code> 跟最快的副本走，总耗时只有 <code>0.00011922299745492637</code> 秒，约 <code>167752.87005815492</code> ops/s，平均 <code>5.961149872746318e-06</code> 秒，<code>min_waited=1</code>、<code>max_waited=1</code>。<code>wait3_one_slow_50ms</code> 让 <code>r3</code> 延迟 0.05 秒，<code>WAIT 3</code> 被最慢的副本拖住，总耗时 <code>1.0109846529958304</code> 秒，约 <code>19.78269397140145</code> ops/s，平均 <code>0.05054923264979152</code> 秒，<code>min_waited=3</code>、<code>max_waited=3</code>。同样的慢副本，<code>WAIT 1</code> 可以绕开，<code>WAIT 3</code> 绕不开；要求越多副本确认，越受最慢副本影响。</p>
+<p><code>WAIT</code> 的返回值也必须单独看。实验 <code>wait_timeout</code> 里，只有 <code>r1</code> 能确认，<code>WAIT 2</code> 的超时设为 100 毫秒，结果是 <code>waited=1</code>、<code>demanded=2</code>，耗时 <code>0.100113414999214</code> 秒，而主库已经是新标题。客户端如果只看「命令返回了」而不检查返回值，就会把只到达 1 个副本的写当成到达 2 个副本。<code>WAIT</code> 在副本实例上不能使用，这也是它属于主库确认语义的一个旁证。</p>
+<h3 id="2">2. 复制延迟和读陈旧</h3>
+<p>复制延迟可以按 offset 看，也可以按时间看。按 offset 看，主库当前 offset 是 2，副本 applied 是 1，<code>lag_offset=1</code>，说明副本还差一条命令。按时间看，副本最后一次 ack 距今多久，就是 <code>lag_s</code>；官方 <code>min-replicas-max-lag</code> 用的也是「延迟不超过 M 秒的已连接副本」这个口径。教学引擎的 <code>Node</code> 同时记录 <code>applied</code>、<code>last_ack_offset</code> 和 <code>last_ack_at</code>，<code>advance</code> 会推进冻结时钟，让暂停或断链副本的 lag 增长；<code>info()</code> 会给出每个副本的 <code>lag_offset</code> 和 <code>lag_s</code>。</p>
+<p>实验 <code>async_lag_stale_read</code> 把这条机制拆得很清楚。先 seed 旧标题 <code>Weekly digest</code>，这次写入占用 offset 1；暂停 <code>r1</code>；再异步写新标题 <code>Weekly digest (revised)</code>，返回 <code>ok</code>、<code>waited=0</code>、<code>offset=2</code>。此时主库是修订版、offset 2，<code>r2</code> 和 <code>r3</code> 也是修订版、offset 2；<code>r1</code> 仍是 <code>Weekly digest</code>、applied offset 1，<code>lag_offset=1</code>。<code>stale_before_flush=true</code>，说明读 <code>r1</code> 确实读到了旧值。随后对 <code>r1</code> 执行教学 <code>flush</code>，这不是 Redis 命令，而是测试辅助函数，用来按需把暂停副本的待应用队列送进去；之后三个副本都变成修订版、offset 2，<code>caught_up_after_flush=true</code>。</p>
+<p>这组数字回答了两个问题。第一，异步写返回成功时，主库和部分副本可能已经是新值，但落后副本仍可能返回旧值；读副本不是「读一份稍微旧一点但最终一样」这么简单，客户端在延迟窗口内看到的就是旧值。第二，副本不是永远落后；只要复制流恢复或教学 <code>flush</code> 把队列应用掉，它就会追上。关键是应用之前的那段时间里，读请求有没有被路由到它身上。</p>
+<p>官方文档还给了两个相关的读边界。副本在初次同步时可以使用旧数据集回答查询（如果配置如此），也可以配置成复制流中断时对客户端返回错误；页面写了这两种行为，但没有写出配置项的名字，本课不擅自补 <code>redis.conf</code> 键名。教学实验 <code>link_down_read</code> 复现了这两种结果：<code>r1</code> 在未跟上时断链，默认仍返回旧标题 <code>Weekly digest</code>、offset 1；把 <code>serve_on_link_down</code> 设为 <code>false</code> 后，同一个读返回 <code>status=link_down</code>，不再给出旧值。这里要记住的是语义边界：<strong>断开复制流的副本既可以继续用当前数据集回答，也可以拒绝回答；选择哪一种取决于配置，而不是「副本一定安全」。</strong></p>
+<p>复制延迟还会影响 <code>min-replicas-to-write</code> 的判定。实验 <code>replica_count_is_not_consensus</code> 里，打开 <code>min-replicas-to-write=2</code>、<code>min-replicas-max-lag=2.0</code> 秒后，三个副本新鲜时写成功；暂停 <code>r2</code> 和 <code>r3</code>，把教学时钟推进 2.1 秒，只有 <code>r1</code> 一个新鲜副本，于是写 <code>unpublished draft</code> 被拒绝，<code>status=noreplicas</code>，标题仍是 <code>Weekly digest (revised)</code>，<code>fresh_at_reject=1</code>。这里「新鲜」指的是最近有 ping 且 lag 不超过 2.0 秒，不是「已经收到这次写」。恢复 <code>r2</code> 并让 <code>r2</code> 重新 ping 后，新鲜副本变成 2 个，写成功，offset 变成 3，标题变成 <code>unpublished draft</code>。被拒绝的那次写 offset 是 0，因为它根本没有被主库接受，不能算作一条已经发生的写。</p>
+<p>读陈旧和写拒绝是同一件事的两面：副本落后时，读可能旧；主库发现新鲜副本不够时，写可能被拒绝。两者都不能靠「副本数量」自动解决。</p>
+<h3 id="3">3. 故障切换与已确认写丢失</h3>
+<p>客户端收到 <code>ok</code> 的写，在故障切换后不一定还在。实验 <code>async_ack_lost_on_failover</code> 把三个副本全部暂停，然后异步写新标题，返回 <code>ok</code>、<code>waited=0</code>、<code>offset=2</code>，<code>client_saw_ok=true</code>；主库已经是修订版，但三个副本都还是 <code>Weekly digest</code>、offset 1。接着宕掉主库，按最高 applied offset 提升副本。三个副本并列在 offset 1，教学函数选中了 <code>r3</code>；<code>new_master_offset=1</code>，恢复值是 <code>Weekly digest</code>，<code>acknowledged_write_lost=true</code>，<code>lost_writes=1</code>，<code>allowed_loss=true</code>。这条丢失的写就是客户端已经确认的 offset 2：它只在主库上，副本没收到，主库故障后没有来源可以恢复。</p>
+<p><code>WAIT</code> 可以改善这个边界，但不能消除它。实验 <code>wait_promote_acking_replica</code> 暂停 <code>r2</code> 和 <code>r3</code>，只让 <code>r1</code> 能确认；<code>SET</code> 加 <code>WAIT 1</code>，<code>waited=1</code>，<code>r1</code> 已有修订版、offset 2。宕掉主库后按最高 offset 提升，<code>r1</code> 成为新主库，<code>new_master_offset=2</code>，恢复值是 <code>Weekly digest (revised)</code>，<code>lost_writes=0</code>，<code>acknowledged_write_lost=false</code>；<code>r2</code> 和 <code>r3</code> 随后被全量同步成修订版。这个结果说明：如果切换选中了已经确认这次写的副本，已确认的写可以保住。</p>
+<p>但切换不一定选中它。实验 <code>wait_promote_lagging_replica</code> 用同样的 <code>WAIT 1</code> 让 <code>r1</code> 确认，却强制提升落后的 <code>r2</code>。切换前 <code>r1</code> 已有新标题，<code>r2</code> 还是旧标题；提升 <code>r2</code> 后，<code>new_master_offset=1</code>，恢复值是 <code>Weekly digest</code>；<code>r1</code> 被新主库全量同步，也被改回 <code>Weekly digest</code>。<code>lost_writes=1</code>，<code>allowed_loss=true</code>。这正对应官方 <code>WAIT</code> 页的说法：在 Sentinel 或 Cluster 故障切换场景中，<code>WAIT</code> 改善现实世界的数据安全，但只是「更可能（但不保证）」提升到已收到该写的副本，仍是 best-effort；仍然可能丢失已经同步复制到多个副本的写。</p>
+<p>这里的「故障切换」是教学函数，不是 Sentinel。教学 <code>failover(promote=None)</code> 会在存活副本中按 <code>(applied, -priority, name)</code> 选一个，优先已应用 offset 更大的；也可以由测试指定副本。它不投票、不判断 ODOWN、不需要多数派授权，也不处理网络分区。官方 Sentinel 的 quorum 是「就主库不可达达成一致的 Sentinel 进程数」，用于判定 ODOWN；真正执行故障切换还需要 Sentinel 的多数派授权，少数派分区里不会切换。副本选择顺序是：先 <code>replica-priority</code>（越低越优先，0 表示永不提升），相同则选复制 offset 更大、收到更多数据的，再相同则选 run ID 字典序更小的。<strong>「3 个 Redis 副本」和「3 个 Sentinel 的多数派/quorum」不是同一回事。</strong></p>
+<p>分区还会制造另一类丢失。官方 Sentinel 页写到：分区下旧主库若仍接受写，分区愈合后这些写会丢失；可以用 <code>min-replicas-to-write</code> 限制窗口。教学实验没有模拟完整网络分区，但 <code>failover</code> 会把存活旧主库隔离，保留它作为「仍可能接受写、愈合后可能被覆盖」的边界；本课不声称验证了 Sentinel 的分区恢复流程。</p>
+<p>主库无持久化空重启是另一种更危险的故障模式。实验 <code>empty_master_restart</code> 用 2 个副本，先写入 <code>Weekly digest (revised)</code> 和 <code>Product update</code>，两边各有 2 个标题。主库的 <code>persist=False</code>，宕机后以空数据集重启；仍连接的副本被全量同步清空，<code>master_keys_after=0</code>、<code>r1_keys_after=0</code>、<code>r2_keys_after=0</code>，<code>replicas_wiped=true</code>，<code>lost_titles=2</code>。这不是「副本还在所以安全」，而是空主库把副本也带空了。官方文档把「主库关闭持久化并自动重启」列为危险故障模式：空的主库会让仍连接的副本全量同步，并把副本数据也清空。</p>
+<p>最后回到 <code>min-replicas-to-write</code>。从 Redis 2.8 起可用 <code>min-replicas-to-write</code> 与 <code>min-replicas-max-lag</code>：至少 N 个延迟不超过 M 秒的已连接副本时才接受写。因为复制是异步的，它无法确保副本已经收到这一次写，所以始终存在丢失窗口；官方称这是 best-effort 数据安全机制，把无界丢失变成有界丢失，不满足条件时主库以错误拒绝写。它不等于共识。实验里默认 <code>min-replicas-to-write=0</code> 时，3 个已连接副本的异步写仍然 <code>waited=0</code>、<code>confirmation=master_only</code>、<code>is_consensus=false</code>，教学引擎的 <code>consensus_nodes=0</code>。打开 <code>min-replicas-to-write=2</code> 后，它只检查「最近有 N 个副本 ping 过」，并不等待这一次写到达副本。把这个开关理解成「多数派确认」是错的；把它理解成「在主库接受写之前加一道新鲜副本数量的门槛」才准确。</p>
+<h2 id="_10">常见误区</h2>
+<p><strong>「有三个副本，所以三份数据一致。」</strong> 副本数量只说明有三份拷贝。默认异步复制下，写返回成功时副本可能一个都没应用；实验 <code>async_lag_stale_read</code> 里 <code>r1</code> 就停在 offset 1，主库和另外两个副本在 offset 2。副本之间的一致性取决于复制进度和确认策略，不取决于数量。</p>
+<p><strong>「<code>WAIT</code> 成功就等于强一致，切换一定不丢。」</strong> <code>WAIT</code> 只保证指定数量的副本确认到了某个 offset，不保证故障切换一定提升到这些副本。实验 <code>wait_promote_acking_replica</code> 提升已确认的 <code>r1</code> 丢失 0 条，但 <code>wait_promote_lagging_replica</code> 强制提升落后的 <code>r2</code> 仍丢失 1 条。官方文档明确说 <code>WAIT</code> 是 best-effort，仍可能丢失已经同步复制到多个副本的写；<code>WAITAOF</code> 也不是强一致承诺。</p>
+<p><strong>「<code>min-replicas-to-write</code> 会等这次写到达副本。」</strong> 它检查的是最近有 N 个副本 ping 过且延迟不超过 M 秒，不是这次写的确认。实验里打开 <code>min-replicas-to-write=2</code> 后，三个副本新鲜时写成功；暂停两个副本并推进 2.1 秒后，只剩 1 个新鲜副本，写被拒绝。被拒绝的写没有发生；被接受的写也没有等待所有副本应用，只是通过了准入门槛。</p>
+<p><strong>「Sentinel 的 quorum 就是 Redis 副本数。」</strong> quorum 是 Sentinel 进程之间就「主库不可达」达成一致的数量，用于 ODOWN；真正切换还需要多数派授权。3 个 Redis 副本不构成 3 个 Sentinel 的 quorum，也不构成共识组。本教学引擎的 <code>consensus_nodes=0</code>，<code>sentinel_quorum_is_not_replica_count=true</code>，就是提醒不要把这两层混在一起。</p>
+<p><strong>「主库挂了，副本还有数据，所以空重启也安全。」</strong> 如果主库关闭持久化并自动重启，空主库会让仍连接的副本全量同步，副本数据也会被清空。实验 <code>empty_master_restart</code> 里两个副本各有 2 个标题，最后三边都是 0 个键，<code>lost_titles=2</code>。副本不是备份，尤其不是在这种危险故障模式下。</p>
+<p><strong>「读副本最多读到稍微旧一点的数据，不会有问题。」</strong> 延迟窗口内读副本就是旧值；实验里 <code>r1</code> 返回 <code>Weekly digest</code>，而主库已经是 <code>Weekly digest (revised)</code>。如果复制流断开，副本还可以配置成直接返回错误；<code>link_down_read</code> 里同一个读从返回旧值变成 <code>status=link_down</code>。读副本要么接受陈旧，要么显式拒绝，不能假设它总是最新。</p>
+<p><strong>「教学 offset 就是 Redis 的复制流字节偏移。」</strong> 教学 offset 按命令计数，seed 占 offset 1，发布修订占 offset 2；Redis 的复制 offset 是复制流的字节偏移。教学复制 ID 是短字符串，不是 Redis 的复制 ID。这个区别会影响你读 <code>INFO replication</code> 和源码时的口径。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点的权衡是：同步复制改善持久性边界，但增加延迟并受慢副本影响。实验 <code>sync_latency</code> 把这条权衡量化得很直接。不等待副本时，20 次写总耗时 <code>9.975099237635732e-05</code> 秒，约 <code>200499.2584388598</code> ops/s，平均每次 <code>4.987549618817866e-06</code> 秒。<code>WAIT 1</code> 且副本都很快时，总耗时 <code>0.00011532899225130677</code> 秒，约 <code>173416.93194040185</code> ops/s，平均 <code>5.766449612565339e-06</code> 秒；确认数 <code>min_waited=3</code>、<code>max_waited=3</code>，因为 <code>WAIT</code> 返回的是实际确认数，可以大于要求的 1。</p>
+<p>慢副本把差距拉开。三个副本各延迟 0.05 秒时，<code>WAIT 1</code> 总耗时 <code>1.0131437960080802</code> 秒，约 <code>19.740534442201223</code> ops/s，平均 <code>0.05065718980040401</code> 秒；<code>WAIT 3</code> 在一个副本延迟 0.05 秒时总耗时 <code>1.0109846529958304</code> 秒，约 <code>19.78269397140145</code> ops/s，平均 <code>0.05054923264979152</code> 秒。两者都被 0.05 秒的副本拖到约 1 秒，因为 20 次写每次都要等一次确认，<code>WAIT 3</code> 还要等最慢的那一个。相反，<code>WAIT 1</code> 在「一个快、两个 200 毫秒」的配置下总耗时只有 <code>0.00011922299745492637</code> 秒，约 <code>167752.87005815492</code> ops/s，平均 <code>5.961149872746318e-06</code> 秒，<code>min_waited=1</code>、<code>max_waited=1</code>：它跟最快的副本走，绕开了慢副本。</p>
+<p>这就是确认策略的核心取舍。要求越多副本确认，持久性边界越宽，但写延迟越受慢副本影响，可用性也越差：一个慢副本或一个分区就可能让 <code>WAIT 3</code> 长时间等不到。要求越少，写越快，但故障切换时可选的安全副本越少。<code>min-replicas-to-write</code> 是另一条曲线：它在准入阶段拒绝写，把无界丢失变成有界丢失，但在副本不足时会牺牲可用性；实验里只剩 1 个新鲜副本时，写直接返回 <code>noreplicas</code>，而不是继续接受再等复制。</p>
+<p>故障切换的选择规则也是权衡。优先选 offset 更大的副本，能减少已确认写的丢失；但生产环境的 Sentinel 还要先看 <code>replica-priority</code>，这可能导致「优先级更高但更落后」的副本被选中，或者优先级为 0 的副本永不提升。教学函数按 <code>(applied, -priority, name)</code> 选，是为了让实验可重复，不是 Sentinel 的完整规则。即使选择最靠前的副本，也只能保证它有的数据不丢；它没有的数据仍然没有。</p>
+<p>持久化配置会改变结论。主库关闭持久化并自动重启，会把空数据集同步给副本，副本越多，被清空的范围越大。这个权衡不是「副本多就好」，而是「副本、确认、持久化和切换规则必须一起设计」。</p>
+<h2 id="redis">动手实践：在测试 Redis 主从注入延迟和宕机，记录确认写与恢复数据差异</h2>
+<p>本课不启动 Redis，也不连接真实主从；下面的「主从」由 <code>/workspace/atlas/lessons/practice109</code> 里的教学 <code>ReplicationEngine</code> 模拟。代码用 Python 3.13.5 标准库写成，不链接 Redis，不走网络。运行 <code>./test.sh</code> 会执行全部实验并写下 <code>results.json</code>。本次已跑通，输出 <code>ALL_CHECKS_PASSED</code>。下面的数字都来自这份结果，没有改写。</p>
+<h3 id="0">0. 文件结构</h3>
+<ul>
+<li><code>engine.py</code>：教学 <code>ReplicationEngine</code>、<code>Node</code>、<code>Clock</code>。主库写入、offset 递增、命令入队、副本 ack、<code>WAIT</code> 计数、暂停/断链、全量同步、空主库重启、教学故障切换。</li>
+<li><code>app.py</code>：九组实验。延迟与读陈旧、异步确认写丢失、<code>WAIT</code> 后提升已确认副本、<code>WAIT</code> 后强制提升落后副本、<code>WAIT</code> 超时、副本数不是共识、空主库重启、断链读、同步延迟。</li>
+<li><code>test_replication.py</code> / <code>test.sh</code>：验收并写出 <code>results.json</code>。</li>
+<li><code>results.json</code>：本课所有教学数字的来源。</li>
+</ul>
+<h3 id="1_1">1. 准备数据与目标操作</h3>
+<p>教学键是 <code>article:01:title</code>，旧值 <code>Weekly digest</code>，新值 <code>Weekly digest (revised)</code>；另有 <code>unpublished draft</code> 和 <code>article:02:title = Product update</code>。默认 1 个教学主库加 3 个副本。<code>seed</code> 先写入旧标题并让所有副本跟上，占用 offset 1；目标操作是发布修订标题，占用 offset 2。实验要观察：异步写返回后各节点的值和 offset；暂停或断链后读副本看到什么；主库宕机后按什么规则提升、恢复出哪个值；<code>WAIT</code> 成功或超时后丢失多少条；<code>min-replicas-to-write</code> 拒绝写时标题有没有变；空主库重启会不会清空副本。</p>
+<h3 id="2_1">2. 要比较的几条路径</h3>
+<ol>
+<li>暂停 <code>r1</code>，异步写新标题，比较主库、<code>r2</code>/<code>r3</code> 和 <code>r1</code> 的值与 offset；再 <code>flush</code> <code>r1</code> 看是否追上。</li>
+<li>暂停全部副本，异步写返回 <code>ok</code>，宕掉主库，按最高 offset 提升，看恢复值和丢失条数。</li>
+<li>暂停 <code>r2</code>/<code>r3</code>，<code>SET</code> 加 <code>WAIT 1</code>，提升已确认的 <code>r1</code>，看是否丢失。</li>
+<li>同样的 <code>WAIT 1</code>，但强制提升落后的 <code>r2</code>，看 <code>r1</code> 是否被改回旧值、丢失多少条。</li>
+<li>只让 <code>r1</code> 能确认，<code>WAIT 2</code> 超时 100 毫秒，看返回值和耗时。</li>
+<li>默认 <code>min-replicas-to-write=0</code> 时三副本的异步写确认；打开 <code>min-replicas-to-write=2</code>、<code>max-lag=2.0</code> 后，暂停两个副本并推进 2.1 秒，看写是否被拒绝、标题是否不变，再恢复 <code>r2</code> 看写是否成功。</li>
+<li>主库无持久化，两个副本各有 2 个标题；主库宕机后空数据集重启，看副本是否被清空。</li>
+<li><code>r1</code> 未跟上就断链，默认读旧值；配置成断链返回错误后，看 <code>status</code>。</li>
+<li>20 次写下比较 <code>async_fast</code>、<code>wait1_fast</code>、<code>wait1_all_slow_50ms</code>、<code>wait1_one_fast_two_200ms</code>、<code>wait3_one_slow_50ms</code> 的耗时和确认数。</li>
+</ol>
+<h3 id="3_1">3. 运行并解读（真实输出）</h3>
+<p><code>./test.sh</code> 输出 <code>ALL_CHECKS_PASSED</code>。下面是从 <code>results.json</code> 摘出的关键字段，数值保持原样：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>关键结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>async_lag_stale_read</code></td>
+<td>写 <code>ok</code>、<code>waited=0</code>、<code>offset=2</code>；<code>r1</code> 值 <code>Weekly digest</code>、offset 1、<code>lag_offset=1</code>；<code>stale_before_flush=true</code>，<code>caught_up_after_flush=true</code></td>
+</tr>
+<tr>
+<td><code>async_ack_lost_on_failover</code></td>
+<td>写 <code>ok</code>、<code>waited=0</code>；提升 <code>r3</code>，<code>new_master_offset=1</code>；恢复值 <code>Weekly digest</code>，<code>lost_writes=1</code>，<code>allowed_loss=true</code></td>
+</tr>
+<tr>
+<td><code>wait_promote_acking_replica</code></td>
+<td><code>waited=1</code>；提升 <code>r1</code>，<code>new_master_offset=2</code>；恢复值 <code>Weekly digest (revised)</code>，<code>lost_writes=0</code></td>
+</tr>
+<tr>
+<td><code>wait_promote_lagging_replica</code></td>
+<td><code>waited=1</code>；强制提升 <code>r2</code>，<code>new_master_offset=1</code>；恢复值 <code>Weekly digest</code>，<code>lost_writes=1</code></td>
+</tr>
+<tr>
+<td><code>wait_timeout</code></td>
+<td><code>waited=1</code>、<code>demanded=2</code>、<code>elapsed_s=0.100113414999214</code>；主库已是新标题</td>
+</tr>
+<tr>
+<td><code>replica_count_is_not_consensus</code></td>
+<td>三副本异步写 <code>waited=0</code>、<code>confirmation=master_only</code>、<code>is_consensus=false</code>、<code>consensus_nodes=0</code></td>
+</tr>
+<tr>
+<td><code>empty_master_restart</code></td>
+<td>三边 keys 都是 0，<code>replicas_wiped=true</code>，<code>lost_titles=2</code></td>
+</tr>
+<tr>
+<td><code>link_down_read</code></td>
+<td>默认读旧值 <code>Weekly digest</code>；断链返回错误时 <code>status=link_down</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="4">4. 逐组对照真实数字</h3>
+<ol>
+<li><strong>复制延迟和读陈旧。</strong> 暂停 <code>r1</code> 后异步写，<code>set</code> 返回 <code>ok</code>、<code>waited=0</code>、<code>offset=2</code>，耗时 <code>5.280991899780929e-06</code> 秒。主库和 <code>r2</code>/<code>r3</code> 都是 <code>Weekly digest (revised)</code>、offset 2；<code>r1</code> 仍是 <code>Weekly digest</code>、applied offset 1，<code>lag_offset=1</code>。<code>stale_before_flush=true</code>，<code>caught_up_after_flush=true</code>。seed 占用 offset 1，这次写是 offset 2；<code>flush</code> 之后三个副本都到 offset 2。</li>
+<li><strong>异步已确认写丢失。</strong> 暂停全部副本，异步 <code>SET</code> 返回 <code>ok</code>（客户端已收到确认），主库已是新标题，三个副本仍是旧标题、offset 1。宕掉主库后按最高 offset 提升，三个副本并列，教学函数选中 <code>r3</code>；<code>new_master_offset=1</code>，恢复值是 <code>Weekly digest</code>，<code>acknowledged_write_lost=true</code>，<code>lost_writes=1</code>，<code>allowed_loss=true</code>。</li>
+<li><strong><code>WAIT</code> 后提升已确认副本。</strong> 暂停 <code>r2</code>/<code>r3</code>，<code>SET</code> 加 <code>WAIT 1</code>、超时 1000 毫秒，<code>waited=1</code>。提升最高 offset 的 <code>r1</code>，<code>new_master_offset=2</code>，恢复值 <code>Weekly digest (revised)</code>，<code>lost_writes=0</code>，<code>acknowledged_write_lost=false</code>；<code>r2</code> 和 <code>r3</code> 被全量同步成修订版。</li>
+<li><strong><code>WAIT</code> 后强制提升落后副本。</strong> 同样 <code>WAIT 1</code> 成功（<code>r1</code> 已有新标题，<code>r2</code> 仍是旧标题），但强制提升 <code>r2</code>。新主库恢复值 <code>Weekly digest</code>，<code>new_master_offset=1</code>；<code>r1</code> 被全量同步后也改回 <code>Weekly digest</code>，<code>lost_writes=1</code>，<code>allowed_loss=true</code>。这对应官方「best-effort，仍可能丢失已同步复制的写」。</li>
+<li><strong><code>WAIT</code> 超时。</strong> 只让 <code>r1</code> 能确认，<code>WAIT 2</code>、超时 100 毫秒，<code>waited=1</code>、<code>demanded=2</code>，<code>client_must_check=true</code>，耗时 <code>0.100113414999214</code> 秒；主库已经是新标题。客户端必须检查返回值，不能把超时返回当成成功。</li>
+<li><strong>三副本不是共识。</strong> 默认 <code>min-replicas-to-write=0</code> 时，3 个已连接副本的异步写仍然 <code>waited=0</code>、<code>confirmation=master_only</code>、<code>is_consensus=false</code>，本引擎 <code>consensus_nodes=0</code>，<code>sentinel_quorum_is_not_replica_count=true</code>。打开 <code>min-replicas-to-write=2</code>、<code>max-lag=2.0</code> 秒后，三副本新鲜时写成功；暂停 <code>r2</code>/<code>r3</code> 并推进 2.1 秒后只有 1 个新鲜副本，写 <code>unpublished draft</code> 被拒绝，<code>status=noreplicas</code>，标题仍是 <code>Weekly digest (revised)</code>；恢复 <code>r2</code> 并让它重新 ping 后写成功，标题变成 <code>unpublished draft</code>，offset 变成 3。这个开关只检查「最近有 N 个副本 ping 过」，并不等待这一次写到达副本，官方称仍有丢失窗口。</li>
+<li><strong>主库无持久化空重启。</strong> 2 个副本已有 2 个标题（含 <code>Weekly digest (revised)</code> 与 <code>Product update</code>），主库宕机后空数据集重启，仍连接的副本被全量同步清空，<code>replicas_wiped=true</code>，<code>lost_titles=2</code>，三边 keys 都是 0。这是官方文档里的危险故障模式。</li>
+<li><strong>断链后的读。</strong> <code>r1</code> 未跟上就断链，默认仍返回旧标题 <code>Weekly digest</code>、offset 1；若配置为链路断开时返回错误，<code>status=link_down</code>，不再返回旧值。官方复制页写了「可继续用旧数据集回答」或「复制流中断时返回错误」，但该页没有写出配置项的名字，本课不擅自写出 <code>redis.conf</code> 键名。</li>
+<li><strong>同步延迟。</strong> 各 20 次写：<code>async_fast</code> 的 <code>elapsed_s=9.975099237635732e-05</code>、<code>ops_per_s=200499.2584388598</code>、<code>mean_write_s=4.987549618817866e-06</code>、<code>min_waited=0</code>、<code>max_waited=0</code>；<code>wait1_fast</code> 的 <code>elapsed_s=0.00011532899225130677</code>、<code>ops_per_s=173416.93194040185</code>、<code>mean_write_s=5.766449612565339e-06</code>、<code>min_waited=3</code>、<code>max_waited=3</code>；<code>wait1_all_slow_50ms</code> 的 <code>elapsed_s=1.0131437960080802</code>、<code>ops_per_s=19.740534442201223</code>、<code>mean_write_s=0.05065718980040401</code>、<code>min_waited=3</code>、<code>max_waited=3</code>；<code>wait1_one_fast_two_200ms</code> 的 <code>elapsed_s=0.00011922299745492637</code>、<code>ops_per_s=167752.87005815492</code>、<code>mean_write_s=5.961149872746318e-06</code>、<code>min_waited=1</code>、<code>max_waited=1</code>；<code>wait3_one_slow_50ms</code> 的 <code>elapsed_s=1.0109846529958304</code>、<code>ops_per_s=19.78269397140145</code>、<code>mean_write_s=0.05054923264979152</code>、<code>min_waited=3</code>、<code>max_waited=3</code>。这些数字支撑「同步复制改善持久性边界，但增加延迟并受慢副本影响」。</li>
+</ol>
+<h3 id="5">5. 对照验收标准</h3>
+<div class="codehilite"><pre><span></span><code># 验收 1：能区分副本数与参与共识节点数
+# 3 个副本只是 leader-follower 的拷贝数；
+# 默认写确认只在主库完成：waited=0、confirmation=master_only、is_consensus=false；
+# Sentinel 的 quorum/多数派是 Sentinel 进程之间的，不是这 3 个 Redis 副本；
+# 本教学引擎没有共识组：consensus_nodes=0。
+# sentinel_quorum_is_not_replica_count=true。
+
+# 验收 2：故障测试记录允许丢失的写
+# 异步确认后切换：lost_writes=1，allowed_loss=true；
+# WAIT 且提升已确认副本：lost_writes=0；
+# WAIT 但提升落后副本：lost_writes=1，allowed_loss=true；
+# 空主库重启：lost_titles=2，replicas_wiped=true。
+# 「允许丢失」是测试记录，不是「开了三副本就不会丢」。
+</code></pre></div>
+
+<h3 id="6">6. 自己动手的扩展练习</h3>
+<ul>
+<li>把 <code>wait_promote_lagging_replica</code> 里的强制提升从 <code>r2</code> 改成 <code>r3</code>，观察 <code>r1</code> 和另一个副本被全量同步后的值；再对比「按最高 offset 提升」的结果。</li>
+<li>把 <code>min-replicas-to-write</code> 从 2 改成 3，暂停一个副本并推进超过 <code>max-lag</code>，观察写是否被拒绝；再恢复副本，看被拒绝的写有没有留下 offset。</li>
+<li>把 <code>wait_timeout</code> 的超时从 100 毫秒改成 0，观察 <code>WAIT 2</code> 在只有一个副本能确认时会不会一直等；不要在生产代码里无条件使用 <code>timeout=0</code>。</li>
+<li>在 <code>async_lag_stale_read</code> 里让 <code>r1</code> 断链而不是暂停，比较默认读旧值和 <code>serve_on_link_down=false</code> 两种结果。</li>
+<li>给 <code>sync_latency</code> 增加一组「两个副本 50 毫秒、一个副本 200 毫秒」的 <code>WAIT 2</code>，观察它跟第二快还是最慢的副本走。</li>
+</ul>
+<h3 id="7">7. 和生产引擎的对应关系（不要记错边界）</h3>
+<ul>
+<li>教学 <code>ReplicationEngine</code> 是 Python 3 标准库模型，不是 Redis。没有 TCP、PSYNC/SYNC、RDB/AOF、diskless 传输、Sentinel 进程或 Cluster 槽位；教学复制 ID 是短字符串，教学 offset 按命令计数，不是 Redis 复制流的字节偏移。</li>
+<li>教学 <code>WAIT</code> 用 <code>_wait_for</code> 循环应用到期命令并统计 <code>last_ack_offset &gt;= offset</code> 的副本数；Redis 的 <code>waitCommand</code> 用客户端的 <code>c-&gt;woff</code>，并由 <code>replicationCountAcksByOffset</code> 统计确认 offset。两者语义相近，但实现和计数口径不同。</li>
+<li>教学 <code>failover</code> 按 <code>(applied, -priority, name)</code> 选副本或按测试指定副本，不是 Sentinel 的法定人数选举，也不是 Cluster 故障切换；教学 <code>restart_empty</code> 模拟主库关闭持久化后空重启导致副本被全量同步清空，不是 Redis 的启动流程。</li>
+<li>教学 <code>min-replicas-to-write</code> 用 <code>fresh_replicas()</code> 检查连接、存活和 <code>lag_s &lt;= min_replicas_max_lag</code>；官方 <code>min-replicas-to-write</code> / <code>min-replicas-max-lag</code> 的语义是「至少 N 个延迟不超过 M 秒的已连接副本时才接受写」，仍是 best-effort，不等待这一次写。</li>
+<li>教学断链读用 <code>serve_on_link_down</code> 表示两种配置行为；官方复制页写了「可继续用旧数据集回答」或「复制流中断时返回错误」，但没有在该页写出配置项名字，本课不补键名。</li>
+</ul>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：沿资源中的定义、示例与错误处理路径核对实现，并记录适用版本及边界条件。2026-11-12 用 curl 打开的主文档是 <a href="https://redis.io/docs/latest/operate/oss_and_stack/management/replication/">Redis replication</a>，返回 200，无跳转。页面支撑了本课的核心语义：Redis 默认异步复制；副本定期向主库异步确认已处理的数据量；主库平时不等待副本，但知道各副本处理到哪里，从而允许可选的同步复制；客户端可用 <code>WAIT</code> 请求某些写入的同步复制；<code>WAIT</code> 只能确保在其他 Redis 实例中有指定数量的已确认副本，并不会把一组 Redis 变成具有强一致性的 CP 系统；已确认的写在故障切换时仍可能丢失，取决于持久化配置；<code>WAIT</code> 会把丢失概率降到某些难以触发的故障模式。页面还写到 leader-follower 结构、Sentinel/Cluster 是额外的高可用层、命令流/部分重同步/全量同步三条路径、主库侧复制非阻塞、副本初次同步时可用旧数据集回答或配置成链路中断时返回错误、初次同步加载新数据集窗口会阻塞、<code>min-replicas-to-write</code> 与 <code>min-replicas-max-lag</code> 的 best-effort 语义、副本默认只读、主库关闭持久化并自动重启的危险模式、复制 ID 加 offset 标识数据集版本、提升后的副本使用新复制 ID、过期由主库合成 <code>DEL</code>、以及 <code>INFO replication</code> / <code>ROLE</code> 可查看状态和 offset。</p>
+<p><a href="https://redis.io/docs/latest/commands/wait/">WAIT</a> 返回 200。页面写明 <code>WAIT numreplicas timeout</code> 的毫秒超时、<code>0</code> 表示一直等、自 Redis 3.0.0 起可用、返回已确认副本数、客户端必须检查返回值是否大于等于要求数量、超时或成功都会返回这个数字；在 Sentinel 或 Cluster 故障切换场景中 <code>WAIT</code> 改善现实世界的数据安全，但只是「更可能（但不保证）」提升到已收到该写的副本，仍是 best-effort，仍然可能丢失已经同步复制到多个副本的写。实现上为每个客户端记住写产生时的复制 offset，<code>WAIT</code> 检查是否有足够副本的确认 offset 大于等于该值；示例是 <code>SET foo bar</code>、<code>WAIT 1 0</code> 返回 1，<code>WAIT 2 1000</code> 在只有一个副本时 1 秒后返回 1；<code>WAIT</code> 不能在副本实例上使用。</p>
+<p><a href="https://redis.io/docs/latest/commands/waitaof/">WAITAOF</a> 返回 200。它自 Redis 7.2 起可用，等待本地和/或副本把 AOF fsync 完成；官方同样写明它不会让 Redis 变成强一致存储，除非等待集群所有成员把写 fsync 到磁盘，故障切换或重启时仍可能丢数据。本课实验没有实现 <code>WAITAOF</code>，这里只作为文档阅读，不编造实验数字。</p>
+<p><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/">Sentinel</a> 返回 200（复制页本身指向 Sentinel/Cluster 了解高可用与故障切换，因此打开核对）。页面写明 Sentinel+Redis 分布式系统不保证已确认的写在故障中保留，因为 Redis 使用异步复制；quorum 是就「主库不可达」达成一致的 Sentinel 进程数，用于判定 ODOWN，真正执行故障切换还需要 Sentinel 的多数派授权，少数派分区里不会切换；副本选择顺序是先 <code>replica-priority</code>（越低越优先，0 表示永不提升），相同则选复制 offset 更大、收到更多数据的，再相同则选 run ID 字典序更小的；分区下旧主库若仍接受写，分区愈合后这些写会丢失，可用 <code>min-replicas-to-write</code> 限制窗口。这些内容支撑了本课「3 个 Redis 副本不是 3 个 Sentinel 的 quorum」这条边界。</p>
+<p>同期打开但<strong>不要当作复制正文引用</strong>：<code>https://redis.io/topics/replication</code> 返回 200，但最终跳到 <code>https://redis.io/docs/latest/develop/</code>（文档首页），不是复制页；<code>https://redis.io/docs/latest/topics/sentinel/</code> 返回 404。本课不引用这两处。<code>https://redis.io/docs/latest/commands/replicaof/</code>、<code>https://redis.io/docs/latest/commands/role/</code>、<code>https://redis.io/docs/latest/commands/info/</code>、<code>https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/</code> 均为 200，本课只点到命令名和「Cluster 是额外层」，不展开未核对的 Cluster 槽位细节。</p>
+<p>源码阅读以 <a href="https://raw.githubusercontent.com/redis/redis/8.4/src/replication.c">Redis 8.4 的 src/replication.c</a> 为准，2026-11-12 返回 200；不要写成 unstable 或其他版本。下面按核对过的函数名和大致行号阅读，不编造没打开的函数体：</p>
+<ul>
+<li><code>refreshGoodSlavesCount</code>（约 4461 行）：若配置了 <code>min slaves</code>，遍历 <code>server.slaves</code>，对 <code>SLAVE_STATE_ONLINE</code> 且 <code>lag = server.unixtime - slave-&gt;repl_ack_time</code> 不超过 <code>repl_min_slaves_max_lag</code> 的副本计数，写入 <code>repl_good_slaves_count</code>。对照本课 <code>fresh_replicas()</code> 和 <code>min-replicas-to-write</code> 的「最近 ping 过」语义。</li>
+<li><code>checkGoodReplicasStatus</code>（约 4481 行）：未配置或 good count 大于等于 min 时才认为状态 OK。对照实验里只剩 1 个新鲜副本时写被拒绝。</li>
+<li>约 4488 行的注释概括同步复制设计：全局 offset、主库发送命令时递增、副本 ping 已处理 offset、<code>WAIT &lt;num_replicas&gt; &lt;milliseconds_timeout&gt;</code> 返回已处理的副本数。对照本课 <code>WAIT 1</code> / <code>WAIT 3</code> 和 <code>wait_timeout</code>。</li>
+<li><code>replicationRequestAckFromSlaves</code>、<code>replicationCountAcksByOffset</code>（约 4524 行）：统计 <code>SLAVE_STATE_ONLINE</code> 且 <code>repl_ack_off &gt;= offset</code> 的副本数。对照教学 <code>_ack_count_unlocked</code> 的 <code>last_ack_offset &gt;= offset</code>。</li>
+<li><code>waitCommand</code>（约 4558 行）：用客户端的 <code>c-&gt;woff</code>；若当前确认数已够或 <code>CLIENT_DENY_BLOCKING</code> 则立刻返回该数字；否则 <code>blockForReplication</code>，并 <code>replicationRequestAckFromSlaves</code>。副本实例上调用 <code>WAIT</code> 会报错。对照本课 <code>waited</code> / <code>demanded</code> 和超时返回 1 的结果。</li>
+<li><code>waitaofCommand</code>（约 4592 行）、<code>replicationCountAOFAcksByOffset</code>、<code>processClientsWaitingReplicas</code>：这里只点到名字与「同样按 offset 统计」，不编造没打开的函数体；本课实验没有实现 <code>WAITAOF</code>。</li>
+</ul>
+<p>本课<strong>没有打开 <code>sentinel.c</code></strong>，因此不声称核对过 Sentinel 的 C 源码；Sentinel 的 quorum、多数派和副本选择只按 2026-11-12 打开的官方页面描述。</p>
+<h2 id="_13">自测题</h2>
+<p><strong>1.</strong> 为什么「3 个副本」不等于「参与共识的 3 个节点」？<code>min-replicas-to-write=2</code> 改变了什么，又没有改变什么？</p>
+<p><strong>答案：</strong> 3 个副本只是 leader-follower 结构里的 3 份拷贝。默认异步复制下，写确认只在主库完成；教学实验里 3 个已连接副本的异步写仍然 <code>waited=0</code>、<code>confirmation=master_only</code>、<code>is_consensus=false</code>，本引擎 <code>consensus_nodes=0</code>。<code>min-replicas-to-write=2</code> 只是在主库接受写之前检查「最近有 N 个副本 ping 过且延迟不超过 M 秒」：三个副本新鲜时写成功，暂停两个并推进 2.1 秒后只剩 1 个新鲜副本，写被拒绝，<code>status=noreplicas</code>，标题仍是 <code>Weekly digest (revised)</code>。它没有等待这一次写到达副本，也没有让副本参与投票；官方称它是 best-effort 数据安全机制，仍有丢失窗口。Sentinel 的 quorum 是 Sentinel 进程之间就主库不可达达成一致的数量，真正切换还需要多数派授权，和这 3 个 Redis 副本不是同一层。</p>
+<p><strong>2.</strong> 同样 <code>WAIT 1</code> 成功，为什么提升已确认的 <code>r1</code> 丢失 0 条，强制提升落后的 <code>r2</code> 却丢失 1 条？<code>WAIT</code> 能保证故障切换不丢写吗？</p>
+<p><strong>答案：</strong> <code>WAIT 1</code> 让 <code>r1</code> 确认到 offset 2，所以提升 <code>r1</code> 时新主库有修订版，<code>lost_writes=0</code>，<code>r2</code>/<code>r3</code> 随后被全量同步成修订版。强制提升 <code>r2</code> 时，<code>r2</code> 还停在 offset 1、值是 <code>Weekly digest</code>；<code>r1</code> 虽然已有新标题，也被新主库全量同步改回旧值，<code>lost_writes=1</code>，<code>allowed_loss=true</code>。<code>WAIT</code> 不能保证故障切换不丢写：官方文档明确说它是 best-effort，仍可能丢失已经同步复制到多个副本的写；<code>WAITAOF</code> 也不是强一致承诺。<code>WAIT</code> 的返回值还必须检查：<code>wait_timeout</code> 里 <code>WAIT 2</code> 只等到 1 个副本，耗时 <code>0.100113414999214</code> 秒，客户端不能把超时返回当成成功。</p>
+<p><strong>3.</strong> 异步写返回 <code>ok</code> 后，为什么读 <code>r1</code> 仍是旧标题？主库关闭持久化后空数据集重启，为什么副本也会被清空？</p>
+<p><strong>答案：</strong> 异步写只要求主库完成，客户端不等待副本确认。实验 <code>async_lag_stale_read</code> 里，seed 占用 offset 1，发布修订是 offset 2；写返回 <code>ok</code>、<code>waited=0</code> 后，主库和 <code>r2</code>/<code>r3</code> 是 <code>Weekly digest (revised)</code>、offset 2，而暂停的 <code>r1</code> 仍是 <code>Weekly digest</code>、offset 1，<code>lag_offset=1</code>，所以读 <code>r1</code> 得到旧值；<code>flush</code> <code>r1</code> 后它追上 offset 2。空主库重启更危险：实验 <code>empty_master_restart</code> 里两个副本各有 2 个标题，主库无持久化宕机后以空数据集重启，仍连接的副本被全量同步清空，<code>master_keys_after=0</code>、<code>r1_keys_after=0</code>、<code>r2_keys_after=0</code>，<code>lost_titles=2</code>。官方把「主库关闭持久化并自动重启」列为危险故障模式：空的主库会让仍连接的副本全量同步，并把副本数据也清空。副本不是备份。</p>
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://redis.io/docs/latest/operate/oss_and_stack/management/replication/">存储复制、确认与故障切换：参考文档 / 原始资料</a>（redis.io，英文文档，深入，免费）。重点阅读同步与异步复制、复制延迟和读陈旧，以及 <code>WAIT</code>、<code>min-replicas-to-write</code> 和故障切换相关段落，用于核对本节点实验的语义和边界。2026-11-12 该 URL 返回 200，无跳转。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>复制不是「多一份相同数据」，而是「多一份可能落后、可能被提升的数据」。Redis 默认异步复制，副本定期确认已处理的数据量；主库平时不等待副本，但知道各副本的进度，因此可以支持 <code>WAIT</code> 这种按次的可选同步复制。<code>WAIT</code> 只保证指定数量的副本确认到某个 offset，不会把 Redis 变成强一致 CP 系统；<code>WAITAOF</code> 也不是强一致承诺。教学引擎 <code>ReplicationEngine</code> 用短字符串 <code>replid</code> 和按命令计数的 offset 做近似，不是 Redis 的字节偏移。</li>
+<li>同步复制改善持久性边界，但增加延迟并受慢副本影响。20 次写里，<code>async_fast</code> 总耗时 <code>9.975099237635732e-05</code> 秒、约 <code>200499.2584388598</code> ops/s；<code>wait1_fast</code> 总耗时 <code>0.00011532899225130677</code> 秒、约 <code>173416.93194040185</code> ops/s、<code>min_waited=3</code>；<code>wait1_all_slow_50ms</code> 总耗时 <code>1.0131437960080802</code> 秒、约 <code>19.740534442201223</code> ops/s；<code>wait1_one_fast_two_200ms</code> 总耗时 <code>0.00011922299745492637</code> 秒、约 <code>167752.87005815492</code> ops/s、<code>min_waited=1</code>；<code>wait3_one_slow_50ms</code> 总耗时 <code>1.0109846529958304</code> 秒、约 <code>19.78269397140145</code> ops/s。<code>WAIT 1</code> 可以跟最快副本走，<code>WAIT 3</code> 会被最慢副本拖住。</li>
+<li>复制延迟导致读陈旧。<code>async_lag_stale_read</code> 里异步写返回 <code>ok</code>、<code>waited=0</code>、<code>offset=2</code>，主库和 <code>r2</code>/<code>r3</code> 已是修订版，<code>r1</code> 仍是旧标题、offset 1、<code>lag_offset=1</code>；<code>flush</code> 后追上。断链副本默认可以返回旧值，也可以配置成返回错误；实验 <code>link_down_read</code> 的 <code>status=link_down</code> 就是后一种。</li>
+<li>故障切换会暴露已确认写的丢失。异步确认后切换丢失 1 条；<code>WAIT</code> 且提升已确认副本丢失 0 条；<code>WAIT</code> 但强制提升落后副本仍丢失 1 条；空主库重启丢失 2 个标题，<code>replicas_wiped=true</code>。3 个副本不是共识，<code>min-replicas-to-write</code> 只检查最近有 N 个副本 ping 过，不等待这次写；Sentinel 的 quorum 和多数派是 Sentinel 进程之间的判断，不是这 3 个 Redis 副本。教学故障切换函数按已应用 offset 挑选或按测试指定副本，不是 Sentinel 选举，也不是 Cluster 故障切换。</li>
+<li>学完后可以用三句话自检：异步写返回 <code>ok</code> 后，为什么读落后副本会旧、切换会丢；<code>WAIT</code> 成功为什么仍可能丢，<code>min-replicas-to-write</code> 到底检查了什么；空主库重启为什么会把副本一起清空。三句都能答上来，并且能指出 <code>practice109/results.json</code> 里对应的字段，这一课就算过关。</li>
+</ul>
+<p>如果有一句答不上来，先回到对应的实验表，再回到官方文档里关于「默认异步复制」「<code>WAIT</code> 只保证指定数量的已确认副本」「已确认写仍可能丢失」「<code>min-replicas-to-write</code> 是 best-effort」「空主库重启会清空副本」以及 Sentinel quorum 的那几句，不要只把「多开几个副本就安全了」这句话背下来。</p>
+<p>写作笔记时顺便记下三件事：你核对文档的日期和实际打开的页面（包括 <code>/topics/replication</code> 跳转到文档首页、<code>/docs/latest/topics/sentinel/</code> 返回 404 这两件事），这次实验里每个 <code>lost_writes</code> / <code>lost_titles</code> 对应哪一条写，以及教学 offset 和 Redis 字节 offset 的区别。这三件事能把本课的复制边界带进后面的高可用与一致性课，而不是只留下一个「副本越多越可靠」的印象。</p><div class="pn"><span><a href="108.html">← Bloom Filter与读放大</a></span><span>下一课 待更新</span></div></main></div></body></html>
