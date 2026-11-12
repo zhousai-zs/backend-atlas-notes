@@ -1,0 +1,215 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>107. RocksDB集成与读写调优 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（107/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（11/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="cur" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li class="todo">108. Bloom Filter与读放大 <em>待更新</em></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 107 课 · 领域 G · 阶段 4</p><p class="dl"><a href="../files/107-g-rocksdb.md" download>⬇ 本课 Markdown</a><a href="../files/practice107.tar.gz" download>⬇ 练习包 practice107.tar.gz</a></p><h1 id="107208-rocksdb">第 107/208 课：RocksDB集成与读写调优</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-rocksdb</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>RocksDB</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>存储引擎</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>g-lsm</code>、<code>b-raii</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>RocksDB</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations">RocksDB集成与读写调优：参考文档 / 原始资料</a>（github.com，文档；2026-11-12 该 URL 返回 301，跳转到 <a href="https://github.com/meta/rocksdb/wiki/Basic-Operations">meta/rocksdb wiki：Basic Operations</a> 返回 200。同批核对 Column-Families、Write-Stalls、Block-Cache、Memory-usage-in-RocksDB、Iterator、Snapshot、Checkpoints、Setup-Options-and-Basic-Tuning，均为 facebook 入口 301 后 200；wiki 路径 <code>Snapshots</code> 返回 404，本课引用单数形式的 <a href="https://github.com/facebook/rocksdb/wiki/Snapshot">Snapshot</a>）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>RocksDB是嵌入式LSM存储引擎，应用负责服务层、资源预算和错误处理，不能把引擎当完整分布式数据库。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中出现的「内容后台」「文章标题」「阅读计数」等场景都是<strong>教学假设</strong>，用来让列族、批写、快照、迭代器和块缓存变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学 <code>RocksDBEngine</code>，<strong>不是 RocksDB，不是 Redis，也不是一个对外提供网络协议的服务</strong>。教学 SST 是<strong>按 key 排好序的记录列表，再按固定条数切成块</strong>，不是 RocksDB 的 block-based 约 4 KiB 压缩块；教学 block cache 只缓存这些未压缩的教学块。本课实现了简化的 WAL 恢复和 L0 刷盘/合并，但<strong>没有</strong> bloom filter、压缩、真实 MANIFEST 日志、Checkpoint、事务、Merge Operator、prefix seek、subcompaction 或写缓冲管理器。官方文档已于 <strong>2026-11-12</strong> 核对：节点 URL <code>https://github.com/facebook/rocksdb/wiki/Basic-Operations</code> 返回 301，跳转到 <code>https://github.com/meta/rocksdb/wiki/Basic-Operations</code> 并返回 200；同期打开的 Column-Families、Write-Stalls、Block-Cache、Memory-usage-in-RocksDB、Iterator、Snapshot、Checkpoints、Setup-Options-and-Basic-Tuning 同样 301 后 200。<code>https://github.com/facebook/rocksdb/wiki/Snapshots</code>（复数）返回 404，本课引用 <code>wiki/Snapshot</code>。文中的官方默认值、日志措辞和机制只写到核对过的页面能够支撑的范围；教学实验里的字节数、耗时和命中次数都来自 <code>practice107/results.json</code>，不是生产引擎的基准数字。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：换上嵌入式引擎，并不等于换上了一套完整数据库</h3>
+<p>内容后台如果要把标题和计数从第 104 课那种进程内哈希表，换成一套能重启恢复、能按范围扫描、能原子改多条记录的持久化内核，RocksDB 是常见的选择。它是嵌入式 LSM 存储引擎：进程打开一个目录，调用 <code>Put</code> / <code>Get</code> / <code>Write</code>，数据就落在这个目录里。节点把它概括为：RocksDB 是嵌入式 LSM 存储引擎，应用负责服务层、资源预算和错误处理，不能把引擎当完整分布式数据库。</p>
+<p>这句里有三件容易被跳过的事。服务层——监听端口、鉴权、多副本、故障转移——都不是引擎的工作。资源预算——块缓存、memtable、后台刷盘和压实占用的内存与 IO——默认参数不一定适合这台机器和这条负载，必须由应用按预算来设。错误处理——几乎所有可能失败的调用都返回 <code>Status</code>，不检查就等于把 Incomplete、InvalidArgument 或 IO 错误吞掉。换内核，是把第 104 课的 KV 语义接到第 106 课的 LSM 上，并补上批写、快照、迭代器和重启恢复，而不是少写一层应用。</p>
+<h3 id="_4">接上前置</h3>
+<p>第 106 课把 memtable、SST、压实和 write stall 讲清楚了，但那门课没有列族、没有快照、也没有块缓存，并且假设写入已经进了内存表。本课把这些集成接口接上：一个 DB 里可以有多个 Column Family，一次 <code>WriteBatch</code> 可以原子地改几个列族，读取可以用 snapshot 和 iterator 看到一个一致的时间点，读热数据走 block cache，后台跟不上时仍然会减速或停写。另一门前置 <code>b-raii</code> 讨论资源寿命：<code>GetSnapshot</code> / <code>ReleaseSnapshot</code>、迭代器的创建与销毁、<code>ColumnFamilyHandle</code> 必须在删除 DB 之前释放。本课的验收标准就是这两件事在集成时必须同时成立：所有 <code>Status</code> 都要检查；iterator 的寿命和 snapshot 的释放要正确。</p>
+<h3 id="rocksdb">一次写入走进 RocksDB 之后</h3>
+<p>一次「发布标题并记下阅读计数」的教学写入，会走这条路径：</p>
+<ol>
+<li>调用方构造一个 <code>WriteBatch</code>：向 <code>titles</code> 列族 <code>Put article:01:title</code>，向 <code>counters</code> 列族 <code>Put article:01:views</code>。两步是一批，不是两次互不相干的 <code>Put</code>。</li>
+<li><code>DB::Write</code> 先看有没有 write stall。如果某个列族的 immutable memtable 或 L0 已经碰到停写条件，而 <code>WriteOptions.no_slowdown</code> 为真，这次调用立刻返回 <code>Status::Incomplete()</code>，批里的键都不会被应用。</li>
+<li>通过检查后，整批写入共享的 WAL；<code>WriteOptions.sync=true</code> 时，写操作要等到日志进入持久存储才返回。然后同一批更新被应用到各列族自己的 memtable。列族共享 WAL，不共享 memtable 和 SST，所以标题和计数可以分开配置，又能在一次 Write 里原子提交。</li>
+<li>memtable 满了会封存、刷成该列族的 L0 SST；L0 过多时后台压实。读一条标题时，先看该列族的 memtable，再按块去 SST 里找。块若在 block cache 里就是命中，否则从文件读入，并在 <code>ReadOptions.fill_cache</code> 为真时写入缓存。</li>
+<li><code>GetSnapshot</code> 记下当前序号。之后即使标题被改成修订版，带着这个 snapshot 的 <code>Get</code> 和 iterator 仍看到旧标题。快照是进程内对象，<strong>不会跨重启保存</strong>。需要一份可重新打开的目录副本时，那是 Checkpoint，不是 snapshot。</li>
+</ol>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>下面用「文章标题和阅读计数」做例子。键形如 <code>article:01:title</code>、<code>article:01:views</code>，标题用 <code>Weekly digest</code> 和修订版 <code>Weekly digest (revised)</code>。标题放在 <code>titles</code> 列族，计数放在 <code>counters</code> 列族。这是教学假设，用来观察列族隔离、批写原子性、快照寿命、范围扫描和缓存淘汰，不代表任何线上内容系统的真实存储设计。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>DB 与 Column Family</strong>：一个目录就是一个 DB；每个键属于恰好一个列族，未指定时落到 <code>default</code>。列族可独立配置，共享 WAL，因此跨列族批写可以原子提交；读写打开时必须列出全部已有列族。</li>
+<li><strong>WriteBatch、snapshot 与 iterator</strong>：批写避免「先写新键、再删旧键」在中途崩溃后留下重复值；snapshot 提供点读和扫描的一致视图，但不是跨重启的备份；iterator 在创建时固定一个时间点，并且会钉住块，必须检查 <code>status()</code> 并及时释放。</li>
+<li><strong>block cache 和 write stall</strong>：块缓存按容量缓存未压缩块，默认大小往往不够，全表扫描若 <code>fill_cache=true</code> 会把热点挤出去；flush/compaction 跟不上时，触发条件按列族计算，但减速和停写作用在整个 DB 上。调优必须受内存和 IO 预算约束。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释 DB 与 Column Family：它们如何分担 WAL 与 memtable/SST，读写打开为什么必须列出全部列族，跨列族原子写依赖什么。</li>
+<li>能独立完成：把 KV 内核替换为教学 RocksDB 引擎，加入批写、范围扫描和重启恢复；并在此过程中检查每一处 <code>Status</code>，正确释放 iterator 和 snapshot。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>内容后台的标题、草稿状态和计数如果直接放进进程内哈希表，进程一退就没了，也无法原子地「改标题同时加计数」，更无法按 <code>article:01</code> 到 <code>article:03</code> 做范围扫描。把内核换成嵌入式 LSM，图的是成熟的持久化、有序扫描和批写，而不是少写服务层。若把 RocksDB 当成已经带了副本、监控和资源隔离的分布式数据库，出了 write stall 会误以为是「机器不够」，其实是某一个列族的 memtable 或 L0 触发了整库停写；若把 <code>GetSnapshot()</code> 当成备份，重启之后会发现那份只读视图已经不在了。这些都是应用必须自己负责的边界。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1-db-column-family">1. DB 与 Column Family</h3>
+<p>一个 RocksDB 数据库对应文件系统里的一个目录，打开时通常要检查返回的 <code>Status</code>。官方 Basic Operations 把 <code>Status</code> 放在很靠前的位置：大多数可能失败的调用都返回它，调用方要用 <code>ok()</code> 判断，并用 <code>ToString()</code> 打印原因。关闭也有三种做法，其中 <code>DB::Close()</code> 会返回 <code>Status</code>，只 <code>delete db</code> 可能把关闭时的错误丢掉。教学引擎用 <code>Close()</code> 在退出前把剩余 memtable 刷盘并同步 WAL。</p>
+<p>Column Family 从 RocksDB 3.0 引入。每个键值对恰好属于一个列族；不指定时属于名为 <code>default</code> 的列族。官方文档列出几条对集成最要紧的性质：跨列族的原子写是支持的，可以一次 <code>Write({cf1,key1,value1},{cf2,key2,value2})</code>；可以拿到跨列族一致的视图；列族可以独立配置；可以在运行中创建和删除。实现上，列族<strong>共享 WAL、不共享 memtable 和 SST 文件</strong>。共享日志，所以一批更新要么一起进 WAL，要么一起不进；分开的 memtable 和 SST，所以标题列族和计数列族可以有不同的写入缓冲，也可以很快被删除。</p>
+<p>因此也有一条调优约束：某一个列族如果迟迟不 flush，旧的 WAL 就不能删，因为里面还活着其他列族的数据。官方建议让所有列族都定期 flush，并关注 <code>max_total_wal_size</code>。本课教学引擎没有实现这条 WAL 滞留计数，但机制要记住。</p>
+<p>打开方式也和单列族不同。读写模式的 <code>DB::Open</code> 必须列出当前存在的<strong>全部</strong>列族，否则返回 <code>Status::InvalidArgument()</code>。只读打开可以只打开子集。<code>ListColumnFamilies</code> 用来先查出名字。<code>ColumnFamilyHandle</code> 像打开的文件描述符，必须在删除 DB 指针之前全部释放；对已经 <code>DropColumnFamily</code> 的 handle，官方约定仍然可用，真正删数据要等到 handle 被销毁。</p>
+<p>教学实验把标题和计数拆进 <code>titles</code> 与 <code>counters</code>，再用一个 6 步的 <code>WriteBatch</code> 一次提交三篇文章的标题和初始计数。只在 <code>titles</code> 上做范围扫描，得到 3 条标题，计数键没有混进来。关闭后再打开，如果只传 <code>default</code>，状态是 <code>invalid_argument: must specify all existing column families, missing: titles,counters</code>。把三个列族都列出后，三篇标题和三条计数都能恢复，<code>ListColumnFamilies</code> 返回 <code>default</code>、<code>titles</code>、<code>counters</code>。这就是「把 KV 内核换成可恢复的引擎」的最小闭环：批写、按列族扫描、重启后还在。</p>
+<h3 id="2-writebatchsnapshot-iterator">2. WriteBatch、snapshot 与 iterator</h3>
+<p>Basic Operations 用「把 key1 的值移到 key2」说明批写：如果先 <code>Put(key2)</code> 再 <code>Delete(key1)</code>，进程在两步之间退出，同一个值可能同时出现在两个键下。<code>WriteBatch</code> 把一组编辑按顺序一次性提交。编辑的次序有意义：若 <code>key1</code> 和 <code>key2</code> 相同，必须先 Delete 再 Put，否则会把值删掉。批写也可以用来加快大量更新，但本课先抓住原子性。</p>
+<p>教学实验复现了这条边界。先把 <code>article:01:title</code> 写成 <code>Weekly digest</code>。天真路径只把同样的值 <code>Put</code> 到 <code>article:01:moved</code> 并同步，然后在删除旧键之前模拟掉电：恢复后两个键都还在，值为 <code>Weekly digest</code>，出现重复。改成一个 <code>WriteBatch</code>：先 Delete 旧键，再 Put 新键，并且 <code>sync=true</code>，再掉电：旧键是 <code>not_found</code>，新键仍是 <code>Weekly digest</code>，移动是原子的。同一批若 <code>sync=false</code> 后立刻掉电，整批丢失，旧标题还在，新键不存在——原子性保护的是「不会只应用一半」，并不自动提供耐久性。若只是杀掉进程、不掉电，操作系统的页缓存还在，未同步的整批仍然能恢复，并且仍然是原子的。这和第 105 课的 WAL 边界一致：进程崩溃与机器掉电不是一回事。</p>
+<p>Snapshot 提供整库状态的一致只读视图。<code>ReadOptions.snapshot</code> 非空时，点读和迭代都按这个版本读；为空时，读操作使用当前状态的隐式快照。官方 Snapshot 页第一句就是：A snapshot captures a point-in-time view of the DB at the time it's created. <strong>Snapshots do not persist across DB restarts.</strong> 调用方必须 <code>GetSnapshot()</code>，用完后 <code>ReleaseSnapshot()</code>，否则引擎要为这份视图继续保留旧版本，快照很多时甚至会拖慢 flush/compaction，严重时诱发 write stall。Checkpoint 才是把当前 DB 复制到另一个目录（同盘可用硬链接），可以再打开，那是备份/副本路径，不是 <code>GetSnapshot()</code>。</p>
+<p>教学实验里，先写入 <code>Weekly digest</code> 并取得序号为 1 的快照，再把标题改成 <code>Weekly digest (revised)</code>。当前读取到修订版，带着快照的 <code>Get</code> 和 iterator 仍读到 <code>Weekly digest</code>。此时 <code>ReleaseSnapshot</code>：再用这个句柄去做 <code>Get</code>，返回 <code>invalid_argument: snapshot already released</code>；但<strong>释放前已经创建的 iterator 仍然有效</strong>，还能读到旧标题——iterator 在创建时钉住了那份视图。把这个 iterator 关掉后，再对已释放快照 <code>NewIterator</code>，得到同样的 <code>invalid_argument</code>。当前读取仍是修订版。另一次实验在快照仍然活着时模拟掉电：崩溃前快照还能看到 <code>Weekly digest</code>，进程里有 1 个快照；恢复后快照数为 0，读到的是 <code>Weekly digest (revised)</code>，旧的 snapshot 句柄不能再用。这就是本课的误区：快照不是跨重启的永久备份。</p>
+<p>Iterator 按比较器给出的全序做范围扫描，创建时固定一个一致时间点。<code>ReadOptions.snapshot</code> 为空时，这份一致视图是创建瞬间的隐式快照，不能事后再变成显式 snapshot。错误处理有一条硬约定：<code>Valid()</code> 为真时，<code>status()</code> 一定是 OK，循环里可以先用 <code>key()</code> / <code>value()</code>；<code>Valid()</code> 为假时，可能是扫到了尽头（此时 <code>status()</code> 仍是 OK），也可能是 IO 或校验错误，<strong>必须检查 <code>status()</code></strong>。教学实验扫描 16 个标题到尽头：<code>Valid()</code> 为假，<code>status()</code> 为 <code>OK</code>。用下界 <code>article:05:title</code>、上界 <code>article:09:title</code>，扫描结果正好是 05 到 08 四篇，上界是左闭右开。</p>
+<p>Iterator 自身占用的内存通常不大，但它会阻止资源释放：创建时钉住当时的 memtable 和 SST，当前位置的 data block 也会留在内存里（在 block cache 中钉住，或没有 cache 时留在堆上）。官方建议 iterator 保持短命。教学实验在 <code>SeekToFirst</code> 之后，钉住的块占用是 96 字节；迭代结束并 <code>close()</code> 之后，钉住占用回到 0，未关闭的 iterator 计数从 1 变为 0。只创建不释放，块就一直占着预算。</p>
+<h3 id="3-block-cache-write-stall">3. block cache 和 write stall</h3>
+<p>Block cache 缓存的是未压缩块。官方默认会建一个 32 MB 的 LRU 缓存（8.2 版之前是 8 MB），文档写明这只适合「不怎么依赖读性能、希望引擎内存足迹较小」的应用。缓存对象可以在同一进程的多个 DB、多个列族之间共享，用来卡住总容量；默认情况下，每个列族往往各自拥有一份缓存，内存会按实例叠加。操作系统的页缓存会再缓存压缩后的文件块，形成两级。索引和 filter 默认不计入你给 block cache 设的那笔预算，这是「明明设了 10 GB，进程却用了 15 GB」的常见来源之一。Setup Options 建议把 block cache 大约设成总内存预算的三分之一，剩下留给操作系统页缓存，避免把预算绷得太紧。容量按分片均分，分片之间不共享额度；当有迭代器把块钉住、钉住总量超过容量时，默认允许缓存暂时超卖，<code>strict_capacity_limit=true</code> 则会拒绝新插入并让这次读失败。</p>
+<p>全量扫描会污染缓存。Basic Operations 给出的办法是给这个 iterator 设 <code>ReadOptions.fill_cache=false</code>，避免把工作集里的热块挤走。</p>
+<p>教学实验把 40 个标题刷成 8 个 SST、16 个块（每块 4 条记录；教学 <code>write_buffer_size=120</code>，约 5 条刷一次，所以每个 SST 常是 4+1 两条块）。缓存容量 400 字节，大约只能留下 4 个块（占用 384 字节）。第一次按 key 顺序点读：16 次缺失、24 次命中，耗时 0.01624 秒——每个块的第一键是缺失，同一块里后续键是命中。第二次同样的顺序扫描，仍然是 16 次缺失、24 次命中、0.01624 秒：缓存只能留下扫描末端的 4 个块，顺序扫会一边读一边把前面刚装入的块淘汰掉。这不是「第二次就应该全命中」，而是容量远小于工作集时的顺序扫描抖动。</p>
+<p>若只保留前 8 个热键，第二次点读是 8 次命中、0 次缺失。接着用 <code>fill_cache=true</code> 的 iterator 做一次全表扫描，淘汰 28 次；再读这 8 个热键，变成 5 次命中、3 次缺失，耗时 0.00305 秒。同样的热键预热之后，用 <code>fill_cache=false</code> 再扫全表：淘汰 0 次，缓存占用仍是 216 字节；再读热键，是 8 次命中、0 次缺失，耗时 0.00008 秒。全表扫描要不要填缓存，直接决定热点还在不在。</p>
+<p>Write stall 的机制第 106 课已经核对过：immutable memtable 过多、L0 文件数触达 slowdown/stop、待压实字节触达 soft/hard 限制。触发条件按列族计算，但 stall 作用于整个 DB；<code>no_slowdown=true</code> 时不阻塞，立刻返回 <code>Incomplete</code>。本课核对的 Write-Stalls 页面仍然没有给出 slowdown/stop 的官方默认数字，实验里的 8/12 只是教学阈值。</p>
+<p>80 次写入、教学 <code>write_buffer_size=200</code>、<code>max_write_buffer_number=3</code>、压实带宽 800 字节/秒。快写间隔 0.001 秒：stop 4 次，停写 1.17 秒，写入 p99 为 0.2935 秒，本次没有走到 L0 slowdown，日志原因是 <code>stopping writes because we have 3 immutable memtables (waiting for flush), max_write_buffer_number is set to 3</code>，immutable 峰值 3。慢写间隔 0.15 秒：stop 和 stall 都是 0，p99 就是 0.15 秒的写入间隔，后台跟得上。另一次对照把 <code>auto_compact</code> 关掉，只往 <code>counters</code> 写到停写压力（15 次写入后出现上面这条原因），然后对 <code>titles</code> 发一条 <code>no_slowdown</code> 的写入：返回 <code>Incomplete</code>，标题键仍是 <code>not_found</code>——计数列族触发的停写，挡住了标题列族。随后一条会阻塞的标题写入，在后台 flush 减压后成功，值为 <code>Weekly digest (revised)</code>。这就是「按列族触发、按整个 DB 停写」。</p>
+<h2 id="_10">常见误区</h2>
+<p>快照不是跨重启的永久备份。<code>GetSnapshot()</code> 在进程里登记一个序号，让引擎暂时不要丢掉这个序号仍能看见的版本。教学实验在快照还活着时掉电，恢复后快照数从 1 变成 0，读到的是修订后的标题，旧句柄不能再用。若需要一份重启后还能打开的副本，应当走 Checkpoint 或备份，而不是把 snapshot 句柄存起来。</p>
+<p>另外两件也常一起搞错。一件是把两次成功的 <code>Put</code> 当成原子提交：天真路径在删除旧键之前崩溃，旧键和新键会同时持有 <code>Weekly digest</code>。另一件是打开 DB 时只写 <code>default</code>：只要曾经创建过其他列族，读写打开就会得到 <code>InvalidArgument</code>。只读打开才允许打开子集。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点的权衡是：默认参数不一定适合机器和负载，调优需受内存和 IO 预算约束。Setup Options 把这件事说得很直接：多数选项可以先保持默认，但与资源上限有关的项——列族 <code>write_buffer_size</code>（官方默认 64 MB，并且要按最坏情况预留约两倍内存）、block cache 大小（建议约占预算的三分之一）、压缩、以及是否为点查打开 bloom——每项都在花内存、CPU 或 IO。把 cache 设太小，顺序扫描和点查会反复缺失；设太大，又和 memtable、索引、filter、iterator 钉住的块抢同一台机器的内存。为每个列族各建一份默认缓存，总占用会叠加；让它们共用一个 <code>Cache</code> 对象，才能把进程级上限卡住。</p>
+<p>教学实验用同一组 60 个标题、间隔 0.001 秒的写入对照两种预算。偏紧的一组：<code>write_buffer_size=120</code>、压实带宽 400、缓存 150 字节，结果是 stall 6 次、stop 14 次、停写 8.9 秒、stall 1.2 秒、写入 p99 为 0.6 秒；随后两遍点读命中 86、缺失 34、耗时 0.03486 秒，淘汰 33 次，缓存用了 120 / 150。放宽预算的一组：<code>write_buffer_size=800</code>、带宽 4000、缓存 4096 字节，stall 和 stop 都是 0，写入 p99 为 0，两遍点读命中 105、缺失 15、耗时 0.01605 秒，淘汰 0 次，缓存用了 2400 / 4096。这些数字只说明「预算会改变前台停写和读缺失」，不是生产调参建议。另一组对照：两个列族共用 300 字节缓存，占用 263，淘汰 8 次；拆成两份各 300、合计 600 的私有缓存，占用 467，淘汰 5 次。共享更省总量，私有更不容易互相挤占，选择必须回到进程的内存预算，而不是「默认就好」。</p>
+<p>把某个 slowdown/stop 阈值改得极大，可以暂时看不到 stall，但空间放大和读放大会在后台恶化——Write-Stalls 页把这写成引入减速机制的原因。调参是在前台尾延迟和后台债务之间做预算，不是把触发条件关死。</p>
+<h2 id="kvrocksdb">动手实践：把KV内核替换为RocksDB，加入批写、范围扫描和重启恢复</h2>
+<p>配套代码在 <code>/workspace/atlas/lessons/practice107</code>，用 Python 3.13.5 标准库写成，不链接 RocksDB，也不走网络。运行 <code>./test.sh</code> 会执行全部实验并写下 <code>results.json</code>。本次已跑通，输出 <code>ALL_CHECKS_PASSED</code>。下面的数字都来自这份结果，不要改写。</p>
+<h3 id="0">0. 文件结构</h3>
+<ul>
+<li><code>engine.py</code>：教学 <code>RocksDBEngine</code>。<code>Status</code>、<code>WriteBatch</code>、<code>GetSnapshot</code> / <code>ReleaseSnapshot</code>、<code>NewIterator</code>、列族、教学 block cache、write stall、基于 Durable WAL 的重启恢复。</li>
+<li><code>app.py</code>：八组对照实验。</li>
+<li><code>test_rocksdb.py</code> / <code>test.sh</code>：验收并写出 <code>results.json</code>。</li>
+</ul>
+<h3 id="1">1. 准备数据与目标操作</h3>
+<p>教学键是 <code>article:NN:title</code> 和 <code>article:NN:views</code>，标题用 <code>Weekly digest</code> / <code>Weekly digest (revised)</code>。列族为 <code>default</code>、<code>titles</code>、<code>counters</code>。目标操作是：一次批写提交标题和计数，按列族做范围扫描，关闭后按全部列族重新打开并恢复；对比天真分步写和 <code>WriteBatch</code> 在掉电后的结果；观察 snapshot 与 iterator 的寿命，以及重启后快照消失；测量 block cache 的命中与 <code>fill_cache</code> 的副作用；用快写/慢写和跨列族 <code>no_slowdown</code> 观察 write stall；最后对照偏紧预算和放宽预算。</p>
+<h3 id="2">2. 要比较的几条路径</h3>
+<ol>
+<li>跨列族批写 + 范围扫描 + 重启恢复，以及打开时漏列列族。</li>
+<li>天真分步移动键，对照 <code>sync=true</code> 的批写、<code>sync=false</code> 后掉电、<code>sync=false</code> 后只杀进程。</li>
+<li>快照读写、释放后的句柄、释放前已创建的 iterator，以及「快照仍活着时崩溃再恢复」。</li>
+<li>iterator 扫到尽头时的 <code>status()</code>，以及钉住占用在 <code>close()</code> 前后的变化。</li>
+<li>40 键顺序点读、热键点读、<code>fill_cache=true/false</code> 的全表扫描对热键的影响。</li>
+<li>快写与慢写的停写时间，以及计数列族触发压力时标题列族的 <code>Incomplete</code>。</li>
+<li>偏紧预算与放宽预算，以及共享缓存与私有缓存的容量占用。</li>
+</ol>
+<h3 id="3">3. 运行并解读（真实输出）</h3>
+<div class="codehilite"><pre><span></span><code>ALL_CHECKS_PASSED
+SUMMARY batch_ops=6 titles_scan=3 open_missing_invalid=1 recovered=3 naive_dup=1 sync_atomic=1 unsync_lost=1 kill_atomic=1 snap_v1='Weekly digest' live_v2='Weekly digest (revised)' iter_after_release=1 snap_lost=1 snap_after=0 reopen_v2=1 pinned_during=96 pinned_after_close=0 iter_end_ok=1 range=4 cache_blocks=16 first_miss=16 first_hit=24 hot2_hit=8 fill_evict=28 hot_after_fill_miss=3 nofill_evict=0 hot_after_nofill_hit=8 fast_stop=4 fast_stop_s=1.17 fast_p99=0.2935 slow_stop=0 slow_p99=0.15 cross_incomplete=1 tight_stop=14 tight_stall=6 tight_p99=0.6 budget_stop=0 budget_miss=15 tight_miss=34 shared_cap=300 private_cap=600 status_all=1
+</code></pre></div>
+
+<h3 id="4">4. 逐组对照真实数字</h3>
+<ol>
+<li>一次 <code>WriteBatch</code> 写 6 步（3 个标题 + 3 个计数）。<code>titles</code> 范围扫描 3 条，扫描结果里没有 <code>:views</code> 键；<code>counters</code> 上能单独扫到三条计数。漏列列族打开得到 <code>InvalidArgument</code>。按三个列族重新打开后，三篇标题全部恢复，分别为 <code>Weekly digest</code>、<code>Product update</code>、<code>Community notes</code>。</li>
+<li>天真移动键在掉电后重复：旧键和新键都是 <code>Weekly digest</code>。同步批写原子成功；未同步批写掉电后整批丢失；只杀进程则整批仍在且仍原子。</li>
+<li>快照读到 <code>Weekly digest</code>，当前读到 <code>Weekly digest (revised)</code>。释放后新的 <code>Get</code> / <code>NewIterator</code> 都是 <code>invalid_argument: snapshot already released</code>，但释放前那个 iterator 仍可读到旧标题。崩溃时丢失 1 个活快照，恢复后快照数为 0，读到修订版。</li>
+<li>16 个标题扫到尽头：<code>Valid()</code> 为假，<code>status()</code> 为 <code>OK</code>。<code>SeekToFirst</code> 后钉住 96 字节，<code>close()</code> 后为 0。<code>[article:05:title, article:09:title)</code> 扫到 4 个键。</li>
+<li>40 个标题、8 个 SST、16 个块、缓存 400 字节。两遍顺序点读都是缺失 16、命中 24、0.01624 秒。热键第二遍 8 次命中。<code>fill_cache=true</code> 的全表扫描淘汰 28 次，之后热键缺失 3 次、耗时 0.00305 秒；<code>fill_cache=false</code> 淘汰 0 次，热键 8 次命中、耗时 0.00008 秒。</li>
+<li>快写 stop 4 次、停写 1.17 秒、p99 0.2935 秒；慢写 stop 0、p99 0.15 秒。计数列族先把停写压力堆起来之后，标题列族的 <code>no_slowdown</code> 写入返回 <code>Incomplete</code> 且键不存在，阻塞写入随后成功。</li>
+<li>偏紧预算 stop 14、stall 6、p99 0.6 秒、两遍点读缺失 34、0.03486 秒；放宽预算 stop/stall 为 0、缺失 15、0.01605 秒。共享缓存容量 300、占用 263；两份私有缓存容量合计 600、占用 467。</li>
+</ol>
+<h3 id="5">5. 对照验收标准</h3>
+<div class="codehilite"><pre><span></span><code># 验收 1：所有 Status 均检查
+# Get 空键是 not_found（ok() 为假）；未知列族、漏列列族打开、已释放快照
+# 都是 invalid_argument；iterator 扫到尽头 Valid=false 且 status 为 OK。
+# no_slowdown 在停写压力下返回 Incomplete，键未被写入。
+# status_all=1，每一处非 OK 都被检测，而不是忽略返回值。
+
+# 验收 2：iterator 寿命和 snapshot 释放正确
+# ReleaseSnapshot 之后，新的 Get/NewIterator 得到 invalid_argument；
+# 释放前已创建的 iterator 仍可读到 Weekly digest，close 后钉住占用从 96 回到 0。
+# 活快照在掉电时丢失（snap_lost=1），恢复后 snap_after=0，读到修订版。
+# 快照不是跨重启的永久备份。
+</code></pre></div>
+
+<h3 id="6">6. 自己动手的扩展练习</h3>
+<ul>
+<li>给 <code>titles</code> 和 <code>counters</code> 设不同的 <code>write_buffer_size</code>，看是不是仍然一个列族就能让整个 DB 返回 <code>Incomplete</code>。</li>
+<li>在仍有活快照时强制压实，观察旧标题会不会被丢掉（生产引擎的 CompactionIterator 会为快照保留可见版本；本课教学压实没有实现这条，不要把引擎里「压掉了」直接当成 RocksDB 行为）。</li>
+<li>把 block cache 改成严格容量限制，再拿长寿命 iterator 钉住超过容量的块，看随后的点读是失败还是超卖。</li>
+</ul>
+<h3 id="7">7. 和生产引擎的对应关系（不要记错边界）</h3>
+<ul>
+<li>教学 <code>Status</code> 的 <code>ok</code> / <code>not_found</code> / <code>incomplete</code> / <code>invalid_argument</code> 对应 RocksDB 的 <code>Status</code>；<code>NotFound</code> 时 <code>ok()</code> 为假，要用 <code>IsNotFound()</code> 区分。</li>
+<li>教学列族共享一条 Durable WAL、各有 memtable 和 SST，对应官方「共享 WAL、不共享 memtable 和 table files」。没有实现 <code>max_total_wal_size</code> 和因过期列族而强制 flush。</li>
+<li>教学 snapshot 用一个整数序号，崩溃后不会进入 MANIFEST；这与「Snapshots do not persist across DB restarts」一致。本课没有实现 Checkpoint。</li>
+<li>教学块是固定条数的记录切片，缓存容量以字节计，默认 32 MB 是官方值，不是本课实验用的 400 字节。</li>
+<li>教学 write stall 的 8/12 是阈值设定，不是官方默认。跨列族停写和 <code>Incomplete</code> 的语义按 Write-Stalls 页核对。</li>
+</ul>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：从公开 Basic Operations 示例追踪 DBImpl，先核对 <code>Status</code> 与 iterator / snapshot 的寿命约定。2026-11-12 实际打开的页面如下。facebook 入口均为 301，跳转到 <code>meta/rocksdb</code> 后返回 200；下面保留节点和文档里给出的 facebook URL。</p>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations">Basic Operations</a>（节点给出的入口）：打开与关闭、<code>Status</code>、<code>WriteBatch</code> 的原子更新、同步/非同步写、Iteration、Snapshots、Cache 与 <code>fill_cache</code>。用它核对「先 Delete 再 Put」的批写次序，以及 snapshot 用完必须 <code>ReleaseSnapshot</code>。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Column-Families">Column Families</a>：每个键属于一个列族、跨列族原子写、读写打开必须列出全部列族、handle 的寿命、共享 WAL 和不共享 memtable/SST。对照本课漏列列族时的 <code>InvalidArgument</code>，以及标题扫描不混入计数。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Snapshot">Snapshot</a>：第一句写明快照不跨重启；<code>GetSnapshot</code> / <code>ReleaseSnapshot</code>；compaction 会感知活快照。注意复数路径 <code>wiki/Snapshots</code> 在 2026-11-12 返回 404，不要引用。对照本课 <code>snap_lost=1</code>、恢复后读到修订版。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Iterator">Iterator</a>：<code>Valid()</code> 与 <code>status()</code> 的约定、隐式快照、iterator 钉住 memtable / SST / 当前 block、应当短命。对照本课扫到尽头时 <code>status=OK</code>，以及 <code>pinned_during=96</code> 在 <code>close()</code> 后归零。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Block-Cache">Block Cache</a> 与 <a href="https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB">Memory usage in RocksDB</a>：默认 32 MB LRU（8.2 前为 8 MB）、可共享、索引和 filter 默认不计在这笔预算里、iterator 钉住的块。对照本课 <code>fill_cache</code> 两套热键数字。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Write-Stalls">Write Stalls</a>：三个原因、按列族触发但作用于整个 DB、<code>no_slowdown</code> 返回 <code>Incomplete</code>。该页没有给出 slowdown/stop 的官方默认数字。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Setup-Options-and-Basic-Tuning">Setup Options and Basic Tuning</a>：<code>write_buffer_size</code> 默认 64 MB、block cache 建议约占预算三分之一、同一进程应共享同一个 Cache 对象。对照本课偏紧预算和放宽预算。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Checkpoints">Checkpoints</a>：目录级一致快照，可再打开。用它区分 snapshot 句柄和可持久的备份，不要把两者叫成同一个东西。</li>
+</ul>
+<p>源码阅读按「先看调用约定，再看写入与缓存」两条线走。不要编造行号或未核对的函数名。</p>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/blob/main/examples/column_families_example.cc">examples/column_families_example.cc</a>：<code>CreateColumnFamily</code>、跨列族 <code>WriteBatch</code>、<code>Get</code>、<code>DropColumnFamily</code>。先按这个示例把 handle 和 <code>Status</code> 检查走一遍。</li>
+<li><a href="https://github.com/facebook/rocksdb/blob/main/include/rocksdb/db.h">include/rocksdb/db.h</a>：<code>DB::Open</code> 的多列族重载、<code>GetSnapshot</code>、<code>ReleaseSnapshot</code>、<code>NewIterator</code>、<code>Write</code>、<code>Close</code>。核对哪些调用返回 <code>Status</code>，哪些资源要由调用方释放。</li>
+<li><a href="https://github.com/facebook/rocksdb/blob/main/db/db_impl/db_impl_write.cc">db/db_impl/db_impl_write.cc</a>：前台 <code>Write</code> / <code>WriteImpl</code> 与 stall 处理的交点；结合第 106 课已经核对过的 <code>DelayWrite</code> 和 <code>no_slowdown</code>。</li>
+<li><a href="https://github.com/facebook/rocksdb/blob/main/db/write_batch.cc">db/write_batch.cc</a>：批里的编辑如何按顺序编码，帮助理解「先 Delete 再 Put」和跨列族原子提交。</li>
+<li><a href="https://github.com/facebook/rocksdb/blob/main/cache/lru_cache.cc">cache/lru_cache.cc</a> 与 <a href="https://github.com/facebook/rocksdb/blob/main/db/db_iter.cc">db/db_iter.cc</a>：缓存分片与插入，以及 iterator 如何持有一致视图。阅读时关注块被钉住时容量为什么可能被突破。</li>
+</ul>
+<p>阅读时记下三件事：你打开页面的日期和最终 URL；<code>Status</code>、snapshot、iterator 各自该由谁释放；快照页有没有把「不跨重启」写在开头。不要把本课教学引擎的函数名、缓存字节数或 8/12 阈值当成 RocksDB 的实现细节。</p>
+<h2 id="_13">自测题</h2>
+<p><strong>1.</strong> 读写打开一个已经有 <code>titles</code> 和 <code>counters</code> 的 DB 时，为什么只传 <code>default</code> 会失败？列族之间共享什么、不共享什么？这和「一次批写同时改标题和计数」有什么关系？</p>
+<p><strong>答案：</strong> 读写模式的 <code>DB::Open</code> 必须列出全部已有列族，否则返回 <code>InvalidArgument</code>。教学实验里这条状态是 <code>invalid_argument: must specify all existing column families, missing: titles,counters</code>。列族共享 WAL，不共享 memtable 和 SST，所以标题和计数可以独立配置、独立刷盘，又能在一个 <code>WriteBatch</code> 里原子提交。正是共享的那条 WAL，让跨列族的一批编辑要么一起持久化，要么一起不落地。只读打开才允许只打开子集。</p>
+<p><strong>2.</strong> 为什么说快照不是跨重启的永久备份？释放 snapshot 之后，已经创建的 iterator 为什么还能读到旧标题？如果需要一份重启后还能打开的副本，应该用什么？</p>
+<p><strong>答案：</strong> 官方 Snapshot 页写明 snapshots do not persist across DB restarts。教学实验在活快照下掉电，崩溃前还能读到 <code>Weekly digest</code>，恢复后快照数从 1 变成 0，只能读到 <code>Weekly digest (revised)</code>，旧句柄返回 <code>invalid_argument</code>。<code>ReleaseSnapshot</code> 之后，新的 <code>Get</code> 和 <code>NewIterator</code> 也不能再用这个句柄；但释放前已经创建的 iterator 在创建时钉住了那份一致视图（官方说 iterator 会钉住当时的 memtable、SST 和当前 block），所以仍能读到旧标题，直到它被 <code>close()</code>。需要可重新打开的目录副本时，应使用 Checkpoint 或备份，而不是 snapshot 句柄。</p>
+<p><strong>3.</strong> 40 个标题的两遍顺序点读为什么都是 16 次缺失、24 次命中？<code>fill_cache=true</code> 的全表扫描之后，热键为什么会重新缺失？同一条扫描把 <code>fill_cache</code> 关掉后，数字如何变化？偏紧预算和放宽预算的停写差异说明了什么？</p>
+<p><strong>答案：</strong> 40 个键刷成 8 个 SST、16 个块，教学缓存只有 400 字节，大约放下 4 个块（384 字节）。顺序点读时，每个块的第一键缺失、块内其余键命中，所以是 16 和 24；第二遍仍从最前面开始扫，末端那 4 个块会被前面的缺失淘汰掉，于是数字不变，耗时都是 0.01624 秒。热键第二遍可以 8 次全命中；但 <code>fill_cache=true</code> 的全表扫描会把这 8 个键挤出缓存（淘汰 28 次），之后热键变成缺失 3 次、耗时 0.00305 秒。<code>fill_cache=false</code> 时淘汰 0 次，热键仍是 8 次命中、耗时 0.00008 秒。偏紧预算下 stop 14、stall 6、p99 0.6 秒、两遍点读缺失 34；放宽预算后停写为 0、缺失 15。默认参数不必适合这台机器和这条负载，缓存和写入缓冲都要放进内存与 IO 预算里看，而不是只看 QPS。</p>
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Basic-Operations">RocksDB集成与读写调优：参考文档 / 原始资料</a>（github.com，英文文档，深入，免费）。重点阅读 DB 与 Column Family 与 WriteBatch、snapshot 与 iterator，用于核对本节点实验的语义和边界。2026-11-12 该入口 301 到 <a href="https://github.com/meta/rocksdb/wiki/Basic-Operations">meta/rocksdb 的同一页</a> 后返回 200；同一次核对建议打开 Column-Families、Snapshot、Iterator、Block-Cache、Memory-usage-in-RocksDB、Write-Stalls、Setup-Options-and-Basic-Tuning 和 Checkpoints。注意 <code>wiki/Snapshots</code> 当日 404，应使用 <code>wiki/Snapshot</code>。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>RocksDB 是嵌入式 LSM 存储引擎，应用要自己承担服务层、资源预算和 <code>Status</code> 检查，不能把它当成完整的分布式数据库。教学引擎是 Python 3 标准库的 <code>RocksDBEngine</code>，不是 RocksDB 本身；教学 SST 按固定条数切块，没有 bloom、压缩、Checkpoint、事务或真实 MANIFEST 日志。</li>
+<li>列族共享 WAL、不共享 memtable 和 SST。读写打开必须列出全部列族，教学里漏列会得到 <code>invalid_argument: must specify all existing column families, missing: titles,counters</code>。一次 6 步批写提交三篇标题和计数，范围扫描只在 <code>titles</code> 上看到 3 条，重启后三篇标题都能恢复。</li>
+<li><code>WriteBatch</code> 避免分步移动键在崩溃后留下重复值：天真路径掉电后两个键都是 <code>Weekly digest</code>；<code>sync=true</code> 的批写原子成功；<code>sync=false</code> 后掉电则整批丢失，只杀进程则整批仍在。快照能让当前标题已是 <code>Weekly digest (revised)</code> 时仍读到 <code>Weekly digest</code>，但活快照在掉电后丢失（1 变 0），不是跨重启的备份。释放快照后新的读失败，释放前的 iterator 仍有效；iterator 扫到尽头要检查 <code>status()</code>（本课为 <code>OK</code>），<code>close()</code> 后钉住占用从 96 回到 0。</li>
+<li>教学缓存 400 字节装不下 16 个块时，两遍顺序点读都是缺失 16、命中 24、0.01624 秒。<code>fill_cache=true</code> 的全表扫描淘汰 28 次，热键随后缺失 3 次、0.00305 秒；<code>fill_cache=false</code> 淘汰 0 次，热键 8 次命中、0.00008 秒。官方默认 block cache 是 32 MB（8.2 前 8 MB），建议约占内存预算三分之一，并且多列族应共享同一个 Cache 对象。</li>
+<li>快写停写 4 次、1.17 秒、p99 0.2935 秒，原因是 3 个 immutable memtable；慢写没有停写，p99 为 0.15 秒。计数列族触发的压力会让标题列族的 <code>no_slowdown</code> 写入返回 <code>Incomplete</code>。偏紧预算 stop 14、stall 6、p99 0.6 秒、缺失 34；放宽后停写为 0、缺失 15。默认参数不必适合当前机器和负载，调优要受内存和 IO 预算约束。</li>
+</ul>
+<p>学完后可以用三句话自检：列族共享的是 WAL 还是 SST，读写打开为什么不能只写 <code>default</code>；快照和 Checkpoint 差在哪里，释放 snapshot 之后 iterator 为什么可能仍然有效；顺序扫描在缓存装不下时为什么第二遍仍会缺失，以及为什么某一个列族的停写会让另一个列族收到 <code>Incomplete</code>。三句都能答上来，并且能指出 <code>practice107/results.json</code> 里对应的字段，这一课就算过关。</p>
+<p>如果有一句答不上来，先回到对应的实验表，再回到官方文档里关于 <code>Status</code>、Column Family 打开约定、Snapshots do not persist across DB restarts、<code>Valid()</code>/<code>status()</code>，以及 write stall 按列族触发、作用于整个 DB 的那几句，不要只把「换上 RocksDB 就有持久化」这句话背下来。</p>
+<p>写作笔记时顺便记下三件事：你核对文档的日期和实际打开的页面（包括 <code>wiki/Snapshot</code> 而不是 404 的 <code>wiki/Snapshots</code>），这次实验里每一处 <code>Status</code> 是否都检查了，以及快照在重启之后究竟还能不能用。这三件事能把本课的集成边界带进后面的存储引擎课，而不是只留下一句「RocksDB 很快」。</p><div class="pn"><span><a href="106.html">← LSM Tree、SST与压实</a></span><span>下一课 待更新</span></div></main></div></body></html>
