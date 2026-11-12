@@ -1,0 +1,392 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>108. Bloom Filter与读放大 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（108/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（12/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="cur" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li class="todo">109. 存储复制、确认与故障切换 <em>待更新</em></li><li class="todo">110. 分片、重分布与热点 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">111. 备份、校验与恢复演练 <em>待更新</em></li><li class="todo">112. 存储性能、放大与尾延迟 <em>待更新</em></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 108 课 · 领域 G · 阶段 4</p><p class="dl"><a href="../files/108-g-bloom.md" download>⬇ 本课 Markdown</a><a href="../files/practice108.tar.gz" download>⬇ 练习包 practice108.tar.gz</a></p><h1 id="108208-bloom-filter">第 108/208 课：Bloom Filter与读放大</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-bloom</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Bloom Filters</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>存储引擎</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>g-lsm</code>、<code>a-hash</code>、<code>a-math</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Bloom Filters</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Bloom-Filter">Bloom Filter与读放大：参考文档 / 原始资料</a>（github.com，文档；2026-11-12 该 URL 返回 301，跳转到 <a href="https://github.com/meta/rocksdb/wiki/RocksDB-Bloom-Filter">meta/rocksdb 的同一页</a> 并返回 200。同期打开的 Partitioned-Index-Filters、Prefix-Seek、Rocksdb-BlockBasedTable-Format、Memory-usage-in-RocksDB 同样 facebook 入口 301 后 200；<code>wiki/Bloom-Filter</code> 与 <code>wiki/Filter-Policy</code> 301 后落到 wiki 首页，页面不存在，本课不引用）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>Bloom Filter用位数组快速判断元素可能存在，允许假阳性但在正确维护条件下不应产生假阴性。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中的「内容后台」「文章标题」「未发布稿」「删除稿」都是<strong>教学假设</strong>，用来让 LSM 的读路径、过滤器布局和误判率变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>BloomFilter</code> / <code>SSTFile</code> / <code>BloomLSM</code>，<strong>不是 RocksDB，不是 Redis，也不是一个对外提供网络协议的服务</strong>。教学 SST 是<strong>内存中按 key 排好序的记录列表，再按固定条数切成块</strong>，不是 RocksDB 的 block-based 约 4 KiB 压缩块。教学 Bloom 是标准（非 cache-local）位数组，用 blake2b 得到两个 64 位哈希再做 double hashing，哈希数 <code>k = round(bits_per_key * ln(2))</code>；它不是 RocksDB 的 FastLocalBloom（<code>format_version=5</code>，探针限制在同一条 CPU cache line），也没有实现 Ribbon filter、真实 block cache、WAL、MANIFEST、列族、快照、prefix extractor 或压缩。实验里的「data block read」是教学计数，不是真实磁盘 syscall。官方文档已于 <strong>2026-11-12</strong> 核对：节点 URL <code>https://github.com/facebook/rocksdb/wiki/RocksDB-Bloom-Filter</code> 返回 301，跳转到 <code>https://github.com/meta/rocksdb/wiki/RocksDB-Bloom-Filter</code> 并返回 200；同期打开的 Partitioned-Index-Filters、Prefix-Seek、Rocksdb-BlockBasedTable-Format、Memory-usage-in-RocksDB 同样 301 后 200。<code>https://github.com/facebook/rocksdb/wiki/Bloom-Filter</code> 与 <code>wiki/Filter-Policy</code> 301 后落到 wiki 首页，页面不存在，不要引用。文中的官方默认值、公式和机制只写到核对过的页面能够支撑的范围；教学实验里的字节数、耗时、误判次数和 IO 次数都来自 <code>/workspace/atlas/lessons/practice108/results.json</code>，不是生产引擎的基准数字。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：过滤器不是「查得更准」，而是「更早放弃」</h3>
+<p>LSM 的读放大有一个很具体的来源：一个键不存在时，引擎仍要按层、按文件去找。第 106 课已经把 memtable、SST、压实讲清楚了；第 107 课又把块缓存和按列族配置接上。但在这些路径之前，还有一个更便宜的问题可以问：<strong>这个 SST 里到底有没有可能包含这个键？</strong> Bloom Filter 用一段位数组回答这个问题。查询时用同一组哈希探针去查位：只要有一个位置是 0，这个键「一定不在」；如果全部是 1，只能说「可能在」。允许假阳性，正确维护时不应出现假阴性。</p>
+<p>节点把这条机制的价值写成：降低 LSM 不存在键查询触发的磁盘读取。内容后台里，读者打开一个已经被删除、从未发布、或链接拼错的标题时，Get 本来会在多个重叠的 SST 里白白读数据块。过滤器先判负，就能把「读数据块」降成「查几个位」。这里要记住一个边界：过滤器说「可能在」只是<strong>许可去读</strong>，不是最终答案；真正的值仍要由数据块和版本判断来确认。</p>
+<h3 id="_4">接上前置</h3>
+<p>第 106 课的 LSM 告诉我们，一次 Get 可能先看 memtable，再从 L0 到更底层逐层找；L0 文件之间范围重叠时，一个查询会碰多个文件。<code>a-hash</code> 提供哈希函数和位运算：同一个键每次都要得到同一组位置，不同键要尽量分散。<code>a-math</code> 提供概率：位数组被占满的比例、哈希数过多或过少、以及误判率随 bits-per-key 变化的曲线，都可以用标准公式估计。</p>
+<p>这三门前置在本课汇合成一件事：<strong>用可计算的内存换不可控的读 IO</strong>。但内存不是白来的，哈希也不是白算的。10 bits/key 意味着每个已有键平均占 10 位；4,000 个键就是 40,000 位，也就是 5,000 字节。查询时做 7 次探针；16 bits/key 时位数组变成 8,000 字节，探针变成 11 次。误判率下降，但内存、构建和查询 CPU 都上升。核心知识点第 1 节会把这条曲线和实际数字放在一起看。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>教学 SST 里有 4,000 个已发布标题，键是 <code>article:0000:title</code> 到 <code>article:3999:title</code>，值在 <code>Weekly digest</code>、<code>Product update</code>、<code>Community notes</code>、<code>Editor picks</code>、<code>Weekly digest (revised)</code> 之间轮换。每个数据块放 16 条记录，所以这批数据有 250 个数据块。为了观察「不存在的键」，实验构造了 20,000 个形如 <code>article:NNNN:title~c</code> 的查询，并让它们落在 <code>(smallest, largest)</code> 之内，避免被范围检查直接跳过。另一些实验把 4,000 个键拆成 8 个 L0 文件、每个 500 个键，键交错分布，模拟真实 L0 flush 后范围重叠的样子。</p>
+<p>这些都是教学假设。真实内容后台的键设计、分片、缓存和压缩策略不会这么简单；这里的目的是把「过滤器判负」「过滤器误判」「过滤器漏掉墓碑」三种结果分开观察。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>位数、哈希数与误判率</strong>：位数组多大、做几次哈希，决定误判率；标准公式能解释实测曲线的形状，但实测值不会和理论值逐位相等。</li>
+<li><strong>分层过滤</strong>：每个 SST 都可能有过滤器；L0 多个重叠文件时，过滤器减少的是「查错文件」的读放大。<code>optimize_filters_for_hits</code> 还会决定最底层要不要建过滤器。</li>
+<li><strong>过滤器内存和查询成本</strong>：full filter、partitioned filter、旧式 per-block filter 的读路径不同；Ribbon、prefix Bloom、cache-local 布局又各自在空间、CPU 和最坏读流量之间做取舍。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释位数、哈希数与误判率：<code>m/n</code>、<code>k</code> 与标准公式 <code>p ≈ (1 - e^(-k/(m/n)))^k</code> 的关系，以及为什么提高 bits-per-key 的收益是非线性的。</li>
+<li>能独立完成：对不同 bits-per-key 测量不存在键读取的 IO 和误判率，并说明实测值来自哪组查询、哪个计数器。结合实验还能分清「过滤器判负」「过滤器判正但数据块没有」「已有键被过滤器错误拒绝」三种情况，并比较 full、partitioned、per-block 布局的内存和查询成本。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>内容后台的读取并不总是「读一篇存在的文章」。编辑打开一个已被删除的草稿、读者点开一个过期链接、审核系统按标题查一个从未发布的版本，都会产生不存在键的查询。LSM 不会因为键不存在就跳过所有文件：它仍要按范围判断每个 SST 是否可能包含这个键；在 L0 重叠时，一次查询可能碰 8 个文件。没有过滤器，8 次范围检查之后往往就是 8 次数据块读取。过滤器把大部分查询挡在数据块之前，直接决定这类请求的尾延迟和磁盘压力。</p>
+<p>但过滤器不是「开了就快」。bits-per-key 设得太低，误判率仍然很高，读放大只是从 8 次降到 6 次；设得太高，过滤器占用内存和构建时间，查询还要多算几次哈希。第 107 课已经说明 block cache、memtable 和过滤器都在抢同一台机器的内存预算；本课要补的是：<strong>过滤器的收益要用「避免了多少次数据块读取」来衡量，而不是只看误判率的小数点</strong>。另外，过滤器只解决「不存在」的读放大；对确实存在的键，最后一层仍然要读数据块，命中型负载不能指望它把这次读也省掉。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1">1. 位数、哈希数与误判率</h3>
+<p>标准 Bloom Filter 有一个 <code>m</code> 位的位数组和 <code>k</code> 个哈希函数。插入一个键时，算出 <code>k</code> 个位置并置 1；查询时算出同一组位置：只要有一个为 0，就返回「一定不在」；全为 1 就返回「可能在」。它不存储键本身，所以不能用「值是否相等」来纠错；它也不保证「全为 1」一定存在。节点把这条语义写成：允许假阳性，但在正确维护条件下不应产生假阴性。</p>
+<p>误判率来自位数组被其他键占满。假设哈希分布均匀，插入 <code>n</code> 个键后某一位仍为 0 的概率约为 <code>e^(-kn/m)</code>，因此误判率为：</p>
+<div class="codehilite"><pre><span></span><code>p ≈ (1 - e^(-k / (m/n)))^k
+</code></pre></div>
+
+<p>在给定 <code>m/n</code>（也就是 bits-per-key）时，使 <code>p</code> 最小的哈希数是 <code>k ≈ (m/n) * ln(2)</code>。教学实现取 <code>k = round(bits_per_key * ln(2))</code>，所以 3 bits/key 用 2 个探针，5 用 3 个，10 用 7 个，16 用 11 个。RocksDB 的旧式 <code>LegacyNoLocalityBloomImpl::ChooseNumProbes</code> 用的是 <code>bits_per_key * 0.69</code>，本质上也是这个 <code>ln(2)</code> 的近似；新的 FastLocalBloom 有自己的实现，不能把教学公式直接当成它的内部细节。</p>
+<p>教学实验用同一份 4,000 键的 SST、250 个数据块，查 20,000 个不存在的键。结果如下，数字来自 <code>results.json</code>，没有改动：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">bits/key</th>
+<th style="text-align: right;">k</th>
+<th style="text-align: right;">理论误判率</th>
+<th style="text-align: right;">实测误判率</th>
+<th style="text-align: right;">假阳性</th>
+<th style="text-align: right;">数据块读取</th>
+<th style="text-align: right;">节省读取</th>
+<th style="text-align: right;">过滤器字节</th>
+<th style="text-align: right;">构建秒</th>
+<th style="text-align: right;">查询秒</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0（无过滤器）</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.000694</td>
+<td style="text-align: right;">0.094908</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.23676290005054274</td>
+<td style="text-align: right;">0.23975</td>
+<td style="text-align: right;">4795</td>
+<td style="text-align: right;">4795</td>
+<td style="text-align: right;">15205</td>
+<td style="text-align: right;">1500</td>
+<td style="text-align: right;">0.005532</td>
+<td style="text-align: right;">0.061139</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.09184883923294047</td>
+<td style="text-align: right;">0.09305</td>
+<td style="text-align: right;">1861</td>
+<td style="text-align: right;">1861</td>
+<td style="text-align: right;">18139</td>
+<td style="text-align: right;">2500</td>
+<td style="text-align: right;">0.009597</td>
+<td style="text-align: right;">0.049402</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.008193722065862417</td>
+<td style="text-align: right;">0.00805</td>
+<td style="text-align: right;">161</td>
+<td style="text-align: right;">161</td>
+<td style="text-align: right;">19839</td>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">0.008443</td>
+<td style="text-align: right;">0.040175</td>
+</tr>
+<tr>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">0.0004587107308146284</td>
+<td style="text-align: right;">0.00055</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">19989</td>
+<td style="text-align: right;">8000</td>
+<td style="text-align: right;">0.010129</td>
+<td style="text-align: right;">0.045778</td>
+</tr>
+</tbody>
+</table>
+<p>无过滤器时，每个不存在的键都要读一次数据块，20,000 次查询就是 20,000 次数据块读取，查询耗时 0.094908 秒。3 bits/key 把读取降到 4,795 次，省下 15,205 次，相当于无过滤器效果的 76.025%；5 bits/key 降到 1,861 次，省 18,139 次，效果 90.695%；10 bits/key 降到 161 次，省 19,839 次，效果 99.195%；16 bits/key 降到 11 次，省 19,989 次，效果 99.945%。实测误判率和理论值在同一量级，但不会完全相等，因为哈希、位数组取整和这 20,000 个查询的具体分布都会带来偏差。</p>
+<p>这张表最重要的一行不是 16，而是 10 到 16 的差：过滤器从 5,000 字节涨到 8,000 字节，多花 3,000 字节，数据块读取只从 161 降到 11，只多省 150 次。理论误判率从 0.008193722065862417 降到 0.0004587107308146284，看起来降了一个数量级以上，但绝对次数已经很小，继续加位数的边际收益很低。这就是节点权衡里的「更低误判率需要更多内存和构建成本」。构建耗时从 3 bits/key 的 0.005532 秒到 16 bits/key 的 0.010129 秒，中间有测量噪声（例如 5 bits/key 的 0.009597 秒高于 10 bits/key 的 0.008443 秒），不能逐点比较；总体上是位数越多，构建越贵。查询耗时也一样：10 bits/key 是 0.040175 秒，16 bits/key 反而到 0.045778 秒，因为探针从 7 次加到 11 次，而能再省下的数据块读取已经只剩 150 次；教学实现里这些「读取」只是计数，墙钟时间会把额外的哈希成本露出来。</p>
+<p>官方文档对这条曲线给了一组更直观的比例：1.5 bits/key（50% 误判）相当于 100 bits/key 效果的 50%；2.9 bits/key（25% 误判）相当于 75%；4.9 bits/key（10% 误判）相当于 90%；9.9 bits/key（1% 误判）相当于 99%；15.5 bits/key（0.1% 误判）相当于 99.9%。这组数字说明的是<strong>收益非线性</strong>：从 50% 降到 25% 只多花 1.4 bits/key，但从 1% 降到 0.1% 要再花 5.6 bits/key。文档还建议：如果纠结要不要开过滤器、而且内存紧张，应该拿 <code>NewBloomFilterPolicy(3)</code> 和「不用过滤器」比，而不是拿 10 和「不用」比，因为 10 bits/key 挡住的大部分读取在 3 bits/key 时已经能挡住。</p>
+<p>误判不影响最终正确性。10 bits/key 的 161 次假阳性，每一次都跟着一次数据块读取，Get 最终仍返回 <code>not_found</code>；这组实验里 <code>missing_hits=0</code>，20,000 个不存在的键没有编造出任何标题。反过来，4,000 个已有键在 0、3、5、10、16 各档都是 <code>hits=4000</code>、<code>false_negatives=0</code>，没有一次被过滤器错误拒绝。过滤器说「可能在」只是让读路径继续走；它说「一定不在」才是跳过。正确维护的过滤器不会对已有键说「一定不在」，这正是本课验收标准里的「对已有键无错误拒绝」。</p>
+<p>观测误判率时，口径要写清楚。官方文档给出的点查观测公式是：</p>
+<div class="codehilite"><pre><span></span><code>(positives - true positives) / (positives - true positives + true negatives)
+</code></pre></div>
+
+<p>其中 <code>positives</code> 是过滤器返回「可能在」的次数，<code>true positives</code> 是其中真的存在的次数，<code>true negatives</code> 是过滤器正确判负的次数。对应的 RocksDB 统计是 <code>rocksdb.bloom.filter.useful</code>（真负）、<code>rocksdb.bloom.filter.full.positive</code>（判正）和 <code>rocksdb.bloom.filter.full.true.positive</code>（判正且真有）。教学实验用的也是同一思路：10 bits/key 时判正 161 次、真阳 0 次、真阴 19,839 次，所以 161 / (161 + 19,839) = 0.00805。</p>
+<p>这里还要避免把一个容易混淆的官方数字搬进本课实验。RocksDB 文档里的 cache-local 变体会把过滤器切成 <code>s</code> 片，每片 <code>m/s</code> 位；标准配置 <code>m/s=512</code>、<code>m/n=10</code>，于是 <code>n/s=51.2</code>。文档用 <code>k=6</code>，把 <code>n</code> 换成 <code>51.2±7.16</code>、<code>m=512</code>，算出 0.43% 与 1.48%，平均 0.95%；同一组参数下，无局部性的标准 Bloom 是 0.84%。本课教学过滤器是标准（非 cache-local）实现，10 bits/key 时 <code>k=7</code>，实测是 0.00805；<strong>不要把 0.95% 写成我们实验的数字</strong>。</p>
+<h3 id="2">2. 分层过滤</h3>
+<p>LSM 的一次 Get 先看 memtable，再从 L0 到更底层逐层找。每一层的每个 SST 都有 <code>smallest</code> 和 <code>largest</code>：如果查询键落在范围外，直接跳过；如果落在范围内，没有过滤器就要读索引、读数据块。L0 的文件之间通常范围重叠，所以一个中间范围的键可能同时落在 8 个文件里。第 106 课把这种「查一个键要碰多个文件」叫读放大；Bloom 过滤器放在每个 SST 上，作用就是把「范围命中但键不存在」的文件尽早判负。</p>
+<p>教学实验用 8 个 L0 SST、每个 500 个键，键交错分布，因此 8 个文件的范围几乎覆盖同一段 <code>article:NNNN</code>。查 8,000 个位于公共范围内的不存在键：</p>
+<table>
+<thead>
+<tr>
+<th>配置</th>
+<th style="text-align: right;">过滤器内存</th>
+<th style="text-align: right;">数据块读取</th>
+<th style="text-align: right;">每查询读取</th>
+<th style="text-align: right;">过滤器判负（useful）</th>
+<th style="text-align: right;">假阳性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>无过滤器</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">64000</td>
+<td style="text-align: right;">8.0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>10 bits/key</td>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">601</td>
+<td style="text-align: right;">0.075125</td>
+<td style="text-align: right;">63399</td>
+<td style="text-align: right;">601</td>
+</tr>
+<tr>
+<td>16 bits/key</td>
+<td style="text-align: right;">8000</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">0.00475</td>
+<td style="text-align: right;">63962</td>
+<td style="text-align: right;">38</td>
+</tr>
+</tbody>
+</table>
+<p>无过滤器时，每个查询都碰 8 个文件：<code>range_checks=64000</code>、<code>range_skips=0</code>、<code>data_block_reads=64000</code>，查询耗时 0.065814 秒。10 bits/key 时，过滤器检查 64,000 次，其中 63,399 次正确判负，601 次假阳性；数据块读取降到 601，每查询 0.075125 次，约为无过滤器的 1/106。16 bits/key 时只剩 38 次数据块读取，每查询 0.00475 次。</p>
+<p>注意耗时：10 bits/key 的查询耗时是 0.12756 秒，比无过滤器的 0.065814 秒还长。这不是说过滤器没有用，而是因为教学实现里每个查询要在内存中走 8 遍探针，而「数据块读取」只是计数器，不是真实磁盘 IO。这个实验省下的是 64,000 次到 601 次的数据块读取；在真实引擎里，这些读取可能命中块缓存，也可能落到磁盘，收益取决于缓存命中和设备延迟。教学墙钟时间不能直接当成生产延迟。</p>
+<p>对已有键，过滤器同样减少「查错文件」的放大。4,000 个已有键在三档配置下都全部命中、假阴性为 0。无过滤器时，查一个已有键会先碰到其他重叠 SST，数据块读取合计 17,972 次，每查询 4.493 次；10 bits/key 降到 4,137 次，每查询 1.03425 次，其中 <code>bloom_tp=4000</code>、对其他文件的假阳性 137 次、过滤器正确判负 13,835 次；16 bits/key 降到 4,007 次，每查询 1.00175 次。已有键最终都要在包含它的那个文件里读一次数据块，所以每查询至少还有约 1 次；过滤器能做的是把「查错文件」的次数压掉。</p>
+<p>分层过滤还有一个生命周期问题。官方文档说，过滤器嵌在每个 SST 里，各层通常同样构建；<code>optimize_filters_for_hits</code> 可以跳过最后一层。合并两个 SST 时，引擎不会对旧过滤器做 AND/OR，而是按新文件的键从头构建，以保证可预期的 bits-per-key 和误判率。打开 SST 时按文件里的原始参数加载 Bloom 或 Ribbon，两种 Policy 都能读对方；关闭 SST 后从内存拿掉。若要把过滤器放进 block cache，设 <code>cache_index_and_filter_blocks=true</code>。</p>
+<p><code>optimize_filters_for_hits</code> 的取舍可以用教学实验看清楚。实验有 L0=100、L1=200、L2=4,000 个键，查 8,000 个落在 L2 范围内的不存在键，以及 4,000 个只存在于 L2 的已有键。所有层都带过滤器：过滤器内存 5,375 字节，不存在键的数据块读取只有 60 次（每查询 0.0075，<code>bloom_useful=7940</code>，假阳性 60）；但 4,000 个 L2 命中仍要读 4,000 次数据块（<code>bloom_tp=4000</code>、<code>bloom_useful=0</code>）——命中时最后一层过滤器省不掉数据块。跳过最底层过滤器：内存降到 375 字节，不存在键的数据块读取回到 8,000 次，命中仍是 4,000 次数据块、假阴性 0。这个选项省的是「最大那一层」的过滤器内存，代价是每个不存在键都必须读最底层数据块；它适合命中型负载，不适合「大量查询落在最底层且多数不存在」的负载。</p>
+<h3 id="3">3. 过滤器内存和查询成本</h3>
+<p>Bloom 的第一个成本是内存。位数组按 <code>bits_per_key * n</code> 分配，10 bits/key、4,000 个键就是 40,000 位，正好 5,000 字节；16 bits/key 是 64,000 位，8,000 字节。过滤器通常既占内存又在 SST 里占磁盘：官方文档说降低 bits-per-key 会省过滤器空间，但过滤器「几乎都会同时占内存和磁盘」。构建过滤器要遍历文件的键并做 <code>k</code> 次哈希；查询过滤器要做 <code>k</code> 次探针。在按 bits-per-key 取最优哈希数的前提下，位数越多、探针越多，误判率越低，但每次查询的 CPU 也越高；如果超过最优 <code>k</code> 继续加探针，误判率反而会上升。RocksDB 的新 full filter 还会把探针限制在同一条 CPU cache line 内，减少 cache miss，这属于实现层面的布局优化，教学实现没有模拟。</p>
+<p>同一份 4,000 键 SST、10 bits/key、20,000 次不存在查询，四种布局的数字如下：</p>
+<table>
+<thead>
+<tr>
+<th>布局</th>
+<th style="text-align: right;">过滤器内存</th>
+<th style="text-align: right;">过滤器加载/查询</th>
+<th style="text-align: right;">数据块读取</th>
+<th style="text-align: right;">索引读取</th>
+<th style="text-align: right;">分区索引读取</th>
+<th style="text-align: right;">实测误判率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>none</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1.0</td>
+</tr>
+<tr>
+<td>full</td>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">5000.0</td>
+<td style="text-align: right;">161</td>
+<td style="text-align: right;">161</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.00805</td>
+</tr>
+<tr>
+<td>partitioned（8 分区）</td>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">624.025</td>
+<td style="text-align: right;">176</td>
+<td style="text-align: right;">176</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">0.008815426997245178</td>
+</tr>
+<tr>
+<td>block（旧格式）</td>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">20.0</td>
+<td style="text-align: right;">273</td>
+<td style="text-align: right;">20000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.01365</td>
+</tr>
+</tbody>
+</table>
+<p><code>none</code> 有 250 个数据块，20,000 次查询读 20,000 次数据块，也读 20,000 次索引。<code>full</code> 是整个 SST 一个过滤器：过滤器 5,000 字节，负结果可以连索引都不查，所以索引读取和数据块读取都只有 161 次，正好等于假阳性次数；每查询加载 5,000 字节过滤器（教学计数）。<code>partitioned</code> 把同一份过滤器按 key 范围切成 8 个小 filter block，过滤器总量仍是 5,000 字节，但每查询只加载一个分区，平均 624.025 字节；顶层分区索引读取 20,000 次，数据块读取 176 次，实测误判率 0.008815426997245178，比分片前略高，这是分片后各分区键数不完全均匀导致的预期现象，不要改成和 full 一样。<code>block</code> 是旧格式，每个数据块一个小过滤器，共 250 个：每查询先读索引 20,000 次，再加载 20.0 字节的块过滤器，数据块读取 273 次，实测误判率 0.01365。三种有过滤器的布局对已有键都是 4,000 命中、0 假阴性。</p>
+<p>读路径的顺序值得单独记：full 和 partitioned 是「范围检查 → 过滤器（partitioned 还要先查分区索引）→ 索引 → 数据块」；旧式 block 是「范围检查 → 索引 → 块过滤器 → 数据块」。所以「过滤器判负」并不总是免费的：full filter 判负可以连索引都不查；旧式 per-block filter 判负之前已经付了索引的代价；partitioned 判负之前付了顶层分区索引的代价。官方文档也明确说，旧格式每个约 2KB 的数据块一个小 Bloom，读时先查 SST index 得到块偏移，再加载对应过滤器，可能存在才读数据块，因此「过滤器判负」也已经付了 index 的代价。</p>
+<p>官方文档还给了几个实现层面的关键差异。full filter 是整个 SST 一个过滤器，负结果可以连 index 都不查；探针被限制在同一条 CPU cache line（相当于对 Bloom 空间分片），键多时对误判率影响很小。<code>format_version=5</code>（RocksDB 6.6 及以后）换用新实现，源码里是 FastLocalBloom，使用 64 位哈希；旧 full filter 即使 100 bits/key 也很难低于约 0.1% 误判，新实现 16 bits/key 即可低于 0.1%，并能量到单过滤器数十亿键。<code>partitioned</code> 与 full filter 使用同一块格式，但按键范围切成多个更小的 filter block，用顶层 index 按需加载。开启方式是 <code>index_type=kTwoLevelIndexSearch</code> 且 <code>partition_filters=true</code>；不能只开 partitioned filters 而不开 partitioned index。它增加平均 CPU，但配合 <code>cache_index_and_filter_blocks=true</code> 时能显著减少单次小读取载入 block cache 的最坏流量。文档举例：256MB SST 的 index/filter 大约 0.5MB/5MB，远大于 4–32KB 的数据块。</p>
+<p>Ribbon filter 是可替换实现，从 RocksDB 6.15.0 起可用。官方文档说它约为 Bloom 省 30% 空间，过滤器 CPU 约 3–4 倍（主要在后台构建）；<code>NewRibbonFilterPolicy(9.9)</code> 与 Bloom 同样约 1% 误判，但大约只用 7 bits/key；构建期临时内存约 231 bits/key（Bloom 约 74）。头文件还写：传入 10 时与 Bloom 同样约 0.95% 误判、约 7 bits/key。可以用 <code>bloom_before_level</code> 在上层用 Bloom、下层用 Ribbon。本课教学引擎没有实现 Ribbon，<strong>不要把上面这组实验数字写成 Ribbon 的数字</strong>。</p>
+<p>前缀过滤器是另一个空间/误判的取舍。官方文档说，默认 <code>whole_key_filtering=true</code>，把完整键加入过滤器；关掉后，若设置了 <code>prefix_extractor</code>，则加入前缀哈希。前缀更少，过滤器更小，但误判更高；前缀 Bloom 还可以在 <code>Seek</code> / <code>SeekForPrev</code> 使用（创建 iterator 时 <code>check_filter</code>），整键 Bloom 只用于点查。自定义 comparator 若忽略键的某部分，必须同时提供忽略相同部分的 FilterPolicy，否则过滤器和比较器对「什么是同一个键」的理解会不一致。</p>
+<p>最后是配置语义。官方文档的配置示例是 <code>table_options.filter_policy.reset(NewBloomFilterPolicy(10, false));</code>，约 10 bits/key，可以连续配置约 1 到 20 或更高。提高 bits-per-key 的收益是减少 Get（以及带 prefix Bloom 的 Seek）相关的 I/O、CPU 和 block cache churn；降低则省过滤器空间。<code>include/rocksdb/filter_policy.h</code> 的注释说，9.9 bits/key 是一个好选择，误判约 1%；<code>bits_per_key &lt; 0.5</code> 视为 0（不生成过滤器），0.5 到 1.0 升为 1.0（约 62% 误判）。自 RocksDB 7.0 起，<code>NewBloomFilterPolicy</code> 的 <code>use_block_based_builder</code> 参数已被忽略，旧的 block-based 过滤器不再能从公开 API 启用。这些是官方语义，不是教学引擎的默认值。</p>
+<h2 id="_10">常见误区</h2>
+<p><strong>标准 Bloom Filter 不能直接通过清位安全删除元素。</strong> 位是被多个键共享的：清掉某个键的探针位，可能把其他键的探针也清掉，于是那些仍然存在的键被过滤器判负，产生假阴性。教学实验用 200 个键、8 bits/key、<code>k=6</code>、1,600 位。把 <code>article:0000:title</code> 的 6 个探针清掉后，另外 4 个仍在集合里的键变成了假阴性：<code>article:0017:title</code>、<code>article:0019:title</code>、<code>article:0031:title</code>、<code>article:0179:title</code>。用剩下 199 个键重建过滤器，假阴性回到 0，重建耗时 0.000349 秒，被删键 <code>may_contain=false</code>。这就是「正确维护才没有假阴性」：删除靠墓碑，过滤器在 flush/compaction 时按新文件的键重建，而不是改旧位图。</p>
+<p><strong>墓碑必须进入该 SST 的过滤器。</strong> 教学实验里，L1 有 <code>article:0001:title = Weekly digest</code>，L0 里是同一键的墓碑。过滤器包含墓碑键时，Get 读到 tombstone，旧标题被挡住，数据块读取 1 次。若构建过滤器时漏掉墓碑键，L0 过滤器会判负并跳过这支 SST，Get 落到 L1，错误读回 <code>Weekly digest</code>。压实到最底层后墓碑可以丢弃，重建的过滤器不再包含该键：本次 <code>may_contain_after_rebuild=false</code>，<code>records=70</code>，Get 为 miss，不会复活标题。</p>
+<p><strong>过滤器判正不等于键存在。</strong> 误判率 0.00805 的意思是，在 20,000 个不存在的查询里大约有 161 次过滤器说「可能在」；这 161 次都会继续读数据块，然后返回 <code>not_found</code>。如果应用把 Bloom 的「可能在」当成「一定在」，就会把不存在的标题当成命中。过滤器只负责减少不必要的读取，不负责给出最终值。</p>
+<p><strong>过滤器不是越大约好，也不是所有布局都省同一种成本。</strong> 10 到 16 bits/key 多花 3,000 字节只多省 150 次数据块读取；full filter 判负可以跳过索引，旧式 block filter 判负前已经读了索引，partitioned 判负前已经读了顶层分区索引。把「误判率更低」直接等同于「读路径更便宜」，会忽略这些固定成本。</p>
+<p><strong>不要用教学数字替代 RocksDB 的实现数字。</strong> 本课 10 bits/key 的 0.00805 是标准非 cache-local Bloom 在这 20,000 个查询上的实测值；官方文档里的 0.95% 是 cache-local 布局、<code>k=6</code>、<code>m/s=512</code> 的示例计算。两者不是同一个实现，也不是同一个测量口径。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点的权衡是：更低误判率需要更多内存和构建成本。本课实验把这条权衡量化了：3 bits/key 用 1,500 字节把 20,000 次数据块读取压到 4,795 次；10 bits/key 用 5,000 字节压到 161 次；16 bits/key 用 8,000 字节压到 11 次。从 3 到 10，多花 3,500 字节，少读 4,634 次；从 10 到 16，多花 3,000 字节，只少读 150 次。选择 bits-per-key 时，应该先估计「不存在的查询占多少」「每次数据块读取有多贵」「过滤器内存预算有多大」，再看曲线的哪一段值得买。</p>
+<p>官方文档的收益比例也支持这个判断：1.5 bits/key 已经有 100 bits/key 效果的 50%，4.9 bits/key 有 90%，9.9 bits/key 有 99%。如果内存紧张，<code>NewBloomFilterPolicy(3)</code> 和「不用过滤器」的对比，比 10 和「不用」的对比更能说明问题。反过来说，如果不存在查询很多、过滤器内存相对便宜，9.9 bits/key 左右是文档推荐的一个好选择；再往上就要接受边际收益递减。</p>
+<p>布局也是权衡。full filter 的负结果最便宜，连索引都不用查，但每查询要加载整个过滤器（教学计数 5,000 字节）。partitioned filter 把总量保持在 5,000 字节，每查询只加载一个分区，平均 624.025 字节，代价是每次查询多一次顶层分区索引读取，而且分片后误判率略高（0.008815426997245178 对 0.00805）。旧式 block filter 每查询加载 20.0 字节，但先读索引 20,000 次，数据块读取 273 次，误判率 0.01365；它省的是单次加载的字节数，不是索引成本。真实引擎里还要把 block cache 命中、过滤器是否驻留内存、以及 <code>cache_index_and_filter_blocks</code> 的配置一起看。</p>
+<p>分层上，<code>optimize_filters_for_hits</code> 是「省最大一层的内存」和「不存在键必须读最底层」之间的交换。教学实验里，所有层都建过滤器时内存 5,375 字节、不存在键读 60 次；跳过最底层后内存 375 字节、不存在键读 8,000 次。命中仍是 4,000 次数据块读取，因为最后一层过滤器本来也省不掉命中键的数据块。命中型负载可以接受这个交换；以不存在查询为主、且底层文件很大的负载，则要保留最底层过滤器。</p>
+<p>Ribbon 是另一条曲线：官方说它约省 30% 空间，但过滤器 CPU 约 3–4 倍，构建期临时内存约 231 bits/key（Bloom 约 74）。它适合空间紧张、能接受后台构建成本、且读多写少的场景；<code>bloom_before_level</code> 还允许上层 Bloom、下层 Ribbon，把两种过滤器的成本分开。本课没有实现 Ribbon，这条权衡只按官方文档理解，不要用教学实验的 10/16 bits/key 数字去推算 Ribbon。</p>
+<h2 id="bits-per-key-io">动手实践：对不同 bits-per-key 测量不存在键读取的 IO 和误判率</h2>
+<p>配套代码在 <code>/workspace/atlas/lessons/practice108</code>，用 Python 3.13.5 标准库写成，不链接 RocksDB，也不走网络。运行 <code>./test.sh</code> 会执行全部实验并写下 <code>results.json</code>。本次已跑通，输出 <code>ALL_CHECKS_PASSED</code>。下面的数字都来自这份结果，不要改写。</p>
+<h3 id="0">0. 文件结构</h3>
+<ul>
+<li><code>engine.py</code>：教学 <code>BloomFilter</code>、<code>SSTFile</code>、<code>BloomLSM</code>。标准位数组 Bloom、full / partitioned / block 三种过滤器布局、固定 16 条一块的教学 SST、范围检查和过滤器检查的读路径、墓碑与压实重建。</li>
+<li><code>app.py</code>：七组实验。bits-per-key 曲线、正确性、危险删除、分层读放大、过滤器布局、<code>optimize_filters_for_hits</code>、墓碑与过滤器。</li>
+<li><code>test_bloom.py</code> / <code>test.sh</code>：验收并写出 <code>results.json</code>。</li>
+</ul>
+<h3 id="1_1">1. 准备数据与目标操作</h3>
+<p>教学键是 <code>article:0000:title</code> 到 <code>article:3999:title</code>，值在五个标题之间轮换。每个 SST 块放 16 条记录，所以 4,000 个键有 250 个块。20,000 个不存在键形如 <code>article:NNNN:title~c</code>，落在 <code>(smallest, largest)</code> 之内，避免被范围检查直接跳过。目标是：对不同 bits-per-key 测量不存在键的 IO 和误判率；验证假阳性不影响最终正确性、已有键无错误拒绝；观察 8 个重叠 L0 文件上的读放大；比较 full / partitioned / block 布局；观察 <code>optimize_filters_for_hits</code> 的内存与读放大交换；最后用清位删除和墓碑实验说明「正确维护」的边界。</p>
+<h3 id="2_1">2. 要比较的几条路径</h3>
+<ol>
+<li>0、3、5、10、16 bits/key 的过滤器，对 20,000 个不存在键和 4,000 个已有键的读取与误判。</li>
+<li>10 bits/key 下，161 次假阳性是否都跟着数据块读取，Get 是否仍返回 not_found。</li>
+<li>清掉一个键的探针位，是否会把其他已有键变成假阴性；用剩余键重建是否恢复。</li>
+<li>8 个交错 L0 SST、8,000 个不存在键：无过滤器、10 bits/key、16 bits/key 的数据块读取与耗时。</li>
+<li>同一 SST 的 none / full / partitioned / block 四种布局：数据块读取、索引读取、分区索引读取、过滤器加载字节、误判率。</li>
+<li>L0=100、L1=200、L2=4,000 时，所有层建过滤器与跳过最底层过滤器的内存、缺失读取、命中读取。</li>
+<li>墓碑是否进入过滤器：包含墓碑、漏掉墓碑、压实后重建三种结果。</li>
+</ol>
+<h3 id="3_1">3. 运行并解读（真实输出）</h3>
+<div class="codehilite"><pre><span></span><code>ALL_CHECKS_PASSED
+SUMMARY bpk3_fpr=0.239750 bpk5_fpr=0.093050 bpk10_fpr=0.008050 bpk16_fpr=0.000550 bpk10_fp=161 bpk10_io=161 bpk10_mem=5000 no_io=20000 fn=0 unsafe_fn=4 rebuild_fn=0 layer_no_io=64000 layer_b10_io=601 layer_b16_io=38 full_load=5000.00 part_load=624.02 block_load=20.00 opt_miss_io=60 skip_miss_io=8000 opt_mem=5375 skip_mem=375 tomb_ok=1 tomb_bug=1
+</code></pre></div>
+
+<h3 id="4">4. 逐组对照真实数字</h3>
+<ol>
+<li>bits-per-key 曲线已经在第 1 节表里。补充构建耗时：无过滤器 0.000694 秒、3 bits/key 0.005532 秒、5 bits/key 0.009597 秒、10 bits/key 0.008443 秒、16 bits/key 0.010129 秒。查询 20,000 个不存在键的耗时分别是 0.094908、0.061139、0.049402、0.040175、0.045778 秒。所有档位对 4,000 个已有键都是 <code>hits=4000</code>、<code>false_negatives=0</code>；20,000 个不存在键都是 <code>missing_hits=0</code>，不会编造出标题。</li>
+<li>10 bits/key 的 161 次假阳性，每一次都跟着一次数据块读取；<code>data_block_reads_on_missing=161</code>，<code>fp_then_data_read=true</code>。Get 仍返回 not_found，<code>missing_not_found=20000</code>，<code>false_positive_does_not_invent_value=true</code>。已有键 4,000 全部命中，<code>no_false_negative=true</code>。过滤器说「可能在」只是许可去读 SST，不是最终答案。</li>
+<li>200 个键、8 bits/key、<code>k=6</code>、1,600 位。清掉 <code>article:0000:title</code> 的 6 个探针后，<code>unsafe_false_negatives=4</code>，例子就是 <code>article:0017:title</code>、<code>article:0019:title</code>、<code>article:0031:title</code>、<code>article:0179:title</code>。用剩下 199 个键重建：<code>rebuild_false_negatives=0</code>，<code>rebuild_s=0.000349</code>，<code>deleted_key_may_contain_after_rebuild=false</code>，<code>remaining_all_present=true</code>。</li>
+<li>8 个 L0 SST、每个 500 个键、8,000 个不存在键。无过滤器数据块读取 64,000、每查询 8.0、耗时 0.065814 秒；10 bits/key 数据块读取 601、每查询 0.075125、耗时 0.12756 秒；16 bits/key 数据块读取 38、每查询 0.00475、耗时 0.159133 秒。已有 4,000 键在三档都全部命中、假阴性 0；无过滤器查已有键读 17,972 次数据块（每查询 4.493），10 bits/key 降到 4,137 次（每查询 1.03425，<code>bloom_tp=4000</code>、对其他文件的假阳性 137、useful 13,835），16 bits/key 降到 4,007 次（每查询 1.00175）。</li>
+<li>同一份 4,000 键 SST、10 bits/key、20,000 次不存在查询。none：250 个数据块，读取 20,000，索引读取 20,000。full：过滤器 5,000 字节，误判 0.00805，数据块 161，索引 161，每查询加载过滤器 5,000 字节。partitioned（8 个分区）：过滤器合计仍 5,000 字节，每查询只加载一个分区，平均 624.025 字节，顶层分区索引读取 20,000，数据块 176，实测误判率 0.008815426997245178。block（旧格式，每数据块一个小过滤器，共 250 个）：每查询先读索引 20,000 次再加载 20.0 字节的块过滤器，数据块 273，误判 0.01365。三种有过滤器的布局对已有键都是 4,000 命中、0 假阴性。</li>
+<li>L0=100、L1=200、L2=4,000，查 8,000 个落在 L2 范围内的不存在键，以及 4,000 个只存在于 L2 的已有键。所有层都带过滤器：过滤器内存 5,375 字节，不存在键数据块读取 60（每查询 0.0075，useful 7,940，假阳性 60），L2 命中仍要读 4,000 次数据块（<code>bloom_tp=4000</code>、<code>useful=0</code>）。跳过最底层过滤器：内存降到 375 字节，不存在键数据块读取回到 8,000，命中仍是 4,000 次数据块、假阴性 0。这个选项省的是「最大那一层」的过滤器内存，代价是不存在键必须读最底层数据块；命中型负载才划算。</li>
+<li>墓碑实验：L1 有 <code>article:0001:title = Weekly digest</code>，L0 有同一键的墓碑。过滤器包含墓碑键时，Get 读到 tombstone，旧标题被挡住，<code>data_block_reads=1</code>；漏掉墓碑键时，L0 过滤器判负并跳过这支 SST，Get 落到 L1，错误读回 <code>Weekly digest</code>。压实到最底层后墓碑可丢弃，重建的过滤器不再包含该键：<code>may_contain_after_rebuild=false</code>、<code>records=70</code>，Get 为 <code>miss_data</code>，不会复活标题。</li>
+</ol>
+<h3 id="5">5. 对照验收标准</h3>
+<div class="codehilite"><pre><span></span><code># 验收 1：能解释误判不影响最终正确性
+# 10 bits/key 下 161 次假阳性，每次都跟着数据块读取；
+# Get 仍返回 not_found，missing_hits=0；
+# 4,000 个已有键全部命中，false_negatives=0。
+# 过滤器说「可能在」只是许可去读，不是最终答案。
+
+# 验收 2：对已有键无错误拒绝
+# 0、3、5、10、16 bits/key 各档 existing_hits=4000、false_negatives=0；
+# unsafe_delete 实验说明清位会制造假阴性，重建后 rebuild_false_negatives=0。
+</code></pre></div>
+
+<h3 id="6">6. 自己动手的扩展练习</h3>
+<ul>
+<li>把不存在查询改成「一半落在 <code>(smallest, largest)</code> 之外」，观察范围检查先跳过时，过滤器检查次数和误判率的分母怎么变。范围外的查询不应该算进过滤器误判率。</li>
+<li>把 partitioned 的分区数从 8 改成 2 和 16，比较每查询加载字节、顶层分区索引读取和实测误判率；注意分区后误判率略高于 full 是预期现象。</li>
+<li>把 <code>optimize_filters_for_hits</code> 打开，同时把查询改成以 L2 命中为主，观察「省内存」与「缺失查询必须读最底层」的差别。不要只看命中数，要看数据块读取。</li>
+<li>给 <code>BloomFilter</code> 加一个计数器，记录 <code>may_contain</code> 的探针次数，验证 10 bits/key 的 7 个探针、16 bits/key 的 11 个探针是否与 <code>k = round(bits_per_key * ln(2))</code> 一致。</li>
+</ul>
+<h3 id="7">7. 和生产引擎的对应关系（不要记错边界）</h3>
+<ul>
+<li>教学 <code>BloomFilter</code> 是标准（非 cache-local）位数组，用 blake2b 两个 64 位哈希做 double hashing；RocksDB 的新 full filter 是 FastLocalBloom（<code>format_version=5</code>，64 位哈希，探针限制在同一条 CPU cache line）。教学公式 <code>k = round(bits_per_key * ln(2))</code> 对应旧式 <code>ChooseNumProbes</code> 的 <code>bits_per_key * 0.69</code> 思路，不是 FastLocalBloom 的全部实现。</li>
+<li>教学 SST 是内存中按 key 排好序的记录列表，按固定条数切块；RocksDB 是 block-based 约 4 KiB 压缩块。教学 <code>data_block_read</code> 和 <code>filter_bytes_loaded</code> 都是计数器，不是真实磁盘 syscall，也不是真实 block cache 流量。</li>
+<li>教学 <code>filter_mode</code> 的 full / partitioned / block 对应官方 full filter、partitioned filter 和旧式 per-block filter 的读路径思想；教学没有实现 <code>format_version</code>、真实 filter block 编码、<code>cache_index_and_filter_blocks</code>、prefix extractor 和 Ribbon。</li>
+<li>官方文档里的 <code>NewBloomFilterPolicy(10, false)</code>、9.9 bits/key、<code>bits_per_key &lt; 0.5</code>、RocksDB 7.0 起忽略 <code>use_block_based_builder</code>、Ribbon 的 6.15.0 / 30% / 3–4 倍 CPU / 231 与 74 bits/key，都是核对过的文档语义；本课实验用的是教学引擎，不能把这些官方数字改写成实验结果。</li>
+</ul>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 RocksDB Bloom Filter 文档与 <code>filter_policy</code> 实现，关联过滤器布局和不存在键读取路径。2026-11-12 实际打开页面：facebook 入口均为 301，跳转到 <code>meta/rocksdb</code> 后返回 200；<code>raw.githubusercontent.com/facebook/rocksdb/main</code> 返回 200。下面保留节点和文档里给出的 facebook URL。</p>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Bloom-Filter">RocksDB Bloom Filter</a>（节点给出的入口）：Bloom 的基本语义、配置示例、bits-per-key 的非线性收益、full filter 与旧式 per-block filter 的差别、prefix vs whole key、点查误判率的统计口径。用它核对「过滤器判负一定不在、判正可能在」以及 <code>NewBloomFilterPolicy(10, false)</code> 的语义。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Partitioned-Index-Filters">Partitioned Index Filters</a>：partitioned filter 与 full filter 的同一块格式、按键范围切分、顶层 index 按需加载、必须同时开启 <code>kTwoLevelIndexSearch</code> 和 <code>partition_filters</code>、增加平均 CPU 但减少最坏读流量。对照本课 partitioned 的 624.025 字节/查询、20,000 次分区索引读取和 176 次数据块读取。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Prefix-Seek">Prefix Seek</a>：prefix extractor、<code>whole_key_filtering</code>、prefix Bloom 在 <code>Seek</code> / <code>SeekForPrev</code> 与 <code>check_filter</code> 中的使用边界。整键 Bloom 只用于点查，不要把它说成迭代器前缀过滤。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Rocksdb-BlockBasedTable-Format">RocksDB BlockBasedTable Format</a>：filter block 在 SST 中的位置、旧式 per-block 布局与 full filter 的差别。对照本课 block 布局「先索引、再块过滤器、再数据块」的顺序。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB">Memory usage in RocksDB</a>：过滤器内存、block cache、索引和 <code>cache_index_and_filter_blocks</code> 的关系。用它解释过滤器如何与 block cache、memtable 一起计入内存预算，以及 <code>cache_index_and_filter_blocks</code> 会把过滤器从进程堆改放到块缓存里。</li>
+</ul>
+<p>源码阅读按「先看 Policy 接口，再看构建与查询」两条线走。不要编造行号或未核对的函数名。</p>
+<ul>
+<li><code>include/rocksdb/filter_policy.h</code>：<code>NewBloomFilterPolicy</code>、<code>NewRibbonFilterPolicy</code>、<code>FilterPolicy::GetBuilderWithContext</code> / <code>GetFilterBitsReader</code>、<code>FilterBuildingContext</code>（含 <code>level_at_creation</code>、<code>is_bottommost</code>）。这里能看到 Bloom / Ribbon 的选择，以及「构建时知道层级」这件事如何支撑 <code>optimize_filters_for_hits</code>。</li>
+<li><code>util/bloom_impl.h</code>：<code>BloomMath::StandardFpRate</code>（标准公式 <code>(1-e^(-k/(m/n)))^k</code>）、<code>CacheLocalFpRate</code>；<code>LegacyNoLocalityBloomImpl::ChooseNumProbes</code> 使用 <code>bits_per_key * 0.69</code>（约 <code>ln(2)</code>）；<code>FastLocalBloomImpl::ChooseNumProbes</code> / <code>AddHash</code> / <code>HashMayMatch</code>。对照本课 <code>k = round(bits_per_key * ln(2))</code>，注意教学实现不等于 FastLocalBloom。</li>
+<li><code>table/block_based/filter_policy.cc</code>：<code>FastLocalBloomBitsBuilder</code> / <code>FastLocalBloomBitsReader</code>，构建与查询走 <code>AddHash</code> / <code>HashMayMatch</code>。看新 full filter 如何把探针限制在同一条 cache line 内。</li>
+<li><code>table/block_based/full_filter_block.h</code>：<code>FullFilterBlockReader::KeyMayMatch</code> / <code>PrefixMayMatch</code>。对照本课 full 布局「判负可以连 index 都不查」。</li>
+<li><code>table/block_based/partitioned_filter_block.h</code>：<code>PartitionedFilterBlockBuilder</code> / <code>PartitionedFilterBlockReader</code>，以及 <code>GetFilterPartitionHandle</code> / <code>GetFilterPartitionBlock</code>。对照本课 partitioned 的顶层分区索引和按需加载。</li>
+<li><code>table/block_based/block_based_table_reader.cc</code>：<code>PrefetchIndexAndFilterBlocks</code>、<code>CreateFilterBlockReader</code>（在 <code>kFullFilter</code> 与 <code>kPartitionedFilter</code> 之间选择）、<code>FullFilterKeyMayMatch</code>、<code>MultiGetFilter</code> 调用 <code>FullFilterKeysMayMatch</code>。这些函数把「过滤器布局」接到「不存在键读取路径」上。</li>
+</ul>
+<p>本课没有打开 <code>db_impl</code> 的 Get 实现文件，因此<strong>不声称核对过 <code>DBImpl::Get</code> 的完整调用链</strong>。阅读时记下三件事：你打开页面的日期和最终 URL；<code>Bloom-Filter</code> / <code>Filter-Policy</code> 这两个 wiki 路径当日不存在，不要引用；文档里的 0.95% 是 cache-local 示例，不是本课标准 Bloom 的实测值。</p>
+<h2 id="_13">自测题</h2>
+<p><strong>1.</strong> 过滤器返回「可能在」之后，为什么最终仍可能不存在？教学里 10 bits/key 的 161 次假阳性，怎样证明没有影响正确性？</p>
+<p><strong>答案：</strong> Bloom 只回答「集合中有没有可能包含这个键」，不存储值，也不保证判正一定存在。过滤器判正只是允许读路径继续查索引和数据块；真正的结果仍要由数据块和版本判断给出。教学实验里 161 次假阳性每一次都跟着一次数据块读取（<code>data_block_reads_on_missing=161</code>、<code>fp_then_data_read=true</code>），但 Get 全部返回 <code>not_found</code>，<code>missing_hits=0</code>，20,000 个不存在的键没有编造出标题。反过来，4,000 个已有键全部命中、<code>false_negatives=0</code>，说明过滤器没有错误拒绝已有键。误判影响的是读放大，不是最终正确性。</p>
+<p><strong>2.</strong> 标准 Bloom Filter 为什么不能通过清位删除元素？正确删除路径是什么？墓碑为什么必须进入该 SST 的过滤器？</p>
+<p><strong>答案：</strong> 位数组的每一位被多个键共享。清掉被删键的探针位，可能同时清掉其他键的探针，使那些仍然存在的键被判负，产生假阴性。教学实验用 200 个键、8 bits/key、<code>k=6</code>、1,600 位，清掉 <code>article:0000:title</code> 的 6 个探针后，<code>article:0017:title</code>、<code>article:0019:title</code>、<code>article:0031:title</code>、<code>article:0179:title</code> 变成假阴性；用剩下 199 个键重建后 <code>rebuild_false_negatives=0</code>，耗时 0.000349 秒，被删键 <code>may_contain=false</code>。正确做法是用墓碑表达删除，并在 flush/compaction 时按新文件的键重建过滤器。墓碑必须进过滤器，否则 L0 过滤器会判负并跳过这支 SST，Get 落到 L1 读回旧标题 <code>Weekly digest</code>；包含墓碑时 Get 读到 tombstone，旧值被挡住。压实到最底层后墓碑可丢弃，重建的过滤器不再包含该键，Get 为 miss，不会复活标题。</p>
+<p><strong>3.</strong> 为什么 10 到 16 bits/key 的收益递减？full、partitioned、block 三种布局对不存在键的代价有什么不同？</p>
+<p><strong>答案：</strong> 10 bits/key 用 5,000 字节把 20,000 次不存在查询的数据块读取压到 161 次；16 bits/key 用 8,000 字节压到 11 次。多花 3,000 字节只多省 150 次读取，因为绝对读取次数已经很小，理论误判率从 0.008193722065862417 降到 0.0004587107308146284 并不能带来同比例的绝对收益。布局上，full 是整个 SST 一个过滤器，负结果可以连索引都不查：5,000 字节过滤器、161 次数据块读取、161 次索引读取，误判 0.00805。partitioned 把过滤器切成 8 个分区，总量仍是 5,000 字节，每查询只加载一个分区，平均 624.025 字节，但要读 20,000 次顶层分区索引，数据块读取 176 次，误判 0.008815426997245178；分片后略高于 full 是预期现象。block 是旧格式，每查询先读索引 20,000 次，再加载 20.0 字节的块过滤器，数据块读取 273 次，误判 0.01365。选择布局时要看「省下的是数据块读取还是过滤器加载字节」，以及索引/分区索引是否已经成为固定成本。</p>
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Bloom-Filter">Bloom Filter与读放大：参考文档 / 原始资料</a>（github.com，英文文档，深入，免费）。重点阅读位数、哈希数与误判率、full filter 与旧式 per-block filter、partitioned filter、prefix vs whole key，以及点查误判率的统计口径，用于核对本节点实验的语义和边界。2026-11-12 该入口 301 到 <a href="https://github.com/meta/rocksdb/wiki/RocksDB-Bloom-Filter">meta/rocksdb 的同一页</a> 后返回 200；同一次核对建议打开 Partitioned-Index-Filters、Prefix-Seek、Rocksdb-BlockBasedTable-Format 和 Memory-usage-in-RocksDB。注意 <code>wiki/Bloom-Filter</code> 与 <code>wiki/Filter-Policy</code> 当日 301 后落到 wiki 首页，页面不存在，不要引用。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>Bloom Filter 用位数组判断「一定不在」或「可能在」：任一探针为 0 就判负，全为 1 才判正。允许假阳性，正确维护时不应有假阴性。教学引擎是 Python 3 标准库的 <code>BloomFilter</code> / <code>SSTFile</code> / <code>BloomLSM</code>，不是 RocksDB；教学 SST 按固定条数切块，教学 Bloom 是标准非 cache-local 位数组，没有 FastLocalBloom、Ribbon、真实 block cache、WAL、MANIFEST、列族、快照、prefix extractor 或压缩。</li>
+<li>位数、哈希数与误判率：4,000 键、20,000 个不存在查询下，无过滤器读 20,000 次；3 bits/key 读 4,795 次、过滤器 1,500 字节；5 bits/key 读 1,861 次、2,500 字节；10 bits/key 读 161 次、5,000 字节；16 bits/key 读 11 次、8,000 字节。10 到 16 多花 3,000 字节只多省 150 次读取，收益递减。所有档位对已有键都是 4,000 命中、0 假阴性；161 次假阳性都跟着数据块读取，但 Get 仍返回 not_found。</li>
+<li>分层过滤：8 个交错 L0 SST 上，8,000 个不存在键无过滤器读 64,000 次（每查询 8.0），10 bits/key 降到 601 次（每查询 0.075125），16 bits/key 降到 38 次（0.00475）。已有键的读放大也从无过滤器的 17,972 次（每查询 4.493）降到 10 bits/key 的 4,137 次（1.03425）和 16 bits/key 的 4,007 次。<code>optimize_filters_for_hits</code> 把过滤器内存从 5,375 字节降到 375 字节，但不存在键读取从 60 次回到 8,000 次；命中仍要读 4,000 次数据块。</li>
+<li>过滤器内存和查询成本：同一 SST 上，full 布局负结果连索引都不查（161 次数据块、161 次索引、每查询加载 5,000 字节）；partitioned 每查询平均加载 624.025 字节、分区索引 20,000 次、数据块 176 次、误判 0.008815426997245178；block 旧格式每查询先读索引 20,000 次、加载 20.0 字节块过滤器、数据块 273 次、误判 0.01365。官方文档还说明了 FastLocalBloom、partitioned filter 的开启条件、Ribbon 的 30% 空间/3–4 倍 CPU 取舍，以及 prefix vs whole key 的边界。</li>
+<li>标准 Bloom 不能清位删除：清掉一个键的探针会让其他键变成假阴性；正确路径是墓碑 + 按新文件重建过滤器。墓碑必须进入该 SST 的过滤器，否则旧值会从下一层复活；压实到最底层后丢弃墓碑、重建过滤器，Get 才会稳定为 miss。</li>
+<li>学完后可以用三句话自检：过滤器判正为什么不等于键存在，161 次假阳性如何仍返回 not_found；为什么 10 到 16 bits/key 的边际收益很低，full / partitioned / block 各自把成本花在哪里；清位删除为什么会制造假阴性，墓碑和重建过滤器如何保证「正确维护时没有假阴性」。三句都能答上来，并且能指出 <code>practice108/results.json</code> 里对应的字段，这一课就算过关。</li>
+</ul>
+<p>如果有一句答不上来，先回到对应的实验表，再回到官方文档里关于「任一 loc 为 0 则一定不在」「收益非线性」「full filter 判负可以跳过 index」「partitioned filter 必须同时开 partitioned index」以及「标准 Bloom 不能安全清位删除」的那几句，不要只把「加个 Bloom 就能减少读放大」这句话背下来。</p>
+<p>写作笔记时顺便记下三件事：你核对文档的日期和实际打开的页面（包括 <code>Bloom-Filter</code> / <code>Filter-Policy</code> 当日不存在这件事），这次实验里每个误判率的分母是什么，以及墓碑在删除路径上究竟由谁负责。这三件事能把本课的过滤器边界带进后面的存储引擎课，而不是只留下一个「误判率越低越好」的印象。</p><div class="pn"><span><a href="107.html">← RocksDB集成与读写调优</a></span><span>下一课 待更新</span></div></main></div></body></html>
