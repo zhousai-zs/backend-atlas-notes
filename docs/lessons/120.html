@@ -1,0 +1,389 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>120. 分片与在线迁移 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（120/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details open><summary>领域 H（8/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="cur" href="../lessons/120.html">120. 分片与在线迁移</a></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 120 课 · 领域 H · 阶段 4</p><p class="dl"><a href="../files/120-h-shard.md" download>⬇ 本课 Markdown</a><a href="../files/practice120.tar.gz" download>⬇ 练习包 practice120.tar.gz</a></p><h1 id="120208">第 120/208 课：分片与在线迁移</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>h-shard</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Sharding</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>H / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>分布式业务机制</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/116.html"><code>h-replication</code></a>、<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/110.html"><code>g-sharding</code></a></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Sharding</code>、<code>Distributed</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://redis.io/docs/latest/operate/oss_and_stack/reference/cluster-spec/">Redis — Cluster specification</a>（Redis，英文文档，深入，免费；节点把类型标为「论文」，实际是 Redis 官方文档站上的规范页面。2026-11-14 该地址返回 200，无跳转，最终 URL 不变，HTML 242101 字节，Content-Type 为 <code>text/html</code>，<code>&lt;title&gt;</code> 为 Redis cluster specification | Docs；页面元数据 <code>dateModified</code> 为 2026-09-21T15:59:03+01:00，即北京时间 2026-09-21 22:59；页面没有署名作者，开头自称 a work in progress as it is continuously synchronized with the actual implementation of Redis）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>按键空间把数据与负载分到多组节点；在线迁移必须处理路由版本、并发写与切换窗口。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课里的「内容后台」「文章标题 <code>Weekly digest</code> / <code>Weekly digest (draft)</code> / <code>Weekly digest (revised)</code> / <code>Weekly digest (hotfix)</code>」「键 <code>article:NNNNN:title</code>」「四台节点 <code>n1</code>–<code>n4</code>」都是<strong>教学假设</strong>，用来让路由版本、并发写和切换窗口变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>ShardMigrationEngine</code>，<strong>不是 Redis，不是 redis-py，不是网络服务，也不是 Redis Cluster 客户端</strong>。它是单进程离散事件仿真，没有 TCP，没有真实丢包，没有副本、故障切换和 gossip。键到槽用的是 Redis 规范里的 CRC16（XMODEM）与 hash tag 规则，<code>HASH_SLOT = CRC16(key) &amp; 0x3FFF</code>；但 16384 个槽被教学引擎<strong>按每 2048 个一组归并成 8 个分片</strong>，迁移单位是分片，而 Redis Cluster 的迁移单位是单个槽。路由表由一个全知的配置服务持有，带单调递增的 <code>route_version</code>；节点拒绝不属于自己的分片时回 <code>STALE_ROUTE</code>（含义上接近 Redis 的 <code>-MOVED</code>），分片冻结时回 <code>RETRY</code>（含义上接近 <code>-TRYAGAIN</code>），但这<strong>不是</strong> Redis 的 <code>CLUSTER SETSLOT</code>、<code>MIGRATE</code>、<code>ASKING</code> 或 <code>configEpoch</code>。在线迁移的两种正确做法 <code>dual_write</code>（双写转发）和 <code>change_log</code>（变更日志追赶）是应用路由层的教学方案，不是 Redis 的实现方式；<code>flip_only</code> 与 <code>copy_then_flip</code> 两种错误做法只在误区对照里出现。一致性哈希环用 MD5 放置虚拟节点，<strong>这也不是 Redis Cluster 的路由方式</strong>。<code>Clock</code> 是虚拟时钟，所有时间都来自 <code>/workspace/atlas/lessons/practice120/results.json</code>，是<strong>教学虚拟时钟上的数字</strong>，不是生产 RTT、磁盘或网卡测量。参数是：客户端到节点单向 <code>rpc_delay_s=0.001</code>，源到目标转发单向 <code>forward_delay_s=0.001</code>，批量拷贝每批 <code>50</code> 个键、每批 <code>0.01</code> 秒，变更日志重放每条 <code>0.0002</code> 秒，发布新路由 <code>0.001</code> 秒，冻结时重试退避 <code>0.002</code> 秒。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">上一课留下的缺口</h3>
+<p>上一课的 <code>PaxosEngine</code> 关心的是「一个值」：两个 proposer 交错时，新提案必须继承已被选中的 <code>Weekly digest (draft)</code>；三台 acceptor 上跑 2 个实例，就选出 2 条命令，<code>instances_equal_replicas=false</code>。那一课特意强调，实例数量不是副本数量。但它没有回答另一件同样常见的事：数据量和写入量涨到一组节点放不下时，<strong>不同的键</strong>怎么分到<strong>不同组</strong>的节点上；以及在不停写入的情况下，把一部分键从一组节点搬到另一组时，路由、数据和版本怎样保持一致。</p>
+<p>共识解决的是「同一份数据的多个副本怎么对齐」，分片解决的是「不同键由谁服务」。两件事正交：一个分片内部可以用 116–119 课的复制状态机、Raft 或 Paxos 保持副本一致，但分片之间的搬迁要靠另一套机制。本课补的就是这套机制：带版本的路由表、迁移期间的双写或转发，以及从「源节点负责」切到「目标节点负责」的那个切换窗口。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置之一 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/116.html">第 116 课</a> <code>h-replication</code> 讲复制状态机：确定性命令按同一顺序应用到多个副本，副本在相同日志前缀上得到相同状态。本课沿用两个思路：每个键带单调版本号，迁移时目标节点只接受<strong>更新的版本</strong>（<code>apply_if_newer</code>），所以拷贝和转发即使乱序到达，也不会把新值覆盖成旧值；以及「已确认的写」必须在切换后仍然存在，这是 116–118 课「已提交不能丢」在分片迁移里的对应物。</p>
+<p>前置之二 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/110.html">第 110 课</a> <code>g-sharding</code> 已经比较过取模、一致性哈希与范围分片，统计了增删节点时的迁移比例，并用 Redis Cluster 风格的槽演示过 <code>ASK</code> / <code>MOVED</code>。那一课的迁移是在没有并发写压测的条件下做的，热点实验也只用了一种虚拟节点数。本课往前推两步：一是<strong>在持续写入时</strong>迁移一个分片，并用「总键数 + 每个键的版本」做验收；二是把虚拟节点数从 <code>1</code> 扫到 <code>128</code>，再加一台节点，直接回答「一致性哈希为什么不能自动消除热点键」。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台把 4000 篇文章的标题键 <code>article:00000:title</code> 到 <code>article:03999:title</code> 存在分片 KV 里，初值都是 <code>Weekly digest</code>，版本 <code>1</code>。键用 Redis 规范的 CRC16 算出 0–16383 的槽，每 2048 个槽为一个教学分片，共 8 个分片。初始路由表 <code>route_version=1</code>：分片 0、3、6 在 <code>n1</code>，分片 1、4、7 在 <code>n2</code>，分片 2、5 在 <code>n3</code>，<code>n4</code> 是刚扩容进来的空节点。4 个客户端各自缓存一份路由表。压测从 <code>0.0</code> 持续到 <code>0.6</code>：每 <code>0.001</code> 秒一次写，共 <code>600</code> 次；其中约 10% 是新文章插入，其余是把已有标题改成 <code>Weekly digest (draft)</code>、<code>Weekly digest (revised)</code> 或 <code>Weekly digest (hotfix)</code>，并且 30% 的更新故意打在分片 0 上，好让被迁移的分片足够「热」；每 <code>0.002</code> 秒一次读，共 <code>300</code> 次。<code>0.1</code> 开始把分片 0 从 <code>n1</code> 迁到 <code>n4</code>。这些数字都是教学虚拟时钟上的值，不是线上配置。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>范围分片与哈希分片</strong>：范围分片按键的顺序切段，扫描连续区间只碰一个分片，但递增 id 的新写入会全部落在最后一段；哈希分片把键打散，写入均匀，但范围扫描要扇出到所有分片。</li>
+<li><strong>虚拟节点与热点键</strong>：虚拟节点改善的是<strong>键数</strong>在节点间的均衡；一个热点键无论放到哪里，都只落在一个节点上，所以访问量的不均衡不会因为虚拟节点或加机器而消失。</li>
+<li><strong>迁移期间双写和转发</strong>：路由表必须带版本；迁移要先拷贝存量，再用双写转发或变更日志追平增量，最后在一个短的冻结窗口里切换路由、清理源节点。只改路由表，或拷完存量不追增量，都会丢已确认的写。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释范围分片与哈希分片及适用边界：什么时候扫描友好更重要，什么时候写入均匀更重要；能说清 Redis Cluster 的 16384 槽属于哪一类。</li>
+<li>能独立完成实践：实现带版本路由表的分片 KV，在写压测中迁移一个分片，并用总键数和每个键的版本验收迁移结果。</li>
+<li>能用实验数字解释一致性哈希不能自动消除热点键，并说明拆分热点键和加机器、加虚拟节点分别改变了什么。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>公众号内容后台（教学假设）的文章元数据，最先遇到的瓶颈往往不是单条读写慢，而是一台机器装不下、扛不住。分片几乎是必经之路，但真正出事故的通常不是「怎么切」，而是「怎么搬」。扩容那天，运维把分片 0 从旧节点改到新节点；如果只改了路由，没有把数据搬过去，读请求就会落到一台没有这批标题的机器上，编辑看到文章标题变成空；如果拷完存量就切换，拷贝期间编辑改过的标题会悄悄回到旧值。两种情况在监控上可能都只表现为「迁移期间有少量错误」，事后却要逐篇对账。</p>
+<p>热点是另一类问题。一篇爆款推文的标题和阅读计数在几分钟内被读几十万次，键在节点间分得再均匀，这一个键也只在一台机器上。如果以为「上了一致性哈希、虚拟节点开到 128，就不会有热点」，容量规划会漏掉最关键的那一台。理解分片的边界，才能在扩容、迁移和应对爆款时分清：哪些问题靠路由解决，哪些问题必须改数据模型。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1">1. 范围分片与哈希分片</h3>
+<p>范围分片把键按顺序切成连续的段，每段交给一个分片。它的好处是保序：要列出 id 1000 到 1099 的文章，只需访问持有这一段的分片。哈希分片先对键算哈希，再按哈希值分配，好处是把相邻的键打散到不同分片，写入和容量更均匀，代价是失去顺序，范围扫描要问遍所有分片。</p>
+<p>Redis Cluster 属于哈希分片。规范的 Key distribution model 一节写明：键空间被分成 16384 个槽，基本算法是 <code>HASH_SLOT = CRC16(key) mod 16384</code>，CRC16 采用 XMODEM 参数（多项式 <code>1021</code>，初值 <code>0000</code>，不反射，输出不异或），对字符串 <code>"123456789"</code> 的输出是 <code>31C3</code>；只用 16 位输出中的 14 位，所以是对 16384 取模。每个主节点负责其中一部分槽。Hash tags 一节又给出例外：键里有 <code>{...}</code> 时，只对花括号内的子串算槽，用来把多个键放进同一槽，从而支持多键操作。</p>
+<p>教学引擎直接实现了这套槽计算并做了核对：<code>crc16("123456789")</code> 的结果是 <code>31C3</code>，与规范一致；<code>{user:1000}.name</code> 与 <code>{user:1000}.surname</code> 都落在槽 <code>1649</code>；<code>article:00042:title</code> 落在槽 <code>10587</code>，按每 2048 槽一组属于分片 <code>5</code>。</p>
+<p>实验 <code>range_vs_hash</code> 把两种分片的取舍变成数字，两边都是 8 个分片，范围分片每段 500 个 id：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th style="text-align: right;">范围分片</th>
+<th style="text-align: right;">哈希分片（CRC16 槽 → 8 分片）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>扫描 id 1000–1099 要访问的分片数</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr>
+<td>4000 个已有键的最大分片份额</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">0.125（每个分片恰好 500 个键）</td>
+</tr>
+<tr>
+<td>新插入 id 4000–4399 落到的分片数</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr>
+<td>新插入的最大分片份额</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.13</td>
+</tr>
+</tbody>
+</table>
+<p>范围分片下，100 个连续 id 的扫描只碰 1 个分片；哈希分片要碰全部 8 个。反过来，400 篇新文章的 id 是递增的，在范围分片里全部落在最后一段，那个分片承担 100% 的插入；在哈希分片里分到 8 个分片，最大份额 0.13。这就是节点的权衡：范围分片利于扫描，哈希分片更容易均匀分布。</p>
+<p>「每个分片恰好 500 个键」看起来过于整齐，但这是这次运行的真实结果：CRC 对输入是线性的，连续十进制编号的键名在高 3 位上恰好均匀轮转；4000 个键实际只占了 <code>2464</code> 个不同的槽。换一组键名，就不会这么整齐，不要把它当成 CRC16 的一般性质。</p>
+<h3 id="2">2. 虚拟节点与热点键</h3>
+<p>一致性哈希把节点放到一个哈希环上，键顺时针找到第一个节点。只放一个点时，各节点在环上分到的弧长差别很大；虚拟节点让每台物理节点在环上放很多点，弧长趋于平均，键数也就更均衡，加减节点时也只搬动一小部分键。第 110 课已经统计过迁移比例，本课只看均衡与热点。</p>
+<p>需要先说明：Redis 规范<strong>没有</strong>讲一致性哈希或虚拟节点。Redis Cluster 用固定的 16384 个槽，再由运维或工具把槽分给节点，可以看成「槽就是固定数量的虚拟分区」，但它不是哈希环。本节的环是教学实现，用 MD5 放置虚拟节点。</p>
+<p>实验 <code>hotkey</code>：4 台节点、4000 个标题键，模拟 10000 次访问，其中一半打在爆款 <code>article:00042:title</code> 上（实际 <code>4980</code> 次），另一半在所有键上均匀分布。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">虚拟节点数</th>
+<th style="text-align: right;">键数最大份额</th>
+<th style="text-align: right;">访问最大份额</th>
+<th>热点键所在节点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.6158</td>
+<td style="text-align: right;">0.6084</td>
+<td><code>n2</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">0.4163</td>
+<td style="text-align: right;">0.5856</td>
+<td><code>n4</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">128</td>
+<td style="text-align: right;">0.2988</td>
+<td style="text-align: right;">0.6460</td>
+<td><code>n3</code></td>
+</tr>
+</tbody>
+</table>
+<p>虚拟节点从 1 加到 128，键数的最大份额从 <code>0.6158</code> 降到 <code>0.2988</code>，接近理想的 0.25；但访问的最大份额一直在 <code>0.58</code>–<code>0.65</code> 之间，128 个虚拟节点时反而是 <code>0.646</code>。原因很直接：热点键只有一个，哈希把它映射到环上的一个点，它的 4980 次访问全部由那一台节点承担，再加上它分到的普通访问。虚拟节点改变的是键在哪里，改变不了一个键被访问多少次。</p>
+<p>再加一台 <code>n5</code>（同样 128 个虚拟节点），键数最大份额降到 <code>0.2265</code>，但热点键仍在 <code>n3</code>，<code>n3</code> 的访问份额仍是 <code>0.6046</code>。加机器分走的是其他键，热点键并没有被分走。</p>
+<p>真正能分散热点的是改数据模型。教学实验把爆款标题的读请求随机打到 N 个副本键 <code>article:00042:title#0</code> … <code>#N-1</code> 上（写入时要写全部 N 份，这里只模拟读）。N=8 时，8 个副本键里有 6 个落在 <code>n1</code>，访问最大份额只降到 <code>0.5016</code>；N=32 时，副本键分布为 <code>n1</code> 14 个、<code>n2</code> / <code>n3</code> / <code>n4</code> 各 6 个，访问最大份额降到 <code>0.3469</code>。拆分本身也要经过哈希，副本数少时一样会撞到同一台节点。这不是 Redis 的功能，也不是副本提升，只是演示：热点必须从键的设计上处理，靠路由层是消除不了的。</p>
+<h3 id="3">3. 迁移期间双写和转发</h3>
+<p>Redis 规范的 Live reconfiguration 一节把加节点、删节点和再平衡归结为同一件事：把哈希槽从一个节点移到另一个节点，而移动一个槽就是移动所有落在这个槽里的键。它的做法是：向目标 B 发 <code>CLUSTER SETSLOT 8 IMPORTING A</code>，向源 A 发 <code>CLUSTER SETSLOT 8 MIGRATING B</code>。之后，已有的键仍由 A 处理；A 上不存在的键通过 <code>-ASK</code> 交给 B，「这样就不会再在 A 上创建新键」。迁移工具用 <code>CLUSTER GETKEYSINSLOT</code> 取键，再用 <code>MIGRATE</code> 把键原子地从 A 搬到 B：B 回 OK 之后，A 删除旧键，所以从外部客户端看，一个键在任一时刻要么在 A，要么在 B。全部搬完后，对两台节点发 <code>SETSLOT &lt;slot&gt; NODE &lt;node-id&gt;</code>，通常也发给所有其他节点，不必等配置自然传播。</p>
+<p>ASK redirection 一节解释了为什么不能只用 MOVED：MOVED 表示这个槽已经永久由另一个节点服务，后续请求都应发到那里；ASK 只表示「把下一条请求发过去」，因为下一条请求的键可能还在 A 上。客户端收到 ASK 时只重发这一条请求，先发 <code>ASKING</code>，不更新本地槽表；目标节点只有在请求前带了 <code>ASKING</code> 时，才会处理处于 IMPORTING 的槽，否则用 MOVED 把客户端打回真正的所有者。槽迁移完成后，A 会回 MOVED，客户端才把槽永久映射到新节点。Multi-keys operations 一节补充：迁移期间，所有键都存在且仍在同一节点上的多键操作照常可用；键不存在，或者分散在源和目标两边的多键操作，会返回 <code>-TRYAGAIN</code>。配置传播部分还写到：导入节点完成一个槽的导入后，会把自己的配置纪元（configEpoch）加一，让这次变更传播到整个集群；所有节点最终会认定，声明该槽的节点里 configEpoch 最大的那个是所有者。</p>
+<p>这套机制的核心是两件事：<strong>路由有版本</strong>（configEpoch 决定谁说了算），<strong>数据在源和目标之间有明确的读写规则</strong>（MIGRATING / IMPORTING / ASK）。应用自己做分片路由时（例如在业务层或代理层维护路由表），一般没有 <code>MIGRATE</code> 这种逐键原子搬迁和 ASK 协议，常见做法是：</p>
+<ol>
+<li><strong>路由表带版本</strong>：配置服务维护 <code>route_version</code>，客户端缓存路由表，每个请求带上自己缓存的版本。节点发现分片不归自己时，回一个「路由过期」错误，客户端刷新路由后重试。</li>
+<li><strong>拷贝存量</strong>：目标节点进入导入状态，源节点按批把这个分片的存量键拷过去。拷贝期间写入仍由源节点处理。</li>
+<li><strong>追平增量</strong>：拷贝期间的新写有两种处理方式。<strong>双写转发</strong>：源节点写本地之后，同步把同一个版本转发给目标，再回复客户端；<strong>变更日志</strong>：源节点只写本地并追加变更日志，拷完存量后分几轮重放日志，直到剩下的条目足够少。</li>
+<li><strong>短暂冻结并切换</strong>：冻结这个分片的写（客户端收到「稍后重试」），把最后剩下的日志重放完，发布新版本路由，让目标成为所有者。冻结开始到新路由生效，就是<strong>切换窗口</strong>。</li>
+<li><strong>清理源节点</strong>：确认新路由已生效后，删除源节点上这个分片的数据。</li>
+</ol>
+<p>每一步都依赖「每个键有单调版本号，目标只接受更新的版本」：存量拷贝可能拷到旧值，双写转发可能比拷贝先到，日志重放可能晚于转发，只要目标节点按版本取较大者，乱序就不会把新值覆盖成旧值。</p>
+<h2 id="_10">常见误区</h2>
+<p>节点给出的误区是：<strong>仅修改哈希环就认为完成无损迁移</strong>。<code>flip_only</code> 对照在完全相同的写压测下，<code>0.1</code> 开始迁移、<code>0.101</code> 直接把路由表改成 <code>route_version=2</code>、分片 0 归 <code>n4</code>，不搬任何数据；<code>0.121</code> 清理源节点，删除 <code>n1</code> 上分片 0 的 <code>500</code> 个键。结果：</p>
+<ul>
+<li>读请求有 <code>27</code> 次读不到已经确认写入的键，<code>reads_missing=27</code>。</li>
+<li>已确认写入的键应有 <code>4060</code> 个，所有者节点上只有 <code>3715</code> 个，<code>missing_keys=345</code>，<code>total_key_count_ok=false</code>。</li>
+<li><code>n4</code> 上分片 0 只有 <code>165</code> 个键，都是切换之后写进来的。</li>
+<li>有 <code>14</code> 个已有键在 <code>n4</code> 上被重新从版本 <code>1</code> 开始计数，版本比之前确认过的更小，<code>version_regressions=14</code>。</li>
+</ul>
+<p>改路由只是改了「请求去哪」，数据还留在原来的地方。路由表、数据和版本三者必须一起迁移，不能只看哈希环。</p>
+<p><strong>额外误区（本课实验发现）：拷完存量就切换，不追增量。</strong> <code>copy_then_flip</code> 照样拷了 10 批共 <code>500</code> 个键，<code>0.2</code> 拷完，<code>0.201</code> 切换路由，<code>0.221</code> 清理源节点。但拷贝期间源节点上发生的写没有同步给目标：在某个键所在批次已经拷完之后才写入的更新，以及拷贝开始后才插入的新文章，都留在了源节点上，随清理一起删除。最终 <code>missing_keys=2</code>（2 篇拷贝期间插入的新文章丢失），<code>wrong_version_keys=13</code>（13 个键回到了旧版本），已确认写入共丢 <code>15</code> 次，读到旧版本 <code>2</code> 次。总键数看上去只差 2 个，<code>4058</code> 对 <code>4060</code>，很容易被当成「基本没问题」；只有逐键核对版本才能发现另外 13 处回退。这也是验收要同时看总键数和版本的原因。</p>
+<p><strong>第二个误区：以为一致性哈希或虚拟节点能消除热点。</strong> 上一节的数字已经说明：虚拟节点从 1 到 128，键数最大份额从 <code>0.6158</code> 降到 <code>0.2988</code>，访问最大份额却始终在 <code>0.58</code>–<code>0.65</code>；加一台节点后，热点节点的访问份额仍是 <code>0.6046</code>。</p>
+<p><strong>第三个误区：只看总键数就算验收通过。</strong> <code>copy_then_flip</code> 少了 2 个键，13 个键版本回退；如果某次迁移恰好没有插入新键，总键数会完全一致，但版本依旧错。验收要逐键比较「最后一次确认的值和版本」。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点给出的权衡是：<strong>范围分片利于扫描，哈希分片更容易均匀分布</strong>。<code>range_vs_hash</code> 的数字：扫描 100 个连续 id，范围分片碰 <code>1</code> 个分片、哈希分片碰 <code>8</code> 个；插入 400 个递增 id，范围分片 <code>100%</code> 落在最后一段，哈希分片最大份额 <code>0.13</code>。按文章 id 顺序翻页、按时间做归档扫描的场景偏向范围分片，但要预先切分最后一段，或者给 id 加随机前缀，以免新写入集中到一处；以单键读写为主、要求负载均匀的场景偏向哈希分片，代价是范围查询要扇出，或者另建索引。Redis Cluster 选择了哈希槽，并用 hash tag 给需要放在一起的键留了一个出口。</p>
+<p>第二笔权衡是<strong>双写转发和变更日志</strong>，它们用不同的代价换取同样的正确结果。两次迁移的验收完全相同：<code>4060</code> 个键、版本全对。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th style="text-align: right;"><code>dual_write</code></th>
+<th style="text-align: right;"><code>change_log</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存量拷贝</td>
+<td style="text-align: right;">10 批 / 500 个键，<code>0.1</code>–<code>0.2</code></td>
+<td style="text-align: right;">10 批 / 500 个键，<code>0.1</code>–<code>0.2</code></td>
+</tr>
+<tr>
+<td>增量处理</td>
+<td style="text-align: right;">同步转发 <code>36</code> 次</td>
+<td style="text-align: right;"><code>0.2</code> 一轮重放 <code>36</code> 条，冻结时剩 <code>3</code> 条</td>
+</tr>
+<tr>
+<td>冻结开始 → 新路由生效</td>
+<td style="text-align: right;"><code>0.200</code> → <code>0.201</code></td>
+<td style="text-align: right;"><code>0.207</code> → <code>0.209</code></td>
+</tr>
+<tr>
+<td>切换窗口</td>
+<td style="text-align: right;"><code>0.001</code> 秒</td>
+<td style="text-align: right;"><code>0.002</code> 秒</td>
+</tr>
+<tr>
+<td>迁移期间分片 0 写延迟 p50</td>
+<td style="text-align: right;"><code>0.004</code> 秒（迁移前 <code>0.002</code>）</td>
+<td style="text-align: right;"><code>0.002</code> 秒（不变）</td>
+</tr>
+<tr>
+<td>收到 <code>RETRY</code> 的写</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p>双写转发让每次写多等一次源到目标的往返，迁移期间分片 0 的写延迟 p50 从 <code>0.002</code> 翻倍到 <code>0.004</code>；但目标始终与源同步，冻结时没有剩余日志，切换窗口最短。变更日志不增加写延迟，代价是要多一轮重放、冻结时还要把尾巴补完，切换窗口更长，实现也更复杂（日志要有界、要处理重放跟不上写入的情况）。这些都是教学虚拟时钟上的数字，只说明方向：双写把成本摊到迁移期间的每次写，日志追赶把成本集中到切换前后。</p>
+<p>第三笔权衡是<strong>冻结窗口的长短与可用性</strong>。冻结期间分片 0 的写会收到 <code>RETRY</code>，客户端要退避重试；<code>dual_write</code> 里有 <code>1</code> 次写撞上了 <code>0.001</code> 秒的窗口。Redis 对单键操作没有冻结窗口：逐键 <code>MIGRATE</code> 是原子的，键要么在 A、要么在 B，配合 ASK 就能持续服务；代价是迁移期间部分多键操作会返回 <code>TRYAGAIN</code>，而且规范提醒，存在大键时在线重分片并不明智，因为 MIGRATE 要锁住两端搬迁整个值。应用层迁移用一个短冻结换取更简单的读写规则，Redis 用逐键原子搬迁和 ASK 协议换取不冻结。</p>
+<h2 id="kv">动手实践：实现带版本路由表的分片 KV，在写压测中迁移一个分片</h2>
+<p>配套代码在 <code>/workspace/atlas/lessons/practice120/</code>，包括 <code>engine.py</code>、<code>app.py</code>、<code>test_shard.py</code>，用 Python 3 标准库实现，不依赖 Redis 或网络服务。运行验收：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice120
+bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>标准输出应是一行 <code>ALL_CHECKS_PASSED</code>，并写出 <code>results.json</code>。压测用固定随机种子 <code>120</code>，两次运行的 <code>results.json</code> 完全相同。下面的数字都来自这次运行，时间单位是教学虚拟时钟上的秒，不是生产 RTT。</p>
+<p><strong>0. 初始状态。</strong> 4000 个键，每个分片恰好 <code>500</code> 个，路由表 <code>route_version=1</code>：</p>
+<div class="codehilite"><pre><span></span><code>route_version=1
+shard 0 -&gt; n1   shard 1 -&gt; n2   shard 2 -&gt; n3   shard 3 -&gt; n1
+shard 4 -&gt; n2   shard 5 -&gt; n3   shard 6 -&gt; n1   shard 7 -&gt; n2
+n4: empty
+</code></pre></div>
+
+<p>压测从 <code>0.0</code> 到 <code>0.6</code> 一共发出 <code>600</code> 次写和 <code>300</code> 次读，其中 <code>229</code> 次写打在分片 0 上，<code>60</code> 次是新文章插入；600 次写全部得到确认。迁移在 <code>0.1</code> 开始：分片 0 从 <code>n1</code> 迁到 <code>n4</code>。</p>
+<p><strong>1. 主实践 <code>dual_write</code>。</strong> 时间线：</p>
+<div class="codehilite"><pre><span></span><code>0.100  n4 标记分片 0 为 importing，n1 标记为 migrating_out；快照 500 个键，分 10 批
+0.100–0.200  每 0.01 秒拷一批；同期分片 0 上的 36 次写由 n1 写本地后同步转发给 n4
+0.200  存量拷完；冻结分片 0，剩余日志 0 条
+0.201  发布 route_version=2：shard 0 -&gt; n4；切换窗口 0.001 秒
+0.221  清理 n1 上分片 0 的 501 个键
+</code></pre></div>
+
+<p>切换后，4 个客户端各自用旧版本路由访问 <code>n1</code> 一次，收到 <code>STALE_ROUTE</code>，刷新路由后重试，<code>stale_route_redirects=4</code>、<code>route_refreshes=4</code>；有 <code>1</code> 次写撞上冻结窗口，收到 <code>RETRY</code> 后退避重试成功。迁移期间分片 0 的写延迟 p50 是 <code>0.004</code> 秒（<code>36</code> 次），迁移前是 <code>0.002</code> 秒（<code>38</code> 次），多出来的就是源到目标转发的那一次往返。300 次读里，<code>reads_missing=0</code>、<code>reads_stale=0</code>。</p>
+<p>验收：</p>
+<div class="codehilite"><pre><span></span><code>expected_keys=4060   keys_on_owners=4060   missing_keys=0   wrong_version_keys=0
+keys_on_non_owners=0 route_version=2       n4 shard0 keys=510   n1 shard0 keys=0
+total_key_count_ok=true   versions_ok=true
+</code></pre></div>
+
+<p><code>4060 = 4000 + 60</code> 篇新插入的文章；分片 0 在 <code>n4</code> 上有 <code>510</code> 个键（500 个存量加 10 篇落在分片 0 的新文章）；<code>n1</code> 上不再有分片 0 的数据；每个键在所有者上的值和版本，都与最后一次确认写入的结果相同。</p>
+<p><strong>2. 对照 <code>change_log</code>。</strong> 同样的压测、同样的拷贝：</p>
+<div class="codehilite"><pre><span></span><code>0.100–0.200  拷 10 批 500 个键；同期分片 0 上的写只写 n1，并追加到变更日志
+0.200  第一轮追赶：重放 36 条日志（36 × 0.0002 秒）
+0.207  剩余 3 条 &lt; 阈值 5，冻结分片 0
+0.209  重放完最后 3 条，发布 route_version=2；切换窗口 0.002 秒
+0.229  清理 n1 上分片 0 的 502 个键
+</code></pre></div>
+
+<p>迁移期间分片 0 的写延迟 p50 仍是 <code>0.002</code> 秒（<code>39</code> 次），没有转发开销；这次没有写撞上冻结窗口，<code>retry_replies=0</code>。验收与双写相同：<code>expected_keys=4060</code>、<code>keys_on_owners=4060</code>、<code>missing_keys=0</code>、<code>wrong_version_keys=0</code>、<code>keys_on_non_owners=0</code>、<code>route_version=2</code>，读请求 <code>reads_missing=0</code>、<code>reads_stale=0</code>。</p>
+<p><strong>3. 误区对照 <code>flip_only</code> 与 <code>copy_then_flip</code>。</strong> 数字已在常见误区里给出，这里放在一起：</p>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th style="text-align: right;">切换时刻</th>
+<th style="text-align: right;">所有者上的键 / 应有键</th>
+<th style="text-align: right;"><code>missing_keys</code></th>
+<th style="text-align: right;"><code>wrong_version_keys</code></th>
+<th style="text-align: right;">读不到</th>
+<th style="text-align: right;">读到旧版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dual_write</code></td>
+<td style="text-align: right;">0.201</td>
+<td style="text-align: right;">4060 / 4060</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td><code>change_log</code></td>
+<td style="text-align: right;">0.209</td>
+<td style="text-align: right;">4060 / 4060</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td><code>flip_only</code></td>
+<td style="text-align: right;">0.101</td>
+<td style="text-align: right;">3715 / 4060</td>
+<td style="text-align: right;">345</td>
+<td style="text-align: right;">0（另有 14 次版本回退）</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td><code>copy_then_flip</code></td>
+<td style="text-align: right;">0.201</td>
+<td style="text-align: right;">4058 / 4060</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">2</td>
+</tr>
+</tbody>
+</table>
+<p><code>flip_only</code> 的 <code>wrong_version_keys=0</code> 并不表示版本正确：那 14 个键在 <code>n4</code> 上从版本 <code>1</code> 重新计数，记录「最后一次确认」的对照表也跟着记下了回退后的版本，所以要看 <code>version_regressions=14</code> 这一项。</p>
+<p><strong>4. 热点与虚拟节点 <code>hotkey</code>。</strong> 数字见核心知识点第 2 节：虚拟节点 1 / 16 / 128 时，键数最大份额 <code>0.6158</code> / <code>0.4163</code> / <code>0.2988</code>，访问最大份额 <code>0.6084</code> / <code>0.5856</code> / <code>0.6460</code>；加 <code>n5</code> 后热点节点 <code>n3</code> 的访问份额仍是 <code>0.6046</code>；把热点键拆成 8 / 32 个副本键，访问最大份额 <code>0.5016</code> / <code>0.3469</code>。</p>
+<p><strong>5. 范围与哈希 <code>range_vs_hash</code>、槽核对 <code>redis_slot_check</code>。</strong> 扫描 100 个连续 id：范围 <code>1</code> 个分片、哈希 <code>8</code> 个；递增插入 400 个 id：范围最大份额 <code>1.0</code>、哈希 <code>0.13</code>。<code>crc16("123456789")=31C3</code>，与规范一致；<code>{user:1000}.name</code> 与 <code>.surname</code> 同在槽 <code>1649</code>。</p>
+<p><strong>6. 核对验收字段。</strong> <code>acceptance_total_keys_and_versions_ok=true</code>，<code>acceptance_consistent_hash_does_not_remove_hot_key=true</code>，<code>pitfall_flip_only_loses_data=true</code>，<code>pitfall_copy_without_catchup_loses_writes=true</code>，<code>tradeoff_range_scan_vs_hash_balance=true</code>。五个字段都在 <code>results.json</code> 顶层，测试脚本以 <code>ALL_CHECKS_PASSED</code> 结束。</p>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 Redis Cluster specification 的槽迁移、ASK 与 MOVED 重定向部分，比较应用路由迁移与 Redis 实现。2026-11-14 的实际打开情况如下。</p>
+<ul>
+<li>节点给出的 <a href="https://redis.io/docs/latest/operate/oss_and_stack/reference/cluster-spec/">Redis cluster specification</a> 返回 200，无跳转，最终 URL 不变，HTML 242101 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>&lt;title&gt;</code> 为 Redis cluster specification | Docs。页面元数据 <code>dateModified</code> 为 2026-09-21T15:59:03+01:00（北京时间 2026-09-21 22:59）。页面没有署名作者，开头说明文档 is a work in progress as it is continuously synchronized with the actual implementation of Redis。节点把资源类型标为「论文」，实际是官方文档页面。</li>
+<li>本课主要读了 Key distribution model、Hash tags、MOVED Redirection、Live reconfiguration、ASK redirection、Multi-keys operations，以及配置纪元（Cluster current epoch、Configuration epoch、configEpoch conflicts resolution）里与重分片相关的段落。</li>
+<li>规范<strong>没有</strong>讲一致性哈希、虚拟节点、范围分片或热点键。核心知识点第 1、2 节里这几部分的实验，是教学实现与通用设计讨论，不是对规范的转述。</li>
+</ul>
+<p>规范里的定义与结论，本课按以下方式使用。</p>
+<p>键分布：16384 个槽，<code>HASH_SLOT = CRC16(key) mod 16384</code>，CRC16 为 XMODEM，<code>"123456789"</code> 的输出为 <code>31C3</code>；集群稳定时，一个槽只由一个节点服务（该节点可以有副本）。Hash tag：键里有 <code>{</code>，且其右边有 <code>}</code>，两者之间至少有一个字符时，只对花括号之间的子串算槽。</p>
+<p>MOVED：节点收到不属于自己的槽的请求时，回 <code>-MOVED &lt;slot&gt; &lt;endpoint:port&gt;</code>；客户端应记住这个映射，或者用 <code>CLUSTER SHARDS</code>（或已弃用的 <code>CLUSTER SLOTS</code>）刷新整张表，因为很可能不止一个槽变了。</p>
+<p>Live reconfiguration：加节点、删节点、再平衡都是移动槽；<code>SETSLOT IMPORTING</code> / <code>MIGRATING</code>、<code>GETKEYSINSLOT</code>、原子的 <code>MIGRATE</code>，最后 <code>SETSLOT NODE</code>。MIGRATING 状态下，源节点只处理已存在的键，其余用 ASK 交给目标，因此不再在源上创建新键。</p>
+<p>ASK：只重定向下一条请求，先发 <code>ASKING</code>，不更新槽表；IMPORTING 节点没有收到 <code>ASKING</code> 就回 MOVED。多键操作在迁移期间可能 <code>-TRYAGAIN</code>。</p>
+<p>配置纪元：导入节点完成导入后递增 configEpoch，好让变更传播；重分片时，工具会强制目标把配置纪元提升到集群里最大的值加一，不需要其他节点同意，规范说这是出于性能考虑，因为真实的重分片往往要搬几百个槽。</p>
+<p>教学实验与 Redis 实现的差异如下。</p>
+<ul>
+<li><strong>迁移单位</strong>：Redis 按单个槽迁移；教学引擎把每 2048 个槽合成一个分片，一次搬一个分片。</li>
+<li><strong>数据搬迁</strong>：Redis 逐键 <code>MIGRATE</code>，原子地把键从 A 移到 B，任一时刻一个键只存在于一边；教学引擎先批量<strong>复制</strong>（源上仍保留），再用双写或日志追平，切换后才清理源，所以迁移期间同一个键在两边各有一份，靠版本号保证目标不会回退。</li>
+<li><strong>新键</strong>：Redis 在 MIGRATING 期间把源上不存在的键用 ASK 交给 B，新键直接建在目标上；教学引擎在切换前所有写都由源处理，新键先建在源上，再随双写或日志进入目标。</li>
+<li><strong>重定向</strong>：Redis 有 MOVED 和 ASK 两种语义；教学引擎只有 <code>STALE_ROUTE</code>（相当于「请刷新路由」）和冻结期间的 <code>RETRY</code>，没有「只重定向一次」的 ASK。</li>
+<li><strong>路由版本</strong>：Redis 用每个节点的 configEpoch 在 gossip 中竞争，最终取最大者；教学引擎用一个全知配置服务的全局 <code>route_version</code>，没有 gossip、UPDATE 消息或纪元冲突处理。</li>
+<li><strong>冻结窗口</strong>：Redis 对单键操作没有冻结；教学引擎在切换前冻结整个分片 <code>0.001</code>–<code>0.002</code> 秒（虚拟时钟）。</li>
+<li><strong>其他</strong>：没有副本、故障切换、持久化、<code>nodes.conf</code> 与 fsync，也没有 TCP。所有时间都是虚拟时钟上的教学数字。</li>
+</ul>
+<h2 id="_13">自测题</h2>
+<p><strong>题 1.</strong> 迁移完成后，怎样判断「总键数与版本正确」？请用 <code>dual_write</code> 和 <code>copy_then_flip</code> 的数字说明，为什么只看总键数不够。</p>
+<details>
+<summary>答案</summary>
+
+要维护一张「最后一次确认写入」的对照表：每次写得到确认时，记下这个键的值和版本。迁移完成后，对每个键查当前路由下的所有者节点，比较它保存的值和版本是否与对照表一致；同时统计所有者节点上的键总数，确认非所有者节点上不再有残留。
+
+`dual_write`：对照表里有 `4060` 个键（4000 个初始键加 60 篇新文章），所有者节点上正好 `4060` 个，`missing_keys=0`、`wrong_version_keys=0`、`keys_on_non_owners=0`，`route_version=2`，分片 0 在 `n4` 上有 `510` 个键、在 `n1` 上为 `0`。总键数和版本都正确。
+
+`copy_then_flip`：所有者节点上有 `4058` 个键，只比应有的少 2 个（拷贝开始后插入的 2 篇新文章），但逐键比较时还有 `13` 个键的版本比最后一次确认的旧，共丢失 `15` 次已确认写入。如果这次迁移期间恰好没有插入新键，总键数会完全一致，而那 13 处版本回退依然存在。所以验收必须同时看总键数和每个键的版本。
+
+</details>
+
+<p><strong>题 2.</strong> 为什么一致性哈希（以及更多虚拟节点、加机器）不能自动消除热点键？用 <code>hotkey</code> 的数字说明，并指出什么办法有效。</p>
+<details>
+<summary>答案</summary>
+
+一致性哈希和虚拟节点调整的是「每个键落在哪台节点」，目标是让**键数**均衡。热点是**单个键**的访问量过大，而这个键无论怎么哈希，都只映射到环上的一个位置，由一台节点承担它的全部访问。
+
+10000 次访问里有 `4980` 次打在 `article:00042:title` 上。虚拟节点 1 / 16 / 128 时，键数最大份额从 `0.6158` 降到 `0.4163`，再降到 `0.2988`，但访问最大份额是 `0.6084` / `0.5856` / `0.6460`，并没有下降。再加一台 `n5`，键数最大份额降到 `0.2265`，热点键仍在 `n3`，`n3` 的访问份额仍是 `0.6046`。
+
+有效的办法是改数据模型，把一个热点键拆成多个键，让访问分散到多个副本键上。拆成 8 个副本键时，有 6 个落在同一台节点，访问最大份额只降到 `0.5016`；拆成 32 个时降到 `0.3469`。拆分后的键也要经过哈希，副本数太少时一样会撞到一起。实际系统还可以用本地缓存或读副本，但那属于缓存与复制的手段，不是路由层自动完成的。
+
+</details>
+
+<p><strong>题 3.</strong> 只把路由表（或哈希环）上的分片 0 改到 <code>n4</code>，为什么不是无损迁移？双写转发和变更日志分别怎样补上缺口，代价有什么不同？</p>
+<details>
+<summary>答案</summary>
+
+路由只决定请求发往哪里，数据并不会随之移动。`flip_only` 在 `0.101` 把分片 0 改到 `n4`，`n4` 上一个存量键都没有；`0.121` 清理 `n1` 后，原来的 500 个键彻底消失。结果是读请求 `27` 次读不到已确认写入的键，所有者节点上只有 `3715` 个键、应有 `4060` 个，`missing_keys=345`，另有 `14` 个键在 `n4` 上从版本 `1` 重新计数，版本回退。
+
+正确的迁移是：先拷贝存量，再追平增量，最后在短冻结里切换路由，然后才清理源节点。`dual_write` 让源节点在每次写入后同步转发给目标：同期转发 `36` 次，冻结时没有剩余，`0.200` 冻结、`0.201` 切换，窗口 `0.001` 秒；代价是迁移期间分片 0 的写延迟 p50 从 `0.002` 变成 `0.004`。`change_log` 只写本地并记日志：`0.2` 重放 `36` 条，`0.207` 剩 `3` 条时冻结，`0.209` 切换，窗口 `0.002` 秒；写延迟 p50 不变，代价是窗口更长、实现更复杂。两者的验收都是 `4060` 个键、版本全对、读不到和读到旧版本都是 `0`。Redis 用的是第三种做法：逐键原子 `MIGRATE` 加 ASK 重定向，键在任一时刻只在一边，单键操作不需要冻结窗口。
+
+</details>
+
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://redis.io/docs/latest/operate/oss_and_stack/reference/cluster-spec/">Redis — Cluster specification</a>（Redis，英文文档，深入，免费）：用于核对哈希槽、hash tag、MOVED / ASK、在线重分片和配置纪元，并与本节点的应用路由迁移实验对照。2026-11-14 该地址返回 200，无跳转，HTML 242101 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>&lt;title&gt;</code> 为 Redis cluster specification | Docs；页面元数据 <code>dateModified</code> 为 2026-09-21T15:59:03+01:00。规范没有涉及一致性哈希、虚拟节点、范围分片和热点键。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>范围分片利于扫描，哈希分片更容易均匀分布。扫描 100 个连续 id，范围碰 <code>1</code> 个分片、哈希碰 <code>8</code> 个；递增插入 400 个 id，范围 <code>100%</code> 落在最后一段，哈希最大份额 <code>0.13</code>。Redis Cluster 是哈希槽：<code>CRC16(key) mod 16384</code>，<code>crc16("123456789")=31C3</code> 已核对。</li>
+<li>虚拟节点改善键数均衡，不消除热点键。虚拟节点 1 → 128，键数最大份额 <code>0.6158</code> → <code>0.2988</code>，访问最大份额始终在 <code>0.58</code>–<code>0.65</code>；加一台节点后热点节点仍有 <code>0.6046</code>。把热点键拆成 32 个副本键，访问最大份额降到 <code>0.3469</code>。</li>
+<li>在线迁移要同时迁移路由、数据和版本：路由表带版本，先拷存量，再用双写或日志追平增量，短冻结后切换，最后清理源节点。<code>dual_write</code> 和 <code>change_log</code> 都得到 <code>4060</code> 个键、版本全对，切换窗口分别为 <code>0.001</code> 秒和 <code>0.002</code> 秒；双写让迁移期间的写延迟 p50 从 <code>0.002</code> 变成 <code>0.004</code>。</li>
+<li>只改路由丢数据：<code>flip_only</code> 少了 <code>345</code> 个键，<code>27</code> 次读不到，<code>14</code> 个键版本回退。拷完存量不追增量也丢写：<code>copy_then_flip</code> 少 <code>2</code> 个键、<code>13</code> 个键版本回退，总键数只差 2，必须逐键核对版本才能发现。</li>
+<li>Redis 用逐键原子 <code>MIGRATE</code>、MIGRATING / IMPORTING 与 ASK / MOVED 实现不冻结的在线迁移，用 configEpoch 决定槽的所有者；教学引擎用全局 <code>route_version</code>、批量复制加双写或日志，以及短冻结窗口。两者都是为了保证一个已确认的写在迁移后仍然存在。</li>
+<li>这些时间都是教学虚拟时钟上的数字，不是生产 RTT。<code>ShardMigrationEngine</code> 不是 Redis，也不是 Redis Cluster 客户端；它没有副本、故障切换、gossip 和 TCP，8 个分片是对 16384 个槽的教学归并。</li>
+</ul>
+<p>如果有一句答不上来，先回到 <code>results.json</code> 里对应的字段，再回到规范的 Live reconfiguration、ASK redirection 和 Multi-keys operations 三节，不要把「路由表改好了」当成「迁移完成了」。</p><div class="pn"><span><a href="119.html">← Paxos 与多数派交集</a></span><span>下一课 待更新</span></div></main></div></body></html>
