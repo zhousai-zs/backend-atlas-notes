@@ -1,0 +1,213 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>127. 分布式协议演进 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（127/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details open><summary>领域 H（15/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li><a class="" href="../lessons/122.html">122. 消息投递与幂等消费</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li><a class="" href="../lessons/123.html">123. 限流与过载保护</a></li><li><a class="" href="../lessons/124.html">124. 熔断、降级与隔离</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li><a class="" href="../lessons/125.html">125. 多机房与灾难恢复</a></li><li><a class="" href="../lessons/126.html">126. 分布式历史与故障测试</a></li></ul><div>阶段 6</div><ul><li><a class="cur" href="../lessons/127.html">127. 分布式协议演进</a></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 127 课 · 领域 H · 阶段 6</p><p class="dl"><a href="../files/127-h-evolution.md" download>⬇ 本课 Markdown</a><a href="../files/practice127.tar.gz" download>⬇ 练习包 practice127.tar.gz</a></p><h1 id="127208">第 127/208 课：分布式协议演进</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>h-evolution</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Protocol evolution</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>H / 第 6 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>可靠性与演进</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>专家</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/126.html"><code>h-verification</code></a></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Protocol evolution</code>、<code>Distributed</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://etcd.io/docs/v3.5/upgrades/upgrade_3_5/">etcd — Upgrade guide</a>（etcd 文档，英文，专家，免费；2026-11-14 该地址返回 HTTP 200，无跳转，最终 URL 仍是 <code>https://etcd.io/docs/v3.5/upgrades/upgrade_3_5/</code>，406529 字节，<code>Content-Type</code> 为 <code>text/html; charset=UTF-8</code>，由 Netlify 提供。页面没有 HTTP <code>Last-Modified</code>。本次抓取响应头 <code>Date</code> 为 <code>Fri, 13 Nov 2026 17:23:07 GMT</code>（北京时间 2026-11-14 01:23:07）。<code>&lt;title&gt;</code> 为 Upgrade etcd from 3.4 to 3.5 | etcd，与正文 <code>h1</code> Upgrade etcd from 3.4 to 3.5 一致，<code>og:description</code> 为 Processes, checklists, and notes on upgrading etcd from 3.4 to 3.5，canonical 与 <code>og:url</code> 均为该地址。页内 <code>article:modified_time</code> 为 <code>2026-04-13T18:30:41+05:30</code>（北京时间 2026-04-13 21:00:41）；页脚写 Last modified April 13, 2026: docs: replace callout blockquotes and bold NOTE markers with alert shortcodes (4699e86)。没有个人作者署名，页脚版权为 © 2013–2026 etcd Authors。正文与本课直接相关的是开篇的滚动升级步骤、<em>Upgrade checklists</em> 里「若启用了 auth，因 3.5 更改了与 auth 相关的 WAL 条目格式而不支持从 3.4 滚动升级」、<em>Mixed versions</em>（混合版本以最低共同版本的协议运行，全体升级后才视为升级完成，成员协商出的 cluster version 控制所报告的版本和所支持的特性）、<em>Downgrade</em>（全体升级并使集群版本升到 3.5 之后不可再降级；只要仍有一名成员是 3.4，集群就仍按 3.4 运行，可以把全部成员退回 3.4 二进制；完全升级后只能依靠事先保存的 snapshot 回退）以及 <em>Upgrade procedure</em> 中第一步成员换成 3.5 后「cluster still operates as v3.4 protocol, which is the lowest common version」、最后一名成员升级后日志出现 enabled capabilities for version 且 <code>/version</code> 报 <code>{"etcdcluster":"3.5.0"}</code>。该页没有使用 feature gate 或迁移状态机这些词，也没有给出一份 v1/v2 日志格式兼容矩阵）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>升级期间新旧节点、持久化格式和消息模式同时存在，需要兼容窗口与可回滚边界。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课里的「内容后台」「文章键 <code>article:01:title</code>」「标题家族 <code>Weekly digest</code> / <code>Weekly digest (revised)</code> / <code>Weekly digest (hotfix)</code>」「节点 <code>n1</code> / <code>n2</code> / <code>n3</code>」「日志格式 v1 / v2」都是<strong>教学假设</strong>，用来让读写版本兼容、特性开关和半数升级再回滚变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>EvolutionEngine</code>，<strong>不是 Redis，不是 etcd，不是真实的协议或产品，也不是网络服务</strong>。它是单进程离散事件仿真，没有 Raft，没有 WAL，没有 TCP，也没有真实的滚动发布工具。持久化是教学用 dict flush，不是 <code>fsync</code>。<code>Clock</code> 是虚拟时钟。<code>write_s=0.05</code>、<code>upgrade_s=0.10</code>、<code>snapshot_s=0.05</code>、<code>restore_s=0.10</code> 和 <code>negotiate_s=0.05</code> 都是教学延迟，不是生产 RTT。v1 / v2 是教学日志格式，不是 etcd 的 WAL 或 mvcc db。本课把节点里的 feature gate 落实为「只有集群版本升到 v2 才允许写出 v2 记录」，把迁移状态机落实为 <code>all_v1</code> / <code>mixed</code> / <code>all_v2</code>；升级指南本身使用的是 mixed versions、lowest common version、supported features 和 enabled capabilities，并不定义这两个教学名字。本课所有时间都来自 <code>/workspace/atlas/lessons/practice127/results.json</code>，是<strong>教学虚拟时钟上的数字</strong>。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">上一课留下的缺口</h3>
+<p>上一课的 <code>VerificationEngine</code> 解决的是「一致性承诺怎样留下独立证据」：把并发操作记成 invoke / ok / fail / info 历史，注入分区或丢失应答，再用寄存器模型去核对，并保存能复现反例的种子。那一课的边界停在<strong>已经固定的协议和日志格式</strong>，没有回答另一件同样会破坏集群安全的事：滚动升级期间，旧二进制、新二进制和新的持久化格式会同时存在，旧节点会不会把一条新记录误读成错误的标题，集群版本一旦抬上去还能不能退回来。</p>
+<p>找出一条陈旧读的反例，并不能代替「为新旧格式写兼容矩阵，并在半数升级后再试一次回滚」。节点把摘要写成：升级期间新旧节点、持久化格式和消息模式同时存在，需要兼容窗口与可回滚边界。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/126.html">第 126 课</a> <code>h-verification</code> 留下的结论是：没有记下来的历史就没有可复查的证据；超时要记成不确定结果；测试能发现错误，但不能穷尽状态空间。把这条结论搬到升级上，就会看到对称的风险。如果只在「已经全部换成新二进制」的集群上跑通读写，就等于没测过混合版本窗口，也测不到「旧节点碰到新记录该拒绝还是误读」。本课不再生成 Jepsen 式的并发历史，而是给同一组标题加上 v1 / v2 两种日志格式，并让三个教学节点逐个更换二进制。</p>
+<p>升级指南把滚动升级写成：一个接一个地把旧进程换成新进程；在全体更换完成之前，集群按最低共同版本的协议运行；新特性要等全部成员升级后才可用；一旦集群版本抬上去，就不能再靠换回旧二进制来降级，只能依靠事先保存的 snapshot。本课的兼容矩阵、特性开关和半数回滚，就是把这几句话落到可测量的步骤上，而不是复现 etcd 3.4 到 3.5 的发布流程。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台把文章 <code>article:01:title</code> 放在三个教学节点 <code>n1</code>、<code>n2</code>、<code>n3</code> 上，一开始三边都是 v1 二进制，日志里只有格式 v1 的 <code>Weekly digest</code>。一次写入花费 <code>write_s=0.05</code>，一次升级或回降花费 <code>upgrade_s=0.10</code>，随后用 <code>negotiate_s=0.05</code> 重算集群版本：只要还有一个 v1 成员，集群版本就是 v1，v2 日志格式的特性开关保持关闭，v2 二进制也只能继续写 v1 记录。三个成员都换成 v2 之后，集群版本升到 v2，开关打开，新写入带上教学字段 <code>editor=desk</code>。拍快照花费 <code>snapshot_s=0.05</code>，从快照恢复花费 <code>restore_s=0.10</code>。所有时间都是教学虚拟时钟上的值，不是线上滚动升级的墙钟时间，也不是生产 RTT。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>读写版本兼容</strong>：列出 v1 / v2 读写与记录格式的矩阵。新二进制必须能读旧记录；集群版本未抬升时，新二进制仍写旧格式；旧二进制碰到新记录必须拒绝，不能误读成一个错误标题。</li>
+<li><strong>feature gate</strong>：v2 记录能不能写出，不取决于某台机器的二进制，而取决于集群版本。开关关闭时，半数成员已经是 v2，写出的仍是 v1。</li>
+<li><strong>迁移状态机</strong>：状态在 <code>all_v1</code>、<code>mixed</code>、<code>all_v2</code> 之间移动。处于 <code>mixed</code> 时可以回滚；进入 <code>all_v2</code> 之后二进制回降被拒绝，恢复策略是从升级前的快照还原。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释读写版本兼容及适用边界：兼容窗口靠「读得了旧格式、新格式被开关拦住」来维持；窗口只在集群版本尚未抬升时存在。指南里与 auth 相关的 WAL 格式变更不支持滚动升级，说明并不是所有格式变化都有这样的窗口。</li>
+<li>独立完成实践：为日志格式 v1/v2 写兼容矩阵，模拟半数升级再回滚。能指出半数升级时集群版本为什么仍是 v1，以及全体升级后为什么不能再换回旧二进制。</li>
+<li>验收上要做到：旧版本不会误读新记录；明确不可逆迁移后的恢复策略。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>节点给出的理由是：<strong>避免滚动升级破坏集群安全性。</strong> 升级很少是「三台机器在同一瞬间同时换成新版本」。只要中间有一段时间新旧并存，一条新格式记录就可能被旧进程看到。如果旧进程把它当成旧格式解析，标题可能被读错，集群的安全性在一次看起来正常的滚动中被破坏。指南要求先在预发环境验证、先拍 snapshot、按最低共同版本运行，并且写清「全部升级完成之后不能再降级」。本课用同一组标题把兼容窗口、特性开关和回滚边界写成可核对的数字，就是为了让「可回滚」不再只写在发布说明里。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1">1. 读写版本兼容</h3>
+<p>兼容矩阵要按「谁在写、集群版本是什么、谁在读、记录是哪种格式」逐格填写，而不是只看新集群能不能工作。本课得到的格子如下。</p>
+<table>
+<thead>
+<tr>
+<th>写入方 / 集群版本</th>
+<th>写出格式</th>
+<th>读取方</th>
+<th>结果</th>
+<th>时刻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v1 / v1</td>
+<td>v1</td>
+<td>v1</td>
+<td>读到 <code>Weekly digest (revised)</code></td>
+<td><code>0.10</code></td>
+</tr>
+<tr>
+<td>v1 / v1</td>
+<td>v1</td>
+<td>v2</td>
+<td>同样读到 revised（新二进制能读旧记录）</td>
+<td><code>0.30</code></td>
+</tr>
+<tr>
+<td>v2 / v1（开关关闭）</td>
+<td>仍是 v1</td>
+<td>v1</td>
+<td>读到 revised，特性 <code>log_format_v2</code> 为假</td>
+<td><code>0.30</code></td>
+</tr>
+<tr>
+<td>v2 / v2（开关打开）</td>
+<td>v2，并带 <code>editor=desk</code></td>
+<td>v2</td>
+<td>读到 revised</td>
+<td><code>0.55</code></td>
+</tr>
+<tr>
+<td>v2 / v2</td>
+<td>v2</td>
+<td>v1</td>
+<td>拒绝，原因 <code>unsupported_format</code>，v1 节点仍保留 revised，并不把 hotfix 当成自己的标题</td>
+<td><code>0.60</code></td>
+</tr>
+</tbody>
+</table>
+<p>最后一格是验收要求的那句：<strong>旧版本不会误读新记录。</strong> 集群已是 v2 之后，进程在 <code>n1</code> 写出 <code>Weekly digest (hotfix)</code> 的 v2 记录，<code>n1</code> / <code>n2</code> 应用成功，仍为 v1 二进制的 <code>n3</code> 拒绝这条记录，标题留在升级前已经共同持有的 <code>Weekly digest (revised)</code>。若忽略 <code>fmt</code> 字段直接取 <code>value</code>，不安全的解码会得到 hotfix——那才叫误读。正确的 v1 实现必须拒绝，而不是猜。</p>
+<p>适用边界也在这张表里。兼容窗口成立，是因为 v2 二进制在集群仍为 v1 时继续写 v1 记录，旧节点根本不会碰到新格式。指南同时写明：若集群启用了 auth，3.5 更改了与 auth 相关的 WAL 条目格式，从 3.4 滚动升级不受支持。那种格式变化没有「先写旧格式」的窗口，不能用本课这张矩阵去硬套。</p>
+<h3 id="2-feature-gate">2. feature gate</h3>
+<p>节点所说的 feature gate，在本课里就是集群版本对「能否写出 v2 记录」的开关。指南的原话是：全体换成新进程之后，新特性才对集群可用；混合期间集群按最低共同版本的协议运行，成员协商出的 cluster version 控制所支持的特性。升级过程的日志里则出现 enabled capabilities for version。本课不把 feature gate 写成书中的正式接口名。</p>
+<p>开关的效果可以从半数升级那条线上直接读出来。<code>t=0.00</code> 拍下快照，标题仍是 <code>Weekly digest</code>，校验和为 <code>efe1be83bdea6938</code>。<code>0.10</code> 到 <code>0.15</code> 写入 revised，格式是 v1。<code>0.20</code> 开始把 <code>n1</code> 升到 v2，<code>0.35</code> 协商结束，状态是 <code>mixed</code>，集群版本仍是 v1，开关为假。<code>0.50</code> 再升 <code>n2</code>，<code>0.65</code> 协商结束，两台已经是 v2、<code>n3</code> 仍是 v1，集群版本还是 v1。随后在 <code>0.70</code> 到 <code>0.75</code> 写入 <code>Weekly digest (hotfix)</code>，格式仍然是 v1，三个节点全部应用成功。新二进制已经占了半数，但没有被允许写出旧节点读不懂的记录。</p>
+<h3 id="3">3. 迁移状态机</h3>
+<p>状态按成员二进制和集群版本移动：全部为 v1 时是 <code>all_v1</code>；只要新旧并存就是 <code>mixed</code>；三台都换成 v2 并且集群版本抬升后是 <code>all_v2</code>。这是教学状态名，用来落实指南里「只有全体升级后才视为升级完成，混合时仍按旧协议运行」这句话。</p>
+<p><code>mixed</code> 是可回滚窗口。半数升级之后，<code>0.80</code> 把 <code>n2</code> 降回 v1，<code>0.95</code> 协商结束时状态仍是 <code>mixed</code>（<code>n1</code> 还是 v2），集群版本仍是 v1；接着把 <code>n1</code> 也降回，<code>1.10</code> 回到 <code>all_v1</code>。<code>1.15</code> 从 <code>n3</code> 读到的仍是格式 v1 的 <code>Weekly digest (hotfix)</code>。因为混合期间从未写出 v2 记录，回滚不需要动日志，只需要把二进制换回去。</p>
+<p>窗口在最后一名成员升级时关上。对照路径里，<code>n1</code>、<code>n2</code>、<code>n3</code> 分别在 <code>0.35</code>、<code>0.50</code>、<code>0.65</code> 完成协商：前两次集群仍是 v1，第三次集群变成 v2，开关打开，状态成为 <code>all_v2</code>。随后 <code>0.70</code> 写出格式 v2 的 hotfix。此时再把 <code>n1</code> 降回 v1，会在 <code>0.80</code> 被拒绝，原因是 <code>cluster_already_v2_and_log_has_v2_records</code>，给出的恢复策略是 <code>restore_from_pre_upgrade_snapshot</code>。按这条策略从 <code>0.05</code> 的快照恢复，<code>0.95</code> 结束时标题回到 <code>Weekly digest</code>，校验和仍是 <code>efe1be83bdea6938</code>，集群版本回到 v1，三台二进制都是 v1。这就是验收要求的「明确不可逆迁移后的恢复策略」：不能再靠换回旧二进制，只能回到升级前拍下的快照。快照里没有后来的 revised 和 hotfix，这是正确的，说明恢复回到的是拍摄点。</p>
+<h2 id="_10">常见误区</h2>
+<p>第一个误区是节点写明的那句：<strong>只测试全量新版本集群。</strong> 对照路径里，三台都已是 v2 时写入 revised，格式为 v2，读取成功，看起来一切正常，结束于 <code>0.55</code>。可是同一条 v2 写入若碰到一个仍为 v1 的 <code>n3</code>，就会被 <code>unsupported_format</code> 拒绝。全量新集群上的通过，测不到混合窗口，也测不到回滚边界。</p>
+<p>第二个误区是把「已经有两台换成新二进制」当成「可以启用新格式」。半数升级之后开关仍是关的，hotfix 仍以 v1 写出并被 <code>n3</code> 接受。若在 <code>mixed</code> 里强行写出 v2，旧节点就会进入上一节那一格拒绝路径；兼容代码的意义，正是先把这种写出拦住。</p>
+<p>第三个误区是以为全体升级之后还能靠换回旧二进制来撤。指南写得清楚：全部成员升级、集群版本抬升之后，降级不可用；事先下载的 snapshot 才是退路。本课在 <code>0.80</code> 拒绝回降，并在 <code>0.95</code> 用快照把标题恢复到 <code>Weekly digest</code>，就是把这句话跑通一遍。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点给出的权衡是：<strong>兼容代码增加复杂度，但缩小升级爆炸半径。</strong> 为了让 v2 二进制在集群仍为 v1 时继续写 v1、让 v2 读者能读 v1、让 v1 读者拒绝而不是误读 v2，引擎里要同时理解两种记录，还要在每次成员变更后重算集群版本。这些分支就是增加的复杂度。</p>
+<p>换来的是可回滚的混合窗口：两台升到 v2 之后，集群仍按 v1 运行，<code>0.75</code> 的 hotfix 仍是旧格式，随后可以在 <code>1.10</code> 把两台都降回去，爆炸半径停在「尚未启用新格式」这一侧。若没有这层兼容，第一次把新二进制加入集群就可能写出旧节点读不懂或误读的记录，一次滚动就会把错误标题扩散出去。指南用最低共同版本和「新特性等全部升级后再开放」来收紧同一半径；本课的开关和矩阵是它的教学对照，不是一份更短的升级脚本。</p>
+<h2 id="v1v2">动手实践：为日志格式 v1/v2 写兼容矩阵，模拟半数升级再回滚</h2>
+<p>配套代码在 <a href="https://zhousai-zs.github.io/backend-atlas-notes/files/practice127.tar.gz"><code>/workspace/atlas/lessons/practice127/</code></a>。<code>engine.py</code> 是 <code>EvolutionEngine</code>，<code>app.py</code> 跑完整组实验并写出 <code>results.json</code>，<code>test_evolution.py</code> / <code>test.sh</code> 负责核对。在该目录执行：</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>应打印 <code>ALL_CHECKS_PASSED</code>。下面的数字全部来自这次运行写出的 <code>results.json</code>，都是教学虚拟时钟上的值。</p>
+<p>请先亲自填完整张兼容矩阵，确认最后一格是拒绝而不是误读，然后再走半数升级那条线：<code>0.35</code>、<code>0.65</code> 两次协商后集群仍为 v1，<code>0.75</code> 的 hotfix 仍是格式 v1，<code>1.10</code> 回到 <code>all_v1</code>，<code>1.15</code> 读到 hotfix。对照路径里，第三次协商在 <code>0.65</code> 把集群抬到 v2，<code>0.80</code> 回降被拒绝，<code>0.95</code> 只能从校验和为 <code>efe1be83bdea6938</code> 的快照恢复到 <code>Weekly digest</code>。</p>
+<p>验收与误区、权衡对应的标志在 <code>results.json</code> 里均为真：<code>acceptance_old_will_not_misread</code>、<code>acceptance_irreversible_has_restore</code>、<code>practice_matrix_and_half_rollback</code>、<code>pitfall_only_test_all_new</code>、<code>tradeoff_compat_code_shrinks_blast_radius</code>。引擎同时标明 <code>not_redis</code>、<code>not_a_network_service</code>、<code>not_etcd</code>、<code>not_a_real_protocol</code>。</p>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 etcd — Upgrade guide 中与 Protocol evolution 相关的定义、示例或实现，记录与教学实验的差异。2026-11-14 的实际打开情况如下。</p>
+<ul>
+<li>节点给出的 <a href="https://etcd.io/docs/v3.5/upgrades/upgrade_3_5/">https://etcd.io/docs/v3.5/upgrades/upgrade_3_5/</a> 返回 200，无跳转，406529 字节，<code>Content-Type</code> 为 <code>text/html; charset=UTF-8</code>，由 Netlify 提供，没有 HTTP <code>Last-Modified</code>。响应头 <code>Date</code> 为 <code>Fri, 13 Nov 2026 17:23:07 GMT</code>（北京时间 2026-11-14 01:23:07）。<code>&lt;title&gt;</code> 与正文标题均为 Upgrade etcd from 3.4 to 3.5。没有个人作者署名，页脚为 © 2013–2026 etcd Authors。页内修改时间为 2026-04-13（<code>article:modified_time</code> 为 <code>2026-04-13T18:30:41+05:30</code>，北京时间 2026-04-13 21:00:41），页脚说明是一次把 callout 改成 alert shortcode 的文档提交 <code>(4699e86)</code>。这一页就是指南正文，主题是从 3.4 滚动升级到 3.5，没有再跟随到另一份「协议演进」专章。</li>
+</ul>
+<p>教学实验按以下方式使用它，并记下差异。</p>
+<ul>
+<li><strong>术语</strong>：指南使用 mixed versions、lowest common version、cluster version、supported features、enabled capabilities 和 downgrade，<strong>没有</strong>出现 feature gate 或迁移状态机这些词。本课的开关名字、<code>all_v1</code> / <code>mixed</code> / <code>all_v2</code> 状态名，以及日志格式 v1 / v2，都是教学用语，用来落实「按最低共同版本运行，全体升级后再开放新特性」，不要写成 etcd 的正式接口。</li>
+<li><strong>混合版本与最低共同协议</strong>：指南写明，升级期间集群支持混合版本成员，并按最低共同版本的协议运行；只有全部成员升到 3.5 才视为升级完成。过程示例里，第一台换成 3.5 之后，"cluster still operates as v3.4 protocol, which is the lowest common version"；未升级成员会打出 local etcd version is not up-to-date 这类告警，直到全体升级。本课在 <code>0.35</code> 和 <code>0.65</code> 两次协商后集群版本仍为 v1，写出的 hotfix 仍是格式 v1，就是这句话的对照。教学引擎用一次 <code>0.05</code> 的协商延迟来重算最低版本，没有实现成员之间真实的版本协商消息。</li>
+<li><strong>特性何时开放</strong>：开篇写 after running all v3.5 processes, new features in v3.5 are available to the cluster；Mixed versions 一节写 cluster version 控制 supported features；最后一名成员升级后日志出现 enabled capabilities for version，<code>/version</code> 报出 <code>{"etcdcluster":"3.5.0"}</code>。本课把「新特性」缩小为「允许写出 v2 记录」，只有集群版本变成 v2 后，<code>0.70</code> 的写入才带上 <code>fmt=2</code> 和 <code>editor=desk</code>。不要把这个字段写成 3.5 的某一项正式能力。</li>
+<li><strong>降级与快照</strong>：Downgrade 一节写，若全部成员已升到 3.5，集群将升到 3.5，从这一完成状态降级是不可能的；只要仍有一名成员是 3.4，集群就仍按 3.4 运行，可以把全部成员退回 3.4 二进制。指南要求在开始前下载 snapshot，以便在完全升级后仍有退路，并说明 snapshot 只包含 v3 数据。本课在 <code>mixed</code> 下回滚成功，在 <code>all_v2</code> 下于 <code>0.80</code> 拒绝回降，并在 <code>0.95</code> 用拍摄点标题 <code>Weekly digest</code> 做恢复，是这两段的对照。教学快照是一份 dict 拷贝，不是 <code>etcdctl snapshot save</code>，校验和 <code>efe1be83bdea6938</code> 不要和指南示例里的 backup.db 混用。</li>
+<li><strong>不能滚动的格式变化</strong>：指南注明，若启用了 auth，因 3.5 更改了与 auth 相关的 WAL 条目格式，从 3.4 或更旧版本滚动升级不受支持。这是「旧版本读不懂新记录、又没有兼容窗口」的真实例子。本课的 v1 / v2 之所以能在混合期间共存，是因为开关关闭时根本不会写出 v2；不要把这套窗口说成对所有格式变更都成立。</li>
+<li><strong>未实现的章节内容</strong>：从 3.3 先升到 3.4 的前置要求、健康检查命令、指标更名、<code>--logger</code> 与 gRPC 网关路径等破坏性变更、按成员间隔两分钟等待、以及真实的 Raft 领导权转移，教学引擎都没有做，它们的数字不会进入 <code>results.json</code>。</li>
+<li><strong>网络与时间</strong>：单进程离散事件，所有时延都是教学虚拟时钟上的值，不是生产 RTT，也不是指南示例日志里那些 2018 年的墙钟时间戳。三节点在同一进程里更换一个 <code>binary</code> 字段，没有替换真实进程，也没有 HTTP <code>/version</code>。</li>
+</ul>
+<h2 id="_13">自测题</h2>
+<p><strong>题 1.</strong> 为什么旧版本不能误读新记录？请用兼容矩阵里 v2 记录碰到 v1 读取方的那一格，说明拒绝和「直接取 value」有什么不同。</p>
+<details>
+<summary>答案</summary>
+
+误读指的是旧二进制把一条它并不理解的记录当成合法标题用掉。矩阵的前四格都是合法路径：v1 写 v1、v2 读 v1、开关关闭时 v2 二进制仍写 v1，以及开关打开后 v2 读写 v2，读到的都是 `Weekly digest (revised)`。真正要防的是第五格。
+
+集群已经是 v2 之后，`n1` 写出格式 v2 的 `Weekly digest (hotfix)`，`n1` 和 `n2` 应用成功，仍为 v1 的 `n3` 返回 `unsupported_format`，标题留在原来的 `Weekly digest (revised)`，完成于 `0.60`。它没有把 hotfix 写进自己的存储。若忽略 `fmt`、直接取 `value`，不安全的解码会得到 hotfix，看起来像是一次成功的读取，实际上是把旧进程不能理解的字段当成了标题。验收要求的「旧版本不会误读新记录」，指的就是拒绝这条路径，而不是猜一个值。
+
+这格能出现，前提往往是集群版本已经抬升，或有人绕过开关。兼容窗口里，开关关闭时根本不会写出 v2，旧节点也就不会走到这一格。
+
+</details>
+
+<p><strong>题 2.</strong> 为日志格式 v1/v2 做完兼容矩阵之后，半数升级再回滚，集群版本和写出格式会怎样变？为什么这时可以回滚？</p>
+<details>
+<summary>答案</summary>
+
+先拍快照：`t=0.05`，标题是 `Weekly digest`，校验和 `efe1be83bdea6938`。`0.15` 写入 revised，格式 v1。然后只升两台：`n1` 在 `0.35` 协商结束，`n2` 在 `0.65` 协商结束，状态都是 `mixed`，集群版本仍是 v1，特性开关为假。随后 `0.70` 到 `0.75` 写入 `Weekly digest (hotfix)`，格式仍是 v1，三个节点都应用成功，包括尚未升级的 `n3`。
+
+这时可以回滚，是因为集群版本还没有抬升，日志里也没有 v2 记录。`0.80` 起把 `n2`、`n1` 依次降回 v1，`0.95` 时状态仍是 `mixed`，`1.10` 回到 `all_v1`。`1.15` 从 `n3` 读到的还是格式 v1 的 hotfix。指南把这一阶段写成：只要仍有一名成员停留在旧版本，集群就仍按旧协议运行，可以把全部成员退回旧二进制。本课的半数升级对应的就是这个窗口，而不是已经完成的升级。
+
+</details>
+
+<p><strong>题 3.</strong> 全体升级之后为什么不能再换回旧二进制？不可逆迁移后的恢复策略是什么？若只在全量新集群上做测试，会漏掉什么？</p>
+<details>
+<summary>答案</summary>
+
+最后一名成员升级时，集群版本会被抬起来。对照路径里，`n3` 在 `0.65` 完成协商后，集群版本变成 v2，开关打开，状态成为 `all_v2`。`0.70` 写出格式 v2 的 hotfix。此后在 `0.80` 尝试把 `n1` 降回 v1，结果是 `ok=false`，原因 `cluster_already_v2_and_log_has_v2_records`。指南的原话是：全部成员升到新版本后，集群将升到新版本，从这一完成状态降级是不可能的。
+
+恢复策略在拒绝记录里写明为 `restore_from_pre_upgrade_snapshot`。按 `0.05` 拍摄、校验和为 `efe1be83bdea6938` 的快照恢复，`0.95` 结束时标题回到 `Weekly digest`，集群版本回到 v1，三台都是 v1 二进制。恢复不会保留后来的 revised 和 hotfix，因为它回到的是拍摄点。这就是「明确不可逆迁移后的恢复策略」：退路是升级前的快照，不是换回旧二进制。
+
+若只在全量新集群上测试，三台都是 v2 时写入 revised 会在 `0.55` 成功，格式为 v2，看起来没有问题。同一条 v2 写入碰到仍为 v1 的 `n3` 时，才会出现 `unsupported_format`。只测全量新版本，既看不到混合窗口，也看不到回滚在何时失效。
+
+</details>
+
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://etcd.io/docs/v3.5/upgrades/upgrade_3_5/">etcd — Upgrade guide</a>（etcd 从 3.4 升级到 3.5 的指南，英文，专家，免费）：用于核对混合版本、最低共同协议、特性在全体升级后才开放，以及集群版本抬升后只能靠 snapshot 回退这些与协议演进相关的结论，并将结论落到本节点的兼容矩阵、特性开关和半数回滚实验。2026-11-14 该地址返回 200，无跳转，406529 字节，<code>&lt;title&gt;</code> 为 Upgrade etcd from 3.4 to 3.5 | etcd，没有 HTTP <code>Last-Modified</code>，页内修改时间为 2026-04-13，版权为 © 2013–2026 etcd Authors，无个人作者署名。该页不定义 feature gate 或 v1/v2 日志格式；本课的开关、教学状态名和记录格式是对照，不是 etcd 的正式接口。指南里与 auth 相关的 WAL 格式变更不支持滚动升级，健康检查、指标更名和真实的 snapshot 命令本课没有实现。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>升级期间新旧节点、持久化格式和消息模式会同时存在，需要兼容窗口和可回滚边界，以免滚动升级破坏集群安全。</li>
+<li>读写兼容要写成矩阵。新二进制能读 v1；开关关闭时 v2 二进制仍写 v1；开关打开后 v2 读写带 <code>editor=desk</code> 的 v2 记录。v1 碰到 v2 记录必须拒绝：<code>n3</code> 在 <code>0.60</code> 以 <code>unsupported_format</code> 留下 revised，而不会把 hotfix 误读进来。</li>
+<li>特性开关跟的是集群版本，不是某一台机器的二进制。半数升级在 <code>0.35</code> 和 <code>0.65</code> 之后集群仍为 v1，<code>0.75</code> 的 hotfix 仍是格式 v1，三个节点都能应用。</li>
+<li><code>mixed</code> 可以回滚：<code>1.10</code> 回到 <code>all_v1</code>，<code>1.15</code> 读到 hotfix。一旦 <code>0.65</code> 把集群抬到 v2，<code>0.80</code> 的二进制回降会被拒绝；不可逆之后只能从 <code>0.05</code> 的快照恢复，<code>0.95</code> 标题回到 <code>Weekly digest</code>，校验和 <code>efe1be83bdea6938</code>。</li>
+<li>不要只测试全量新版本集群。全部为 v2 时读写可以在 <code>0.55</code> 通过，却测不到旧节点拒绝新记录、也测不到回滚窗口。兼容代码增加了分支，但把爆炸半径留在集群版本抬升之前。</li>
+<li>这些是教学虚拟时钟上的数字，不是生产 RTT。<code>EvolutionEngine</code> 不是 Redis，也不是 etcd。指南不定义 feature gate 或 v1/v2 教学格式；本课用它们落实最低共同协议、特性开关和 snapshot 退路。并不是所有格式变化都有滚动窗口。</li>
+</ul>
+<p>如果有一句答不上来，先回到 <code>results.json</code> 里对应的字段，再回到指南里「按最低共同版本运行」「新特性等全部升级后再开放」以及「集群版本抬升后只能靠事先保存的 snapshot 回退」这几段，不要把「已经有一半换成新二进制」当成「可以启用新格式」，也不要把「全量新集群测试通过」当成升级安全。</p><div class="pn"><span><a href="126.html">← 分布式历史与故障测试</a></span><span>下一课 待更新</span></div></main></div></body></html>
