@@ -1,0 +1,293 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>121. 分布式事务与补偿 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（121/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details open><summary>领域 H（9/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="cur" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 121 课 · 领域 H · 阶段 4</p><p class="dl"><a href="../files/121-h-transactions.md" download>⬇ 本课 Markdown</a><a href="../files/practice121.tar.gz" download>⬇ 练习包 practice121.tar.gz</a></p><h1 id="121208">第 121/208 课：分布式事务与补偿</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>h-transactions</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Distributed transactions</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>H / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>分布式业务机制</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/113.html"><code>h-failure</code></a>、<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/99.html"><code>g-transaction</code></a></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Distributed transactions</code>、<code>Distributed</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://www.postgresql.org/docs/current/two-phase.html">PostgreSQL — Two-Phase Transactions</a>（PostgreSQL 官方文档，英文，深入，免费；2026-11-14 该地址返回 200，无跳转，最终 URL 仍是 <code>https://www.postgresql.org/docs/current/two-phase.html</code>，11575 字节，Content-Type 为 <code>text/html; charset=utf-8</code>。<code>&lt;title&gt;</code> 为 PostgreSQL: Documentation: 18: 67.4. Two-Phase Transactions；页面 <code>og:url</code> 为 <code>https://www.postgresql.org/docs/18/two-phase.html</code>，页眉指向 PostgreSQL 18.7 Documentation，copyright 为 The PostgreSQL Global Development Group，1996–2026。该页正文很短，只概述 2PC 并由外部事务管理器使用，点名 <code>PREPARE TRANSACTION</code>、<code>COMMIT PREPARED</code>、<code>ROLLBACK PREPARED</code>、<code>pg_twophase</code> 与 <code>pg_prepared_xacts</code>。同日继续打开这四个被点名的官方页面，均返回 200、无跳转： <a href="https://www.postgresql.org/docs/current/sql-prepare-transaction.html">PREPARE TRANSACTION</a> 20035 字节，<code>&lt;title&gt;</code> 为 PostgreSQL: Documentation: 18: PREPARE TRANSACTION； <a href="https://www.postgresql.org/docs/current/sql-commit-prepared.html">COMMIT PREPARED</a> 15616 字节； <a href="https://www.postgresql.org/docs/current/sql-rollback-prepared.html">ROLLBACK PREPARED</a> 15831 字节； <a href="https://www.postgresql.org/docs/current/view-pg-prepared-xacts.html">pg_prepared_xacts</a> 17376 字节，<code>&lt;title&gt;</code> 为 PostgreSQL: Documentation: 18: 53.17. pg_prepared_xacts）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>跨资源的原子提交需要协调；2PC 的准备状态和协调者故障影响可用性，Saga 则以业务补偿替代原子回滚。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课里的「内容后台」「推荐位库存 <code>promo:weekly-digest</code>」「订单 <code>order-1</code> / <code>order-s1</code>」「文章键 <code>article:01:title</code>」「标题 <code>Weekly digest</code> / <code>Weekly digest (revised)</code>」都是<strong>教学假设</strong>，用来让两阶段提交、协调器崩溃和业务补偿变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>DistTxnEngine</code>，<strong>不是 Redis，不是 redis-py，不是网络服务，不是真实的事务管理器，不是 PostgreSQL，不是 X/Open XA，也不是 TCC 产品</strong>。它是单进程邮箱仿真，没有 TCP，没有真实丢包。持久化是教学用 dict，参与者在回复 PREPARE / COMMIT / ROLLBACK 之前 flush，协调器在登记事务和写入决策之前 flush，不是磁盘，也没有 <code>fsync</code>。<code>Clock</code> 是虚拟时钟。<code>crash_coordinator()</code> 是全知崩溃：发往或来自协调器的在途消息被丢弃，易失状态被清空，持久日志保留。教学协调器在恢复时若发现事务已登记、但还没有决策日志，就按 <strong>presumed abort</strong> 回滚所有参与者；这是本课事务管理器的策略。PostgreSQL 作为参与者<strong>不会</strong>自动结束已 PREPARE 的事务，必须由外部管理器随后发出 <code>COMMIT PREPARED</code> 或 <code>ROLLBACK PREPARED</code>。教学引擎也不实现 <code>pg_twophase</code> 目录、checkpoint、<code>VACUUM</code> 与事务号回卷，只把「准备态占用资源」落实为库存预留；文档里「准备态持锁过久会妨碍 VACUUM，极端情况下数据库会为防止事务号回卷而关机」这一条，会在源码阅读里对照，不在数字里假装测到。Saga 的补偿是账本上的一条新业务操作，不是 <code>ROLLBACK PREPARED</code>，也不是数据库撤销准备态。本课所有时间都来自 <code>/workspace/atlas/lessons/practice121/results.json</code>，是<strong>教学虚拟时钟上的数字</strong>，不是生产 RTT。参数 <code>rpc_delay_s=0.01</code>。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">上一课留下的缺口</h3>
+<p>上一课的 <code>ShardMigrationEngine</code> 解决的是「不同的键由哪一组节点服务」：带版本的路由表、迁移期间的双写或变更日志，以及一个短的冻结窗口。<code>dual_write</code> 和 <code>change_log</code> 都能在写压测后交出 <code>4060</code> 个键、版本全对；只改路由或拷完存量不追增量，则会丢掉已确认的写。那一课的边界停在<strong>同一个分片 KV</strong> 里搬数据，没有回答另一件同样常见的事：一笔业务要同时改<strong>两个服务</strong>的状态——下一条订单、扣一份推荐位库存——怎样让它们要么一起生效，要么一起不作数。</p>
+<p>分片迁移处理的是一份数据的位置和版本；跨服务事务处理的是两份独立资源的提交决策。上一课的 <code>route_version</code> 不能替订单服务向库存服务投票，库存服务也不会因为路由表切换就自动预留或释放一份库存。本课要补的就是这个协调：2PC 的 prepare / commit、协调器在各个阶段崩溃后怎么恢复，以及当业务不愿意承担准备态占用时，Saga 怎样用补偿代替原子回滚。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置之一 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/99.html">第 99 课</a> <code>g-transaction</code> 讲的是单机事务：原子性、持久性、隔离和重试边界。那里的 safe 路径用一个事务把「先扣 alice、再给 bob 入账」包起来，崩溃后两边一起回滚，总额仍是 200。这个回滚能成立，是因为两边的账在<strong>同一个数据库事务</strong>里。本课的订单和库存是两个服务、两份持久状态，没有共享的 <code>ROLLBACK</code>。要把 99 课的原子性跨出去，就要么引入一个协调器做两阶段提交，要么接受每一步先本地提交，失败时用一笔新的业务操作去补偿。</p>
+<p>前置之二 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/113.html">第 113 课</a> <code>h-failure</code> 留下的结论是：超时只说明等待预算耗尽，不能证明远端没有执行；崩溃是停住不回答，不是一个全局的失败通知。协调器正好会在这种模型里出事。它可能在发出 PREPARE 之前崩溃，也可能在双方都已准备、甚至已经把 COMMIT 写入日志之后崩溃。参与者看不到「协调器没了」这条广播，只能继续持有准备态，直到协调器恢复并补发决策。113 课的「我不知道」在这里变成具体的占用：一份库存被预留下去，另一笔订单却还看不见。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台把一篇已发布文章 <code>article:01:title</code>（初值 <code>Weekly digest</code>）投放到推荐位。推荐位是一种有限库存，SKU 为 <code>promo:weekly-digest</code>，初始库存 <code>5</code>。一次投放要同时做两件事：订单服务记下 <code>order-1</code>，库存服务扣 1 个推荐位。两个服务没有共享事务，由一个教学协调器来协调。默认路径走 2PC；对照路径把每一步先本地提交，失败时再补偿。还有一条路径会把标题改成 <code>Weekly digest (revised)</code> 并视为已经推送给关注者，用来观察不可逆步骤。压测对照里则连续做 10 笔投放。<code>rpc_delay_s=0.01</code>，所有时间都是教学虚拟时钟上的值，不是线上超时，也不是生产 RTT。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>2PC prepare/commit</strong>：参与者先进入准备态并投票，协调器再做提交或中止的决策。准备成功之后，业务读取还看不到订单，但库存已经被占用；能发出的下一步只有 commit 或 rollback。</li>
+<li><strong>协调者恢复</strong>：协调器在发出 PREPARE 之前、只准备好一方、双方都已准备但尚未落盘决策、决策已落盘、以及只通知了一方之后崩溃，恢复时依据的是持久日志里有没有决策：没有就 presumed abort，有 COMMIT 就必须补齐提交。</li>
+<li><strong>Saga 补偿与不可逆操作</strong>：每一步先本地提交；失败时按相反顺序做补偿。补偿是账本上的新操作，不是数据库回滚。已经推送给关注者的标题改写，补偿无法撤回。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释 2PC 的 prepare / commit 及适用边界：准备态为什么必须短，准备之后资源被谁占用，以及协调器不在时参与者为什么不能自行结束。</li>
+<li>能独立完成实践：模拟订单与库存两个服务，在各阶段杀死协调器并恢复，观察库存、订单可见性和决策日志。</li>
+<li>能说明补偿不是数据库回滚，并能列出 prepare 之后资源占用的风险。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>公众号内容后台（教学假设）要给一篇稿子买推荐位时，订单和库存往往已经拆成两个服务。如果库存先扣、订单还没写成协调器就宕了，推荐位会被空占用，别的投放进不来，编辑却查不到这笔订单。如果订单先写成再去扣库存，库存不足时又会留下一笔无法履约的单。把两边放进同一个单机事务，在服务拆开之后已经做不到；直接「先写一边，失败了再改回来」，又会把补偿和回滚混为一谈，遇到已经推送给关注者的标题，更是改不回去。</p>
+<p>后端要能讲清失败语义：2PC 用准备态换原子性，代价是协调器和锁；Saga 用补偿换可用性，代价是短暂的不一致，以及必须承认有些步骤不可逆。对账不是「最终一致性」的反面，而是它能收敛的前提。选哪一条路，取决于业务能不能接受准备态占用，以及补偿是不是真的可逆。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1-2pc-preparecommit">1. 2PC prepare/commit</h3>
+<p>两阶段提交把一次跨资源的事务分成投票和决策。协调器先向每个参与者发 PREPARE，参与者把本地改动做成<strong>可提交、也可回滚</strong>的准备态，再投票。全部投是，协调器把 COMMIT 写入自己的持久日志，再通知各方提交；有任何人投否，或协调器在尚未记录决策时决定放弃，就发 ROLLBACK。</p>
+<p>PostgreSQL 18 文档把这套命令写成给<strong>外部事务管理器</strong>用的接口，并说明它遵循 X/Open XA 的模型，但没有实现其中较少使用的部分。<code>PREPARE TRANSACTION</code> 的要点有三条。第一，成功之后，当前会话不再持有这笔事务，状态被完整记下，即使随后数据库崩溃，也有很高概率还能提交成功；之后从<strong>任意会话</strong>都可以对同一个事务标识做 <code>COMMIT PREPARED</code> 或 <code>ROLLBACK PREPARED</code>。第二，对发出 PREPARE 的那个会话来说，这条命令看起来不像提交，倒像回滚：当前事务结束了，准备态的效果暂时不可见，只有真正提交之后才会重新可见。第三，PREPARE 一旦失败，就变成一次 <code>ROLLBACK</code>，当前事务被取消。文档明确告诫：准备态只应短暂存在；准备态会继续持有它已经拿到的锁，拖太久会妨碍 <code>VACUUM</code> 回收存储，极端情况下数据库会为防止事务号回卷而关机。如果没有外部管理器负责及时关账，应把 <code>max_prepared_transactions</code> 设为 <code>0</code>，以免准备态被忘掉。</p>
+<p>教学引擎按这个形状实现订单和库存，但不假装自己是 PostgreSQL。一次成功的 2PC 时间线如下。初始库存 <code>5</code>，没有任何订单。协调器为 <code>order-1</code> 登记 <code>xid-1</code> 后，先向订单服务发 PREPARE：<code>0.02</code> 订单投是，准备态里有这笔订单，但业务读取仍看不到它。再向库存发 PREPARE：<code>0.04</code> 库存也投是，可用库存从 <code>5</code> 变成 <code>4</code>，预约记在 <code>xid-1</code> 上。此时：</p>
+<div class="codehilite"><pre><span></span><code>stock=5  available=4  reservations={xid-1: 1}
+prepared_order=xid-1  visible_orders=[]
+votes={order:yes, inventory:yes}
+</code></pre></div>
+
+<p>订单对业务读取仍不可见（对应文档里「PREPARE 之后效果暂时不可见」），库存却已经被占用。<code>0.04</code> 协调器把决策 <code>commit</code> 写入持久日志，然后先通知订单、再通知库存。<code>0.06</code> 订单变为 <code>committed</code>，库存仍持有预约；<code>0.08</code> 库存扣减完成，<code>stock=4</code>，预约清空。最终 <code>order-1</code> 可见，双方都不再处于准备态，<code>consistent=true</code>，共用了 <code>8</code> 次 RPC、<code>6</code> 次 flush。</p>
+<p>适用边界也在这条时间线上。2PC 能给出「要么两边都有、要么两边都无」的原子性，但要求每个参与者支持准备态，并在准备之后把决策权交给协调器。准备态必须短：文档把它写成预期用法，实验里从双方都 PREPARE 到全部 COMMIT，库存被占用了 <code>0.04</code> 秒（<code>0.04</code> 到 <code>0.08</code>）。若协调器在这期间消失，占用会一直持续到恢复，下面第二节会看到。参与者在准备之后不能自行「当作没发生」——否则协调器一旦已经写下 COMMIT，两边就会分叉。</p>
+<h3 id="2">2. 协调者恢复</h3>
+<p>113 课已经说明，崩溃不会给系统发一封全局通知。2PC 的协调器必须把自己的决策写成持久日志，恢复时只根据日志行事：已经写下 COMMIT，就只能补发 COMMIT；还没有决策，本课的教学管理器按 presumed abort 回滚。PostgreSQL 参与者本身不会做这个判断，它们会一直把准备态留到外部管理器来关账，可用 <code>pg_prepared_xacts</code> 查看。教学实验把「杀死协调器并恢复」做到五个阶段，每一次恢复后系统都重新变得一致，<code>all_2pc_consistent=true</code>。</p>
+<table>
+<thead>
+<tr>
+<th>崩溃点</th>
+<th>崩溃时的可见状态</th>
+<th>恢复策略</th>
+<th style="text-align: right;">恢复完成时刻</th>
+<th>最终订单</th>
+<th style="text-align: right;">最终库存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>发出任何 PREPARE 之前</td>
+<td>库存 <code>5</code>，无准备态</td>
+<td>presumed abort，向双方补发 rollback</td>
+<td style="text-align: right;">0.02</td>
+<td>无</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>只完成订单一侧 PREPARE</td>
+<td>订单在准备态、仍不可见，库存未占用</td>
+<td>presumed abort，回滚已准备的订单</td>
+<td style="text-align: right;">0.04</td>
+<td>无</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>双方都已 PREPARE，尚未写决策</td>
+<td><code>available=4</code>，预约仍在，订单仍不可见</td>
+<td>presumed abort，回滚双方</td>
+<td style="text-align: right;">0.06</td>
+<td>无</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>决策 <code>commit</code> 已落盘，尚未通知</td>
+<td>同上，但日志里已有 COMMIT</td>
+<td>重发 COMMIT</td>
+<td style="text-align: right;">0.06</td>
+<td><code>order-1</code> 已提交</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>只通知了订单服务</td>
+<td><code>order-1</code> 已提交，库存仍占用 1 个</td>
+<td>按已记录的 COMMIT 补通知库存</td>
+<td style="text-align: right;">0.08</td>
+<td><code>order-1</code> 已提交</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+<p>前三行没有决策日志，恢复后库存回到 <code>5</code>、没有任何可见订单，准备态被清空。关键是第三行：崩溃发生在 <code>0.04</code>，当时预约还在，<code>during_outage.reservation_held=true</code>，<code>order_still_invisible=true</code>。协调器停着的这段时间里，被预留的那一份库存谁也用不了，业务侧却查不到对应订单。这就是准备态对可用性的影响：不是数据写错了，而是资源被卡住了。</p>
+<p>后两行已经有 COMMIT 日志，恢复必须把事务做完，不能改主意去回滚。尤其是只通知了一方的情形：<code>0.06</code> 订单已经是 <code>committed</code>，库存仍是 <code>stock=5</code> 且 <code>reservation_held=true</code>。如果恢复时错误地 abort，就会留下一笔没有库存的订单。教学引擎按日志补发 COMMIT，<code>0.08</code> 库存扣到 <code>4</code>，两边重新对齐。</p>
+<p>「先写决策，再发通知」是这条恢复路径能成立的前提。如果协调器在内存里决定提交、还没 flush 就崩溃，教学策略会把它当成没有决策，走 presumed abort；已经收到 COMMIT 的参与者一旦存在，就会和这条策略冲突。所以决策必须先落盘。PostgreSQL 文档写 PREPARE 把状态完整记下、崩溃后仍有很高概率能提交，说的是<strong>参与者</strong>一侧；协调器自己的决策日志，要由事务管理器保证。</p>
+<h3 id="3-saga">3. Saga 补偿与不可逆操作</h3>
+<p>Saga 把一笔跨服务的业务拆成若干本地事务，每一步先提交，失败时按相反顺序做补偿。它不再要求参与者进入准备态，因此也没有「PREPARE 之后效果不可见、但锁还在」的窗口。代价是：中间步骤已经对业务可见，补偿也不是把历史擦掉。</p>
+<p>成功路径很短。<code>0.01</code> 库存本地扣 1，<code>stock=4</code>；<code>0.03</code> 订单本地提交为 <code>committed</code>；<code>0.04</code> 结束，<code>rpc_count=2</code>。没有准备态，也没有第二轮 COMMIT。</p>
+<p>失败路径用来回答「补偿是不是数据库回滚」。实验让投放在「发布标题」这一步注入失败：库存和订单已经本地提交，发布没有发生。补偿按相反顺序执行：<code>0.06</code> 把 <code>order-s2</code> 的状态改成 <code>cancelled</code>，<code>0.08</code> 再补一条 <code>compensate_restock</code>，库存回到 <code>5</code>，<code>t_end=0.09</code>。库存账本里两条都在：</p>
+<div class="codehilite"><pre><span></span><code>t=0.01  saga_reserve          qty=1  stock_after=4
+t=0.08  compensate_restock    qty=1  stock_after=5  undone=true
+</code></pre></div>
+
+<p>订单账本同样留下 <code>saga_create_order</code> 和 <code>compensate_cancel_order</code>。补偿没有把「预留」从历史上删掉，也没有走 <code>ROLLBACK PREPARED</code>：<code>compensation_is_new_operation=true</code>，<code>not_a_prepared_rollback=true</code>，<code>order_record_still_present=true</code>。它是一笔新的业务操作，有自己的时间和结果。</p>
+<p>不是所有步骤都能这样补。对照实验先走完库存、订单，并把 <code>article:01:title</code> 改成 <code>Weekly digest (revised)</code>，视为已经推送给关注者；随后业务要求取消。库存可以退回 <code>5</code>，订单可以改成 <code>cancelled</code>，标题却必须留下：</p>
+<div class="codehilite"><pre><span></span><code>compensate_publish  irreversible=true  undone=false
+title_still=Weekly digest (revised)
+</code></pre></div>
+
+<p><code>publish_not_undone=true</code>。补偿在这里只能记下「无法撤回一次已对用户可见的推送」，不能假装发布没有发生。不可逆不是实现偷懒，而是业务边界：能补库存，补不回已经看到新标题的关注者。</p>
+<h2 id="_10">常见误区</h2>
+<p>节点给出的误区是：<strong>把最终一致性当作永不需要对账</strong>。<code>pitfall_dropped_compensate</code> 让库存本地扣减成功（<code>t=0.01</code>，<code>stock=4</code>），创建订单失败，再把本应发出的 <code>compensate_restock</code> 丢掉。对账之前：库存是 <code>4</code>，没有任何订单，<code>stock_short_before_reconcile=true</code>。如果到此为止、以为「最终总会一致」，这份推荐位会一直少 1 个。对账任务发现一笔 <code>saga_reserve</code> 既没有对应的已提交订单，也没有成功的退库记录，补写 <code>reconcile_restock</code>，<code>0.04</code> 库存回到 <code>5</code>，<code>needed_reconcile=true</code>。最终一致性描述的是收敛的目标，不是「可以不做核对」的许可证。补偿消息会丢、进程会在补完之前崩溃，没有对账，不一致就停在那里。</p>
+<p>第二个误区是把补偿当成数据库回滚。上一节的账本已经说明：回滚会让准备态消失、效果像从未发生（2PC 里 presumed abort 之后，订单不可见、预约清空）；补偿则留下「先扣后还」「先下单再取消」的轨迹，并且对已发布的标题无能为力。</p>
+<p>第三个误区是以为「PREPARE 成功就等于下单成功」。主实践里 <code>0.04</code> 双方都已投票，可用库存已经少 1，但 <code>business_visible_orders</code> 仍是空列表。此时如果把占用当成已售，或把「还看不见订单」当成「库存也没动」，后面的对账会从错误的前提出发。只有协调器的 COMMIT 落地、参与者真正提交之后，订单才可见、库存才完成扣减。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点给出的权衡是：<strong>强原子性增加协调成本，补偿需要业务明确可逆边界</strong>。同样连续完成 10 笔投放（初始库存 <code>20</code>，最后都是 10 笔订单、库存 <code>10</code>），两种路径的教学数字是：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th style="text-align: right;">命令数</th>
+<th style="text-align: right;"><code>elapsed_s</code></th>
+<th style="text-align: right;"><code>rpc_count</code></th>
+<th style="text-align: right;">从首次 PREPARE 到双方 COMMIT（均值）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2PC</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">0.06 秒（其中库存预约出现在第二次 PREPARE 之后，约 0.02 秒）</td>
+</tr>
+<tr>
+<td>Saga</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.40</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.00（每一步本地提交，不跨服务持有准备态）</td>
+</tr>
+</tbody>
+</table>
+<p>2PC 每笔要准备两方、再提交两方，实验里是 <code>8</code> 次 RPC；10 笔就是 <code>80</code> 次，耗时 <code>0.60</code> 秒。Saga 每笔只打两个服务各一次，<code>20</code> 次 RPC，耗时 <code>0.40</code> 秒，而且没有跨服务的准备态占用。<code>saga_fewer_rpcs=true</code>，<code>saga_no_prepared_lock_hold=true</code>。<code>lock_hold_s_mean=0.06</code> 量的是从发出第一次 PREPARE 到双方 COMMIT 完成；库存预约从第二次 PREPARE 成功（约 +0.04）持有到提交完成（+0.06），大约 <code>0.02</code> 秒。这些时间是虚拟时钟上、每次 RPC 单向 <code>0.01</code> 秒的结果，不是生产延迟，只说明方向：原子性把等待和锁集中在协调器与准备态上；补偿把成本换成「可逆怎么定义」和「不一致窗口里对外可见什么」。</p>
+<p>可逆边界要事先写清。库存退回、订单取消，在本课里是可逆的补偿；把标题推给关注者，是不可逆的。如果业务把不可逆步骤放在 Saga 的中间，失败时就补不回已经发生的可见效果，只能留下补偿记录并转入人工或对账。2PC 也不是没有边界：它要求双方都支持准备态，并且协调器的决策日志可靠；它换来的是切换完成之前对外不可见，而不是「永远不会卡住」。</p>
+<p>第二笔权衡是可用性与占用。文档要求准备态尽量短，因为锁会一直持有。实验 <code>occupancy</code> 把库存设为 <code>1</code>：第一笔在 <code>0.04</code> 双方 PREPARE 之后，<code>available_stock=0</code>，订单仍不可见。第二笔订单服务可以准备成功，库存却投否，<code>second_votes={order:yes, inventory:no}</code>，决策是 abort，第二笔不会提交。第一笔若此时还不做 commit 或 rollback（例如协调器在双方 PREPARE 之后崩溃、尚未恢复），最后一份库存会一直被占用，新的投放全部被拒。2PC 的原子性，在协调器故障窗口里体现为可用性下降。Saga 没有这个窗口，但会在补偿完成之前把「库存已扣、订单没有」或「订单已成、稍后取消」暴露给业务。</p>
+<h2 id="_12">动手实践：模拟订单与库存两个服务，在各阶段杀死协调器并恢复</h2>
+<p>配套代码在 <code>/workspace/atlas/lessons/practice121/</code>，包括 <code>engine.py</code>、<code>app.py</code>、<code>test_txn.py</code>，用 Python 3 标准库实现，不依赖 Redis、PostgreSQL 或网络服务。运行验收：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice121
+bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>标准输出应是一行 <code>ALL_CHECKS_PASSED</code>，并写出 <code>results.json</code>。下面的数字都来自这次运行，时间单位是教学虚拟时钟上的秒，不是生产 RTT。<code>rpc_delay_s=0.01</code>。SKU 为 <code>promo:weekly-digest</code>，默认库存 <code>5</code>。</p>
+<p><strong>1. 主实践：成功的 2PC，以及五个崩溃点。</strong> 成功路径已在核心知识点第 1 节给出：<code>0.02</code> 订单准备，<code>0.04</code> 库存准备并占用 1 个名额，<code>0.04</code> 决策落盘，<code>0.06</code> 订单提交，<code>0.08</code> 库存提交，<code>stock=4</code>，<code>order-1</code> 可见，<code>consistent=true</code>。</p>
+<p>五个崩溃点的恢复结果见第 2 节的表。这里把「占用」和「决策日志」再对一次现场：</p>
+<div class="codehilite"><pre><span></span><code>双方 PREPARE 后立刻崩溃（0.04）
+  available=4  reservations={xid-1:1}  visible_orders=[]  decision=None
+  恢复后 0.06：presumed_abort=true  stock=5  orders=[]  准备态清空
+
+决策 commit 已落盘后立刻崩溃（0.04）
+  占用同上，但 durable_decision=commit
+  恢复后 0.06：order-1 committed  stock=4  准备态清空
+
+只通知了订单后崩溃（0.06）
+  order-1=committed  stock=5  reservation_held=true  durable_decision=commit
+  恢复后 0.08：stock=4  预约清除  consistent=true
+</code></pre></div>
+
+<p><code>kill_before_prepare</code> 和 <code>kill_after_one_prepare</code> 同样 presumed abort，分别在 <code>0.02</code>、<code>0.04</code> 结束，库存保持 <code>5</code>。五条路径加上成功路径，全部 <code>consistent=true</code>。</p>
+<p><strong>2. 准备态占用 <code>occupancy</code>。</strong> 把库存改为 <code>1</code>。第一笔在 <code>0.04</code> 完成双方 PREPARE：<code>available_stock=0</code>，<code>order_visible=false</code>，最后一份推荐位被 <code>xid-1</code> 预约。第二笔的订单服务投是，库存投否，<code>second_votes={order:yes, inventory:no}</code>，决策 abort，第二笔订单不会提交。第一笔此时仍停在准备态，<code>first_still_prepared=true</code>。实验在 <code>0.10</code> 结束时没有给第一笔发 COMMIT，就是为了把「准备态不结束，新业务就进不来」留在现场。文档把这种风险写成持锁过久；教学引擎把它写成可用库存为零。</p>
+<p><strong>3. Saga 补偿、不可逆与对账。</strong> 成功路径 <code>0.04</code> 结束，库存 <code>4</code>，<code>order-s1</code> 为 <code>committed</code>，<code>rpc_count=2</code>。失败路径在发布步骤注入错误：<code>0.01</code> 库存扣到 <code>4</code>，<code>0.03</code> 写下订单，随后补偿在 <code>0.06</code> 取消订单、<code>0.08</code> 退库，账本同时保留 <code>saga_reserve</code> 与 <code>compensate_restock</code>。不可逆路径先把标题改成 <code>Weekly digest (revised)</code>，再取消：库存退回 <code>5</code>，订单为 <code>cancelled</code>，标题仍是修订后的值，<code>publish_not_undone=true</code>。对账对照里，退库消息被丢掉，对账前库存停在 <code>4</code> 且没有订单；<code>reconcile</code> 在 <code>0.04</code> 补回库存，<code>needed_reconcile=true</code>。</p>
+<p><strong>4. 权衡 <code>tradeoff</code>。</strong> 10 笔投放：2PC 用 <code>0.60</code> 秒、<code>80</code> 次 RPC，每笔从第一次 PREPARE 到结束 <code>0.06</code> 秒（库存预约大约占后 <code>0.02</code> 秒）；Saga 用 <code>0.40</code> 秒、<code>20</code> 次 RPC，不跨服务持有准备态。两边最后都是 10 笔订单、库存 <code>10</code>。注意：成功路径那一次 2PC 把两份 COMMIT 改成了先后发送（为了插入「只通知一方」的崩溃点），结束于 <code>0.08</code>，双方 PREPARE 之后库存被占用到 <code>0.08</code>，共 <code>0.04</code> 秒；权衡实验里两份 COMMIT 一起发出，所以更短。数字都来自同一次 <code>results.json</code>，不要混用。</p>
+<p><strong>5. 核对验收字段。</strong> <code>acceptance_compensation_is_not_db_rollback=true</code>，<code>acceptance_prepare_occupies_resources=true</code>，<code>pitfall_eventual_consistency_needs_reconcile=true</code>，<code>tradeoff_atomicity_costs_coordination=true</code>，<code>all_2pc_consistent=true</code>。这些字段都在 <code>results.json</code> 顶层，测试脚本以 <code>ALL_CHECKS_PASSED</code> 结束。</p>
+<h2 id="_13">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 PostgreSQL — Two-Phase Transactions 中与 Distributed transactions 相关的定义、示例或实现，记录与教学实验的差异。2026-11-14 的实际打开情况如下。</p>
+<ul>
+<li>节点给出的 <a href="https://www.postgresql.org/docs/current/two-phase.html">Two-Phase Transactions</a> 返回 200，无跳转，11575 字节，<code>Content-Type</code> 为 <code>text/html; charset=utf-8</code>，<code>&lt;title&gt;</code> 为 PostgreSQL: Documentation: 18: 67.4. Two-Phase Transactions。<code>og:url</code> 为 <code>https://www.postgresql.org/docs/18/two-phase.html</code>，页眉为 PostgreSQL 18.7 Documentation，copyright 为 The PostgreSQL Global Development Group。该页只有两段正文，说明 PostgreSQL 支持 2PC，命令是 <code>PREPARE TRANSACTION</code>、<code>COMMIT PREPARED</code> 和 <code>ROLLBACK PREPARED</code>，供外部事务管理器使用；它遵循 X/Open XA 的特性与模型，但没有实现其中较少使用的部分。PREPARE 之后，下一步只能是提交或回滚已准备的事务。准备态预期很短，但外部可用性问题可能让事务在这个状态停留较久。短寿命的准备事务只存在共享内存和 WAL 中，跨越检查点的会记到 <code>pg_twophase</code> 目录；当前的准备事务可用 <code>pg_prepared_xacts</code> 查看。</li>
+<li>因为概述页没有展开命令语义，同日按它点名的命令继续打开了四个官方页面，均返回 200、无跳转：<a href="https://www.postgresql.org/docs/current/sql-prepare-transaction.html">PREPARE TRANSACTION</a> 20035 字节；<a href="https://www.postgresql.org/docs/current/sql-commit-prepared.html">COMMIT PREPARED</a> 15616 字节；<a href="https://www.postgresql.org/docs/current/sql-rollback-prepared.html">ROLLBACK PREPARED</a> 15831 字节；<a href="https://www.postgresql.org/docs/current/view-pg-prepared-xacts.html">53.17. pg_prepared_xacts</a> 17376 字节。</li>
+<li><code>PREPARE TRANSACTION</code> 写明：成功后事务与当前会话脱钩，状态完整落盘，即使崩溃也有很高概率仍能提交；之后任意会话都可提交或回滚。对发出该命令的会话，效果暂时不可见，像一次 <code>ROLLBACK</code>；命令失败则确实变成 <code>ROLLBACK</code>。它不适合普通应用或交互会话，只应被外部事务管理器用来跨多个数据库或其他事务资源做原子全局事务。不能准备涉及临时表、<code>WITH HOLD</code> 游标或 <code>LISTEN</code> / <code>NOTIFY</code> 的事务。文档用 Caution 强调：不要让准备态拖很久，它继续持锁，会妨碍 <code>VACUUM</code>，极端情况下可能导致数据库为防止事务号回卷而关机；若没有外部管理器跟踪并及时关闭准备事务，应把 <code>max_prepared_transactions</code> 设为 <code>0</code>。</li>
+<li><code>COMMIT PREPARED</code> / <code>ROLLBACK PREPARED</code> 必须由原用户或超级用户执行，不必在原会话中，也不能放在一个事务块里；执行后立即完成。<code>pg_prepared_xacts</code> 为每个准备中的事务保留一行，在提交或回滚后删除，列包括事务号、全局事务标识 <code>gid</code>、准备时间、所有者和数据库。</li>
+</ul>
+<p>论文式的规范在这里就是这份官方文档。教学实验按以下方式使用它，并记下差异。</p>
+<ul>
+<li><strong>角色</strong>：文档中的 PostgreSQL 是参与者，真正做原子全局事务的是外部管理器。<code>DistTxnEngine</code> 同时模拟了协调器和两个参与者，协调器不是 XA 实现，也不是 PostgreSQL。</li>
+<li><strong>准备态可见性</strong>：文档说 PREPARE 之后效果对当前会话不可见，直到 COMMIT。教学引擎里，准备中的订单不进入业务可见的 <code>orders</code>，库存只减少 <code>available_stock</code>，<code>stock</code> 仍要等到 COMMIT 才减。</li>
+<li><strong>恢复</strong>：PostgreSQL 崩溃重启后仍保留准备事务，等待外部的 <code>COMMIT PREPARED</code> 或 <code>ROLLBACK PREPARED</code>，自己不会 presumed abort。教学协调器在没有决策日志时会 presumed abort；这是管理器策略，必须在课文里与参与者行为分开。</li>
+<li><strong>持久化</strong>：文档区分共享内存加 WAL，以及跨越检查点后的 <code>pg_twophase</code>。教学引擎只有 dict flush，没有 WAL、检查点、目录或 <code>fsync</code>。</li>
+<li><strong>持锁风险</strong>：文档提到 VACUUM 与事务号回卷。教学引擎只用库存预约来表现「准备态占用资源」，没有实现 VACUUM，也没有事务号。</li>
+<li><strong>命令限制</strong>：教学引擎没有临时表、会话参数、<code>LISTEN</code>、权限模型和 <code>max_prepared_transactions</code>。</li>
+<li><strong>Saga</strong>：文档不讨论 Saga。补偿、不可逆和对账是本课在 2PC 之外的对照，不能读成 PostgreSQL 的行为。</li>
+<li><strong>网络与时间</strong>：单进程邮箱，<code>rpc_delay_s=0.01</code> 是教学延迟，不是生产 RTT。<code>crash_coordinator()</code> 是全知崩溃。</li>
+</ul>
+<h2 id="_14">自测题</h2>
+<p><strong>题 1.</strong> 为什么说补偿不是数据库回滚？请用 <code>compensate</code> 和 <code>irreversible</code> 两组实验的账本与标题说明。</p>
+<details>
+<summary>答案</summary>
+
+数据库回滚（以及 2PC 的 `ROLLBACK PREPARED`）会结束准备态，让那笔事务的效果像从未发生：可见订单仍是空的，预约被抹掉。补偿是在本地事务已经提交之后，再记一笔方向相反的新业务操作，历史还在，有些效果也补不掉。
+
+失败路径里，发布步骤被注入错误。库存已经在 `0.01` 扣到 `4`，订单已经在 `0.03` 写成；补偿并没有把这两条记录删掉，而是在 `0.06` 把订单改为 `cancelled`，在 `0.08` 再写一条 `compensate_restock` 把库存补回 `5`。账本上 `saga_reserve` 和 `compensate_restock` 同时存在，`compensation_is_new_operation=true`，`not_a_prepared_rollback=true`，`order_record_still_present=true`。
+
+不可逆路径走得更远：标题已经被改成 `Weekly digest (revised)` 并视为已推送给关注者。随后的取消可以把库存退回 `5`、把订单改为 `cancelled`，但 `compensate_publish` 的结果是 `irreversible=true`、`undone=false`，标题仍是 `Weekly digest (revised)`。如果补偿等于回滚，这次发布应当被撤掉。它撤不掉，正说明补偿受业务可逆边界约束，不是准备态上的 undo。
+
+</details>
+
+<p><strong>题 2.</strong> PREPARE 之后，资源占用有哪些风险？请用成功路径里 <code>0.04</code> 的状态、<code>occupancy</code> 实验，以及协调器在双方都已准备后崩溃的那段窗口说明。</p>
+<details>
+<summary>答案</summary>
+
+PREPARE 成功并不等于业务已经完成，但它已经把资源占住。成功路径的 `0.04`：双方都投了是，`available_stock=4`，`reservations={xid-1:1}`，`prepared_order=xid-1`，而 `business_visible_orders` 仍是空的。一份推荐位从可用库存里消失了，编辑却还查不到订单。文档也写过：准备态会继续持有已经拿到的锁，只应短暂存在。
+
+把库存改成 `1` 时，风险更具体。第一笔在 `0.04` 进入准备态后，`available_stock=0`，订单仍不可见。第二笔库存投否，`votes={order:yes, inventory:no}`，整笔 abort，第二笔订单不会生成。第一笔若迟迟不提交、不回滚，最后一份库存会一直被占用，新的投放全部被拒，`first_still_prepared=true`。
+
+协调器在双方都已 PREPARE、尚未写决策时崩溃，会把这个窗口拉长：`0.04` 当时 `reservation_held=true`、`order_still_invisible=true`。恢复之前，被预留的库存既不能卖给别人，也不能当作本笔已经成交。本课的协调器在 `0.06` 按 presumed abort 回滚双方，库存回到 `5`；如果协调器迟迟不恢复，占用会一直持续。PostgreSQL 作为参与者不会自动结束准备态，还要额外面对持锁妨碍 `VACUUM`、极端情况下事务号回卷的风险。所以「列出 prepare 后资源占用的风险」，至少包括：业务可见性滞后、并发事务被拒、协调器故障延长占用，以及真实数据库里持锁过久带来的运维后果。
+
+</details>
+
+<p><strong>题 3.</strong> 协调器在「双方都已 PREPARE」和「COMMIT 决策已落盘」两个时刻崩溃，恢复后为什么结果不同？若把最终一致性理解成「不必对账」，会在 Saga 路径上看到什么？</p>
+<details>
+<summary>答案</summary>
+
+区别在持久日志里有没有决策。双方都已 PREPARE、尚未写决策时崩溃，教学协调器恢复时只能 presumed abort：它不能冒充自己曾经决定提交，否则无法与「其实还没决定」的状态区分。实验里这条路径在 `0.06` 回滚双方，库存回到 `5`，没有可见订单。COMMIT 已经落盘后再崩溃，决策不可更改，恢复必须重发 COMMIT：实验里 `0.06` 得到 `order-1` 已提交、库存 `4`。如果这时错误地 abort，就会和可能已经（或即将）按 COMMIT 行事的参与者分叉；「只通知了订单」的对照把这一点表现得更清楚：`0.06` 订单已提交、库存仍占用，恢复只能把库存也提交掉。
+
+Saga 路径上，把最终一致性当成「不必对账」，会把一次丢失的补偿当成还会自己修好。`pitfall_dropped_compensate` 在订单失败后丢掉 `compensate_restock`，对账前库存停在 `4`，又没有已提交订单。系统不会自动回到 `5`，除非跑对账：`needed_reconcile=true`，`0.04` 才把库存补回。最终一致性要有人去核对并修补，不是一种可以省略对账的保证。
+
+</details>
+
+<h2 id="_15">推荐资源</h2>
+<ul>
+<li><a href="https://www.postgresql.org/docs/current/two-phase.html">PostgreSQL — Two-Phase Transactions</a>（PostgreSQL 18.7 文档，英文，深入，免费）：用于核对 2PC 的 prepare / commit、准备态的预期寿命，以及外部事务管理器与参与者的分工，并将结论落到本节点的协调器恢复实验。2026-11-14 该地址返回 200，无跳转，11575 字节，<code>&lt;title&gt;</code> 为 PostgreSQL: Documentation: 18: 67.4. Two-Phase Transactions。同日打开的命令页：<a href="https://www.postgresql.org/docs/current/sql-prepare-transaction.html">PREPARE TRANSACTION</a>、<a href="https://www.postgresql.org/docs/current/sql-commit-prepared.html">COMMIT PREPARED</a>、<a href="https://www.postgresql.org/docs/current/sql-rollback-prepared.html">ROLLBACK PREPARED</a>、<a href="https://www.postgresql.org/docs/current/view-pg-prepared-xacts.html">pg_prepared_xacts</a>。文档不讨论 Saga；补偿与对账是本课的对照实验，不是 PostgreSQL 的行为。</li>
+</ul>
+<h2 id="_16">本课小结</h2>
+<ul>
+<li>2PC 用 prepare / commit 把跨服务的原子性交给协调器。成功路径里，<code>0.04</code> 双方都已准备：可用库存少 1，订单仍不可见；<code>0.08</code> 双方提交后，<code>order-1</code> 可见，<code>stock=4</code>。PREPARE 成功不等于下单成功，但资源已经被占用。</li>
+<li>协调器恢复看的是决策日志。尚未落盘就崩溃，本课按 presumed abort 回滚，库存回到 <code>5</code>；COMMIT 一旦落盘，即使只通知了一方，恢复也必须把另一边补提交。五条崩溃路径加上成功路径全部 <code>consistent=true</code>。PostgreSQL 参与者不会自动 abort 准备态，外部管理器必须来关账。</li>
+<li>准备态占用会挡住新业务。库存为 <code>1</code> 时，第一笔准备后 <code>available_stock=0</code>，第二笔库存投否，整笔 abort；协调器若在此时消失，最后一份库存会一直被卡住。文档还指出持锁过久会妨碍 VACUUM，极端情况下触发事务号回卷保护。</li>
+<li>补偿不是数据库回滚。失败路径的账本同时留下 <code>saga_reserve</code> 和 <code>compensate_restock</code>，订单被改为 <code>cancelled</code> 而不是消失。已经推送的 <code>Weekly digest (revised)</code> 无法撤回，<code>publish_not_undone=true</code>。</li>
+<li>最终一致性需要对账。丢掉补偿后库存停在 <code>4</code> 且没有订单；<code>reconcile</code> 之后才回到 <code>5</code>。</li>
+<li>强原子性更贵：10 笔投放，2PC 用 <code>0.60</code> 秒、<code>80</code> 次 RPC，每笔从第一次 PREPARE 到结束 <code>0.06</code> 秒；Saga 用 <code>0.40</code> 秒、<code>20</code> 次 RPC，不跨服务持有准备态。这些是教学虚拟时钟上的数字，不是生产 RTT。补偿路径必须事先写清哪些步骤可逆。</li>
+<li><code>DistTxnEngine</code> 不是 PostgreSQL，也不是 XA。它没有 <code>pg_twophase</code>、没有 WAL，决策恢复策略是教学管理器的 presumed abort；Saga 是对照，不是文档里的命令。</li>
+</ul>
+<p>如果有一句答不上来，先回到 <code>results.json</code> 里对应的字段，再回到 <code>PREPARE TRANSACTION</code> 的 Caution、以及「PREPARE 之后效果暂时不可见、但锁还在」这句话，不要把「两边都投了是」当成「已经下单成功」，也不要把「最终会一致」理解成「不必对账」。</p><div class="pn"><span><a href="120.html">← 分片与在线迁移</a></span><span>下一课 待更新</span></div></main></div></body></html>
