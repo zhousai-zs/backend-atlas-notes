@@ -1,0 +1,232 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>123. 限流与过载保护 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（123/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details open><summary>领域 H（11/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li><a class="" href="../lessons/122.html">122. 消息投递与幂等消费</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li><a class="cur" href="../lessons/123.html">123. 限流与过载保护</a></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 123 课 · 领域 H · 阶段 4</p><p class="dl"><a href="../files/123-h-limits.md" download>⬇ 本课 Markdown</a><a href="../files/practice123.tar.gz" download>⬇ 练习包 practice123.tar.gz</a></p><h1 id="123208">第 123/208 课：限流与过载保护</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>h-limits</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Rate limiting</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>H / 第 4 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>分布式业务机制</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>深入</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/113.html"><code>h-failure</code></a>、<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/91.html"><code>f-backpressure</code></a></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Rate limiting</code>、<code>Distributed</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://sre.google/sre-book/handling-overload/">Google SRE — Handling Overload</a>（Google SRE 书籍第 21 章，英文，深入，免费；2026-11-14 该地址返回 HTTP 200，无跳转，最终 URL 仍是 <code>https://sre.google/sre-book/handling-overload/</code>，71785 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>Last-Modified</code> 为 <code>Thu, 08 Oct 2026 04:48:00 GMT</code>（北京时间 2026-10-08 12:48:00）。<code>&lt;title&gt;</code> 为 Google SRE: Load Balancing with Client Side Throttling，与章名不一致：页内 <code>h2.chapter-title</code> 与正文 <code>h1</code> 均为 Chapter 21 - Handling Overload / Handling Overload。作者为 Alejandro Forero Cuervo，编辑为 Sarah Chavis。页脚版权为 Copyright © 2017 Google, Inc. Published by O'Reilly Media, Inc.，许可为 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>。canonical 为 <code>https://sre.google/sre-book/handling-overload/</code>。正文与本课直接相关的是 <em>The Pitfalls of "Queries per Second"</em>、<em>Per-Customer Limits</em>、<em>Utilization Signals</em> 与 <em>Conclusions</em>；同章还讨论了 Client-Side Throttling、Criticality、Handling Overload Errors 和 Load from Connections，教学引擎没有实现这些机制）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>以令牌桶、并发上限与队列预算限制工作进入速度，防止排队导致延迟和内存失控。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课里的「内容后台」「文章键 <code>article:01:title</code>」「标题 <code>Weekly digest</code>」「租户 <code>editor</code> / <code>batch</code>」「教学 KV」都是<strong>教学假设</strong>，用来让令牌桶、突发量、并发限额、队列上限和租户公平性变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>OverloadKVEngine</code>，<strong>不是 Redis，不是真实的网关或限流产品，不是网络服务，不是 Google 生产环境里的过载保护，也不是 Doorman、Envoy、nginx 或 Guava RateLimiter</strong>。它是单进程离散事件仿真，没有 TCP，没有 CPU 核算，没有自适应客户端节流，也没有真实丢包。KV 是内存 dict。持久化是教学用 dict flush（只在 SET 时发生），不是磁盘，也没有 <code>fsync</code>。<code>Clock</code> 是虚拟时钟。<code>service_time_s=0.10</code> 和到达间隔都是教学延迟，不是生产 RTT。令牌是抽象的准入货币，不是 CPU 秒。文档指出不同请求的资源消耗可以差很多，用 QPS 衡量容量往往并不合适；本课的实验故意让每条请求使用相同的 <code>service_time_s</code>，因而速率与工作量成正比，这一差异会在源码阅读里对照，不在数字里假装测到了 CPU。分位数是教学用的 nearest-rank，不是生产监控里的 histogram。<code>max_queue_depth</code> / <code>max_resident</code> 是驻留请求数，不是 RSS 或堆内存。本课所有时间都来自 <code>/workspace/atlas/lessons/practice123/results.json</code>，是<strong>教学虚拟时钟上的数字</strong>。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">上一课留下的缺口</h3>
+<p>上一课的 <code>MessageDeliveryEngine</code> 解决的是「消息会不会被做两次」：至少一次投递允许重复，可靠消费要把余额和去重标记放进同一可恢复边界。业务提交后、ack 前崩溃，不去重时余额从 <code>100</code> 经 <code>130</code> 变成 <code>160</code>；去重之后重投仍会发生，余额停在 <code>130</code>。那一课的边界停在<strong>单条消息的生效次数</strong>，没有回答另一件同样常见的事：重投、重试或一次批量任务把大量请求同时打到教学 KV 上，服务还能否按它被配置的速度及时完成已经接受的请求。</p>
+<p>幂等可以防止同一笔结算加两次钱，但不能防止一百个批量任务同时来读 <code>article:01:title</code>。上一课未协调的外部推送会在重投时再执行一遍；<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/113.html">第 113 课</a> 里盲目重试会把一次超时放大成两次写入。这些放大后的流量如果没有入口约束，就会在队列里堆积，把延迟和内存一起顶上去。本课要补的就是这个入口：用令牌桶限制平均速率并允许有限突发，用并发限额和队列上限把在途工作卡住，并在过载时画出时延与拒绝率。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置之一 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/113.html">第 113 课</a> <code>h-failure</code> 留下的结论是：超时只说明等待预算耗尽，不能证明对端没有执行；盲目重试可能重复生效。从过载的角度看，重试还是额外的进入流量。文档在 <em>Handling Overload Errors</em> 里把「立刻换一个任务重试」和「整个数据中心都过载时不要再试」分开，并设置每请求与每客户端的重试预算，就是为了避免重试把过载放大。本课的实验不实现重试策略，但所有进入 KV 的请求都按到达序列接受或拒绝，不再假设「失败了再打一次」是免费的。</p>
+<p>前置之二 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/91.html">第 91 课</a> <code>f-backpressure</code> 已经区分过：限流约束进入速率，背压把下游消费能力反馈给上游，两者不能互相替代；无界队列会先吃掉内存，队列上限应由可接受的等待时间、处理速度和内存预算共同决定。本课把那一课的「限并发、限队列」落到一个教学 KV 上，补上令牌桶与突发量，并明确验收「限 QPS 不等于限并发」。91 课讲的是路径上的反馈；本课讲的是入口上的预算，以及过载时用拒绝换取已接受请求的及时完成。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台用一个教学 KV 保存已发布文章 <code>article:01:title</code>（标题 <code>Weekly digest</code>）。编辑租户 <code>editor</code> 按较低速率预览和读取这篇稿子；批量租户 <code>batch</code> 可能以高得多的速率来做扫描或扇出。KV 处理一条请求的教学服务时间为 <code>service_time_s=0.10</code>。默认路径给 KV 设置并发上限 <code>2</code>、队列上限 <code>4</code>，因而稳态容量是 <code>2 / 0.10 = 20</code> QPS。对照路径会拿掉队列上限去追求零拒绝，或只用一条共享令牌桶而不按租户隔离。令牌桶对照里，默认速率是 <code>10</code> 个令牌/秒，桶深（突发量）是 <code>5</code>。所有时间都是教学虚拟时钟上的值，不是线上超时，也不是生产 RTT。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>令牌桶与突发量</strong>：桶按配置速率补充令牌，最多积到突发上限。短时突发可以高于平均速率，但用尽之后必须等令牌回来；持续高于速率就会被拒绝。</li>
+<li><strong>并发限额与队列上限</strong>：同样的 QPS，服务时间一变，在途请求数就变。要限制同时处理的工作，必须单独限额并发，并用队列预算把等待的内存卡住。</li>
+<li><strong>租户公平性</strong>：一条共享的准入桶会被到达更密的租户用光；按租户设置配额，才能在某个客户过载时让其他客户大致不受影响。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释令牌桶与突发量及适用边界：突发允许什么、不允许什么，以及令牌速率为什么仍不是并发上限。</li>
+<li>能独立完成实践：给 KV 设置并发和排队上限，画出超载时延与拒绝率。</li>
+<li>能说明限 QPS 不等于限并发，并能验证过载下内存有界。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>公众号内容后台（教学假设）把标题存在 KV 里之后，读这条键的不只是编辑预览，还有批量任务、重试和下游扇出。节点把「为什么要懂」写成：保护核心服务与下游容量。如果入口只顾把请求全部收下，队列会在内存里越排越长，已经接受的预览也会一起变慢，KV 还可能把下游拖倒。</p>
+<p>文档的结论写得很干脆：一个按某速率配好容量的后端任务，无论再被扔来多少超额流量，都应当继续按那个速率提供服务，并且不让已接受请求的延迟受到显著影响；它也不应当在负载下崩溃。推论是：后端应当只接受自己处理得完的请求，其余的优雅拒绝。限流和过载保护要做的，不是把拒绝率降到零，而是把「能及时做完什么」守住。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1">1. 令牌桶与突发量</h3>
+<p>令牌桶是一种教学上常用的准入算法：令牌按速率 <code>r</code> 补充，桶里最多存放 <code>b</code> 个令牌（突发量）。请求到来时若桶里还有令牌，就取走并准入；否则拒绝。桶在空闲时会积满，于是可以一次性放出最多 <code>b</code> 个请求，即使这短暂高于 <code>r</code>。它限制的是进入速度的平均值和短时峰值，不是「此刻同时有多少请求正在执行」。</p>
+<p>本课默认 <code>r=10</code>、<code>b=5</code>，桶开始是满的。在 <code>t=0.00</code> 连续到达 6 条读取 <code>article:01:title</code> 的请求：前 5 条被准入，第 6 条因 <code>token_bucket</code> 被拒绝，<code>tokens_after_burst=0.0</code>。等到 <code>t=0.10</code>，按每秒 10 个令牌恰好补回 1 个，下一条被准入，随即再来一条仍被拒绝。结束于 <code>0.20</code>（最后一条准入的请求还要跑完 <code>0.10</code> 的服务时间）。全程准入 6 条、拒绝 2 条。突发量让短时尖峰可以高于 10 QPS，但只允许 5 条；再用，就必须等令牌按速率回来。</p>
+<p>持续到达把边界表现得更清楚。1.00 秒内按 10 QPS 均匀到达 10 条，全部准入，<code>rejected=0</code>，结束于 <code>1.00</code>。同样 1.00 秒按 20 QPS 到达 20 条，只用掉突发之后就必须按 10/s 补令牌，结果是准入 <code>14</code>、拒绝 <code>6</code>，<code>reject_rate=0.30</code>。<code>14</code> 来自开始时桶里的 5 个令牌，加上这一秒里按速率补充、并在到达时刻够用的那些；不要把它口算成「10 + 5 = 15」再写进结论，以 <code>results.json</code> 为准。</p>
+<p>适用边界也在这里。令牌桶假定「一条请求一个令牌」就够用。文档 <em>The Pitfalls of "Queries per Second"</em> 明确反对把容量建模成 QPS：不同查询的资源需求可以差很多，一度好用的代理指标也会随代码版本或流量组成而失效，更好的办法是直接用 CPU 等资源来计量。本课每条请求的服务时间相同，令牌与工作量才成正比；若预览是一次内存读取、批量任务却要做一次昂贵聚合，同一只速率桶就会给贵的请求放过太多工作。突发量也不是越大越好：它能平滑短时尖峰，但也会在瞬间放出更多在途工作，必须和下一节的并发限额一起看。</p>
+<h3 id="2">2. 并发限额与队列上限</h3>
+<p>限 QPS 不等于限并发。同一条 10 QPS 的到达序列、令牌速率也是 10（桶深 10，不会在这组实验里拒绝），只改服务时间，在途请求数就不一样：</p>
+<table>
+<thead>
+<tr>
+<th><code>service_time_s</code></th>
+<th style="text-align: right;">到达</th>
+<th style="text-align: right;">准入 / 拒绝</th>
+<th style="text-align: right;"><code>max_inflight</code></th>
+<th style="text-align: right;">Little 近似 <code>qps × 服务时间</code></th>
+<th style="text-align: right;"><code>latency_max</code></th>
+<th style="text-align: right;"><code>t_end</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.05</td>
+<td style="text-align: right;">10 QPS × 1.00 秒</td>
+<td style="text-align: right;">10 / 0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.95</td>
+</tr>
+<tr>
+<td>0.50</td>
+<td style="text-align: right;">同上</td>
+<td style="text-align: right;">10 / 0</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5.00</td>
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">1.40</td>
+</tr>
+<tr>
+<td>1.00</td>
+<td style="text-align: right;">同上</td>
+<td style="text-align: right;">10 / 0</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">1.90</td>
+</tr>
+</tbody>
+</table>
+<p>三组都被令牌桶放行，QPS 限额并没有变，但同时驻留的工作从 <code>1</code> 变成 <code>10</code>。服务时间变长时，只限速率会让内存和在途数跟着涨。反过来，把令牌速率放到 20（足够宽松），并发上限设为 <code>2</code>、队列上限设为 <code>0</code>，服务时间 <code>0.50</code>，只以 6 QPS 到达 1.00 秒（6 条，远低于 20 QPS）：仍有 2 条被拒绝，<code>accepted=4</code>，<code>max_inflight=2</code>，<code>reject_rate</code> 约为 <code>0.33</code>，结束于 <code>1.33</code>。QPS 没有超，并发先满了。</p>
+<p>所以要保护 KV，还得给同时执行的请求设上限，并给排不上的请求设排队预算。默认配置是并发 <code>2</code>、队列 <code>4</code>、服务时间 <code>0.10</code>，稳态容量 <code>20</code> QPS；队列最多再缓冲 4 条，驻留上限是 <code>2 + 4 = 6</code>。这就是节点说的：以并发上限与队列预算限制工作进入速度，防止排队导致延迟和内存失控。</p>
+<p>文档没有给出「并发 = N、队列 = M」这样的公式，但它的利用率信号是同一类问题：任务开始按本地利用率拒绝请求，其中最常用的信号是进程里可运行线程数经平滑后是否超过可用处理器——在途工作太多，就要拒绝。教学引擎不数线程、不算 CPU，只用显式的并发计数和队列长度来落实这件事。</p>
+<h3 id="3">3. 顺序与公平：租户配额</h3>
+<p>文档 <em>Per-Customer Limits</em> 的目标是：全局过载时，服务应当只向行为异常的客户返回错误，其他客户尽量不受影响。容量按协商用量预留，并据此设置每客户配额；各配额之和可以大于总容量，因为所有客户不太可能同时打满。</p>
+<p>教学对照把这件事简化成两只令牌桶。<code>batch</code> 以 40 QPS、<code>editor</code> 以 10 QPS，在 1.00 秒内一共到达 50 条请求。若只设一只共享桶（<code>r=10</code>、<code>b=5</code>），到达更密的批量租户会把令牌先拿走：<code>editor</code> 只准入 <code>1</code> 条、拒绝 <code>9</code> 条，<code>batch</code> 准入 <code>13</code> 条、拒绝 <code>27</code> 条，总共准入 <code>14</code> 条。编辑预览几乎被饿死。给每个租户一只同样的桶（各 <code>r=10</code>、<code>b=5</code>）之后，<code>editor</code> 的 10 条全部准入，<code>rejected=0</code>；<code>batch</code> 准入 <code>14</code>、拒绝 <code>26</code>，自己的配额用尽，但不能再去占编辑的令牌。这不是「批量租户变少了所以更公平」（共享桶下批量本身也只有 <code>13</code> 条），而是「编辑的 10 条不再被挤掉」。</p>
+<p>注意：若只共享并发和 FIFO 队列、不按租户做准入，均匀到达的低速租户未必会被饿死——排队空位会轮到谁，取决于到达时刻。本课故意用共享令牌桶来演示「没有每客户配额时，更密的租户会吃光准入货币」。教学桶按请求计数，不是文档例子里的「CPU 秒/秒」；也没有把各租户配额加总后超过 KV 容量的超卖写进数字。</p>
+<h2 id="_10">常见误区</h2>
+<p>节点给出的误区是：<strong>不加上限地排队来追求零拒绝</strong>。把并发仍设为 <code>2</code>，但拿掉队列上限，以 40 QPS 向容量为 20 QPS 的 KV 打 1.00 秒（40 条）：<code>rejected=0</code>，看起来「谁都没有失败」，可是 <code>max_queue_depth=20</code>，<code>max_resident=22</code>，已接受请求的 <code>latency_p50=0.55</code>、<code>latency_p99=1.05</code>、<code>latency_max=1.05</code>，全部做完要到 <code>t=2.03</code>。加上队列上限 <code>4</code> 之后，同样的到达被拒绝 <code>16</code> 条，<code>reject_rate=0.40</code>，但 <code>max_queue_depth=4</code>，<code>max_resident=6</code>，<code>latency_max=0.30</code>，结束于 <code>1.23</code>。零拒绝不是保护，是把等待从调用方搬进内存，已经接受的预览也一起变慢。</p>
+<p>第二个误区是把「限了 10 QPS」当成「同时不会有很多请求在跑」。上一节三组同样 10 QPS 的实验里，服务时间从 <code>0.05</code> 变到 <code>1.00</code>，<code>max_inflight</code> 从 <code>1</code> 变成 <code>10</code>，一条都没有被令牌桶拒绝。限速率和限在途是两道闸。</p>
+<p>第三个误区是以为「大家都走同一条队列就是公平」。共享令牌桶实验里，编辑和批量并没有被区别对待，结果却是编辑只进去 1 条。没有按租户划分的配额，公平就不会自动出现。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点给出的权衡是：<strong>拒绝部分请求换取已接受请求的及时完成</strong>。给 KV 设置并发 <code>2</code>、队列 <code>4</code> 之后，1.00 秒内不同到达速率的教学数字是：</p>
+<div class="codehilite"><pre><span></span><code>capped concurrency=2 queue=4, service=0.10, duration=1.0
+offer  accept  reject  rej%   p50    p99    max    qmax  resident
+   10      10       0    0.0   0.10   0.10   0.10     0         1
+   20      20       0    0.0   0.10   0.10   0.10     0         2
+   30      24       6   20.0   0.27   0.30   0.30     4         6
+   40      24      16   40.0   0.30   0.30   0.30     4         6
+   50      24      26   52.0   0.30   0.30   0.30     4         6
+
+unbounded queue, concurrency=2, service=0.10, duration=1.0
+offer  accept  reject  rej%   p50    p99    max    qmax  resident
+   10      10       0    0.0   0.10   0.10   0.10     0         1
+   20      20       0    0.0   0.10   0.10   0.10     0         2
+   30      30       0    0.0   0.33   0.57   0.57    10        12
+   40      40       0    0.0   0.55   1.05   1.05    20        22
+   50      50       0    0.0   0.82   1.54   1.54    30        32
+</code></pre></div>
+
+<p>低于或等于容量（10、20 QPS）时，两条路径都没有拒绝，时延就是服务时间 <code>0.10</code>。一旦到达超过 20 QPS，有界路径把驻留钉在 <code>6</code>，已接受请求的最大时延停在 <code>0.30</code>（4 个排队名额、2 个并发，最末一条大约要等 <code>0.20</code> 再跑 <code>0.10</code>），多出来的请求被拒绝；1.00 秒窗口里实际完成的是 <code>24</code> 条——20 条稳态容量，加上窗口结束时仍可排完的那几条，以表中数字为准。无界路径拒绝率保持 <code>0</code>，但 40 QPS 时最大时延已经是 <code>1.05</code>，50 QPS 时是 <code>1.54</code>，队列分别涨到 <code>20</code> 和 <code>30</code>。拒绝，是为了让已经收下的预览仍然在 <code>0.30</code> 以内结束，而不是在内存里排到超过一秒。</p>
+<p>同一组对照里的瞬间突发把内存边界画得更硬：40 条请求在 <code>t=0.00</code> 同时到达。有界路径只准入 <code>6</code> 条（2 个在跑、4 个在排），拒绝 <code>34</code> 条，<code>reject_rate=0.85</code>，<code>latency_max=0.30</code>，结束于 <code>0.30</code>，<code>max_resident=6</code>。无界路径 40 条全部收下，<code>max_queue_depth=38</code>，<code>max_resident=40</code>，最后一条时延 <code>2.00</code>，结束于 <code>2.00</code>。过载下内存有界，指的就是驻留请求数不超过并发上限加队列上限。</p>
+<p>这些时间是虚拟时钟上、每条请求服务 <code>0.10</code> 秒的结果，不是生产延迟。文档也说，不要假设过载的后端应当把流量全部关掉；它应当在容量腾出来时继续接受，只优雅地拒绝处理不完的部分。</p>
+<h2 id="kv">动手实践：给 KV 设置并发和排队上限，画出超载时延与拒绝率</h2>
+<p>配套代码在 <code>/workspace/atlas/lessons/practice123/</code>，包括 <code>engine.py</code>、<code>app.py</code>、<code>test_limits.py</code>，用 Python 3 标准库实现，不依赖 Redis、网关或网络服务。运行验收：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice123
+bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>标准输出应是一行 <code>ALL_CHECKS_PASSED</code>，并写出 <code>results.json</code>。下面的数字都来自这次运行，时间单位是教学虚拟时钟上的秒，不是生产 RTT。<code>service_time_s=0.10</code>。键为 <code>article:01:title</code>，标题为 <code>Weekly digest</code>。</p>
+<p><strong>1. 主实践：给 KV 设置并发 <code>2</code>、队列 <code>4</code>，画出超载曲线。</strong> 稳态容量为 20 QPS。上节两张表就是这次画出的结果：到达 10、20 QPS 时拒绝率为 0、时延 <code>0.10</code>；30、40、50 QPS 时有界路径的最大时延停在 <code>0.30</code>、<code>max_resident=6</code>，拒绝率分别为 <code>0.20</code>、<code>0.40</code>、<code>0.52</code>，窗口内准入都是 <code>24</code> 条；无界队列在同样的 40、50 QPS 下拒绝率为 0，最大时延却是 <code>1.05</code> 和 <code>1.54</code>，队列涨到 <code>20</code> 和 <code>30</code>。瞬间 40 条对照把驻留钉在 <code>6</code> 对 <code>40</code>。要验证的是「过载时有拒绝、已接受请求仍然及时、驻留有界」，不是「拒绝率越小越好」。</p>
+<p><strong>2. 令牌桶与突发量。</strong> <code>r=10</code>、<code>b=5</code>：<code>t=0.00</code> 连续 6 条，准入 5、拒绝 1，令牌清零；<code>t=0.10</code> 补回 1 个后再准入 1 条，随即再拒绝 1 条。按 10 QPS 走 1.00 秒 10 条全部准入；按 20 QPS 走 1.00 秒则准入 <code>14</code>、拒绝 <code>6</code>。</p>
+<p><strong>3. 限 QPS 不等于限并发。</strong> 同样 10 QPS，服务时间 <code>0.05</code> / <code>0.50</code> / <code>1.00</code> 时 <code>max_inflight</code> 分别是 <code>1</code>、<code>5</code>、<code>10</code>，令牌桶一条都没有拒绝。6 QPS 低于 20 的令牌速率，但并发 <code>2</code>、队列 <code>0</code>、服务时间 <code>0.50</code> 时仍拒绝 2 条，<code>max_inflight=2</code>。</p>
+<p><strong>4. 租户公平性。</strong> 共享一只 <code>10/5</code> 的桶时，编辑 10 条里只进去 <code>1</code> 条；每租户一只同样的桶之后，编辑 10 条全部准入，批量仍被限制在 <code>14</code> 条。</p>
+<p><strong>5. 核对验收字段。</strong> <code>practice_overload_latency_and_reject_rate=true</code>，<code>acceptance_qps_is_not_concurrency=true</code>，<code>acceptance_memory_bounded_under_overload=true</code>，<code>pitfall_queue_without_cap_for_zero_rejects=true</code>，<code>tradeoff_reject_to_keep_accepted_timely=true</code>，<code>tenant_fairness_protects_editor=true</code>。这些字段都在 <code>results.json</code> 顶层，测试脚本以 <code>ALL_CHECKS_PASSED</code> 结束。</p>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 Google SRE — Handling Overload 中与 Rate limiting 相关的定义、示例或实现，记录与教学实验的差异。2026-11-14 的实际打开情况如下。</p>
+<ul>
+<li>节点给出的 <a href="https://sre.google/sre-book/handling-overload/">https://sre.google/sre-book/handling-overload/</a> 返回 200，无跳转，71785 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>Last-Modified</code> 为 <code>Thu, 08 Oct 2026 04:48:00 GMT</code>（北京时间 2026-10-08 12:48:00）。<code>&lt;title&gt;</code> 为 Google SRE: Load Balancing with Client Side Throttling，正文标题是 Chapter 21 - Handling Overload。作者 Alejandro Forero Cuervo，编辑 Sarah Chavis，版权 2017 Google, Inc.，由 O'Reilly Media 出版，许可为 CC BY-NC-ND 4.0。这一页就是章节正文，没有再跟随到另一份文档。</li>
+</ul>
+<p>论文式的规范在这里就是这一章。教学实验按以下方式使用它，并记下差异。</p>
+<ul>
+<li><strong>QPS 不是容量</strong>：文档用整节说明，把容量建模成 queries per second、或用「读了多少个键」这类静态特征做代理，往往并不合适，因为不同查询的资源需求可以差很多，比例还会随版本变化。更好的办法是直接用 CPU（以及必要时的其他资源）来计量。教学令牌桶按「一条请求一个令牌」计数，实验里服务时间又是均匀的，所以速率与工作量成正比。这是为了把突发、拒绝和时延画清楚，不能读成「文档推荐用 QPS 做容量规划」。本课用「同样 10 QPS、服务时间不同、在途数从 1 变到 10」来呼应文档的警告：限 QPS 不等于限资源，也不等于限并发。</li>
+<li><strong>令牌桶与突发量</strong>：文档正文没有定义 token bucket，也没有给出桶深公式。令牌桶是本课的教学算法，用来落实「限制工作进入速度，并允许有限突发」。不要把 <code>r=10</code>、<code>b=5</code> 写成 SRE 书里的参数。</li>
+<li><strong>并发与队列</strong>：文档的任务级保护基于本地利用率，常用信号是经指数平滑的可运行线程数是否超过可用处理器；内存压力也可作为信号。它没有规定「并发上限 2、队列上限 4」。教学引擎用显式计数器落实「在途有上限、排队有预算、过载时内存有界」，不实现线程、GC，也不平滑瞬时尖峰。</li>
+<li><strong>每客户限额</strong>：文档按 CPU 秒/秒给 Gmail、Calendar 等客户设配额，总额可以大于物理容量，并实时汇总后把有效限额下发到各个任务。教学对照只有 <code>editor</code> 与 <code>batch</code> 两只按请求计数的桶，没有超卖、没有全球汇总，也没有「按 criticality 分层的配额」。Gmail 那些数字是书中的举例，不是本课实验数字。</li>
+<li><strong>未实现的章节内容</strong>：Client-Side Throttling（自适应节流，用最近两分钟的 <code>requests</code> / <code>accepts</code> 和乘数 <code>K</code>，默认约 2，在客户端本地拒绝）、Criticality 四级优先级、过载错误与重试预算（每请求最多 3 次、每客户端重试比低于 10%、以及 "overloaded; don't retry"）、连接本身的 CPU / 内存成本，教学引擎都没有做。脚注提到的 Doorman 也没有实现。课文不把这些机制的数字写进 <code>results.json</code>。</li>
+<li><strong>结论与本课实践的对应</strong>：文档要求配好容量的任务在超额流量下仍按原速率服务、延迟没有显著恶化、不要崩溃；应当只接受处理得完的请求并拒绝其余。有界路径在 30–50 QPS 下把已接受请求的最大时延钉在 <code>0.30</code>、驻留钉在 <code>6</code>，就是这句话的教学版本。无界排队追求零拒绝，则直接违反它。</li>
+<li><strong>网络与时间</strong>：单进程离散事件，<code>service_time_s=0.10</code> 是教学服务时间，不是生产 RTT。文档提到的跨机房重试「几个网络往返」不会被写进本课数字。</li>
+</ul>
+<h2 id="_13">自测题</h2>
+<p><strong>题 1.</strong> 为什么说限 QPS 不等于限并发？请用「同样 10 QPS、三种服务时间」以及「6 QPS 仍被并发上限拒绝」两组实验说明。</p>
+<details>
+<summary>答案</summary>
+
+令牌桶限制的是准入速率和短时突发，不限制此刻有多少请求正在执行。在途数量大约是到达速率乘以服务时间。三组实验都是 10 QPS、令牌速率 10、1.00 秒 10 条全部准入，但 `service_time_s` 从 `0.05` 改到 `0.50` 再改到 `1.00` 时，`max_inflight` 分别是 `1`、`5`、`10`，最大时延也从 `0.05` 变成 `1.00`。QPS 限额没有任何一条拒绝，在途工作却涨了十倍。
+
+反过来，把令牌速率放到 20，只以 6 QPS 到达，按「限了 QPS」的说法应当全部通过；可是服务时间 `0.50`、并发上限 `2`、队列上限 `0` 时，大约需要 3 个在途名额，第 3 条没有地方站。结果是 6 条里准入 `4`、拒绝 `2`，`max_inflight=2`，结束于 `1.33`。所以要限制同时处理的工作，必须单独设置并发限额，而不能只看每秒放过了多少条。
+
+</details>
+
+<p><strong>题 2.</strong> 给 KV 设置并发和排队上限之后，超载时延与拒绝率应是什么形态？若拿走队列上限去追求零拒绝，会看到什么？过载下怎样判断内存有界？</p>
+<details>
+<summary>答案</summary>
+
+容量是 `2 / 0.10 = 20` QPS，队列预算是 4。到达不超过容量时（10、20 QPS），拒绝率为 0，时延等于服务时间 `0.10`。到达超过容量后，有界路径把最大时延钉在 `0.30`、驻留钉在 `6`，拒绝率随到达升高：30 QPS 时拒绝 `6` 条（`0.20`），40 QPS 时拒绝 `16` 条（`0.40`），50 QPS 时拒绝 `26` 条（`0.52`）；这三档窗口内准入都是 `24` 条。瞬间 40 条同时到达时，只留下 `6` 条，拒绝 `34` 条，最大时延仍是 `0.30`，在 `0.30` 结束。
+
+拿走队列上限后，40 QPS 的 40 条全部准入，`reject_rate=0`，但 `max_queue_depth=20`，`latency_p50=0.55`，`latency_p99=latency_max=1.05`，要到 `2.03` 才排完；50 QPS 时最大时延到 `1.54`，队列到 `30`。零拒绝换来的是已接受请求变慢、驻留失去上限。内存有界看的是 `max_queue_depth <= 4` 且 `max_resident <= 6`：有界路径在所有超载档和瞬间突发里都成立，无界路径在 40 条同时到达时驻留是 `40`。这些是教学驻留计数，不是进程 RSS。
+
+</details>
+
+<p><strong>题 3.</strong> 拒绝部分请求换来了什么？共享令牌桶和按租户分桶，对编辑预览各有什么结果？文档里「只向行为异常的客户报错」和令牌桶公式是什么关系？</p>
+<details>
+<summary>答案</summary>
+
+拒绝换来的是已经接受的请求仍然及时完成。40 QPS 对照里，有界路径拒绝 `16` 条，但 `latency_max=0.30`；无界路径拒绝 0 条，`latency_max=1.05`。文档的结论是：任务应按配置速率继续服务，不让超额流量显著伤害延迟，只接受处理得完的部分。把队列放开追求零拒绝，就是把这份延迟和内存成本转嫁到已经收下的预览上。
+
+共享一只 `r=10`、`b=5` 的桶时，1.00 秒内批量 40 QPS、编辑 10 QPS，编辑只准入 `1` 条、拒绝 `9` 条，几乎被到达更密的批量租户挤掉。每租户一只同样的桶之后，编辑 10 条全部准入，批量被限制在 `14` 条。这对应文档 *Per-Customer Limits* 的目标：全局过载时，应当主要限制行为异常的客户，而不是让所有客户一起饿死。
+
+文档并没有给出令牌桶公式，也没有把配额写成「每秒 10 个请求」。它用的是 CPU 秒/秒，并讨论客户端节流、关键性和重试预算。本课用教学令牌桶来落实「每租户一份准入货币」，数字是实验里的 `1` 对 `10`、`13` 对 `14`，不要把它们写成书中 Google 客户的配额。
+
+</details>
+
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://sre.google/sre-book/handling-overload/">Google SRE — Handling Overload</a>（Google SRE 第 21 章，英文，深入，免费）：用于核对「不要只用 QPS 衡量容量」、每客户限额，以及「只接受处理得完的请求、拒绝其余」这一过载结论，并将结论落到本节点的并发、队列和超载曲线实验。2026-11-14 该地址返回 200，无跳转，71785 字节，<code>&lt;title&gt;</code> 为 Google SRE: Load Balancing with Client Side Throttling，正文标题为 Handling Overload，<code>Last-Modified</code> 为 <code>Thu, 08 Oct 2026 04:48:00 GMT</code>，作者 Alejandro Forero Cuervo。文档不定义令牌桶，也不给出教学里的并发/队列数字；令牌桶、突发量和队列上限是本课的对照算法。章内的自适应客户端节流、criticality 与重试预算，本课没有实现。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>令牌桶按速率补充令牌，桶深限制突发。<code>r=10</code>、<code>b=5</code> 时，<code>t=0.00</code> 的 6 条里准入 5、拒绝 1；<code>t=0.10</code> 补回 1 个后再放行 1 条。按 10 QPS 走 1.00 秒 10 条全部准入；按 20 QPS 则准入 <code>14</code>、拒绝 <code>6</code>。突发允许短时高于平均速率，不是「可以持续超速」。</li>
+<li>限 QPS 不等于限并发。同样 10 QPS，服务时间 <code>0.05</code> / <code>0.50</code> / <code>1.00</code> 时 <code>max_inflight</code> 是 <code>1</code>、<code>5</code>、<code>10</code>。6 QPS 低于令牌速率 20，并发上限 <code>2</code> 仍会拒绝 2 条。</li>
+<li>给 KV 设置并发 <code>2</code>、队列 <code>4</code> 后，容量是 20 QPS。超载时有界路径把最大时延钉在 <code>0.30</code>、驻留钉在 <code>6</code>，40 QPS 的拒绝率是 <code>0.40</code>；无界队列拒绝率为 0，但 40 QPS 时最大时延是 <code>1.05</code>，队列是 <code>20</code>。拒绝部分请求，是为了让已接受请求及时完成。</li>
+<li>不加上限地排队来追求零拒绝，会把延迟和内存一起抬上去。瞬间 40 条时，有界驻留是 <code>6</code>，无界是 <code>40</code>，最后一条要到 <code>2.00</code> 才结束。过载下内存有界，指驻留不超过并发加队列。</li>
+<li>租户需要单独的准入配额。共享桶里编辑 10 条只进去 <code>1</code> 条；每租户一桶之后，编辑 10 条全部准入，批量仍被限制在 <code>14</code> 条。</li>
+<li>这些是教学虚拟时钟上的数字，不是生产 RTT。<code>OverloadKVEngine</code> 不是 Redis，也不是 Google 的过载保护实现。文档警告不要用 QPS 代替资源计量，本课令牌桶在均匀服务时间下才与工作量成正比；自适应节流、criticality、重试预算和连接负载写在同一章里，但没有进入本课实验。</li>
+</ul>
+<p>如果有一句答不上来，先回到 <code>results.json</code> 里对应的字段，再回到文档里「Queries per Second 的陷阱」以及「只接受处理得完的请求」这两段，不要把「限了 10 QPS」当成「在途不会涨」，也不要把「拒绝率为零」理解成「系统更安全」。</p><div class="pn"><span><a href="122.html">← 消息投递与幂等消费</a></span><span>下一课 待更新</span></div></main></div></body></html>
