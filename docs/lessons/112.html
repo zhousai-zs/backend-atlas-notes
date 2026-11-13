@@ -1,0 +1,232 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>112. 存储性能、放大与尾延迟 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（112/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details open><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="cur" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details><summary>领域 H（0/15）</summary><div>阶段 3</div><ul><li class="todo">113. 分布式故障模型 <em>待更新</em></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 112 课 · 领域 G · 阶段 5</p><p class="dl"><a href="../files/112-g-storageperf.md" download>⬇ 本课 Markdown</a><a href="../files/practice112.tar.gz" download>⬇ 练习包 practice112.tar.gz</a></p><h1 id="112208">第 112/208 课：存储性能、放大与尾延迟</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>g-storageperf</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Storage Performance</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>G / 第 5 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>存储引擎</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>专家</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>g-rocksdb</code>、<code>g-bloom</code>、<code>a-math</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Storage Performance</code>、<code>G</code>、<code>Systems</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://github.com/facebook/rocksdb/wiki/Benchmarking-tools">存储性能、放大与尾延迟：参考文档 / 原始资料</a>（github.com，文档；2026-11-13 该 URL 返回 301，跳转到 <a href="https://github.com/meta/rocksdb/wiki/Benchmarking-tools">meta/rocksdb wiki：Benchmarking tools</a> 返回 200。同批核对 Write Stalls、RocksDB Tuning Guide、Statistics、Compaction Stats and DB Status、WAL Performance、Performance Benchmarks、How to ask a performance-related question、Leveled Compaction、Setup Options and Basic Tuning、Memory usage in RocksDB，均为 facebook 入口 301 后 200；<code>tools/db_bench_tool.cc</code>、<code>include/rocksdb/statistics.h</code> 的 blob 入口同样 301 到 meta 后 200；raw.githubusercontent.com 上的 <code>version.h</code> / <code>options.h</code> / <code>advanced_options.h</code> 直接 200。<code>wiki/Storage-Performance</code>、<code>wiki/db_bench</code>、<code>wiki/Write-Stall</code>、<code>wiki/Amplification</code> 当日会跳到 wiki 首页，本课不引用。源码以 main 为准，当日最新正式版 v11.13.2（2026-11-04），main 的 <code>version.h</code> 为计划中的 11.15.0）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>存储性能受访问分布、缓存状态、压实、同步策略和设备队列共同影响，必须测量稳态与故障恢复阶段。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中的「内容后台」「文章标题」「阅读请求」都是<strong>教学假设</strong>，用来让预热、写停顿、放大和尾延迟变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎，模块包括 <code>StoragePerfEngine</code> / <code>Options</code> / <code>WriteOptions</code> / <code>ReadOptions</code> / <code>Device</code> / <code>LRUCache</code>（统称 <code>StoragePerfEngine</code>），<strong>不是 RocksDB，不是 Redis，也不是网络服务</strong>。延迟来自虚拟设备队列（读 80µs、写 40µs、fsync 1000µs，另按 256 字节加一点服务时间），不是某块真实 SSD 的基准数字，也不是 <code>db_bench</code> 在生产硬件上的结果。教学 LSM 只有 L0/L1 两层，压实会合并全部 L0 与 L1；写停顿的触发阈值已缩小（L0 slowdown=4、stop=8，pending 24KiB/48KiB），以便短跑就能碰到官方 wiki 里那类日志。它没有多线程后台池、没有 RateLimiter、没有 Bloom 过滤（第 108 课的那种）、也没有真正的 <code>db_bench</code>。<code>WriteOptions.sync</code> / <code>disableWAL</code> / <code>no_slowdown</code> 是对官方选项的教学对应，不是对 <code>db/db_impl</code> 的逐行移植。官方文档和头文件已于 <strong>2026-11-13</strong> 用 curl 核对（见下文）。文中的官方机制只写到核对过的页面和源码能够支撑的范围；教学实验里的字节数、延迟、命中率和键数量都来自 <code>/workspace/atlas/lessons/practice112/results.json</code>，是这台教学机器上的实测。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：缓存里跑得快，不等于存储很快</h3>
+<p>内容后台要把标题和计数落到本地 KV。压测面板如果只展示「刚写进去的 80 篇，立刻再读，p99 是 0」，很容易让人以为引擎已经够快。节点把这件事说得很硬：存储性能受访问分布、缓存状态、压实、同步策略和设备队列共同影响，必须测量稳态与故障恢复阶段。只用内存命中或短跑结果来宣传存储能力，会把还没碰到设备、还没碰到压实、还没碰到 fsync 的数字，当成长期可交付的能力。</p>
+<p>本课要盯住的不是「这一秒的 QPS」，而是：数据相对缓存有多大、预热之后随机读还快不快、后台压实或 fsync 会不会把 p99 拉高、以及你为了把 QPS 做上去时，有没有把 WAL 或 sync 悄悄关掉。</p>
+<h3 id="_4">接上前置</h3>
+<p>第 107 课把 RocksDB 当成嵌入式内核来用：写入走 WAL 和 memtable，刷盘形成 SST，读路径穿过块缓存。第 108 课说明，没有过滤时，不存在的键也会变成一次次文件探查。第 16 课的百分位数则是本课读延迟时要反复用的尺子：p99 看的是排序后靠近尾部的那一次，不是平均值。本课把这三件事放在同一条负载里：持续混合读写，看缓存是否还热、压实和 fsync 是否正好打在尾部，以及数据规模和内存的比例有没有写进报告。</p>
+<h3 id="_5">一次混合读写走进教学引擎之后</h3>
+<p>一次 <code>put</code> 会先向后台捐出一小段设备时间（刷盘或压实），再检查写停顿：L0 文件数或待压实字节超过阈值时，写入会被放慢或停住。然后按 <code>WriteOptions</code> 决定要不要写 WAL、要不要 <code>fsync</code>。记录进 memtable 之后，若 memtable 满了，就变成 immutable，等待刷成 L0。教学模型里，触发压实的那次写入会把压实的设备时间记在自己的延迟上——这是简化，不是官方「压实在后台线程、写入只竞争磁盘队列」的完整形态，但足以观察「有压实的窗口，写 p99 更高」。</p>
+<p>一次 <code>get</code> 先查 memtable 和 immutable。未命中时，从新到旧检查可能覆盖该键的 SST：先读教学用的索引块，键不在文件里就看下一份；在的话再读数据块。索引和数据都可以进块缓存。不存在、但落在文件键范围内的查询，必须把所有重叠的 L0 都问一遍，这就是读放大。</p>
+<h3 id="_6">教学场景（教学假设）</h3>
+<p>假设内容后台用嵌入式 KV 保存已发布文章的标题，键为 <code>article:0001</code> 这种形式，值是固定 128 字节、以 <code>Weekly digest</code> 开头的缓冲区。读请求按随机键来，写请求是新文章或覆盖。下面的数字都是这个假设里跑出来的，不是线上容量规划。</p>
+<h3 id="_7">本课三条主线</h3>
+<ol>
+<li><strong>预热与稳态</strong>：短跑和已经放进缓存的工作集，不能代表数据大于缓存时的随机读。</li>
+<li><strong>写停顿和后台 IO</strong>：刷盘或压实跟不上时，引擎会放慢甚至停写；压实窗口里的写 p99 会明显高于只有 fsync 的窗口。</li>
+<li><strong>读写空间放大与 p99</strong>：重叠的 L0 会抬高空间放大和未命中读的 p99；压实用更多写入换回更瘦的树。优化时，持久性契约不能偷偷改变。</li>
+</ol>
+<h2 id="_8">学习目标</h2>
+<ul>
+<li>能解释预热与稳态：报告里要写清数据规模相对内存（块缓存）的比例，并区分短跑、已预热的工作集，以及数据大于缓存时的随机读。</li>
+<li>能独立完成：对教学 KV（对应节点里的 RocksDB KV 实践）执行持续混合负载，标注压实和 fsync 与尾延迟的相关性；比较时保持相同的 WAL / sync 契约。</li>
+</ul>
+<h2 id="_9">为什么后端要懂</h2>
+<p>节点写得很直接：避免只用内存命中或短跑结果宣传存储能力。内容后台如果按「刚写入还能在 memtable 里读到」去对外承诺读延迟，一旦工作集不再热、压实开始重写 SST、或者每条写都要 <code>fsync</code>，p99 会完全是另一个数量级。故障恢复之后缓存是冷的，也必须单独测，不能拿恢复前的稳态数字直接套用。把持久性悄悄放宽换来的 QPS，更不能写进同一张对比表。</p>
+<h2 id="_10">核心知识点</h2>
+<h3 id="1">1. 预热与稳态</h3>
+<p>先看一组对照。800 篇 <code>Weekly digest</code> 的逻辑大小是 112000 字节，块缓存只有 16384 字节，<strong>数据相对缓存的比例是 6.8359</strong>。这是验收标准要求写进报告的那一项：不写比例，读者不知道你是在缓存里跑，还是已经超出内存。</p>
+<p>80 篇的短跑里，数据还留在 memtable，200 次随机读的 p50 / p99 / 平均值全部是 0µs，缓存未命中 0 次。它很快，是因为几乎没走设备。把 800 篇刷盘并压实、清空缓存之后，200 次冷随机读的 p50 和 p99 都是 88µs，p999 和最大值是 172µs，平均值 83.14µs，命中率只有 0.5275（每次查询会查索引块和数据块，计数会多于 200）。再把 40 篇能放进缓存的工作集预热一遍，随后 200 次读的命中率是 1.0，p99 回到 0。可是预热并不能改变「整库比缓存大」这件事：对全部 800 键再做 200 次随机读，命中率只有 0.5725，p99 仍是 88µs，平均值 75.24µs。</p>
+<p>所以稳态不是「已经跑了一会儿」，而是：访问分布、缓存能否罩住工作集、以及 LSM 的形状，都已经不再靠开局的特殊条件。官方 <code>db_bench</code> 用 <code>--benchmarks=fillseq,readrandom</code> 和 <code>--use_existing_db</code> 把填充与回读拆开，也可以在基准名后面加 <code>[W10]</code> 做预热、加 <code>[X3]</code> 重复测量；这些是工具用法，本身不会自动消除压实或停顿造成的尾部。故障恢复刚打开库时，块缓存是空的，应视为又一次冷启动，而不是沿用恢复前的 p99。</p>
+<h3 id="2-io">2. 写停顿和后台 IO</h3>
+<p>RocksDB 的 <a href="https://github.com/facebook/rocksdb/wiki/Write-Stalls">Write Stalls</a> 写明：当 flush 或 compaction 跟不上写入时，引擎会放慢甚至停写，否则空间放大和读放大会一起恶化。触发条件包括 immutable memtable 过多、L0 文件数达到 <code>level0_slowdown_writes_trigger</code> / <code>level0_stop_writes_trigger</code>，以及待压实字节达到 <code>soft_pending_compaction_bytes_limit</code> / <code>hard_pending_compaction_bytes_limit</code>。slowdown 时写入线程通常先睡约 1ms；stop 时会一直等到条件解除。<code>no_slowdown=true</code> 的写入在停顿时直接返回 <code>Status::Incomplete()</code>。默认阈值在 2026-11-13 的 <code>advanced_options.h</code> 里是 slowdown 20、stop 36、soft 64GB、hard 256GB、<code>max_write_buffer_number</code> 为 2。本课教学阈值缩小为 slowdown 4、stop 8，才能在 120 次写入里看到同样形态的日志。</p>
+<p>120 次写入、自动压实关闭时：刷盘 15 次，压实只在 stop 时发生了 1 次，出现 56 次 slowdown、1 次 stop，累计停顿 56400µs。日志样本是 <code>Stalling writes because we have 4 level-0 files</code>，与官方 wiki 的句式一致。写 p50 是 104µs，p99 是 1104µs，平均值 521.5µs。同样 120 次写入、后台额度加大并打开自动压实时：压实 7 次，停顿 0 次，写 p50 是 44µs，p99 是 648µs，平均值 75.03µs。p99 从 1104 降到 648，不是「设备变快了」，而是 L0 不再堆到触发阈值。</p>
+<p>持续混合负载把这件事推到窗口上。预填 400 篇后再做 400 次操作（约 80% 随机读、20% 写），数据 67200 字节、缓存 16384 字节，比例 4.1016。WAL 且每条 <code>sync=true</code> 时，混合阶段写 p50 是 1048µs、p99 是 3260µs，发生 83 次 fsync（80 次混合写加 3 条用于崩溃检查的脏写）。只含 fsync、没有压实的窗口，写 p99 是 1108µs；同一段负载里出现压实的窗口，写 p99 升到 3332µs。关掉每条 fsync 之后，安静窗口的写 p99 只有 104µs，压实窗口仍有 2328µs。相关性是直接标在窗口上的：fsync 把基线从几十微秒抬到约 1ms，压实再在这条基线上面叠两三毫秒。教学压实跑在触发它的那次写入里，所以本课读 p99 没有同样被拉高；真实引擎里后台压实会占用设备队列，读路径上的 cache miss 也可能排在后面，这是模型边界，不要反过来推到生产。</p>
+<h3 id="3-p99">3. 读写空间放大与 p99</h3>
+<p><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Tuning-Guide">Tuning Guide</a> 把三种放大定义为逻辑请求和硬件请求之间的倍数：写放大是「写到存储的字节 / 写进数据库的字节」，空间放大是盘上 SST 相对活数据的倍数，读放大是一次查询实际碰到了多少文件或块。200 个键覆盖写 6 轮、且每一轮都刷成一份与其它 L0 完全重叠的 SST 之后：逻辑写入 168000 字节，盘上 SST 也是 168000，活数据只有 28000，<strong>空间放大 6.0</strong>；SST 写放大 1.0（还没压实），若把 WAL 算进存储写入则是 2.0。对落在键范围内、但从未写入的 80 个空档键，且不把索引送进缓存时，每次查询必须咨询全部 6 份 L0，读放大 6.0，p50 / p99 / 平均值都是 504µs（6 次索引读）。压实之后只剩一份 28000 字节的 L1，空间放大回到 1.0，SST 写放大升到 1.1667（多写出了那份新 SST），空档键的读放大降到 1.0，p99 降到 84µs。压实用一次额外的顺序写，换掉了「不存在的键也要问 6 份文件」的尾部。</p>
+<p>验收的另一条是：优化前后，持久性契约不能偷偷改变。同样 300 次混合操作，基线是 WAL + 每条 sync、16KiB 缓存，数据/缓存比例 3.9307，虚拟 QPS 3818.54，读平均 38.43µs，命中率 0.7812，崩溃后丢失 0 条。公平优化只把缓存加到 256KiB，比例降到 0.2457，契约仍是 <code>wal-sync-on-every-write</code>，命中率 0.8354，读平均 28.92µs，崩溃仍丢失 0 条。不公平的「优化」是 <code>disableWAL</code>：虚拟 QPS 跳到 19127.77，但契约变成 <code>memory-only-until-flush</code>，同一套崩溃检查会丢掉 4 个还在 memtable 里的键。节点的误区就是这句话：关闭 WAL 后更高的 QPS，不能与原来的持久化配置直接等价比较。</p>
+<h2 id="_11">常见误区</h2>
+<ul>
+<li>把 memtable 或块缓存里的短跑 p99，当成稳态能力。本课 80 篇短跑 p99 是 0，800 篇、数据是缓存 6.8359 倍时的随机读 p99 是 88µs。</li>
+<li>只跑 <code>fillseq</code> / <code>fillrandom</code> 的前几秒，或在工作集完全能放进缓存时宣传吞吐。官方工具把填充、预热和回读分开，就是为了避免这种混淆。</li>
+<li>关闭 WAL 或把 <code>sync</code> 关掉以后，拿更高 QPS 和原来的配置比快。混合负载里 <code>disableWAL</code> 的虚拟 QPS 是 11088.93，sync WAL 是 3250.55，但崩溃时前者丢掉 3 个脏键，后者丢掉 0 个。</li>
+<li>看到平均延迟下降，就认为尾部也改善了。异步 WAL 的写平均值是 181.7µs，p99 仍有 2256µs，因为压实窗口并没有消失。</li>
+<li>只盯用户写入的带宽，不看压实在设备上写了多少。空间放大从 6.0 降到 1.0 的同时，SST 写放大从 1.0 升到 1.1667，这是同一件事的两面。</li>
+</ul>
+<h2 id="_12">设计权衡</h2>
+<p>节点的权衡是：缓存、批量与同步频率各有成本，应保留一致的正确性条件。更大的块缓存能把命中率从 0.7812 提到 0.8354，但要占用进程内存，而且压实一旦换掉 SST，刚预热的块也会失效。批量写入或降低 <code>sync</code> 频率能减少 fsync，写 p50 会从 1048µs 掉到 44µs，可是确认返回时数据未必已经落盘，本课异步 WAL 在崩溃时丢掉了 3 个脏键。让压实更积极可以压住 L0、避免 1104µs 那种停顿 p99，但压实本身就是写放大，也会在窗口里把写 p99 抬到 3ms 以上。无论选哪一边，对比实验必须把 <code>disableWAL</code> 和 <code>sync</code> 固定住；改了契约，比的就不再是同一件事。</p>
+<h2 id="rocksdb-kvfsync">动手实践：对RocksDB KV执行持续混合负载，标注压实和fsync与尾延迟相关性</h2>
+<p>节点要求对 RocksDB KV 做持续混合负载。本课用教学 <code>StoragePerfEngine</code> 在同一组契约下完成这件事，并同时覆盖两条验收：报告里出现数据规模相对内存的比例；优化前后持久性契约没有偷偷改变。</p>
+<h3 id="0">0. 文件结构</h3>
+<div class="codehilite"><pre><span></span><code>practice112/
+  engine.py             # StoragePerfEngine 与虚拟设备队列
+  app.py                # 五组实验
+  test_storageperf.py   # 验收断言
+  test.sh
+  results.json          # 本次实测
+</code></pre></div>
+
+<p>在 <code>practice112</code> 目录执行 <code>./test.sh</code>，应看到 <code>ALL_CHECKS_PASSED</code>，并刷新 <code>results.json</code>。</p>
+<h3 id="1_1">1. 准备数据与目标操作</h3>
+<p>标题统一为 <code>Weekly digest</code>，值补齐到 128 字节，键为 <code>article:0001</code> 起。短跑用 80 篇且留在 memtable；稳态用 800 篇、16KiB 缓存。混合负载先预填 400 篇并压实，再跑 400 次操作（每 5 次里 4 次随机读、1 次写）。放大实验把 200 个键覆盖写 6 轮，每轮刷成一份重叠的 L0。崩溃检查在混合阶段结束后再写 3 个仍留在 memtable 里的脏键（契约实验里不公平路径会丢掉 4 个未刷盘键）。</p>
+<h3 id="2">2. 要比较的几条路径</h3>
+<ul>
+<li>短跑（memtable）对照冷随机读、已预热的 40 键工作集、以及整库随机读。</li>
+<li>关闭自动压实、让 L0 堆到教学 slowdown/stop，对照加大后台额度并自动压实。</li>
+<li>同一组混合负载：WAL + 每条 sync、WAL 但不每条 sync、<code>disableWAL</code>。按窗口标注 fsync 次数、压实用时和写 p99。</li>
+<li>6 份重叠 L0 对照压实之后的 1 份 L1：空间放大、写放大、空档键的读放大和 p99。</li>
+<li>公平优化（只加大缓存，契约不变）对照不公平优化（关掉 WAL）。</li>
+</ul>
+<h3 id="3">3. 运行并解读（真实输出）</h3>
+<div class="codehilite"><pre><span></span><code>$ ./test.sh
+ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p>下面的数字全部来自这次运行写入的 <code>results.json</code>，是虚拟时钟上的教学测量，不是 SSD 厂商标称，也不是生产 SLA。</p>
+<h3 id="4">4. 逐组对照真实数字</h3>
+<p><strong>预热与稳态（<code>warmup_vs_steady</code>）</strong></p>
+<ul>
+<li>800 篇，逻辑 112000 字节，缓存 16384 字节，比例 6.8359。</li>
+<li>短跑 80 篇仍在 memtable：读 p99 0µs，未命中 0。</li>
+<li>冷随机 200 次：p99 88µs，p999 172µs，平均值 83.14µs，命中率 0.5275。</li>
+<li>40 键工作集预热后 200 次：命中率 1.0，p99 0µs。</li>
+<li>整库随机 200 次：命中率 0.5725，p99 88µs，平均值 75.24µs。短跑不能代表稳态。</li>
+</ul>
+<p><strong>写停顿（<code>write_stall_and_bg_io</code>）</strong></p>
+<ul>
+<li>教学阈值 L0 slowdown=4、stop=8；官方默认 20 / 36。</li>
+<li>慢路径 120 次写：slowdown 56、stop 1，停顿 56400µs，写 p99 1104µs。样本：<code>Stalling writes because we have 4 level-0 files</code>。</li>
+<li>快路径：停顿 0，压实 7 次，写 p99 648µs。</li>
+</ul>
+<p><strong>混合负载与窗口标注（<code>mixed_load_compaction_fsync</code>）</strong></p>
+<ul>
+<li>预填 400，混合 400，数据/缓存 = 4.1016。</li>
+<li>sync WAL：写 p50 1048µs、p99 3260µs，虚拟 QPS 3250.55，fsync 83 次，崩溃丢失 0。仅 fsync 窗口写 p99 1108µs，压实窗口 3332µs。</li>
+<li>异步 WAL：写 p50 44µs、p99 2256µs，QPS 10069.48，fsync 0，崩溃丢失 3。安静窗口写 p99 104µs，压实窗口 2328µs。</li>
+<li><code>disableWAL</code>：写 p50 0µs、p99 2212µs，QPS 11088.93，崩溃丢失 3，契约已变，不能与 sync 路径等价比较。</li>
+</ul>
+<p><strong>放大与 p99（<code>amplification_and_p99</code>）</strong></p>
+<ul>
+<li>200 键覆盖 6 轮后：6 份 L0，空间放大 6.0，SST 写放大 1.0，存储写放大 2.0。空档键读放大 6.0，p99 504µs。</li>
+<li>压实后：空间放大 1.0，SST 写放大 1.1667，读放大 1.0，空档键 p99 84µs。</li>
+</ul>
+<p><strong>持久性契约（<code>persistence_contract</code>）</strong></p>
+<ul>
+<li>基线 WAL+sync、16KiB 缓存：比例 3.9307，QPS 3818.54，读平均 38.43µs，命中率 0.7812，丢失 0。</li>
+<li>公平加大缓存到 256KiB：比例 0.2457，契约不变，QPS 3932.88，读平均 28.92µs，命中率 0.8354，丢失 0。</li>
+<li><code>disableWAL</code>：QPS 19127.77，丢失 4，契约改为 <code>memory-only-until-flush</code>。</li>
+</ul>
+<h3 id="5">5. 对照验收标准</h3>
+<div class="codehilite"><pre><span></span><code># 验收 1：报告包含数据规模相对内存比例
+# 稳态 800 篇：logical_live_bytes=112000，cache_bytes=16384，
+#   data_to_cache_ratio=6.8359。
+# 混合负载预填 400 篇后：logical_live_bytes=67200，cache_bytes=16384，
+#   data_to_cache_ratio=4.1016。
+# 契约对照：基线比例 3.9307（16KiB 缓存），公平加大缓存后 0.2457（256KiB）。
+# 不写这个比例，就无法判断数字是不是内存命中。
+
+# 验收 2：优化前后持久性契约不偷偷改变
+# 基线与公平优化的 contract.label 都是 wal-sync-on-every-write，
+#   durable_on_ack=true，崩溃丢失 0 个键；这是一次合法对照。
+# disableWAL 的 label 是 memory-only-until-flush，durable_on_ack=false，
+#   混合负载崩溃丢失 3 个脏键，契约实验丢失 4 个；虚拟 QPS
+#   虽从 3250.55 / 3818.54 升到 11088.93 / 19127.77，
+#   fair_compare_sync_vs_disableWAL=false。
+# 关闭 WAL 后更高的 QPS 不能与原持久化配置直接等价比较。
+</code></pre></div>
+
+<h3 id="6">6. 自己动手的扩展练习</h3>
+<ul>
+<li>把教学 <code>level0_slowdown_writes_trigger</code> 改回 20，看 120 次写入还能不能打出 slowdown，并对照官方默认值为什么要在生产里另外观测 <code>STALL_MICROS</code>。</li>
+<li>给空档键打开 <code>fill_cache=true</code>，看读放大是不是只在第一次查询为 6，之后索引命中就把 p99 打回 0；想想这和「稳态随机读」有什么不同。</li>
+<li>在同步 WAL 的混合负载里，把每条 <code>sync</code> 改成每 10 条才 <code>sync</code> 一次，记录写 p99、崩溃丢失的键数，以及契约是否已经改变。</li>
+</ul>
+<h3 id="7">7. 和生产引擎的对应关系（不要记错边界）</h3>
+<p>教学设备是单队列虚拟时钟，服务时间是写死的 80/40/1000µs，不是 <code>iostat</code> 或 <code>fio</code> 的测量。教学压实往往跑在触发它的那次 <code>put</code> 里，所以本课是「压实窗口的写 p99 更高」，不要把它读成官方后台压实线程的调度。教学停顿阈值是缩小后的 4/8，官方默认是 20/36 和 64GB/256GB；日志句式对齐 wiki，阈值不对齐默认值。教学没有 Bloom，空档键会探查所有重叠 L0，这更接近「过滤没帮上忙」的读放大，而不是第 108 课里已经调过假阳性的那条路径。<code>db_bench</code> 的 <code>fillsync</code>、<code>readwhilewriting</code>、<code>readrandomwriterandom</code>、<code>--statistics</code>、<code>--disable_wal</code>、<code>--sync</code>、<code>--cache_size</code> 是核对负载参数的官方工具；本课的混合负载只是同一种问题的教学版本。崩溃恢复只重放已经 <code>fsync</code> 的 WAL 前缀和已经刷成的 SST，不是完整的 WAL recovery mode。</p>
+<h2 id="_13">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：使用 RocksDB <code>db_bench</code> 和统计信息定位 write stall、cache miss 与 compaction，并核对负载参数。2026-11-13 实际打开的页面如下。facebook 入口均为 301，跳转到 <code>meta/rocksdb</code> 后返回 200；下面保留节点和文档里给出的 facebook URL。当日最新正式发布是 v11.13.2（2026-11-04）；main 上 <code>version.h</code> 写的是 11.15.0，注释说明这是计划中的下一个版本号，不要把它当成已发布版本。</p>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Benchmarking-tools">Benchmarking tools</a>（节点给出的入口）：<code>db_bench</code> 的 <code>fillseq</code> / <code>fillrandom</code> / <code>fillsync</code> / <code>readrandom</code> / <code>readwhilewriting</code> / <code>readrandomwriterandom</code>，以及 <code>--benchmarks="fillseq,stats" --statistics</code>、<code>--use_existing_db</code>。用它核对本课「先填充再回读」「同步写和不带 sync 的写不是同一个基准」。<code>tools/db_bench_tool.cc</code> 里，基准名后的 <code>[W10]</code> 是预热次数，<code>[X3]</code> 是重复测量次数。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Write-Stalls">Write Stalls</a>：三类触发条件、LOG 里的 <code>Stalling writes</code> / <code>Stopping writes</code> 句式、slowdown 约 1ms、<code>delayed_write_rate</code>、<code>no_slowdown</code> 返回 <code>Incomplete</code>。对照本课 56 次 slowdown 与 1104µs 的写 p99。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Tuning-Guide">RocksDB Tuning Guide</a>：先看统计再调参；写放大等于磁盘写入带宽除以 DB 写入速率；关注 compaction stats 里的 <code>Stalls</code> 和统计项 <code>STALL_MICROS</code>。三种放大是调压实时要一起看的杠杆。</li>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Statistics">Statistics</a>、<a href="https://github.com/facebook/rocksdb/wiki/Compaction-Stats-and-DB-Status">Compaction Stats and DB Status</a>：<code>CreateDBStatistics()</code> / <code>ToString()</code>，以及 LOG 里的 LSM 形状、停顿汇总。定位 cache miss 与 compaction 应从这里开始，而不是只看 QPS。</li>
+<li><a href="https://github.com/facebook/rocksdb/blob/main/include/rocksdb/advanced_options.h">advanced_options.h</a>：<code>level0_slowdown_writes_trigger = 20</code>、<code>level0_stop_writes_trigger = 36</code>、<code>soft_pending_compaction_bytes_limit = 64 * 1073741824ull</code>、<code>hard_pending_compaction_bytes_limit = 256 * 1073741824ull</code>、<code>max_write_buffer_number = 2</code>。本课教学阈值是缩小后的值，对比时要写明。</li>
+<li>同日核对过、正文未展开的页面：<a href="https://github.com/facebook/rocksdb/wiki/WAL-Performance">WAL Performance</a>、<a href="https://github.com/facebook/rocksdb/wiki/Performance-Benchmarks">Performance Benchmarks</a>、<a href="https://github.com/facebook/rocksdb/wiki/How-to-ask-a-performance-related-question">How to ask a performance-related question</a>、<a href="https://github.com/facebook/rocksdb/wiki/Leveled-Compaction">Leveled Compaction</a>、<a href="https://github.com/facebook/rocksdb/wiki/Setup-Options-and-Basic-Tuning">Setup Options and Basic Tuning</a>、<a href="https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB">Memory usage in RocksDB</a>。<code>wiki/Storage-Performance</code>、<code>wiki/db_bench</code>、<code>wiki/Write-Stall</code>、<code>wiki/Amplification</code> 当日会跳到 wiki 首页，不要引用。</li>
+</ul>
+<h2 id="_14">自测题</h2>
+<p><strong>1.</strong> 80 篇标题的短跑读 p99 是 0µs，能不能用来宣传这套存储已经足够快？一份合格的性能报告至少还要写上什么？</p>
+<details>
+<summary>答案</summary>
+
+不能。短跑时数据还在 memtable 里，根本没走设备。同一课里 800 篇、逻辑 112000 字节、缓存只有 16384 字节（比例 6.8359）时，整库随机读的 p99 是 88µs；能放进缓存的 40 键工作集预热之后 p99 才会回到 0。节点要求必须测量稳态，并且验收标准写明：报告要包含数据规模相对内存的比例。缺了这个比例，别人无法判断你是不是在用内存命中宣传存储能力。
+
+</details>
+
+<p><strong>2.</strong> 混合负载里把 WAL 关掉之后，虚拟 QPS 从 3250.55 升到 11088.93。能把它和原来的配置放在同一张「优化效果」表里吗？崩溃之后呢？</p>
+<details>
+<summary>答案</summary>
+
+不能等价比较。节点的误区就是：关闭 WAL 后更高的 QPS 不能与原持久化配置直接等价比较。sync WAL 的契约是 `wal-sync-on-every-write`，崩溃丢失 0 个键；`disableWAL` 的契约是 `memory-only-until-flush`，同一组混合负载结束时留下的 3 个脏键全部丢失。公平对照是只加大缓存、保持 sync 不变：QPS 只从 3818.54 到 3932.88，但读平均从 38.43µs 降到 28.92µs，崩溃仍然丢失 0 个键。
+
+</details>
+
+<p><strong>3.</strong> 200 个键覆盖写 6 轮后，空间放大是 6.0，空档键的读 p99 是 504µs；压实之后空间放大 1.0，写放大从 1.0 升到 1.1667，读 p99 变成 84µs。为什么写放大升了，读的尾部反而降了？这和写停顿有什么关系？</p>
+<details>
+<summary>答案</summary>
+
+6 份完全重叠的 L0 让活数据在盘上存了 6 份，所以空间放大是 6；一个从未写入、但落在键范围内的查询必须咨询全部 6 份文件，读放大 6.0，6 次索引读合计 504µs。压实把它们合并成一份 28000 字节的 L1，多一次 SST 写出，于是写放大升到 1.1667，但之后空档键只问 1 份文件，p99 降到 84µs。若这些 L0 继续堆下去，还会碰到本课慢路径里的 56 次 slowdown 和 1104µs 写 p99——Write Stalls 文档把停顿解释为：不把写入降到设备跟得上的速度，空间放大和读放大还会继续恶化。压实是在用写放大，换空间、读尾部和停顿。
+
+</details>
+
+<h2 id="_15">推荐资源</h2>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb/wiki/Benchmarking-tools">存储性能、放大与尾延迟：参考文档 / 原始资料</a>（github.com，英文文档，专家，免费）。重点阅读预热与稳态与写停顿和后台 IO，用于核对本节点实验的语义和边界。2026-11-13 该入口 301 到 <a href="https://github.com/meta/rocksdb/wiki/Benchmarking-tools">meta/rocksdb 的同一页</a> 后返回 200；同一次核对建议打开 <a href="https://github.com/facebook/rocksdb/wiki/Write-Stalls">Write Stalls</a> 和 <a href="https://github.com/facebook/rocksdb/wiki/RocksDB-Tuning-Guide">RocksDB Tuning Guide</a>。不要使用会跳到 wiki 首页的 <code>wiki/Storage-Performance</code>、<code>wiki/db_bench</code>、<code>wiki/Write-Stall</code>、<code>wiki/Amplification</code>。</li>
+</ul>
+<h2 id="_16">本课小结</h2>
+<ul>
+<li>预热和稳态不是一回事。80 篇短跑的读 p99 是 0µs，是因为还在 memtable；800 篇、数据是缓存的 6.8359 倍时，整库随机读 p99 是 88µs。报告必须写上数据规模相对内存的比例，恢复之后的冷缓存也要单独测。</li>
+<li>写停顿和后台 IO 会直接出现在尾部。教学慢路径 56 次 L0 slowdown、写 p99 1104µs；混合负载里，仅 fsync 的窗口写 p99 是 1108µs，叠上压实后是 3332µs。异步 WAL 能把安静窗口降到 104µs，但压实窗口仍有 2328µs。</li>
+<li>放大是同一组杠杆。6 份重叠 L0 的空间放大 6.0、空档键 p99 504µs；压实后空间放大 1.0、写放大 1.1667、p99 84µs。加大缓存是契约不变的公平优化；关掉 WAL 把 QPS 做到 19127.77 却丢掉 4 个键，不能拿来和原来的持久化配置比。</li>
+<li>学完后可以用三句话自检：短跑 p99 和数据/缓存比例为什么必须一起出现在报告里；fsync 窗口和压实窗口的写 p99 差在哪里，L0 停顿的日志长什么样；空间/写/读放大如何一起变化，以及为什么 <code>disableWAL</code> 的 QPS 不能直接对比。三句都能答上来，并且能指出 <code>practice112/results.json</code> 里对应的字段，这一课就算过关。</li>
+</ul>
+<p>如果有一句答不上来，先回到对应的实验字段，再回到官方文档里关于「<code>db_bench</code> 的填充、预热与回读」「Write Stalls 的 slowdown/stop 与 <code>STALL_MICROS</code>」「写放大等于磁盘写入除以 DB 写入」「<code>disableWAL</code> 与 <code>sync</code> 不是同一个基准」的那几句，不要只把「要看 p99」这句话背下来。</p><div class="pn"><span><a href="111.html">← 备份、校验与恢复演练</a></span><span>下一课 待更新</span></div></main></div></body></html>
