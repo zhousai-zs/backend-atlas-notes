@@ -1,0 +1,221 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>122. 消息投递与幂等消费 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（122/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details open><summary>领域 H（10/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li><a class="cur" href="../lessons/122.html">122. 消息投递与幂等消费</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 122 课 · 领域 H · 阶段 3</p><p class="dl"><a href="../files/122-h-messaging.md" download>⬇ 本课 Markdown</a><a href="../files/practice122.tar.gz" download>⬇ 练习包 practice122.tar.gz</a></p><h1 id="122208">第 122/208 课：消息投递与幂等消费</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>h-messaging</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Message delivery</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>H / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>分布式业务机制</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/121.html"><code>h-transactions</code></a></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Message delivery</code>、<code>Distributed</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://kafka.apache.org/documentation/#semantics">Apache Kafka — Message Delivery Semantics</a>（Apache Kafka 官方文档，英文，进阶，免费；2026-11-14 该地址返回 HTTP 200，<strong>没有 HTTP 3xx 跳转</strong>，<code>Content-Length</code> / 实收 20078 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>Last-Modified</code> 为 <code>Sun, 08 Nov 2026 16:53:55 GMT</code>。<code>&lt;title&gt;</code> 为 Documentation Redirect | Apache Kafka，页面元数据 <code>og:url</code> 为 <code>https://kafka.apache.org/documentation/</code>，<code>description</code> 为 Redirecting…。这是一份带锚点映射的 JavaScript 跳转页，不是「Message Delivery Semantics」正文。页内脚本把当前文档版本记为 <code>t="44"</code>，并把 <code>"#semantics"</code> 映射到 <code>"design/design/#message-delivery-semantics"</code>。同日继续打开实际正文 <a href="https://kafka.apache.org/44/design/design/#message-delivery-semantics">Design | Apache Kafka</a>，返回 HTTP 200，无跳转，<code>Content-Length</code> / 实收 148030 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>Last-Modified</code> 同样为 <code>Sun, 08 Nov 2026 16:53:55 GMT</code>。<code>&lt;title&gt;</code> 为 Design | Apache Kafka，<code>og:url</code> 为 <code>https://kafka.apache.org/44/design/design/</code>，页眉面包屑为 AK 4.4.X，<code>article:modified_time</code> / <code>itemprop=dateModified</code> 为 <code>2026-10-26T16:02:25+00:00</code>（北京时间 2026-10-27 00:02:25）。正文里与本课直接相关的是 <em>Message Delivery Semantics</em>、<em>Using Transactions</em>、<em>Consumer Position</em>，以及 <em>The Producer</em> 中按 key 分区的说明）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>至少一次投递允许重复；可靠消费必须把业务状态和去重标记纳入同一可恢复边界。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课里的「内容后台」「文章键 <code>article:01:title</code>」「标题 <code>Weekly digest</code>」「结算入账 <code>settlement:s1</code> / <code>+30</code>」「创作者钱包初始余额 <code>100</code>」「主题 <code>wallet-credits</code>」都是<strong>教学假设</strong>，用来让 ack、重投、outbox、去重表、分区顺序和毒消息变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>MessageDeliveryEngine</code>，<strong>不是 Redis，不是真实的消息队列或 broker，不是网络服务，不是 Apache Kafka，也不是 Kafka 客户端 / Kafka Streams / 事务生产者</strong>。它是单进程里的分区日志仿真，没有 TCP，没有 ISR，没有 broker 复制，没有 <code>transactional.id</code>，没有 <code>isolation.level</code>，也没有真实丢包。持久化是教学用 dict，在追加日志、提交消费位置、写入钱包与去重标记、以及把毒消息写入教学死信日志之前 flush，不是磁盘，也没有 <code>fsync</code>。<code>Clock</code> 是虚拟时钟。<code>crash_consumer()</code> 会丢掉易失的消费位置，恢复时从已提交的位置重新加载；这是本课消费者的策略。分区函数是教学用的 <code>sum(key.encode()) % n_partitions</code>，不是 Kafka 的 murmur2。幂等生产只用 <code>(producer_id, seq)</code> 去重，不是 Kafka 0.11 之后的 PID / epoch 协议。本课所有时间都来自 <code>/workspace/atlas/lessons/practice122/results.json</code>，是<strong>教学虚拟时钟上的数字</strong>，不是生产 RTT。参数 <code>rpc_delay_s=0.01</code>。文档里「等待消息提交可能大约需要 10 ms」是官方文档的数量级说明，不会被写进本课的实验数字。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">上一课留下的缺口</h3>
+<p>上一课的 <code>DistTxnEngine</code> 解决的是「一笔业务要同时改两个服务」：2PC 用准备态换原子提交，Saga 用补偿换可用性，并对账把丢掉的补偿补回来。成功的 2PC 里，<code>0.04</code> 双方都已准备，可用库存少 1、订单仍不可见；<code>0.08</code> 双方提交后，<code>order-1</code> 可见，库存为 <code>4</code>。那一课的边界停在<strong>同步协调两个参与者</strong>，没有回答另一件同样常见的事：业务先在本地提交，再把「请给创作者钱包入账 30」交给一条消息。消息可能丢，也可能被投递两次。</p>
+<p>跨服务事务处理的是两份资源的同一笔决策；消息投递处理的是「发出去之后，对端会不会做、会不会多做」。上一课的协调器决策日志不能替消费者记住「这笔结算是不是已经入过账」，钱包也不会因为协调器提交成功就自动幂等。本课要补的就是这个投递与消费的边界：ack 与重投、把业务状态和去重标记放进同一可恢复边界、以及分区能保证什么顺序、不能保证什么顺序。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/121.html">第 121 课</a> <code>h-transactions</code> 留下的结论是：没有共享事务时，要么引入协调器做两阶段提交，要么接受每一步先本地提交、失败时用一笔新的业务操作去补偿。补偿不是数据库回滚；超时也不能证明对端没有执行。把这条结论搬到消息上，就会看到对称的两种风险。如果先提交消费位置再处理，崩溃会把消息弄丢，这是 at-most-once。如果先处理再提交位置，崩溃会让同一条消息再来一次，这是 at-least-once。121 课里「我不知道对面做没做」在这里变成具体的重投：钱包已经加了 30，ack 还没发出去，消费者挂了，这条入账会再被拉一次。</p>
+<p>本课的可靠消费，其实是把 121 课「同一可恢复边界」这句话换了一个落点：不是协调器的决策日志，而是钱包余额和去重标记必须一起 flush。文档把 Kafka 内部的 exactly-once 写成「把消费位置和输出写进同一笔事务」；写到 Kafka 以外的系统时，需要那些系统配合。outbox 是这句话的反向操作：本地业务和待发送的消息先一起落盘，再异步发出去。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台把一篇已发布文章 <code>article:01:title</code>（标题 <code>Weekly digest</code>）的结算入账发给创作者钱包。钱包初始余额 <code>100</code>，一笔结算记为 <code>settlement:s1</code>，金额 <code>+30</code>，消息写到教学主题 <code>wallet-credits</code>。默认路径是：消费者先处理、再 ack；对照路径会在业务提交之后、ack 之前把消费者杀死，观察重投是否再次增加余额。还有一条路径先 ack 再处理，用来看消息丢失。生产者侧对照 outbox 与「提交后再发送」。分区对照把 <code>wallet:alice</code> 和 <code>wallet:bob</code> 打到两个分区。毒消息对照则在两条正常入账中间插入一条无法处理的记录。<code>rpc_delay_s=0.01</code>，所有时间都是教学虚拟时钟上的值，不是线上超时，也不是生产 RTT。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>ack 与重投</strong>：先处理再保存消费位置，对应至少一次；先保存位置再处理，对应至多一次。业务提交后、ack 前崩溃，重投一定会再发生一次处理。</li>
+<li><strong>outbox 与去重表</strong>：本地提交和待发消息一起 flush，崩溃后还能补发；去重标记必须和余额写在同一可恢复边界里，否则至少一次投递会把 30 加成 60。</li>
+<li><strong>顺序与分区</strong>：同一个 key 进入同一个分区，分区内有序；跨分区没有全局顺序。毒消息若不隔离，会挡住分区里排在后面的正常消息。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释 ack 与重投及适用边界：至少一次为什么允许重复，至多一次为什么可能丢消息，以及「处理成功」为什么不等于「中间件不会再投」。</li>
+<li>能独立完成实践：在业务提交后 ack 前故障，验证重投不重复增加余额。</li>
+<li>能区分 exactly-once 处理范围与外部副作用，并能验证毒消息隔离。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>公众号内容后台（教学假设）按篇结算时，入账往往已经不和发布接口走同一笔同步事务，而是写成一条消息。如果这条消息在钱包已经加了 30、ack 还没发出时消费者宕了，中间件会再投一次。余额是支付语义：加两次就是多付。库存扣减、任务调度也是同一类问题——节点把「为什么要懂」写成：避免支付、库存或任务调度重复生效。</p>
+<p>后端要能讲清失败语义。消息中间件给出的至少一次、至多一次、恰好一次，都有明确的范围。Kafka 的文档写过：许多系统声称 exactly-once，但细读会发现这些声明在生产者或消费者会失败、有多个消费进程、或磁盘上的数据可能丢失时并不成立；Kafka 默认提供的是至少一次，把消费位置和输出一起提交才能在 Kafka 话题之间取得 exactly-once，写到外部系统则需要那些系统配合。把中间件的承诺直接扩大到一次 HTTP 推送、一次短信或一次银行调用，重投时副作用会再执行一遍。去重键也不是记下来就永远有效，保留窗口过短，回放仍会再入一笔账。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1-ack">1. ack 与重投</h3>
+<p>官方文档把投递语义分成三条：at-most-once（消息可能丢失，但不会被重投）、at-least-once（消息不会丢，但可能被重投）、exactly-once（每条消息只被处理一次）。它还把问题拆成发布时的持久性，以及消费时如何更新位置。</p>
+<p>消费侧有两种典型排法。一种是先保存位置、再处理：消费者在保存位置之后、写出处理结果之前崩溃，接任者会从已经保存的位置继续，前面几条可能没被处理——这是 at-most-once。另一种是先处理、再保存位置：消费者在处理之后、保存位置之前崩溃，接任者会再收到已经处理过的那几条——这是 at-least-once。Kafka 把消费位置做成每个分区一个整数（下一条要读的 offset），ack 因此很便宜；这也意味着 ack 只是「我把位置往前挪了」，不是「对端业务已经不可撤销地完成，并且不会再见到这条消息」。</p>
+<p>本课主实践走第二条路。教学引擎里，<code>poll</code> 只推进易失位置，<code>ack</code> 才把 <code>committed</code> 写成 <code>offset+1</code> 并 flush；<code>crash_consumer()</code> 丢掉易失位置，<code>recover_consumer()</code> 从 <code>committed</code> 重新加载。一条 <code>settlement:s1</code>、金额 <code>+30</code> 的入账被写入分区 0 的 offset <code>0</code> 之后：</p>
+<div class="codehilite"><pre><span></span><code>t=0.00  余额 100，日志为空
+t=0.01  生产者写入一条消息，log_length=1
+t=0.02  消费者处理成功，余额 130，尚未 ack
+t=0.02  业务提交后、ack 前消费者崩溃（committed 仍是 0）
+t=0.03  恢复后同一条消息被重投并再次处理
+t=0.04  第二次处理后才 ack，committed_offset=1
+</code></pre></div>
+
+<p>不启用去重时，第二次处理会再加 30，<code>balance_after_redelivery=160</code>，<code>double_credited=true</code>，<code>rpc_count=4</code>，<code>flush_count=4</code>。这就是至少一次投递允许重复：日志里仍然只有一条记录（<code>log_length=1</code>），重复发生在消费端。对照路径把顺序改成先 ack 再处理，然后立刻崩溃：<code>committed_offset=1</code>，恢复后 <code>repoll=None</code>，余额停在 <code>100</code>，<code>message_lost=true</code>，<code>credit_missing=true</code>，结束于 <code>0.04</code>。先保存位置，换来的是消息丢失，不是「更安全」。</p>
+<p>文档还写过生产侧的对称问题：生产者在网络错误时无法区分消息是在提交之前还是之后失败的；0.11.0.0 之前只能重发，因而至少一次；之后可以用幂等生产者，靠 broker 分配的生产者 ID 和序号避免日志里出现重复条目。教学引擎用 <code>(producer_id, seq)</code> 做了一个对照：同一次请求被重发时，关闭幂等会得到 <code>naive_log_length=2</code>，打开后是 <code>idempotent_log_length=1</code>，两条路径都在 <code>0.02</code> 结束。这只说明「重复发送不必写成两条日志」，不能把它读成「下游业务自动 exactly-once」。它也不是 Kafka 的 PID / epoch 协议。</p>
+<h3 id="2-outbox">2. outbox 与去重表</h3>
+<p>至少一次投递本身没有错，可靠消费靠的是：业务状态和去重标记必须纳入同一可恢复边界。主实践的另一条路径把 <code>idempotency_key=settlement:s1</code> 和余额一起 flush。时间线与上面相同，到 <code>0.02</code> 余额也是 <code>130</code>，去重表里已经有 <code>settlement:s1</code>；崩溃之后重投再次进入 <code>apply</code>，这次 <code>second_duplicate=true</code>、<code>second_applied=false</code>，<code>balance_after_redelivery=130</code>，随后在 <code>0.04</code> ack。<code>rpc_count</code> 仍是 <code>4</code>，<code>flush_count</code> 变成 <code>3</code>——重复那一次没有再写钱包。<code>exactly_once_wallet=true</code>。实践题要验证的，就是这个结果：重投发生了，余额没有从 130 变成 160。</p>
+<p>这和文档给外部系统的建议是同一句话的两种写法。文档说：写到外部系统时，难点是让消费位置和实际输出保持一致；经典做法是对位置和输出做两阶段提交，更简单、也更普遍的做法是让消费者把 offset 存在输出所在的同一个地方。去重表是「输出这边」的实现：余额和键一起落盘，重投只是再看见一次已经生效的键。它没有把 Kafka 的 offset 存进钱包，但满足同一条约束——可恢复状态里必须能回答「这笔结算是不是已经入过账」。</p>
+<p>outbox 是这句话的反向操作，用在生产者。业务先本地加 30，再通知下游。如果「提交成功之后再发送」，教学对照在 flush 之后、<code>produce</code> 之前崩溃：余额已经是 <code>130</code>，<code>log_length=0</code>，<code>message_lost=true</code>，<code>t_end_lost=0.00</code>（这次崩溃发生在下一次 RPC 之前，虚拟时钟没有往前走）。改成 outbox 之后，余额和待发消息 <code>ob-1</code> 在同一次 flush 里提交，<code>pending_after_commit=1</code>；即便此时进程停住，恢复后仍能 <code>drain_outbox()</code>。实际排出在 <code>0.01</code>，<code>log_length=1</code>，<code>outbox_survives_crash_before_send=true</code>。本地提交和消息发出不再要求恰好落在同一个瞬间，但要求它们先进入同一个可恢复位置。</p>
+<p>去重键不能无限期假装还在。权衡实验把保留窗口设为 <code>0.05</code>：第一次处理在 <code>0.02</code> 把余额写到 <code>130</code>，ack 在 <code>0.03</code>；等到 <code>0.09</code> 再 rewind 回放，第二次 <code>apply</code> 发生在 <code>0.10</code>，键已经过期，余额变成 <code>160</code>，<code>t_replay=0.11</code>。把窗口留到 <code>1.0</code> 秒，同样等 <code>0.06</code> 再回放，<code>duplicate_on_replay=true</code>，余额仍是 <code>130</code>。幂等键需要保留窗口，窗口的长度是业务能容忍的回放范围，不是「记过一次就永远安全」。</p>
+<h3 id="3">3. 顺序与分区</h3>
+<p>文档把 topic 写成一组全序分区：在同一个消费组里，每个分区同一时刻只被一个消费者消费，位置就是一个整数。生产者可以按 key 做语义分区——例如用 user id 作 key，同一用户的数据会进入同一分区，消费者才能做局部性假设。本课的教学哈希是 <code>sum(key.encode()) % n_partitions</code>，不是 murmur2；在 <code>n_partitions=2</code> 时，<code>wallet:alice</code> 落到分区 <code>1</code>，<code>wallet:bob</code> 落到分区 <code>0</code>。</p>
+<p>实验先向 Alice 写入 <code>+30</code>、再写入 <code>+10</code>，然后向 Bob 写入 <code>+5</code>。消费时故意在 Alice 的第二条之前插入 Bob 的那一条，得到的处理顺序是：</p>
+<div class="codehilite"><pre><span></span><code>A offset=0 amount=30  余额 130
+B offset=0 amount=5   余额 135
+A offset=1 amount=10  余额 145
+</code></pre></div>
+
+<p><code>alice_amounts_in_order=true</code>：同一分区里 Alice 的 30 一定在 10 之前。<code>bob_applied_between_alice=true</code>：跨分区没有全局顺序，Bob 的 5 可以插在 Alice 两条消息中间。最终余额 <code>145</code>，结束于 <code>0.09</code>。需要「同一钱包的入账按产生顺序生效」时，必须让这些消息共享分区键；需要「全站严格总序」时，分区做不到，也不要从至少一次投递里推导出总序。</p>
+<p>分区还有一个操作后果：队头阻塞。三条消息依次是 <code>good1</code>（+30）、一条 <code>op=poison</code> 的坏消息、<code>good2</code>（+10）。先成功处理 <code>good1</code>，余额到 <code>130</code>，ack 之后 <code>committed=1</code>。若不隔离毒消息，消费者会在 offset <code>1</code> 上反复 <code>poll</code> / 拒绝 / 回退位置：实验连续尝试了 5 次（<code>attempt</code> 从 1 到 5），<code>dlq_count=0</code>，后面那条 +10 始终进不来，<code>final_balance=130</code>，<code>head_of_line_blocked=true</code>，结束于 <code>0.10</code>，<code>rpc_count=10</code>。把 <code>max_retries=3</code> 用尽后移入教学死信日志并 ack，毒消息在 <code>0.08</code> 被隔离（<code>attempts=3</code>，<code>offset=1</code>），随后 <code>good2</code> 被处理，余额到 <code>140</code>，<code>dlq_count=1</code>，<code>later_message_applied=true</code>，结束于 <code>0.11</code>，<code>rpc_count=11</code>。隔离不是「这条坏消息变得可以处理」，而是「不要让它永远占住分区的位置」。</p>
+<h2 id="_10">常见误区</h2>
+<p>节点给出的误区是：<strong>把消息中间件承诺扩大到所有外部系统</strong>。<code>side_effect_pitfall</code> 仍然使用去重表：重投后钱包余额停在 <code>130</code>，<code>wallet_exactly_once=true</code>，<code>second_was_duplicate=true</code>。但每一次 <code>apply</code> 都发起一次未纳入同一可恢复边界的外部推送，<code>push_attempts=2</code>，<code>external_side_effect_duplicated=true</code>，结束于 <code>0.04</code>。钱包侧的 exactly-once 在这里是成立的；那次推送不成立。文档的细读条件与这句话直接对应：exactly-once delivery for other destination systems generally requires cooperation with such systems；默认提供的是至少一次。中间件没有、也不能替一次 HTTP 调用、一次短信或一次银行扣款做决定。</p>
+<p>第二个误区是把「日志里只有一条」当成「业务只生效一次」。幂等生产者可以把一次重发收成 <code>idempotent_log_length=1</code>，主实践的至少一次路径里 <code>log_length</code> 也始终是 <code>1</code>。没有去重时，消费端还是把余额加成了 <code>160</code>。重复发生在哪一层，要单独验证。</p>
+<p>第三个误区是把 ack 理解成业务提交本身。ack 提交的是消费位置。主实践在 <code>0.02</code> 余额已经是 <code>130</code>，但 <code>committed</code> 仍是 <code>0</code>；先 ack 再处理的对照里，<code>committed_offset=1</code>，余额却还是 <code>100</code>。位置和输出若不在同一边界里，这两个数字可以各说各的。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点给出的权衡是：<strong>事务消息增加协调成本，幂等键需要保留窗口</strong>。连续完成 10 笔本地提交并发布消息时，两条路径的教学数字是：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th style="text-align: right;">笔数</th>
+<th style="text-align: right;"><code>elapsed_s</code></th>
+<th style="text-align: right;"><code>rpc_count</code></th>
+<th style="text-align: right;"><code>flush_count</code></th>
+<th style="text-align: right;">发布条数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提交后再发送</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td>outbox（本地提交与待发消息同一次 flush，再排出）</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">10</td>
+</tr>
+</tbody>
+</table>
+<p>两条路径都在虚拟时钟 <code>0.10</code> 结束，RPC 次数都是 <code>10</code>，因为本课只有 <code>_rpc()</code> 推进时钟，flush 不推进。协调成本首先表现在持久化次数：outbox 每笔要写业务、追加日志、再标记已发送，<code>flush_count=30</code>；提交后立刻发送只需业务 flush 加日志 flush，<code>flush_count=20</code>，<code>transactional_path_more_flushes=true</code>。少掉的那 10 次 flush 不是免费的：同一组对照里，提交后、发送前崩溃的那一笔，余额已经增加，日志仍是空的，<code>crash_demo_lost=true</code>。outbox 用多出来的协调换来「崩溃后还能补发」，<code>outbox_publishes_all=true</code>。这些时间是虚拟时钟上、每次 RPC 单向 <code>0.01</code> 秒的结果，不是生产延迟，只说明方向：把消息纳入可恢复边界会增加协调，省掉这笔协调就要接受丢失窗口。</p>
+<p>第二笔权衡是保留窗口。<code>dedup_retain_s=0.05</code> 时，第一次入账在 <code>0.02</code>，ack 在 <code>0.03</code>，等到 <code>0.09</code> rewind，<code>0.10</code> 再次处理时键已过期，余额从 <code>130</code> 变成 <code>160</code>，<code>short_window_replays_after_expire=true</code>。窗口留到 <code>1.0</code> 秒，同样间隔下回放会被识别为重复，余额仍是 <code>130</code>，<code>long_window_holds=true</code>。窗口太短，修复缺陷后的合法回放会再入一笔账；窗口太长，去重表会一直占着空间。窗口长度必须按「可能 rewind 多远」来选，不能按一次演示里没有回放来假设。</p>
+<h2 id="ack">动手实践：在业务提交后 ack 前故障，验证重投不重复增加余额</h2>
+<p>配套代码在 <code>/workspace/atlas/lessons/practice122/</code>，包括 <code>engine.py</code>、<code>app.py</code>、<code>test_messaging.py</code>，用 Python 3 标准库实现，不依赖 Redis、消息中间件或网络服务。运行验收：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice122
+bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>标准输出应是一行 <code>ALL_CHECKS_PASSED</code>，并写出 <code>results.json</code>。下面的数字都来自这次运行，时间单位是教学虚拟时钟上的秒，不是生产 RTT。<code>rpc_delay_s=0.01</code>。钱包初始余额 <code>100</code>，默认入账 <code>30</code>，键为 <code>article:01:title</code>，标题为 <code>Weekly digest</code>。</p>
+<p><strong>1. 主实践：业务提交后、ack 前崩溃。</strong> 时间线已在核心知识点第 1、2 节给出。不启用去重：<code>0.02</code> 余额到 <code>130</code>，崩溃后重投在 <code>0.03</code> 再次入账，<code>0.04</code> 才 ack，最终 <code>160</code>，<code>double_credited=true</code>。启用去重并把键与余额一起 flush：时间线相同，重投时 <code>second_duplicate=true</code>，最终 <code>130</code>，<code>exactly_once_wallet=true</code>，<code>committed_offset=1</code>，<code>log_length=1</code>。要验证的不是「消息没有重投」，而是「重投了，余额没有加第二次」。</p>
+<p><strong>2. 先 ack 再处理会丢消息。</strong> <code>ack_then_crash</code> 在处理之前把位置提交到 <code>1</code>，随后崩溃。恢复后 <code>repoll=None</code>，余额仍是 <code>100</code>，<code>message_lost=true</code>，<code>credit_missing=true</code>，结束于 <code>0.04</code>。这是文档中的 at-most-once 排法，不能拿来当作「更可靠的 ack」。</p>
+<p><strong>3. outbox 对照「提交后再发送」。</strong> 后者在本地余额到 <code>130</code> 之后、<code>produce</code> 之前崩溃，<code>log_length=0</code>，消息丢失。outbox 把 <code>ob-1</code> 和余额一起提交，<code>pending_after_commit=1</code>，<code>0.01</code> 排出后 <code>log_length=1</code>。<code>outbox_survives_crash_before_send=true</code>。</p>
+<p><strong>4. 分区内有序、跨分区无总序；毒消息必须隔离。</strong> <code>wallet:alice</code> 在分区 <code>1</code> 上按 <code>30</code> 再 <code>10</code> 的顺序被处理；<code>wallet:bob</code> 的 <code>5</code> 插在这两条之间，最终余额 <code>145</code>，结束于 <code>0.09</code>。毒消息不隔离时，offset <code>1</code> 被连续拒绝 5 次，后面的 +10 无法处理，余额停在 <code>130</code>，<code>head_of_line_blocked=true</code>。重试 3 次后写入教学死信日志并 ack，<code>good2</code> 生效，余额 <code>140</code>，<code>dlq_count=1</code>，<code>later_message_applied=true</code>。</p>
+<p><strong>5. 外部副作用与权衡数字。</strong> 去重保护了钱包（<code>130</code>），未纳入同一边界的推送被执行了 2 次。10 笔发布：outbox <code>flush_count=30</code>，提交后发送 <code>flush_count=20</code>，两边 <code>elapsed_s</code> 都是 <code>0.10</code>、<code>rpc_count</code> 都是 <code>10</code>；短窗口回放后余额 <code>160</code>，长窗口仍是 <code>130</code>。幂等生产对照：关闭时日志 2 条，打开时 1 条。</p>
+<p><strong>6. 核对验收字段。</strong> <code>practice_redelivery_does_not_double_credit=true</code>，<code>acceptance_exactly_once_scope_vs_external=true</code>，<code>acceptance_poison_isolated=true</code>，<code>pitfall_middleware_promise_is_not_universal=true</code>，<code>tradeoff_txn_cost_and_retain_window=true</code>。这些字段都在 <code>results.json</code> 顶层，测试脚本以 <code>ALL_CHECKS_PASSED</code> 结束。</p>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 Apache Kafka — Message Delivery Semantics 中与 Message delivery 相关的定义、示例或实现，记录与教学实验的差异。2026-11-14 的实际打开情况如下。</p>
+<ul>
+<li>节点给出的 <a href="https://kafka.apache.org/documentation/#semantics">https://kafka.apache.org/documentation/#semantics</a> 返回 200，<strong>没有 HTTP 3xx 跳转</strong>，20078 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>Last-Modified</code> 为 <code>Sun, 08 Nov 2026 16:53:55 GMT</code>，<code>&lt;title&gt;</code> 为 Documentation Redirect | Apache Kafka。这是锚点映射用的 JavaScript 跳转页，正文是 Redirecting…，不能当作 Semantics 一节来引用。页内脚本把文档版本记为 <code>44</code>，映射 <code>"#semantics" → "design/design/#message-delivery-semantics"</code>。</li>
+<li>同日打开实际正文 <a href="https://kafka.apache.org/44/design/design/#message-delivery-semantics">https://kafka.apache.org/44/design/design/#message-delivery-semantics</a>，返回 200，无跳转，148030 字节，<code>&lt;title&gt;</code> 为 Design | Apache Kafka，<code>og:url</code> 为 <code>https://kafka.apache.org/44/design/design/</code>，面包屑为 AK 4.4.X，<code>article:modified_time</code> 为 <code>2026-10-26T16:02:25+00:00</code>（北京时间 2026-10-27 00:02:25）。真正读到并对照实验的是 <em>Message Delivery Semantics</em>、<em>Using Transactions</em>、<em>Consumer Position</em>，以及 <em>The Producer</em> 里按 key 分区的段落。</li>
+</ul>
+<p>论文式的规范在这里就是这份官方设计文档。教学实验按以下方式使用它，并记下差异。</p>
+<ul>
+<li><strong>三条语义</strong>：文档给出 at-most-once、at-least-once、exactly-once，并区分发布持久性与消费位置更新。教学实验用「先 ack 再处理然后崩溃」对照至多一次（余额 <code>100</code>，消息丢失），用「先处理再 ack、ack 前崩溃」对照至少一次（无去重时余额 <code>160</code>）。</li>
+<li><strong>消费位置</strong>：文档对比「broker 为每条消息保存已投递 / 已确认状态」与 Kafka「每个分区一个 offset，ack 很便宜，也允许 rewind」。教学引擎的 <code>committed[p]</code> 是下一条要读的整数；<code>rewind</code> 是为了演示保留窗口，不是生产里的日常操作。教学引擎没有 broker 侧的单条 ack 协议，也没有 ISR。</li>
+<li><strong>生产侧去重与事务</strong>：文档写明 0.11.0.0 起可用幂等生产者（PID + 序号）避免日志重复，也可用事务把多分区写入做成原子，并把消费 offset 当作事务的一部分写回。教学引擎只有 <code>(producer_id, seq)</code> 的对照，没有 <code>transactional.id</code>，没有 <code>read_committed</code>，没有内部 offset 话题，也没有跨分区原子写。</li>
+<li><strong>exactly-once 的范围</strong>：文档写过，许多 exactly-once 声明经不起失败场景的细读；Kafka 在 Streams、以及事务生产者加 <code>read_committed</code> 消费者、并且读写都落在 Kafka 话题上时，可以提供 exactly-once；写到其他目标系统则需要那些系统配合，否则默认是至少一次。教学实验把「配合」落实为钱包与去重表的同一次 flush，并用一次未协调的外部推送说明范围：钱包 <code>130</code>，推送 2 次。本课不实现 Kafka 事务，也不声称教学引擎提供了 Kafka 意义上的 exactly-once。</li>
+<li><strong>把位置存在输出旁边</strong>：文档建议让消费者把 offset 存在输出所在的同一处，举例是 Kafka Connect 往 HDFS 写数据时同时写下 offset。教学去重表没有存储 Kafka offset，只存储业务幂等键；outbox 则是生产者侧的对称物，文档这一节并未展开 outbox 这个名称。</li>
+<li><strong>分区与顺序</strong>：文档说按 key 哈希到分区，同一 key（例如 user id）进入同一分区，从而允许局部性假设；topic 是一组全序分区，不是全局全序。教学实验用 <code>sum(key.encode()) % n</code> 得到 Alice 分区 <code>1</code>、Bob 分区 <code>0</code>，并验证分区内有序、跨分区可交错。哈希函数与 Kafka murmur2 不同，不能把分区编号当作 Kafka 里的真实编号。</li>
+<li><strong>毒消息</strong>：官方这一节没有规定死信队列的实现。教学里的 DLQ、<code>max_retries=3</code> 和队头阻塞是本课的验收对照，不应读成 Kafka 文档的行为。</li>
+<li><strong>时间与网络</strong>：单进程仿真，<code>rpc_delay_s=0.01</code> 是教学延迟，不是生产 RTT。文档提到等待提交「大约 10 ms」只作为文档原文保留，不进入 <code>results.json</code>。<code>crash_consumer()</code> 是全知崩溃：易失位置被清空，已 flush 的余额、去重表、outbox 和日志保留。flush 不推进虚拟时钟，所以 10 笔 outbox 与 10 笔「提交后发送」的 <code>elapsed_s</code> 同为 <code>0.10</code>，协调成本要看 <code>flush_count</code>（30 对 20），不要把这两个耗时读成生产里的协调开销对比。</li>
+</ul>
+<h2 id="_13">自测题</h2>
+<p><strong>题 1.</strong> 为什么至少一次投递允许重复，又怎样验证「业务提交后、ack 前故障，重投不会重复增加余额」？请用无去重和有去重两条路径的时间线说明。</p>
+<details>
+<summary>答案</summary>
+
+至少一次的排法是：先处理，再保存消费位置。处理已经生效、位置还没保存时崩溃，恢复后会从旧位置再次 `poll` 到同一条消息。这不是实现缺陷，而是这种 ack 顺序在故障下的语义。
+
+无去重路径把这一点暴露成重复入账。`0.01` 日志里写下一条 `+30`，`0.02` 余额从 `100` 变成 `130`，此时 `committed` 仍是 `0`。崩溃之后重投在 `0.03` 再次处理，余额变成 `160`，`0.04` 才 ack。`log_length` 始终是 `1`，重复发生在消费端，`double_credited=true`。
+
+有去重路径并不阻止重投，而是把 `settlement:s1` 和余额放进同一次 flush。时间线相同，到 `0.02` 余额同样是 `130`，但去重表已经有这个键；`0.03` 的第二次 `apply` 得到 `second_duplicate=true`、`second_applied=false`，余额仍是 `130`，随后在 `0.04` ack，`exactly_once_wallet=true`。要验证的是「重投发生了，余额没有从 130 变成 160」，不是「消息没有再来」。如果先 ack 再处理，对照实验会走向另一面：位置已经是 `1`，恢复后 `repoll=None`，余额停在 `100`，消息丢失。
+
+</details>
+
+<p><strong>题 2.</strong> 怎样区分 exactly-once 处理范围与外部副作用？若把消息中间件的承诺扩大到所有外部系统，实验里会看到什么？</p>
+<details>
+<summary>答案</summary>
+
+范围要问两件事：哪一份状态和去重标记（或消费位置）写在同一可恢复边界里，以及边界之外还做了什么。文档的写法是：在 Kafka 话题之间，可以把 offset 和输出放进同一笔事务；写到其他系统则需要那些系统配合，否则默认仍是至少一次。
+
+`side_effect_pitfall` 把配合只做在钱包上：重投后余额停在 `130`，`wallet_exactly_once=true`，第二次 `apply` 确实是重复。但同一次处理还调用了未纳入该边界的外部推送，`push_attempts=2`，`external_side_effect_duplicated=true`，结束于 `0.04`。钱包没有多加，推送加了一次。若把「中间件承诺了 exactly-once」理解成「所有下游都只会执行一次」，就会在已经去重成功的消费路径上漏掉第二次副作用。要让推送也恰好一次，必须把它和余额、去重标记放进同一个可恢复边界，或让对端同样按幂等键去重；中间件不会自动完成这件事。
+
+</details>
+
+<p><strong>题 3.</strong> 毒消息不隔离时为什么会挡住后续消息？事务消息的协调成本和幂等键的保留窗口，分别在哪些数字上体现？</p>
+<details>
+<summary>答案</summary>
+
+分区内必须按 offset 往前消费。毒消息占据 offset `1` 时，如果不 ack、也不把它移走，消费者就只能反复读这一条。不隔离的对照在该 offset 上连续拒绝 5 次，`committed` 停在 `1`，后面的 `good2`（+10）始终进不来，余额停在已经处理过的 `130`，`head_of_line_blocked=true`，`dlq_count=0`，结束于 `0.10`。隔离之后，重试 3 次就把它写入教学死信日志并 ack，`isolated_t=0.08`，随后 `good2` 生效，余额 `140`，`later_message_applied=true`。隔离换来的是分区能够继续，不是把坏消息变成好消息。
+
+协调成本在本课的 10 笔对照里首先是 flush 次数：outbox 路径 `flush_count=30`，提交后发送是 `20`，`transactional_path_more_flushes=true`。两边的 `elapsed_s` 都是 `0.10`、`rpc_count` 都是 `10`，因为教学时钟只在 RPC 时前进；不能把这两个耗时读成生产里的快慢对比。少 flush 的那条路径在崩溃对照里会丢消息（余额已改、`log_length=0`）。保留窗口则体现在回放结果：`dedup_retain_s=0.05` 时，`0.02` 写入的键在 `0.10` 的回放中已经过期，余额变成 `160`；窗口 `1.0` 秒时同样间隔下仍识别为重复，余额保持 `130`。窗口太短，合法回放会再入账；窗口太长，去重记录要留得更久。
+
+</details>
+
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://kafka.apache.org/documentation/#semantics">Apache Kafka — Message Delivery Semantics</a>（Apache Kafka 官方文档，英文，进阶，免费）：用于核对 ack 与重投、消费位置、以及 exactly-once 对外部系统需要配合这一条，并将结论落到本节点的重投与去重实验。2026-11-14 该地址返回 200，无 HTTP 跳转，但页面本身是 JavaScript 跳转页，20078 字节，<code>&lt;title&gt;</code> 为 Documentation Redirect | Apache Kafka。同日实际阅读的正文是 <a href="https://kafka.apache.org/44/design/design/#message-delivery-semantics">Design（AK 4.4）</a>，200，无跳转，148030 字节，<code>&lt;title&gt;</code> 为 Design | Apache Kafka，<code>dateModified</code> 为 <code>2026-10-26T16:02:25+00:00</code>。文档讨论的是 Kafka 日志、ISR、幂等生产者和事务；outbox、去重表保留窗口和毒消息隔离是本课的对照，不是该页规定的实现。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>至少一次投递允许重复。先处理再 ack，业务提交后、ack 前崩溃，同一条 <code>+30</code> 会被再处理一次。不去重时余额从 <code>100</code> 经 <code>130</code> 变成 <code>160</code>；把 <code>settlement:s1</code> 与余额一起 flush 之后，重投被识别为重复，余额停在 <code>130</code>，<code>exactly_once_wallet=true</code>。</li>
+<li>先 ack 再处理是至多一次：位置已经提交到 <code>1</code>，崩溃后消息不再出现，余额停在 <code>100</code>，<code>message_lost=true</code>。ack 提交的是消费位置，不是业务本身。</li>
+<li>可靠消费必须把业务状态和去重标记纳入同一可恢复边界。outbox 把本地提交和待发消息一起 flush，崩溃后仍能在 <code>0.01</code> 排出；提交后再发送、发送前崩溃，余额已是 <code>130</code>，日志却是空的。</li>
+<li>exactly-once 有范围。去重可以保护钱包（<code>130</code>），未纳入同一边界的外部推送仍会被执行 2 次。不要把中间件的承诺扩大到所有外部系统。</li>
+<li>同一 key 进入同一分区，分区内有序；跨分区没有全局顺序。Alice 的 <code>30</code> 在 <code>10</code> 之前，Bob 的 <code>5</code> 可以插在中间。毒消息不隔离会挡住后续的 <code>good2</code>；重试 3 次后写入教学死信日志并 ack，余额才能从 <code>130</code> 走到 <code>140</code>。</li>
+<li>事务消息更贵，幂等键需要保留窗口。10 笔发布，outbox 的 <code>flush_count</code> 是 <code>30</code>，提交后发送是 <code>20</code>，两边的教学耗时都是 <code>0.10</code> 秒。窗口 <code>0.05</code> 秒后回放会把余额加成 <code>160</code>，窗口 <code>1.0</code> 秒则仍识别为重复。这些是教学虚拟时钟上的数字，不是生产 RTT。</li>
+<li><code>MessageDeliveryEngine</code> 不是 Kafka，也不是真实 broker。它没有 ISR、没有 <code>transactional.id</code>、没有 murmur2，分区函数和幂等生产都是教学对照；毒消息隔离和 outbox 也不是文档这一节规定的实现。</li>
+</ul>
+<p>如果有一句答不上来，先回到 <code>results.json</code> 里对应的字段，再回到官方文档里「先处理再保存位置 / 先保存位置再处理」以及「写到外部系统需要配合」这两段，不要把「日志里只有一条」当成「业务只生效一次」，也不要把「中间件声称 exactly-once」理解成「所有副作用都恰好一次」。</p><div class="pn"><span><a href="121.html">← 分布式事务与补偿</a></span><span>下一课 待更新</span></div></main></div></body></html>
