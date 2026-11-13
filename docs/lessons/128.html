@@ -1,0 +1,285 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>128. 吞吐、延迟与排队 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（128/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details><summary>领域 H（15/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li><a class="" href="../lessons/122.html">122. 消息投递与幂等消费</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li><a class="" href="../lessons/123.html">123. 限流与过载保护</a></li><li><a class="" href="../lessons/124.html">124. 熔断、降级与隔离</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li><a class="" href="../lessons/125.html">125. 多机房与灾难恢复</a></li><li><a class="" href="../lessons/126.html">126. 分布式历史与故障测试</a></li></ul><div>阶段 6</div><ul><li><a class="" href="../lessons/127.html">127. 分布式协议演进</a></li></ul></details><details open><summary>领域 I（1/14）</summary><div>阶段 2</div><ul><li><a class="cur" href="../lessons/128.html">128. 吞吐、延迟与排队</a></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 128 课 · 领域 I · 阶段 2</p><p class="dl"><a href="../files/128-i-metrics.md" download>⬇ 本课 Markdown</a><a href="../files/practice128.tar.gz" download>⬇ 练习包 practice128.tar.gz</a></p><h1 id="128208">第 128/208 课：吞吐、延迟与排队</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>i-metrics</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Throughput and latency</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>I / 第 2 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>测量与负载</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>基础</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/59.html"><code>d-threadpool</code></a></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Throughput and latency</code>、<code>Performance</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE — Monitoring Distributed Systems</a>（Google SRE 书籍第 6 章，英文，基础，免费；2026-11-14 该地址返回 HTTP 200，无跳转，最终 URL 仍是 <code>https://sre.google/sre-book/monitoring-distributed-systems/</code>，73467 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>Last-Modified</code> 为 <code>Thu, 08 Oct 2026 04:48:00 GMT</code>（北京时间 2026-10-08 12:48:00）。本次抓取响应头 <code>Date</code> 为 <code>Fri, 13 Nov 2026 17:28:21 GMT</code>（北京时间 2026-11-14 01:28:21）。<code>&lt;title&gt;</code> 为 Google SRE: SRE Responsibilities and Management Frameworks，与章名不完全一致：页内 <code>h2.chapter-title</code> 为 Chapter 6 - Monitoring Distributed Systems，正文 <code>h1</code> 为 Monitoring Distributed Systems。作者为 Rob Ewaschuk，由 Betsy Beyer 编辑。页脚版权为 Copyright © 2017 Google, Inc. Published by O'Reilly Media, Inc.，许可为 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a>。canonical 为 <code>https://sre.google/sre-book/monitoring-distributed-systems/</code>。正文与本课直接相关的是 <em>The Four Golden Signals</em>（延迟、流量、错误、饱和；流量对 Web 服务通常是 HTTP requests per second，对键值存储可能是 transactions and retrievals per second；饱和一节指出许多系统在达到 100% 利用率之前就会降质，延迟升高往往是饱和的领先指标，并建议在短窗口里看 99th percentile）以及 <em>Worrying About Your Tail</em>（不要只用均值看延迟：平均 100 ms、每秒 1,000 个请求时，1% 的请求也可能要 5 秒；一个后端的 99th percentile 很容易变成前端的中位数）。该章没有定义 QPS、TPS 这两个缩写，也没有陈述 Little 定律或其适用前提）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>吞吐描述单位时间完成量，延迟描述单次等待与处理时间；稳定系统可用 Little 定律联系并发、吞吐与响应时间。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课里的「内容后台」「文章键 <code>article:01:title</code>」「标题 <code>Weekly digest</code>」「Echo 服务」「工作线程数为 2」都是<strong>教学假设</strong>，用来让吞吐、端到端延迟、排队等待和服务时间变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>EchoMetricsEngine</code>，<strong>不是 Redis，不是真实的指标产品，不是网络服务，不是 Prometheus，也不是 Google 生产环境里的监控系统</strong>。它是单进程离散事件仿真，没有 TCP，没有真实套接字，也没有采集后端。<code>Clock</code> 是虚拟时钟。<code>service_s=0.10</code>、<code>slow_s=5.00</code>、预热 <code>1.00</code> 和测量窗 <code>10.00</code> 都是教学延迟，不是生产 RTT，也不是把章内「平均 100 ms、1% 要 5 秒」那组例子原样当成这次实验的测量结果。QPS、TPS 和 Little 定律这些名字来自本课节点与教学模型；第 6 章用 requests per second、transactions and retrievals per second 谈流量，用均值对比尾部谈延迟，但并不定义这两个缩写，也不陈述 Little 定律。本课所有时间都来自 <code>/workspace/atlas/lessons/practice128/results.json</code>，是<strong>教学虚拟时钟上的数字</strong>。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">上一课留下的缺口</h3>
+<p>上一课的 <code>EvolutionEngine</code> 解决的是滚动升级期间的兼容窗口：新旧二进制和日志格式同时存在时，旧节点不能误读新记录，半数升级后还可以回滚，集群版本一旦抬升就只能靠升级前的快照恢复。那一课的边界停在<strong>协议能不能安全演进</strong>，没有回答另一件更基础的测量问题：系统在单位时间里到底完成了多少工作，一次请求要等多久，排队占用了端到端时间里的哪一段。</p>
+<p>一次升级演练可以说明「能不能退回去」，但不能代替「逐步增加并发，把吞吐和 p50 / p99 记下来」。节点把摘要写成：吞吐描述单位时间完成量，延迟描述单次等待与处理时间；稳定系统可用 Little 定律联系并发、吞吐与响应时间。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/59.html">第 59 课</a> <code>d-threadpool</code> 留下的结论是：工作要交给有限的工作线程，任务会在队列里等待；线程池的容量一旦占满，后来的请求并不会让每个工人处理得更快，只会把等待拉长。本课把这条结论变成可记录的数字：固定 2 个教学工人，每次 Echo 的服务时间是 <code>0.10</code>，然后逐步增加闭环并发，观察吞吐何时封顶、端到端时间如何增长。</p>
+<p>第 6 章把面向用户的系统应优先测量的四件事写成 four golden signals：延迟、流量、错误和饱和。流量要按系统自己的口径来量，Web 服务通常是每秒 HTTP 请求数，键值存储则可能是每秒事务数与读取数；延迟要能看出尾部，而不是只看平均值；饱和则提醒我们，许多系统在利用率到 100% 之前就会变慢，延迟升高往往是领先指标。本课的 QPS / TPS、p50 / p99 和利用率，就是把这几句话落到一个教学 Echo 上，而不是复现 Google 的监控栈。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台有一个教学 Echo 服务：请求打来，就把文章 <code>article:01:title</code> 的标题 <code>Weekly digest</code> 原样返回。服务有 2 个工作线程，每个请求的服务时间是 <code>service_s=0.10</code>，多出来的请求在 FIFO 队列里等待。压测是闭环的：固定 <code>N</code> 个客户端，一个请求返回后立刻再发下一个。先预热 <code>1.00</code>，再在 <code>10.00</code> 的窗口里记账，窗口从 <code>1.00</code> 到 <code>11.00</code>。另外两组对照分别是：一次「发布周报」事务连续做 2 次 Echo，用来区分 QPS 与 TPS；以及 100 次请求里每 100 次有 1 次服务时间为 <code>5.00</code> 的慢请求，用来对比均值和 p99。所有时间都是教学虚拟时钟上的值，不是线上探测间隔，也不是生产 RTT。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>QPS 与 TPS 定义</strong>：QPS 计的是查询（一次 Echo），TPS 计的是业务事务。当一次事务就是一次查询时，二者相等；当一次发布由两次 Echo 组成时，同一查询吞吐下 TPS 是 QPS 的一半。</li>
+<li><strong>Little 定律适用前提</strong>：在稳定窗口里，平均在系统中的请求数 <code>L</code> 等于吞吐 <code>λ</code> 乘以平均端到端时间 <code>W</code>。它要求系统稳定、单位一致、平均数取自同一段时间；本课只在预热之后的闭环窗口里验证它。</li>
+<li><strong>利用率与排队</strong>：工人占满之后再加并发，吞吐不再增加，多出来的时间都花在排队上。服务时间仍然是 <code>0.10</code>，端到端时间会变长。高利用率少了闲置，也少了吸收突发的余量。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释 QPS 与 TPS 定义及适用边界：二者都是单位时间完成量，但计数对象不同；不能只用一个 QPS 数字判断系统「快还是慢」。</li>
+<li>独立完成实践：逐步增加并发压测 Echo 服务，记录吞吐和 p50/p99。能说明并发继续增加而吞吐不变的原因，并能区分服务时间和端到端时间。</li>
+<li>验收上还要能指出：平均值不能代表尾部体验；稳定窗口里 Little 定律如何把并发、吞吐和响应时间连在一起。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>节点给出的理由是：<strong>避免用单一 QPS 误判系统性能。</strong> 每秒完成 20 次 Echo，在并发为 2、端到端 <code>0.10</code> 时是容量刚刚用满；在并发为 16、端到端 <code>0.80</code> 时吞吐还是 20，用户已经多等了七倍的排队。只看 QPS，这两件事会被当成「性能一样好」。再加上平均值可能把一次 <code>5.00</code> 的慢请求稀释成 <code>0.149</code>，更难看清尾部。吞吐、延迟和排队要一起看，系统性能才不会被一个速率数字说偏。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1-qps-tps">1. QPS 与 TPS 定义</h3>
+<p>QPS（queries per second）是单位时间完成的查询数。对本课 Echo 来说，一次返回 <code>Weekly digest</code> 就是一次查询。TPS（transactions per second）是单位时间完成的业务事务数。章内 <em>Traffic</em> 一节没有写下这两个缩写，但把流量说成系统各自的需求口径：Web 服务通常是 HTTP requests per second，键值存储可能是 transactions and retrievals per second。本课用 QPS / TPS 来落实这两种口径，不要把缩写写成书中的正式术语。</p>
+<p>当一次事务恰好是一次 Echo 时，二者相等：2 个闭环客户端、2 个工人，测量窗里 QPS 与 TPS 都是 <code>20.00</code>，完成 200 次查询、200 次事务。当「发布周报」需要连续两次 Echo 才能算一笔事务时，查询吞吐仍是 <code>20.00</code>（工人的容量没变，窗内仍完成 200 次查询），事务吞吐却是 <code>10.00</code>（100 笔事务）。适用边界就是：比较两个系统或两次压测之前，先问清楚计数的是查询还是事务。只报一个「20」而不说口径，会把两种完全不同的完成量当成同一回事。</p>
+<h3 id="2-little">2. Little 定律适用前提</h3>
+<p>节点摘要里的 Little 定律写成 <code>L = λW</code>：稳定系统中，平均在系统里的请求数，等于吞吐乘以平均端到端时间。第 6 章没有陈述这条定律，本课把它作为教学工具，并只在满足前提时使用。</p>
+<p>前提是：系统稳定（这段窗口里进入和完成能够配对，队列不会在窗内无限涨上去），<code>L</code>、<code>λ</code>、<code>W</code> 取自同一段时间，单位一致。本课的做法是先预热 <code>1.00</code>，再在 <code>10.00</code> 的窗口里同时记这三个量。闭环压测里，稳定后在系统中的请求数就等于并发 <code>N</code>。</p>
+<p>实验里五个并发档都对得上，误差为 <code>0</code>：</p>
+<table>
+<thead>
+<tr>
+<th>并发 <code>N</code></th>
+<th>窗内完成</th>
+<th>QPS <code>λ</code></th>
+<th>平均端到端 <code>W</code></th>
+<th><code>λW</code></th>
+<th>平均在系统中 <code>L</code></th>
+<th>定律成立</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>100</td>
+<td><code>10.00</code></td>
+<td><code>0.10</code></td>
+<td><code>1.00</code></td>
+<td><code>1.00</code></td>
+<td>是</td>
+</tr>
+<tr>
+<td>2</td>
+<td>200</td>
+<td><code>20.00</code></td>
+<td><code>0.10</code></td>
+<td><code>2.00</code></td>
+<td><code>2.00</code></td>
+<td>是</td>
+</tr>
+<tr>
+<td>4</td>
+<td>200</td>
+<td><code>20.00</code></td>
+<td><code>0.20</code></td>
+<td><code>4.00</code></td>
+<td><code>4.00</code></td>
+<td>是</td>
+</tr>
+<tr>
+<td>8</td>
+<td>200</td>
+<td><code>20.00</code></td>
+<td><code>0.40</code></td>
+<td><code>8.00</code></td>
+<td><code>8.00</code></td>
+<td>是</td>
+</tr>
+<tr>
+<td>16</td>
+<td>200</td>
+<td><code>20.00</code></td>
+<td><code>0.80</code></td>
+<td><code>16.00</code></td>
+<td><code>16.00</code></td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>从并发 4 起，吞吐已经不再随 <code>N</code> 增加，但 <code>L = λW</code> 仍然成立：多出来的并发全部变成了更长的 <code>W</code>。这也是适用边界：定律联系的是这三个平均数，它不会在吞吐封顶之后失效，更不会替你证明「再加并发还能更快」。若窗口开在队列仍在上涨、只统计已经完成的请求，用完成请求的平均 <code>W</code> 去乘 <code>λ</code>，就可能和窗内真实的平均在制数对不上。本课不把那种未稳定的窗口拿来当定律的例证。</p>
+<h3 id="3">3. 利用率与排队</h3>
+<p>2 个工人、服务时间 <code>0.10</code>，容量是 <code>2 / 0.10 = 20</code> QPS。并发从 1 加到 2 时，利用率从 <code>0.50</code> 升到 <code>1.00</code>，吞吐从 <code>10.00</code> 升到 <code>20.00</code>，队列仍是空的，端到端还是服务时间 <code>0.10</code>。再往上加并发，工人已经饱和，吞吐停在 <code>20.00</code>，多出来的请求只能排队：</p>
+<table>
+<thead>
+<tr>
+<th>并发</th>
+<th>QPS</th>
+<th>利用率</th>
+<th>平均排队</th>
+<th>服务时间</th>
+<th>等待</th>
+<th>端到端（p50 / p99 / 均值）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>10.00</code></td>
+<td><code>0.50</code></td>
+<td><code>0.00</code></td>
+<td><code>0.10</code></td>
+<td><code>0.00</code></td>
+<td><code>0.10</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>20.00</code></td>
+<td><code>1.00</code></td>
+<td><code>0.00</code></td>
+<td><code>0.10</code></td>
+<td><code>0.00</code></td>
+<td><code>0.10</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>20.00</code></td>
+<td><code>1.00</code></td>
+<td><code>2.00</code></td>
+<td><code>0.10</code></td>
+<td><code>0.10</code></td>
+<td><code>0.20</code></td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>20.00</code></td>
+<td><code>1.00</code></td>
+<td><code>6.00</code></td>
+<td><code>0.10</code></td>
+<td><code>0.30</code></td>
+<td><code>0.40</code></td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>20.00</code></td>
+<td><code>1.00</code></td>
+<td><code>14.00</code></td>
+<td><code>0.10</code></td>
+<td><code>0.70</code></td>
+<td><code>0.80</code></td>
+</tr>
+</tbody>
+</table>
+<p>这就是验收要说明的两件事。并发继续增加而吞吐不变，是因为工人已经用满，系统按容量 <code>20</code> QPS 前进，多出来的并发不会创造新的工人。服务时间始终是 <code>0.10</code>，端到端时间却从 <code>0.10</code> 涨到 <code>0.80</code>——多出来的是排队等待，不是工人变慢了。服务时间和端到端时间必须分开记；把它们混成一个「延迟」，就看不到排队已经占了大头。</p>
+<p>章内饱和一节写：许多系统在达到 100% 利用率之前就会降质，延迟升高往往是饱和的领先指标，短窗口里的 99th percentile 可以给出很早的信号。本课这组均匀服务的数字里，利用率一到 <code>1.00</code>，再增加并发后首先变大的就是端到端时间；真实系统可能会更早就开始变慢。本课没有在利用率 80% 处人为加速，以免把教学容量公式和章内的「未到 100% 也会降质」写成同一件事。</p>
+<h2 id="_10">常见误区</h2>
+<p>第一个误区是节点写明的那句：<strong>把平均延迟当作用户尾部体验。</strong> 对照里 100 次 Echo、每 100 次有 1 次服务时间为 <code>5.00</code>，总时间 <code>14.90</code>，均值是 <code>0.149</code>，p50 仍是 <code>0.10</code>，看起来都还「接近服务时间」。可是 p99 和最大值都是 <code>5.00</code>。章内的告诫是：平均 100 ms、每秒 1,000 个请求时，1% 的请求也可能要 5 秒；若不测量分布，以为大多数请求都靠近均值，只是一厢情愿。本课的 <code>0.10</code> 与 <code>5.00</code> 是教学虚拟时钟上的对照，不是把书中那组生产数字抄进 <code>results.json</code>。只看 <code>0.149</code>，会把那一次慢请求稀释掉。</p>
+<p>第二个误区是只看 QPS。并发 2 和并发 16 的吞吐都是 <code>20.00</code>，但后者的端到端已经是 <code>0.80</code>，平均有 14 个请求在排队。没有延迟和队列长度，20 QPS 不能说明用户过得好。</p>
+<p>第三个误区是把服务时间当成端到端时间。五个档位里服务时间从来没有离开 <code>0.10</code>，变的是等待。若监控里只暴露「处理耗时」，排队会被藏掉。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点给出的权衡是：<strong>高利用率降低闲置成本，也压缩突发余量。</strong> 2 个工人、并发 1 时利用率是 <code>0.50</code>，吞吐 <code>10.00</code>，等于有一个工人空着；并发 2 时利用率是 <code>1.00</code>，吞吐翻到 <code>20.00</code>，闲置没了，稳态延迟仍然是 <code>0.10</code>。从成本上看，后一种把工人都用上了。</p>
+<p>余量要在突发里才看得见。同一时刻到来 5 个 Echo、工人仍是 2 个时，5 个请求的端到端分别被排成两两一批，均值 <code>0.18</code>，p50 为 <code>0.20</code>，p99 与最大值都是 <code>0.30</code>，平均等待 <code>0.08</code>，最后一次在 <code>0.30</code> 才完成。若把工人加到 5 个，这 5 个请求都能立刻开始，端到端、p50、p99 都是 <code>0.10</code>，等待为 <code>0</code>，<code>0.10</code> 就全部结束。多养 3 个工人，平时闲置成本更高，换来的是突发不必排队。利用率要取在「闲置付得起」和「突然多来几个请求还能按服务时间完成」之间；本课不把某一侧写成唯一正确答案。章内也提醒：要有一个利用率目标，因为系统往往在到 100% 之前就已经开始变差。</p>
+<h2 id="echo-p50p99">动手实践：逐步增加并发压测 Echo 服务，记录吞吐和 p50/p99</h2>
+<p>配套代码在 <a href="https://zhousai-zs.github.io/backend-atlas-notes/files/practice128.tar.gz"><code>/workspace/atlas/lessons/practice128/</code></a>。<code>engine.py</code> 是 <code>EchoMetricsEngine</code>，<code>app.py</code> 跑完整组实验并写出 <code>results.json</code>，<code>test_metrics.py</code> / <code>test.sh</code> 负责核对。在该目录执行：</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>应打印 <code>ALL_CHECKS_PASSED</code>。下面的数字全部来自这次运行写出的 <code>results.json</code>，都是教学虚拟时钟上的值。</p>
+<p>请先自己把并发 1、2、4、8、16 的 QPS、p50、p99 记进一张表，确认从并发 4 起 QPS 停在 <code>20.00</code>、端到端按 <code>0.20</code>、<code>0.40</code>、<code>0.80</code> 上升，而服务时间始终是 <code>0.10</code>。然后再核对另外两组：一次事务两步 Echo 时 TPS 为 <code>10.00</code>、QPS 仍为 <code>20.00</code>；100 次里 1 次慢请求时均值 <code>0.149</code>、p99 为 <code>5.00</code>。突发对照里，2 个工人接待同时到达的 5 个请求，p99 是 <code>0.30</code>；5 个工人时 p99 回到 <code>0.10</code>。</p>
+<p>百分位采用教学规则 <code>index = min(n-1, floor(p/100 * n))</code>：100 个样本里有 1 个慢请求时，p99 取到那个 <code>5.00</code>。这是本课写在引擎里的取法，不是第 6 章规定的算法。</p>
+<p>验收与误区、权衡对应的标志在 <code>results.json</code> 里均为真：<code>acceptance_throughput_plateau</code>、<code>acceptance_service_vs_e2e</code>、<code>practice_records_qps_and_percentiles</code>、<code>pitfall_mean_hides_tail</code>、<code>tradeoff_util_vs_headroom</code>，以及稳定窗口里的 <code>little_holds_when_stable</code>。引擎同时标明 <code>not_redis</code>、<code>not_a_network_service</code>、<code>not_a_real_metrics_product</code>、<code>not_prometheus</code>、<code>not_google_sre_production</code>。</p>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 Google SRE — Monitoring Distributed Systems 中与 Throughput and latency 相关的定义、示例或实现，记录与教学实验的差异。2026-11-14 的实际打开情况如下。</p>
+<ul>
+<li>节点给出的 <a href="https://sre.google/sre-book/monitoring-distributed-systems/">https://sre.google/sre-book/monitoring-distributed-systems/</a> 返回 200，无跳转，73467 字节，<code>Content-Type</code> 为 <code>text/html</code>，<code>Last-Modified</code> 为 <code>Thu, 08 Oct 2026 04:48:00 GMT</code>（北京时间 2026-10-08 12:48:00），响应头 <code>Date</code> 为 <code>Fri, 13 Nov 2026 17:28:21 GMT</code>（北京时间 2026-11-14 01:28:21）。<code>&lt;title&gt;</code> 为 Google SRE: SRE Responsibilities and Management Frameworks，正文标题是 Chapter 6 - Monitoring Distributed Systems。作者 Rob Ewaschuk，由 Betsy Beyer 编辑，版权 2017 Google, Inc.，由 O'Reilly Media 出版，许可为 CC BY-NC-ND 4.0。这一页就是章节正文，主题是监控与告警的原则，没有再跟随到另一份专门讲排队论的文档。</li>
+</ul>
+<p>教学实验按以下方式使用它，并记下差异。</p>
+<ul>
+<li><strong>术语</strong>：该章定义了 four golden signals：latency、traffic、errors、saturation。流量是「系统特定的需求量」，对 Web 服务通常是 HTTP requests per second，对键值存储可能是 transactions and retrievals per second。章内<strong>没有</strong>出现 QPS、TPS 或 Little's law 这些词。本课的 QPS / TPS 用来落实这两种口径，Little 定律用来在稳定窗口里把并发、吞吐和响应时间连在一起，不要写成书中的正式公式或缩写。</li>
+<li><strong>延迟与尾部</strong>：章内把 latency 写成 the time it takes to service a request，并强调要区分成功请求与失败请求的延迟。<em>Worrying About Your Tail</em> 告诫不要只用均值：平均 100 ms、每秒 1,000 个请求时，1% 也可能要 5 秒；若用户要串起多个这样的后端，一个后端的 99th percentile 很容易变成前端的中位数。脚注还写：若 1% 的请求是平均值的 50 倍，其余请求其实比平均值大约快一倍；不测量分布，就不能假定大多数请求靠近均值。本课的对照是 100 次请求里 1 次 <code>5.00</code>、99 次 <code>0.10</code>，均值 <code>0.149</code>、p99 为 <code>5.00</code>。这些是教学虚拟时钟上的数，不是把书中 1,000 rps 的例子复现一遍。本课也没有引入失败请求，因此没有按章内要求把错误延迟单独记账。</li>
+<li><strong>饱和与利用率</strong>：饱和是系统有多「满」，并指出许多系统在 100% 利用率之前就会降质，必须有利用率目标；延迟升高往往是饱和的领先指标，短窗口（例如一分钟）的 99th percentile 可以给出很早的信号。本课用工人利用率、平均队列长度和端到端时间来对照「有多满」：利用率到 <code>1.00</code> 之后，再加并发只增加等待。本课没有实现「四小时后磁盘写满」这类预测，也没有在利用率低于 100% 时人为加大服务时间。</li>
+<li><strong>测量分辨率</strong>：章内提醒，按一分钟看 CPU 可能看不到推高尾部延迟的尖峰；本课的测量窗是教学用的 <code>10.00</code>，百分位直接从每次请求的端到端时间计算，没有做指数分桶的直方图。引擎里的百分位取法已在实践一节写明，不是该章规定的算法。</li>
+<li><strong>未实现的章节内容</strong>：症状与原因、黑盒与白盒、告警与工单、Bigtable / Gmail 的监控案例，以及 Borg、生产环境里的采集与聚合，教学引擎都没有做，它们的数字不会进入 <code>results.json</code>。</li>
+<li><strong>网络与时间</strong>：单进程离散事件，所有时延都是教学虚拟时钟上的值，不是生产 RTT。闭环客户端在同一进程里立刻发下一个请求，没有真实的协调遗漏，也没有打开套接字的 Echo 端口。</li>
+</ul>
+<h2 id="_13">自测题</h2>
+<p><strong>题 1.</strong> 为什么并发继续增加，吞吐却不再变化？请用并发 2、4、8、16 的 QPS 和端到端时间说明，并区分服务时间与端到端时间。</p>
+<details>
+<summary>答案</summary>
+
+2 个工人、每次服务 `0.10`，容量是 `20` QPS。并发从 1 加到 2 时，吞吐从 `10.00` 升到 `20.00`，利用率从 `0.50` 升到 `1.00`，这时工人刚刚用满，队列还是空的，端到端仍等于服务时间 `0.10`。
+
+再把并发加到 4、8、16，窗内完成次数都是 200，QPS 都停在 `20.00`。吞吐不再增加，是因为没有新的工人；系统只能按已经饱和的容量前进。多出来的并发变成了排队：平均队列分别是 `2.00`、`6.00`、`14.00`，平均等待分别是 `0.10`、`0.30`、`0.70`，端到端（也是这一档的 p50 / p99）分别是 `0.20`、`0.40`、`0.80`。
+
+服务时间在五个档位里都是 `0.10`，并没有变慢。端到端时间等于服务时间加等待，变长的是等待。若只看 QPS，会误以为并发 2 与并发 16「一样好」；把服务时间和端到端时间分开，才能看到用户多等了那 `0.70`。
+
+</details>
+
+<p><strong>题 2.</strong> QPS 和 TPS 有什么不同？什么时候它们相等，什么时候不相等？在稳定窗口里，怎样用 Little 定律核对并发、吞吐和响应时间？</p>
+<details>
+<summary>答案</summary>
+
+QPS 计的是查询，TPS 计的是业务事务。对这个教学 Echo，一次返回 `Weekly digest` 是一次查询。当一次事务就是一次 Echo 时，2 个闭环客户端测得 QPS 和 TPS 都是 `20.00`。当「发布周报」必须连续两次 Echo 才算一笔事务时，工人仍然每秒完成 `20.00` 次查询，但事务吞吐是 `10.00`，窗内 200 次查询只合成 100 笔事务。口径不同，同一个「20」就不能拿来直接比较。章内把流量写成系统特定的需求量，requests per second 和 transactions per second 本来就可能不是一回事。
+
+Little 定律在稳定窗口里写成 `L = λW`。本课先预热 `1.00`，再在 `1.00` 到 `11.00` 这段里同时取平均在制数、吞吐和平均端到端时间。五个并发档都精确成立，例如并发 16 时 `λ = 20.00`、`W = 0.80`，乘积是 `16.00`，与平均在制数 `16.00` 一致。它要求系统已经稳定、三个量取自同一窗口；吞吐封顶之后公式仍然成立，因为更长的 `W` 正好消化了更大的 `L`。第 6 章没有写下这条定律，它是本课在上述前提成立时使用的教学工具。
+
+</details>
+
+<p><strong>题 3.</strong> 为什么不能把平均延迟当作用户的尾部体验？高利用率在节省闲置的同时，会怎样压缩突发余量？</p>
+<details>
+<summary>答案</summary>
+
+100 次 Echo 里有 1 次服务时间为 `5.00`、其余为 `0.10`，总时间 `14.90`。均值被稀释成 `0.149`，p50 仍是 `0.10`，看起来离「正常服务时间」不远。p99 和最大值却都是 `5.00`。只看平均值，那一次慢请求几乎看不见；用户若恰好碰到它，等的是 `5.00` 而不是 `0.149`。这与章内「不要只用均值、要看分布和 99th percentile」的告诫一致。本课的百分位按 `floor(p/100 * n)` 取值，所以 100 个样本里的那一个慢请求会出现在 p99 上。
+
+利用率的权衡要放到突发里看。稳态下，并发 1 时利用率 `0.50`、吞吐 `10.00`，有一个工人闲着；并发 2 时利用率 `1.00`、吞吐 `20.00`，闲置没了，延迟仍是 `0.10`。同一时刻到来 5 个请求时，2 个工人只能先做 2 个，其余排队，均值 `0.18`，p99 为 `0.30`，最后一次在 `0.30` 完成。把工人加到 5 个，这 5 个请求都不必等，p99 回到 `0.10`，在 `0.10` 全部结束。高利用率降低了闲置成本，也把突发余量收窄了。利用率目标要同时考虑这两边，而不是只追求把工人占满。
+
+</details>
+
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://sre.google/sre-book/monitoring-distributed-systems/">Google SRE — Monitoring Distributed Systems</a>（Google SRE 第 6 章，英文，基础，免费）：用于核对延迟、流量和饱和这些与吞吐、延迟、排队相关的结论，并将结论落到本节点的 QPS / TPS、p50 / p99 和利用率实验。2026-11-14 该地址返回 200，无跳转，73467 字节，<code>&lt;title&gt;</code> 为 Google SRE: SRE Responsibilities and Management Frameworks，正文标题为 Chapter 6 - Monitoring Distributed Systems，<code>Last-Modified</code> 为 <code>Thu, 08 Oct 2026 04:48:00 GMT</code>，作者 Rob Ewaschuk，由 Betsy Beyer 编辑。该章定义 four golden signals，并用均值对比尾部；并不定义 QPS、TPS 或 Little 定律。本课的缩写、定律前提和教学百分位取法是对照，不是书中的正式接口。错误延迟分账、直方图分桶、黑盒探测和 Google 的监控系统，本课没有实现。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>吞吐描述单位时间完成量，延迟描述单次等待与处理时间。不要用单一 QPS 误判系统性能：并发 2 与并发 16 的吞吐都是 <code>20.00</code>，后者的端到端已经是 <code>0.80</code>。</li>
+<li>QPS 计查询，TPS 计事务。一次 Echo 即一笔事务时二者都是 <code>20.00</code>；一次发布要两次 Echo 时，QPS 仍为 <code>20.00</code>，TPS 是 <code>10.00</code>。</li>
+<li>稳定窗口里可用 Little 定律 <code>L = λW</code>。五个并发档在预热后的 <code>10.00</code> 窗口里都精确成立。定律要求系统稳定、三个量取自同一窗口；第 6 章没有陈述它。</li>
+<li>工人饱和之后再加并发，吞吐停在容量 <code>20.00</code>，服务时间仍是 <code>0.10</code>，多出来的是排队。区分服务时间和端到端时间，才能看到等待从 <code>0.00</code> 涨到 <code>0.70</code>。</li>
+<li>不要把平均延迟当作用户尾部体验。100 次里 1 次 <code>5.00</code> 的慢请求，均值是 <code>0.149</code>，p99 是 <code>5.00</code>。</li>
+<li>高利用率降低闲置成本，也压缩突发余量。利用率 <code>1.00</code> 时稳态吞吐更高；5 个请求同时到来，2 个工人下 p99 是 <code>0.30</code>，5 个工人下是 <code>0.10</code>。</li>
+<li>这些是教学虚拟时钟上的数字，不是生产 RTT。<code>EchoMetricsEngine</code> 不是 Redis，也不是 Prometheus 或 Google 的监控实现。章内不定义 QPS / TPS / Little 定律；本课用它们落实流量口径、尾部延迟和饱和，测量仍要和排队一起看。</li>
+</ul>
+<p>如果有一句答不上来，先回到 <code>results.json</code> 里对应的字段，再回到文档里「流量要按系统口径来量」「不要只用均值看延迟」以及「延迟升高往往是饱和的领先指标」这几段，不要把「QPS 没掉」当成「用户也不慢」，也不要把平均值当成尾部体验。</p><div class="pn"><span><a href="127.html">← 分布式协议演进</a></span><span>下一课 待更新</span></div></main></div></body></html>
