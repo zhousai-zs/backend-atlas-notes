@@ -1,0 +1,343 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>119. Paxos 与多数派交集 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（119/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details open><summary>领域 H（7/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li><a class="cur" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 119 课 · 领域 H · 阶段 5</p><p class="dl"><a href="../files/119-h-paxos.md" download>⬇ 本课 Markdown</a><a href="../files/practice119.tar.gz" download>⬇ 练习包 practice119.tar.gz</a></p><h1 id="119208-paxos">第 119/208 课：Paxos 与多数派交集</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>h-paxos</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Paxos</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>H / 第 5 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>复制与共识</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>专家</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/118.html"><code>h-raft-log</code></a></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Paxos</code>、<code>Distributed</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Lamport — Paxos Made Simple 论文</a>（英文论文，专家，免费；2026-11-14 该地址返回 200，无跳转，95019 字节，Content-Type 为 <code>application/pdf</code>。题名 Paxos Made Simple；作者 Leslie Lamport；文内标注 01 Nov 2001；pdfinfo 记录 Creator 为 TeX output 2001.11.01:1449，CreationDate 为 Wed Nov 7 08:48:16 2001 CST，共 14 页，文内正文页码至第 11 页）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>Paxos 的 prepare/accept 两阶段使新提案继承已被选中值所需的约束；Multi-Paxos 可复用稳定领导关系。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课里的「内容后台」「文章标题 <code>Weekly digest</code> / <code>Weekly digest (draft)</code> / <code>Weekly digest (revised)</code> / <code>Weekly digest (hotfix)</code>」「键 <code>article:01:title</code>」都是<strong>教学假设</strong>，用来让提案编号、promise、accepted value 和多数派交集变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>PaxosEngine</code>，<strong>不是 Redis，不是 redis-py，不是网络服务，不是完整 Paxos，不是完整 Multi-Paxos，不是 Raft，也不是 Jepsen</strong>。它是单进程邮箱仿真，没有 TCP，没有真实丢包或重复投递。论文假定消息可以丢失、重复、任意延迟，且不被篡改；教学引擎默认把每条 RPC 在虚拟时钟上延迟 <code>rpc_delay_s=0.01</code> 后送达，丢包只在 <code>crash()</code> / <code>isolate()</code> 这类全知信号里发生。<code>pause()</code> 是全知冻结，<code>isolate()</code> 是全知分区；真实异步网络没有这种信号。持久化是教学用 dict，acceptor 在回复 prepare / accept 之前 flush，proposer 在分配提案编号时 flush，不是磁盘，也没有 <code>fsync</code>。<code>Clock</code> 是虚拟时钟。本课核心实现的是论文 §2 的单决议（single-decree）共识算法，也就是 The Part-Time Parliament 里的 synod 算法：一次实例选出一个值。论文 §3 用「一串互相独立的 Paxos 实例」实现状态机，并说明稳定领导人可以用同一个提案编号、一条较短的 Phase 1 消息覆盖许多实例，之后新命令只需 Phase 2；教学引擎里的 Multi-Paxos 对照只实现了这一条「复用 Phase 1」的对比，<strong>没有选主、没有 no-op 填洞、没有 α 超前窗口、没有成员变更</strong>。学习者是全知观察者，用当前多数派是否接受了同一提案来判断值是否被选中，没有实现 §2.3 里「区分的 learner」那套通知协议。教学引擎在忽略过期 prepare 或拒绝过期 accept 时会回一条 nack，这是论文 §2.2 写明的性能优化，不影响正确性。当 acceptor 收到它并未 promise 过的 accept（论文允许 Phase 2 发给与 Phase 1 不同的集合）时，若 <code>promised_n &lt; n</code>，引擎会把 <code>promised_n</code> 提升到 <code>n</code>，避免随后再接受更小的编号；论文正文只要求记住「已响应的最高 prepare 编号」和「已接受的最高提案」，这一条是教学实现对 P1a 的补充，会在源码阅读里再次标明。本课所有时间都来自 <code>/workspace/atlas/lessons/practice119/results.json</code>，是<strong>教学虚拟时钟上的数字</strong>，不是生产 RTT 或线上超时配置。参数是 <code>rpc_delay_s=0.01</code>，三台 acceptor 的多数派为 <code>2</code>。两个 proposer 的提案编号取自不相交集合：<code>p1</code> 使用奇数 <code>1,3,5,…</code>，<code>p2</code> 使用偶数 <code>2,4,6,…</code>，用来落实论文 §2.5 的「不同 proposer 从不相交集合中取号，且永不复用」。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">上一课留下的缺口</h3>
+<p>上一课的 <code>RaftLogEngine</code> 已经把日志复制说清楚：<code>overwrite_uncommitted_tail</code> 里，旧 leader <code>s1</code> 带着未提交的 <code>Weekly digest (draft)</code> 被暂停后，新 leader <code>s2</code> 在 <code>0.56</code> 提交 term 3 的 <code>Weekly digest (revised)</code>，<code>0.65</code> 只从 index 2 截断草稿，已提交的 index 1 还在，<code>0.87</code> 三台日志完全相同。<code>current_term_commit_restriction</code> 又说明，旧任期条目即使已经在多数派上，也不能只靠副本计数提交。</p>
+<p>这些结论依赖 Raft 的两项设计：新 leader 在选举时日志至少和投票者一样新，所以上任时已提交前缀已经在它的日志里；领导人的日志只追加，冲突由 follower 截断后缀来对齐。换句话说，Raft 把「已被选中的值不能被另一个值替换」藏进了选主限制和日志匹配。上一课没有把这条安全约束从「谁是 leader」里拆出来，单独观察：一个新的提案发起者，在没有先当选、也不拥有完整日志的情况下，凭什么不能把自己想写的 <code>Weekly digest (revised)</code> 变成被选中的值。</p>
+<p>这正是本课要补的三件事。提案编号如何排序、如何保证不相交且不可复用；prepare / accept 两阶段如何让新提案继承「已被选中值」所需的约束；以及多数派交集为什么能保证：只要一个值已经被选中，任意新的 prepare 多数派都会看见它。只看成功路径不够，两个 proposer 交错执行、只被少数派接受的值、以及双方不断抬高编号却选不出值的活锁，才是这条安全证明真正要处理的边界。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置的 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/118.html">第 118 课</a> <code>h-raft-log</code> 讲的是前缀匹配、<code>matchIndex</code> / <code>commitIndex</code>，以及当前任期提交限制。它留下了一个重要结论：已提交的命令在切主后仍然存在。本课要把这个结论还原到更早、也更一般的安全证明思路上：Paxos 的 P2c。新 proposer 完成 Phase 1 之后，若 prepare 多数派里已经有人接受过提案，它必须发出其中编号最高的那个值，而不能用自己想提的值。选主和稳定领导人解决的是进度；两阶段和多数派交集解决的是「至多一个值被选中」。Raft 的 leader 模型可以看成这条思路的一种工程折叠，本课先把折叠打开。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台用三台 acceptor <code>a1</code>、<code>a2</code>、<code>a3</code> 为键 <code>article:01:title</code> 做一次单决议：选出一个标题。两个 proposer <code>p1</code>、<code>p2</code> 分别想写入 <code>Weekly digest (draft)</code> 和 <code>Weekly digest (revised)</code>。三台的多数派为 <code>2</code>，<code>rpc_delay_s=0.01</code>。提案编号由不相交集合分配：<code>p1</code> 用 <code>1,3,5,…</code>，<code>p2</code> 用 <code>2,4,6,…</code>。主实践里，<code>p1</code> 先让 <code>{a1,a2}</code> 接受草稿，使该提案被选中；随后 <code>p2</code> 向 <code>{a2,a3}</code> 发起更高编号的提案，观察它必须继承哪个值。对照实验再引入只被 <code>a1</code> 接受、尚未选中的草稿，以及 <code>Weekly digest</code> 与 <code>Weekly digest (revised)</code> 作为连续两条命令、分别落在两个 Paxos 实例上的情形。这些数字都是教学虚拟时钟上的值，不是线上超时配置，也不是生产 RTT。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>proposal number</strong>：提案由编号和值组成，不同提案必须有不同编号；不同 proposer 从不相交集合取号，用过的编号不能再发。编号更高只表示更新一轮两阶段，不表示可以改写已被选中的值。</li>
+<li><strong>promise 与 accepted value</strong>：Phase 1 的 prepare 换来「不再接受更小编号」的 promise，以及该 acceptor 已经接受的最高编号提案；Phase 2 用继承得到的值，或在没有任何 accepted value 时用 proposer 自己选的值，去请求 accept。</li>
+<li><strong>多数派交集</strong>：任意两个多数派至少有一个公共 acceptor。若某提案已被一个多数派接受，因而被选中，则新提案的 prepare 多数派一定与之相交，从而看见并继承该值。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释 proposal number 的作用及适用边界，说明为什么编号必须唯一、必须来自不相交集合、不能复用，以及为什么更高的编号不能用来改写已被选中的值。</li>
+<li>能独立完成实践：手工演算两个 proposer 交错执行 prepare / accept，并在每一步列出 acceptor 的持久状态（已 promise 的编号、已接受的编号和值）。</li>
+<li>能指出新 proposer 必须继承哪个值，并能区分活锁与安全性：交错可能选不出任何值，但只要安全性质还在，就不会选出两个不同的值。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>公众号内容后台（教学假设）修改已发布标题时，两个协调者可能同时想把 <code>article:01:title</code> 写成不同的稿。<code>p1</code> 想发布 <code>Weekly digest (draft)</code>，<code>p2</code> 想发布 <code>Weekly digest (revised)</code>。如果草稿已经被多数派接受，因而被选中，新来的 <code>p2</code> 即使拿出更高的提案编号，也必须把这个已选中的草稿继承下来，而不能把自己的修订当成「更新的命令」直接覆盖。否则编辑会在一个时刻看到草稿已生效，另一个时刻又看到修订生效，审核、缓存失效和审计记录都无法依赖「已选中」这个词。</p>
+<p>反过来，如果两个协调者不停地用更高编号去做 Phase 1，谁的 Phase 2 都会被对方的 promise 挡住，标题可能长时间选不出来。这是活锁，不是安全性被破坏：系统卡住了，但没有宣布两个互相冲突的标题都已生效。要恢复进度，需要选出一个 distinguished proposer，只让它继续提案。理解这两点，才能在「为什么要有领导」和「没有领导是否会写坏数据」之间画出正确边界，也才能在阅读 etcd、Chubby 或各种「Paxos 家族」实现时，分清哪些是论文 §2 的安全证明，哪些是为了进度和吞吐做的优化。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1-proposal-number">1. proposal number</h3>
+<p>Lamport 在 §2.1 给出共识的安全要求：只有被提出过的值可以被选中；只选中一个值；进程不会在值尚未被选中时得知它已被选中。§2.2 接着说明，单个 acceptor 会单点故障，所以要用多个 acceptor，并在一个多数派接受某提案时宣布该提案（以及它的值）被选中。为了让 acceptor 可以接受不止一个提案，每个提案由一个编号和一个值组成，且不同提案必须有不同编号。</p>
+<p>编号的适用边界要从论文里逐条落实。第一，编号是全序的自然数，用来对提案做归纳；P2 说：若编号为 <code>m</code>、值为 <code>v</code> 的提案被选中，则之后每一个被选中的更高编号提案也必须具有值 <code>v</code>。因此「编号更大」只是「更新的一轮提案」，不是「可以换一个值」。第二，§2.5 要求不同 proposer 从不相交的编号集合中取号，并且每个 proposer 在稳定存储里记住自己用过的最大编号，下一次 Phase 1 必须使用比它更大的编号。教学引擎里 <code>p1</code> 使用 <code>1,3,5,…</code>，<code>p2</code> 使用 <code>2,4,6,…</code>，分配成功会先 flush 再发送 prepare。第三，acceptor 只响应严格大于自己已响应过的最高 prepare 编号的请求；更小的 prepare 会被忽略。P1a 又规定：acceptor 可以接受编号为 <code>n</code> 的提案，当且仅当它还没有响应过编号大于 <code>n</code> 的 prepare。把这三条放在一起，提案编号既是排序键，也是「我保证不再接受更旧提案」的边界。</p>
+<p>实践里的 <code>proposal_number_bounds</code> 把这三条变成可观察的时间线。<code>0.02</code>，<code>p2</code> 用属于自己集合的 <code>n=2</code> 完成 Phase 1，三台 <code>promised=2</code>：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=2  accepted_n=None  accepted_v=None
+a2  promised=2  accepted_n=None  accepted_v=None
+a3  promised=2  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.03</code>，<code>p1</code> 用更小的 <code>n=1</code> 把 prepare 发到三台，三台都忽略，<code>prepare_ignored_count=3</code>。<code>0.06</code>，<code>p1</code> 改用自己集合里更大的 <code>n=3</code>，三台 <code>promised=3</code>。<code>0.07</code>，<code>p2</code> 仍用已经过期的 <code>n=2</code> 发 accept，三台拒绝，<code>promised_n=3 &gt; 2</code>，<code>accept_rejected_count=3</code>。同一时刻 <code>0.08</code>，<code>p1</code> 试图再次使用已经用过的 <code>n=3</code>，引擎拒绝，错误是 <code>p1 cannot reuse or go backwards on instance 1: requested n=3, already used 3</code>；再试图使用属于 <code>p2</code> 集合的 <code>n=4</code>，同样被拒绝，错误是 <code>p1 must choose n from its disjoint set (n ≡ 1 mod 2), got n=4</code>。<code>0.10</code>，<code>p1</code> 用合法的 <code>n=3</code> 完成 Phase 2，三台接受 <code>Weekly digest (draft)</code>，该值被选中；<code>p2</code> 原先打算写的 <code>Weekly digest (hotfix)</code> 从未被选中，<code>hotfix_never_chosen=true</code>。</p>
+<p>编号用错的后果很具体：过期编号会被忽略或拒绝，复用编号会破坏「不同提案不同编号」这条前提，跨集合取号则会让两个 proposer 在同一编号上相撞。教学引擎在后两种情况直接拒绝发请求，是为了让边界可检查；真实实现里，稳定存储里的「已用最大编号」承担同一责任。</p>
+<h3 id="2-promise-accepted-value">2. promise 与 accepted value</h3>
+<p>只靠编号还不能选出值。§2.2 从 P2 逐步加强到 P2c：proposer 要发出编号为 <code>n</code> 的提案，必须先找到一个多数派 <code>S</code>，使得要么 <code>S</code> 中还没有人接受过小于 <code>n</code> 的提案，要么它将要发出的值，就是 <code>S</code> 中已接受的、编号小于 <code>n</code> 的那些提案里编号最高的那个值。它无法预测未来的 accept，所以改为控制未来：先请求多数派 promise 不再接受小于 <code>n</code> 的提案，并汇报各自已经接受的最高编号提案。这就是 Phase 1 的 prepare / promise。若多数派都汇报「没有 accepted value」，proposer 可以选自己的值；否则必须继承那个最高编号的 accepted value。然后进入 Phase 2，发出 accept 请求。</p>
+<p>论文把两阶段写得很短。Phase 1a：proposer 选择编号 <code>n</code>，向一个多数派发送 prepare。Phase 1b：acceptor 若发现 <code>n</code> 大于自己已经响应过的任何 prepare，就 promise 不再接受小于 <code>n</code> 的提案，并带上自己已接受的最高编号提案。Phase 2a：proposer 收到多数派响应后，对同一个 <code>n</code> 发出 accept，值为继承结果或自己选的值。Phase 2b：acceptor 接受该提案，除非它已经响应过编号大于 <code>n</code> 的 prepare。acceptor 可以忽略任何请求而不破坏安全性；实现上通常忽略已经过期的 prepare，并最好通知 proposer 放弃该提案。</p>
+<p>主实践 <code>interleave_two_proposers</code> 把这两阶段展开成可逐步核对的持久状态。<code>0.00</code> 三台都是空的：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=0  accepted_n=None  accepted_v=None
+a2  promised=0  accepted_n=None  accepted_v=None
+a3  promised=0  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.02</code>，<code>p1</code> 完成 <code>n=1</code> 的 Phase 1，意图值是 <code>Weekly digest (draft)</code>，三台 promise，没有人汇报 accepted value，因此 <code>inherited=false</code>，<code>issued_value</code> 就是草稿本身：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=None  accepted_v=None
+a2  promised=1  accepted_n=None  accepted_v=None
+a3  promised=1  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.04</code>，<code>p1</code> 只向 <code>{a1,a2}</code> 发 Phase 2，这两台接受 <code>n=1</code> 的草稿，提案被选中，<code>chosen_majority=['a1','a2']</code>；<code>a3</code> 没有接受：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a3  promised=1  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.06</code> 是本课最关键的一步。<code>p2</code> 想写 <code>Weekly digest (revised)</code>，向 <code>{a2,a3}</code> 发起 <code>n=2</code> 的 Phase 1。<code>a2</code> 的 promise 里带着 <code>accepted_n=1</code>、<code>accepted_v=Weekly digest (draft)</code>，<code>a3</code> 没有 accepted value。prepare 多数派是 <code>['a2','a3']</code>，其中最高编号的 accepted value 来自 <code>a2</code>，于是 <code>inherited=true</code>，<code>inherit_from_n=1</code>，<code>inherit_from_acceptor=a2</code>，<code>issued_value</code> 变成草稿，而不是 <code>p2</code> 自己的修订：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=2  accepted_n=1  accepted_v=Weekly digest (draft)
+a3  promised=2  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.08</code>，<code>p2</code> 即使在 <code>start_accept</code> 时传入修订，引擎也忽略这个自身的值，<code>ignored_own_value=true</code>，发出的是继承来的草稿。<code>{a2,a3}</code> 接受 <code>n=2</code> 的草稿后，被选中的值仍然是 <code>Weekly digest (draft)</code>，<code>revised_never_chosen=true</code>：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=2  accepted_n=2  accepted_v=Weekly digest (draft)
+a3  promised=2  accepted_n=2  accepted_v=Weekly digest (draft)
+</code></pre></div>
+
+<p>同一时刻 crash 再 restart <code>a2</code>，它的持久状态仍是 <code>promised=2</code>、<code>accepted_n=2</code>、<code>accepted_v=Weekly digest (draft)</code>，<code>restart_preserved=true</code>。这对应论文 §2.1 和 §2.5：agent 可能停机再恢复，若值已经在停机前被选中，acceptor 必须记住 promise 与 accepted 提案，否则安全证明会断。教学引擎用 dict 在回复前 flush 来模拟这条要求，不是磁盘。</p>
+<h3 id="3">3. 多数派交集</h3>
+<p>§2.2 一开始就点明，为什么「足够大的集合」要取多数派：任意两个多数派至少有一个公共 acceptor。若再要求一个 acceptor 对同一轮冲突只能留下与安全证明相容的 accepted value，被一个多数派选中的值就无法从另一个多数派眼前消失。P2c 正是把这句话写成可执行的检查：新提案的 prepare 多数派 <code>S</code> 必须与先前选中该值的多数派 <code>C</code> 相交，相交的那一台会汇报已经接受的提案，新 proposer 只能继承。</p>
+<p>主实践把交集算得很具体。<code>0.04</code> 的选中多数派是 <code>{a1,a2}</code>，<code>0.06</code> 的 prepare 多数派是 <code>{a2,a3}</code>，交集是 <code>{a2}</code>，正是汇报 <code>n=1</code> 草稿的那一台。没有 <code>a2</code> 这一票相交，<code>p2</code> 就会以为自己可以写修订，已选中的草稿就会被另一个值替换。多数派大小在三台里是 <code>2</code>，不是「全部到齐」；论文也允许 Phase 2 发给与 Phase 1 不同的集合，主实践里 <code>p1</code> 的 Phase 1 发给三台、Phase 2 只发给 <code>{a1,a2}</code>，就是为了让后来的交集清晰可见。</p>
+<p>对照实验 <code>partial_accept_not_chosen</code> 说明，交集约束只在「值已经被选中」时成为必然。<code>0.04</code>，<code>p1</code> 只让 <code>a1</code> 接受 <code>n=1</code> 的草稿，未形成多数派，<code>chosen=None</code>，<code>not_chosen_after_partial=true</code>：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=1  accepted_n=None  accepted_v=None
+a3  promised=1  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.06</code>，<code>p2</code> 向 <code>{a2,a3}</code> 做 Phase 1，这个多数派与唯一接受草稿的 <code>a1</code> 不相交，<code>intersection_with_a1=[]</code>，<code>p2_inherited=false</code>，它因此可以发出自己的 <code>Weekly digest (revised)</code>。<code>0.08</code>，<code>{a2,a3}</code> 接受修订，修订被选中，<code>draft_never_chosen=true</code>，<code>safety_ok=true</code>：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=2  accepted_n=2  accepted_v=Weekly digest (revised)
+a3  promised=2  accepted_n=2  accepted_v=Weekly digest (revised)
+</code></pre></div>
+
+<p><code>a1</code> 上仍留着未被选中的草稿，这并不违反「只选中一个值」：草稿从未获得多数派，修订才是被选中的值。把这两段实验对照着看：部分接受不是选中；只有当某个提案已被多数派接受，任意新的 prepare 多数派才会与之相交，从而被迫继承该值。</p>
+<h2 id="_10">常见误区</h2>
+<p>节点给出的误区是：把 Paxos 的实例数量等同存储数据副本数量。<code>pitfall_instances_are_not_replicas</code> 用同一组三台 acceptor 连续跑两个单决议实例来观察这一点。论文 §3 写得很清楚：实现复制状态机的方法，是运行一串互相独立的 Paxos 共识实例，第 <code>i</code> 个实例选出第 <code>i</code> 条状态机命令。实例数量随命令序列增长，与 acceptor 的数量、也就是数据副本的数量，不是一回事。</p>
+<p><code>0.04</code>，实例 1 选中第 1 条命令 <code>SET article:01:title = Weekly digest</code>，三台的持久状态都是 <code>promised=1</code>、<code>accepted_n=1</code>、<code>accepted_v=Weekly digest</code>。<code>0.08</code>，实例 2 选中第 2 条命令 <code>SET article:01:title = Weekly digest (revised)</code>，三台在实例 2 上的持久状态都是 <code>promised=1</code>、<code>accepted_n=1</code>、<code>accepted_v=Weekly digest (revised)</code>。注意这里的 <code>n=1</code> 是实例 2 里 <code>p1</code> 的第一个提案编号，与实例 1 的 <code>n=1</code> 互不相干；提案编号是按实例分配的。最终 <code>acceptor_count=3</code>，<code>instance_count=2</code>，<code>command_count=2</code>，<code>instances_equal_replicas=false</code>，<code>instances_equal_commands=true</code>，<code>each_acceptor_holds_all_instances=true</code>，<code>wrong_model_rejected=true</code>。若按「有 3 个副本就该有 3 个 Paxos 实例」来理解，会期待 <code>instance_count=3</code>；实验里再来第 3 条命令，才会出现实例 3，而它仍然跑在这 3 个 acceptor 上，不会再复制出一套新的集群。把实例数当成副本数，会把「命令日志有多长」和「这份日志存了几份」混成一个数字，成员变更、追赶和容量规划都会从错误的模型出发。</p>
+<p>第二个误区是把「已经有一台接受」当成「值已被选中」。<code>partial_accept_not_chosen</code> 里，<code>0.04</code> 的 <code>a1</code> 已经接受了草稿，但 <code>chosen</code> 仍是 <code>None</code>。<code>0.08</code> 另一个多数派选出了修订，草稿永远没有被选中。若在 <code>0.04</code> 就向客户端宣布草稿生效，随后就会看到一个「已发布」的标题被另一个值替换。选中的定义是「某个提案被一个多数派接受」，不是「至少有一个人写下了它」。</p>
+<p>第三个误区是把更高的 proposal number 当成改写已选中值的许可证。主实践里 <code>p2</code> 的 <code>n=2</code> 确实比 <code>p1</code> 的 <code>n=1</code> 大，意图值也确实是 <code>Weekly digest (revised)</code>，但 <code>0.06</code> 它必须继承草稿，<code>0.08</code> 发出去的还是草稿，<code>ignored_own_value=true</code>。编号用来排序和获取 promise，不用来覆盖 P2。</p>
+<p>第四个误区是把活锁当成安全性失败。两个 proposer 互相抢更高编号时，可能很久都选不出值，表面上看像协议「坏了」。下一节的对照会说明：这只是进度没有保证，安全性质仍然成立。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点给出的权衡是：Paxos 家族实现选择多，阅读时明确论文模型和具体优化。论文 §2 的核心是单决议两阶段算法，本身并不包含稳定领导；§3 把一串实例排成状态机，并观察到：新领导人用同一个提案编号，向其他服务器发一条较短的 Phase 1 消息，就可以覆盖许多尚未选中的实例，之后在这些实例上提出新命令只需执行 Phase 2。「既然故障和重新选主应当是稀有事件，执行一条状态机命令的有效代价就是只跑 Phase 2。」教学对照 <code>tradeoff_paper_vs_multipaxos</code> 只实现了这一条，明确标注 <code>not_full_multipaxos=true</code>，不要把它读成完整的 Multi-Paxos、Fast Paxos 或其他变体。</p>
+<p>实验里每次 RPC 单向延迟仍是教学用的 <code>0.01</code> 秒，不是生产 RTT。同样由一个 proposer 连续提出命令时，单决议路径每个实例都走满 Phase 1 加 Phase 2；Multi-Paxos 教学对照先对全部实例做一次范围 prepare，再对每条命令只做 Phase 2：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th style="text-align: right;">命令数</th>
+<th style="text-align: right;"><code>elapsed_s</code></th>
+<th style="text-align: right;"><code>rpc_count</code></th>
+<th>每条命令的阶段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>single_decree</code></td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.20</td>
+<td style="text-align: right;">60</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>multipaxos_teaching_contrast</code></td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.12</td>
+<td style="text-align: right;">36</td>
+<td>先 2，其后 1</td>
+</tr>
+<tr>
+<td><code>single_decree</code></td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.80</td>
+<td style="text-align: right;">240</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>multipaxos_teaching_contrast</code></td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0.42</td>
+<td style="text-align: right;">126</td>
+<td>先 2，其后 1</td>
+</tr>
+</tbody>
+</table>
+<p>20 条命令时，单决议要用 <code>0.80</code> 秒、<code>240</code> 次单向 RPC；复用 Phase 1 之后只要 <code>0.42</code> 秒、<code>126</code> 次 RPC，少了 <code>114</code> 次 RPC、<code>0.38</code> 秒，<code>multipaxos_fewer_rpcs_for_same_commands=true</code>，<code>stable_leader_skips_phase1=true</code>。范围 prepare 自己花费 <code>0.02</code> 秒、<code>6</code> 次 RPC（向三台各发一条 prepare，再收回三条 promise），之后每条命令是 <code>6</code> 次 Phase 2 RPC。这些数字只说明「稳定领导把大多数命令的代价从两阶段降到一阶段」这个方向，不是生产容量规划，也没有把选主、填洞和流水线算进去。</p>
+<p>第二笔权衡是进度与安全性的分离。§2.4 构造了两个 proposer 轮流完成更高编号 Phase 1、对方 Phase 2 被忽略的场景，并指出：要保证进度，必须选出一个 distinguished proposer；若它能与多数派通信，并用一个足够大的编号，就可以选出一个值。Fischer、Lynch 与 Patterson 的结果又说明，可靠地选出这样一个 proposer，必须使用随机或真实时间（例如超时）。但「选主成功与否都不影响安全性」。活锁实验把这句活写成数字：交错期间一个值都没选中，安全性质却一直成立；一旦只让 <code>p1</code> 继续，值立刻被选中。用选主换进度，是工程上几乎不可避免的选择，不是安全证明的一部分。Raft 把这个选择做成了默认形态；阅读具体实现时，要先问它还保存着哪些 §2 的约束，再问它为进度做了哪些 §3 或更后面的优化。</p>
+<p>第三笔权衡是 nack 与忽略。论文允许 acceptor 默默忽略任何请求而不破坏安全性，同时建议：若因为已经看到更高编号的 prepare 而忽略，最好通知 proposer 放弃。教学引擎选择发送 <code>prepare_nack</code> / <code>accept_nack</code>，好让时间线上的拒绝可观察。这是性能与可观测性上的实现选择，不是安全条件。</p>
+<h2 id="proposer-acceptor">动手实践：手工演算两个 proposer 交错执行，列出 acceptor 持久状态</h2>
+<p>配套代码在 <code>/workspace/atlas/lessons/practice119/</code>，包括 <code>engine.py</code>、<code>app.py</code>、<code>test_paxos.py</code>，用 Python 3 标准库实现，不依赖 Redis 或网络服务。运行验收：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>/workspace/atlas/lessons/practice119
+bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>标准输出应是一行 <code>ALL_CHECKS_PASSED</code>，并写出 <code>results.json</code>。下面的数字都来自这次运行，时间单位是教学虚拟时钟上的秒，不是生产 RTT，也不是线上超时配置。<code>rpc_delay_s=0.01</code>，三台 acceptor 的多数派为 <code>2</code>。<code>p1</code> 的编号集合是 <code>1,3,5,…</code>，<code>p2</code> 的编号集合是 <code>2,4,6,…</code>。每一步都列出三台的持久状态：<code>promised</code> 是已响应的最高 prepare 编号，<code>accepted_n</code> / <code>accepted_v</code> 是已接受的最高编号提案及其值。</p>
+<p><strong>1. 主实践 <code>interleave_two_proposers</code>。</strong> <code>0.00</code> 三台 acceptor 的持久状态都为空，尚未选中任何值。</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=0  accepted_n=None  accepted_v=None
+a2  promised=0  accepted_n=None  accepted_v=None
+a3  promised=0  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.00</code>，<code>p1</code> 向 <code>{a1,a2,a3}</code> 发送 <code>n=1</code> 的 prepare，意图值是 <code>Weekly digest (draft)</code>。<code>0.02</code> Phase 1 完成，三台 <code>promised=1</code>，没有 accepted value，<code>inherited=false</code>，<code>issued_value</code> 为草稿，<code>promises=['a1','a2','a3']</code>。</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=None  accepted_v=None
+a2  promised=1  accepted_n=None  accepted_v=None
+a3  promised=1  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.02</code>，<code>p1</code> 只向 <code>{a1,a2}</code> 发送 <code>n=1</code> 的 accept。<code>0.04</code> 这两台接受草稿，提案被选中，<code>chosen_majority=['a1','a2']</code>，<code>chosen_after_p1=Weekly digest (draft)</code>；<code>a3</code> 仍无 accepted value。已选中的是草稿，不是修订。</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a3  promised=1  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.04</code>，<code>p2</code> 向 <code>{a2,a3}</code> 发送 <code>n=2</code> 的 prepare，意图值是 <code>Weekly digest (revised)</code>。<code>0.06</code> Phase 1 完成，<code>promises=['a2','a3']</code>。这个 prepare 多数派与选中多数派 <code>{a1,a2}</code> 交于 <code>{a2}</code>：<code>a2</code> 汇报 <code>accepted_n=1</code>、<code>accepted_v=Weekly digest (draft)</code>，<code>a3</code> 没有已接受提案。于是 <code>p2_inherited=true</code>，<code>p2_inherited_value=Weekly digest (draft)</code>，<code>inherit_from_n=1</code>，<code>inherit_from_acceptor=a2</code>。<code>p2</code> 必须继承草稿，不能发出修订。</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=2  accepted_n=1  accepted_v=Weekly digest (draft)
+a3  promised=2  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.06</code>，<code>p2</code> 向 <code>{a2,a3}</code> 发送 accept，调用时仍传入修订，但引擎忽略自身的值，<code>ignored_own_value=true</code>，实际发出的是草稿。<code>0.08</code>，<code>a2</code> 和 <code>a3</code> 接受 <code>n=2</code> 的草稿，被选中的值仍然是 <code>Weekly digest (draft)</code>，<code>revised_never_chosen=true</code>，<code>safety_ok=true</code>。<code>a1</code> 仍保留 <code>n=1</code> 的草稿；更高编号的提案带的是同一个值。</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=2  accepted_n=2  accepted_v=Weekly digest (draft)
+a3  promised=2  accepted_n=2  accepted_v=Weekly digest (draft)
+</code></pre></div>
+
+<p>同一时刻 <code>0.08</code> crash 再 restart <code>a2</code>，重启后持久状态不变，仍是 <code>promised=2</code>、<code>accepted_n=2</code>、<code>accepted_v=Weekly digest (draft)</code>，<code>restart_preserved=true</code>。整段实验共 flush <code>11</code> 次，都发生在分配编号或回复 prepare / accept 之前。结论是：Paxos 里「被选中」对应「某个提案已被多数派接受」，它是上一课「已提交」最接近的对应物；新 proposer 面对已被选中的草稿，只能继承它。</p>
+<p><strong>2. 对照 <code>partial_accept_not_chosen</code>。</strong> 同样从空状态开始。<code>p1</code> 完成 <code>n=1</code> 的 Phase 1 后，只让 <code>a1</code> 接受草稿。<code>0.04</code> 时草稿尚未被选中，<code>not_chosen_after_partial=true</code>：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=1  accepted_n=None  accepted_v=None
+a3  promised=1  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p><code>0.06</code>，<code>p2</code> 向 <code>{a2,a3}</code> 完成 Phase 1，与 <code>a1</code> 的交集为空，<code>p2_inherited=false</code>，<code>issued_value</code> 是它自己的 <code>Weekly digest (revised)</code>。<code>0.08</code>，<code>{a2,a3}</code> 接受修订，修订被选中，<code>draft_never_chosen=true</code>：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=2  accepted_n=2  accepted_v=Weekly digest (revised)
+a3  promised=2  accepted_n=2  accepted_v=Weekly digest (revised)
+</code></pre></div>
+
+<p>与主实践唯一的差别，就是 <code>p1</code> 有没有让草稿获得多数派。没有多数派，就没有「任意新多数派都会相交」的保证，另一个值仍然可以被选中，而且这并不违反安全性。</p>
+<p><strong>3. 提案编号边界 <code>proposal_number_bounds</code>。</strong> <code>0.02</code>，<code>p2</code> 用 <code>n=2</code> 完成 Phase 1，三台 <code>promised=2</code>。<code>0.03</code>，<code>p1</code> 的 <code>n=1</code> prepare 被三台忽略，<code>prepare_ignored_count=3</code>。<code>0.06</code>，<code>p1</code> 改用 <code>n=3</code>，三台 <code>promised=3</code>。<code>0.07</code>，<code>p2</code> 的 <code>n=2</code> accept 被三台拒绝，<code>promised_n=3</code>，<code>accept_rejected_count=3</code>。<code>0.08</code>，复用 <code>n=3</code> 和跨集合使用 <code>n=4</code> 都被引擎拒绝。<code>0.10</code>，<code>p1</code> 用合法的 <code>n=3</code> 完成 Phase 2，三台接受草稿，<code>chosen=Weekly digest (draft)</code>，<code>hotfix_never_chosen=true</code>。过期编号进不了 Phase 2，不相交集合和不可复用从源头上避免了「两个提案共用一个编号」。</p>
+<p><strong>4. 活锁与安全性 <code>livelock_vs_safety</code>。</strong> 两个 proposer 按论文 §2.4 的方式交错抬高编号，谁也不先完成 Phase 2。<code>0.02</code>，<code>p1</code> 完成 <code>n=1</code> 的 Phase 1；<code>0.04</code>，<code>p2</code> 完成更高的 <code>n=2</code> 的 Phase 1，三台 <code>promised=2</code>；<code>0.05</code> 三台拒绝 <code>p1</code> 的 <code>n=1</code> accept，<code>0.06</code> <code>p1</code> 收到三份 nack。<code>0.08</code>，<code>p1</code> 改用 <code>n=3</code> 完成 Phase 1；<code>0.09</code> 三台拒绝 <code>p2</code> 的 <code>n=2</code> accept。<code>0.12</code>，<code>p2</code> 改用 <code>n=4</code> 完成 Phase 1；<code>0.13</code> 三台拒绝 <code>p1</code> 的 <code>n=3</code> accept。<code>0.16</code>，<code>p1</code> 改用 <code>n=5</code> 完成 Phase 1；<code>0.17</code> 三台拒绝 <code>p2</code> 的 <code>n=4</code> accept。到 <code>0.18</code>，<code>t_livelock_end=0.18</code>，<code>accept_rejected_during_livelock=12</code>（四轮拒绝，每轮三台），<code>chosen_during_livelock=None</code>，<code>livelock_no_value_chosen=true</code>，但 <code>safety_during_livelock=true</code>：三台始终没有接受任何提案，更没有选出两个不同的值。</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=5  accepted_n=None  accepted_v=None
+a2  promised=5  accepted_n=None  accepted_v=None
+a3  promised=5  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+<p>这时停止交错，只让 <code>p1</code> 作为 distinguished proposer 继续。它已经持有 <code>n=5</code> 的 Phase 1 多数派，直接发出 Phase 2。<code>0.20</code> 三台接受 <code>n=5</code> 的 <code>Weekly digest (draft)</code>，该值被选中，<code>chosen_after_distinguished=Weekly digest (draft)</code>，<code>election_is_for_progress_not_safety=true</code>：</p>
+<div class="codehilite"><pre><span></span><code>a1  promised=5  accepted_n=5  accepted_v=Weekly digest (draft)
+a2  promised=5  accepted_n=5  accepted_v=Weekly digest (draft)
+a3  promised=5  accepted_n=5  accepted_v=Weekly digest (draft)
+</code></pre></div>
+
+<p>活锁可以一直进行下去，安全性不会因此放松；选出一个 distinguished proposer，是为了让某个值最终被选中，不是为了修补一条已经被破坏的安全性质。论文还指出，可靠选主必须借助随机或超时，因为 FLP 限制仍然在；教学实验没有实现选主，只是停止其中一方的交错，来观察「只让一个人提案」对进度的效果。</p>
+<p><strong>5. 误区对照与 Multi-Paxos 权衡。</strong> <code>pitfall_instances_are_not_replicas</code> 已在常见误区里给出数字：3 个 acceptor、2 个实例、2 条命令，<code>instances_equal_replicas=false</code>。<code>tradeoff_paper_vs_multipaxos</code> 已在设计权衡里给出表格：20 条命令时，单决议 <code>0.80</code> 秒、<code>240</code> 次 RPC，教学 Multi-Paxos 对照 <code>0.42</code> 秒、<code>126</code> 次 RPC，<code>rpc_saved_20=114</code>，<code>elapsed_saved_20_s=0.38</code>。两种模式最终都选出了全部命令，<code>all_chosen=true</code>，<code>safety_ok=true</code>。</p>
+<p><strong>6. 核对验收字段。</strong> <code>acceptance_new_proposer_inherits_chosen_value=true</code>，<code>acceptance_livelock_vs_safety=true</code>，<code>pitfall_instances_not_equal_replicas=true</code>，<code>tradeoff_stable_leader_saves_phase1=true</code>。四个字段都能在 <code>results.json</code> 顶层找到，实验脚本以 <code>ALL_CHECKS_PASSED</code> 结束。</p>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 Lamport — Paxos Made Simple 论文中与 Paxos 相关的定义、示例或实现，记录与教学实验的差异。2026-11-14 的实际打开情况如下。</p>
+<ul>
+<li>节点给出的 <a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Paxos Made Simple PDF</a> 返回 200，无跳转（最终 URL 仍是 <code>https://lamport.azurewebsites.net/pubs/paxos-simple.pdf</code>），95019 字节，<code>Content-Type</code> 为 <code>application/pdf</code>。</li>
+<li>题名 Paxos Made Simple；作者 Leslie Lamport；文内标注 01 Nov 2001。<code>pdfinfo</code> 记录 Creator 为 TeX output 2001.11.01:1449，CreationDate 为 Wed Nov 7 08:48:16 2001 CST，Pages 14，PDF 版本 1.2。PDF 共 14 页，其中文内正文页码至第 11 页。本节课主要用 §2.1 The Problem（安全性质与角色）、§2.2 Choosing a Value（P1、P2、P2c 与两阶段，约第 2–6 页）、§2.3 Learning a Chosen Value、§2.4 Progress（活锁与 distinguished proposer，约第 7 页）、§2.5 The Implementation（不相交编号与稳定存储，约第 7–8 页），以及 §3 Implementing a State Machine（多实例与稳定领导复用 Phase 1，约第 8–11 页）。</li>
+</ul>
+<p>论文里的定义与结论，本课按以下方式使用。</p>
+<p>§2.1 的安全要求：只有被提出过的值可以被选中；只选中一个值；进程不会在值尚未被选中时得知它已被选中。角色分为 proposer、acceptor、learner，一个进程可以扮演多种角色。模型是异步、非拜占庭：进程可以停机再恢复，因此失败重启后仍必须记住某些信息；消息可以延迟、重复、丢失，但不被篡改。</p>
+<p>§2.2 的选值规则：值在某个提案被多数派接受时被选中。P1 要求 acceptor 接受它收到的第一个提案，因而必须允许接受多个提案。P2 / P2a / P2b / P2c 逐步把「已被选中的值必须被更高编号提案继承」写成可维护的不变式。Phase 1 用 prepare 换 promise 和已接受的最高编号提案；Phase 2 发出继承得到的值，或在没有 accepted value 时发出 proposer 自选的值。P1a：acceptor 可以接受编号 <code>n</code>，当且仅当它还没有响应过编号大于 <code>n</code> 的 prepare。优化后，acceptor 只需持久记住已响应的最高 prepare 编号，以及已接受的最高编号提案。</p>
+<p>§2.4 明确给出活锁：两个 proposer 轮流完成更高编号的 Phase 1，对方的 Phase 2 被忽略，于是没有任何值被选中。进度依赖 distinguished proposer；选举算法需要随机或真实时间，但选举成败不影响安全性。</p>
+<p>§2.5 要求不同 proposer 从不相交集合取号，并在稳定存储中记住自己用过的最大编号；acceptor 必须在真正发出响应之前，先把打算写入的响应记录到稳定存储。</p>
+<p>§3 用一串独立实例实现状态机，第 <code>i</code> 个实例选出第 <code>i</code> 条命令。正常情况下选出一个 leader，作为所有实例的 distinguished proposer。Phase 1 不必在提出值之前完成对值的选择，这是稳定领导可以跳过后续 Phase 1 的关键。新 leader 可用同一个提案编号、一条较短消息执行许多实例的 Phase 1；之后新命令的有效代价主要是 Phase 2。多个自认为是 leader 的服务器同时提案，可能阻止选出值，但不会让第 <code>i</code> 条命令出现两个不同的值。</p>
+<p>教学实验与论文的差异如下。</p>
+<ul>
+<li><code>PaxosEngine</code> 是单进程邮箱仿真，没有 TCP，默认不会丢失或重复消息，只在 <code>crash()</code> / <code>isolate()</code> 时丢弃在途消息。论文允许任意延迟、丢失和重复。</li>
+<li><code>rpc_delay_s=0.01</code> 和所有时间戳都是教学虚拟时钟上的数字，不是生产 RTT，也不是论文里的真实时间或超时。</li>
+<li>持久化是 dict，在回复前 flush，不是磁盘，也没有 <code>fsync</code>。<code>restart()</code> 保留这份 dict，用来观察 §2.5 的稳定存储要求，不表示做过真正的崩溃恢复测试。</li>
+<li>核心实现是单决议算法。多实例只用于误区对照和 Multi-Paxos 教学对比；对照没有选主、没有 no-op 填洞、没有 α 超前窗口、没有成员变更，不能当成完整的 §3 实现。</li>
+<li>提案编号用算术等差集合实现不相交取号，这是 §2.5「从不相交集合中取号」的一种教学实现，不是论文指定的唯一格式。</li>
+<li>学习者是全知观察者，按当前多数派是否接受同一提案来判断选中；没有实现 §2.3 的区分 learner 或「向所有 learner 广播」。</li>
+<li>忽略过期请求时发送 nack，是论文写明的性能优化；教学引擎把它做成默认行为，以便拒绝可观察。</li>
+<li>若 acceptor 收到它并未 promise 过的 accept，且 <code>promised_n &lt; n</code>，引擎会把 <code>promised_n</code> 提升到 <code>n</code>。这是对 P1a 的教学补充，论文正文没有单独写这一步。</li>
+<li><code>pause()</code> 与 <code>isolate()</code> 是全知信号。活锁实验中的 distinguished proposer，是测试脚本停止另一方交错后得到的，不是一次真实选举。</li>
+</ul>
+<h2 id="_13">自测题</h2>
+<p><strong>题 1.</strong> 主实践里，新 proposer <code>p2</code> 必须继承哪个值？请用 <code>0.04</code> 和 <code>0.06</code> 的 acceptor 持久状态，以及多数派交集说明原因。</p>
+<details>
+<summary>答案</summary>
+
+必须继承已经被选中的 `Weekly digest (draft)`，不能发出自己打算写的 `Weekly digest (revised)`。
+
+`0.04`，`p1` 的 `n=1` 提案已被 `{a1,a2}` 接受，因而被选中：
+
+
+<div class="codehilite"><pre><span></span><code>a1  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a2  promised=1  accepted_n=1  accepted_v=Weekly digest (draft)
+a3  promised=1  accepted_n=None  accepted_v=None
+</code></pre></div>
+
+
+
+选中多数派是 `{a1,a2}`。`0.06`，`p2` 向 `{a2,a3}` 完成 `n=2` 的 Phase 1，意图值却是修订。prepare 多数派 `{a2,a3}` 与选中多数派交于 `{a2}`，`a2` 汇报 `accepted_n=1`、`accepted_v=Weekly digest (draft)`。于是 `p2_inherited=true`，`inherit_from_n=1`，`inherit_from_acceptor=a2`，`issued_value` 变成草稿。`0.08` 即使 `start_accept` 传入修订，也会被忽略，`ignored_own_value=true`，`{a2,a3}` 接受的仍是草稿，`revised_never_chosen=true`。
+
+这就是 P2c 与多数派交集：已被一个多数派选中的值，一定会出现在任意新的 prepare 多数派里，新 proposer 只能继承它。对照实验里，若草稿只被 `a1` 接受、尚未选中，`p2` 的 `{a2,a3}` 与 `a1` 不相交，就可以发出修订；那是因为草稿从未被选中，并不推翻这条规则。
+
+</details>
+
+<p><strong>题 2.</strong> 活锁与安全性有什么区别？请用 <code>livelock_vs_safety</code> 的时间线和最终状态说明。</p>
+<details>
+<summary>答案</summary>
+
+活锁是进度失败：协议一直在运行，却选不出任何值。安全性是「至多选出一个值，且只选出被提出过的值」。两者不是一回事。两个 proposer 互相抢更高编号时，可能陷入活锁，但安全性质仍然成立；要恢复进度，需要一个 distinguished proposer，而选主本身是为了进度，不是为了修补安全性。
+
+实验里，`0.02` `p1` 完成 `n=1` 的 Phase 1，`0.04` `p2` 用 `n=2` 抢先完成 Phase 1，`0.05` 三台拒绝 `n=1` 的 accept。随后双方交替抬高编号：`0.09` 拒绝 `n=2`，`0.13` 拒绝 `n=3`，`0.17` 拒绝 `n=4`。到 `0.18`，四轮拒绝共 `12` 次 `accept_rejected`，`chosen_during_livelock=None`，`livelock_no_value_chosen=true`，三台的持久状态是 `promised=5`、`accepted_n=None`、`accepted_v=None`。此时一个值都没选中，更没有选出两个不同的值，`safety_during_livelock=true`。
+
+停止交错后，只让已经持有 `n=5` Phase 1 多数派的 `p1` 发出 Phase 2，`0.20` 三台接受 `Weekly digest (draft)`，`chosen_after_distinguished=Weekly digest (draft)`。论文 §2.4 的原意就是这样：活锁容易构造，进度依赖 distinguished proposer；选举成败不影响安全性。`election_is_for_progress_not_safety=true`。
+
+</details>
+
+<p><strong>题 3.</strong> 为什么不能把 Paxos 的实例数量当成数据副本数量？用 <code>pitfall_instances_are_not_replicas</code> 的数字说明。</p>
+<details>
+<summary>答案</summary>
+
+Paxos 实例是「第几条状态机命令要在哪一次共识里被选中」，数据副本是「同一条被选中的命令被多少个 acceptor 记住」。前者随命令序列变长，后者由集群成员数决定，两件事不是同一个计数。
+
+实验在 3 个 acceptor 上先后跑了 2 个单决议实例。`0.04`，实例 1 选中 `SET article:01:title = Weekly digest`，三台都接受了这个值。`0.08`，实例 2 选中 `SET article:01:title = Weekly digest (revised)`，仍然是这三台，各自为实例 2 保存一份持久状态。最终 `acceptor_count=3`，`instance_count=2`，`command_count=2`，`instances_equal_replicas=false`，`instances_equal_commands=true`，`each_acceptor_holds_all_instances=true`。若把「3 个副本」理解成「应该有 3 个 Paxos 实例」，就会期待 `instance_count=3`，这个错误模型被 `wrong_model_rejected=true` 拒绝。再来第 3 条命令，出现的是实例 3，不是第 4、第 5 个 acceptor，也不是一套新的集群。
+
+论文 §3 的原句是：用一串互相独立的 Paxos 共识实例实现状态机，第 `i` 个实例选出第 `i` 条命令。阅读实现时，要把「日志有多长」和「日志存了几份」分开看。
+
+</details>
+
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://lamport.azurewebsites.net/pubs/paxos-simple.pdf">Lamport — Paxos Made Simple 论文</a>（Leslie Lamport，英文论文，专家，免费）：用于核对 proposal number 与 promise、accepted value，以及多数派交集和当前提案必须继承的约束，将结论落实到本节点实验。2026-11-14 该地址返回 200，无跳转，95019 字节，<code>Content-Type</code> 为 <code>application/pdf</code>；题名 Paxos Made Simple，作者 Leslie Lamport，文内标注 01 Nov 2001；pdfinfo 记录 Creator 为 TeX output 2001.11.01:1449，CreationDate 为 Wed Nov 7 08:48:16 2001 CST，共 14 页，文内正文页码至第 11 页。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>提案由编号和值组成。编号必须唯一，必须来自不相交集合，不能复用；更高的编号只启动新的一轮两阶段，不能改写已被选中的值。<code>proposal_number_bounds</code> 里，<code>0.03</code> 三台忽略过期的 <code>n=1</code> prepare，<code>0.07</code> 三台拒绝过期的 <code>n=2</code> accept，<code>0.08</code> 复用 <code>n=3</code> 和跨集合使用 <code>n=4</code> 都被拒绝，<code>0.10</code> 合法的 <code>n=3</code> 才选出草稿。</li>
+<li>Phase 1 的 promise 带上已接受的最高编号提案，Phase 2 必须发出继承得到的值，或在没有 accepted value 时发出 proposer 自选的值。主实践 <code>0.04</code> <code>{a1,a2}</code> 接受并选中 <code>Weekly digest (draft)</code>；<code>0.06</code> <code>p2</code> 想写修订，却从 <code>a2</code> 继承了 <code>n=1</code> 的草稿；<code>0.08</code> 发出去的仍是草稿，<code>ignored_own_value=true</code>，<code>revised_never_chosen=true</code>。<code>a2</code> 在 <code>0.08</code> 重启后持久状态不变。</li>
+<li>多数派交集保证：已被选中的值一定出现在任意新的 prepare 多数派里。主实践的交集是 <code>{a2}</code>。对照实验里，草稿只被 <code>a1</code> 接受、尚未选中时，<code>p2</code> 的 <code>{a2,a3}</code> 与 <code>a1</code> 不相交，可以选出修订；部分接受不是选中。</li>
+<li>活锁不是安全性失败。交错到 <code>0.18</code> 仍无值被选中，<code>accept_rejected_during_livelock=12</code>，但 <code>safety_during_livelock=true</code>；只让 <code>p1</code> 继续后，<code>0.20</code> 选出草稿。选主是为了进度。</li>
+<li>Paxos 实例数量不等于数据副本数量。3 个 acceptor 上的 2 个实例选出 2 条命令，<code>instances_equal_replicas=false</code>，<code>instances_equal_commands=true</code>。</li>
+<li>稳定领导可以复用 Phase 1，这是论文 §3 的优化，不是 §2 单决议核心。20 条命令时，单决议 <code>0.80</code> 秒、<code>240</code> 次 RPC，教学 Multi-Paxos 对照 <code>0.42</code> 秒、<code>126</code> 次 RPC。这些时间是教学虚拟时钟上的数字，不是生产 RTT。</li>
+<li>教学引擎 <code>PaxosEngine</code> 不是完整 Paxos，也不是完整 Multi-Paxos；它没有选主、没有 no-op 填洞、没有成员变更，持久化是 dict，不是磁盘；<code>pause()</code> 与 <code>isolate()</code> 是全知信号。</li>
+</ul>
+<p>如果有一句答不上来，先回到对应的实验字段，再回到论文 §2.2 的 P2c 与两阶段、§2.4 的活锁与 distinguished proposer、§2.5 的不相交编号和稳定存储，以及 §3 的多实例与稳定领导，不要只把「多数派同意了就能改成自己的值」背下来。</p><div class="pn"><span><a href="118.html">← Raft 日志一致性与提交</a></span><span>下一课 待更新</span></div></main></div></body></html>
