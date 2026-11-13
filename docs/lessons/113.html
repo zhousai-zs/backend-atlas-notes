@@ -1,0 +1,336 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>113. 分布式故障模型 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（113/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details open><summary>领域 H（1/15）</summary><div>阶段 3</div><ul><li><a class="cur" href="../lessons/113.html">113. 分布式故障模型</a></li><li class="todo">114. 一致性模型与线性化点 <em>待更新</em></li><li class="todo">115. CAP 与分区下的选择 <em>待更新</em></li><li class="todo">122. 消息投递与幂等消费 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">116. 复制状态机 <em>待更新</em></li><li class="todo">117. Raft 任期与选主 <em>待更新</em></li><li class="todo">118. Raft 日志一致性与提交 <em>待更新</em></li><li class="todo">120. 分片与在线迁移 <em>待更新</em></li><li class="todo">121. 分布式事务与补偿 <em>待更新</em></li><li class="todo">123. 限流与过载保护 <em>待更新</em></li><li class="todo">124. 熔断、降级与隔离 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">119. Paxos 与多数派交集 <em>待更新</em></li><li class="todo">125. 多机房与灾难恢复 <em>待更新</em></li><li class="todo">126. 分布式历史与故障测试 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 113 课 · 领域 H · 阶段 3</p><p class="dl"><a href="../files/113-h-failure.md" download>⬇ 本课 Markdown</a><a href="../files/practice113.tar.gz" download>⬇ 练习包 practice113.tar.gz</a></p><h1 id="113208">第 113/208 课：分布式故障模型</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>h-failure</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Failure models</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>H / 第 3 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>理论与故障模型</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>进阶</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><code>d-tcp</code>、<code>f-model</code></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Failure models</code>、<code>Distributed</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://pdos.csail.mit.edu/6.5840/">MIT 6.5840 — Distributed Systems</a>（MIT 6.5840，英文文档，进阶，免费；2026-11-13 该入口返回 200，无跳转。<code>schedule.html</code> 与 <code>notes/l01.txt</code>、<code>notes/l-rpc.txt</code>、<code>notes/l-raft.txt</code>、<code>notes/l-bft.txt</code> 同批核对为 200，正文按需引用）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>跨机器系统不存在共享时钟和瞬时通信；超时只能说明等待预算耗尽，不能证明远端没有执行。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课中的「内容后台」「文章标题 <code>Weekly digest</code>」「阅读计数 <code>article:01:views</code>」都是<strong>教学假设</strong>，用来让超时、重试、分区和故障检测变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>FailureEngine</code>，包含 <code>Clock</code>、<code>Replica</code>、<code>ProxyPolicy</code>、<code>ClientObservation</code>、<code>ServerObservation</code>，<strong>不是 Redis，不是 redis-py，不是网络服务，不是 Raft，也不是 PBFT</strong>。它没有 TCP、没有真实 socket、没有共识协议、没有跨机器共享物理时钟；<code>Clock</code> 只是仿真调度器，让实验可以重复，真实部署里的两台机器并不会共享这样一个时钟。官方材料已于 <strong>2026-11-13</strong> 用 curl 核对：<code>https://pdos.csail.mit.edu/6.5840/</code> 与 <code>schedule.html</code> 均为 200；<code>notes/l01.txt</code>（2026 Lecture 1，10886 字节）、<code>notes/l-rpc.txt</code>（2026 Lecture 2）、<code>notes/l-raft.txt</code>（2026 Lecture 6）、<code>notes/l-bft.txt</code>（讲义标题仍写 2024 Lecture 22，但 Spring 2026 日程的 LEC 21 链到这个文件）均为 200 且无跳转；<code>notes/65840-pbft.pdf</code>、<code>papers/castro-practicalbft.pdf</code>、<code>papers/bft-faq.txt</code> 均为 200。本课只引用这些核对过的页面。教学实验里的超时、耗时和状态都来自 <code>/workspace/atlas/lessons/practice113/results.json</code>，是教学虚拟时钟上的数字，不是生产 RTT，也不是任何系统在真实网络上的基准。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">一个直觉：超时不是「没发生」，只是「我不知道」</h3>
+<p>内容后台（教学假设）发布一篇稿件，客户端把标题改成 <code>Weekly digest (revised)</code>，等待预算 <code>timeout_s=0.05</code>。面板上出现 <code>timeout</code>，看起来像这次修改失败了。节点把这件事说得很硬：跨机器系统不存在共享时钟和瞬时通信；超时只能说明等待预算耗尽，不能证明远端没有执行。客户端没有收到回复，可能是请求没送到，可能是服务端已经提交而回复丢了，也可能是请求和回复都在路上、只是比预算慢。</p>
+<p>本课要盯住的不是「这次调用返回了什么」，而是：返回 <code>timeout</code> 之后，服务端的存储可能处于哪几种状态；盲目重试会把哪种操作做两次；探测不到一台副本时，把它当崩溃处理会换来什么。对内容后台来说，这三件事分别对应标题修改、阅读计数和故障切换。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置的 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/49.html">第 49 课</a> <code>d-tcp</code> 与 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/83.html">第 83 课</a> <code>f-model</code> 已经建立了传输与 RPC 失败语义的基本词汇。本课把问题推到跨机器：一次本地函数调用返回，只说明本进程拿到了一个结果；一次远端调用超时，只说明本进程的等待预算用完了。节点把「为什么」写成建立复制、重试和容错设计的前提，原因就在这里：复制和重试都是在信息不完整的情况下做决定。</p>
+<h3 id="set">一次 SET 走进教学引擎之后</h3>
+<p>教学引擎的 <code>client_call(replica_id, op, timeout_s)</code> 从 <code>t0=clock.now()</code> 开始，先算出 <code>deadline=t0+timeout_s</code>。代理策略先决定请求能不能出门：<code>partitioned=true</code> 或 <code>drop_request=true</code> 时，请求不会到达副本，客户端等到 <code>deadline</code> 返回 <code>timeout</code>，并标记 <code>applied_unknown=true</code>。若 <code>delay_request_s</code> 把请求推到 <code>deadline</code> 之后，客户端会在 <code>t0</code> 到 <code>deadline</code> 之间先超时，请求被放进 <code>pending_requests</code>，等 <code>pump_pending()</code> 在更晚的时刻送达。</p>
+<p>请求按时到达时，副本执行 <code>SET</code>。如果 <code>drop_reply=true</code>，回复被丢掉，客户端仍然等到 <code>deadline</code> 返回 <code>timeout</code>，但服务端已经改过值。<code>partitioned=true</code> 走的是前面那条短路：请求在代理处就被拦住，服务端没有执行，所以本课分区实验里 <code>r1</code> 的标题保持不变。如果 <code>delay_reply_s</code> 把回复推到 <code>deadline</code> 之后，客户端同样先超时，回复被放进 <code>late_replies</code>，在更晚的时刻到达。只有回复在 <code>deadline</code> 之前到达，<code>client_call</code> 才返回 <code>status="ok"</code>，并更新 <code>last_heard[replica_id]</code>。</p>
+<p><code>pump_pending()</code> 会把 <code>pending_requests</code> 和 <code>late_replies</code> 按 <code>at</code> 排序，推进虚拟时钟，投递请求或回复。因此「客户端已经超时」和「服务端后来才提交」可以同时成立；这不是引擎的漏洞，而是本课要展示的故障模型。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台用两个 KV 副本 <code>r1</code>、<code>r2</code> 保存已发布文章的标题，键为 <code>article:01:title</code>，初始值是 <code>Weekly digest</code>；阅读计数键为 <code>article:01:views</code>。一次标题修订写成 <code>Weekly digest (revised)</code>，一次分区另一侧的应急修改写成 <code>Weekly digest (hotfix)</code>。教学参数是 <code>timeout_s=0.05</code>、<code>delay_s=0.08</code>、<code>suspect_s=0.05</code>。这些数字是虚拟时钟上的教学值，不是线上超时配置，也不是生产 RTT。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>崩溃与拜占庭故障</strong>：崩溃是停住不回答，拜占庭是继续回答但可能给出错误值；本课只在崩溃模型里做容错，不声称覆盖恶意副本。</li>
+<li><strong>网络分区与消息延迟</strong>：消息可以丢、可以晚到；超时只说明预算耗尽，客户端无法从超时本身判断远端是否执行。</li>
+<li><strong>部分失败与故障检测</strong>：故障是局部的，观察也是局部的；基于心跳的怀疑可能误报，把怀疑当崩溃会带来安全性或可用性的取舍。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释崩溃与拜占庭故障及适用边界。</li>
+<li>能独立完成：用代理延迟或丢弃一个 KV 副本的请求，记录客户端与服务端的不同观察。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>公众号内容后台（教学假设）会修改已发布标题、累加阅读计数、在副本之间切换读流量。标题修改超时之后，如果后台直接重试，<code>SET</code> 写同一个值通常看不出问题；换成阅读计数 <code>INCR</code>，重试就会把一次阅读算成两次。另一台副本一次心跳没回，后台如果立刻判定它崩溃并提升新副本，而旧副本其实只是网络断了，两侧就可能各自接受一个不同的标题。</p>
+<p>节点要求你建立复制、重试和容错设计的前提，说的就是这些决定：超时之后到底能不能重试、重试要不要带幂等键、怀疑一台副本时是该等待还是该切换。这些判断不能靠「调用返回失败就是没成功」这句话，因为跨机器系统里没有这样一个全局的失败通知。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1">1. 崩溃与拜占庭故障</h3>
+<p>崩溃故障也叫 fail-stop：副本停止工作，不再产生新的回复。它可能丢掉还没持久化的内存状态，也可能在重启后需要恢复，但它不会在停止之后发出一个错误的值。本课先给 <code>r1</code>、<code>r2</code> 都写入 <code>Weekly digest (revised)</code>，再让 <code>r1</code> 崩溃。对 <code>r1</code> 的 <code>GET</code> 返回 <code>status=timeout</code>、<code>elapsed_s=0.05</code>、<code>applied_unknown=true</code>；对 <code>r2</code> 的 <code>GET</code> 返回 <code>status=ok</code>、<code>value=Weekly digest (revised)</code>、<code>elapsed_s=0.0</code>。服务端视角里，<code>r1</code> 的 <code>value</code> 仍是 <code>Weekly digest (revised)</code>，<code>applied_count=0</code>，<code>crashed=true</code>，<code>byzantine=false</code>。它没有撒谎，只是不再回答。</p>
+<p>拜占庭故障是另一类模型：副本继续运行，可能因为缺陷、没有遵守协议，或被攻击者控制，返回错误的值。教学引擎用一个明确的教学桩来展示边界：<code>r1</code> 的存储里仍是 <code>Weekly digest (revised)</code>，但它对 <code>GET</code> 在 <code>elapsed_s=0.0</code> 返回 <code>Weekly digest</code>；<code>r2</code> 返回 <code>Weekly digest (revised)</code>。此时 <code>clients_see_different_values=true</code>，<code>timeout_does_not_detect_the_lie=true</code>。拜占庭副本没有超时，它比超时更早地给了一个看起来成功的回复，所以基于等待预算的故障检测根本抓不到它。</p>
+<p>MIT 6.5840 的材料把这两种模型的边界写得很清楚。<code>notes/l-bft.txt</code> 说明课程此前一直假设 fail-stop；拜占庭是 buggy、不遵守协议、或被攻击者控制的副本。<code>notes/l01.txt</code> 里 MapReduce 假设 fail-stop，错误计算被归为「too bad」。<code>notes/l-raft.txt</code> 指出复制适合单个副本的 fail-stop，不一定能对付缺陷或误操作。教学引擎按节点的权衡只限定在崩溃故障：<code>teaching_limited_to_crash_failures=true</code>，<code>does_not_claim_to_cover_malicious_replicas=true</code>。它不实现 PBFT，也不把「复制 + 故障切换」说成能解决撒谎的副本。</p>
+<p>这个边界对设计很重要。崩溃模型下，超时和连接失败可以作为「这台副本可能停了」的证据；拜占庭模型下，一个快速的、格式正确的回答也可能是假的，需要额外的交叉校验或拜占庭容错协议。本课后面的分区、重试和检测，全部建立在崩溃模型上，不能直接搬到恶意副本的场景。</p>
+<h3 id="2">2. 网络分区与消息延迟</h3>
+<p>节点把这一条写成：跨机器系统不存在共享时钟和瞬时通信；超时只能说明等待预算耗尽，不能证明远端没有执行。教学引擎用 <code>timeout_s=0.05</code> 和 <code>delay_s=0.08</code> 让「预算先到、消息后到」稳定发生。四条路径的客户端观察和服务端观察如下。</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>客户端观察</th>
+<th>服务端观察</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>drop_reply</code></td>
+<td><code>status=timeout</code>，<code>elapsed_s=0.05</code>，<code>applied_unknown=true</code></td>
+<td><code>value=Weekly digest (revised)</code>，<code>applied_count=1</code>，<code>title_committed=true</code></td>
+</tr>
+<tr>
+<td><code>drop_request</code></td>
+<td><code>status=timeout</code>，<code>elapsed_s=0.05</code>，<code>applied_unknown=true</code></td>
+<td><code>value=Weekly digest</code>，<code>applied_count=0</code>，<code>title_committed=false</code></td>
+</tr>
+<tr>
+<td><code>delay_reply</code></td>
+<td><code>status=timeout</code>，<code>elapsed_s=0.05</code>，<code>applied_unknown=true</code></td>
+<td>请求已提交为 <code>Weekly digest (revised)</code>，late reply 在 <code>at=0.08</code> 到达，<code>value=Weekly digest (revised)</code></td>
+</tr>
+<tr>
+<td><code>delay_request</code></td>
+<td>先在 <code>elapsed_s=0.05</code> 超时，<code>applied_unknown=true</code></td>
+<td>请求在 <code>at=0.08</code> 才送达并提交，<code>value=Weekly digest (revised)</code>，<code>title_committed=true</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>drop_reply</code> 和 <code>drop_request</code> 的客户端字段完全一样：<code>status=timeout</code>、<code>elapsed_s=0.05</code>、<code>value=null</code>、<code>applied_unknown=true</code>。结果是 <code>client_timeout_observations_identical=true</code>，而服务端 <code>server_observations_differ=true</code>：前者已经提交了修订标题，后者连请求都没收到。于是 <code>cannot_distinguish_drop_reply_from_drop_request=true</code>。客户端手里没有足够信息去区分这两种世界，这正是 <code>timeout_is_not_proof_of_rollback=true</code> 的含义，也是 <code>timeout_only_means_budget_exhausted=true</code> 的含义。</p>
+<p><code>delay_reply</code> 更直接：请求在预算内到达并提交，回复要等到 <code>at=0.08</code>，超过 <code>deadline=0.05</code>，所以客户端超时；<code>delay_reply_commits_before_client_gives_up=true</code>，但 <code>delay_reply_arrives_late=true</code>。<code>delay_request</code> 则展示了另一种更麻烦的情况：客户端在 <code>0.05</code> 已经放弃，请求在 <code>0.08</code> 才送达并提交，<code>delay_request_commits_after_timeout=true</code>、<code>delay_request_delivered_late=true</code>。所以超时之后不仅可能「已经提交」，还可能「将在超时之后提交」。<code>cannot_distinguish_delay_from_loss_at_timeout=true</code> 说的是同一件事：在超时那一刻，延迟和丢失对客户端看起来一样。MIT 6.5840 的 <code>notes/l-rpc.txt</code> 也指出，客户端看不到回复时，并不知道服务端是否见到过请求。</p>
+<p>超时带来的不确定性会直接传到重试策略上。教学引擎对 <code>article:01:views</code> 做 <code>INCR</code>，先让第一次回复丢失，再比较三条路径。</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>第一次</th>
+<th>第二次</th>
+<th>最终 <code>views</code></th>
+<th><code>applied_count</code></th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>盲重试</td>
+<td><code>status=timeout</code>，<code>elapsed_s=0.05</code></td>
+<td><code>status=ok</code>，<code>value=2</code>，<code>elapsed_s=0.0</code></td>
+<td>2</td>
+<td>2</td>
+<td><code>safety_violation=true</code></td>
+</tr>
+<tr>
+<td>不重试</td>
+<td><code>status=timeout</code>，<code>elapsed_s=0.05</code></td>
+<td>无</td>
+<td>1</td>
+<td>1</td>
+<td><code>safety_violation=false</code>，<code>availability_reduced=true</code>，<code>client_confirmation=timeout</code></td>
+</tr>
+<tr>
+<td>幂等键 <code>publish-01</code> 重试</td>
+<td><code>status=timeout</code>，<code>elapsed_s=0.05</code></td>
+<td><code>status=ok</code>，<code>value=1</code>，<code>elapsed_s=0.0</code></td>
+<td>1</td>
+<td>1</td>
+<td>安全性与确认都保住</td>
+</tr>
+</tbody>
+</table>
+<p>盲重试的第一次 <code>INCR</code> 已经在服务端执行，只是回复丢了；客户端不知道，于是第二次又执行一次，<code>views=2</code>、<code>applied_count=2</code>。客户端最终拿到了 <code>status=ok</code> 和 <code>value=2</code>，但阅读计数多了一次，这是一次安全性违反，不是一次成功的恢复。不重试的路径让 <code>views=1</code>，服务端只执行一次，安全性没有破坏；代价是客户端只拿到 <code>timeout</code>，<code>availability_reduced=true</code>，后续流程无法确认这次计数到底有没有生效。幂等重试把 <code>publish-01</code> 作为键交给服务端，第二次到达时服务端直接返回第一次的结果 <code>value=1</code>，没有再执行 <code>INCR</code>，所以 <code>views=1</code>、<code>applied_count=1</code>，第二次仍然是 <code>status=ok</code>。这条路径不是靠「猜第一次有没有成功」，而是让服务端记住这个键对应的结果。</p>
+<p>这里的操作类型很关键。本课用 <code>INCR</code> 而不是 <code>SET</code>，因为重复执行 <code>INCR</code> 会留下可见的差异；<code>SET</code> 写同一个标题时，重复执行可能只让 <code>applied_count</code> 增加，而值看起来没变，容易掩盖重试问题。幂等键也不是一句注释：服务端必须把键和结果一起保存，并在重复请求到达时返回同一个结果；如果保存键和保存副作用不是原子的，崩溃窗口里仍然可能重复。教学引擎用一个内存字典演示这件事，不代表生产实现已经替你处理好。</p>
+<h3 id="3">3. 部分失败与故障检测</h3>
+<p>分布式系统里的故障是部分失败：一台副本停了，另一台还在回答；一个客户端超时，另一个客户端可能正好成功。观察也是局部的，<code>client_call</code> 返回的是本客户端这一次等待的结果，<code>server_view</code> 返回的才是某个副本本地的状态。教学引擎用 <code>heartbeat_reachable()</code> 和 <code>suspects(suspect_s)</code> 做一个最简故障检测器：能到达的副本会更新 <code>last_heard</code>，当前时间减去 <code>last_heard</code> 达到 <code>suspect_s=0.05</code> 的副本会被列为怀疑对象。它不是独立的周期心跳线程：<code>client_call</code> 成功时会更新 <code>last_heard</code>，超时路径会调用 <code>heartbeat_reachable()</code>，所以怀疑列表是在这些调用之后观察到的。</p>
+<p>分区实验先做一次初始 <code>GET r1</code>，得到 <code>status=ok</code>、<code>value=Weekly digest</code>、<code>elapsed_s=0.0</code>，<code>heard_at=0.0</code>。随后把 <code>r1</code> 标记为分区，再对 <code>r1</code> 做 <code>SET</code>，客户端得到 <code>status=timeout</code>、<code>elapsed_s=0.05</code>。此时 <code>r1_crashed=false</code>，<code>r1</code> 的标题仍是 <code>Weekly digest</code>，请求根本没有到达；但 <code>suspects_after_partitioned_write=["r1"]</code>，<code>false_suspicion=true</code>。检测器没有做错什么，它只是根据「多久没听到」判断，而分区和崩溃在这条信息上不可区分。<code>cannot_distinguish_crash_from_partition=true</code>。MIT 6.5840 的 <code>notes/l-raft.txt</code> 把这件事写成：计算机无法区分「server crashed」和「network broken」；网络分区还可能导致 split brain。</p>
+<p>接下来是两条故障切换策略。保守路径不提升 <code>r2</code>，客户端继续收到 <code>timeout</code>；<code>r1_title=Weekly digest</code>、<code>r2_title=Weekly digest</code>、<code>split_brain=false</code>、<code>safety_violation=false</code>、<code>availability_reduced=true</code>。它保住了「两个副本标题一致」这个安全条件，代价是写不可用。</p>
+<p>激进路径把怀疑当成崩溃，提升 <code>r2</code>。同时，分区另一侧还有客户端能直接写 <code>r1</code>，教学引擎用 <code>direct_apply</code> 模拟这一侧：<code>r1</code> 被写成 <code>Weekly digest (revised)</code>；客户端这一侧对 <code>r2</code> 写入 <code>Weekly digest (hotfix)</code>，得到 <code>status=ok</code>、<code>elapsed_s=0.0</code>。结果是 <code>r1_title=Weekly digest (revised)</code>、<code>r2_title=Weekly digest (hotfix)</code>、<code>split_brain=true</code>、<code>safety_violation=true</code>、<code>availability_reduced=false</code>。客户端这一侧看起来完全成功，但两个副本已经分叉。这里的 <code>direct_apply</code> 是教学装置，用来表示分区另一侧仍有写入口，不是真实客户端实现；真实系统里，如果没有多数派或租约约束，两侧各自接受写入就会产生同样的分裂。</p>
+<p>这两条路径对应验收里要区分的东西：安全性违反是两个副本出现不同值、或同一次副作用被执行两次；可用性降低是客户端拿不到确认、写无法推进。保守路径是「安全但不可用」，激进路径是「可用但不安全」，盲重试是「最终有确认但不安全」，不重试是「安全但没有确认」，幂等重试才同时保住两边。故障检测的误报本身不等于系统出错，真正决定后果的是你拿怀疑去做什么。</p>
+<h2 id="_10">常见误区</h2>
+<ul>
+<li><strong>把超时当成远端事务回滚的证明。</strong> 本课 <code>drop_reply</code> 的客户端是 <code>timeout</code>、<code>elapsed_s=0.05</code>，服务端却已经提交 <code>Weekly digest (revised)</code>、<code>applied_count=1</code>。超时只说明等待预算耗尽，不说明远端没有执行。</li>
+<li><strong>看到客户端超时一样，就认为服务端状态一样。</strong> <code>drop_reply</code> 和 <code>drop_request</code> 的客户端字段完全相同，服务端一个已提交、一个 <code>applied_count=0</code>。<code>cannot_distinguish_drop_reply_from_drop_request=true</code>。</li>
+<li><strong>对非幂等操作盲重试。</strong> <code>INCR</code> 第一次超时后重试，<code>views=2</code>、<code>applied_count=2</code>，客户端最终 <code>ok</code>，但计数已经错了。客户端的成功不等于操作只发生一次。</li>
+<li><strong>为了避免重复，干脆不重试，并认为这是免费的。</strong> 不重试时 <code>views=1</code>、<code>safety_violation=false</code>，但 <code>availability_reduced=true</code>、<code>client_confirmation=timeout</code>。安全性保住了，客户端却不知道结果。</li>
+<li><strong>把心跳超时直接当成副本崩溃。</strong> 分区实验里 <code>r1_crashed=false</code>、标题仍是 <code>Weekly digest</code>，检测器却给出 <code>suspects_after_partitioned_write=["r1"]</code> 和 <code>false_suspicion=true</code>。怀疑不是事实。</li>
+<li><strong>认为故障切换只会提高可用性。</strong> 激进路径的 <code>promoted_write</code> 是 <code>status=ok</code>，看起来服务恢复了，代价是 <code>r1</code> 与 <code>r2</code> 标题分叉，<code>split_brain=true</code>、<code>safety_violation=true</code>。</li>
+<li><strong>认为复制和故障切换能覆盖拜占庭副本。</strong> 拜占庭 <code>r1</code> 在 <code>elapsed_s=0.0</code> 返回 <code>Weekly digest</code>，存储里却是 <code>Weekly digest (revised)</code>；<code>timeout_does_not_detect_the_lie=true</code>。本课限定在崩溃故障，不声称覆盖恶意副本。</li>
+<li><strong>把教学 <code>Clock</code> 当成生产里的共享物理时钟。</strong> 它只是仿真调度器，用来让 <code>0.05</code> 和 <code>0.08</code> 的先后关系可重复；真实机器之间没有这样一个共同的 <code>now()</code>。</li>
+</ul>
+<h2 id="_11">设计权衡</h2>
+<p>超时预算本身是取舍。把 <code>timeout_s</code> 设得比 <code>delay_s=0.08</code> 短，客户端能更快地放弃，但 <code>delay_reply</code> 和 <code>delay_request</code> 都会变成超时，误报和不确定性增加；设得更长，晚到的回复有机会被确认，代价是故障检测和用户等待都变慢。本课选 <code>0.05</code> 对 <code>0.08</code>，是为了让「预算耗尽但消息仍在路上」稳定出现，不是为了给出一个生产建议值。</p>
+<p>重试策略在安全性和可用性之间取舍。盲重试让客户端最终拿到 <code>status=ok</code>，但 <code>INCR</code> 的 <code>views=2</code> 说明副作用被执行了两次；不重试让 <code>views=1</code>，却只给客户端 <code>timeout</code>。幂等重试要求服务端保存键和结果，增加存储与协议复杂度，换来的是第二次请求返回第一次的结果 <code>value=1</code>、<code>applied_count=1</code>。操作本身是否幂等也很重要：写同一个标题的 <code>SET</code> 比 <code>INCR</code> 更容易做成幂等，但不能因为值相同就假设副作用只发生了一次。</p>
+<p>故障切换在安全性和可用性之间取舍。保守路径 <code>split_brain=false</code>、<code>availability_reduced=true</code>；激进路径 <code>availability_reduced=false</code>、<code>split_brain=true</code>、<code>safety_violation=true</code>。节点的权衡是：教学系统先限定崩溃故障，不声称覆盖恶意副本。这个限定不是省略，而是边界：崩溃模型下可以用超时、心跳、复制和切换来讨论容错；拜占庭模型需要额外的假设和协议，本课不做，也不把已有实验的结论外推过去。</p>
+<h2 id="kv">动手实践：用代理延迟或丢弃一个 KV 副本的请求，记录客户端与服务端的不同观察</h2>
+<p>本课不连接 Redis，也不启动真实网络服务；下面的副本、代理、超时和分区都由 <code>/workspace/atlas/lessons/practice113</code> 里的教学 <code>FailureEngine</code> 模拟。代码是 Python 3 标准库，<code>Clock</code> 是虚拟调度器。运行 <code>./test.sh</code> 会执行全部实验并写下 <code>results.json</code>；本课数字全部来自这份结果，是教学虚拟时钟上的测量，不是生产 RTT 或基准。</p>
+<h3 id="0">0. 文件结构</h3>
+<div class="codehilite"><pre><span></span><code>practice113/
+  engine.py             # FailureEngine、Clock、Replica、ProxyPolicy 与观察结构
+  app.py                # 四组实验
+  test_failure.py       # 验收断言
+  test.sh
+  results.json          # 本次实测
+</code></pre></div>
+
+<h3 id="1_1">1. 准备数据与目标操作</h3>
+<p>标题键是 <code>article:01:title</code>，初始值 <code>Weekly digest</code>，修订值 <code>Weekly digest (revised)</code>，应急值 <code>Weekly digest (hotfix)</code>；计数键是 <code>article:01:views</code>，从 0 开始。教学参数为 <code>timeout_s=0.05</code>、<code>delay_s=0.08</code>、<code>suspect_s=0.05</code>。实验要观察：请求或回复被丢弃时客户端看到什么、服务端实际发生了什么；延迟到预算之外时请求和回复分别在哪里落地；盲重试、不重试和幂等重试对 <code>views</code> 的影响；分区之后怀疑对象、保守切换和激进切换的差别；崩溃与拜占庭在客户端观察上的差别。</p>
+<h3 id="2_1">2. 要比较的几条路径</h3>
+<ul>
+<li><code>drop_reply</code>、<code>drop_request</code>、<code>delay_reply</code>、<code>delay_request</code> 四条路径，逐条记录客户端与服务端观察。</li>
+<li>对 <code>INCR article:01:views</code> 做盲重试、不重试、带幂等键 <code>publish-01</code> 的重试。</li>
+<li>先 <code>GET r1</code>，再分区 <code>r1</code> 并尝试 <code>SET</code>，记录怀疑列表；然后比较不提升 <code>r2</code> 与提升 <code>r2</code> 两种策略。</li>
+<li>崩溃 <code>r1</code> 之后分别 <code>GET r1</code>、<code>GET r2</code>；再对照拜占庭 <code>r1</code> 快速返回错误标题的情况。</li>
+</ul>
+<h3 id="3_1">3. 运行并解读（真实输出）</h3>
+<div class="codehilite"><pre><span></span><code>$ ./test.sh
+ALL_CHECKS_PASSED
+</code></pre></div>
+
+<p>下面的数字全部来自这次运行写入的 <code>results.json</code>。它们是虚拟时钟上的先后关系，不是线上超时统计，也不是网络基准。</p>
+<h3 id="4">4. 逐组对照真实数字</h3>
+<p><strong>超时与提交（<code>timeout_vs_commit</code>）</strong></p>
+<ul>
+<li><code>timeout_s=0.05</code>，<code>delay_s=0.08</code>。</li>
+<li><code>drop_reply</code>：客户端 <code>status=timeout</code>、<code>value=null</code>、<code>elapsed_s=0.05</code>、<code>applied_unknown=true</code>；服务端 <code>value=Weekly digest (revised)</code>、<code>applied_count=1</code>、<code>title_committed=true</code>。</li>
+<li><code>drop_request</code>：客户端同样 <code>status=timeout</code>、<code>elapsed_s=0.05</code>、<code>applied_unknown=true</code>；服务端 <code>value=Weekly digest</code>、<code>applied_count=0</code>、<code>title_committed=false</code>。</li>
+<li><code>client_timeout_observations_identical=true</code>、<code>server_observations_differ=true</code>、<code>cannot_distinguish_drop_reply_from_drop_request=true</code>、<code>timeout_is_not_proof_of_rollback=true</code>。</li>
+<li><code>delay_reply</code>：请求已提交为 <code>Weekly digest (revised)</code>，客户端仍 <code>timeout</code>；late reply 在 <code>at=0.08</code> 到达，<code>value=Weekly digest (revised)</code>。</li>
+<li><code>delay_request</code>：客户端先在 <code>elapsed_s=0.05</code> 超时，请求在 <code>at=0.08</code> 才送达并提交，<code>title_committed=true</code>。</li>
+<li><code>cannot_distinguish_delay_from_loss_at_timeout=true</code>。</li>
+</ul>
+<p><strong>重试与安全/可用（<code>retry_safety_vs_availability</code>）</strong></p>
+<ul>
+<li>盲重试 <code>INCR article:01:views</code>：第一次 <code>status=timeout</code>、<code>elapsed_s=0.05</code>；第二次 <code>status=ok</code>、<code>value=2</code>、<code>elapsed_s=0.0</code>；<code>views=2</code>、<code>applied_count=2</code>、<code>safety_violation=true</code>。</li>
+<li>不重试：<code>views=1</code>、<code>safety_violation=false</code>、<code>availability_reduced=true</code>、<code>client_confirmation=timeout</code>。</li>
+<li>幂等键 <code>publish-01</code> 再重试：第一次 <code>status=timeout</code>、<code>elapsed_s=0.05</code>；第二次 <code>status=ok</code>、<code>value=1</code>、<code>elapsed_s=0.0</code>；<code>views=1</code>、<code>applied_count=1</code>、<code>safety_violation=false</code>。</li>
+</ul>
+<p><strong>分区与故障检测（<code>partition_and_failure_detection</code>）</strong></p>
+<ul>
+<li>初始 <code>GET r1</code> 得到 <code>Weekly digest</code>，<code>status=ok</code>、<code>elapsed_s=0.0</code>、<code>heard_at=0.0</code>。</li>
+<li>分区 <code>r1</code> 后，对 <code>r1</code> 的 <code>SET</code> 超时，<code>elapsed_s=0.05</code>；<code>r1_crashed=false</code>，<code>r1</code> 标题仍是 <code>Weekly digest</code>，请求没有到达；<code>suspects_after_partitioned_write=["r1"]</code>，<code>false_suspicion=true</code>。</li>
+<li>保守路径：不提升 <code>r2</code>，<code>client_status=timeout</code>，<code>r1_title=Weekly digest</code>、<code>r2_title=Weekly digest</code>、<code>split_brain=false</code>、<code>safety_violation=false</code>、<code>availability_reduced=true</code>。</li>
+<li>激进路径：<code>direct_apply</code> 把 <code>r1</code> 写成 <code>Weekly digest (revised)</code>，客户端一侧提升 <code>r2</code> 并写入 <code>Weekly digest (hotfix)</code>，<code>status=ok</code>、<code>elapsed_s=0.0</code>；<code>split_brain=true</code>、<code>safety_violation=true</code>、<code>availability_reduced=false</code>。</li>
+</ul>
+<p><strong>崩溃与拜占庭（<code>crash_vs_byzantine</code>）</strong></p>
+<ul>
+<li>崩溃：<code>GET r1</code> 为 <code>status=timeout</code>、<code>elapsed_s=0.05</code>；<code>GET r2</code> 为 <code>status=ok</code>、<code>value=Weekly digest (revised)</code>、<code>elapsed_s=0.0</code>；<code>r1</code> 仓库仍是 <code>Weekly digest (revised)</code>，不撒谎。<code>crash_is_fail_stop=true</code>。</li>
+<li>拜占庭：<code>r1</code> 在 <code>elapsed_s=0.0</code> 回复 <code>Weekly digest</code>，但 <code>r1_store</code> 仍是 <code>Weekly digest (revised)</code>；<code>r2</code> 回复 <code>Weekly digest (revised)</code>；<code>clients_see_different_values=true</code>、<code>timeout_does_not_detect_the_lie=true</code>。<code>byzantine_is_outside_crash_model=true</code>，<code>failover_covers_crash_not_byzantine_lie=true</code>。</li>
+<li><code>teaching_limited_to_crash_failures=true</code>、<code>does_not_claim_to_cover_malicious_replicas=true</code>。</li>
+</ul>
+<h3 id="5">5. 对照验收标准</h3>
+<div class="codehilite"><pre><span></span><code># 验收 1：解释超时后请求可能已提交
+# timeout_s=0.05，delay_s=0.08。
+# drop_reply：client status=timeout，elapsed_s=0.05，applied_unknown=true；
+#   server value=Weekly digest (revised)，applied_count=1，title_committed=true。
+# drop_request：client status=timeout，elapsed_s=0.05，applied_unknown=true；
+#   server value=Weekly digest，applied_count=0，title_committed=false。
+# client_timeout_observations_identical=true，
+# server_observations_differ=true，
+# cannot_distinguish_drop_reply_from_drop_request=true，
+# timeout_is_not_proof_of_rollback=true。
+# delay_reply：请求已提交为 Weekly digest (revised)，客户端仍 timeout；
+#   late reply 在 at=0.08 到达，value=Weekly digest (revised)。
+# delay_request：客户端先在 0.05 超时，请求在 at=0.08 才送达并提交，
+#   title_committed=true。cannot_distinguish_delay_from_loss_at_timeout=true。
+
+# 验收 2：区分安全性违反与可用性降低
+# 盲重试 INCR article:01:views：第一次 timeout，第二次 ok 且 value=2，
+#   views=2，applied_count=2，safety_violation=true。
+# 不重试：views=1，safety_violation=false，availability_reduced=true，
+#   client_confirmation=timeout。
+# 幂等键 publish-01 再重试：views=1，applied_count=1，
+#   第二次 ok 且 value=1，safety_violation=false。
+# 分区后保守路径：split_brain=false，safety_violation=false，
+#   availability_reduced=true。
+# 分区后激进路径：split_brain=true，safety_violation=true，
+#   availability_reduced=false。
+# 安全性违反看副本是否分叉、副作用是否重复；
+# 可用性降低看客户端是否拿不到确认。
+# 验收 1 汇总：acceptance_timeout_may_already_be_committed=true，
+#   pitfall_timeout_is_not_rollback_proof=true。
+# 验收 2 汇总：acceptance_distinguish_safety_vs_availability=true，
+#   safety_violation_on_blind_retry=true，
+#   availability_reduced_when_not_retrying=true，
+#   idempotent_retry_preserves_safety_and_gets_ok=true，
+#   conservative_preserves_safety=true，aggressive_violates_safety=true。
+</code></pre></div>
+
+<h3 id="6">6. 自己动手的扩展练习</h3>
+<ul>
+<li>把 <code>timeout_s</code> 改成大于 <code>delay_s=0.08</code> 的值，再跑 <code>delay_reply</code> 和 <code>delay_request</code>，看客户端是否变成 <code>status=ok</code>；<code>drop_reply</code> 和 <code>drop_request</code> 仍然会超时。新数字要自己跑出来，不要拿本课 <code>results.json</code> 的数字当成新配置的结果。</li>
+<li>把 <code>SET</code> 改成两个不同的标题再盲重试，观察 <code>applied_count</code> 变成 2、最终只留下最后一次的值；再对比 <code>INCR</code>，说明「值看起来一样」为什么不能证明副作用只发生一次。</li>
+<li>把 <code>suspect_s</code> 从 <code>0.05</code> 调小或调大，观察分区后 <code>suspects</code> 的时机变化；想一想更短的怀疑阈值换来了什么，又让哪种误报更常见。</li>
+<li>给盲重试加上 <code>idempotency_key</code>，看 <code>applied_count</code> 是否从 2 回到 1，并检查第二次返回的是第一次的结果还是重新计算的结果。</li>
+</ul>
+<h3 id="7">7. 和生产系统的对应关系（不要记错边界）</h3>
+<p>教学引擎没有 TCP、没有真实 socket、没有 Raft、没有 PBFT、没有多数派和租约。<code>ProxyPolicy</code> 的 <code>drop_request</code>、<code>drop_reply</code>、<code>delay_request_s</code>、<code>delay_reply_s</code>、<code>partitioned</code> 是确定性故障注入，不是网络模拟器。<code>Clock</code> 是单进程虚拟时钟，不能用来推断生产里的时钟偏移、RTT 分布或超时重传行为。<code>applied_count</code> 统计的是单个副本本地执行过的请求数，不是跨副本的提交次数；<code>direct_apply</code> 是模拟分区另一侧写入的教学装置，不是客户端 API。幂等键的去重表在内存里，没有持久化和原子性保证；真实系统需要把键、结果和副作用放在同一个持久化边界内考虑。<code>FailureEngine</code> 不实现共识，也不评估 PBFT 的性能；它只展示崩溃与拜占庭的边界、超时与提交的分离，以及安全性/可用性在重试和故障切换里的取舍。</p>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 MIT 6.5840 — Distributed Systems 中与 Failure models 相关的定义、示例或实现，记录与教学实验的差异。2026-11-13 实际打开的页面如下；它们都在 <code>pdos.csail.mit.edu/6.5840/</code> 下，入口与讲义均返回 200 且无跳转。</p>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.5840/">MIT 6.5840 — Distributed Systems</a>（节点给出的入口）：课程主页，用来进入日程和讲义。本课只引用这个入口与下面核对过的讲义，不把日程页当成节点 <code>resources</code> 数组之外的资源条目。</li>
+<li><a href="https://pdos.csail.mit.edu/6.5840/schedule.html">schedule.html</a>：Spring 2026 日程。LEC 21 链到 <code>notes/l-bft.txt</code>，可以核对拜占庭讲义在课程里的位置。</li>
+<li><a href="https://pdos.csail.mit.edu/6.5840/notes/l01.txt">notes/l01.txt</a>：2026 Lecture 1，10886 字节。MapReduce 假设 fail-stop，错误计算被归为「too bad」；用它对照本课：教学实验只在崩溃（fail-stop）模型里讨论超时和切换，错误计算与撒谎不在这个假设里；即便在崩溃模型下，超时本身仍然不能把崩溃和分区分开。</li>
+<li><a href="https://pdos.csail.mit.edu/6.5840/notes/l-rpc.txt">notes/l-rpc.txt</a>：2026 Lecture 2。客户端看不到回复时，并不知道服务端是否见到过请求；用它核对本课 <code>drop_reply</code> 与 <code>drop_request</code> 的客户端观察为什么相同。</li>
+<li><a href="https://pdos.csail.mit.edu/6.5840/notes/l-raft.txt">notes/l-raft.txt</a>：2026 Lecture 6。计算机无法区分「server crashed」和「network broken」，网络分区可能导致 split brain；复制适合单个副本的 fail-stop，不一定能对付缺陷或误操作。用它核对本课 <code>false_suspicion</code> 与保守/激进路径。</li>
+<li><a href="https://pdos.csail.mit.edu/6.5840/notes/l-bft.txt">notes/l-bft.txt</a>：讲义标题仍写 2024 Lecture 22，但 Spring 2026 日程的 LEC 21 链到这个文件。课程此前一直假设 fail-stop；拜占庭是 buggy、不遵守协议、或被攻击者控制的副本。本课不实现 PBFT。</li>
+<li><a href="https://pdos.csail.mit.edu/6.5840/notes/65840-pbft.pdf">notes/65840-pbft.pdf</a>：PBFT 讲义。用于理解拜占庭容错需要的额外假设和代价；本课不实现，也不评估其性能。</li>
+<li><a href="https://pdos.csail.mit.edu/6.5840/papers/castro-practicalbft.pdf">papers/castro-practicalbft.pdf</a>：Castro–Liskov 的 PBFT 论文。作为拜占庭模型的原始阅读，不要把它和本课的崩溃模型实验混在一起。</li>
+<li><a href="https://pdos.csail.mit.edu/6.5840/papers/bft-faq.txt">papers/bft-faq.txt</a>：BFT FAQ。用于核对拜占庭容错常见问题的表述，避免把「复制」直接说成「能对付撒谎副本」。</li>
+</ul>
+<p>与教学实验的差异要写清楚：这些讲义是完整课程语境，教学引擎只抽取了超时、丢弃、延迟、分区、崩溃和拜占庭桩这几件事；它没有实现 Raft 的选举与日志复制，也没有实现 PBFT 的消息轮次和投票。<code>l01.txt</code> 里的 MapReduce 用 fail-stop 假设，<code>l-rpc.txt</code> 讨论 RPC 语义，<code>l-raft.txt</code> 讨论复制与分区，<code>l-bft.txt</code> 讨论拜占庭副本；本课把它们当作模型定义和边界的核对来源，而不是把教学引擎当成这些系统的实现。</p>
+<h2 id="_13">自测题</h2>
+<p><strong>1.</strong> 客户端对 <code>SET article:01:title</code> 得到 <code>status=timeout</code>、<code>elapsed_s=0.05</code>，能不能据此认为服务端事务已经回滚？<code>drop_reply</code> 和 <code>drop_request</code> 的客户端观察为什么无法区分？</p>
+<details>
+<summary>答案</summary>
+
+不能。超时只说明客户端 `timeout_s=0.05` 的等待预算耗尽，不证明远端没有执行。本课 `drop_reply` 的客户端是 `status=timeout`、`elapsed_s=0.05`、`applied_unknown=true`，服务端却已经提交 `Weekly digest (revised)`、`applied_count=1`、`title_committed=true`；`drop_request` 的客户端字段完全一样，服务端却是 `Weekly digest`、`applied_count=0`、`title_committed=false`。`client_timeout_observations_identical=true`、`server_observations_differ=true`，所以 `cannot_distinguish_drop_reply_from_drop_request=true`。更麻烦的是 `delay_request`：客户端在 `0.05` 超时，请求在 `at=0.08` 才送达并提交，`title_committed=true`，说明超时之后还可能有新的提交。节点的误区正是把超时当作远端事务回滚的证明。
+
+</details>
+
+<p><strong>2.</strong> 盲重试 <code>INCR article:01:views</code> 为什么算安全性违反？不重试不是更安全吗？幂等重试怎样同时保住安全性和可用性？</p>
+<details>
+<summary>答案</summary>
+
+盲重试的第一次 `INCR` 已经在服务端执行，只是回复丢失；客户端不知道，第二次又执行一次，得到 `views=2`、`applied_count=2`，第二次 `status=ok`、`value=2`。客户端最终有确认，但阅读计数多了一次，这是安全性违反，不是成功的恢复。不重试确实保住了 `views=1`、`safety_violation=false`，但客户端只拿到 `timeout`，`availability_reduced=true`，无法确认这次计数是否生效。幂等键 `publish-01` 让服务端记住第一次的结果：第二次到达时直接返回 `value=1`，不再执行 `INCR`，所以 `views=1`、`applied_count=1`，第二次仍然是 `status=ok`。安全性看副作用是否只发生一次、副本是否分叉；可用性看客户端能否拿到确认。幂等重试两边都保住了，代价是服务端要持久化键和结果，并处理去重与副作用之间的原子性。
+
+</details>
+
+<p><strong>3.</strong> 崩溃的 <code>r1</code> 对 <code>GET</code> 是 <code>timeout</code>，拜占庭的 <code>r1</code> 却在 <code>elapsed_s=0.0</code> 返回 <code>Weekly digest</code>。这两种情况在故障检测上有什么差别？为什么分区误报会导致脑裂？</p>
+<details>
+<summary>答案</summary>
+
+崩溃的 `r1` 不再回答，`GET r1` 得到 `status=timeout`、`elapsed_s=0.05`；`r2` 返回真实的 `Weekly digest (revised)`，而 `r1` 的存储仍是 `Weekly digest (revised)`，它没有撒谎。拜占庭的 `r1` 继续运行，在 `elapsed_s=0.0` 返回 `Weekly digest`，但 `r1_store` 仍是 `Weekly digest (revised)`；`r2` 返回修订版，`clients_see_different_values=true`。它没有超时，`timeout_does_not_detect_the_lie=true`，所以基于等待预算的检测抓不到它；本课只在崩溃模型里做容错，`teaching_limited_to_crash_failures=true`。
+
+分区时，检测器看到 `r1` 一段时间没有心跳，就把它列为怀疑对象，但实验里 `r1_crashed=false`、标题仍是 `Weekly digest`，`false_suspicion=true`。如果保守处理，不提升 `r2`，`split_brain=false`、`availability_reduced=true`；如果把怀疑当成崩溃并提升 `r2`，同时分区另一侧还能写 `r1`，就会得到 `r1_title=Weekly digest (revised)`、`r2_title=Weekly digest (hotfix)`、`split_brain=true`、`safety_violation=true`。`l-raft.txt` 说计算机无法区分 crashed 和 network broken，分区可能导致 split brain；故障检测的误报本身不是结论，拿怀疑去做什么才决定安全性和可用性。
+
+</details>
+
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://pdos.csail.mit.edu/6.5840/">MIT 6.5840 — Distributed Systems</a>（MIT 6.5840，英文文档，进阶，免费）。重点阅读崩溃与拜占庭故障的边界、RPC 超时和 Raft 对分区与 fail-stop 的假设，用于核对本节点实验的语义和边界。2026-11-13 该入口返回 200，无跳转；同一次核对建议打开 <code>schedule.html</code> 与 <code>notes/l01.txt</code>、<code>notes/l-rpc.txt</code>、<code>notes/l-raft.txt</code>、<code>notes/l-bft.txt</code> 讲义。这些讲义是核对路径，不是节点 <code>resources</code> 数组里的额外条目。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>崩溃是停住不回答，拜占庭是继续回答但可能给出错误值。崩溃实验里 <code>GET r1</code> 超时 <code>elapsed_s=0.05</code>、<code>r2</code> 返回 <code>Weekly digest (revised)</code>，<code>r1</code> 存储仍是修订版；拜占庭 <code>r1</code> 在 <code>elapsed_s=0.0</code> 返回 <code>Weekly digest</code>，存储却是修订版，<code>timeout_does_not_detect_the_lie=true</code>。本课限定在崩溃故障，不声称覆盖恶意副本。</li>
+<li>超时只说明等待预算耗尽，不证明远端没有执行。<code>drop_reply</code> 的客户端 <code>status=timeout</code>、<code>elapsed_s=0.05</code>，服务端已经提交 <code>applied_count=1</code>；<code>drop_request</code> 的客户端观察完全相同，服务端 <code>applied_count=0</code>。<code>delay_request</code> 的请求在 <code>at=0.08</code> 才送达并提交。盲重试让 <code>views=2</code>、<code>safety_violation=true</code>；不重试让 <code>views=1</code>、<code>availability_reduced=true</code>；幂等键 <code>publish-01</code> 让 <code>views=1</code>、<code>applied_count=1</code>，同时拿到 <code>status=ok</code>。</li>
+<li>故障是部分失败，怀疑不等于崩溃。分区后 <code>suspects_after_partitioned_write=["r1"]</code>、<code>false_suspicion=true</code>，但 <code>r1_crashed=false</code>、标题仍是 <code>Weekly digest</code>。保守路径 <code>split_brain=false</code>、<code>availability_reduced=true</code>；激进路径 <code>split_brain=true</code>、<code>safety_violation=true</code>、<code>availability_reduced=false</code>。两次验收分别要求说清「超时后可能已提交」和「安全性违反与可用性降低的区别」。</li>
+<li>学完后可以用三句话自检：超时之后请求为什么可能已经提交，<code>drop_reply</code> 与 <code>drop_request</code> 的客户端为什么看起来一样；盲重试、不重试和幂等重试分别把安全性、可用性放在了哪里；崩溃超时与拜占庭快速撒谎有什么差别，分区误报又怎样走到脑裂。三句都能答上来，并且能指出 <code>practice113/results.json</code> 里对应的字段，这一课就算过关。</li>
+</ul>
+<p>如果有一句答不上来，先回到对应的实验字段，再回到 <code>l-rpc.txt</code> 关于「客户端看不到回复时不知道服务端是否见过请求」、<code>l-raft.txt</code> 关于「无法区分 crashed 与 network broken」和 <code>l-bft.txt</code> 关于「课程此前假设 fail-stop、拜占庭是另一类副本」的那几句，不要只把「超时要重试」或「故障要切换」背下来。</p><div class="pn"><span><a href="112.html">← 存储性能、放大与尾延迟</a></span><span>下一课 待更新</span></div></main></div></body></html>
