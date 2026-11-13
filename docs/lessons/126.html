@@ -1,0 +1,246 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>126. 分布式历史与故障测试 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（126/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details open><summary>领域 H（14/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li><a class="" href="../lessons/122.html">122. 消息投递与幂等消费</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li><a class="" href="../lessons/123.html">123. 限流与过载保护</a></li><li><a class="" href="../lessons/124.html">124. 熔断、降级与隔离</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li><a class="" href="../lessons/125.html">125. 多机房与灾难恢复</a></li><li><a class="cur" href="../lessons/126.html">126. 分布式历史与故障测试</a></li></ul><div>阶段 6</div><ul><li class="todo">127. 分布式协议演进 <em>待更新</em></li></ul></details><details><summary>领域 I（0/14）</summary><div>阶段 2</div><ul><li class="todo">128. 吞吐、延迟与排队 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">129. 可复现微基准 <em>待更新</em></li><li class="todo">130. 负载模型与协调遗漏 <em>待更新</em></li><li class="todo">131. perf 采样与符号 <em>待更新</em></li><li class="todo">132. 火焰图与差分分析 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">133. 堆内存与分配器分析 <em>待更新</em></li><li class="todo">134. 锁竞争与调度延迟 <em>待更新</em></li><li class="todo">135. eBPF 可观测性 <em>待更新</em></li><li class="todo">136. NUMA 与内存局部性 <em>待更新</em></li><li class="todo">137. CPU 缓存与伪共享 <em>待更新</em></li><li class="todo">138. 零拷贝与批处理 <em>待更新</em></li><li class="todo">139. io_uring 与异步完成 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">140. 性能回归与预算 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">141. 系统瓶颈与容量模型 <em>待更新</em></li></ul></details><details><summary>领域 J（0/15）</summary><div>阶段 0</div><ul><li class="todo">142. Git 工作流与变更管理 <em>待更新</em></li></ul><div>阶段 1</div><ul><li class="todo">143. CMake 目标式构建 <em>待更新</em></li><li class="todo">145. 单元测试与边界设计 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">144. Bazel 与可复现依赖 <em>待更新</em></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 126 课 · 领域 H · 阶段 5</p><p class="dl"><a href="../files/126-h-verification.md" download>⬇ 本课 Markdown</a><a href="../files/practice126.tar.gz" download>⬇ 练习包 practice126.tar.gz</a></p><h1 id="126208">第 126/208 课：分布式历史与故障测试</h1>
+<h2 id="_1">元信息</h2>
+<table>
+<thead>
+<tr>
+<th>项</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>节点 ID</td>
+<td><code>h-verification</code></td>
+</tr>
+<tr>
+<td>英文名</td>
+<td>Jepsen testing</td>
+</tr>
+<tr>
+<td>领域 / 阶段</td>
+<td>H / 第 5 阶段</td>
+</tr>
+<tr>
+<td>子类</td>
+<td>可靠性与演进</td>
+</tr>
+<tr>
+<td>难度</td>
+<td>专家</td>
+</tr>
+<tr>
+<td>前置节点</td>
+<td><a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/114.html"><code>h-consistency</code></a>、<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/118.html"><code>h-raft-log</code></a>、<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/111.html"><code>g-recovery</code></a></td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Jepsen testing</code>、<code>Distributed</code></td>
+</tr>
+<tr>
+<td>参考资料</td>
+<td><a href="https://github.com/jepsen-io/jepsen">Jepsen — Fault injection testing</a>（Jepsen 仓库，英文，专家，免费；2026-11-14 该地址返回 HTTP 200，无跳转，最终 URL 仍是 <code>https://github.com/jepsen-io/jepsen</code>，294864 字节，<code>Content-Type</code> 为 <code>text/html; charset=utf-8</code>。本次抓取响应头 <code>Date</code> 为 <code>Fri, 13 Nov 2026 17:17:12 GMT</code>（北京时间 2026-11-14 01:17:12）。页面没有 <code>Last-Modified</code>。<code>&lt;title&gt;</code> 与 <code>og:title</code> 为 GitHub - jepsen-io/jepsen: A framework for distributed systems verification, with fault injection，<code>og:description</code> 为 A framework for distributed systems verification, with fault injection - jepsen-io/jepsen。仓库所有者为 jepsen-io，这些页面没有署个人作者。同日打开的仓库元数据 <code>https://api.github.com/repos/jepsen-io/jepsen</code> 返回 200，6652 字节，<code>Last-Modified</code> 为 <code>Thu, 12 Nov 2026 22:13:07 GMT</code>（北京时间 2026-11-13 06:13:07），<code>pushed_at</code> 为 <code>2026-11-06T23:52:13Z</code>（北京时间 2026-11-07 07:52:13），<code>updated_at</code> 与上述 <code>Last-Modified</code> 一致，默认分支 <code>main</code>，<code>license</code> 字段为 <code>null</code>。仓库根目录 <code>LICENSE</code> 与 <code>license</code> 同日返回 404。同日读取的 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/jepsen/project.clj"><code>jepsen/project.clj</code></a> 返回 200、3294 字节，写明 <code>:description</code> 为 Distributed systems testing framework.，<code>:url</code> 为 <code>https://jepsen.io</code>，<code>:license</code> 为 Eclipse Public License（<code>http://www.eclipse.org/legal/epl-v10.html</code>），版本 <code>0.3.16-SNAPSHOT</code>。页面展示的 README 原文同日在 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/README.md">https://raw.githubusercontent.com/jepsen-io/jepsen/main/README.md</a> 返回 200，无跳转，13500 字节；其中 <em>Design Overview</em> 把一次测试写成：在控制节点上对 DB 节点部署系统，由进程执行操作并把每次操作的开始与结束记进 <em>history</em>，同时由 <em>nemesis</em> 注入故障，最后用 <em>checker</em> 分析历史是否说得通。README 点名的 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/doc/tutorial/index.md">tutorial 目录</a> 同日 200、754 字节；本课实际读过并对照的是其中与节点三条主线直接相关的 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/doc/tutorial/03-client.md">03 Writing a Client</a>（200，17111 字节）、<a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/doc/tutorial/04-checker.md">04 Checking Correctness</a>（200，7703 字节）和 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/doc/tutorial/05-nemesis.md">05 Introducing Faults</a>（200，7278 字节），以及概述命名空间的 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/doc/whats-here.md">What's Here</a>（200，9127 字节）。教程把完成记录定义为 <code>:ok</code>（成功）、<code>:fail</code>（确定没发生）或 <code>:info</code>（不确定），并说明超时或抛出异常应变成 <code>:info</code>；checker 配合模型（教程里用 Knossos 的线性化寄存器）判断历史是否合法，nemesis 负责在生成器调度下注入故障，失败时可打开 <code>store/latest/history.txt</code> 查看反例）</td>
+</tr>
+<tr>
+<td>摘要</td>
+<td>通过生成并发操作历史、注入故障并检查模型，寻找成功路径测试难以暴露的一致性错误。</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>边界说明</strong>：本课里的「内容后台」「文章键 <code>article:01:title</code>」「标题家族 <code>Weekly digest</code> / <code>Weekly digest (revised)</code> / <code>Weekly digest (hotfix)</code>」「节点 <code>n1</code> / <code>n2</code> / <code>n3</code>」都是<strong>教学假设</strong>，用来让 invoke / ok / fail / info 历史、超时的不确定结果、故障注入和最小反例变得可观察，不代表腾讯/微信或任何企业的内部实现。配套代码是 Python 3 标准库写的教学引擎 <code>VerificationEngine</code>，<strong>不是 Redis，不是真实的 Jepsen 产品或 Clojure 库，不是网络服务，不是 Knossos 或 Elle，也不是 etcd</strong>。它是单进程离散事件仿真，没有 SSH，没有 TCP，也没有 WAN。持久化是教学用 dict flush，不是 <code>fsync</code>。<code>Clock</code> 是虚拟时钟。<code>local_s=0.05</code>、<code>quorum_s=0.10</code> 和 <code>timeout_s=0.20</code> 都是教学延迟，不是生产 RTT。历史条目用 JSON 字符串 <code>invoke</code> / <code>ok</code> / <code>fail</code> / <code>info</code> 记录，对应教程里的 <code>:invoke</code> / <code>:ok</code> / <code>:fail</code> / <code>:info</code>，并不是把 Clojure 关键字搬进了本课引擎。检查器是针对单一寄存器的教学枚举，不是 Knossos，也不是 Elle。本课所有时间都来自 <code>/workspace/atlas/lessons/practice126/results.json</code>，是<strong>教学虚拟时钟上的数字</strong>。</p>
+</blockquote>
+<h2 id="_2">导读</h2>
+<h3 id="_3">上一课留下的缺口</h3>
+<p>上一课的 <code>GeoKVEngine</code> 解决的是跨机房的恢复目标：同步与异步复制怎样决定写延迟和丢失窗口，断网时哪个机房可写，主备切换 runbook 的 RTO / RPO，以及备份是否真的能恢复并校验。那一课的边界停在<strong>事先定义的切换与恢复步骤</strong>，没有回答另一件事：系统口头承诺了某种一致性之后，怎样留下一份独立于实现的证据，去抓住那些只在并发和故障下才出现、成功路径测试很难碰到的错误。</p>
+<p>一份切换 runbook 可以量出「新主库何时可写」，但不能代替「把并发读写的调用与返回记下来，注入故障，再用模型去核对」。节点把摘要写成：通过生成并发操作历史、注入故障并检查模型，寻找成功路径测试难以暴露的一致性错误。</p>
+<h3 id="_4">接上前置</h3>
+<p>前置 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/114.html">第 114 课</a> <code>h-consistency</code> 已经说明：线性一致性要求操作看起来在调用与返回之间某一点原子生效，并尊重实时先后；那一课构造过不可线性化的 <code>SET</code> / <code>GET</code> 历史，但还没有给完成记录分成确定成功、确定失败和不确定，也没有把故障注入写进同一条历史。前置 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/118.html">第 118 课</a> <code>h-raft-log</code> 留下的是法定人数与旧领导者不能在分区后继续充当权威。本课用三节点教学 KV 把「多数派写入、本地读」和「多数派读」对照起来，看一种读法会不会在分区后读到已经完成的写入之前的标题。前置 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/111.html">第 111 课</a> <code>g-recovery</code> 演练的是备份能否恢复并校验；本课的「验证」对象换成了操作历史：没有记下来的历史，就没有可复现的反例，也就没有独立证据。</p>
+<p>Jepsen 教程把一次测试写成：客户端把 invoke 变成 ok / fail / info，nemesis 往集群里注入故障，checker 拿模型和历史做判断。本课的引擎和实验是这条结构的教学对照，不是把 Jepsen 或 etcd 搬到本课目录里跑一遍。</p>
+<h3 id="_5">教学场景（教学假设）</h3>
+<p>假设内容后台把文章 <code>article:01:title</code> 放在三个教学节点 <code>n1</code>、<code>n2</code>、<code>n3</code> 上，一开始三边已经对齐为 <code>Weekly digest</code>。三个客户端进程分别连到这三个节点：进程 0 连 <code>n1</code>，进程 1 连 <code>n2</code>，进程 2 连 <code>n3</code>。多数派写入和多数派读取花费 <code>quorum_s=0.10</code>，本地读取花费 <code>local_s=0.05</code>，客户端超时是 <code>timeout_s=0.20</code>，nemesis 每一步花费 <code>0.05</code>。写入先试图应用到可达的同伴，够多数才记 <code>ok</code>；多数未达成或应答在路上丢失时，等到超时并记 <code>info</code>，而不是直接记 <code>fail</code>。所有时间都是教学虚拟时钟上的值，不是线上往返时延，也不是生产 RTT。</p>
+<h3 id="_6">本课三条主线</h3>
+<ol>
+<li><strong>历史记录</strong>：每次操作都要记下 invoke，以及后来的 ok、fail 或 info。超时属于不确定结果，不能写成确定失败。</li>
+<li><strong>checker 模型</strong>：用单一寄存器的线性化模型去核对整条历史。确定失败的操作不生效；确定成功的必须在调用与返回之间生效；info 则两种可能性都要试。</li>
+<li><strong>nemesis 与最小反例</strong>：由 nemesis 注入分区或丢失应答，得到一条可以手工检查的失败历史，并把能复现它的种子保存下来。</li>
+</ol>
+<h2 id="_7">学习目标</h2>
+<ul>
+<li>能解释历史记录及适用边界：invoke 只表示尝试开始，完成必须是 ok、fail 或 info 之一；超时和「应答丢了但集群里可能已经写上」都属于 info。没有历史，就不能判断模型，也不能复现反例。</li>
+<li>独立完成实践：给三节点 KV 记录 invoke/ok/fail/info 历史，手工检查一个失败案例。能指出哪一次已完成的写入和哪一次读出的旧标题互相矛盾，并能用同一颗种子再次得到同一条历史。</li>
+<li>验收上要做到：超时使用不确定结果而非直接失败；复现并保存反例种子。</li>
+</ul>
+<h2 id="_8">为什么后端要懂</h2>
+<p>节点给出的理由是：<strong>让一致性承诺有独立证据。</strong> 实现自己声明「写入成功之后再读一定能看到新标题」，并不足够。成功路径上的几次读写往往都是健康集群、顺序执行，暴露不了分区后的陈旧读，也暴露不了「客户端以为写失败、集群里其实已经写上」这种窗口。把并发操作记成历史、用故障注入把窗口打开、再用独立于实现的模型去核对，才是可以把承诺证伪的办法。测试仍然不能穷尽状态空间，它能发现错误，不能代替证明——但没有历史和种子，连发现了什么都无法复查。</p>
+<h2 id="_9">核心知识点</h2>
+<h3 id="1">1. 历史记录</h3>
+<p>一条教学历史是按虚拟时钟排列的事件流。客户端先写下 <code>invoke</code>，表示开始尝试；完成时再写 <code>ok</code>（确定发生了）、<code>fail</code>（确定没发生）或 <code>info</code>（不确定）。教程原文把这三种完成类型说成：<code>:ok</code> if the operation succeeded, <code>:fail</code> if it didn't take place, or <code>:info</code> if we're not sure；抛出异常也会被当成 <code>:info</code>。本课用同样的三分法，只是写成 JSON 字符串。</p>
+<p>健康的多数派路径里，没有故障，四次操作都有成对的 invoke 与 ok，历史校验和为 <code>7e716acb17f550d2</code>：</p>
+<table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>类型</th>
+<th>进程</th>
+<th>操作</th>
+<th>标题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0.00</code>–<code>0.10</code></td>
+<td>invoke / ok</td>
+<td>0</td>
+<td>write</td>
+<td><code>Weekly digest (revised)</code></td>
+</tr>
+<tr>
+<td><code>0.20</code>–<code>0.30</code></td>
+<td>invoke / ok</td>
+<td>1</td>
+<td>read</td>
+<td><code>Weekly digest (revised)</code></td>
+</tr>
+<tr>
+<td><code>0.40</code>–<code>0.50</code></td>
+<td>invoke / ok</td>
+<td>1</td>
+<td>write</td>
+<td><code>Weekly digest (hotfix)</code></td>
+</tr>
+<tr>
+<td><code>0.60</code>–<code>0.70</code></td>
+<td>invoke / ok</td>
+<td>2</td>
+<td>read</td>
+<td><code>Weekly digest (hotfix)</code></td>
+</tr>
+</tbody>
+</table>
+<p>两次写入的确认时延都是 <code>0.10</code>，两次读取也是 <code>0.10</code>，结束于 <code>0.70</code>。检查器认为这条历史合法，见证线性化的最终值是 <code>Weekly digest (hotfix)</code>。这是成功路径：它说明记录格式和模型可以在无故障时对上，但不能单独当作一致性证据。</p>
+<p>超时必须记成 info。第二条实验里，nemesis 在 <code>0.15</code> 对 <code>n1</code> 开始丢弃应答（<code>0.20</code> 记一条 nemesis 的 info），随后进程 0 在 <code>0.20</code> 写入 <code>Weekly digest (hotfix)</code>。这次写入实际应用到了 <code>n1</code>、<code>n2</code>、<code>n3</code>，但应答丢失，客户端在 <code>0.40</code> 等到 <code>timeout_s=0.20</code> 后记下 <code>info</code>，原因是 <code>timeout_lost_reply</code>。之后进程 1 在 <code>0.50</code> 发起多数派读，<code>0.60</code> 读到 <code>Weekly digest (hotfix)</code>。把这次超时保持为 info 时，检查器认为历史合法：不确定的写入可以被解释为「已经生效」。若错误地把它改标为 <code>fail</code>，检查器会假定这次写入没发生，于是无法解释后来读到的 hotfix，判定变为不合法。这就是验收要求的那句话：超时使用不确定结果而非直接失败。</p>
+<h3 id="2-checker">2. checker 模型</h3>
+<p>检查器使用的模型是单一寄存器：一次生效的写把标题换成新值，一次生效的读必须读到当前标题。它只看操作的 <code>f</code> 与 <code>value</code>，并不知道节点内部怎样复制。确定失败的操作被排除；确定成功的必须出现在某个尊重实时先后的线性化里；info 则「发生了」和「没发生」两种子集都要枚举。这是教学枚举，不是 Knossos，也不是 Elle，只适用于本课这种很短的历史。</p>
+<p>把模型和历史对上，才能抓住成功路径看不到的错误。上一小节里，同一条超时历史在「记 info」时合法、在「误标 fail」时不合法，差的不是集群状态，而是完成类型有没有把不确定性留给模型。检查器给出的误标失败原因是：<code>can't read Weekly digest (hotfix) from register Weekly digest (revised)</code>，因为 <code>0.10</code> 完成的 revised 写入若后面没有 hotfix，就解释不了 <code>0.50</code> 才开始的那次读。</p>
+<p>模型也有适用边界。它检查的是「看起来像不像一个寄存器」，并不证明实现在所有调度下都线性一致，更不会去穷尽状态空间。一次合法的结果只对送进去的那条历史负责。</p>
+<h3 id="3-nemesis">3. nemesis 与最小反例</h3>
+<p>nemesis 是专门注入故障的进程，它自己的完成也记为 info。要得到一条能用手检查的失败案例，本课让它在 <code>0.15</code> 把 <code>n3</code> 分区出去（<code>0.20</code> 完成），此时三节点都已经有 <code>Weekly digest (revised)</code>。进程 0 随即在 <code>0.20</code> 写入 <code>Weekly digest (hotfix)</code>，<code>0.30</code> 以多数派成功返回，只应用到 <code>n1</code> 和 <code>n2</code>。进程 2 在 <code>0.35</code> 向已经孤立的 <code>n3</code> 做本地读，<code>0.40</code> 返回 <code>Weekly digest (revised)</code>。</p>
+<p>这条历史的校验和是 <code>5702df2c35c4e2f5</code>，可以按时间逐条核对：</p>
+<table>
+<thead>
+<tr>
+<th>时刻</th>
+<th>类型</th>
+<th>谁</th>
+<th>做了什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0.00</code>–<code>0.10</code></td>
+<td>invoke / ok</td>
+<td>进程 0</td>
+<td>多数派写入 <code>Weekly digest (revised)</code>，应用到 n1/n2/n3</td>
+</tr>
+<tr>
+<td><code>0.15</code>–<code>0.20</code></td>
+<td>invoke / info</td>
+<td>nemesis</td>
+<td><code>start_partition</code>，把 n3 隔离</td>
+</tr>
+<tr>
+<td><code>0.20</code>–<code>0.30</code></td>
+<td>invoke / ok</td>
+<td>进程 0</td>
+<td>多数派写入 <code>Weekly digest (hotfix)</code>，只应用到 n1/n2</td>
+</tr>
+<tr>
+<td><code>0.35</code>–<code>0.40</code></td>
+<td>invoke / ok</td>
+<td>进程 2</td>
+<td>在 n3 本地读到 <code>Weekly digest (revised)</code></td>
+</tr>
+</tbody>
+</table>
+<p>检查器判定不合法，原因是：<code>can't read Weekly digest (revised) from register Weekly digest (hotfix): write of Weekly digest (hotfix) completed at 0.3 before read invoked at 0.35</code>。hotfix 的写入在 <code>0.30</code> 已经完成，读在 <code>0.35</code> 才开始，实时上写在读之前，读却回到了旧标题。这就是成功路径测试很难碰到、但手工可以一眼看完的最小反例。同一时间表若改成多数派读，孤立的 <code>n3</code> 凑不齐多数，读取在 <code>0.55</code> 记为 <code>info</code>（<code>timeout_no_majority</code>，时延 <code>0.20</code>），不再返回一个看起来成功的旧标题，检查器认为合法。</p>
+<p>只靠手工构造还不够，验收要求把反例种子保存下来并能复现。本课在本地读模式下从种子 <code>1262026</code> 起连续试了 30 个种子，其中 21 个合法、9 个不合法；第一颗失败种子是 <code>1262027</code>，历史校验和 <code>e7647d6a1f6253a9</code>，原因是 <code>Weekly digest (west)</code> 的写入在 <code>0.35</code> 完成之后，<code>0.85</code> 才开始的本地读仍读到 <code>Weekly digest (revised)</code>。用同一颗种子再跑一遍，校验和与判定都相同；换一颗相邻种子 <code>1262028</code>，校验和变成 <code>901375405fe769b0</code>，与反例不同。没有保存种子，就无法证明这次失败还能再看见。</p>
+<h2 id="_10">常见误区</h2>
+<p>第一个误区是节点写明的那句：<strong>随机杀进程不记录操作历史。</strong> 对照路径里 nemesis 在 <code>0.25</code> 杀掉 <code>n2</code>、在 <code>0.35</code> 杀掉 <code>n3</code>，操作员只留下两条「killed n2 / killed n3」的笔记，把历史清空。结果是 <code>history_recorded=false</code>，检查器没有跑，也没有反例种子。进程是倒下了，但没有 invoke/ok/fail/info 可核对，失败无法被定位，也无法被复现。</p>
+<p>第二个误区是把超时写成 <code>fail</code>。上面那次已经应用到三个节点、只是应答丢失的 hotfix 写入，若被标成确定失败，检查器会把后来读到的 hotfix 判成错误。看起来「测试更严了」，其实是在用错误的完成类型制造误报，也会在相反的窗口里漏掉真正的不确定性。</p>
+<p>第三个误区是看见一次合法结果就宣布「已经线性一致」。健康路径是合法的，30 个随机种子里也有 21 个合法，这只说明这些历史没找到反例，不是证明。</p>
+<h2 id="_11">设计权衡</h2>
+<p>节点给出的权衡是：<strong>状态空间无法穷尽，测试能发现错误不能替代证明。</strong> 本课的检查器只枚举送进去的短历史；随机狩猎只覆盖 30 个种子，远远谈不上穷尽。它在本地读加分区的设置下找出了 9 条反例，并保存了种子 <code>1262027</code>，这是「能发现错误」。同一套多数派读在完全相同的手工时间表上不再返回陈旧的 ok 读，说明一种实现选择可以避开这条已知反例，但那同样只对测过的历史负责。要把承诺变成证明，需要的是论证或模型检验；把承诺变成可复查的证据，需要的是历史、故障注入、检查器和种子。二者不是替代关系。本课把这一条落实为 <code>tradeoff_testing_is_not_proof</code>：窗口里 21 次合法、9 次不合法，总数是 30，而不是一个声称已经穷尽的数字。</p>
+<h2 id="kv-invokeokfailinfo">动手实践：给三节点 KV 记录 invoke/ok/fail/info 历史，手工检查一个失败案例</h2>
+<p>配套代码在 <a href="https://zhousai-zs.github.io/backend-atlas-notes/files/practice126.tar.gz"><code>/workspace/atlas/lessons/practice126/</code></a>。<code>engine.py</code> 是 <code>VerificationEngine</code>，<code>app.py</code> 跑完整组实验并写出 <code>results.json</code>，<code>test_verification.py</code> / <code>test.sh</code> 负责核对。在该目录执行：</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>test.sh
+</code></pre></div>
+
+<p>应打印 <code>ALL_CHECKS_PASSED</code>。下面的数字全部来自这次运行写出的 <code>results.json</code>，都是教学虚拟时钟上的值。</p>
+<p>请先手工核对自己会看的那条失败历史：<code>0.30</code> 完成的 hotfix 写入只到了 <code>n1</code> / <code>n2</code>，<code>0.35</code> 开始的本地读在 <code>n3</code> 上于 <code>0.40</code> 返回 <code>Weekly digest (revised)</code>，检查器给出的原因与时间戳必须对得上。然后再核对另外两组数字：超时写入在 <code>0.40</code> 记为 <code>info</code>，后读在 <code>0.60</code> 读到 hotfix，info 路径合法、误标 fail 则不合法；反例种子 <code>1262027</code> 的校验和 <code>e7647d6a1f6253a9</code> 可以复现，相邻种子不同。</p>
+<p>验收与误区、权衡对应的标志在 <code>results.json</code> 里均为真：<code>acceptance_timeout_is_info</code>、<code>acceptance_seed_saved</code>、<code>practice_history_and_manual_fail_case</code>、<code>pitfall_kill_without_history</code>、<code>tradeoff_testing_is_not_proof</code>。引擎同时标明 <code>not_redis</code>、<code>not_a_network_service</code>、<code>not_jepsen</code>、<code>not_knossos</code>、<code>not_elle</code>、<code>not_etcd</code>。</p>
+<h2 id="_12">源码与文档阅读</h2>
+<p>按节点的 <code>sourceStudy</code>：阅读 Jepsen — Fault injection testing 中与 Jepsen testing 相关的定义、示例或实现，记录与教学实验的差异。2026-11-14 的实际打开情况如下。</p>
+<ul>
+<li>节点给出的 <a href="https://github.com/jepsen-io/jepsen">https://github.com/jepsen-io/jepsen</a> 返回 200，无跳转，294864 字节，<code>Content-Type</code> 为 <code>text/html; charset=utf-8</code>，响应头 <code>Date</code> 为 <code>Fri, 13 Nov 2026 17:17:12 GMT</code>（北京时间 2026-11-14 01:17:12）。页面没有 <code>Last-Modified</code>。<code>&lt;title&gt;</code> 为 GitHub - jepsen-io/jepsen: A framework for distributed systems verification, with fault injection。仓库所有者为 jepsen-io，页上没有个人作者署名。根目录 <code>LICENSE</code> 同日 404；许可以同日读取的 <code>jepsen/project.clj</code> 为准，为 Eclipse Public License。</li>
+<li>该页展示的 README 原文在 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/README.md">https://raw.githubusercontent.com/jepsen-io/jepsen/main/README.md</a> 返回 200，无跳转，13500 字节。<em>Design Overview</em> 给出控制节点、DB 节点、进程与客户端、生成器、history、nemesis 和 checker 这条流水线，并把结果写到 <code>store/&lt;test-name&gt;/&lt;date&gt;/</code>。这不是一份单独改换主题的文档，而是节点所给仓库的正文。</li>
+<li>README 点名的教程是跟进阅读的依据，不是另换官方来源。同日打开 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/doc/tutorial/index.md">doc/tutorial/index.md</a>（200，754 字节）以及其中的 03 / 04 / 05 章和 <a href="https://raw.githubusercontent.com/jepsen-io/jepsen/main/doc/whats-here.md">What's Here</a>（200，9127 字节），用来核对历史类型、模型与检查器、以及 nemesis 注入故障的写法。</li>
+</ul>
+<p>教学实验按以下方式使用这些文本，并记下差异。</p>
+<ul>
+<li><strong>术语与完成类型</strong>：教程写明 invoke 表示尝试，完成必须是 <code>:ok</code>、<code>:fail</code> 或 <code>:info</code>；不确定时用 <code>:info</code>，异常也会变成 <code>:info</code>。本课采用同一组含义，但用 JSON 字符串记录，不要写成「引擎里跑着 Clojure 关键字」。nemesis 的完成在教程里也是 <code>:info</code>（例如 <code>:start</code> / <code>:stop</code>）；本课对应为 <code>start_partition</code>、<code>drop_replies</code> 等教学故障名，不是 <code>partition-random-halves</code> 那个现成 nemesis。</li>
+<li><strong>模型与检查器</strong>：04 章用 Knossos 的 <code>CASRegister</code> 和 <code>checker/linearizable</code> 说明「模型负责 step，检查器判断历史是否合法」；失败时可以打开 <code>store/latest/history.txt</code> 和线性化示意图。本课的检查器是针对短历史的教学枚举，只覆盖单一寄存器上的读和写，没有 CAS，没有 SVG，也没有 Fressian 存储格式。不要把 <code>results.json</code> 里的 <code>valid</code> 写成 Knossos 的输出。</li>
+<li><strong>反例形态</strong>：05 章给出的典型失败是 “can't read 3 from register 4”，原因是 etcd 允许不经共识读取本地副本；加上 quorum 读之后测试通过。本课手工反例是同一类陈旧读：已完成的标题是 <code>Weekly digest (hotfix)</code>，本地读却返回 <code>Weekly digest (revised)</code>。标题、节点和时间都是教学假设，不是把 etcd v2 API 或 Verschlimmbesserung 客户端搬进本课。教程里的 5 秒超时、约 1 秒的 stagger 和 15 秒 time-limit，也不是本课的 <code>0.05</code> / <code>0.10</code> / <code>0.20</code>。</li>
+<li><strong>超时与 info</strong>：验收要求的「超时使用不确定结果而非直接失败」，直接对应教程对 <code>:info</code> 的定义。本课用「多数派已经写上、应答被丢掉」这条窗口，让误标 <code>fail</code> 的对照给出假的不合法；这是教学对照，不是 Jepsen 解释器在抛异常时自动转 info 的原实现。</li>
+<li><strong>种子与 store/</strong>：Jepsen 把测试、历史和分析写到 <code>store/</code>，用最新结果的符号链接方便复查。本课把反例种子 <code>1262027</code> 和校验和写进 <code>results.json</code>，用同一生成器复现，没有实现 <code>store/</code> 目录，也没有 lein 命令行。</li>
+<li><strong>未实现的仓库内容</strong>：SSH 控制平面、Debian 安装、AWS Marketplace 集群、时钟偏移、文件损坏、Elle 事务检查、性能曲线、以及真实 DB 节点，教学引擎都没有做，它们的数字不会进入 <code>results.json</code>。</li>
+<li><strong>网络与时间</strong>：单进程离散事件，所有时延都是教学虚拟时钟上的值，不是生产 RTT。三节点在同一进程里用分区集合模拟隔离，没有 iptables，也没有真正的网络丢包。</li>
+</ul>
+<h2 id="_13">自测题</h2>
+<p><strong>题 1.</strong> 为什么超时要记成不确定结果，而不能直接记成失败？请用 hotfix 写入应答丢失、随后又读到 hotfix 的那条历史说明。</p>
+<details>
+<summary>答案</summary>
+
+完成类型要回答的是「这件事在不在系统里发生过」，不是「客户端有没有等到应答」。`0.20` 开始的 hotfix 写入已经应用到 `n1`、`n2`、`n3`，只是 nemesis 让 `n1` 上的应答丢失，客户端在 `0.40` 超时。这时不能断定写入没发生，只能记 `info`，原因是 `timeout_lost_reply`，时延 `0.20`。
+
+之后进程 1 在 `0.50` 发起多数派读，`0.60` 读到 `Weekly digest (hotfix)`。检查器把这次 info 解释为「写入已经生效」，历史合法。若把同一条完成改标为 `fail`，模型里只剩下 `0.10` 完成的 `Weekly digest (revised)`，就无法解释这次读，检查器会报 `can't read Weekly digest (hotfix) from register Weekly digest (revised)`。看起来更严，其实是误报。教程把「不确定」专门留给 `:info`，把 `:fail` 留给确定没发生的操作；超时属于前者。
+
+</details>
+
+<p><strong>题 2.</strong> 请手工检查那条三节点失败历史：哪一次写入已经完成，哪一次读取返回了旧标题，为什么这违反线性化？同一时间表改成多数派读，完成类型会变成什么？</p>
+<details>
+<summary>答案</summary>
+
+先按时间把事件摆出来。`0.00` 到 `0.10`，进程 0 把 `Weekly digest (revised)` 写到三个节点。`0.15` 到 `0.20`，nemesis 把 `n3` 分区出去。`0.20` 到 `0.30`，进程 0 多数派写入 `Weekly digest (hotfix)`，只应用到 `n1` 和 `n2`，并且已经 `ok`。`0.35` 到 `0.40`，进程 2 在 `n3` 上本地读，得到 `Weekly digest (revised)`，也是 `ok`。
+
+违反线性化的原因不在「分区」这个事实本身，而在实时先后：hotfix 的写入在 `0.30` 已经完成，读在 `0.35` 才 invoke。读的区间完全落在这次写入返回之后，却读到了更旧的 revised。检查器给出的句子就是 `can't read Weekly digest (revised) from register Weekly digest (hotfix)`，时间戳是 `completed at 0.3 before read invoked at 0.35`。历史校验和 `5702df2c35c4e2f5`，可以对照 `results.json` 逐条核对。
+
+同一时间表若使用多数派读，孤立的 `n3` 凑不齐两个节点，这次读在 `0.55` 记为 `info`，原因 `timeout_no_majority`，时延 `0.20`，不会再给出一个成功的旧标题，检查器认为合法。换读法避开的是「成功返回陈旧值」，不是把分区变没。
+
+</details>
+
+<p><strong>题 3.</strong> 为什么发现反例之后要保存种子并再跑一遍？若只随机杀进程、不记录历史，会失去什么？30 个种子里有 21 个合法，能否据此宣布系统已经被证明？</p>
+<details>
+<summary>答案</summary>
+
+没有种子，就无法证明眼前这条失败历史还能再生成一次，也就无法把反例交给别人复查。狩猎从 `1262026` 起试了 30 颗种子，第一颗失败种子是 `1262027`，历史校验和 `e7647d6a1f6253a9`，判定不合法。用同一颗种子再跑，校验和与原因都相同；相邻种子 `1262028` 的校验和是 `901375405fe769b0`，与反例不同。验收要求「复现并保存反例种子」，指的就是这一对数字，而不是只在屏幕上看到一次失败。
+
+若只随机杀进程、不记录 invoke/ok/fail/info，对照路径里只剩下 `0.25` 杀掉 `n2`、`0.35` 杀掉 `n3` 两条笔记，历史被清空，检查器没有跑，也没有种子。故障发生过，但没有可分析的对象。这正是「随机杀进程不记录操作历史」这个误区。
+
+21 次合法、9 次不合法，只说明这个大小为 30 的窗口里测试能发现错误，也能漏过许多种子。状态空间无法穷尽，测试不能替代证明。健康路径那一条合法历史同样如此：它验证的是记录和模型在无故障时能对上，不是三节点 KV 的证明。
+
+</details>
+
+<h2 id="_14">推荐资源</h2>
+<ul>
+<li><a href="https://github.com/jepsen-io/jepsen">Jepsen — Fault injection testing</a>（Jepsen 仓库，英文，专家，免费）：用于核对 history、checker 与 nemesis 这条测试结构，并将结论落到本节点的三节点历史、超时 info 和反例种子实验。2026-11-14 该地址返回 200，无跳转，294864 字节，<code>&lt;title&gt;</code> 为 GitHub - jepsen-io/jepsen: A framework for distributed systems verification, with fault injection，页面无 <code>Last-Modified</code>，无个人作者署名。同日读取的 README（13500 字节）给出 Design Overview；教程 03 / 04 / 05 章定义了 <code>:invoke</code> / <code>:ok</code> / <code>:fail</code> / <code>:info</code>、模型加检查器，以及 nemesis 注入故障后查看 <code>store/latest/history.txt</code> 的做法。根目录没有 LICENSE 文件，<code>jepsen/project.clj</code> 声明为 Eclipse Public License。本课引擎不是 Jepsen、Knossos 或 Elle；教学时间和标题不要与教程里的 etcd 例子或 5 秒超时混用。SSH 集群、Elle 事务检查和性能图本课没有实现。</li>
+</ul>
+<h2 id="_15">本课小结</h2>
+<ul>
+<li>一致性承诺需要独立证据：生成并发操作历史，注入故障，再用模型检查，才能抓住成功路径测试难以暴露的错误。</li>
+<li>历史必须记录 invoke，以及 ok / fail / info。超时是不确定结果：hotfix 写入已应用到三个节点，但在 <code>0.40</code> 因丢失应答记为 <code>info</code>；后读在 <code>0.60</code> 读到 hotfix。保持 info 则合法，误标 fail 则误报。</li>
+<li>检查器按单一寄存器模型核对短历史。健康的多数派路径四次操作都是 ok，结束于 <code>0.70</code>，最终标题是 <code>Weekly digest (hotfix)</code>。这只对送入的历史负责。</li>
+<li>手工失败案例是分区后的陈旧本地读：<code>0.30</code> 已完成的 hotfix 写入之后，<code>0.35</code> 开始的读在 <code>n3</code> 返回 <code>Weekly digest (revised)</code>。同一时间表的多数派读变为 <code>info</code>，不再返回旧值。失败种子 <code>1262027</code>（校验和 <code>e7647d6a1f6253a9</code>）可以复现。</li>
+<li>随机杀进程却不记历史，就既不能检查也不能复现。30 个种子里 21 个合法、9 个不合法，说明测试能发现错误，不能穷尽状态空间，也不能替代证明。</li>
+<li>这些是教学虚拟时钟上的数字，不是生产 RTT。<code>VerificationEngine</code> 不是 Redis，也不是 Jepsen、Knossos 或 etcd。教程定义了完成类型和测试结构；本课用教学枚举和三节点标题来落实它们。</li>
+</ul>
+<p>如果有一句答不上来，先回到 <code>results.json</code> 里对应的字段，再回到教程里「完成必须是 ok、fail 或 info」以及「用模型和历史判断是否合法」这两段，不要把超时写成确定失败，也不要把「杀过进程」或「有一次测试通过」当成已经验证过的一致性承诺。</p><div class="pn"><span><a href="125.html">← 多机房与灾难恢复</a></span><span>下一课 待更新</span></div></main></div></body></html>
