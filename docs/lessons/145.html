@@ -1,0 +1,150 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>145. 单元测试与边界设计 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（145/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details><summary>领域 H（15/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li><a class="" href="../lessons/122.html">122. 消息投递与幂等消费</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li><a class="" href="../lessons/123.html">123. 限流与过载保护</a></li><li><a class="" href="../lessons/124.html">124. 熔断、降级与隔离</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li><a class="" href="../lessons/125.html">125. 多机房与灾难恢复</a></li><li><a class="" href="../lessons/126.html">126. 分布式历史与故障测试</a></li></ul><div>阶段 6</div><ul><li><a class="" href="../lessons/127.html">127. 分布式协议演进</a></li></ul></details><details><summary>领域 I（14/14）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/128.html">128. 吞吐、延迟与排队</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/129.html">129. 可复现微基准</a></li><li><a class="" href="../lessons/130.html">130. 负载模型与协调遗漏</a></li><li><a class="" href="../lessons/131.html">131. perf 采样与符号</a></li><li><a class="" href="../lessons/132.html">132. 火焰图与差分分析</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/133.html">133. 堆内存与分配器分析</a></li><li><a class="" href="../lessons/134.html">134. 锁竞争与调度延迟</a></li><li><a class="" href="../lessons/135.html">135. eBPF 可观测性</a></li><li><a class="" href="../lessons/136.html">136. NUMA 与内存局部性</a></li><li><a class="" href="../lessons/137.html">137. CPU 缓存与伪共享</a></li><li><a class="" href="../lessons/138.html">138. 零拷贝与批处理</a></li><li><a class="" href="../lessons/139.html">139. io_uring 与异步完成</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/140.html">140. 性能回归与预算</a></li></ul><div>阶段 6</div><ul><li><a class="" href="../lessons/141.html">141. 系统瓶颈与容量模型</a></li></ul></details><details open><summary>领域 J（4/15）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/142.html">142. Git 工作流与变更管理</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/143.html">143. CMake 目标式构建</a></li><li><a class="cur" href="../lessons/145.html">145. 单元测试与边界设计</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/144.html">144. Bazel 与可复现依赖</a></li><li class="todo">146. 集成与故障测试 <em>待更新</em></li><li class="todo">147. Sanitizer 动态检测 <em>待更新</em></li><li class="todo">148. gdb 与 Core Dump <em>待更新</em></li><li class="todo">149. 结构化日志与敏感信息 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">150. Metrics 与指标基数 <em>待更新</em></li><li class="todo">151. Tracing 与上下文传播 <em>待更新</em></li><li class="todo">152. CI 与供应链检查 <em>待更新</em></li><li class="todo">153. 容器镜像与运行边界 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">154. Kubernetes 服务生命周期 <em>待更新</em></li><li class="todo">155. 灰度发布与回滚 <em>待更新</em></li><li class="todo">156. 后台安全与威胁建模 <em>待更新</em></li></ul></details><details><summary>领域 K（0/12）</summary><div>阶段 1</div><ul><li class="todo">157. 后台工程师的机器学习基础 <em>待更新</em></li><li class="todo">159. Token、窗口与生成预算 <em>待更新</em></li></ul><div>阶段 2</div><ul><li class="todo">158. Transformer 与注意力 <em>待更新</em></li><li class="todo">160. Embedding 与相似度 <em>待更新</em></li><li class="todo">161. 模型 API 与可靠客户端 <em>待更新</em></li><li class="todo">162. 提示词与任务契约 <em>待更新</em></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 145 课 · 领域 J · 阶段 1</p><p class="dl"><a href="../files/145-j-unit.md" download>⬇ 本课 Markdown</a><a href="../files/practice145.tar.gz" download>⬇ 练习包 practice145.tar.gz</a></p><h1 id="145208">第 145/208 课：单元测试与边界设计</h1>
+<blockquote>
+<p>序号 145/208 · id <code>j-unit</code> · 领域 J · 阶段 1 · 难度 基础 · 子类 测试与调试
+前置：<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/143.html"><code>j-cmake</code></a>
+节点摘要：围绕可观察行为测试模块，使用依赖注入控制时间、网络和故障，避免测试只复述实现。</p>
+</blockquote>
+<h2 id="_1">导读</h2>
+<p>上一课用 CMake 把库、服务和测试拆成三个 target，消费者不用手写公共头路径。这一课把「测试」本身当作设计对象：断言检查的是可观察行为，还是实现步骤？夹具（fixture）能不能保证用例互不影响？边界值是被单独测到了，还是只覆盖了成功输入？</p>
+<p>教学场景是一个后台消息解析器。微信公众号后台这类服务里，模块之间常常用长度前缀帧传配置或内部消息（下面的 2 字节大端长度 + payload 是教学假设，不是真实微信协议）。空包、截断包、超大长度和连续粘在一起的包，都是线上会碰到的输入；只拿一条完整的 <code>"hello"</code> 去测，重构时没有回归保护。</p>
+<h2 id="_2">学习目标</h2>
+<ol>
+<li>解释 fixture 与断言，以及它们的适用边界。</li>
+<li>能按等价类和边界挑选用例，而不是只堆成功路径。</li>
+<li>独立完成实践：为消息解析器测试空包、截断包、超大长度和连续包。</li>
+</ol>
+<h2 id="_3">为什么后端要懂</h2>
+<p>节点给出的理由是「让重构有回归保护」。后台代码里，解析、重试、超时这类逻辑改起来很勤：你可能只是把 <code>&gt;=</code> 改成 <code>&gt;</code>，或把两次短读合成一次 <code>read</code>。没有针对行为的测试，改完只能靠线上暴露；测试若写成「必须先 <code>read(2)</code> 再 <code>read(payload)</code>」，实现一优化，测试反而红了。单元测试要保护的是对外契约，不是某一版源码的调用形状。</p>
+<h2 id="_4">核心知识点</h2>
+<h3 id="1-fixture">1. fixture 与断言</h3>
+<p><strong>直觉。</strong> 断言是对「这一刻行为该是什么」的检查；fixture 是多个用例共享的准备方式。两者都是为了让每个用例独立、可重复，而不是为了少写几行重复代码那么简单。</p>
+<p><strong>原理。</strong> GoogleTest Primer 把断言分成两类：<code>ASSERT_*</code> 失败后中止当前函数，<code>EXPECT_*</code> 失败后继续，以便一次跑出更多问题。本课在取 <code>messages[0]</code> 之前用 <code>ASSERT_EQ(r.messages.size(), 1u)</code>，属于「失败后再往下走会越界」的情形，与 Primer 里对空指针先 <code>ASSERT_NE</code> 再解引用的规则一致。</p>
+<p><code>TEST_F</code> 的 fixture 必须派生自 <code>testing::Test</code>。Primer 写得很明确：每个 <code>TEST_F</code> 都会在运行时拿到一个全新的 fixture 对象，先 <code>SetUp()</code>，再跑测试，再 <code>TearDown()</code>，然后销毁；框架不会在两个用例之间复用同一个对象。本课的 <code>FrameTest</code> 把缓冲放在成员里：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">FrameTest</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">testing</span><span class="o">::</span><span class="n">Test</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="k">protected</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">SetUp</span><span class="p">()</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">buf_</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span><span class="w"> </span><span class="n">scratch_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">buf_</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">scratch_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div>
+
+<p><code>FrameTest.FixtureMutationDoesNotLeak</code> 把 <code>scratch_</code> 写成 42，<code>FrameTest.FixtureStartsFresh</code> 则断言它仍是 0。用 <code>--gtest_shuffle --gtest_random_seed=1</code> 时，<code>FixtureStartsFresh</code> 先于 <code>FixtureMutationDoesNotLeak</code> 运行；种子为 2 时顺序反过来。两次都是 <code>[  PASSED  ] 12 tests.</code>，说明新鲜对象这一条在真实运行里成立。</p>
+<p><strong>适用边界。</strong> fixture 适合「每个用例都要一份干净的解析缓冲、假时钟或假数据源」。它不适合把进程级静态残留当「会话」在用例之间接力——那会把执行顺序变成隐式输入。GoogleTest 可以换种子打乱顺序，但 <code>--gtest_filter</code> 只筛选用例、并不改注册顺序，不能靠它来证明独立性。</p>
+<h3 id="2">2. 等价类和边界</h3>
+<p><strong>直觉。</strong> 不可能穷举所有字节串。先按行为把输入分成几类，再在每类的边界上取样：刚好合法、刚好非法、缺 1 字节、长度为 0。</p>
+<p><strong>原理。</strong> 本课帧格式是 2 字节大端 payload 长度（不含头）+ payload，最大 payload 为 <code>kMaxPayload = 1024</code>，恰好 1024 合法；长度为 0 的空包也合法，得到一条空字符串消息。这和「缓冲区里一个字节都没有」不是同一类：</p>
+<table>
+<thead>
+<tr>
+<th>等价类</th>
+<th>例子</th>
+<th>期望</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>空缓冲区</td>
+<td><code>""</code></td>
+<td><code>kOk</code>，0 条消息，无 leftover</td>
+</tr>
+<tr>
+<td>空包</td>
+<td>两字节 <code>0x00 0x00</code></td>
+<td>1 条空消息</td>
+</tr>
+<tr>
+<td>截断（头不完整）</td>
+<td>只有 1 字节</td>
+<td>0 条消息，字节留在 leftover</td>
+</tr>
+<tr>
+<td>截断（payload 缺 1 字节）</td>
+<td>头声明 8 字节、少给 1 字节</td>
+<td>整帧留在 leftover，不交付残缺消息</td>
+</tr>
+<tr>
+<td>恰好上限</td>
+<td>payload 1024 字节</td>
+<td>1 条消息，长度 1024</td>
+</tr>
+<tr>
+<td>超大长度</td>
+<td>长度字段 1025</td>
+<td><code>kTooLarge</code>，不能当成截断留下等后续字节</td>
+</tr>
+<tr>
+<td>连续完整包</td>
+<td><code>"hi"</code> 再接 <code>"ok"</code></td>
+<td>两条消息，无 leftover</td>
+</tr>
+<tr>
+<td>连续包 + 截断尾巴</td>
+<td>两完整帧后再跟 6 字节残帧</td>
+<td>先交付完整的，尾巴进 leftover</td>
+</tr>
+</tbody>
+</table>
+<p>人为注入的缺陷写在 <code>parse_frames</code> 里：有 <code>MSGPARSE_BUGGY</code> 时用 <code>if (len &gt;= kMaxPayload)</code>，把恰好等于 1024 的合法包也判成超大。<code>-DMSGPARSE_BUGGY=ON</code> 构建后，12 个用例里 11 个通过，唯一失败的是 <code>FrameTest.ExactMaxPayloadAccepted</code>：</p>
+<div class="codehilite"><pre><span></span><code>Expected equality of these values:
+  r.status
+    Which is: 4-byte object &lt;01-00 00-00&gt;   # Status::kTooLarge
+  Status::kOk
+    Which is: 4-byte object &lt;00-00 00-00&gt;
+payload of exactly kMaxPayload must be accepted
+[  FAILED  ] FrameTest.ExactMaxPayloadAccepted
+[  PASSED  ] 11 tests.
+</code></pre></div>
+
+<p>空包、截断、1025 的超大长度、连续包在有缺陷版本上仍然是绿的——它们测的不是这条 <code>&gt;=</code> / <code>&gt;</code> 边界。改成 <code>len &gt; kMaxPayload</code> 之后，同一条用例通过，<code>frame_test</code> 为 <code>[  PASSED  ] 12 tests.</code></p>
+<p><strong>适用边界。</strong> 等价类帮你决定「要哪几发输入」，断言仍然要写在可观察结果上（状态、消息内容、leftover），而不是「走了哪条 <code>if</code>」。边界选错（只测 1025、不测 1024）时，这次注入的缺陷会漏掉。</p>
+<h3 id="3-fake-mock">3. fake 与 mock</h3>
+<p><strong>直觉。</strong> 解析超时不该在测试里真的 <code>sleep</code>，读网络也不该连到真实套接字。把时钟和字节源做成接口，测试里注入可控的替身。</p>
+<p><strong>原理。</strong> gMock for Dummies 把两个词区分得很清楚：fake 有能工作的实现，只是走了捷径（例如内存文件系统）；mock 则预先写好期望，规定会被调用哪些方法、几次、以什么参数。本课的 <code>FakeClock</code> 可以 <code>advance(199)</code> 再 <code>advance(1)</code>，<code>FakeSource</code> 能追加字节、限制每次只吐 1 字节，或 <code>set_fault(true)</code> 返回 -1。<code>StreamAssembler::poll()</code> 每次最多 <code>read(kReadChunk)</code>（256 字节），不完整帧从首次出现起超过 <code>timeout_ms</code> 才报超时。</p>
+<p>一条典型的行为测试是：先写入 1 字节不完整头，<code>poll()</code> 得到 <code>kNeedMore</code>；时间拨到超时前 1 毫秒仍是 <code>kNeedMore</code>；再拨 1 毫秒得到 <code>kTimeout</code>。故障注入同样只看结果：<code>set_fault(true)</code> 之后 <code>poll()</code> 为 <code>kSourceError</code>。这些都不需要真实时间和真实网络。</p>
+<p>作为对照，<code>brittle_mock_demo</code> 里的 <code>ScriptedMockSource</code> 规定必须先 <code>read(2)</code> 再 <code>read(5)</code>（按一帧的头和 payload 拆两次读）。真实汇编器一次 <code>read(256)</code>，这个 mock 失败，报 <code>read size mismatch: got 256 want 2</code>，状态变成 <code>kSourceError</code>。同一组字节交给 <code>FakeSource</code>，<code>FakeSource.SameBytesAreAssembled</code> 得到 <code>kGotMessage</code> 和 <code>"hello"</code>。</p>
+<p><strong>适用边界。</strong> 需要控制时间、短读或故障时，用 fake 注入状态就够了。只有交互本身是契约（例如「必须先协商再发数据」）时，才值得用 mock 去规定调用。把 <code>read</code> 的分片尺寸写进期望，就是在测试实现细节。</p>
+<h2 id="_5">常见误区</h2>
+<ol>
+<li><strong>只测试成功输入（节点 pitfalls）。</strong> 一条完整的 <code>"cfg"</code> 通过，并不说明空包、缺 1 字节或长度 1025 是对的。本课有缺陷的解析器在 11 个用例上是绿的，唯独在恰好 1024 这个边界上暴露。</li>
+<li><strong>把静态残留当成会话，让用例互相接力。</strong> <code>order_trap_demo</code> 用进程级 <code>g_buf</code> 把「先写 2 字节头、再补 <code>hello</code>」拆到两个测试里。按注册顺序跑是 <code>[  PASSED  ] 2 tests.</code>；<code>--gtest_shuffle --gtest_random_seed=1</code> 让 <code>CompleteWithPayload</code> 先跑，<code>"hello"</code> 被当成长度字段（<code>0x6865</code>），<code>messages.size()</code> 为 0，两个用例都失败。</li>
+<li><strong>以为筛选用例等于改变顺序。</strong> <code>--gtest_filter</code> 只决定跑哪些测试，默认仍按注册顺序执行。要检验独立性，应使用 <code>--gtest_shuffle</code> 并换种子，而不是调整 filter 字符串的写法。</li>
+</ol>
+<h2 id="_6">设计权衡</h2>
+<p>节点给出的权衡是：「过多 mock 绑定实现细节，真实依赖又使测试慢而脆弱。」本课两端都做了对照。一边是 <code>FakeClock</code> / <code>FakeSource</code>：不睡真实时间、不连套接字，但仍然行使真实的解析与超时逻辑，<code>assembler_test</code> 7 个用例在种子 7 的 shuffle 下全部通过。另一边是按 <code>read(2)+read(payload)</code> 写死的 mock：汇编器改成一次读较大缓冲后，行为仍然正确，测试却红了。若把 <code>ByteSource</code> 换成真实 TCP，短读、延迟和故障都难以稳定复现，测试会既慢又脆。折中是依赖注入加 fake，把可观察结果当作断言对象。</p>
+<h2 id="_7">动手实践</h2>
+<p>实践包在 <code>practice145/</code>（<code>proj/</code> 为源码，含解析库、GoogleTest 1.16.0 与四个测试目标）。在 <code>practice145/</code> 下执行 <code>bash test.sh</code>。本机没有 g++，实验用 cmake 4.4.4、ninja 1.13.2 和 zig c++（clang 22.1.8 前端）编译；读者用自己机器上的 g++ / clang++ 即可，脚本会优先选系统编译器。</p>
+<ol>
+<li><strong>带缺陷构建。</strong> <code>-DMSGPARSE_BUGGY=ON</code> 配置 14.8s，ninja 构建 <code>[1/11]</code> 至 <code>[11/11]</code>，得到 <code>frame_test</code> 与 <code>assembler_test</code>。</li>
+<li><strong>让测试发现边界缺陷（验收：测试能发现一个人为注入的边界缺陷）。</strong> 有缺陷版本的 <code>frame_test</code> 退出码为 1：12 个用例中 11 个通过，<code>FrameTest.ExactMaxPayloadAccepted</code> 失败，断言恰好 1024 字节的 payload 应被接受。空包、截断、超大长度和连续包在这一版本上仍然通过。</li>
+<li><strong>修复后再跑。</strong> <code>-DMSGPARSE_BUGGY=OFF</code> 配置 0.9s，构建 <code>[1/15]</code> 至 <code>[15/15]</code>（多了两个反例目标）。修复后 <code>frame_test</code> 为 <code>[  PASSED  ] 12 tests.</code>，<code>assembler_test</code> 为 <code>[  PASSED  ] 7 tests.</code></li>
+<li><strong>不依赖执行顺序（验收）。</strong> <code>frame_test --gtest_shuffle --gtest_random_seed=1</code> 与 <code>seed=2</code> 顺序不同（种子 1 以 <code>EquivalenceHints.SingleNonEmptyPacket</code> 开头，种子 2 以 <code>FrameTest.EmptyBufferYieldsNoMessage</code> 开头），两次都是 12 个用例通过；<code>assembler_test</code> 在种子 7 下 7 个用例通过。</li>
+<li><strong>反例。</strong> <code>order_trap_demo</code> 默认注册顺序通过；种子 1 下 <code>CompleteWithPayload</code> 先跑，2 个用例全部失败。<code>brittle_mock_demo</code> 中 Fake 用例通过，规定 <code>read(2)+read(payload)</code> 的 mock 报 <code>read size mismatch: got 256 want 2</code>。</li>
+</ol>
+<p>最后一行应为 <code>ALL_CHECKS_PASSED</code>，并生成 <code>results.json</code>。延伸练习：给解析器再注入一处「把长度字段理解成整帧长度」的缺陷，看现有截断与连续包用例能不能抓住；或把 <code>kReadChunk</code> 改成 2，观察那个 brittle mock 是否反而变绿——变绿本身就说明它绑的是读法，不是行为。</p>
+<h2 id="_8">源码与文档阅读</h2>
+<p>节点建议阅读 GoogleTest — Primer。2026-11-14 北京时间核对：</p>
+<ul>
+<li><a href="https://google.github.io/googletest/primer.html">GoogleTest Primer</a> 返回 200，无跳转。HTML 43172 字节，标题为 "GoogleTest Primer | GoogleTest"。Date 为 2026-11-14 12:18:12 GMT（北京时间 20:18:12），Last-Modified 为 2026-11-13 21:40:56 GMT（北京时间 05:40:56）；抓取的 Markdown 约 18028 字节。</li>
+<li>跟随阅读 <a href="https://google.github.io/googletest/gmock_for_dummies.html">gMock for Dummies</a>（Primer 本身几乎不谈 fake / mock）。200，HTML 63887 字节，标题为 "gMock for Dummies | GoogleTest"。Date 为 2026-11-14 12:19:44 GMT（北京时间 20:19:44），Last-Modified 与 Primer 相同（北京时间 05:40:56）。</li>
+</ul>
+<p>Primer 中与本课直接相关的定义：测试必须独立可重复，每个用例跑在不同的对象上；<code>ASSERT_*</code> 是致命失败，<code>EXPECT_*</code> 是非致命失败；<code>TEST()</code> 的第一个参数是 test suite 名，第二个是用例名，两者都不应包含下划线；<code>TEST_F</code> 在每个用例上构造新的 fixture，先 <code>SetUp()</code> 再运行，再 <code>TearDown()</code> 并销毁；多数情况应链接 <code>gtest_main</code>，而不手写 <code>main</code>。文中还提醒历史上的 Test Case / Test Suite 用语与 ISTQB 不一致，当前推荐 <code>TestSuite</code>。</p>
+<p>与本课实验的差异：</p>
+<ol>
+<li>Primer 的入门例子是 <code>Factorial(0)</code> 与正整数，没有覆盖空包与空缓冲区的区分，也没有截断、上限边界和连续帧；这些是本节点的实践，实验额外补上。</li>
+<li>Primer 不定义 fake 与 mock。gMock for Dummies 写的是：fake 有可工作但走捷径的实现，mock 则预置对调用的期望。本课用手工写出的 <code>FakeSource</code> / <code>ScriptedMockSource</code> 对照这一点，没有使用 <code>MOCK_METHOD</code> / <code>EXPECT_CALL</code> 宏。</li>
+<li>Primer 假定系统已能编译并链接 GoogleTest；本实验把 1.16.0 源码放在 <code>third_party/</code>，在没有 g++ 的机器上用 zig c++（clang 22.1.8）和 cmake 4.4.4 编过。</li>
+</ol>
+<h2 id="_9">自测题</h2>
+<p><strong>1. 为什么 <code>FrameTest.ExactMaxPayloadAccepted</code> 能抓住缺陷，而 <code>OversizedRejected</code> 和 <code>EmptyPacketAccepted</code> 在有缺陷版本里仍然是绿的？</strong></p>
+<p>答：注入的缺陷是 <code>len &gt;= kMaxPayload</code>，只误伤恰好 1024 的合法包。<code>OversizedRejected</code> 用的是 1025，两种比较都会拒绝；<code>EmptyPacketAccepted</code> 的长度是 0，两种比较都会接受。等价类不同，测不到同一条边界。修复后改成 <code>len &gt; kMaxPayload</code>，1024 的用例才变为通过。</p>
+<p><strong>2. 同事说「我用 <code>--gtest_filter=A:B</code> 指定了顺序，所以这两个用例的依赖没有问题」。用本课内容说明问题。</strong></p>
+<p>答：filter 只筛选要跑的用例，并不改变注册顺序。本课 <code>order_trap_demo</code> 按注册顺序（先头后负载）是 2 个用例通过；用 <code>--gtest_shuffle --gtest_random_seed=1</code> 让 <code>CompleteWithPayload</code> 先跑，共享的 <code>g_buf</code> 里没有那 2 字节头，<code>"hello"</code> 被当成长度字段，两个用例都失败。独立性要用新的 fixture（或每个用例自己的局部缓冲）来保证，并用 shuffle 换种子验证，而不是靠 filter 的写法。</p>
+<p><strong>3. 为什么「先 <code>read(2)</code> 再 <code>read(5)</code>」这类 mock 会在行为仍然正确时失败？</strong></p>
+<p>答：<code>StreamAssembler</code> 的契约是「源里有一帧完整字节就交出消息」，并没有保证按头和 payload 分两次读。实现一次 <code>read(256)</code>，手工 mock 报 <code>read size mismatch: got 256 want 2</code>，测试失败；同一输入用 <code>FakeSource</code> 却得到 <code>"hello"</code>。这就是过多 mock 绑定实现细节：改的是读的分片，不是对外行为。</p>
+<h2 id="_10">推荐资源</h2>
+<ul>
+<li><a href="https://google.github.io/googletest/primer.html">GoogleTest — Primer</a>（GoogleTest 官方文档，英文，入门，免费）：节点推荐理由是用于核对 fixture 与断言与等价类和边界，将结论落实到本节点实验。</li>
+<li>文中跟随阅读：<a href="https://google.github.io/googletest/gmock_for_dummies.html">gMock for Dummies</a>（fake 与 mock 的定义，以及「mock 检查的是交互」这一用法）。</li>
+</ul>
+<h2 id="_11">本课小结</h2>
+<p>单元测试保护的是可观察行为：fixture 为每个用例提供干净对象，断言写在状态和输出上，等价类要覆盖空包、截断、上限和连续包，而不能只送成功输入。本课在真实的 GoogleTest 1.16.0 里注入了一处 <code>&gt;=</code> 边界缺陷，由 <code>ExactMaxPayloadAccepted</code> 抓住；修复后 12+7 个用例在不同 shuffle 种子下仍然通过。时间、短读和故障用 fake 注入即可；把 <code>read</code> 尺寸写进 mock，测试就会绑死实现。下一课是第 146 课 j-integration（集成与故障测试）。</p><div class="pn"><span><a href="144.html">← Bazel 与可复现依赖</a></span><span>下一课 待更新</span></div></main></div></body></html>
