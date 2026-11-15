@@ -6,49 +6,56 @@
 
 ## 导读
 
-第 187 课强调生成代码仍要审查，第 147 课用 Sanitizer 把未定义行为变成可复现证据。本课给审查器一份含**悬空引用**和**未同步计数器**的 diff，要求每条结论带代码位置、触发条件和最小测试，并且不能因为「模型这次没提并发」就跳过并发检查。
+第 187 课强调生成代码仍要审查，第 147 课用 Sanitizer 把未定义行为变成可复现证据。本课给审查器一份含**悬空引用**和**未同步计数器**的 diff，要求每条结论带代码位置，并且缺陷必须被**编译后的工具或测试真正抓住**；修复后再干净复跑。
 
-教学假设：`buffer.h` / `use.cpp` 是为暴露缺陷构造的教学片段，不是某条业务链路的生产代码。审查器是脚本化规则，`is_live_model=false`。本机没有 `clang-tidy`，不能声称已经跑过它。
+教学假设：`buffer.h` / `use.cpp` 是为暴露缺陷构造的教学片段，不是某条业务链路的生产代码。审查器是脚本化规则，`is_live_model=false`。
+
+此前一版只在系统 `PATH` 中查找 `clang-tidy`，未盘点 cmvenv 与第 147 课已经用过的 zig c++ / 系统 `libasan`、`libtsan`，因而把静态分析和 sanitizer 写成未运行。本次修订先清点工具，再用同一编译器链接 `libasan.so.8` 与 `libtsan.so.2`，并安装、运行真实的 clang-tidy 22.1.8。旧稿另行保留，文件名不变。
 
 ## 学习目标
 
 1. 说明审查的上下文范围：不仅看 diff 新增行，还要看调用点如何触发。
-2. 独立完成实践：为悬空引用给出位置、触发条件和最小测试；并发问题同样必须有代码证据。
-3. 每条结论都有代码证据；探测并记录 `clang-tidy` 是否真的可运行。
+2. 独立完成实践：用编译后的 ASan 抓住悬空引用，用 TSan 抓住数据竞争；修复后两次运行都必须干净。
+3. 尽力运行真实 clang-tidy，并如实记录它是否（以及是否没有）单独报告这两个缺陷。并发检查不能因为「模型没意见」而跳过。
 
 ## 为什么后端要懂
 
-模型擅长跨文件提示「这里可能有问题」，但漏报和误报都常见。没有文件:行、触发路径和最小复现，审查意见就只是文风。静态分析更稳定，却不是每台机器都装得上，缺工具时要说缺，而不是用叙述补上。
+模型擅长跨文件提示「这里可能有问题」，但漏报和误报都常见。没有文件:行和可触发的复现，审查意见就只是文风。静态分析值得跑，但动态 sanitizer 往往更能钉住生命周期和竞态；两者都要在本机真实调用，缺工具时先找已经装过的版本。
 
 ## 核心知识点
 
-### 1. 每条意见都要能指回代码
+### 1. 缺陷必须被编译后的工具抓住
 
-**直觉。** 先引用，再解释。
+**直觉。** 先复现，再谈修复。
 
-**原理。** `temporary_token()` 返回 `Slice{token.c_str(), token.size()}`，而 `token` 是函数内的 `std::string`，函数返回后对象销毁。`use.cpp` 随即 `std::string(s.ptr, s.len)`，这是触发点。本次记录 `dangling-slice`，`buffer.h` 中对应行的原文作为 evidence，并给出最小测试：在 ASan/UBSan 下跨过该函数后再读 `s.ptr`。
+**原理。** `temporary_token()` 返回 `Slice{token.c_str(), token.size()}`，`token` 是函数内的 `std::string`，返回后对象销毁；`use.cpp` 随即 `std::string(s.ptr, s.len)`。用 `tools/zig-c++`（clang 22.1.8）加上 `-fsanitize=address`，并链接系统 `/usr/lib/x86_64-linux-gnu/libasan.so.8`（这与第 147 课相同），运行结果为退出码 1，日志为 `ERROR: AddressSanitizer: stack-use-after-scope`，访问发生在 `use.cpp` 的 `main` 读取那块已经结束的栈上字符串。
 
-`bump()` 对非原子的 `shared_counter++` 没有互斥；`use.cpp` 用两个 `std::thread` 同时调用。即便有的模型在这次 diff 里「没有意见」，审查清单仍必须包含并发项：`concurrency_not_skipped=true`。最小测试是在 TSan 下跑这两个线程。本课没有在本机运行 ASan/TSan（与第 147 课的工具链限制一致），所以这些是**应当执行的复现步骤**，不是已经跑绿的报告。
+`bump()` 对非原子的 `shared_counter++` 没有互斥，`use.cpp` 用两个 `std::thread` 同时调用。同样的编译器加上 `-fsanitize=thread` 并链接 `libtsan.so.2`，运行退出码 66，日志为 `WARNING: ThreadSanitizer: data race`，摘要指向 `buffer.h` 的 `bump()`。并发项没有因为「模型没有意见」而被跳过。
 
-### 2. clang-tidy 是补充，不是可以假装的步骤
+修复把 `temporary_token()` 改为返回拥有所有权的 `std::string`，并把计数器改成 `std::atomic<int>`。再用 ASan/TSan 编译运行：退出码 0，输出 `live-token` 与 `2`，日志中不再有 sanitizer 报错。
 
-**直觉。** 静态分析能稳定指出一批问题，但要真正调用二进制。
+### 2. 真实 clang-tidy 要跑到，但不要替它编造成果
 
-**原理。** 驱动使用 `shutil.which("clang-tidy")`，若存在则以 `clang-tidy use.cpp -- -std=c++17 -I.` 调用。本次结果 `which=None`，`clang_tidy_ran=false`，`not_verified_on_this_machine` 写明：发现来自代码证据，不是 tidy 报告。官方 clang-tidy 文档在 2026-11-16 仍然有效，不能因为本机缺失就改写成「已用 tidy 确认」。
+**直觉。** 静态分析是补充；没报出来不能假装报出来。
+
+**原理。** 本次从 PyPI 安装 `clang-tidy==22.1.8`（[ssciwr/clang-tidy-wheel](https://github.com/ssciwr/clang-tidy-wheel)，Apache-2.0，打包的是 LLVM 官方二进制，版本与 zig c++ 的 clang 22.1.8 一致），二进制在 `cmvenv/bin/clang-tidy`，`--version` 为 `LLVM version 22.1.8`。审查用 CMake 生成的 `compile_commands.json` 作为编译数据库来运行。clang-tidy **确实执行了**，但这一次并没有单独给出能对应「悬空 Slice」或「数据竞争」的诊断；抓住这两个缺陷的是 ASan 与 TSan。`results.json` 把这一点写在 `not_verified_on_this_machine` 里，而不是改写 tidy 的输出。
+
+官方 clang-tidy 文档说明检查器与配置，不保证某两个缺陷一定被默认检查集命中。验收顺序是：编译后的 sanitizer 必须抓住缺陷；tidy 能补充就补充，不能就如实记录。
 
 ## 常见误区
 
-- 用流畅解释代替可触发证据，或不给出最小测试。
+- 用流畅解释代替可触发证据。
 - 模型没提到并发，审查就跳过数据竞争。
-- 本机没有 clang-tidy / Sanitizer 时，把「应当能检出」写成「已经检出」。
+- 本机其实已有编译器与 sanitizer 运行库，却只在系统 `PATH` 里找 `g++`/`clang-tidy`，然后写成「无法运行」。
+- 把「应当能被 tidy 检出」写成「tidy 已经检出」。
 
 ## 设计权衡
 
-模型适合提出跨文件的生命周期和并发假设；clang-tidy 与 Sanitizer 更可重复。两者都需要代码位置。缺少工具时，保留假设和复现命令，比伪造一次「全部通过」更有用。
+模型适合提出跨文件的生命周期和并发假设；sanitizer 把假设变成退出码和日志；clang-tidy 更可重复，但对这类未定义行为并不总是敏感。三者一起用，并且以实际运行记录为准。
 
 ## 动手实践
 
-实践包在 `practice188/`。`repo/change.diff` 与完整源文件一并提供。
+实践包在 `practice188/`。`repo/change.diff` 与完整源文件一并提供。需要 `cmvenv` 中的 cmake、ninja、ziglang、clang-tidy 22.1.8，以及系统 `libasan`/`libtsan`。
 
 ```bash
 tmp_dir=$(mktemp -d)
@@ -57,31 +64,31 @@ cd "$tmp_dir/practice188"
 bash test.sh
 ```
 
-本次两条发现均有 file:line 与触发点，并发项未被跳过；clang-tidy 未安装，已列入未实测。`is_live_model=false`。若你的机器有 clang-tidy 或 `-fsanitize=address,thread`，应按最小测试补跑，并以那些日志为准。
+本次修订实测：ASan 报告 `stack-use-after-scope`，TSan 报告 `data race`，修复后两次运行干净；clang-tidy 22.1.8 已运行，但不是抓住这两处缺陷的工具。`is_live_model=false`。
 
 ## 源码与文档阅读
 
-节点 `verifiedAt` 为 2026-10-26。2026-11-16（Asia/Shanghai，UTC+8）抓取 [Clang-Tidy](https://clang.llvm.org/extra/clang-tidy/)：HTTP 200，`Date` 2026-11-15 16:13:55 GMT（Asia/Shanghai 2026-11-16 00:13:55），`Last-Modified` 2026-10-14 22:34:19 GMT（Asia/Shanghai 2026-10-15 06:34:19）。该页说明检查器与配置，不保证本课两个缺陷一定被某个默认检查器命中；本课的验收首先是代码证据，其次才是 tidy 输出。
+节点 `verifiedAt` 为 2026-10-26。2026-11-16（Asia/Shanghai，UTC+8）抓取 [Clang-Tidy](https://clang.llvm.org/extra/clang-tidy/)：HTTP 200，`Date` 2026-11-15 16:13:55 GMT（Asia/Shanghai 2026-11-16 00:13:55），`Last-Modified` 2026-10-14 22:34:19 GMT（Asia/Shanghai 2026-10-15 06:34:19）。第 147 课说明了 zig c++ 链接系统 sanitizer 运行库的做法，本次沿用。
 
 ## 自测题
 
-**1. 只评论 `return Slice{token.c_str(), ...}` 而不看 `use.cpp`，漏掉了什么？**
+**1. 只评论 `return Slice{token.c_str(), ...}` 而不运行 ASan，漏掉了什么？**
 
-答：触发条件。悬空指针在返回时形成，在 `std::string(s.ptr, s.len)` 处被使用。本次两条 evidence 都包含调用点。
+答：可触发证据。本次 ASan 在 `main` 读取 `s.ptr` 时给出 `stack-use-after-scope`，这才是缺陷被抓住的记录。
 
-**2. 如果脚本化审查器或模型没有输出并发意见，能否认为没有竞态？**
+**2. 如果 clang-tidy 没有提到数据竞争，能否认为没有竞态？**
 
-答：不能。清单必须覆盖共享可变状态。本次即使不依赖「模型意见」，也对 `shared_counter++` 和双线程调用给出了证据。
+答：不能。本次 tidy 22.1.8 已运行但未单独报出该问题；TSan 在 `bump()` 上报告了 `data race`。并发检查不能缺席。
 
-**3. 没有 clang-tidy 时正确的表述是什么？**
+**3. 修复后怎样才算通过？**
 
-答：记录二进制不存在、未运行，审查结论来自代码证据。不要写「tidy 已确认」。
+答：同一套 ASan/TSan 命令再次运行，退出码为 0，日志中不再出现 sanitizer 错误。本次固定实现输出 `live-token` 与计数 `2`。
 
 ## 推荐资源
 
-- [Clang-Tidy](https://clang.llvm.org/extra/clang-tidy/)（英文，文档，进阶，免费）：检查器与配置；本机是否跑通以实际命令为准。
-- 第 147 课 Sanitizer：把生命周期和竞态变成可复现的动态证据。
+- [Clang-Tidy](https://clang.llvm.org/extra/clang-tidy/)（英文，文档，进阶，免费）：检查器与配置；是否命中以实际运行日志为准。
+- 第 147 课 Sanitizer：同一套 zig c++ 与系统 sanitizer 运行库。
 
 ## 本课小结
 
-审查意见要带位置、触发和最小复现；并发检查不能缺席。静态分析值得跑，但跑不到就要写未实测。下一课是第 189 课 m-tests（Agent 驱动测试与模糊测试）。
+审查意见要能被编译后的工具复现；并发检查不能缺席。clang-tidy 值得安装和运行，但不要替它编造成果。下一课是第 189 课 m-tests（Agent 驱动测试与模糊测试）。

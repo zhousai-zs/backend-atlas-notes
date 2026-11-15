@@ -5,56 +5,65 @@
 节点摘要：将需求转为可验证任务，让 Agent 阅读工程约定、修改代码并运行构建测试，开发者审查关键语义和证据。自动化减少重复劳动，但不能省去关键设计审查。</p>
 </blockquote>
 <h2 id="_1">导读</h2>
-<p>从本课起进入领域 M（Backend + AI）。第 183 课提供了可扩展的诊断宿主，第 145 课强调测试应钉住契约而不是当前实现的偶然输出。本课的任务是：给一个教学用 KV 存储增加 <code>EXISTS</code> 命令，要求补协议测试并说清它对键生命周期的影响。</p>
-<p>教学假设：<code>kv_exists</code> 是为讲协议和代码审查构造的内存表，不是腾讯或微信的存储组件，也不与任何线上 KV 接口对应。实践中的「Agent」是脚本化改写，<code>is_live_model=false</code>，不能写成已经用真实编码模型改过仓库。</p>
+<p>从本课起进入领域 M（Backend + AI）。第 183 课提供了可扩展的诊断宿主，第 145 课强调测试应钉住契约而不是当前实现的偶然输出。本课的任务是：给一个教学用 KV 存储增加 <code>EXISTS</code> 命令，要求补协议测试并说清它对键生命周期的影响，并且<strong>必须真实编译、链接并跑 ctest</strong>。</p>
+<p>教学假设：<code>kv_exists</code> 是为讲协议和代码审查构造的内存表，不是腾讯或微信的存储组件。实践中的「Agent」是脚本化改写，<code>is_live_model=false</code>，不能写成已经用真实编码模型改过仓库。</p>
+<p>本课曾有一版只调用了系统 <code>PATH</code> 里的 <code>cmake</code>/<code>g++</code>，在没有先盘点 <code>/workspace/atlas/cmvenv</code> 的情况下把构建写成「未成功」。第 143–152 课已经使用同一套工具链完成过真实 C++ 构建。本次修订在开工前先清点：<code>cmake</code> 4.4.4、<code>ninja</code> 1.13.2、<code>ziglang</code> 0.17.1（<code>zig c++</code> 报告为 clang 22.1.8），然后用它们完成配置、编译和 ctest。旧稿另行保留，本页与实践包文件名不变。</p>
 <h2 id="_2">学习目标</h2>
 <ol>
 <li>说明编码任务的边界：该改哪些文件、以什么协议为验收、哪些文件禁止动。</li>
 <li>独立完成实践：为 KV 增加 <code>exists</code>，解释它不创建键；协议测试必须反映这一生命周期。</li>
-<li>亲自复现文档中的构建命令，并检查无关文件未被修改。若本机没有编译器，必须如实记录，而不是用 Python 或 rustc 冒充 C++ 构建已通过。</li>
+<li>亲自复现文档中的构建命令，并检查无关文件未被修改。构建是否通过以 cmake/ctest 的退出码为准，不能用 Python 协议脚本或另一种语言的编译器冒充。</li>
 </ol>
 <h2 id="_3">为什么后端要懂</h2>
-<p>Coding Agent 最容易越界的不是「没写出函数」，而是改了不该改的文件、用实现细节当测试、或者在没有编译器的环境里宣称「构建已通过」。任务说明书和仓库约定要先于模型输出。</p>
+<p>Coding Agent 最容易越界的不是「没写出函数」，而是改了不该改的文件、用实现细节当测试、或者在本机其实已有工具链时宣称「构建无法运行」。开工前要先盘点已安装的编译器和 CMake，包括虚拟环境里的包。</p>
 <h2 id="_4">核心知识点</h2>
 <h3 id="1">1. 先把需求写成协议，再允许改代码</h3>
 <p><strong>直觉。</strong> <code>EXISTS</code> 是成员查询，不是「没有就插入」。</p>
-<p><strong>原理。</strong> <code>tests/protocol.md</code> 规定：<code>EXISTS &lt;key&gt;</code> 在键存在时返回 <code>1</code>，否则 <code>0</code>，且不得创建该键。起始树的 <code>handle_line</code> 把 <code>EXISTS</code> 落成 <code>ERR unknown command</code>，但 <code>tests/test_kv.cpp</code> 已经写好了对应断言——测试先于实现。脚本化 Agent 只改了 <code>include/kv.h</code>（声明 <code>bool exists() const</code>）和 <code>src/kv.cpp</code>（<code>const</code> 查找 <code>data_</code>，并在 <code>handle_line</code> 中路由 <code>EXISTS</code>）。生命周期说明写在 <code>reports/lifecycle.md</code>：只有 <code>SET</code> 创建或更新条目，<code>exists()</code> 是 const 查询，随后对缺失键的 <code>GET</code> 仍是 <code>MISSING</code>。</p>
-<p><strong>边界。</strong> 本课附带的 <code>tests/protocol_check.py</code> 只能检查协议格式和「EXISTS 不创建键」这一属性，<strong>明确不是 C++ 编译器，也不能代替 <code>kv_test</code></strong>。它在本机通过，只说明契约本身被理解，不说明 <code>g++</code> 已经把 <code>test_kv.cpp</code> 跑绿。</p>
+<p><strong>原理。</strong> <code>tests/protocol.md</code> 规定：<code>EXISTS &lt;key&gt;</code> 在键存在时返回 <code>1</code>，否则 <code>0</code>，且不得创建该键。起始树的 <code>handle_line</code> 把 <code>EXISTS</code> 落成 <code>ERR unknown command</code>，但 <code>tests/test_kv.cpp</code> 已经写好了对应断言——测试先于实现。脚本化 Agent 只改了 <code>include/kv.h</code>（声明 <code>bool exists() const</code>）和 <code>src/kv.cpp</code>（<code>const</code> 查找 <code>data_</code>，并在 <code>handle_line</code> 中路由 <code>EXISTS</code>）。生命周期说明写在 <code>reports/lifecycle.md</code>：只有 <code>SET</code> 创建或更新条目，随后对缺失键的 <code>GET</code> 仍是 <code>MISSING</code>。</p>
+<p><strong>边界。</strong> <code>tests/protocol_check.py</code> 只能检查协议格式和「EXISTS 不创建键」这一属性，<strong>明确不是 C++ 编译器，也不能代替 <code>kv_test</code></strong>。它只是补充，真正的验收是下面的 ctest。</p>
 <h3 id="2">2. 亲自复现构建命令，并且不碰无关文件</h3>
 <p><strong>直觉。</strong> 「构建通过」必须是那条命令的退出码，不是叙述。</p>
-<p><strong>原理。</strong> README 中的命令是 <code>cmake -S . -B build</code>、<code>cmake --build build</code>、<code>ctest --test-dir build --output-on-failure</code>。实践驱动<strong>实际调用</strong>了这三条，并记录 <code>shutil.which</code>：本次机器上 <code>cmake</code>、<code>g++</code>、<code>clang++</code>、<code>c++</code>、<code>ctest</code> 均为 <code>None</code>，configure 以 <code>FileNotFoundError: cmake</code> 失败，后续 build/ctest 被标记为跳过。<code>cpp_build_succeeded=false</code>，<code>not_verified_on_this_machine</code> 写明端到端 C++ 构建与测试未在本机完成。有编译器的环境应按同一命令复现，而不是换成 rustc 或只跑 Python。</p>
-<p>文件哈希对照：<code>docs/UNRELATED.md</code>（含 <code>UNRELATED_DOC_MARKER_DO_NOT_EDIT</code>）以及 README、CMakeLists、<code>main.cpp</code>、测试与协议文档均未修改；仅允许变更的实现文件是头文件和 <code>kv.cpp</code>。</p>
+<p><strong>原理。</strong> 本课把 <code>PATH</code> 指向 <code>cmvenv/bin</code> 和实践包内的 <code>tools/zig-c++</code>，再执行：</p>
+<div class="codehilite"><pre><span></span><code>cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build build
+ctest --test-dir build --output-on-failure
+</code></pre></div>
+
+<p>CMake 识别到的 CXX 是 Clang 22.1.8。对<strong>未打补丁</strong>的起始树，编译成功，但 ctest 失败（退出码 8），输出 <code>FAIL exists present got=[ERR unknown command] want=[1]</code> 以及 <code>exists absent</code> 同样失败。打上 <code>exists()</code> 之后再次配置并构建，ctest 报告 <code>100% tests passed</code>。<code>docs/UNRELATED.md</code> 的全文与哈希均未改动，允许变更的文件只有头文件和 <code>kv.cpp</code>。</p>
+<p>这次用的不是系统 <code>g++</code>。工具链来自与第 143–152 课相同的 cmvenv：CMake 4.4.4（Kitware）、Ninja 1.13.2、ziglang 0.17.1。<code>results.json</code> 里写明了路径和版本，并把「系统 g++/clang++」列为未使用的编译器，而不是把构建本身写成未实测。</p>
 <h2 id="_5">常见误区</h2>
 <ul>
 <li>把生成代码直接当作已经通过审查的代码。</li>
 <li>为让当前实现「通过」而改断言，或让 <code>EXISTS</code> 在缺失时插入键。</li>
-<li>本机没有 <code>g++</code>/<code>cmake</code> 时，用 Python 协议检查或另一种语言的编译冒充 C++ 构建成功。</li>
+<li>只在系统 <code>PATH</code> 里找 <code>g++</code>，不盘点已经装在虚拟环境里的 CMake/Ninja/zig，然后宣称无法构建。</li>
+<li>用 Python 协议检查冒充 C++ 测试已通过。</li>
 <li>顺便改了 README、文档或其他无关文件却不声明。</li>
 </ul>
 <h2 id="_6">设计权衡</h2>
-<p>自动化能减少机械编辑，但协议语义、生命周期和构建证据仍要人看。把测试先写进仓库，比事后根据 Agent 输出补断言更安全。</p>
+<p>自动化能减少机械编辑，但协议语义、生命周期和构建证据仍要人看。把测试先写进仓库，比事后根据 Agent 输出补断言更安全。选用 zig c++ 是为了在没有系统 g++ 时仍然使用真实的 Clang 前端完成编译，而不是换一种语言交差。</p>
 <h2 id="_7">动手实践</h2>
-<p>实践包在 <code>practice187/</code>。起始仓库在 <code>repo/</code>，运行时复制到 <code>workspace/repo/</code>。</p>
+<p>实践包在 <code>practice187/</code>。起始仓库在 <code>repo/</code>，运行时复制到 <code>workspace/repo/</code>。需要已安装的 <code>cmvenv</code>（cmake、ninja、ziglang）。</p>
 <div class="codehilite"><pre><span></span><code><span class="nv">tmp_dir</span><span class="o">=</span><span class="k">$(</span>mktemp<span class="w"> </span>-d<span class="k">)</span>
 cp<span class="w"> </span>-a<span class="w"> </span>practice187<span class="w"> </span><span class="s2">"</span><span class="nv">$tmp_dir</span><span class="s2">/"</span>
 <span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$tmp_dir</span><span class="s2">/practice187"</span>
 bash<span class="w"> </span>test.sh
 </code></pre></div>
 
-<p>本次：<code>exists</code> 已声明并实现，无关文件未改，Python 协议检查通过且标注「不是编译器」，构建命令已调用但因缺少工具链未成功。<code>is_live_model=false</code>。在有 CMake 与 C++ 编译器的机器上，应继续运行上述三条命令，并以它们的退出码为准。</p>
+<p>本次修订实测：起始树 ctest 失败，补上 <code>exists()</code> 后 ctest 通过，无关文件未改。<code>is_live_model=false</code>。Python 协议检查仍然通过，且继续标注「不是编译器」。</p>
 <h2 id="_8">源码与文档阅读</h2>
-<p>节点 <code>verifiedAt</code> 为 2026-10-26。2026-11-16（Asia/Shanghai，UTC+8）核对 <a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/sdk.md">Pi SDK integration</a>：raw 200，<code>Date</code> 2026-11-15 16:13:45 GMT（Asia/Shanghai 2026-11-16 00:13:45）。该文档讲的是会话与工具装配，并不规定本课的 EXISTS 协议；本课额外要求「亲自调用构建命令」和「无关文件不变」。本课实践没有再跑一遍 Pi 会话（见第 183 课），以避免把编码任务绑死在单一宿主上。</p>
+<p>节点 <code>verifiedAt</code> 为 2026-10-26。2026-11-16（Asia/Shanghai，UTC+8）核对 <a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/sdk.md">Pi SDK integration</a>：raw 200，<code>Date</code> 2026-11-15 16:13:45 GMT（Asia/Shanghai 2026-11-16 00:13:45）。该文档讲的是会话与工具装配，并不规定本课的 EXISTS 协议；本课额外要求「亲自调用构建命令」和「无关文件不变」。本课实践没有再跑一遍 Pi 会话（见第 183 课）。</p>
 <h2 id="_9">自测题</h2>
-<p><strong>1. 为什么 Python 协议检查通过，仍不能在汇报里写「C++ 构建已通过」？</strong></p>
-<p>答：它只验证消息契约，不编译、不链接、也不跑 <code>kv_test</code>。本次 <code>cmake</code> 不存在，<code>cpp_build_succeeded=false</code>，未实测项已列出。</p>
+<p><strong>1. 为什么 Python 协议检查通过，仍不能单独写成「C++ 测试已通过」？</strong></p>
+<p>答：它只验证消息契约，不编译、不链接、也不跑 <code>kv_test</code>。本次验收以起始失败、修补后 <code>100% tests passed</code> 的 ctest 退出码为准。</p>
 <p><strong>2. EXISTS 对一个尚不存在的键返回 0 之后，GET 该键应得到什么？</strong></p>
 <p>答：<code>MISSING</code>。EXISTS 不得创建键，否则生命周期被偷偷改变。</p>
-<p><strong>3. 怎样证明无关文件没被改？</strong></p>
-<p>答：对任务开始前的哈希或全文做对照。本次 <code>docs/UNRELATED.md</code> 的内容与哈希均不变，意外变更列表为空。</p>
+<p><strong>3. 系统 <code>PATH</code> 里没有 <code>g++</code>，是否就可以写「无法复现构建」？</strong></p>
+<p>答：不行。应先盘点已有工具。本次 <code>cmvenv</code> 中已有 cmake 4.4.4 与 zig c++（clang 22.1.8），构建和 ctest 都实际跑过。</p>
 <h2 id="_10">推荐资源</h2>
 <ul>
 <li><a href="https://github.com/earendil-works/pi/blob/main/packages/coding-agent/docs/sdk.md">Pi SDK integration</a>（英文，文档，进阶，免费）：任务宿主与工具边界，不能代替本仓库的构建命令。</li>
 <li>本课 <code>repo/README.md</code> 与 <code>tests/protocol.md</code>：验收时实际执行的构建与协议合同。</li>
+<li>第 143 课 j-cmake：同一套 cmake/ninja/zig 工具链的用法。</li>
 </ul>
 <h2 id="_11">本课小结</h2>
-<p>编码 Agent 的验收是：协议正确、无关文件不动、构建命令被真实调用。没有编译器就如实记录，绝不拿别的语言或协议脚本冒充。下一课是第 188 课 m-review（AI 代码审查与缺陷复核）。</p><div class="pn"><span><a href="186.html">← 多 Agent 协作与协调</a></span><span><a href="188.html">AI 代码审查与缺陷复核 →</a></span></div></main></div></body></html>
+<p>编码 Agent 的验收是：协议正确、无关文件不动、构建命令被真实调用且退出码符合预期。开工前要先清点本机已有的 CMake 与编译器。下一课是第 188 课 m-review（AI 代码审查与缺陷复核）。</p><div class="pn"><span><a href="186.html">← 多 Agent 协作与协调</a></span><span><a href="188.html">AI 代码审查与缺陷复核 →</a></span></div></main></div></body></html>
