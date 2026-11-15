@@ -24,7 +24,7 @@ EXPECTED = {
     "K": ("LLM 工程基础", 12, 12),
     "L": ("Agent 与 Harness", 18, 18),
     "M": ("Backend + AI", 10, 10),
-    "N": ("架构与技术领导力", 6, 12),
+    "N": ("架构与技术领导力", 12, 12),
 }
 
 GROUP_RE = re.compile(
@@ -68,7 +68,7 @@ class DomainTitleTests(unittest.TestCase):
 
     def test_every_page_has_named_groups_and_same_counts(self):
         html_pages = pages()
-        self.assertEqual(len(html_pages), 203)
+        self.assertEqual(len(html_pages), 209)
         for path in html_pages:
             text = path.read_text(encoding="utf-8")
             found = groups(text)

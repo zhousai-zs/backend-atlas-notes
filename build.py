@@ -120,13 +120,13 @@ blockquote{margin:1em 0;padding:8px 16px;border-left:4px solid var(--ln);backgro
         dl = f'<a href="../files/{x["n"]}-{x["id"]}.md" download>⬇ 本课 Markdown</a>'
         if pack(x["n"]): dl += f'<a href="../files/practice{x["n"]}.tar.gz" download>⬇ 练习包 practice{x["n"]}.tar.gz</a>'
         pv = done[i-1] if i else None; nx = done[i+1] if i+1 < len(done) else None
-        pn = '<div class="pn"><span>' + (f'<a href="{pv["n"]}.html">← {html.escape(pv["title"])}</a>' if pv else "") + "</span><span>" + (f'<a href="{nx["n"]}.html">{html.escape(nx["title"])} →</a>' if nx else "下一课 待更新") + "</span></div>"
+        pn = '<div class="pn"><span>' + (f'<a href="{pv["n"]}.html">← {html.escape(pv["title"])}</a>' if pv else "") + "</span><span>" + (f'<a href="{nx["n"]}.html">{html.escape(nx["title"])} →</a>' if nx else "全部课程已完成") + "</span></div>"
         meta = f'<p style="color:var(--mut)">第 {x["n"]} 课 · 领域 {x["dom"]} · 阶段 {x["stage"]}</p><p class="dl">{dl}</p>'
         open(f'{OUT}/lessons/{x["n"]}.html', "w", encoding="utf-8").write(page(f'{x["n"]}. {x["title"]} - Backend Atlas', meta + body + pn, x["n"], "../"))
     pct = len(done) * 100 / len(L)
     rec = "".join(f'<li><a href="lessons/{x["n"]}.html">第 {x["n"]} 课 · {html.escape(x["title"])}</a></li>' for x in reversed(done[-10:]))
     nxt = next((x for x in L if not x["md"]), None)
-    idx = f'<h1>Backend Atlas 后端学习笔记</h1><p>已完成 <b>{len(done)}/{len(L)}</b> 课（{pct:.1f}%）</p><div class="bar"><div style="width:{pct:.1f}%"></div></div>' + (f'<p>下一课：第 {nxt["n"]} 课 · {html.escape(nxt["title"])}（待更新）</p>' if nxt else "") + f'<h2>最近更新</h2><ul>{rec}</ul>'
+    idx = f'<h1>Backend Atlas 后端学习笔记</h1><p>已完成 <b>{len(done)}/{len(L)}</b> 课（{pct:.1f}%）</p><div class="bar"><div style="width:{pct:.1f}%"></div></div>' + (f'<p>下一课：第 {nxt["n"]} 课 · {html.escape(nxt["title"])}（待更新）</p>' if nxt else "<p>全部课程已完成。</p>") + f'<h2>最近更新</h2><ul>{rec}</ul>'
     open(f"{OUT}/index.html", "w", encoding="utf-8").write(page("Backend Atlas 后端学习笔记", idx, None, ""))
     print(f"built {len(done)}/{len(L)} lessons")
 
