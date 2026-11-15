@@ -69,7 +69,7 @@ def main():
                 buf = io.BytesIO()
                 with tarfile.open(fileobj=buf, mode="w") as t:
                     for root, ds, fs in os.walk(d):
-                        ds[:] = sorted(x for x in ds if x not in (".git", "node_modules", "target", "__pycache__", "build"))
+                        ds[:] = sorted(x for x in ds if x not in (".git", "node_modules", "target", "__pycache__", "build", "rootfs-build", "rootfs-runtime"))
                         for f in sorted(fs):
                             p = os.path.join(root, f)
                             if os.path.islink(p) or is_bin(p): continue
