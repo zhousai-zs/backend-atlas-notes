@@ -20,7 +20,7 @@ EXPECTED = {
     "G": ("数据库与存储", 16, 16),
     "H": ("分布式系统", 15, 15),
     "I": ("性能工程", 14, 14),
-    "J": ("软件与生产工程", 6, 15),
+    "J": ("软件与生产工程", 11, 15),
     "K": ("LLM 工程基础", 0, 12),
     "L": ("Agent 与 Harness", 0, 18),
     "M": ("Backend + AI", 0, 10),
@@ -68,7 +68,7 @@ class DomainTitleTests(unittest.TestCase):
 
     def test_every_page_has_named_groups_and_same_counts(self):
         html_pages = pages()
-        self.assertEqual(len(html_pages), 148)
+        self.assertEqual(len(html_pages), 153)
         for path in html_pages:
             text = path.read_text(encoding="utf-8")
             found = groups(text)
