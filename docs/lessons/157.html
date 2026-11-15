@@ -1,87 +1,81 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>157. 后台工程师的机器学习基础 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（162/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A：计算机科学基础（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B：现代 C++（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C：Linux 系统编程（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D：网络与高并发（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E：并发与内存模型（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F：RPC 与通信（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G：数据库与存储（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details><summary>领域 H：分布式系统（15/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li><a class="" href="../lessons/122.html">122. 消息投递与幂等消费</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li><a class="" href="../lessons/123.html">123. 限流与过载保护</a></li><li><a class="" href="../lessons/124.html">124. 熔断、降级与隔离</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li><a class="" href="../lessons/125.html">125. 多机房与灾难恢复</a></li><li><a class="" href="../lessons/126.html">126. 分布式历史与故障测试</a></li></ul><div>阶段 6</div><ul><li><a class="" href="../lessons/127.html">127. 分布式协议演进</a></li></ul></details><details><summary>领域 I：性能工程（14/14）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/128.html">128. 吞吐、延迟与排队</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/129.html">129. 可复现微基准</a></li><li><a class="" href="../lessons/130.html">130. 负载模型与协调遗漏</a></li><li><a class="" href="../lessons/131.html">131. perf 采样与符号</a></li><li><a class="" href="../lessons/132.html">132. 火焰图与差分分析</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/133.html">133. 堆内存与分配器分析</a></li><li><a class="" href="../lessons/134.html">134. 锁竞争与调度延迟</a></li><li><a class="" href="../lessons/135.html">135. eBPF 可观测性</a></li><li><a class="" href="../lessons/136.html">136. NUMA 与内存局部性</a></li><li><a class="" href="../lessons/137.html">137. CPU 缓存与伪共享</a></li><li><a class="" href="../lessons/138.html">138. 零拷贝与批处理</a></li><li><a class="" href="../lessons/139.html">139. io_uring 与异步完成</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/140.html">140. 性能回归与预算</a></li></ul><div>阶段 6</div><ul><li><a class="" href="../lessons/141.html">141. 系统瓶颈与容量模型</a></li></ul></details><details><summary>领域 J：软件与生产工程（15/15）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/142.html">142. Git 工作流与变更管理</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/143.html">143. CMake 目标式构建</a></li><li><a class="" href="../lessons/145.html">145. 单元测试与边界设计</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/144.html">144. Bazel 与可复现依赖</a></li><li><a class="" href="../lessons/146.html">146. 集成与故障测试</a></li><li><a class="" href="../lessons/147.html">147. Sanitizer 动态检测</a></li><li><a class="" href="../lessons/148.html">148. gdb 与 Core Dump</a></li><li><a class="" href="../lessons/149.html">149. 结构化日志与敏感信息</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/150.html">150. Metrics 与指标基数</a></li><li><a class="" href="../lessons/151.html">151. Tracing 与上下文传播</a></li><li><a class="" href="../lessons/152.html">152. CI 与供应链检查</a></li><li><a class="" href="../lessons/153.html">153. 容器镜像与运行边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/154.html">154. Kubernetes 服务生命周期</a></li><li><a class="" href="../lessons/155.html">155. 灰度发布与回滚</a></li><li><a class="" href="../lessons/156.html">156. 后台安全与威胁建模</a></li></ul></details><details open><summary>领域 K：LLM 工程基础（6/12）</summary><div>阶段 1</div><ul><li><a class="cur" href="../lessons/157.html">157. 后台工程师的机器学习基础</a></li><li><a class="" href="../lessons/159.html">159. Token、窗口与生成预算</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/158.html">158. Transformer 与注意力</a></li><li><a class="" href="../lessons/160.html">160. Embedding 与相似度</a></li><li><a class="" href="../lessons/161.html">161. 模型 API 与可靠客户端</a></li><li><a class="" href="../lessons/162.html">162. 提示词与任务契约</a></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L：Agent 与 Harness（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M：Backend + AI（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N：架构与技术领导力（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 157 课 · 领域 K · 阶段 1</p><p class="dl"><a href="../files/157-k-ml.md" download>⬇ 本课 Markdown</a><a href="../files/practice157.tar.gz" download>⬇ 练习包 practice157.tar.gz</a></p><h1 id="157208">第 157/208 课：后台工程师的机器学习基础</h1>
 <blockquote>
-<p>序号 157/208 · id <code>k-ml</code> · 领域 K · 阶段 1 · 难度 基础 · 子类 模型能力与表示
-前置：无（K 领域起始课）
-节点摘要：模型从数据中拟合统计关系，训练、验证与测试划分用于估计泛化，不能把测试集反复用于调参。</p>
+<p>序号 157/208 · id <code>k-ml</code> · 领域 K · 阶段 1 · 难度 基础 · 子类 模型接口与输出
+前置：课程进入领域 K。以下数据和模型都是教学设计，不是线上推荐或内容安全模型。
+节点摘要：监督学习用有标签数据拟合损失；高离线分不等于上线有效。</p>
 </blockquote>
 <h2 id="_1">导读</h2>
-<p>J 领域把服务交到线上。从本课开始进入模型能力：先分清训练与推理、以及「验证集很高」并不等于线上有效。泄漏字段会让离线分数看起来完美，一旦线上不再提供该字段，分数就会崩掉。</p>
-<p>教学假设：用 40 条教学故障摘要做基础设施/应用二分类。以下文本、标签和泄漏字段均为教学设计，不代表腾讯或微信内部实现或线上模型。训练器是 NumPy 实现的逻辑回归，<code>is_live_model=false</code>，没有调用远程模型 API。</p>
+<p>后台工程师不必从训练一个大模型开始，但必须能看懂「训练集/验证集、损失、过拟合、泄漏、训练职责与推理职责」。否则你会把泄漏出来的 100% 验证准确率当成可以上线的质量。</p>
+<p>本课实践是一个<strong>真实的、用 numpy 手写的逻辑回归</strong>，在 40 条短文本上做二分类，而不是调用付费 API，也不是假装有一个深度网络。<code>is_live_model=false</code>（没有外部托管模型）。它足以演示泄漏造成的虚假高分，但它不是生产级文本分类器，也没有使用 GPU 或 PyTorch。</p>
 <h2 id="_2">学习目标</h2>
 <ol>
 <li>解释监督学习与损失及适用边界</li>
 <li>独立完成实践：用小型文本分类模型做训练/验证划分，加入泄漏字段观察虚假高分。</li>
 </ol>
 <h2 id="_3">为什么后端要懂</h2>
-<p>节点给出的理由是「理解模型服务质量与数据分布的关系。」服务是否好用，取决于线上数据是否仍与训练/验证时同分布；泄漏和漂移会让离线指标失效。</p>
+<p>上线有效性取决于数据是否代表未来流量。训练代码和推理代码的职责一旦混在一起（推理时还能看到标签，或把标签编码进特征），离线分会撒谎。</p>
 <h2 id="_4">核心知识点</h2>
 <h3 id="1">1. 监督学习与损失</h3>
-<p><strong>原理。</strong> 监督学习用带标签的样本拟合从输入到标签的映射。Google Machine Learning Crash Course 在 2026-11-15 的课程首页仍以线性回归、逻辑回归和分类等模块组织，并强调损失与梯度下降等基础。逻辑回归估计某一结果的概率。损失（本课用对数损失）衡量预测与标签的偏差；训练通过更新参数降低训练集损失。</p>
-<p><strong>直觉。</strong> 训练是在已知答案的数据上改权重；推理只使用冻结的权重，不应再看见标签。</p>
-<p><strong>实践对照。</strong> 40 条样本按 28/12 划分。干净特征下验证准确率 0.9167、对数损失 0.3262；训练准确率 1.0。NumPy 2.5.4。这是极小教学拟合，不能外推到生产模型质量。</p>
+<p><strong>直觉。</strong> 有标签的例子告诉模型「这类文本属于 INF 还是 APP」。模型输出一个概率，损失衡量它和标签的距离，训练沿损失下降的方向改权重。</p>
+<p><strong>原理。</strong> 2026-11-15 抓取 Google <em>Machine Learning Crash Course</em>（<code>https://developers.google.com/machine-learning/crash-course</code>，Date 2026-11-15 22:58:54 CST，Last-Modified 2026-01-09 23:54:17 CST，140292 字节）。课程把监督学习、损失与过拟合作为入门主干。本课实现是逻辑回归：</p>
+<p>[
+p = \sigma(xw + b),\quad
+L = -\frac{1}{n}\sum_i \big(y_i\log p_i + (1-y_i)\log(1-p_i)\big)
+]</p>
+<p><code>model.py</code> 的 <code>train()</code> 用全数据梯度更新 <code>w</code> 和 <code>b</code>（400 步，学习率 0.8）。特征是词袋并做了行内归一化，另可拼接泄漏记号 <code>INF</code>/<code>APP</code>。这是可运行的监督训练，不是示意图。</p>
+<p>本机一次结果（numpy 2.5.4，28 条训练 / 12 条验证）：干净特征验证准确率 0.9167、logloss 0.3262；训练准确率 1.0。已经有一点「训练完美、验证略差」的味道，但还没有到泄漏那么夸张。</p>
+<p><strong>适用边界。</strong> 逻辑回归假设特征近似线性可分。文本的真实语义关系它建模不了。本课结论只覆盖「泄漏如何抬高离线分」，不覆盖「怎样得到最好的文本模型」。</p>
 <h3 id="2">2. 过拟合与数据泄漏</h3>
-<p><strong>原理。</strong> 同日抓取的模块 <em>Datasets, generalization, and overfitting</em> 把学习目标列为：解释训练集、验证集和测试集，识别数据划分中的潜在问题，并解释过拟合及其可能原因。该页是目标提纲，没有给出「泄漏」一词的正式定义。本课把泄漏实现为：把真实类别标记作为额外特征同时放入训练和验证，这是划分/特征问题的一个具体例子，而不是该页的原文字句。</p>
-<p><strong>直觉。</strong> 如果验证时也能看到「这就是标准答案」的字段，模型不必学习文本，分数却会接近满分。</p>
-<p><strong>实践对照。</strong> 加入泄漏类别标记后，验证准确率升到 1.0，损失降到 0.1525。同一批样本若在服务侧把泄漏标记取反（分布漂移），准确率变为 0.0。离线「完美」因此不能说明上线有效。</p>
-<h3 id="3">3. 分布漂移</h3>
-<p><strong>原理。</strong> 当线上特征、用户或标签过程与离线数据不同，原来的分数就失去参照。本课用「泄漏标记在线上不再可靠」模拟其中一种漂移，而不是完整的数据监控系统。</p>
-<p><strong>实践对照。</strong> <code>duties</code> 记录：训练更新权重，推理使用冻结权重且不应看到标签。漂移集只做推理，不再训练。</p>
+<p><strong>直觉。</strong> 过拟合是「把训练噪声记住了」；泄漏是「验证集偷偷用了上线时没有的信息」，后者更危险，因为它看起来像泛化很好。</p>
+<p><strong>原理与实践。</strong> 泄漏路径把标签对应的记号 <code>INF</code>/<code>APP</code> 加进训练和验证文本。验证准确率变成 1.0，logloss 降到 0.1525。断言要求泄漏验证分高于干净验证分，且至少 0.99。然后构造漂移：把泄漏记号按相反标签写进去，同一套冻住的泄漏模型在「真实标签」上准确率变成 0.0。这就是「高离线分数未必上线有效」：上线后前缀规则一变，分数立刻塌掉。</p>
+<p>节点陷阱是「把模型输出当作确定性事实」。即使干净模型 0.9167，也只是这个 12 条验证集上的点估计。</p>
+<h3 id="3">3. 分布漂移与训练/推理职责</h3>
+<p><strong>直觉。</strong> 训练可以看标签、改权重；推理必须用冻住的权重，而且不能把标签当特征。</p>
+<p><strong>实践对照（已实测，不再硬编码 True）。</strong> 训练后 <code>||w||</code> 与全零初始化不同，说明训练确实更新了权重；推理时复制 <code>w_frozen</code>，准确率 0.9167，且 <code>np.allclose(w_frozen, w_c)</code>；<code>predict_proba</code> 的签名不含 <code>y</code> 或 <code>labels</code>。泄漏特征则是<strong>反例</strong>：<code>transform(..., use_leak=True, labels=yva)</code> 在验证阶段偷看标签，这正是推理不该做的事。</p>
 <h2 id="_5">常见误区</h2>
-<ol>
-<li><strong>把模型输出当作确定性事实。</strong> 节点原句即此。即便干净模型在本批验证上达到 0.9167，输出仍是概率阈值后的类别，遇到新写法或新故障类型都会错。泄漏模型的 1.0 更不能当成事实。</li>
-<li><strong>只看验证准确率、不检查特征是否在线上可获得。</strong> 泄漏字段只存在于离线表时，分数没有部署意义。</li>
-</ol>
+<ul>
+<li>把模型输出当作确定性事实。</li>
+<li>只用训练准确率做发布决定。</li>
+<li>把票号前缀、环境名、未来才知道的标签编码进特征。</li>
+<li>看到 1.0 验证分就认为「模型很强」，而不做对照（干净特征、漂移特征）。</li>
+</ul>
 <h2 id="_6">设计权衡</h2>
-<p>节点原句是「更复杂模型未必胜过质量更好的数据。」本课甚至没有换模型，只是去掉或加入一个泄漏字段，分数就从 0.9167 变成 1.0 再掉到 0.0。先检查标签和特征是否可在线上复现，通常比急着加深网络更有用。</p>
+<p>更复杂的模型未必胜过质量更好的数据。本课 0.9167 的线性模型已经能分类这些短句；泄漏的 1.0 更「好看」，却完全不稳健。增加模型容量而不先切开数据，只会更快记住泄漏。</p>
 <h2 id="_7">动手实践</h2>
-<p>实践目录为 <code>practice157/</code>，需要 Python 3 和 NumPy。本次为 CPython 3.13.5、NumPy 2.5.4。不要把该脚本说成已部署的分类服务或实调的大模型。</p>
 <div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice157
-bash<span class="w"> </span>test.sh
-cat<span class="w"> </span>results.json
+python3<span class="w"> </span>driver.py<span class="w">   </span><span class="c1"># 或 bash test.sh</span>
+<span class="c1"># 阅读 reports/scores.txt 中 clean / leaked / drifted_leak / duties</span>
 </code></pre></div>
 
-<p>成功最后一行为 <code>ALL_CHECKS_PASSED</code>。划分使用固定随机种子 7；换种子会改变具体准确率，但泄漏高于干净、漂移后下降的方向应保持可复查。</p>
-<p>两项验收是「解释高离线分数为何未必上线有效」以及「能描述训练与推理职责」。前者对应 1.0 的泄漏验证分在标记取反后变为 0.0；后者对应 <code>duties</code> 中的职责划分。</p>
 <h2 id="_8">源码与文档阅读</h2>
-<p>阅读 <code>model.py</code> 与 <code>data.py</code>，对照 <code>results.json</code>。ML Crash Course 首页介绍课程模块；过拟合模块页当日主要是学习目标提纲，没有单独的 data-leakage 路径（该 URL 当天返回 404）。本课泄漏实验是教学构造，用来落实「数据划分/特征问题会让分数不可信」，不要把 1.0 和 0.0 写成该课程的官方数字。</p>
-<p>2026-11-15 在本机核对节点 URL，并跟随阅读过拟合模块。</p>
+<p><code>data.py</code> 的 40 条不透明文本（不要在原文里放 <code>INF-</code> 这种一眼可见的前缀，泄漏应由实验显式加入）；<code>model.py</code> 的损失与梯度；<code>driver.py</code> 的划分与三项职责检查。</p>
+<h2 id="_9">自测题</h2>
+<p><strong>1. 为什么泄漏验证分是 1.0，漂移后变成 0.0？</strong></p>
+<p>答案：模型主要在拟合标签记号而不是文本。记号与标签一旦相反，决策被系统性翻转。</p>
+<p><strong>2. 训练准确率 1.0、验证 0.9167，一定是泄漏吗？</strong></p>
+<p>答案：不一定，也可能是普通过拟合或验证集很小。要用「是否使用了上线不可得的特征」来判断泄漏，并用对照实验量化。</p>
+<p><strong>3. 推理函数如果接收 <code>labels</code> 参数，有什么风险？</strong></p>
+<p>答案：后续的人可能把标签拼进特征或用来「校正」输出，职责被破坏。本课用签名检查禁止这一点。</p>
+<h2 id="_10">推荐资源</h2>
 <table>
 <thead>
 <tr>
-<th>页面及标题</th>
-<th style="text-align: right;">字节数</th>
-<th>Date（北京时间）</th>
-<th>Last-Modified（北京时间）</th>
-<th>备注</th>
+<th>资源</th>
+<th>字节</th>
+<th>抓取时间 (CST)</th>
+<th>Last-Modified (CST)</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><a href="https://developers.google.com/machine-learning/crash-course">Google — Machine Learning Crash Course</a>：Machine Learning Crash Course</td>
-<td style="text-align: right;">140292</td>
+<td><a href="https://developers.google.com/machine-learning/crash-course">Google — Machine Learning Crash Course</a></td>
+<td>140292</td>
 <td>2026-11-15 22:58:54</td>
 <td>2026-01-09 23:54:17</td>
-<td>节点 URL，HTTP 200</td>
-</tr>
-<tr>
-<td><a href="https://developers.google.com/machine-learning/crash-course/overfitting">Datasets, generalization, and overfitting</a></td>
-<td style="text-align: right;">146790</td>
-<td>2026-11-15 23:05:23</td>
-<td>2025-12-03 23:50:27</td>
-<td>跟随阅读；data-leakage 路径当天 404</td>
+<td>核对称学习、损失与过拟合。另抓取过拟合模块作对照。英文，基础，免费。同日检查节点曾列的部分 data-leakage 旧地址返回 404，不以失效页为准。</td>
 </tr>
 </tbody>
 </table>
-<p>节点的 <code>verifiedAt</code> 是 2026-10-26，独立于以上抓取时间。</p>
-<h2 id="_9">自测题</h2>
-<ol>
-<li><strong>验证集准确率 1.0 为什么还可能上线失败？</strong> 若该分数依赖线上不存在或会改变的泄漏字段，服务分布一切换，分数就会掉。本课取反后准确率为 0.0。</li>
-<li><strong>训练和推理有何不同？</strong> 训练根据标签更新权重；推理只使用冻结权重，不应再读标签来「改答案」。</li>
-<li><strong>模型给出类别，能否当成确定性事实？</strong> 不能。输出是按阈值做的判定，对新分布没有保证。</li>
-</ol>
-<h2 id="_10">推荐资源</h2>
-<ul>
-<li><a href="https://developers.google.com/machine-learning/crash-course">Google — Machine Learning Crash Course</a>：用于核对监督学习与损失及数据划分问题，将结论落实到本节点实验。英文，基础，免费。</li>
-</ul>
 <h2 id="_11">本课小结</h2>
-<p>监督学习用损失更新权重，推理则使用冻结权重；验证分数只有在特征与分布都能在线上复现时才有意义，泄漏字段会造成虚假高分。下一课是第 158 课 k-transformer（Transformer 与注意力）。</p><div class="pn"><span><a href="156.html">← 后台安全与威胁建模</a></span><span><a href="158.html">Transformer 与注意力 →</a></span></div></main></div></body></html>
+<p>监督学习用损失更新权重；泄漏会制造上线即垮的虚假高分；训练改权重，推理必须冻结且看不到标签。本课用可运行的逻辑回归验证了这些机制，不是生产文本模型，也没有实调外部模型。</p><div class="pn"><span><a href="156.html">← 后台安全与威胁建模</a></span><span><a href="158.html">Transformer 与注意力 →</a></span></div></main></div></body></html>

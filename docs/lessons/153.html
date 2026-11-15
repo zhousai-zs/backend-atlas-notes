@@ -5,88 +5,123 @@
 节点摘要：容器以 namespaces 与 cgroups 管理进程视图和资源；共享宿主内核，不等同独立虚拟机。</p>
 </blockquote>
 <h2 id="_1">导读</h2>
-<p>上一课把工具链锁在流水线里。交付时还要把编译环境和运行环境分开：运行镜像应只留下服务进程，不应带上编译密钥或编译器；进程要能在内存上限下失败，并在收到终止信号时收尾。</p>
-<p>教学假设：内容后台有一个 C++ 教学服务，用多阶段布局生成最小运行根文件系统。以下镜像、密钥和限制均为教学设计，不代表腾讯或微信内部实现。本机没有 Docker / Podman 守护进程，也不能创建 cgroup；实验用目录化的构建/运行阶段和 POSIX <code>RLIMIT_AS</code> 完成等价检查，并如实记录与真实容器运行时的差异。</p>
+<p>上一课把工具链锁在流水线里。交付时还要把<strong>编译环境</strong>和<strong>运行环境</strong>拆开：运行镜像应只留下服务进程，不应带上编译器或编译密钥；进程要能在内存上限下失败，并在收到终止信号时收尾。</p>
+<p>教学假设：内容后台有一个 C++ 教学服务，要用多阶段 Dockerfile 生成最小运行镜像。以下镜像名、密钥和限额都是教学设计，不代表腾讯或微信内部实现。</p>
+<p><strong>本机事实（2026-11-15，Asia/Shanghai）：</strong> 没有 <code>docker</code> / <code>podman</code> 二进制，也没有守护进程套接字；<code>/sys/fs/cgroup</code> 可见 <code>memory</code> 控制器，但当前用户创建子 cgroup 被拒绝（Permission denied）。因此本课<strong>没有</strong>把目录里的 rootfs 布局称作「已构建的镜像」，也<strong>没有</strong>观察到 cgroup OOM 退出码 137。实践包提供完整的 <code>Dockerfile</code>、<code>scripts/docker-e2e.sh</code> 和 <code>scripts/diagnose.sh</code>；在有引擎的机器上应跑端到端脚本。本机只验收 Dockerfile 静态策略，以及同一份 <code>service.cpp</code> 在宿主机上的 SIGTERM 与 <code>RLIMIT_AS</code> 行为，并在结果里列出未实测项。</p>
 <h2 id="_2">学习目标</h2>
 <ol>
 <li>解释多阶段构建及适用边界</li>
 <li>独立完成实践：为 C++ 服务构建最小镜像，限制内存后观察 OOM 与退出码。</li>
 </ol>
 <h2 id="_3">为什么后端要懂</h2>
-<p>节点给出的理由是「标准化服务交付与资源约束。」同一份源码如果把编译密钥和工具链带进运行环境，攻击面和泄露面都会变大；没有内存上限和终止处理，调度器也无法安全回收进程。</p>
+<p>节点给出的理由是「标准化服务交付与资源约束。」同一份源码如果把编译密钥和工具链带进运行环境，攻击面和泄露面都会变大；没有内存上限和终止处理，调度器也无法安全回收进程。容器共享宿主内核，所以「最小镜像 + 非 root + cgroup 限额」是交付约定，不是任意恶意代码的沙箱。</p>
 <h2 id="_4">核心知识点</h2>
 <h3 id="1">1. 多阶段构建</h3>
-<p><strong>原理。</strong> Docker 文档 <em>Multi-stage builds</em> 写明：多阶段构建在一份 Dockerfile 里使用多条 <code>FROM</code>，每一条开始新的阶段，并可以只把需要的产物复制到下一阶段，把其余内容留在后面。示例把编译得到的二进制拷进最终阶段后指出：最终镜像里只有该二进制，构建所需工具不会被保存。</p>
-<p><strong>直觉。</strong> 编译需要编译器、头文件，甚至临时密钥；运行只需要程序和它的动态库。阶段之间用复制，而不是把整个构建目录打包。</p>
-<p><strong>实践对照。</strong> 本课提供符合该模式的 <code>Dockerfile</code>（<code>build</code> 阶段写入 <code>BUILD_SECRET</code>，<code>runtime</code> 阶段只复制二进制并 <code>USER app</code>）。因为没有守护进程，<code>driver.py</code> 把同样的划分落实到 <code>rootfs-build/</code> 与 <code>rootfs-runtime/</code>。扫描结果：密钥出现在构建阶段的 <code>secret/compile-secret</code>，运行阶段 0 处命中。二进制由 ziglang 0.17.1 的 <code>zig c++</code>（目标 <code>x86_64-linux-gnu</code>）编译，不是 <code>docker build</code> 的产物。<code>is_live_container_runtime=false</code>。</p>
-<h3 id="2-root">2. 非 root 运行</h3>
-<p><strong>原理。</strong> 最终阶段以非特权用户启动，可降低容器被攻破后的默认权限。文档示例用 <code>scratch</code> 或精简基础镜像承载二进制；是否使用 <code>USER</code> 由镜像作者声明。</p>
-<p><strong>直觉。</strong> 进程以 uid 0 运行时，一次远程漏洞就更接近宿主权限。非 root 不是沙箱，只是缩小默认能力。</p>
-<p><strong>实践对照。</strong> 运行时 uid 为 1000，状态文件为 <code>shutdown_ok</code> 与 <code>uid=1000</code>。程序在 <code>getuid()==0</code> 时直接退出码 3。本环境本身不是 root，因此「拒绝 root」只验证了分支存在，没有在真实 uid 0 下启动。</p>
-<h3 id="3-cpu">3. CPU/内存限制</h3>
-<p><strong>原理。</strong> 容器的硬限制通常由 cgroup 的 <code>memory.max</code>、<code>cpu.max</code> 实施；突破内存上限时，内核 OOM killer 常用 SIGKILL，退出码多为 137。本机 cgroup 控制器列表含 <code>memory</code>，但创建子 cgroup 被拒绝。</p>
-<p><strong>直觉。</strong> 没有上限的「最小镜像」仍然可以吃光宿主内存。限制必须由内核或监督者实际执行，而不是只写在清单里。</p>
-<p><strong>实践对照。</strong> <code>mkdir /sys/fs/cgroup/...</code> 返回 Permission denied。改用 <code>RLIMIT_AS=16MiB</code> 让进程尝试分配 64MiB：<code>malloc_failed at_mb=13</code>，退出码 2。这不是 cgroup OOM，也不是 137；<code>rlimit_is_cgroup_oom=false</code>。CPU 限制同样未能通过 cgroup 实施，本课未伪造 CPU 节流数据。</p>
-<h2 id="_5">常见误区</h2>
-<ol>
-<li><strong>把容器当作足够隔离任意恶意代码的沙箱。</strong> 节点原句即此。容器与宿主共享内核，namespaces 和用户隔离也取决于运行时配置。本课甚至没有启动真正的容器运行时，更不能把目录化根文件系统当成安全沙箱。</li>
-<li><strong>看见 Dockerfile 就认为已经构建过镜像。</strong> 本课的 Dockerfile 是对照官方模式的声明；实际检查是对两个根目录的扫描和本地进程测试。</li>
-</ol>
-<h2 id="_6">设计权衡</h2>
-<p>节点原句是「最小镜像降低攻击面，也减少现场调试工具。」运行阶段没有编译器或密钥，泄露面更小；一旦需要在现场用调试器，就要另备带符号的调试镜像或临时进入构建阶段，而不是把工具默认装进生产镜像。</p>
-<h2 id="_7">动手实践</h2>
-<p>实践目录为 <code>practice153/</code>，需要 Python 3 和可调用的 C++ 编译器。脚本使用 <code>tools/zig-c++</code>。本次为 CPython 3.13.5 与 ziglang 0.17.1。</p>
-<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice153
-bash<span class="w"> </span>test.sh
-cat<span class="w"> </span>results.json
-cat<span class="w"> </span>reports/secret-scan.txt
-cat<span class="w"> </span>reports/memory-rlimit.txt
-cat<span class="w"> </span>reports/sigterm.txt
+<p><strong>直觉。</strong> 编译需要编译器、头文件，有时还需要临时密钥；运行只需要程序和它的动态库。阶段之间用「复制产物」，而不是把整个构建目录打包进最终镜像。</p>
+<p><strong>原理。</strong> 2026-11-15 抓取节点给出的 Docker 文档 <em>Multi-stage builds</em>（<code>https://docs.docker.com/build/building/multi-stage/</code>，响应 Date 为 2026-11-15 09:11:18 CST，Last-Modified 2026-11-14 01:08:38 CST；同日另一次抓取曾得到过仅 6876 字节的薄页面，用浏览器 UA 再抓为 566751 字节，以完整页面为准）。文档写明：多阶段构建在一份 Dockerfile 里使用多条 <code>FROM</code>，每一条开始新的阶段，并可以只把需要的产物复制到下一阶段；示例把编译得到的二进制拷进最终阶段后指出，最终镜像里只有该二进制，构建所需工具不会被保存。</p>
+<p>本课 <code>Dockerfile</code> 按这一模式写了两个命名阶段：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">debian:bookworm</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">build</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/src</span>
+<span class="k">ARG</span><span class="w"> </span><span class="nv">BUILD_SECRET</span><span class="o">=</span>atlas-compile-key-1492
+<span class="k">ENV</span><span class="w"> </span><span class="nv">BUILD_SECRET</span><span class="o">=</span><span class="si">${</span><span class="nv">BUILD_SECRET</span><span class="si">}</span>
+<span class="k">COPY</span><span class="w"> </span>service.cpp<span class="w"> </span>./
+<span class="k">RUN</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$BUILD_SECRET</span><span class="s2">"</span><span class="w"> </span>&gt;<span class="w"> </span>/tmp/compile-secret<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>c++<span class="w"> </span>-std<span class="o">=</span>c++17<span class="w"> </span>-O2<span class="w"> </span>service.cpp<span class="w"> </span>-o<span class="w"> </span>/bin/service<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="o">&amp;&amp;</span><span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>/tmp/compile-secret
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">debian:bookworm-slim</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="s">runtime</span>
+<span class="k">RUN</span><span class="w"> </span>useradd<span class="w"> </span>--uid<span class="w"> </span><span class="m">1000</span><span class="w"> </span>--create-home<span class="w"> </span>--shell<span class="w"> </span>/usr/sbin/nologin<span class="w"> </span>app
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>build<span class="w"> </span>/bin/service<span class="w"> </span>/usr/local/bin/service
+<span class="k">USER</span><span class="w"> </span><span class="s">app</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">"/usr/local/bin/service"</span><span class="p">]</span>
 </code></pre></div>
 
-<p>脚本物化两个阶段、扫描密钥、探测 cgroup、用 <code>RLIMIT_AS</code> 限制内存，并发送 SIGTERM。成功最后一行为 <code>ALL_CHECKS_PASSED</code>。<code>rootfs-runtime</code> 中的二进制可在复跑时重建，不必当作发布产物依赖。</p>
-<p>本次官方实践目录：<code>docker_daemon=false</code>，<code>cgroup_writable=false</code>；运行镜像不含编译密钥；SIGTERM 后退出码 0 且写入 <code>shutdown_ok</code>；内存限制退出码 2 而非 137。</p>
-<p>两项验收是「运行镜像不包含编译密钥」以及「进程正确处理 SIGTERM」。前者对应运行阶段扫描为空；后者对应退出码 0 与 <code>shutdown_ok</code>。内存限制的退出码按本机实际机制记录，不把 <code>RLIMIT_AS</code> 说成内核 OOM。</p>
+<p>逐段说明：</p>
+<ul>
+<li><code>AS build</code> / <code>AS runtime</code> 只是阶段名，供后面的 <code>COPY --from=</code> 引用。</li>
+<li>密钥用 <code>ARG</code> 在构建时传入。教学文件给了一个默认值，便于本地复现；真实流水线应在 <code>--build-arg</code> 或 BuildKit secret 里提供，并避免把生产密钥写进仓库。</li>
+<li><code>RUN</code> 把密钥写到构建阶段的 <code>/tmp/compile-secret</code>，编译结束后删除该文件。即便删除，它仍可能存在于<strong>构建阶段的某一层</strong>；关键是 <strong>runtime 阶段不得 <code>COPY</code> 它</strong>。</li>
+<li>第二条 <code>FROM</code> 丢弃整个 build 阶段的文件系统，只通过 <code>COPY --from=build /bin/service</code> 拿走二进制。源码、<code>c++</code>、密钥文件都不应再出现。</li>
+<li>静态检查（<code>static_check.py</code>）会拒绝：运行阶段提到 <code>BUILD_SECRET</code>、复制 <code>compile-secret</code> 或 <code>service.cpp</code>、缺少 <code>USER</code>、或 <code>USER root</code>。这些检查<strong>不能</strong>证明镜像已被构建，只能证明这份 Dockerfile 符合策略。本机结果：<code>stage_count=2</code>，<code>proves_image_was_built=false</code>。</li>
+</ul>
+<p><strong>适用边界。</strong> 多阶段解决的是「最终镜像里有什么」，不解决「构建机是否被污染」或「运行时进程是否被 cgroup 限制」。没有容器引擎时，不要用宿主机目录扫描代替 <code>docker export</code>。</p>
+<p><strong>真实路径（本机未执行，见 <code>scripts/docker-e2e.sh</code> / <code>diagnose.sh</code>）。</strong></p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>--build-arg<span class="w"> </span><span class="nv">BUILD_SECRET</span><span class="o">=</span>atlas-compile-key-1492<span class="w"> </span>-t<span class="w"> </span>atlas-153-service:local<span class="w"> </span>.
+<span class="nv">cid</span><span class="o">=</span><span class="k">$(</span>docker<span class="w"> </span>create<span class="w"> </span>--user<span class="w"> </span><span class="m">1000</span>:1000<span class="w"> </span>atlas-153-service:local<span class="k">)</span>
+docker<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="s2">"</span><span class="nv">$cid</span><span class="s2">"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-F<span class="w"> </span>atlas-compile-key-1492<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>LEAK<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span>clean
+docker<span class="w"> </span>rm<span class="w"> </span><span class="s2">"</span><span class="nv">$cid</span><span class="s2">"</span>
+</code></pre></div>
+
+<h3 id="2-root">2. 非 root 运行</h3>
+<p><strong>直觉。</strong> 进程以 uid 0 运行时，一次远程漏洞更接近宿主权限。<code>USER app</code> 缩小的是容器<strong>默认</strong>身份，不是沙箱。</p>
+<p><strong>原理。</strong> 最终阶段用 <code>useradd --uid 1000 ... app</code> 再 <code>USER app</code>，使镜像默认入口不再是 root。文档示例可以用 <code>scratch</code> 或精简基础镜像承载静态二进制；是否声明 <code>USER</code> 由镜像作者决定。本课显式写出，并由静态检查强制。</p>
+<p><strong>实践对照。</strong> <code>service.cpp</code> 在 <code>getuid()==0</code> 时直接以退出码 3 拒绝启动。本机编译出的宿主机二进制以 uid 1000 运行（教学环境本身不是 root），SIGTERM 后状态文件为 <code>shutdown_ok</code> 与 <code>uid=1000</code>。这只验证了「进程代码在非 root 下能跑、并拒绝 root 分支存在」；<strong>没有</strong>验证容器运行时是否真的丢掉了特权、是否启用了 user namespace。这些列在 <code>not_verified_on_this_machine</code>。</p>
+<h3 id="3-cpu-sigterm">3. CPU/内存限制与 SIGTERM</h3>
+<p><strong>直觉。</strong> 没有上限的「最小镜像」仍然可以吃光宿主内存。限制必须由内核或运行时实际执行，而不是只写在注释里。终止则是另一条契约：调度器发 SIGTERM，进程应停掉新工作并退出 0。</p>
+<p><strong>原理。</strong> 容器的硬限制通常由 cgroup 的 <code>memory.max</code>、<code>cpu.max</code> 实施。突破内存上限时，内核 OOM killer 常用 SIGKILL，shell 里常见退出码 137（128+9）。这与「malloc 失败后进程自己 <code>return 2</code>」不是同一条路径。本机 cgroup 控制器列表含 <code>memory</code>，但 <code>mkdir /sys/fs/cgroup/...</code> 返回 Permission denied，因此不能在本机制造 137。</p>
+<p><strong>实践对照（本机已验证的宿主机近似，不是容器 OOM）。</strong> <code>host_checks.py</code> 用 POSIX <code>RLIMIT_AS=16MiB</code> 让同一份二进制尝试分配 64MiB：<code>malloc_failed at_mb=13</code>，退出码 2。结果明确记录 <code>is_cgroup_oom=false</code>、<code>observed_exit_is_137=false</code>。SIGTERM 路径：进程先写 <code>ready</code>，收到信号后写 <code>shutdown_ok</code> 并以 0 退出。节点验收里「进程正确处理 SIGTERM」这一条，在<strong>进程契约</strong>层面本机是成立的；「在容器里由 <code>docker stop</code> 触发」尚未做。</p>
+<p>有引擎时应跑：</p>
+<div class="codehilite"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>--user<span class="w"> </span><span class="m">1000</span>:1000<span class="w"> </span>--memory<span class="w"> </span>16m<span class="w"> </span>--memory-swap<span class="w"> </span>16m<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>atlas-153-service:local<span class="w"> </span>--eat-mb<span class="w"> </span><span class="m">64</span>
+<span class="nb">echo</span><span class="w"> </span><span class="nv">exit</span><span class="o">=</span><span class="nv">$?</span><span class="w">    </span><span class="c1"># 可能是 137，也可能因引擎忽略 --memory 而仍成功；成功则应判失败并记录「限额未生效」</span>
+docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>atlas-153-term<span class="w"> </span>--user<span class="w"> </span><span class="m">1000</span>:1000<span class="w"> </span>atlas-153-service:local
+docker<span class="w"> </span>stop<span class="w"> </span>-t<span class="w"> </span><span class="m">3</span><span class="w"> </span>atlas-153-term
+docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">'{{.State.ExitCode}}'</span><span class="w"> </span>atlas-153-term
+</code></pre></div>
+
+<h2 id="_5">常见误区</h2>
+<ul>
+<li>把容器当作足够隔离任意恶意代码的沙箱。节点指出容器共享宿主内核。</li>
+<li>把「目录里仿了一个 rootfs」写成已经 <code>docker build</code> 成功。本课明确 <code>directory_layout_is_not_an_image=true</code>。</li>
+<li>把 <code>RLIMIT_AS</code> 的退出码 2 说成 cgroup OOM 137。</li>
+<li>认为最终阶段 <code>rm</code> 了密钥，构建层历史里就一定没有。要用 <code>docker history</code> / <code>docker export</code> 检查运行镜像。</li>
+</ul>
+<h2 id="_6">设计权衡</h2>
+<p>最小镜像降低攻击面，也减少现场调试工具（往往没有 shell 和调试器）。多阶段增加 Dockerfile 复杂度，但换来运行环境与工具链分离。把密钥放进 <code>ARG</code> 图方便，却容易进层缓存；更严的做法是 BuildKit secret 挂载（本课未在本机实跑，不据此下实验结论）。</p>
+<h2 id="_7">动手实践</h2>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice153
+bash<span class="w"> </span>test.sh
+<span class="c1"># 若本机有 Docker/Podman：脚本会自动跑 scripts/docker-e2e.sh</span>
+<span class="c1"># 若没有：阅读 results.json 中的 verified_on_this_machine 与 not_verified_on_this_machine</span>
+<span class="c1"># 并按 scripts/diagnose.sh 在你自己的引擎上补齐端到端项</span>
+</code></pre></div>
+
+<p>本机一次运行（2026-11-15 23:22 左右，Asia/Shanghai）：<code>docker_e2e_verified=false</code>，跳过原因 <code>NO_CONTAINER_ENGINE</code>；Dockerfile 静态检查通过；宿主机 SIGTERM 退出 0；<code>RLIMIT_AS</code> 退出 2，stderr 为 <code>malloc_failed at_mb=13</code>。二进制内不含编译密钥字符串。</p>
 <h2 id="_8">源码与文档阅读</h2>
-<p>阅读 <code>Dockerfile</code>、<code>service.cpp</code> 和 <code>reports/secret-scan.txt</code>。Docker 文档说明最终镜像可以只保留二进制；本实验没有执行 <code>docker build</code>，也没有使用 <code>scratch</code> 基础镜像，差异应记在适用边界里。</p>
-<p>2026-11-15 在本机核对节点 URL。用普通库抓取时只得到 6876 字节的不完整文档；随后用浏览器 User-Agent 取得完整 HTML。表中 Date 为 CloudFront 响应头（缓存），另记抓取时刻。</p>
+<ol>
+<li><code>Dockerfile</code>：两阶段、<code>COPY --from=build</code>、<code>USER app</code>。</li>
+<li><code>static_check.py</code>：只解析文本，不构建镜像。</li>
+<li><code>service.cpp</code>：<code>SIGTERM</code>、<code>--eat-mb</code>、拒绝 uid 0。</li>
+<li><code>scripts/docker-e2e.sh</code>：有引擎时的 export 扫密钥、<code>docker stop</code>、<code>--memory</code>。</li>
+<li><code>results.json</code> / <code>run.log</code>：必须同时出现已验证项和未验证项（无引擎时）。</li>
+</ol>
+<h2 id="_9">自测题</h2>
+<p><strong>1. 为什么 <code>COPY --from=build /bin/service</code> 能丢掉编译器和 <code>/tmp/compile-secret</code>？若有人在 runtime 阶段再 <code>COPY service.cpp</code> 会怎样？</strong></p>
+<p>答案：第二条 <code>FROM</code> 从空的新基础镜像开始，只有被 <code>COPY --from</code> 点名的路径进入最终镜像。再复制源码会把构建输入带进运行环境，静态检查应失败；有引擎时应能在 <code>docker export</code> 里看到该文件。</p>
+<p><strong>2. 本机实验退出码是 2，为什么不能写成「已验证容器 OOM」？</strong></p>
+<p>答案：2 来自程序在 <code>malloc</code> 失败后主动返回，限制手段是 POSIX <code>RLIMIT_AS</code>。cgroup 的 <code>memory.max</code> 触发的是内核 OOM killer，常见 137。本机不能创建子 cgroup，也没有容器引擎执行 <code>--memory</code>。</p>
+<p><strong>3. 同事说「我用 Python 扫了一个 rootfs 目录，密钥不在，所以镜像是安全的」。如何回应？</strong></p>
+<p>答案：那只是目录布局，不是镜像层。没有 <code>docker build</code> 与 <code>docker export</code>，不能验收「运行镜像不包含编译密钥」。应使用本课的 Dockerfile 和 <code>docker-e2e.sh</code>。</p>
+<h2 id="_10">推荐资源</h2>
 <table>
 <thead>
 <tr>
-<th>页面及标题</th>
-<th style="text-align: right;">字节数</th>
-<th>Date（北京时间）</th>
-<th>Last-Modified（北京时间）</th>
-<th>备注</th>
+<th>资源</th>
+<th>字节</th>
+<th>抓取时间 (CST)</th>
+<th>Last-Modified (CST)</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><a href="https://docs.docker.com/build/building/multi-stage/">Docker — Multi-stage builds</a>：Multi-stage builds | Docker Docs</td>
-<td style="text-align: right;">566751</td>
-<td>响应头 2026-11-15 09:11:18（CDN Date）；完整页抓取约 22:59</td>
+<td><a href="https://docs.docker.com/build/building/multi-stage/">Docker — Multi-stage builds</a></td>
+<td>566751（完整页）</td>
+<td>2026-11-15 09:11:18（文档 Date）/ 当日另有完整抓取</td>
 <td>2026-11-14 01:08:38</td>
-<td>HTTP 200，节点 URL 无路径跳转</td>
-</tr>
-<tr>
-<td>同页源码 <a href="https://raw.githubusercontent.com/docker/docs/main/content/manuals/build/building/multi-stage.md">docker/docs multi-stage.md</a></td>
-<td style="text-align: right;">7227</td>
-<td>2026-11-15 22:59 左右</td>
-<td>（未作为正文依据的缓存头）</td>
-<td>用于核对与 HTML 一致的多阶段定义</td>
+<td>核对应使用多条 <code>FROM</code> 与 <code>COPY --from</code>。英文，进阶，免费。首次精简抓取仅 6876 字节，不以薄页为准。</td>
 </tr>
 </tbody>
 </table>
-<p>节点的 <code>verifiedAt</code> 是 2026-10-26，独立于以上抓取时间。</p>
-<h2 id="_9">自测题</h2>
-<ol>
-<li><strong>为什么编译密钥不能出现在运行阶段？</strong> 运行阶段会随服务一起分发和启动，密钥一旦进入该文件系统，就会扩大泄露范围。本课扫描要求运行阶段命中数为 0。</li>
-<li><strong>退出码 2 是 OOM killer 吗？</strong> 不是。本次是 <code>RLIMIT_AS</code> 下 <code>malloc</code> 失败。cgroup OOM 常见为 137，但本机无法写入 <code>memory.max</code>。</li>
-<li><strong>非 root 是否等于与宿主隔离？</strong> 不等于。容器共享内核；非 root 只降低默认权限。</li>
-</ol>
-<h2 id="_10">推荐资源</h2>
-<ul>
-<li><a href="https://docs.docker.com/build/building/multi-stage/">Docker — Multi-stage builds</a>：用于核对多阶段构建与非 root 运行，将结论落实到本节点实验。英文，进阶，免费。</li>
-</ul>
 <h2 id="_11">本课小结</h2>
-<p>用多阶段划分把编译密钥和工具留在构建侧，运行侧只保留非 root 进程；内存与 CPU 限制必须由本机真实可执行的机制来验证，不能把清单上的数字说成已经生效。下一课是第 154 课 j-kubernetes（Kubernetes 服务生命周期）。</p><div class="pn"><span><a href="152.html">← CI 与供应链检查</a></span><span><a href="154.html">Kubernetes 服务生命周期 →</a></span></div></main></div></body></html>
+<p>多阶段构建把编译密钥和工具链留在被丢弃的阶段，运行镜像只保留二进制并以非 root 启动；内存上限必须由运行时真正执行，SIGTERM 必须由进程自己收尾。本机验证了 Dockerfile 策略和进程契约，没有验证 Docker 构建、镜像 export、cgroup OOM 137。有引擎时不要跳过 <code>scripts/docker-e2e.sh</code>。</p><div class="pn"><span><a href="152.html">← CI 与供应链检查</a></span><span><a href="154.html">Kubernetes 服务生命周期 →</a></span></div></main></div></body></html>

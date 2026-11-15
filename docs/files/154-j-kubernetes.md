@@ -1,93 +1,143 @@
 # 第 154/208 课：Kubernetes 服务生命周期
 
 > 序号 154/208 · id `j-kubernetes` · 领域 J · 阶段 4 · 难度 深入 · 子类 交付与安全
-> 前置：[`j-container`](https://zhousai-zs.github.io/backend-atlas-notes/lessons/153.html)
-> 节点摘要：Kubernetes 通过声明式控制器协调 Pod、Service 和滚动更新；探针与资源配置影响可用性。
+> 前置：[`j-container`](https://zhousai-zs.github.io/backend-atlas-notes/lessons/153.html) 和 [`c-cgroup`](https://zhousai-zs.github.io/backend-atlas-notes/lessons/47.html)
+> 节点摘要：Kubernetes 以声明式对象管理副本、探针、滚动升级与资源限制。
 
 ## 导读
 
-上一课处理镜像内容和进程退出。多个副本上线时，还要决定何时接收流量、何时重启、滚动替换时如何处理在途请求。这些语义如果用错，一次依赖抖动就可能变成重启风暴。
+容器只解决「一个进程怎么打包」。服务上线还要回答：两个副本如何轮流更新？进程还没准备好时要不要杀它？依赖抖动时会不会重启风暴？在途请求怎么收尾？
 
-教学假设：教学用两副本服务在本机用进程模拟 Pod 与 Service 端点。以下控制器、探针和滚动策略均为教学设计，不代表腾讯或微信内部实现，也没有连接 kube-apiserver。`is_live_cluster=false`。
+教学假设：把一个教学 HTTP 服务以两副本 Deployment 发布。以下名称、镜像和限额都是教学设计，不代表腾讯或微信内部集群。
+
+**本机事实：** 没有 `kubectl`，也没有可用集群（kind / k3s / minikube 均未安装）。因此**不再**用 Python 进程模拟 Pod 来充当 kube-apiserver 验收。实践包的主产物是 `manifests/` 与 `scripts/rollout-e2e.sh`。本机验收清单结构和教学进程自身的就绪/终止契约，并明确列出未在真实集群上验证的项。`is_live_cluster=false`，`python_pod_simulator_used_as_kube_acceptance=false`。
 
 ## 学习目标
 
-1. 解释readiness/liveness/startup及适用边界
+1. 解释 readiness / liveness / startup 及适用边界
 2. 独立完成实践：部署两副本服务，滚动升级时持续请求并统计失败。
 
 ## 为什么后端要懂
 
-节点给出的理由是「理解服务部署、扩缩容与终止语义。」副本数、探针和终止宽限共同决定用户是否还能打到健康实例，以及在途请求是被做完还是被切断。
+自动编排降低操作成本，也把失败模式从「机器宕了」变成「探针写错导致重启风暴」或「滚动时摘流过晚导致在途失败」。后端需要读懂自己写进清单的字段，而不是只把镜像交给平台。
 
 ## 核心知识点
 
-### 1. readiness/liveness/startup
+### 1. readiness / liveness / startup
 
-**原理。** Kubernetes *Pod Lifecycle* 文档区分三类探针：Startup 确认容器内应用是否已启动，成功之前不执行 liveness 或 readiness，失败则按重启策略处理该容器；Liveness 决定何时重启容器，例如陷入死锁但仍在运行的进程，超过容忍次数后 kubelet 重启该容器，且不等待 readiness 先成功；Readiness 决定容器何时可以接受流量，失败时 EndpointSlice 控制器会从匹配 Service 的端点中去掉该 Pod IP，从而不再把新请求打过去。
+**直觉。** 还没准备好，应该摘掉流量，而不一定要杀死进程；已经死锁，才需要重启；启动很慢时，先不要用 liveness 去「催」。把「依赖系统暂时不可用」写成 liveness，会把一次抖动放大成反复重启。
 
-**直觉。** 还没准备好，应该摘掉流量，而不一定要杀死进程；已经死锁，才需要重启。把「依赖系统暂时不可用」写成 liveness，会把一次抖动放大成反复重启。
+**原理。** 2026-11-15 抓取 Kubernetes *Pod Lifecycle*（`https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/`，Date 2026-11-15 22:58:53 CST，608435 字节，未提供 Last-Modified）。文档区分三类探针：Startup 确认容器内应用是否已启动，成功之前不执行 liveness 或 readiness，失败则按重启策略处理该容器；Liveness 决定何时重启容器，例如陷入死锁但仍在运行的进程；Readiness 决定何时把 Pod 加入 Service 的 endpoints，失败时摘流但**不一定**重启。这正是节点验收「解释 readiness 失败为何不一定重启」要落实的官方区分。
 
-**实践对照。** readiness 被强制失败时：startup 已成功，liveness 仍为 200，进程还在，重启次数为 0，Service 侧没有就绪端点，`/work` 不被转发。对照地把缺失依赖挂到 liveness 上，教学控制器连续重启 3 次。这是本地进程模拟，不是 kubelet。
+本课主清单把三条探针指到**不同路径**：
 
-### 2. requests/limits
+```yaml
+startupProbe:
+  httpGet: { path: /startupz, port: http }
+  failureThreshold: 12
+  periodSeconds: 2
+readinessProbe:
+  httpGet: { path: /readyz, port: http }
+  periodSeconds: 2
+  failureThreshold: 3
+livenessProbe:
+  httpGet: { path: /healthz, port: http }
+  periodSeconds: 5
+  failureThreshold: 3
+```
 
-**原理。** 资源 requests 影响调度，limits 约束运行时用量。文档把它们作为 Pod spec 的一部分；没有真实 kubelet 就不能声称已执行这些限制。
+`app/server.py` 的实现约定：
 
-**实践对照。** 结果里声明了 `requests.cpu=100m, memory=64Mi` 与相应 limits，但 `resource_limits_enforced_here=false`，与上一课无法写入 cgroup 的限制一致。
+- `/startupz`、`/readyz`：启动延迟内返回 503；收到 SIGTERM 后 `/readyz` 变为 503（`reason=draining`），以便 kubelet 把它从 endpoints 摘掉。
+- `/healthz`：**故意不检查依赖、也不因 draining 失败**。它只表示「这个进程还活着」。
+- `/work` 在 draining 或未就绪时拒绝。
 
-### 3. 优雅终止
+本机应用级实验（明确标记 `scope=local_process_only_not_kubelet`）：进程在 SIGTERM 后仍短暂存活，`/readyz` 为 503，随后以退出码 0 结束。这验证的是**应用程序契约**，不是「kubelet 看到 readiness 失败不会重启」。后者必须在真实集群里用 `kubectl get pod -o yaml` 看 `restartCount` 与 endpoints，本机未做。
 
-**原理。** 文档说明删除 Pod 时，运行时向容器主进程发送 SIGTERM（或镜像配置的 STOPSIGNAL），并在宽限期结束后再发送 KILL。宽限期内应用可以停止接新请求、完成或拒绝在途工作。
+反例见 `manifests/bad-liveness-on-dependency.yaml`：liveness 指向 `/dependency-health`，且缺少 readiness、资源和 `terminationGracePeriodSeconds`。静态检查要求这份反例可被识别，主清单不得使用同一路径。
 
-**实践对照。** 滚动替换时，对即将退出的 v1 副本在在途请求期间发送 SIGTERM：该请求返回 200 且进程退出码 0。教学实现选择完成在途请求；也可以改为立即 503，两种都算「完成或拒绝」，但不能两者都不做就直接消失。
+### 2. requests / limits
+
+**直觉。** YAML 里写了 `limits.memory: 128Mi`，并不等于本机已经用 cgroup 卡住了进程。限额由 kubelet 落到容器运行时之后才生效。
+
+**原理。** `resources.requests` 影响调度与超卖，`limits` 才是硬顶（具体是否转化为 cgroup `memory.max` / CPU quota 取决于版本与运行时）。本课主清单声明：
+
+```yaml
+resources:
+  requests: { cpu: 100m, memory: 64Mi }
+  limits:   { cpu: 200m, memory: 128Mi }
+```
+
+静态检查要求两套字段都在。`resource_limits` **本机未强制执行**，结果里写明 `kubelet_enforced_requests_and_limits` 未验证。
+
+### 3. 优雅终止与滚动升级
+
+**直觉。** 滚动升级不是「先杀掉再启动」，而是「先有新副本 ready，再摘旧副本；摘之前要让 endpoints 消失，并给在途请求收尾时间」。
+
+**原理。** 本课 `replicas: 2`，`rollingUpdate.maxUnavailable: 0`、`maxSurge: 1`，表示更新期间希望保持可用副本数，额外再允许一个新 Pod。`terminationGracePeriodSeconds: 15` 与 `lifecycle.preStop`（`sleep 2`）给摘流和在途请求留窗口。节点验收「终止期间完成或拒绝在途请求」依赖 kubelet 的终止顺序：先执行 preStop，再 SIGTERM，到期 SIGKILL。本机只验证了应用在 SIGTERM 后拒绝新 `/work` 并退出 0，**没有**统计真实滚动中的失败率。
+
+有集群时的路径（`scripts/rollout-e2e.sh` / `diagnose.sh`）：
+
+```bash
+kubectl apply -f manifests/service.yaml -f manifests/deployment.yaml
+kubectl rollout status deployment/atlas-kv --timeout=180s
+# 另开一个循环：while true; do curl -sS --max-time 1 http://<svc>/work; done
+kubectl apply -f manifests/deployment-v2.yaml
+kubectl rollout status deployment/atlas-kv
+kubectl rollout history deployment/atlas-kv
+```
+
+把连续请求的成功/失败次数记下来，才算完成节点实践「滚动升级时持续请求并统计失败」。本机因 `NO_KUBECTL` 将此项列为未验证。
 
 ## 常见误区
 
-1. **用依赖服务可用性作为 liveness 导致重启风暴。** 节点原句即此。本课在依赖文件缺失时把 liveness 判失败，连续重启 3 次。同样的条件放在 readiness 上只是摘除流量。
-2. **滚动升级零失败是默认保证。** 本次 28 次请求中失败 0 次，并同时观察到 v1 与 v2，只说明这次教学滚动先 surge 再摘旧副本且宽限足够；换更短宽限或更高并发，失败计数完全可能上升。
+- 用依赖服务可用性作为 liveness，导致重启风暴。
+- 把 Python 模拟控制器的「重启计数」写成 Kubernetes 行为。
+- 以为清单里写了 limits 就已经在本机生效。
+- readiness 与 liveness 共用同一条「依赖是否可达」的路径。
 
 ## 设计权衡
 
-节点原句是「自动编排降低操作成本，也增加控制面复杂性。」探针、端点和滚动策略把大量操作自动化，但也引入了「为什么这个 Pod 不接流量却没重启」这类需要对照官方语义才能回答的问题。本课用本地模拟理解语义，不能替代对真实集群控制面的排障。
+`maxUnavailable: 0` 更稳，但需要更多瞬时容量（`maxSurge`）。更长的 `terminationGracePeriodSeconds` 减少在途失败，却拖慢滚动。严格的 probes 提高安全，也让启动慢或依赖抖动的服务更难变 Ready。
 
 ## 动手实践
-
-实践目录为 `practice154/`，需要 Python 3。本次为 CPython 3.13.5。
 
 ```bash
 cd practice154
 bash test.sh
-cat results.json
+# 阅读 results.json 的 verified_on_this_machine / not_verified_on_this_machine
+# 有集群时再跑 scripts/rollout-e2e.sh，不要用旧版 pod.py 充当验收
 ```
 
-脚本启动教学 Pod 进程，检查 readiness 失败与 liveness 风暴，然后做两副本滚动并持续发请求。成功最后一行为 `ALL_CHECKS_PASSED`。端口号随环境变化。
-
-本次官方实践目录：readiness 失败时进程仍在、重启 0；liveness 依赖缺失重启 3 次；终止期间在途请求 HTTP 200；滚动统计 `ok=28, fail=0`，版本集合为 v1 与 v2。
-
-两项验收是「解释 readiness 失败为何不一定重启」以及「终止期间完成或拒绝在途请求」。前者对应官方「从端点去掉 IP」与本课重启次数为 0；后者对应 SIGTERM 期间完成的 200 响应。
+本机一次运行：清单静态检查通过（两副本，路径分别为 `/startupz` `/readyz` `/healthz`，grace=15）；应用在 SIGTERM 后 `/readyz=503`、退出 0；`cluster_e2e_verified=false`，原因 `NO_KUBECTL`。
 
 ## 源码与文档阅读
 
-阅读 `pod.py` 中三类探针与 SIGTERM 处理，对照 `results.json`。官方文档讨论的是 kubelet 与 EndpointSlice；本实验用本机进程和教学负载均衡代替，探针间隔、容忍次数和正式滚动参数都未按集群默认值复现。
-
-2026-11-15 在本机核对节点 URL。
-
-| 页面及标题 | 字节数 | Date（北京时间） | Last-Modified（北京时间） |
-| --- | ---: | --- | --- |
-| [Kubernetes — Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)：Pod Lifecycle \| Kubernetes | 608435 | 2026-11-15 22:58:53 | （响应未提供） |
-
-最终 URL 与节点所列相同，HTTP 200，锚点 `#container-probes` 指向同一文档。节点的 `verifiedAt` 是 2026-10-26，独立于以上抓取时间。
+1. `manifests/deployment.yaml` 与 `deployment-v2.yaml`：对照滚动字段和探针。
+2. `manifests/bad-liveness-on-dependency.yaml`：反例。
+3. `app/server.py`：三条探针和 draining。
+4. `static_check.py`、`app_contract.py`、`scripts/rollout-e2e.sh`。
 
 ## 自测题
 
-1. **readiness 失败为什么不一定重启？** 文档说明失败时从 Service 端点去掉 Pod IP，目的是停止派发新流量，而不是杀死容器。本课该进程仍在，liveness 仍为 200。
-2. **为什么不要把依赖可用性做成 liveness？** 依赖抖动会让 kubelet 反复重启容器，形成风暴。本课在缺失依赖下连续重启 3 次。
-3. **滚动时失败为 0，能否保证以后也是 0？** 不能。这只是本次宽限和并发下的计数。
+**1. 为什么 readiness 失败不一定重启？liveness 失败呢？**
+
+答案：Readiness 只影响 Service endpoints，用来摘流；Liveness 失败由 kubelet 按重启策略重启容器。这是官方 Pod Lifecycle 的分工，不是应用自己「决定重启」。
+
+**2. 把 liveness 指到依赖的健康检查，最可能看到什么？**
+
+答案：依赖抖动时本进程被反复重启，形成风暴。主清单禁止 liveness 使用 `/readyz` 或 `/dependency-health`。
+
+**3. 本机 `app_contract` 通过了，能否声称「滚动升级零失败已验证」？**
+
+答案：不能。那只验证了单进程的摘流契约。滚动失败率、endpoints 变化和 kubelet 重启计数必须在真实集群上统计。
 
 ## 推荐资源
 
-- [Kubernetes — Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)：用于核对readiness/liveness/startup与requests/limits，将结论落实到本节点实验。英文，深入，免费。
+| 资源 | 字节 | 抓取时间 (CST) | Last-Modified | 说明 |
+| --- | --- | --- | --- | --- |
+| [Kubernetes — Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) | 608435 | 2026-11-15 22:58:53 | （响应未提供） | 核对三类探针与终止顺序。英文，深入，免费。 |
 
 ## 本课小结
 
-startup 负责初始化窗口，readiness 负责是否接流量，liveness 才决定是否重启；滚动替换时要在 SIGTERM 宽限里完成或拒绝在途请求，并把失败次数当作需要测量的量，而不是默认的零。下一课是第 155 课 j-release（灰度发布与回滚）。
+三类探针解决的问题不同：启动、摘流、重启。两副本滚动依赖就绪后再替换，以及足够的终止宽限。本机验证了清单与进程契约，没有验证 kube-apiserver、endpoints 或 kubelet 限额；有集群时必须跑 `rollout-e2e.sh`。

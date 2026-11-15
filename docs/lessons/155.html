@@ -1,79 +1,93 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>155. 灰度发布与回滚 - Backend Atlas</title><link rel="stylesheet" href="../style.css"><script>if(innerWidth<800)addEventListener("DOMContentLoaded",()=>document.getElementById("toc").open=false)</script></head><body><div class="wrap"><nav><details open id="toc"><summary>📚 Backend Atlas 目录（162/208）</summary><p><a href="../index.html">🏠 首页</a></p><details><summary>领域 A：计算机科学基础（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/1.html">1. 二进制、整数与数字逻辑</a></li><li><a class="" href="../lessons/2.html">2. CPU与指令执行</a></li><li><a class="" href="../lessons/4.html">4. 操作系统的资源抽象</a></li><li><a class="" href="../lessons/5.html">5. 终端、路径与命令组合</a></li><li><a class="" href="../lessons/6.html">6. 源码到可执行文件</a></li><li><a class="" href="../lessons/12.html">12. 网络分层、地址与路由</a></li><li><a class="" href="../lessons/14.html">14. 测试思维与问题分解</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/3.html">3. 内存层次与局部性</a></li><li><a class="" href="../lessons/7.html">7. 复杂度与实验分析</a></li><li><a class="" href="../lessons/8.html">8. 数组、链表、栈与队列</a></li><li><a class="" href="../lessons/9.html">9. 哈希表与冲突处理</a></li><li><a class="" href="../lessons/10.html">10. 搜索树、堆与有序索引</a></li><li><a class="" href="../lessons/11.html">11. 图、依赖与拓扑排序</a></li><li><a class="" href="../lessons/13.html">13. 关系模型与SQL入门</a></li><li><a class="" href="../lessons/15.html">15. 字符编码、字节序与数据表示</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/16.html">16. 概率、统计与数量级估算</a></li></ul></details><details><summary>领域 B：现代 C++（16/16）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/17.html">17. 类型、表达式与控制流</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/18.html">18. 指针、引用与借用边界</a></li><li><a class="" href="../lessons/19.html">19. 对象生命周期与存储期</a></li><li><a class="" href="../lessons/20.html">20. RAII与资源所有权</a></li><li><a class="" href="../lessons/21.html">21. 拷贝、移动与值类别</a></li><li><a class="" href="../lessons/22.html">22. 智能指针与共享所有权</a></li><li><a class="" href="../lessons/23.html">23. STL容器与迭代器</a></li><li><a class="" href="../lessons/24.html">24. 算法、Lambda与函数对象</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/25.html">25. 模板与编译期泛型</a></li><li><a class="" href="../lessons/26.html">26. 类型系统、转换与接口设计</a></li><li><a class="" href="../lessons/27.html">27. 异常安全与错误模型</a></li><li><a class="" href="../lessons/29.html">29. 非拥有视图与边界安全</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/28.html">28. 分配器、对齐与内存资源</a></li><li><a class="" href="../lessons/30.html">30. C++17/20/23工程选型</a></li><li><a class="" href="../lessons/31.html">31. C++20无栈协程机制</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/32.html">32. ABI、ODR与二进制兼容</a></li></ul></details><details><summary>领域 C：Linux 系统编程（16/16）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/33.html">33. 进程、fork与exec</a></li><li><a class="" href="../lessons/36.html">36. 文件描述符与打开文件描述</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/34.html">34. Linux线程与线程资源</a></li><li><a class="" href="../lessons/35.html">35. 系统调用、errno与部分成功</a></li><li><a class="" href="../lessons/37.html">37. 文件读写、页缓存与持久性</a></li><li><a class="" href="../lessons/38.html">38. 虚拟内存、缺页与mmap</a></li><li><a class="" href="../lessons/39.html">39. 管道、共享内存与IPC</a></li><li><a class="" href="../lessons/40.html">40. 信号与安全停机</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/41.html">41. 调度、亲和性与上下文切换</a></li><li><a class="" href="../lessons/42.html">42. futex与用户态同步慢路径</a></li><li><a class="" href="../lessons/43.html">43. ELF、装载与符号</a></li><li><a class="" href="../lessons/45.html">45. 资源限制与/proc诊断</a></li><li><a class="" href="../lessons/46.html">46. namespace与隔离边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/44.html">44. 动态加载、懒绑定与可重入性</a></li><li><a class="" href="../lessons/47.html">47. cgroup v2与资源治理</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/48.html">48. 内核路径与运行时边界</a></li></ul></details><details><summary>领域 D：网络与高并发（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/49.html">49. TCP状态机与连接生命周期</a></li><li><a class="" href="../lessons/50.html">50. UDP报文与可靠性设计</a></li><li><a class="" href="../lessons/51.html">51. Socket服务端基础</a></li><li><a class="" href="../lessons/52.html">52. 非阻塞IO与读写状态机</a></li><li><a class="" href="../lessons/53.html">53. select与fd集合</a></li><li><a class="" href="../lessons/54.html">54. poll与就绪集合扫描</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/55.html">55. epoll事件语义与工程边界</a></li><li><a class="" href="../lessons/56.html">56. 字节流分帧与协议解析</a></li><li><a class="" href="../lessons/57.html">57. Reactor与事件循环</a></li><li><a class="" href="../lessons/58.html">58. 定时器、时间轮与单调时钟</a></li><li><a class="" href="../lessons/59.html">59. IO线程与工作线程池</a></li><li><a class="" href="../lessons/60.html">60. 连接池与长连接复用</a></li><li><a class="" href="../lessons/61.html">61. 有栈协程与用户态调度</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/62.html">62. Proactor、完成通知与io_uring</a></li><li><a class="" href="../lessons/63.html">63. TCP流控、拥塞与队列</a></li><li><a class="" href="../lessons/64.html">64. 海量连接与接入治理</a></li></ul></details><details><summary>领域 E：并发与内存模型（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/65.html">65. 数据竞争与线程安全契约</a></li><li><a class="" href="../lessons/66.html">66. 互斥锁与锁粒度</a></li><li><a class="" href="../lessons/67.html">67. 条件变量与状态谓词</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/68.html">68. 死锁、锁顺序与阻塞传播</a></li><li><a class="" href="../lessons/69.html">69. 原子操作与复合不变量</a></li><li><a class="" href="../lessons/71.html">71. 缓存一致性与伪共享</a></li><li><a class="" href="../lessons/72.html">72. TLS与协程共享边界</a></li><li><a class="" href="../lessons/74.html">74. 有界并发队列与背压</a></li><li><a class="" href="../lessons/75.html">75. 读写锁、快照与读密集优化</a></li><li><a class="" href="../lessons/79.html">79. 竞态检测与并发故障复现</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/70.html">70. C++内存序与发布订阅</a></li><li><a class="" href="../lessons/73.html">73. 可重入性与协作调度安全</a></li><li><a class="" href="../lessons/76.html">76. 无锁进展保证与CAS结构</a></li><li><a class="" href="../lessons/78.html">78. 结构化并发、取消与停机</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/77.html">77. ABA与安全内存回收</a></li><li><a class="" href="../lessons/80.html">80. 并发模型选择与可证明边界</a></li></ul></details><details><summary>领域 F：RPC 与通信（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/81.html">81. Protobuf模式与代码生成</a></li><li><a class="" href="../lessons/83.html">83. RPC调用模型与失败语义</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/82.html">82. 序列化成本与缓冲管理</a></li><li><a class="" href="../lessons/84.html">84. gRPC C++同步与异步接口</a></li><li><a class="" href="../lessons/85.html">85. brpc通道与服务实现</a></li><li><a class="" href="../lessons/86.html">86. 超时预算与取消传播</a></li><li><a class="" href="../lessons/87.html">87. 重试、退避与重试风暴</a></li><li><a class="" href="../lessons/88.html">88. 幂等键与重复请求处理</a></li><li><a class="" href="../lessons/89.html">89. 服务发现与地址变化</a></li><li><a class="" href="../lessons/90.html">90. 负载均衡与热点倾斜</a></li><li><a class="" href="../lessons/92.html">92. 请求上下文与链路传播</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/91.html">91. 背压与并发限制</a></li><li><a class="" href="../lessons/93.html">93. RPC身份、TLS与授权</a></li><li><a class="" href="../lessons/94.html">94. 异步RPC与生命周期协调</a></li><li><a class="" href="../lessons/95.html">95. 接口兼容与服务演进</a></li><li><a class="" href="../lessons/96.html">96. 轻量RPC框架设计与边界</a></li></ul></details><details><summary>领域 G：数据库与存储（16/16）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/97.html">97. MySQL访问与连接管理</a></li><li><a class="" href="../lessons/101.html">101. Redis数据结构与命令成本</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/98.html">98. B+Tree与索引访问路径</a></li><li><a class="" href="../lessons/99.html">99. 事务、隔离与异常</a></li><li><a class="" href="../lessons/102.html">102. 缓存一致性与失效策略</a></li><li><a class="" href="../lessons/103.html">103. Redis持久化与恢复窗口</a></li><li><a class="" href="../lessons/104.html">104. KV语义、索引与并发</a></li><li><a class="" href="../lessons/105.html">105. 预写日志与崩溃恢复</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/100.html">100. MVCC、快照与锁</a></li><li><a class="" href="../lessons/106.html">106. LSM Tree、SST与压实</a></li><li><a class="" href="../lessons/107.html">107. RocksDB集成与读写调优</a></li><li><a class="" href="../lessons/108.html">108. Bloom Filter与读放大</a></li><li><a class="" href="../lessons/109.html">109. 存储复制、确认与故障切换</a></li><li><a class="" href="../lessons/110.html">110. 分片、重分布与热点</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/111.html">111. 备份、校验与恢复演练</a></li><li><a class="" href="../lessons/112.html">112. 存储性能、放大与尾延迟</a></li></ul></details><details><summary>领域 H：分布式系统（15/15）</summary><div>阶段 3</div><ul><li><a class="" href="../lessons/113.html">113. 分布式故障模型</a></li><li><a class="" href="../lessons/114.html">114. 一致性模型与线性化点</a></li><li><a class="" href="../lessons/115.html">115. CAP 与分区下的选择</a></li><li><a class="" href="../lessons/122.html">122. 消息投递与幂等消费</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/116.html">116. 复制状态机</a></li><li><a class="" href="../lessons/117.html">117. Raft 任期与选主</a></li><li><a class="" href="../lessons/118.html">118. Raft 日志一致性与提交</a></li><li><a class="" href="../lessons/120.html">120. 分片与在线迁移</a></li><li><a class="" href="../lessons/121.html">121. 分布式事务与补偿</a></li><li><a class="" href="../lessons/123.html">123. 限流与过载保护</a></li><li><a class="" href="../lessons/124.html">124. 熔断、降级与隔离</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/119.html">119. Paxos 与多数派交集</a></li><li><a class="" href="../lessons/125.html">125. 多机房与灾难恢复</a></li><li><a class="" href="../lessons/126.html">126. 分布式历史与故障测试</a></li></ul><div>阶段 6</div><ul><li><a class="" href="../lessons/127.html">127. 分布式协议演进</a></li></ul></details><details><summary>领域 I：性能工程（14/14）</summary><div>阶段 2</div><ul><li><a class="" href="../lessons/128.html">128. 吞吐、延迟与排队</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/129.html">129. 可复现微基准</a></li><li><a class="" href="../lessons/130.html">130. 负载模型与协调遗漏</a></li><li><a class="" href="../lessons/131.html">131. perf 采样与符号</a></li><li><a class="" href="../lessons/132.html">132. 火焰图与差分分析</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/133.html">133. 堆内存与分配器分析</a></li><li><a class="" href="../lessons/134.html">134. 锁竞争与调度延迟</a></li><li><a class="" href="../lessons/135.html">135. eBPF 可观测性</a></li><li><a class="" href="../lessons/136.html">136. NUMA 与内存局部性</a></li><li><a class="" href="../lessons/137.html">137. CPU 缓存与伪共享</a></li><li><a class="" href="../lessons/138.html">138. 零拷贝与批处理</a></li><li><a class="" href="../lessons/139.html">139. io_uring 与异步完成</a></li></ul><div>阶段 5</div><ul><li><a class="" href="../lessons/140.html">140. 性能回归与预算</a></li></ul><div>阶段 6</div><ul><li><a class="" href="../lessons/141.html">141. 系统瓶颈与容量模型</a></li></ul></details><details open><summary>领域 J：软件与生产工程（15/15）</summary><div>阶段 0</div><ul><li><a class="" href="../lessons/142.html">142. Git 工作流与变更管理</a></li></ul><div>阶段 1</div><ul><li><a class="" href="../lessons/143.html">143. CMake 目标式构建</a></li><li><a class="" href="../lessons/145.html">145. 单元测试与边界设计</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/144.html">144. Bazel 与可复现依赖</a></li><li><a class="" href="../lessons/146.html">146. 集成与故障测试</a></li><li><a class="" href="../lessons/147.html">147. Sanitizer 动态检测</a></li><li><a class="" href="../lessons/148.html">148. gdb 与 Core Dump</a></li><li><a class="" href="../lessons/149.html">149. 结构化日志与敏感信息</a></li></ul><div>阶段 3</div><ul><li><a class="" href="../lessons/150.html">150. Metrics 与指标基数</a></li><li><a class="" href="../lessons/151.html">151. Tracing 与上下文传播</a></li><li><a class="" href="../lessons/152.html">152. CI 与供应链检查</a></li><li><a class="" href="../lessons/153.html">153. 容器镜像与运行边界</a></li></ul><div>阶段 4</div><ul><li><a class="" href="../lessons/154.html">154. Kubernetes 服务生命周期</a></li><li><a class="cur" href="../lessons/155.html">155. 灰度发布与回滚</a></li><li><a class="" href="../lessons/156.html">156. 后台安全与威胁建模</a></li></ul></details><details><summary>领域 K：LLM 工程基础（6/12）</summary><div>阶段 1</div><ul><li><a class="" href="../lessons/157.html">157. 后台工程师的机器学习基础</a></li><li><a class="" href="../lessons/159.html">159. Token、窗口与生成预算</a></li></ul><div>阶段 2</div><ul><li><a class="" href="../lessons/158.html">158. Transformer 与注意力</a></li><li><a class="" href="../lessons/160.html">160. Embedding 与相似度</a></li><li><a class="" href="../lessons/161.html">161. 模型 API 与可靠客户端</a></li><li><a class="" href="../lessons/162.html">162. 提示词与任务契约</a></li><li class="todo">163. 结构化输出与校验 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">164. RAG 与可追溯回答 <em>待更新</em></li><li class="todo">165. 向量检索与混合召回 <em>待更新</em></li><li class="todo">166. 模型推理服务与批调度 <em>待更新</em></li><li class="todo">167. 模型成本、缓存与路由 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">168. LLM 评测与校准 <em>待更新</em></li></ul></details><details><summary>领域 L：Agent 与 Harness（0/18）</summary><div>阶段 2</div><ul><li class="todo">169. Agent 循环与 Workflow <em>待更新</em></li><li class="todo">170. Tool Calling 与执行器 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">171. MCP 角色与协议边界 <em>待更新</em></li><li class="todo">172. MCP 传输与连接管理 <em>待更新</em></li><li class="todo">174. Agent Harness 的组成 <em>待更新</em></li><li class="todo">175. 上下文工程与压缩 <em>待更新</em></li><li class="todo">176. 短期状态与长期记忆 <em>待更新</em></li><li class="todo">178. 工具重试、超时与取消 <em>待更新</em></li><li class="todo">181. OpenAI Agents SDK 实践 <em>待更新</em></li><li class="todo">183. pi 最小 Harness 与扩展 <em>待更新</em></li><li class="todo">184. Skill 与可复用任务流程 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">173. MCP 授权与信任边界 <em>待更新</em></li><li class="todo">177. 持久状态与任务恢复 <em>待更新</em></li><li class="todo">179. 工具沙箱与权限隔离 <em>待更新</em></li><li class="todo">180. 审批与人工介入 <em>待更新</em></li><li class="todo">182. LangGraph 状态图实践 <em>待更新</em></li><li class="todo">185. Agent 结果验证与轨迹评测 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">186. 多 Agent 协作与协调 <em>待更新</em></li></ul></details><details><summary>领域 M：Backend + AI（0/10）</summary><div>阶段 2</div><ul><li class="todo">187. Coding Agent 辅助 C++ 开发 <em>待更新</em></li></ul><div>阶段 3</div><ul><li class="todo">188. AI 代码审查与缺陷复核 <em>待更新</em></li><li class="todo">189. Agent 驱动测试与模糊测试 <em>待更新</em></li><li class="todo">190. 后台知识库与版本证据 <em>待更新</em></li><li class="todo">191. Agent 日志查询工具 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">192. 指标诊断与异常归因 <em>待更新</em></li><li class="todo">193. 为 C++ RPC 封装安全工具 <em>待更新</em></li><li class="todo">194. 长任务服务与 Agent Worker <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">195. 可验证的智能运维 Agent <em>待更新</em></li><li class="todo">196. Agent 服务的 SLO 与追踪 <em>待更新</em></li></ul></details><details><summary>领域 N：架构与技术领导力（0/12）</summary><div>阶段 3</div><ul><li class="todo">197. 系统设计与需求澄清 <em>待更新</em></li></ul><div>阶段 4</div><ul><li class="todo">198. SLI、SLO 与错误预算 <em>待更新</em></li><li class="todo">199. 容量规划与成本治理 <em>待更新</em></li><li class="todo">200. 技术决策与 ADR <em>待更新</em></li><li class="todo">202. 事故响应与复盘 <em>待更新</em></li></ul><div>阶段 5</div><ul><li class="todo">201. 架构演进与迁移策略 <em>待更新</em></li><li class="todo">203. 项目推进与风险拆解 <em>待更新</em></li><li class="todo">204. 跨团队接口与协作 <em>待更新</em></li><li class="todo">205. 技术传承与人才培养 <em>待更新</em></li></ul><div>阶段 6</div><ul><li class="todo">206. 技术战略与组合投入 <em>待更新</em></li><li class="todo">207. 复杂系统治理与边界 <em>待更新</em></li><li class="todo">208. 技术深度与外部影响力 <em>待更新</em></li></ul></details></details></nav><main><p style="color:var(--mut)">第 155 课 · 领域 J · 阶段 4</p><p class="dl"><a href="../files/155-j-release.md" download>⬇ 本课 Markdown</a><a href="../files/practice155.tar.gz" download>⬇ 练习包 practice155.tar.gz</a></p><h1 id="155208">第 155/208 课：灰度发布与回滚</h1>
 <blockquote>
 <p>序号 155/208 · id <code>j-release</code> · 领域 J · 阶段 4 · 难度 深入 · 子类 交付与安全
-前置：<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/154.html"><code>j-kubernetes</code></a> 和 <a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/150.html"><code>j-metrics</code></a>
-节点摘要：小流量灰度通过指标与版本对照控制变更风险；数据库和协议变化必须支持回退窗口。</p>
+前置：<a href="https://zhousai-zs.github.io/backend-atlas-notes/lessons/154.html"><code>j-kubernetes</code></a>
+节点摘要：灰度用小份额流量暴露新版本，以可观察指标决定继续或回滚。</p>
 </blockquote>
 <h2 id="_1">导读</h2>
-<p>上一课在滚动替换时统计了请求失败。灰度更进一步：只让一小部分流量看到新版本，用对照指标决定继续还是回滚，并且回滚后还要找得到旧产物。应用进程可以退回去，并不意味着数据迁移也能撤销。</p>
-<p>教学假设：一次配置变更以 5% 流量进入金丝雀实例，并被注入延迟退化。以下路由、指标阈值和产物命名均为教学设计，不代表腾讯或微信内部实现。没有使用生产流量。<code>is_live_prod_traffic=false</code>。</p>
+<p>滚动升级解决的是「如何换成新副本」。灰度解决的是「要不要把新版本当作默认」。5% 的流量如果已经明显变慢，就应该停，而不是等 100% 用户一起来报案。</p>
+<p>教学假设：一次配置变更要先以 5% 流量观察延迟，劣化则回滚到可定位的旧产物。以下阈值和端口是教学设计。</p>
+<p><strong>本机已验证的是决策逻辑：</strong> 两个真实的本地 HTTP 进程同时在线，200 次请求里 10 次（5%）打到注入了延迟的 v2，p99(v2)=129.499 ms 超过 50 ms 阈值，决策为 rollback，并继续使用带哈希的 v1 产物；回滚后 40 次请求不再打 v2。数据迁移文件在应用回滚后仍然存在。<code>is_live_prod_traffic=false</code>。未验证：把 <code>nginx/canary-5percent.conf</code> 真正 reload 到 nginx，或 Istio / Flagger / Ingress 的金丝雀控制器，以及生产长尾观察窗口。</p>
 <h2 id="_2">学习目标</h2>
 <ol>
 <li>解释金丝雀指标及适用边界</li>
 <li>独立完成实践：为配置变更设置 5% 流量灰度，注入延迟退化触发回滚。</li>
 </ol>
 <h2 id="_3">为什么后端要懂</h2>
-<p>节点给出的理由是「把故障影响限制在可控范围。」若新版本直接接到全部流量，发现问题再撤，影响面已经铺开；小流量对照可以在更低成本下得到「要不要继续」的证据。</p>
+<p>节点理由指向安全发布。后端要能回答三件事：流量怎么切、用哪一个指标停、回滚后哪一份产物在跑、数据迁移清不干净。</p>
 <h2 id="_4">核心知识点</h2>
 <h3 id="1">1. 金丝雀指标</h3>
-<p><strong>原理。</strong> Google SRE Workbook 第 16 章把 canarying 定义为：把一次变更做部分、有时限的部署并加以评估，再决定是否继续放量。接受变更的部分称为 canary，其余称为 control。其逻辑是金丝雀通常只覆盖生产中小得多的一部分。该章示例按应用版本查看 HTTP 响应码，并在金丝雀指标相对对照组偏离过大时自动反应。</p>
-<p><strong>直觉。</strong> 要比较的是同一指标在两个版本上的差异，而不是只看全站平均数——全站会被 95% 的旧流量稀释。</p>
-<p><strong>实践对照。</strong> 200 次请求中 10 次进入 v2（观察份额 0.05）。教学 p99：v1 为 6.619 毫秒，v2 为 130.082 毫秒，阈值 50 毫秒，决策为 rollback。这些 p99 是本机短时样本，使用与第 150 课相同的教学分位算法，不是生产 SLO 测量。</p>
-<h3 id="2">2. 自动停止条件</h3>
-<p><strong>原理。</strong> 工作手册指出，可以把部署调成根据版本错误率等指标自动反应。停止条件必须预先写清：用哪项指标、对照谁、阈值多少、以及触发后做什么。</p>
-<p><strong>实践对照。</strong> 本课停止条件是金丝雀 p99 高于 50 毫秒即回滚到 v1，并停止向 v2 派发。回滚后另发 40 次请求，全部由 v1 处理。阈值和 5% 份额都是教学参数。</p>
-<h3 id="3">3. 向后兼容迁移</h3>
-<p><strong>原理。</strong> 应用回滚恢复的是可执行文件或配置，不自动撤销已经发生的数据写入。节点陷阱也提醒：不能认为应用回滚能撤销所有数据迁移。因此迁移需要向后兼容窗口，或单独的数据回退方案。</p>
-<p><strong>实践对照。</strong> v2 在处理请求时写入 <code>reports/migration.dat</code>（<code>schema=v2-migrated</code>）。应用回滚后该文件仍在。旧版本产物 <code>artifacts/v1-f77f0c83ccd13890.json</code> 可按路径和 SHA-256 <code>f77f0c83ccd138902e35ede298d15d9ef14dafe9e5855ccf15ad290f609ff2a4</code> 定位；灰度期间 v1 与 v2 同时运行。</p>
-<h2 id="_5">常见误区</h2>
-<ol>
-<li><strong>认为应用回滚能撤销所有数据迁移。</strong> 节点原句即此。本课迁移文件在回滚后仍然存在。若新版本已经改写存储格式，只把进程换回 v1 可能无法读取或留下半迁移状态。</li>
-<li><strong>把全站延迟当作金丝雀指标。</strong> 5% 的高延迟会被 95% 的对照组稀释；必须按版本切开，如本次分别计算 v1 与 v2 的 p99。</li>
-</ol>
-<h2 id="_6">设计权衡</h2>
-<p>节点原句是「小流量更安全，但低频故障可能需要更长观察。」5% 降低了爆破半径，但对于只在特定用户或特定键上出现的缺陷，短窗口可能看不见。拉长观察会增加并行运行两个版本的成本，也拉长了不确定期。</p>
-<h2 id="_7">动手实践</h2>
-<p>实践目录为 <code>practice155/</code>，需要 Python 3。本次为 CPython 3.13.5。</p>
-<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice155
-bash<span class="w"> </span>test.sh
-cat<span class="w"> </span>results.json
-ls<span class="w"> </span>artifacts
-cat<span class="w"> </span>reports/migration.dat
+<p><strong>直觉。</strong> 金丝雀不是「感觉还行」，而是事先写好的停止条件。本课用 v2 的 p99 延迟对比固定阈值。</p>
+<p><strong>原理。</strong> 2026-11-15 抓取 Google SRE Workbook <em>Canarying Releases</em>（<code>https://sre.google/workbook/canarying-releases/</code>，Date 2026-11-15 22:58:53 CST，Last-Modified 2026-10-08 12:48:00 CST，80800 字节）。工作手册讨论如何用小份额流量比较新旧，并以可观察信号决定推进或放弃。本课把停止条件写成代码：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">maybe_rollback</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">threshold_ms</span><span class="o">=</span><span class="mf">50.0</span><span class="p">):</span>
+    <span class="n">p99_v1</span> <span class="o">=</span> <span class="n">percentile</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">"v1"</span><span class="p">],</span> <span class="mi">99</span><span class="p">)</span>
+    <span class="n">p99_v2</span> <span class="o">=</span> <span class="n">percentile</span><span class="p">(</span><span class="n">samples</span><span class="p">[</span><span class="s2">"v2"</span><span class="p">],</span> <span class="mi">99</span><span class="p">)</span>
+    <span class="n">decision</span> <span class="o">=</span> <span class="s2">"continue"</span>
+    <span class="k">if</span> <span class="n">p99_v2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">p99_v2</span> <span class="o">&gt;</span> <span class="n">threshold_ms</span><span class="p">:</span>
+        <span class="n">decision</span> <span class="o">=</span> <span class="s2">"rollback"</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">"p99_v1"</span><span class="p">:</span> <span class="n">p99_v1</span><span class="p">,</span> <span class="s2">"p99_v2"</span><span class="p">:</span> <span class="n">p99_v2</span><span class="p">,</span> <span class="s2">"threshold_ms"</span><span class="p">:</span> <span class="n">threshold_ms</span><span class="p">,</span> <span class="s2">"decision"</span><span class="p">:</span> <span class="n">decision</span><span class="p">}</span>
 </code></pre></div>
 
-<p>脚本同时启动 v1 与注入延迟的 v2，按 5% 分流，计算分位并在超阈值时回滚。成功最后一行为 <code>ALL_CHECKS_PASSED</code>。延迟数字依赖本机调度，读者应以自己的 <code>results.json</code> 为准。</p>
-<p>两项验收是「回滚产物可定位」以及「新旧版本可同时运行」。前者对应 <code>artifacts/v1-…json</code> 及其摘要；后者对应灰度期间两份进程同时提供服务。</p>
+<p>百分位按升序排列后取 <code>ceil(q/100 * (n-1))</code> 位置（与第 150 课一致，避免把「各组 p99 再平均」误当成合并样本的 p99）。v1 约 6.5 ms，v2 约 129–130 ms，决策 rollback。这是<strong>同一台机器上两个进程 + 确定路由</strong>的结果，不是生产流量形状。</p>
+<p>5% 怎么来：<code>use_canary = (i % 20) &lt; 1</code>，200 次里恰好 10 次。真实代理常用权重，短样本不会精确到 5%。教学 nginx 片段：</p>
+<div class="codehilite"><pre><span></span><code><span class="k">upstream</span><span class="w"> </span><span class="s">atlas_kv</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">server</span><span class="w"> </span><span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">18881</span><span class="w"> </span><span class="s">weight=19</span><span class="p">;</span><span class="w">  </span><span class="c1"># v1</span>
+<span class="w">    </span><span class="kn">server</span><span class="w"> </span><span class="n">127.0.0.1</span><span class="p">:</span><span class="mi">18882</span><span class="w"> </span><span class="s">weight=1</span><span class="p">;</span><span class="w">   </span><span class="c1"># v2 = 5%</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>本机未执行 <code>nginx -s reload</code>。你在自己的实验室可以用这份配置，再用访问日志按 upstream 分 p99，套同一套 <code>maybe_rollback()</code>。</p>
+<h3 id="2">2. 自动停止条件与可定位产物</h3>
+<p><strong>直觉。</strong> 「回滚」若找不到当时在跑的那份制品，就只是口头回滚。</p>
+<p><strong>原理。</strong> 每次发布把 <code>{version, delay, notes}</code> 写成 JSON，文件名带内容哈希：本机 v1 为 <code>artifacts/v1-f77f0c83ccd13890.json</code>，sha256 完整值记在 <code>results.json</code>。回滚是把路由切回这份文件对应的进程，而不是「再部署一次最新的 main」。节点验收「回滚产物可定位」「新旧版本可同时运行」在本机成立：金丝雀期间 v1、v2 同时监听 18881/18882。</p>
+<h3 id="3">3. 向后兼容迁移</h3>
+<p><strong>直觉。</strong> 应用进程回到 v1，不等于数据库或本地数据文件回到 v1。</p>
+<p><strong>实践对照。</strong> v2 启动时写入 <code>reports/migration.dat</code>（含 <code>schema=v2-migrated</code>）。应用回滚后该文件仍在，<code>migration_file_remains_after_app_rollback=true</code>。这是节点陷阱「认为应用回滚能撤销所有数据迁移」的反例，且是本机真实文件，不是口头说明。</p>
+<h2 id="_5">常见误区</h2>
+<ul>
+<li>认为应用回滚能撤销所有数据迁移。</li>
+<li>用 10 个样本的 p99 代表生产长尾。</li>
+<li>把本地确定性 5% 分流写成「已验证 Istio 金丝雀」。</li>
+<li>停止条件只看平均值，吃掉已经恶化的尾延迟。</li>
+</ul>
+<h2 id="_6">设计权衡</h2>
+<p>小流量更安全，但低频故障可能需要更长观察。更敏感的阈值减少用户伤害，也增加误回滚。同时跑两个版本要求配置和协议向后兼容，否则「可同时运行」本身就不成立。</p>
+<h2 id="_7">动手实践</h2>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>practice155
+bash<span class="w"> </span>test.sh
+<span class="c1"># 阅读 nginx/canary-5percent.conf 与 scripts/diagnose.sh</span>
+</code></pre></div>
+
+<p>本机：<code>canary_share_observed=0.05</code>，<code>decision=rollback</code>，迁移文件残留。<code>service_mesh_or_ingress_canary_verified=false</code>。</p>
 <h2 id="_8">源码与文档阅读</h2>
-<p>阅读 <code>driver.py</code> 的分流与停止条件，对照 <code>artifacts/</code> 和 <code>reports/migration.dat</code>。SRE Workbook 的示例使用 HTTP 错误率；本课为了示范「延迟退化」改用延迟 p99，并在本地两个端口上模拟流量拆分，而不是 App Engine 或正式负载均衡器。</p>
-<p>2026-11-15 在本机核对节点 URL。</p>
+<p><code>driver.py</code> 的 <code>route</code> / <code>maybe_rollback</code> / 产物哈希；<code>service.py</code>；<code>nginx/canary-5percent.conf</code>。</p>
+<h2 id="_9">自测题</h2>
+<p><strong>1. 为什么 5% 金丝雀仍可能漏掉故障？</strong></p>
+<p>答案：故障若只打在另外 95% 的特定用户、地域或低频接口上，短窗口的 10 个 v2 样本看不到。小流量换来的是更安全，不是完备。</p>
+<p><strong>2. 回滚后发现写库仍然按新 schema 进行，说明什么？</strong></p>
+<p>答案：应用产物回滚了，数据迁移没有自动撤销。需要单独的迁移兼容策略或前向修复。本课用残留的 <code>migration.dat</code> 演示这一点。</p>
+<p><strong>3. 本机实验能代替 nginx 权重测试吗？</strong></p>
+<p>答案：不能。本机用确定下标保证恰好 5%，用来练停止条件。权重代理的实际份额和失败重试要在真实代理上另测。</p>
+<h2 id="_10">推荐资源</h2>
 <table>
 <thead>
 <tr>
-<th>页面及标题</th>
-<th style="text-align: right;">字节数</th>
-<th>Date（北京时间）</th>
-<th>Last-Modified（北京时间）</th>
+<th>资源</th>
+<th>字节</th>
+<th>抓取时间 (CST)</th>
+<th>Last-Modified (CST)</th>
+<th>说明</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><a href="https://sre.google/workbook/canarying-releases/">SRE Workbook — Canarying Releases</a>：Chapter 16 - Canarying Releases</td>
-<td style="text-align: right;">80800</td>
+<td><a href="https://sre.google/workbook/canarying-releases/">Google SRE Workbook — Canarying Releases</a></td>
+<td>80800</td>
 <td>2026-11-15 22:58:53</td>
 <td>2026-10-08 12:48:00</td>
+<td>核对金丝雀指标与停止条件。英文，深入，免费。</td>
 </tr>
 </tbody>
 </table>
-<p>最终 URL 与节点所列相同，HTTP 200。节点的 <code>verifiedAt</code> 是 2026-10-26，独立于以上抓取时间。</p>
-<h2 id="_9">自测题</h2>
-<ol>
-<li><strong>为什么金丝雀指标要按版本切开？</strong> 小份额异常会被对照组稀释。本课若只看全站平均，130 毫秒的金丝雀会被 95% 的 6.6 毫秒流量掩盖。</li>
-<li><strong>回滚后为什么还要保留旧产物摘要？</strong> 验收要求回滚产物可定位，才能确认退回去的是哪一份已知配置，而不是「现在机器上碰巧还在的文件」。</li>
-<li><strong>迁移文件还在，是否说明回滚失败？</strong> 不说明。应用回滚已经停止把流量打到 v2，但数据侧效果需要单独处理。</li>
-</ol>
-<h2 id="_10">推荐资源</h2>
-<ul>
-<li><a href="https://sre.google/workbook/canarying-releases/">SRE Workbook — Canarying Releases</a>：用于核对金丝雀指标与自动停止条件，将结论落实到本节点实验。英文，深入，免费。</li>
-</ul>
 <h2 id="_11">本课小结</h2>
-<p>用小份额流量和新旧版本对照指标决定是否继续放量；触发回滚时要找得到旧产物，并且不要把应用回滚当成数据迁移的撤销。下一课是第 156 课 j-security（后台安全与威胁建模）。</p><div class="pn"><span><a href="154.html">← Kubernetes 服务生命周期</a></span><span><a href="156.html">后台安全与威胁建模 →</a></span></div></main></div></body></html>
+<p>灰度的核心是预先写好的指标停止条件，加上可定位的旧产物，并承认数据迁移不会随进程一起回去。本机验证了 5% 分流、p99 回滚和产物哈希，没有验证网关或服务网格的金丝雀控制器。</p><div class="pn"><span><a href="154.html">← Kubernetes 服务生命周期</a></span><span><a href="156.html">后台安全与威胁建模 →</a></span></div></main></div></body></html>

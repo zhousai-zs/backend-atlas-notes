@@ -6,9 +6,9 @@
 
 ## 导读
 
-正式节点把第 159 课 `k-tokens` 列为前置：生成长度和上下文窗口会变成本次请求的预算。截至 2026-11-15，本仓库 `lessons/` 中尚未看到第 159 课的完整课文，因此不要把它当作已经完成的读物，也不要补写该课内容。本课只解决另一件事：一次模型调用怎样从演示脚本变成可维护的服务调用。
+正式节点把第 159 课 `k-tokens` 列为前置：生成长度和上下文窗口会变成本次请求的预算。第 159 课已经说明 token 与窗口预算。本课解决另一件事：一次模型调用怎样从演示脚本变成可维护的服务调用。
 
-教学假设：一个内容后台要把用户评论摘要或草稿回复交给远程模型 API。这是为讲解超时、限流和流式中断而设计的场景，不代表腾讯或微信的内部接口、协议或实现。实践完全走本机回环上的 HTTP 模拟服务，没有密钥，也没有对付费 API 做实调。
+教学假设：一个内容后台要把用户评论摘要或草稿回复交给远程模型 API。这是为讲解超时、限流和流式中断而设计的场景，不代表腾讯或微信的内部接口、协议或实现。实践分两层，都**不调用**付费 API、不把环境变量里的密钥（如存在）发给任何主机：一层是只允许回环的教学客户端，对着本机模拟服务注入超时、429 和半途断流；另一层用官方 `openai==3.51.0` 的 `httpx.MockTransport` 做离线契约（429、重试后成功、`finish_reason=length` 不是完整答案）。`is_live_model=false`，`is_live_paid_api=false`。教学客户端不是官方 SDK 的包装器；官方 SDK 路径见 `sdk_offline.py`。
 
 ## 学习目标
 
@@ -73,6 +73,22 @@ budget exhausted: attempts=2 finish_reason=budget_exhausted
 
 **适用边界。** 请求 id 的编码格式、是否一定在超时前返回、以及服务端在客户端取消后是否回滚，都不由本实验保证。官方默认重试超时，本课故意收窄了带工具时的行为；把两种策略混用到生产代码前，需要按接口语义单独设计。
 
+### 4. 官方 SDK 的离线契约（修订补入）
+
+教学客户端证明的是「你自己写的重试状态机」在回环模拟上的行为。要对照官方客户端，应使用已安装的 `openai==3.51.0`，而不是再写一套不相干的 HTTP 调用并声称它等于 SDK。
+
+`sdk_offline.py` 用 `httpx.MockTransport` 拦截 `chat.completions.create`：成功响应带 `usage.total_tokens=6`；`max_retries=0` 时 429 以 `APIStatusError` 露出；`max_retries=2` 时先 429 再 200；`finish_reason=length` 表示截断，不是最终答案。这验证的是 SDK 对 HTTP 状态和字段的处理，**不是**某个托管模型的生成质量。真实调用路径仍是：
+
+```bash
+pip install 'openai==3.51.0'
+# 仅在你自己的环境、并且你明确要实调时才导出密钥
+export OPENAI_API_KEY=...   # 本课 test.sh 不使用
+python -c "from openai import OpenAI; OpenAI().chat.completions.create(...)"
+# 或 client.responses.create / .parse
+```
+
+Chat Completions 在 2026-11-15 的 Deprecations 页上未被列为即将关停；新项目文档仍建议了解 Responses API。不要把本课模拟协议 `POST /v1/lesson/responses` 误认为官方线网路径。
+
 ## 常见误区
 
 1. **客户端超时后自动重复执行有副作用的工具（节点 pitfalls）。** 本次对照里，工具超时只发生一次副作用。若把这类超时与「无工具的连接超时」一样直接重试，计数会被放大。
@@ -90,7 +106,7 @@ budget exhausted: attempts=2 finish_reason=budget_exhausted
 
 ## 动手实践
 
-实践包是 `practice161.tar.gz`，解压后用 Python 3 标准库即可，不需要安装 `openai`，也不需要编译器：
+实践包是 `practice161.tar.gz`。教学客户端只用标准库访问回环模拟服务；官方 SDK 离线契约需要 `openai==3.51.0`（本环境用 `/workspace/atlas/cmvenv`）。不需要编译器，也不需要付费密钥：
 
 ```bash
 tmp_dir=$(mktemp -d)
@@ -99,9 +115,9 @@ cd "$tmp_dir/practice161"
 bash test.sh
 ```
 
-脚本把完整输出写入 `run.log`，并生成 `results.json`。最后一行应为 `ALL_CHECKS_PASSED`；日志中的 400/401、中途断流和超时是受控负例，不代表脚本整体失败。教学协议是 `POST /v1/lesson/responses`，只接受 `127.0.0.1` / `localhost`，构造指向 `https://api.openai.com/v1` 的客户端会直接被拒绝。
+脚本把完整输出写入 `run.log`，并生成 `results.json`。最后一行应为 `ALL_CHECKS_PASSED`；日志中的 400/401、中途断流和超时是受控负例，不代表脚本整体失败。教学协议是 `POST /v1/lesson/responses`，只接受 `127.0.0.1` / `localhost`，构造指向 `https://api.openai.com/v1` 的教学客户端会直接被拒绝。官方 SDK 离线测试则构造 `OpenAI(api_key="sk-unused-offline-placeholder", http_client=...)`，请求被 `MockTransport` 截获，不会发到 `api.openai.com`。
 
-本次机器环境为 CPython 3.13.5、`Linux-6.12.113+-x86_64-with-glibc2.41`，`OPENAI_API_KEY` 未设置，运行前后都未导入 `openai`。主线采纳后的官方实践目录运行在 2026-11-15 北京时间 23:04:43 开始，`driver_exit=0`，外层耗时 1.42855s，**52** 项检查全部通过（含 `is_live_model is false`）。协作稿初次运行是同日 22:48:58 的 51 项，随后补了一致性字段并复跑。请求 id、回环端口会随每次运行变化，应以新生成的 `run.log` / `results.json` 为准。
+本次机器环境为 CPython 3.13.5、`Linux-6.12.113+-x86_64-with-glibc2.41`。修订后的 `bash test.sh`（2026-11-15 23:24 左右，Asia/Shanghai）使用 cmvenv，在教学客户端全部通过之后导入官方 SDK：`openai_version=3.51.0`，`used_mock_transport=true`，无重试时 429 表现为 `APIStatusError.status_code==429`，`max_retries=2` 时第一次 429、第二次成功（2 次尝试），`finish_reason=length` 的 `partial-` 不被当成完整答案。环境中即使存在 `OPENAI_API_KEY`，本课也不会读取其值或把它发给网络；是否设置该变量不再作为通过条件。请求 id、回环端口会随每次运行变化，应以新生成的 `run.log` / `results.json` 为准。先前「运行前后都不导入 openai」的表述已撤销：不导入官方 SDK 并不能更好地证明客户端正确，反而少了一条可对照的官方契约。
 
 1. **成功路径并记录 usage。** 非流式与流式都得到 `可靠客户端`，`usage.total_tokens=9`，各 1 次尝试。
 2. **注入超时。** 客户端超时 0.2s，本次 0.200733s 返回，结果为未完成，没有 usage。
@@ -116,7 +132,7 @@ bash test.sh
 
 节点建议阅读 [OpenAI — Python SDK](https://github.com/openai/openai-python)。2026-11-15 北京时间亲自抓取：仓库页与 raw README 均返回 200，无跳转；README 43144 字节，与同日 [Python 库文档](https://developers.openai.com/api/reference/python/index.md) 正文一致。PyPI 当前稳定版是 `openai 3.51.0`（上传时间为 2026-11-14 05:13:37 北京时间），要求 Python 3.10+。GitHub Releases API 当日返回 403，版本不以 GitHub 发行列表为准。节点 `verifiedAt` 是 2026-10-26，与本次核对日期不同。完整 URL、响应头和摘录见实践包中的 `sources/EVIDENCE.md`。
 
-主线在 2026-11-15 22:58:56（北京时间）再次抓取 PyPI JSON 与 `v3.51.0` / `main` 的 `_constants.py`：稳定版仍是 `openai 3.51.0`、未 yank，两份常量文件内容相同。同日 23:03:58 再次抓取 [Deprecations](https://developers.openai.com/api/docs/deprecations)（标题 Deprecations | OpenAI API，Date 23:03:58，Last-Modified 2026-11-14 11:18:35 北京时间）：功能表将 Assistants API 的关停日期列为 Aug 26, 2026，替代为 Responses API and Conversations API，公布日期为 Aug 26, 2025；当日表中未将 Chat Completions 列为即将关停的端点。独立解包复跑通过后再写入 `is_live_model=false` 并得到 52 项检查通过，`is_live_model=false`，未导入 `openai`，未设置密钥。
+主线在 2026-11-15 22:58:56（北京时间）再次抓取 PyPI JSON 与 `v3.51.0` / `main` 的 `_constants.py`：稳定版仍是 `openai 3.51.0`、未 yank，两份常量文件内容相同。同日 23:03:58 再次抓取 [Deprecations](https://developers.openai.com/api/docs/deprecations)（标题 Deprecations | OpenAI API，Date 23:03:58，Last-Modified 2026-11-14 11:18:35 北京时间）：功能表将 Assistants API 的关停日期列为 Aug 26, 2026，替代为 Responses API and Conversations API，公布日期为 Aug 26, 2025；当日表中未将 Chat Completions 列为即将关停的端点。官方 SDK 的离线契约已纳入同一份 `test.sh`。Assistants API 的关停日期仍以同日 Deprecations 页为准（表列为 Aug 26, 2026，替代为 Responses API and Conversations API）。`is_live_model=false`，`is_live_paid_api=false`。
 
 跟随阅读了流式指南、Responses 迁移页、弃用页、错误码与限流指南。与本课直接相关的当日结论：
 
